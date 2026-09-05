@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=20260905163152">
 </head>
 <body>
 
@@ -173,31 +173,8 @@
   </div>
 </div>
 
-<div class="proto is-min" id="proto">
-  <div class="proto__head" data-proto-toggle>
-    <b>Прототип</b><span data-proto-label>развернуть</span>
-  </div>
-  <div class="proto__links">
-    <a href="index.html">Главная</a>
-    <a href="catalog.html?cat=beauty" class="is-active">Каталог</a>
-    <a href="coupon.html">Купон</a>
-    <button data-mobile>Мобильный</button>
-  </div>
-  <div class="proto__metrics">
-    <span class="metric"><b id="mShown">0</b><span>показы</span></span>
-    <span class="metric"><b id="mOpened">0</b><span>просмотры</span></span>
-    <span class="metric"><b id="mRevealed">0</b><span>купон открыт</span></span>
-  </div>
-  <div class="proto__note">Шапка и поиск не меняются — меняется только содержимое выдачи.</div>
-</div>
-
-<div class="mobile-view" id="mobileView">
-  <button class="mobile-view__close" data-mobile-close>Закрыть</button>
-  <div class="mobile-view__frame"><iframe title="Мобильный вид"></iframe></div>
-</div>
-
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/data.js?v=20260905163152"></script>
+<script src="assets/app.js?v=20260905163152"></script>
 <script>
   var catId = state.cat || "beauty";
   var cat = CATEGORIES.find(function (c) { return c.id === catId; }) || CATEGORIES[0];

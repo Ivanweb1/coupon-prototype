@@ -16,7 +16,8 @@ const ICON = {
   close:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   eye:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>',
   pinFill:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"/></svg>',
-  burger: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>'
+  burger: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  grid:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>'
 };
 
 /* ---------- Состояние ---------- */
@@ -76,14 +77,25 @@ function buildCityModal() {
 function buildTags() {
   const host = qs("#tags");
   if (!host) return;
-  const top = CATEGORIES.slice().sort((a, b) => b.n - a.n).slice(0, 8);
-  top.forEach(c => {
+  /* Показываем все категории, отсортированные по числу активных купонов
+     в городе: строка одна, длинная — её листают вправо. */
+  CATEGORIES.slice().sort((a, b) => b.n - a.n).forEach(c => {
     const a = document.createElement("a");
     a.className = "tag" + (state.cat === c.id ? " is-active" : "");
     a.href = "catalog.html?cat=" + c.id + (EMBED ? "&embed=1" : "");
     a.innerHTML = c.name + ' <span class="tag__n">' + c.n + "</span>";
     host.appendChild(a);
   });
+
+  /* Подсказка, что строка продолжается за правым краем */
+  const row = qs("#tagsRow");
+  const sync = () => {
+    const more = row.scrollWidth - row.clientWidth - row.scrollLeft > 8;
+    row.classList.toggle("has-more", more);
+  };
+  row.addEventListener("scroll", sync, { passive: true });
+  window.addEventListener("resize", sync);
+  sync();
 }
 
 function buildDropdown() {
@@ -171,15 +183,48 @@ function fillFeed(gridSel, n, catId) {
   });
 }
 
+/* Лента не бесконечная: сама подгружается до FEED_AUTO карточек,
+   дальше — по кнопке. Иначе до подвала невозможно доскроллить. */
+const FEED_AUTO = 36;
+const FEED_MAX = 72;
+
 function initInfinite(gridSel, catId) {
   const loader = qs("#loader");
-  if (!loader) return;
+  const grid = qs(gridSel);
+  if (!loader || !grid) return;
+
+  const dots = '<span class="loader__dot"></span><span class="loader__dot"></span>' +
+               '<span class="loader__dot"></span><span style="margin-left:6px">подгружаем ещё купоны</span>';
+
+  function paint() {
+    const n = grid.children.length;
+    if (n >= FEED_MAX) {
+      loader.innerHTML = '<span class="feed-end">Вы посмотрели все купоны' +
+        (state.city ? " в городе " + state.city : "") +
+        '. Новые появляются каждый день.</span>';
+      return;
+    }
+    if (n >= FEED_AUTO) {
+      loader.innerHTML = '<button class="btn btn--ghost btn--lg" data-more>Показать ещё купоны</button>';
+      qs("[data-more]", loader).onclick = () => {
+        fillFeed(gridSel, 12, catId);
+        paint();
+      };
+      return;
+    }
+    loader.innerHTML = dots;
+  }
+
+  paint();
+
   new IntersectionObserver(entries => {
     if (!entries[0].isIntersecting || feedBusy) return;
+    if (grid.children.length >= FEED_AUTO) return;
     feedBusy = true;
     setTimeout(() => {
       fillFeed(gridSel, 8, catId);
       feedBusy = false;
+      paint();
     }, 320);
   }, { rootMargin: "300px" }).observe(loader);
 }
@@ -466,9 +511,6 @@ function renderCouponPage() {
   buildRecommendations(c.cat.id);
 }
 
-/* ==========================================================================
-   Панель прототипа
-   ========================================================================== */
 function paintMetrics() {
   const m = state.metrics;
   const s = qs("#mShown"), o = qs("#mOpened"), r = qs("#mRevealed");
@@ -477,39 +519,6 @@ function paintMetrics() {
   if (r) r.textContent = m.revealed;
 }
 
-function initProto() {
-  const proto = qs("#proto");
-  if (!proto) return;
-  if (EMBED) { proto.remove(); return; }
-
-  const label = qs("[data-proto-label]", proto);
-  qs("[data-proto-toggle]", proto).onclick = () => {
-    proto.classList.toggle("is-min");
-    if (label) label.textContent = proto.classList.contains("is-min") ? "развернуть" : "свернуть";
-  };
-
-  const mv = qs("#mobileView");
-  qs("[data-mobile]", proto).onclick = () => {
-    const src = location.pathname.split("/").pop() +
-      "?embed=1" + (state.cat ? "&cat=" + state.cat : "");
-    qs("iframe", mv).src = src;
-    mv.classList.add("is-on");
-    document.body.classList.add("no-scroll");
-  };
-  qs("[data-mobile-close]", mv).onclick = () => {
-    mv.classList.remove("is-on");
-    qs("iframe", mv).src = "";
-    document.body.classList.remove("no-scroll");
-  };
-
-  const bannerBtn = qs("[data-banner]", proto);
-  if (bannerBtn) {
-    bannerBtn.onclick = () => {
-      const slot = qs("#bannerSlot");
-      if (slot) slot.classList.toggle("hide");
-    };
-  }
-}
 
 /* ==========================================================================
    Общая инициализация
@@ -561,7 +570,6 @@ function initCommon() {
   buildCityModal();
   renderCity();
   initSearch();
-  initProto();
   paintMetrics();
   const ov = qs("#overlay");
   if (ov) ov.onclick = closeQuick;

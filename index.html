@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=20260905163152">
 </head>
 <body>
 
@@ -64,7 +64,7 @@
 
     <div class="hero__top">
       <div>
-        <h1>Скидки вашего города.<br><em>Без квестов и оплаты.</em></h1>
+        <h1><span>Скидки вашего города</span><em>Без квестов и оплаты</em></h1>
         <p class="hero__sub">Нашли купон — сделали скриншот — пошли покупать. Ничего оплачивать и регистрироваться не нужно.</p>
       </div>
       <span class="hero__slogan-note">место под слоган — текст согласуем</span>
@@ -77,12 +77,16 @@
       <button class="search__go">Найти</button>
     </div>
 
-    <div class="tags" id="tagsRow">
-      <span id="tags"></span>
+    <div class="tags-row">
       <span class="dd" id="allCats">
-        <button class="tag tag--all" data-dd-toggle>Все категории <span class="chev" data-icon="chev"></span></button>
+        <button class="tag tag--all" data-dd-toggle>
+          <span data-icon="grid"></span>
+          Все категории
+          <span class="chev" data-icon="chev"></span>
+        </button>
         <span class="dd__panel"></span>
       </span>
+      <div class="tags" id="tagsRow"><span id="tags"></span></div>
     </div>
 
   </div>
@@ -184,33 +188,8 @@
   </div>
 </div>
 
-<!-- Панель прототипа (в продукте её нет) -->
-<div class="proto is-min" id="proto">
-  <div class="proto__head" data-proto-toggle>
-    <b>Прототип</b><span data-proto-label>развернуть</span>
-  </div>
-  <div class="proto__links">
-    <a href="index.html" class="is-active">Главная</a>
-    <a href="catalog.html?cat=beauty">Каталог</a>
-    <a href="coupon.html">Купон</a>
-    <button data-mobile>Мобильный</button>
-    <button data-banner>Баннер</button>
-  </div>
-  <div class="proto__metrics">
-    <span class="metric"><b id="mShown">0</b><span>показы</span></span>
-    <span class="metric"><b id="mOpened">0</b><span>просмотры</span></span>
-    <span class="metric"><b id="mRevealed">0</b><span>купон открыт</span></span>
-  </div>
-  <div class="proto__note">Показ — карточка попала в экран. Просмотр — раскрытие. Третье — целевое действие.</div>
-</div>
-
-<div class="mobile-view" id="mobileView">
-  <button class="mobile-view__close" data-mobile-close>Закрыть</button>
-  <div class="mobile-view__frame"><iframe title="Мобильный вид"></iframe></div>
-</div>
-
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/data.js?v=20260905163152"></script>
+<script src="assets/app.js?v=20260905163152"></script>
 <script>
   initCommon();
   buildTags();
