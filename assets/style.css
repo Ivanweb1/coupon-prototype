@@ -204,6 +204,13 @@ input{font:inherit;color:inherit}
   flex:0 0 auto;
 }
 .burger:hover{background:var(--surface)}
+/* Вход в ЛК иконкой — только на телефоне, вместо верхней служебной полосы */
+.lk-icon{
+  display:none;width:40px;height:40px;border-radius:var(--r-pill);
+  border:1px solid var(--line-strong);place-items:center;color:var(--ink-2);
+  flex:0 0 auto;
+}
+.lk-icon:hover{background:var(--surface);color:var(--ink)}
 .mobile-menu{display:none;border-bottom:1px solid var(--line);background:var(--bg)}
 .mobile-menu.is-on{display:block}
 .mobile-menu ul{margin:0;padding:6px 0 14px;list-style:none}
@@ -785,11 +792,10 @@ input{font:inherit;color:inherit}
 
 @media (max-width:820px){
   :root{--pad:16px}
-  /* слева остаётся короткая подпись, иначе полоса выглядит пустой */
-  .topbar__note{display:none}
-  .topbar__note--s{display:block;margin-right:auto;font-size:11.5px}
-  .topbar a:not(.lk){display:none}
-  .topbar__in{height:34px}
+  /* Служебной полосы на телефоне нет: вход в ЛК переехал иконкой в шапку,
+     «Стать партнёром» и «Разместить купон» лежат в бургер-меню */
+  .topbar{display:none}
+  .lk-icon{display:grid}
   .nav{display:none}
   .burger{display:grid}
   .header__in{gap:10px}
