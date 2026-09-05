@@ -163,10 +163,6 @@ function cardHTML(c, compact) {
       <div class="card__meta">
         <b>${c.company}</b><i class="dot"></i><span>${c.cat.name}</span>
       </div>
-      <div class="code">
-        <span class="code__val">${c.code}</span>
-        <span class="code__hint">код скрыт</span>
-      </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
         <button type="button" class="btn btn--solid" data-card-reveal>Показать купон</button>
@@ -192,35 +188,33 @@ function makeCard(c, compact) {
 
   qs("[data-card-more]", el).onclick = e => { e.stopPropagation(); open(); };
 
-  /* «Показать купон» открывает код прямо в карточке — без лишнего клика.
-     В компактной карточке ленты рекомендаций кода нет, там открываем купон. */
-  const code = qs(".code", el);
+  /* «Показать купон» показывает код на месте самой кнопки — без лишнего
+     клика и без отдельной полосы. В ленте рекомендаций открываем купон. */
   qs("[data-card-reveal]", el).onclick = e => {
     e.stopPropagation();
     if (compact) { open(); return; }
-    revealOnCard(code, e.currentTarget);
+    revealOnCard(e.currentTarget, c);
   };
 
   impressions.observe(el);
   return el;
 }
 
-/* Раскрытие кода в карточке + быстрое копирование вторым нажатием */
-function revealOnCard(code, btn) {
-  if (!code.classList.contains("is-open")) {
-    code.classList.add("is-open");
-    qs(".code__hint", code).textContent = "покажите на кассе";
-    btn.textContent = "Скопировать";
+/* Первое нажатие — код на месте кнопки, второе — копирование */
+function revealOnCard(btn, c) {
+  if (!btn.classList.contains("is-code")) {
+    btn.classList.add("is-code");
+    btn.textContent = c.code;
+    btn.title = "Нажмите, чтобы скопировать";
     state.metrics.revealed++;
     paintMetrics();
     return;
   }
-  const val = qs(".code__val", code).textContent.trim();
   const done = () => {
     btn.textContent = "Скопировано";
-    setTimeout(() => { btn.textContent = "Скопировать"; }, 1600);
+    setTimeout(() => { btn.textContent = c.code; }, 1600);
   };
-  if (navigator.clipboard) navigator.clipboard.writeText(val).then(done, done);
+  if (navigator.clipboard) navigator.clipboard.writeText(c.code).then(done, done);
   else done();
 }
 

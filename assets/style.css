@@ -37,7 +37,9 @@
 
 *,*::before,*::after{box-sizing:border-box}
 
-html{-webkit-text-size-adjust:100%}
+/* clip, а не hidden: не ломает липкую шапку и убирает случайный
+   горизонтальный сдвиг на узких экранах */
+html{-webkit-text-size-adjust:100%;overflow-x:clip}
 body{
   margin:0;
   background:var(--bg);
@@ -387,20 +389,6 @@ input{font:inherit;color:inherit}
 .card__meta b{font-weight:500;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dot{width:3px;height:3px;border-radius:50%;background:var(--ink-4);flex:0 0 auto}
 
-/* Промокод — до раскрытия скрыт */
-.code{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  border:1px dashed var(--line-strong);border-radius:var(--r-sm);
-  padding:8px 10px;background:var(--surface);
-}
-.code__val{
-  font-size:15px;font-weight:600;letter-spacing:.14em;
-  font-variant-numeric:tabular-nums;
-  filter:blur(4.5px);user-select:none;
-  transition:filter .3s var(--ease-soft);
-}
-.code.is-open .code__val{filter:none;user-select:text}
-.code__hint{font-size:11px;color:var(--ink-4);white-space:nowrap}
 
 .card__actions{display:flex;gap:8px}
 .btn{
@@ -415,6 +403,8 @@ input{font:inherit;color:inherit}
 .btn--solid{background:var(--ink);color:var(--bg)}
 .btn--solid:hover{opacity:.88}
 .btn--wide{flex:1}
+/* Кнопка, ставшая промокодом */
+.btn.is-code{letter-spacing:.16em;font-weight:700;font-variant-numeric:tabular-nums}
 .btn--lg{height:46px;padding:0 22px;font-size:15px}
 
 /* ---------- Вариант карточки «как на маркетплейсах» ----------
@@ -448,18 +438,16 @@ input{font:inherit;color:inherit}
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .cards-wb .card__meta{font-size:11.5px}
-.cards-wb .code{padding:6px 9px}
-.cards-wb .code__val{font-size:14px}
 
 /* Узкая карточка (по шесть в ряд): кнопки в столбик, крупное — мельче */
 @container (max-width: 235px){
   .card__actions{flex-direction:column}
-  .card__actions .btn{width:100%}
+  /* flex:1 у «Подробнее» в столбике схлопывал высоту кнопки — отключаем */
+  .card__actions .btn{width:100%;flex:0 0 auto}
   .card__value{font-size:27px;bottom:64px}
   .card__title{font-size:13.5px}
   .card__body{padding:10px 12px 12px;gap:9px}
   .card__cap{padding:30px 12px 10px}
-  .code__hint{display:none}
   .card__near{font-size:10px;padding:3px 7px}
   /* в узкой карточке важнее компания — категория обрезалась бы вместе с ней */
   .card__meta .dot,.card__meta span{display:none}
@@ -476,7 +464,6 @@ input{font:inherit;color:inherit}
 .rail .card .card__media{aspect-ratio:16/10}
 .rail .card .card__value{font-size:24px;bottom:56px}
 .rail .card .card__body{padding:10px 12px 12px}
-.rail .card .code{display:none}
 /* в «виджете» одно действие — иначе кнопки не помещаются */
 .rail .card .card__actions .btn--ghost{display:none}
 .rail .card .card__actions .btn--solid{flex:1}
@@ -817,6 +804,15 @@ input{font:inherit;color:inherit}
   .tags{margin-right:calc(-1 * var(--pad));padding-right:var(--pad)}
   .tag,.dd{flex:0 0 auto}
   .tag--all{padding:10px 14px}
+
+  /* Фильтры каталога — одной лентой со свайпом, иначе занимают четыре строки */
+  .toolbar{
+    flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+    margin-right:calc(-1 * var(--pad));padding-right:var(--pad);
+  }
+  .toolbar::-webkit-scrollbar{display:none}
+  .toolbar .select{flex:0 0 auto}
+  .toolbar__count{display:none}
 
   .section{padding:24px 0 0}
   .card__value{font-size:26px;bottom:62px}
