@@ -239,12 +239,10 @@ function quickHTML(c) {
   return `
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
-      <div class="quick__gallery">
-        <div class="quick__thumb">фото 1</div>
-        <div class="quick__thumb">фото 2</div>
-        <div class="quick__thumb">фото 3</div>
+      <div class="quick__photo">
+        <span class="card__ratio">4:5</span>
+        <span class="quick__value">${c.value}</span>
       </div>
-      <div class="quick__value">${c.value}</div>
     </div>
     <div class="quick__side">
       <div class="quick__eyebrow">
