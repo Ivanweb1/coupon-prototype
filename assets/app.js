@@ -266,15 +266,15 @@ function initNear(gridSel, catId) {
     btn.classList.toggle("is-active", state.near);
     grid.innerHTML = "";
     state.seen.clear();
-    fillFeed(gridSel, 12, catId);
+    fillFeed(gridSel, 10, catId);
     initInfinite(gridSel, catId);
   };
 }
 
 /* Лента не бесконечная: сама подгружается до FEED_AUTO карточек,
    дальше — по кнопке. Иначе до подвала невозможно доскроллить. */
-const FEED_AUTO = 12;   /* две строки по шесть — дальше по кнопке */
-const FEED_MAX = 72;
+const FEED_AUTO = 10;   /* две строки: четыре крупные + шесть — дальше по кнопке */
+const FEED_MAX = 52;
 
 function initInfinite(gridSel, catId) {
   const loader = qs("#loader");
@@ -295,7 +295,7 @@ function initInfinite(gridSel, catId) {
     if (n >= FEED_AUTO) {
       loader.innerHTML = '<button class="btn btn--ghost btn--lg" data-more>Показать ещё купоны</button>';
       qs("[data-more]", loader).onclick = () => {
-        fillFeed(gridSel, 12, catId);
+        fillFeed(gridSel, 6, catId);
         paint();
       };
       return;

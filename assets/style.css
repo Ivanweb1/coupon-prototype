@@ -307,13 +307,20 @@ input{font:inherit;color:inherit}
 .section__head h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.02em}
 .section__head .mute{font-size:13px}
 
+/* Первая строка — четыре крупные карточки, дальше по шесть в ряд.
+   Считается на сетке из 12 колонок: 3 колонки на карточку и 2 соответственно. */
 .grid{
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-columns:repeat(12,minmax(0,1fr));
   gap:18px;
 }
-@media (max-width:1240px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
-@media (max-width:1040px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.grid > *{grid-column:span 2}
+.grid > :nth-child(-n+4){grid-column:span 3}
+
+@media (max-width:1240px){
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .grid > *,.grid > :nth-child(-n+4){grid-column:auto}
+}
 @media (max-width:860px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
 @media (max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 
