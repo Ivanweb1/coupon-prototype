@@ -179,7 +179,7 @@ input{font:inherit;color:inherit}
   border-bottom:1px solid var(--line);
   background:radial-gradient(1000px 420px at 50% -160px, var(--surface) 0%, transparent 70%);
 }
-.hero__in{padding:56px 0 34px;display:flex;flex-direction:column;gap:26px}
+.hero__in{padding-block:56px 34px;display:flex;flex-direction:column;gap:26px}
 .hero__top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
 .hero h1{
   margin:0;
@@ -214,7 +214,7 @@ input{font:inherit;color:inherit}
 .city-hint{border-bottom:1px solid var(--line);background:var(--surface)}
 .city-hint__in{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  padding:9px 0;font-size:13px;color:var(--ink-2);
+  padding-block:9px;font-size:13px;color:var(--ink-2);
 }
 .city-hint__in svg{color:var(--ink-3);flex:0 0 auto}
 .city-hint__yes,
@@ -309,19 +309,10 @@ input{font:inherit;color:inherit}
 .section__head h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.02em}
 .section__head .mute{font-size:13px}
 
-/* Первая строка — четыре крупные карточки, дальше по шесть в ряд.
-   Считается на сетке из 12 колонок: 3 колонки на карточку и 2 соответственно. */
 .grid{
   display:grid;
-  grid-template-columns:repeat(12,minmax(0,1fr));
-  gap:18px;
-}
-.grid > *{grid-column:span 2}
-.grid > :nth-child(-n+4){grid-column:span 3}
-
-@media (max-width:1240px){
-  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .grid > *,.grid > :nth-child(-n+4){grid-column:auto}
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:20px;
 }
 @media (max-width:860px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
 @media (max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
@@ -813,10 +804,10 @@ input{font:inherit;color:inherit}
   .logo{font-size:16px}
   .city-btn{padding:8px 10px}
   /* компактный поиск уезжает на свою строку */
-  .header__in{flex-wrap:wrap;height:auto;padding:10px 0}
+  .header__in{flex-wrap:wrap;height:auto;padding-block:10px}
   .header .search--compact{order:5;flex:1 0 100%;max-width:none}
 
-  .hero__in{padding:22px 0 18px;gap:18px}
+  .hero__in{padding-block:22px 18px;gap:18px}
   .hero h1{font-size:28px;max-width:none}
   .hero__sub{font-size:14px}
     .search input{font-size:16px}
