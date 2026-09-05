@@ -59,6 +59,11 @@ input{font:inherit;color:inherit}
 
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
 
+/* Иконки: обёртка строчная, поэтому svg садился на базовую линию текста
+   и визуально стоял выше слова. Центруем внутри флекса. */
+[data-icon]{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+[data-icon] svg{display:block}
+
 /* ---------- служебные ---------- */
 .mute{color:var(--ink-3)}
 .tiny{font-size:12px;letter-spacing:.01em}
@@ -561,7 +566,10 @@ input{font:inherit;color:inherit}
   padding:22px 26px 20px;
   display:flex;flex-direction:column;gap:13px;
 }
-.quick__eyebrow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3)}
+.quick__eyebrow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);flex-wrap:wrap}
+/* иконка просмотров стоит рядом с числом — центруем и её */
+.quick__eyebrow span,.coupon__meta span{display:inline-flex;align-items:center;gap:5px}
+.quick__eyebrow svg,.coupon__meta svg{display:block}
 .quick h3{margin:0;font-size:23px;line-height:1.16;letter-spacing:-.03em;font-weight:600}
 
 .company{
