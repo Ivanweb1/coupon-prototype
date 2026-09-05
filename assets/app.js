@@ -146,14 +146,20 @@ function buildDropdown() {
    Карточка купона
    ========================================================================== */
 function cardHTML(c, compact) {
+  /* Два варианта карточки. wb — плотная, как на маркетплейсах: заголовок
+     под фото. soft — наша первая версия: заголовок наложен на фото. */
+  const wb = document.body.classList.contains("cards-wb");
   return `
     <div class="card__media">
       <span class="card__near">${fmtDist(c.dist)}</span>
       <span class="card__share" title="Поделиться">${ICON.share}</span>
-      <span class="card__value">${c.value}</span>
-      <div class="card__cap"><h3 class="card__title">${c.title}</h3></div>
+      ${wb
+        ? `<span class="card__badge">${c.value}</span>`
+        : `<span class="card__value">${c.value}</span>
+      <div class="card__cap"><h3 class="card__title">${c.title}</h3></div>`}
     </div>
     <div class="card__body">
+      ${wb ? `<h3 class="card__title">${c.title}</h3>` : ""}
       <div class="card__meta">
         <b>${c.company}</b><i class="dot"></i><span>${c.cat.name}</span>
       </div>
@@ -650,7 +656,19 @@ function initBurger() {
   b.onclick = () => m.classList.toggle("is-on");
 }
 
+/* Стиль карточек: ?cards=wb (по умолчанию) или ?cards=soft — первая версия.
+   Выбор запоминается, чтобы не сбрасывался при переходе между страницами. */
+function initCardStyle() {
+  let style = params.get("cards");
+  if (style !== "wb" && style !== "soft") {
+    style = localStorage.getItem("cp_cards") || "wb";
+  }
+  localStorage.setItem("cp_cards", style);
+  document.body.classList.add("cards-" + style);
+}
+
 function initCommon() {
+  initCardStyle();
   initIcons();
   initBurger();
   buildCityModal();
