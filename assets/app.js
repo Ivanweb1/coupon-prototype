@@ -122,7 +122,6 @@ function buildDropdown() {
 function cardHTML(c, compact) {
   return `
     <div class="card__media">
-      ${compact ? "" : '<span class="card__ratio">4:5</span>'}
       <span class="card__share" title="Поделиться">${ICON.share}</span>
       <span class="card__value">${c.value}</span>
       <div class="card__cap"><h3 class="card__title">${c.title}</h3></div>
@@ -136,23 +135,60 @@ function cardHTML(c, compact) {
         <span class="code__hint">код скрыт</span>
       </div>
       <div class="card__actions">
-        <span class="btn btn--ghost btn--wide">Подробнее</span>
-        <span class="btn btn--solid">Показать купон</span>
+        <button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
+        <button type="button" class="btn btn--solid" data-card-reveal>Показать купон</button>
       </div>
     </div>`;
 }
 
 function makeCard(c, compact) {
-  const el = document.createElement("button");
+  const el = document.createElement("div");
   el.className = "card card-in";
-  el.type = "button";
   el.dataset.id = c.id;
+  el.setAttribute("role", "button");
+  el.setAttribute("tabindex", "0");
   el.setAttribute("aria-label", c.title + " — " + c.company + ", " + c.value);
   el.innerHTML = cardHTML(c, compact);
-  el.addEventListener("click", () => openQuick(c, el));
   el._coupon = c;
+
+  const open = () => openQuick(c, el);
+  el.addEventListener("click", open);
+  el.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+  });
+
+  qs("[data-card-more]", el).onclick = e => { e.stopPropagation(); open(); };
+
+  /* «Показать купон» открывает код прямо в карточке — без лишнего клика.
+     В компактной карточке ленты рекомендаций кода нет, там открываем купон. */
+  const code = qs(".code", el);
+  qs("[data-card-reveal]", el).onclick = e => {
+    e.stopPropagation();
+    if (compact) { open(); return; }
+    revealOnCard(code, e.currentTarget);
+  };
+
   impressions.observe(el);
   return el;
+}
+
+/* Раскрытие кода в карточке + быстрое копирование вторым нажатием */
+function revealOnCard(code, btn) {
+  if (!code.classList.contains("is-open")) {
+    code.classList.add("is-open");
+    qs(".code__hint", code).textContent = "покажите на кассе";
+    btn.textContent = "Скопировать";
+    state.metrics.revealed++;
+    paintMetrics();
+    return;
+  }
+  const val = qs(".code__val", code).textContent.trim();
+  const done = () => {
+    btn.textContent = "Скопировано";
+    setTimeout(() => { btn.textContent = "Скопировать"; }, 1600);
+  };
+  if (navigator.clipboard) navigator.clipboard.writeText(val).then(done, done);
+  else done();
 }
 
 /* Показ засчитывается, когда карточка реально попала в экран */
@@ -240,7 +276,6 @@ function quickHTML(c) {
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
       <div class="quick__photo">
-        <span class="card__ratio">4:5</span>
         <span class="quick__value">${c.value}</span>
       </div>
     </div>
@@ -411,7 +446,6 @@ function renderCouponPage() {
   qs("#couponRoot").innerHTML = `
     <div class="coupon__left">
       <div class="coupon__hero">
-        <span class="card__ratio">4:5 — то же изображение, что уходит в соцсети</span>
         <span class="coupon__value">${c.value}</span>
       </div>
       <div class="coupon__thumbs">

@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260905164603">
+<link rel="stylesheet" href="assets/style.css?v=20260905165436">
 </head>
 <body>
 
@@ -64,7 +64,6 @@
     <span id="crumbCat">Категория</span>
   </div>
   <h1 class="page-title" id="catTitle">Категория</h1>
-  <p class="page-sub" id="catSub">Купоны и скидки категории в вашем городе. Отдельная страница под каждую категорию и город — под SEO.</p>
 
   <div class="toolbar">
     <span class="dd" id="allCats">
@@ -88,11 +87,9 @@
     </div>
   </section>
 
-  <!-- Блок рекомендаций: смежные категории, компактный «виджет»-формат -->
   <section class="section">
     <div class="section__head">
       <h2>Смотрят вместе с этим</h2>
-      <span class="mute">Смежные категории: <span id="railLabel"></span></span>
     </div>
     <div class="rail-wrap">
       <div class="rail" id="rail"></div>
@@ -170,8 +167,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260905164603"></script>
-<script src="assets/app.js?v=20260905164603"></script>
+<script src="assets/data.js?v=20260905165436"></script>
+<script src="assets/app.js?v=20260905165436"></script>
 <script>
   var catId = state.cat || "beauty";
   var cat = CATEGORIES.find(function (c) { return c.id === catId; }) || CATEGORIES[0];

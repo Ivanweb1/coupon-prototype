@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260905164603">
+<link rel="stylesheet" href="assets/style.css?v=20260905165436">
 </head>
 <body>
 
@@ -64,24 +64,18 @@
     <span id="crumbTitle" class="mute">Купон</span>
   </div>
 
-  <!-- Сам купон -->
   <div class="coupon" id="couponRoot"></div>
 
-  <!-- О компании -->
   <section class="section">
     <div class="section__head">
       <h2>О компании</h2>
-      <span class="mute">Блок заполняет продавец в своём личном кабинете</span>
     </div>
     <div class="about">
       <div>
-        <p><b id="aboutName">Компания</b> — текст-рыба о заведении: чем занимается, сколько лет
-        на рынке, что важно знать до визита. Здесь будет описание, которое продавец
-        пишет сам при создании купона.</p>
-        <p>Адрес: <span id="aboutAddress">—</span>. Режим работы: ежедневно 10:00–21:00.
-        Телефон и ссылки на соцсети — в карточке выше.</p>
-        <p class="mute tiny">Объём и состав этого блока — на согласование. В попапе быстрого
-        просмотра его нет намеренно: там только то, что нужно, чтобы забрать купон.</p>
+        <p><b id="aboutName">Компания</b> работает в городе с 2014 года. Своя команда,
+        собственное оборудование, запись день в день. Перед визитом уточняйте наличие
+        свободных мест по телефону.</p>
+        <p>Адрес: <span id="aboutAddress">—</span>. Режим работы: ежедневно 10:00–21:00.</p>
       </div>
       <div class="about__gallery">
         <div class="about__shot">фото места 1</div>
@@ -92,36 +86,29 @@
     </div>
   </section>
 
-  <!-- Другие купоны этой же компании -->
   <section class="section">
     <div class="section__head">
       <h2>Другие купоны · <span id="companyFeedLabel">компания</span></h2>
-      <span class="mute">Одна компания может держать несколько активных купонов</span>
     </div>
     <div class="grid" id="companyFeed"></div>
   </section>
 
-  <!-- Рекомендации по смежным категориям -->
   <section class="section">
     <div class="section__head">
       <h2>Смотрят вместе с этим</h2>
-      <span class="mute">Смежные категории: <span id="railLabel"></span></span>
     </div>
     <div class="rail-wrap">
       <div class="rail" id="rail"></div>
     </div>
   </section>
 
-  <!-- SEO-текст -->
   <div class="seo">
     <h2 id="seoTitle">Категория в городе</h2>
-    <p>Текст-рыба под поисковые запросы. На эту страницу человек приходит из поиска
-    по конкретному купону, поэтому здесь нужен короткий понятный текст: что за скидка,
-    где действует, до какого числа, как получить. Ровно тот объём, который нужен
-    поиску, — без простыни на два экрана.</p>
-    <p>Получить купон можно без регистрации и без оплаты: нажмите «Показать купон»,
-    сделайте скриншот и предъявите код на месте. Другие предложения категории смотрите
-    в каталоге вашего города.</p>
+    <p>Скидка действует в вашем городе по промокоду. Чтобы получить её, не нужно
+    ничего оплачивать и регистрироваться: откройте код, сделайте скриншот и
+    предъявите его на месте.</p>
+    <p>Другие предложения этой же категории смотрите в каталоге города —
+    список обновляется каждый день.</p>
   </div>
 
 </main>
@@ -195,8 +182,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260905164603"></script>
-<script src="assets/app.js?v=20260905164603"></script>
+<script src="assets/data.js?v=20260905165436"></script>
+<script src="assets/app.js?v=20260905165436"></script>
 <script>
   initCommon();
   buildDropdown();

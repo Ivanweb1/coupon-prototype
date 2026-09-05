@@ -191,11 +191,6 @@ input{font:inherit;color:inherit}
 @media (min-width:900px){.hero h1{white-space:nowrap}}
 .hero h1 em{font-style:normal;color:var(--ink-3)}
 .hero__sub{margin:8px 0 0;color:var(--ink-2);max-width:44ch}
-.hero__slogan-note{
-  font-size:11px;color:var(--ink-4);letter-spacing:.04em;text-transform:uppercase;
-  border:1px dashed var(--line-strong);border-radius:var(--r-pill);
-  padding:6px 12px;align-self:flex-end;white-space:nowrap;
-}
 
 /* Бургер и мобильное меню */
 .burger{
@@ -270,15 +265,6 @@ input{font:inherit;color:inherit}
 .dd__panel a span{color:var(--ink-4);font-size:12px;font-variant-numeric:tabular-nums}
 @media (max-width:640px){.dd__panel{grid-template-columns:1fr 1fr}}
 
-/* Слот баннера */
-.banner-slot{
-  margin:22px 0 0;
-  border:1px dashed var(--line-strong);border-radius:var(--r-lg);
-  min-height:150px;display:grid;place-items:center;text-align:center;
-  color:var(--ink-4);background:var(--surface);
-  padding:20px;
-}
-.banner-slot b{display:block;color:var(--ink-3);font-weight:500;margin-bottom:4px}
 
 /* ==========================================================================
    Секции и сетка купонов
@@ -336,11 +322,6 @@ input{font:inherit;color:inherit}
   background:var(--surface-2);
   background-image:repeating-linear-gradient(-45deg,
      rgba(21,21,20,.05) 0 1px, transparent 1px 10px);
-}
-.card__ratio{
-  position:absolute;top:10px;left:10px;
-  font-size:10px;letter-spacing:.06em;color:var(--ink-4);
-  background:rgba(255,255,255,.7);border-radius:6px;padding:3px 6px;
 }
 .card__share{
   position:absolute;top:8px;right:8px;
@@ -611,8 +592,7 @@ input{font:inherit;color:inherit}
   background-image:repeating-linear-gradient(-45deg, rgba(21,21,20,.05) 0 1px, transparent 1px 10px);
   border:1px solid var(--line);overflow:hidden;
 }
-.coupon__hero .card__ratio{top:14px;left:14px}
-.coupon__value{
+.coupon__hero .coupon__value{
   position:absolute;left:26px;bottom:26px;
   font-size:clamp(44px,5vw,68px);font-weight:700;letter-spacing:-.045em;line-height:1;
   text-shadow:0 1px 0 rgba(255,255,255,.85);
@@ -749,8 +729,7 @@ input{font:inherit;color:inherit}
   .hero__in{padding:22px 0 18px;gap:18px}
   .hero h1{font-size:28px;max-width:none}
   .hero__sub{font-size:14px}
-  .hero__slogan-note{display:none}
-  .search input{font-size:16px}
+    .search input{font-size:16px}
 
   /* Лента категорий уходит под правый край экрана — видно, что её листают */
   .tags-row{gap:8px}
