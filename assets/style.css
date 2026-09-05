@@ -104,16 +104,11 @@ input{font:inherit;color:inherit}
   height:var(--header-h);
   display:flex;align-items:center;gap:20px;
 }
-.logo{display:flex;align-items:center;gap:10px;flex:0 0 auto}
-.logo__mark{
-  width:34px;height:34px;border-radius:9px;
-  background:var(--ink);color:var(--bg);
-  display:grid;place-items:center;
-  font-weight:700;font-size:15px;letter-spacing:-.02em;
+.logo{
+  flex:0 0 auto;
+  font-size:17px;font-weight:600;letter-spacing:-.02em;
+  color:var(--ink);white-space:nowrap;
 }
-.logo__text{display:flex;flex-direction:column;line-height:1.05}
-.logo__text b{font-size:15px;font-weight:600;letter-spacing:-.02em}
-.logo__text span{font-size:10px;color:var(--ink-4);letter-spacing:.06em;text-transform:uppercase}
 
 .nav{display:flex;align-items:center;gap:2px}
 .nav a{
@@ -186,14 +181,14 @@ input{font:inherit;color:inherit}
 .hero__top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
 .hero h1{
   margin:0;
-  font-size:clamp(26px,4.2vw,52px);
-  line-height:1.04;
+  font-size:clamp(24px,3.35vw,44px);
+  line-height:1.08;
   letter-spacing:-.035em;
   font-weight:600;
 }
-/* ровно две строки, каждая без переноса внутри */
-.hero h1 span,
-.hero h1 em{display:block;white-space:nowrap}
+/* на широком экране заголовок идёт одной строкой,
+   на узком переносится по словам */
+@media (min-width:900px){.hero h1{white-space:nowrap}}
 .hero h1 em{font-style:normal;color:var(--ink-3)}
 .hero__sub{margin:8px 0 0;color:var(--ink-2);max-width:44ch}
 .hero__slogan-note{
@@ -724,7 +719,7 @@ input{font:inherit;color:inherit}
   .nav{display:none}
   .burger{display:grid}
   .header__in{gap:10px}
-  .logo__text span{display:none}
+  .logo{font-size:16px}
   .city-btn{padding:8px 10px}
   /* компактный поиск уезжает на свою строку */
   .header__in{flex-wrap:wrap;height:auto;padding:10px 0}
