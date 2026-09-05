@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260905165436">
+<link rel="stylesheet" href="assets/style.css?v=20260905170456">
 </head>
 <body>
 
@@ -56,6 +56,15 @@
   </div>
 </header>
 
+<div class="city-hint" id="cityHint" hidden>
+  <div class="wrap city-hint__in">
+    <span data-icon="pin"></span>
+    <span>Ваш город — <b data-city-name>Липецк</b>?</span>
+    <button class="city-hint__yes" data-city-yes>Да, верно</button>
+    <button class="city-hint__other" data-city-open>Выбрать другой</button>
+  </div>
+</div>
+
 <main class="wrap">
 
   <div class="crumbs">
@@ -73,6 +82,7 @@
       </button>
       <span class="dd__panel"></span>
     </span>
+    <button class="select select--near" data-near><span data-icon="pin"></span> Рядом со мной</button>
     <button class="select" data-city-open>Город: <span data-city-name>Липецк</span> <span class="chev" data-icon="chev"></span></button>
     <button class="select">Сортировка: сначала новые <span class="chev" data-icon="chev"></span></button>
     <button class="select">Только действующие <span class="chev" data-icon="chev"></span></button>
@@ -167,8 +177,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260905165436"></script>
-<script src="assets/app.js?v=20260905165436"></script>
+<script src="assets/data.js?v=20260905170456"></script>
+<script src="assets/app.js?v=20260905170456"></script>
 <script>
   var catId = state.cat || "beauty";
   var cat = CATEGORIES.find(function (c) { return c.id === catId; }) || CATEGORIES[0];
@@ -184,6 +194,7 @@
   buildDropdown();
   fillFeed("#feed", 12, cat.id);
   initInfinite("#feed", cat.id);
+  initNear("#feed", cat.id);
   buildRecommendations(cat.id);
 </script>
 </body>

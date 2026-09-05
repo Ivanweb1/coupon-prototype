@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260905165436">
+<link rel="stylesheet" href="assets/style.css?v=20260905170456">
 </head>
 <body>
 
@@ -55,6 +55,15 @@
   </div>
 </header>
 
+<div class="city-hint" id="cityHint" hidden>
+  <div class="wrap city-hint__in">
+    <span data-icon="pin"></span>
+    <span>Ваш город — <b data-city-name>Липецк</b>?</span>
+    <button class="city-hint__yes" data-city-yes>Да, верно</button>
+    <button class="city-hint__other" data-city-open>Выбрать другой</button>
+  </div>
+</div>
+
 <!-- Первый экран: верхняя половина — управление сервисом -->
 <section class="hero">
   <div class="wrap hero__in">
@@ -82,6 +91,10 @@
         </button>
         <span class="dd__panel"></span>
       </span>
+      <button class="tag tag--near" data-near>
+        <span data-icon="pin"></span>
+        Рядом со мной
+      </button>
       <div class="tags" id="tagsRow"><span id="tags"></span></div>
     </div>
 
@@ -176,14 +189,15 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260905165436"></script>
-<script src="assets/app.js?v=20260905165436"></script>
+<script src="assets/data.js?v=20260905170456"></script>
+<script src="assets/app.js?v=20260905170456"></script>
 <script>
   initCommon();
   buildTags();
   buildDropdown();
   fillFeed("#feed", 12);
   initInfinite("#feed");
+  initNear("#feed");
 </script>
 </body>
 </html>

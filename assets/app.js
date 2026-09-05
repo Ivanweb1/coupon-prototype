@@ -21,12 +21,21 @@ const ICON = {
 };
 
 /* ---------- Состояние ---------- */
+/* Город определяется автоматически (в проде — по IP), поэтому выдача видна
+   сразу, без вопроса на входе. Подтверждение спрашиваем плашкой. */
 const state = {
-  city: localStorage.getItem("cp_city") || null,
+  city: localStorage.getItem("cp_city") || CITIES[0],
+  cityConfirmed: localStorage.getItem("cp_city_ok") === "1",
   cat: params.get("cat") || null,
+  near: false,
   metrics: { shown: 0, opened: 0, revealed: 0 },
   seen: new Set()
 };
+
+/* Расстояние до точки */
+function fmtDist(m) {
+  return m < 1000 ? m + " м" : (m / 1000).toFixed(1).replace(".", ",") + " км";
+}
 
 /* ==========================================================================
    Город
@@ -42,9 +51,29 @@ function renderCity() {
 function setCity(name) {
   state.city = name;
   localStorage.setItem("cp_city", name);
+  confirmCity();
   renderCity();
   qs("#cityModal").classList.remove("is-on");
   document.body.classList.remove("no-scroll");
+  qsa("#cityModal .city-list button").forEach(b => {
+    b.classList.toggle("is-active", b.textContent === name);
+  });
+}
+
+/* Плашка «это ваш город?» вместо модалки на входе */
+function confirmCity() {
+  state.cityConfirmed = true;
+  localStorage.setItem("cp_city_ok", "1");
+  const bar = qs("#cityHint");
+  if (bar) bar.remove();
+}
+
+function initCityHint() {
+  const bar = qs("#cityHint");
+  if (!bar) return;
+  if (state.cityConfirmed) { bar.remove(); return; }
+  bar.hidden = false;
+  qs("[data-city-yes]", bar).onclick = confirmCity;
 }
 
 function buildCityModal() {
@@ -66,9 +95,6 @@ function buildCityModal() {
   qsa("[data-city-open]").forEach(b => b.onclick = () => {
     modal.classList.add("is-on");
   });
-  if (!state.city) {
-    modal.classList.add("is-on");
-  }
 }
 
 /* ==========================================================================
@@ -122,6 +148,7 @@ function buildDropdown() {
 function cardHTML(c, compact) {
   return `
     <div class="card__media">
+      <span class="card__near">${fmtDist(c.dist)}</span>
       <span class="card__share" title="Поделиться">${ICON.share}</span>
       <span class="card__value">${c.value}</span>
       <div class="card__cap"><h3 class="card__title">${c.title}</h3></div>
@@ -212,16 +239,41 @@ let feedBusy = false;
 function fillFeed(gridSel, n, catId) {
   const grid = qs(gridSel);
   if (!grid) return;
-  makeBatch(n, catId).forEach((c, i) => {
+  const batch = makeBatch(n, catId);
+  if (state.near) {
+    /* В режиме «рядом» выдача идёт от ближней точки к дальней,
+       в том числе при подгрузке следующих порций. */
+    const offset = grid.children.length;
+    batch.sort((a, b) => a.dist - b.dist);
+    batch.forEach((c, i) => {
+      c.dist = 150 + (offset + i) * 170 + Math.floor(Math.random() * 110);
+    });
+  }
+  batch.forEach((c, i) => {
     const card = makeCard(c);
     card.style.animationDelay = (i % 8) * 40 + "ms";
     grid.appendChild(card);
   });
 }
 
+/* Переключатель «Рядом со мной» */
+function initNear(gridSel, catId) {
+  const btn = qs("[data-near]");
+  const grid = qs(gridSel);
+  if (!btn || !grid) return;
+  btn.onclick = () => {
+    state.near = !state.near;
+    btn.classList.toggle("is-active", state.near);
+    grid.innerHTML = "";
+    state.seen.clear();
+    fillFeed(gridSel, 12, catId);
+    initInfinite(gridSel, catId);
+  };
+}
+
 /* Лента не бесконечная: сама подгружается до FEED_AUTO карточек,
    дальше — по кнопке. Иначе до подвала невозможно доскроллить. */
-const FEED_AUTO = 36;
+const FEED_AUTO = 12;   /* две строки по шесть — дальше по кнопке */
 const FEED_MAX = 72;
 
 function initInfinite(gridSel, catId) {
@@ -283,7 +335,8 @@ function quickHTML(c) {
       <div class="quick__eyebrow">
         <span>${c.cat.name}</span><i class="dot"></i>
         <span>${state.city || "город"}</span><i class="dot"></i>
-        <span>${ICON.eye} ${c.views}</span>
+        <span>${ICON.eye} ${c.views}</span><i class="dot"></i>
+        <span>${fmtDist(c.dist)} от вас</span>
       </div>
       <h3>${c.title}</h3>
 
@@ -461,6 +514,7 @@ function renderCouponPage() {
         <a href="catalog.html?cat=${c.cat.id}">${c.cat.name}</a><i class="dot"></i>
         <span>${state.city || "город"}</span><i class="dot"></i>
         <span>${ICON.eye} ${c.views}</span><i class="dot"></i>
+        <span>${fmtDist(c.dist)} от вас</span><i class="dot"></i>
         <span>осталось ${c.left} шт.</span><i class="dot"></i>
         <span>${c.until}</span>
       </div>
@@ -600,6 +654,7 @@ function initCommon() {
   initIcons();
   initBurger();
   buildCityModal();
+  initCityHint();
   renderCity();
   initSearch();
   paintMetrics();

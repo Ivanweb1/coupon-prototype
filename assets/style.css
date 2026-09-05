@@ -208,6 +208,36 @@ input{font:inherit;color:inherit}
 }
 .mobile-menu a:last-child{border-bottom:0}
 
+/* Плашка подтверждения города — вместо вопроса на входе */
+.city-hint{border-bottom:1px solid var(--line);background:var(--surface)}
+.city-hint__in{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:9px 0;font-size:13px;color:var(--ink-2);
+}
+.city-hint__in svg{color:var(--ink-3);flex:0 0 auto}
+.city-hint__yes,
+.city-hint__other{
+  padding:5px 12px;border-radius:var(--r-pill);font-size:13px;font-weight:500;
+  border:1px solid var(--line-strong);color:var(--ink-2);
+  transition:background .18s,border-color .18s,color .18s;
+}
+.city-hint__yes{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.city-hint__yes:hover{opacity:.88}
+.city-hint__other:hover{border-color:var(--ink-3);color:var(--ink);background:var(--bg)}
+
+/* Расстояние до точки */
+.card__near{
+  position:absolute;top:10px;left:10px;z-index:1;
+  display:inline-flex;align-items:center;
+  font-size:11px;font-weight:500;color:var(--ink-2);
+  background:rgba(255,255,255,.86);border-radius:var(--r-pill);
+  padding:4px 9px;
+}
+.tag--near svg,.select--near svg{color:var(--ink-3)}
+.tag--near.is-active svg{color:rgba(255,255,255,.6)}
+.select--near.is-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.select--near.is-active svg{color:rgba(255,255,255,.6)}
+
 /* Лента популярных категорий: «Все категории» закреплены слева,
    остальные — одной строкой со свайпом вправо, без переноса на вторую */
 .tags-row{display:flex;align-items:center;gap:12px;min-width:0}
@@ -279,14 +309,17 @@ input{font:inherit;color:inherit}
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:20px;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:18px;
 }
-@media (max-width:1080px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:820px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}}
+@media (max-width:1240px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:1040px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:860px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}}
+@media (max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 
 /* ---------- Карточка купона ---------- */
 .card{
+  container-type:inline-size;
   position:relative;
   border:1px solid var(--line);
   border-radius:var(--r-lg);
@@ -383,6 +416,20 @@ input{font:inherit;color:inherit}
 .btn--solid:hover{opacity:.88}
 .btn--wide{flex:1}
 .btn--lg{height:46px;padding:0 22px;font-size:15px}
+
+/* Узкая карточка (по шесть в ряд): кнопки в столбик, крупное — мельче */
+@container (max-width: 235px){
+  .card__actions{flex-direction:column}
+  .card__actions .btn{width:100%}
+  .card__value{font-size:27px;bottom:64px}
+  .card__title{font-size:13.5px}
+  .card__body{padding:10px 12px 12px;gap:9px}
+  .card__cap{padding:30px 12px 10px}
+  .code__hint{display:none}
+  .card__near{font-size:10px;padding:3px 7px}
+  /* в узкой карточке важнее компания — категория обрезалась бы вместе с ней */
+  .card__meta .dot,.card__meta span{display:none}
+}
 
 /* ---------- «Виджет»-купон для рекомендаций ---------- */
 .rail-wrap{position:relative}

@@ -181,6 +181,7 @@ window.makeCoupon = function (catId) {
     code: makeCode(),
     address: STREETS[Math.floor(Math.random() * STREETS.length)],
     views: Math.floor(120 + Math.random() * 4200),
+    dist: Math.floor(120 + Math.random() * 7800),   /* метров до точки */
     left: Math.floor(3 + Math.random() * 40),
     until: ["до 30 сентября", "до конца месяца", "ещё 12 дней", "до 15 октября"][Math.floor(Math.random() * 4)],
     terms: terms
