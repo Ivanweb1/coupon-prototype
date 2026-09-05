@@ -582,12 +582,17 @@ function renderCouponPage() {
   const used = new Set([c.title]);
   for (let i = 0; i < 4; i++) {
     let x = makeCoupon(c.cat.id);
-    for (let t = 0; t < 12 && used.has(x.title); t++) x = makeCoupon(c.cat.id);
+    let tries = 0;
+    while (used.has(x.title) && tries < 14) { x = makeCoupon(c.cat.id); tries++; }
+    /* Заготовок в категории может быть меньше четырёх — лучше показать
+       два разных купона, чем четыре с повторами. */
+    if (used.has(x.title)) break;
     used.add(x.title);
     x.company = c.company;
     x.address = c.address;
     own.appendChild(makeCard(x));
   }
+  if (!own.children.length) own.closest(".section").remove();
   qs("#companyFeedLabel").textContent = c.company;
 
   /* SEO-текст: тот самый «просто текст» под каждую связку купон/город */
