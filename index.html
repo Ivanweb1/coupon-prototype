@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Главная — прототип купонного сервиса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<!-- Верхняя полоса: вход в ЛК всегда справа сверху, отдельно от основного меню -->
+<div class="topbar">
+  <div class="wrap topbar__in">
+    <span class="topbar__note">Купоны и скидки вашего города — без регистрации и оплаты</span>
+    <a href="#">Стать партнёром</a>
+    <a href="#">Разместить купон</a>
+    <a href="#" class="lk">Войти в личный кабинет</a>
+  </div>
+</div>
+
+<!-- Шапка -->
+<header class="header">
+  <div class="wrap header__in">
+    <a class="logo" href="index.html">
+      <span class="logo__mark">К</span>
+      <span class="logo__text"><b>Название</b><span>логотип-заглушка</span></span>
+    </a>
+
+    <nav class="nav">
+      <a href="catalog.html?cat=marketplace">Маркетплейсы</a>
+      <a href="#">Для бизнеса</a>
+    </nav>
+
+    <span class="header__spacer"></span>
+
+    <button class="city-btn" data-city-open>
+      <span data-icon="pin"></span>
+      <span data-city-name>Липецк</span>
+      <span class="chev" data-icon="chev"></span>
+    </button>
+
+    <button class="burger" data-burger data-icon="burger" aria-label="Меню"></button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="wrap">
+      <ul>
+        <li><a href="catalog.html?cat=marketplace">Маркетплейсы</a></li>
+        <li><a href="#">Для бизнеса</a></li>
+        <li><a href="#">Стать партнёром</a></li>
+        <li><a href="#">Разместить купон</a></li>
+        <li><a href="#">Войти в личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- Первый экран: верхняя половина — управление сервисом -->
+<section class="hero">
+  <div class="wrap hero__in">
+
+    <div class="hero__top">
+      <div>
+        <h1>Скидки вашего города.<br><em>Без квестов и оплаты.</em></h1>
+        <p class="hero__sub">Нашли купон — сделали скриншот — пошли покупать. Ничего оплачивать и регистрироваться не нужно.</p>
+      </div>
+      <span class="hero__slogan-note">место под слоган — текст согласуем</span>
+    </div>
+
+    <div class="search">
+      <span class="search__icon" data-icon="search"></span>
+      <input type="text" placeholder="Хочу скидку на кофе в Липецке…">
+      <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
+      <button class="search__go">Найти</button>
+    </div>
+
+    <div class="tags" id="tagsRow">
+      <span id="tags"></span>
+      <span class="dd" id="allCats">
+        <button class="tag tag--all" data-dd-toggle>Все категории <span class="chev" data-icon="chev"></span></button>
+        <span class="dd__panel"></span>
+      </span>
+    </div>
+
+  </div>
+</section>
+
+<main class="wrap">
+
+  <!-- Слот баннера: в MVP выключен, место заложено -->
+  <div class="banner-slot hide" id="bannerSlot">
+    <div>
+      <b>Слот баннера / слайдера акций</b>
+      В MVP выключен. Место заложено — баннеры свои у каждого города.
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="section__head">
+      <h2>Купоны в городе <span data-city-name>Липецк</span></h2>
+      <span class="mute">Выдача по всем категориям · обновляется каждый день</span>
+    </div>
+    <div class="grid" id="feed"></div>
+    <div class="loader" id="loader">
+      <span class="loader__dot"></span><span class="loader__dot"></span><span class="loader__dot"></span>
+      <span style="margin-left:6px">подгружаем ещё купоны</span>
+    </div>
+  </section>
+
+</main>
+
+<!-- Подвал -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__cta">
+      <p>Хотите публиковать свои купоны или приводить клиентов?</p>
+      <a class="btn btn--ghost btn--lg" href="#">Стать партнёром сервиса</a>
+      <a class="btn btn--solid btn--lg" href="#">Войти в личный кабинет</a>
+    </div>
+
+    <div class="footer__cols">
+      <div class="fcol">
+        <h4>Мы в вашем городе</h4>
+        <p>Подписывайтесь на группу своего города — новые купоны выходят там раньше.</p>
+        <div class="city-socials">
+          <a class="soc" href="#" data-city-social="ВКонтакте"></a>
+          <a class="soc" href="#" data-city-social="Одноклассники"></a>
+          <a class="soc" href="#" data-city-social="Telegram"></a>
+          <a class="soc" href="#" data-city-social="MAX"></a>
+        </div>
+      </div>
+      <div class="fcol">
+        <h4>Сервис</h4>
+        <ul>
+          <li><a href="#">Как это работает</a></li>
+          <li><a href="#">Вопросы и ответы</a></li>
+          <li><a href="#">Обучение по сервису</a></li>
+          <li><a href="#">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Бизнесу</h4>
+        <ul>
+          <li><a href="#">Разместить купон</a></li>
+          <li><a href="#">Купоны для маркетплейсов</a></li>
+          <li><a href="#">Тарифы</a></li>
+          <li><a href="#">Документы</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Партнёрам</h4>
+        <ul>
+          <li><a href="#">Партнёрская программа</a></li>
+          <li><a href="#">Бонусы и выплаты</a></li>
+          <li><a href="#">Стать партнёром</a></li>
+          <li><a href="#">Города сервиса</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <span>© 2026 Название</span>
+      <a href="#">Политика конфиденциальности</a>
+      <a href="#">Пользовательское соглашение</a>
+      <span class="erid">Реклама. Рекламодатель — ООО «Название»<br>ERID: XXXXXXXXXXXXXXXX</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Раскрытие купона -->
+<div class="overlay" id="overlay"></div>
+<div class="quick" id="quick"></div>
+
+<!-- Выбор города -->
+<div class="modal" id="cityModal">
+  <div class="modal__box">
+    <h3>В каком вы городе?</h3>
+    <p>Покажем купоны, которые действуют рядом с вами.</p>
+    <div class="city-list"></div>
+    <button class="btn btn--ghost" data-city-close>Позже</button>
+  </div>
+</div>
+
+<!-- Панель прототипа (в продукте её нет) -->
+<div class="proto is-min" id="proto">
+  <div class="proto__head" data-proto-toggle>
+    <b>Прототип</b><span data-proto-label>развернуть</span>
+  </div>
+  <div class="proto__links">
+    <a href="index.html" class="is-active">Главная</a>
+    <a href="catalog.html?cat=beauty">Каталог</a>
+    <a href="coupon.html">Купон</a>
+    <button data-mobile>Мобильный</button>
+    <button data-banner>Баннер</button>
+  </div>
+  <div class="proto__metrics">
+    <span class="metric"><b id="mShown">0</b><span>показы</span></span>
+    <span class="metric"><b id="mOpened">0</b><span>просмотры</span></span>
+    <span class="metric"><b id="mRevealed">0</b><span>купон открыт</span></span>
+  </div>
+  <div class="proto__note">Показ — карточка попала в экран. Просмотр — раскрытие. Третье — целевое действие.</div>
+</div>
+
+<div class="mobile-view" id="mobileView">
+  <button class="mobile-view__close" data-mobile-close>Закрыть</button>
+  <div class="mobile-view__frame"><iframe title="Мобильный вид"></iframe></div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  initCommon();
+  buildTags();
+  buildDropdown();
+  fillFeed("#feed", 12);
+  initInfinite("#feed");
+</script>
+</body>
+</html>
