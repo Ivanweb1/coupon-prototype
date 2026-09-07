@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260905181026">
+<link rel="stylesheet" href="assets/style.css?v=20260907180431">
 </head>
 <body>
 
@@ -99,12 +99,19 @@
     <div class="grid" id="companyFeed"></div>
   </section>
 
+  <!-- Рекомендации намеренно оформлены не как общая выдача: отдельная
+       подложка с рамкой и своя подпись, чтобы блок читался как подборка,
+       а не как продолжение ленты -->
   <section class="section">
-    <div class="section__head">
-      <h2>Смотрят вместе с этим</h2>
-    </div>
-    <div class="rail-wrap">
-      <div class="rail" id="rail"></div>
+    <div class="recos">
+      <div class="recos__head">
+        <span class="recos__eyebrow">Рекомендации</span>
+        <h2>Смотрят вместе с этим</h2>
+        <p class="recos__sub">Смежные категории — не прямые конкуренты этого купона</p>
+      </div>
+      <div class="rail-wrap">
+        <div class="rail" id="rail"></div>
+      </div>
     </div>
   </section>
 
@@ -178,8 +185,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260905181026"></script>
-<script src="assets/app.js?v=20260905181026"></script>
+<script src="assets/data.js?v=20260907180431"></script>
+<script src="assets/app.js?v=20260907180431"></script>
 <script>
   initCommon();
   buildDropdown();

@@ -245,8 +245,24 @@ input{font:inherit;color:inherit}
 
 /* Лента популярных категорий: «Все категории» закреплены слева,
    остальные — одной строкой со свайпом вправо, без переноса на вторую */
-.tags-row{display:flex;align-items:center;gap:12px;min-width:0}
+.tags-row{display:flex;align-items:center;gap:12px;min-width:0;position:relative}
 .tags-row .dd{flex:0 0 auto}
+
+/* Стрелка в конце ленты категорий. Затухания справа мало: на созвоне
+   отдельно проговаривали, что на догадливость по скроллу полагаться
+   нельзя — нужен явный элемент, по которому видно, что там ещё есть. */
+.tags-more{
+  position:absolute;right:0;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:var(--r-pill);
+  display:grid;place-items:center;
+  background:var(--bg);border:1px solid var(--line-strong);color:var(--ink-2);
+  box-shadow:var(--shadow-1);
+  opacity:0;pointer-events:none;
+  transition:opacity .2s var(--ease-soft), background .18s, color .18s, transform .18s var(--ease);
+}
+.tags-more .chev{transform:rotate(-90deg)}   /* шеврон вниз → вправо */
+.tags.has-more ~ .tags-more{opacity:1;pointer-events:auto}
+.tags-more:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .tags{
   flex:1 1 auto;min-width:0;
   display:flex;align-items:center;gap:8px;
@@ -474,6 +490,29 @@ input{font:inherit;color:inherit}
 }
 
 /* ---------- «Виджет»-купон для рекомендаций ---------- */
+/* Блок рекомендаций. Виль отдельно просил, чтобы он не выглядел куском
+   общей выдачи: своя подложка, рамка и подпись — сразу видно, что это
+   подборка смежного, а не продолжение ленты. */
+.recos{
+  border:1px solid var(--line-strong);border-radius:var(--r-xl);
+  background:var(--surface);
+  padding:26px 24px 10px;
+}
+.recos__head{margin-bottom:16px}
+.recos__eyebrow{
+  display:inline-block;margin-bottom:8px;
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-2);background:var(--bg);
+  border:1px solid var(--line-strong);border-radius:var(--r-pill);
+  padding:4px 12px;
+}
+.recos__head h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.02em}
+.recos__sub{margin:6px 0 0;font-size:13px;color:var(--ink-3)}
+/* карточки внутри подборки стоят на серой подложке — возвращаем им белый фон */
+.recos .card{background:var(--bg)}
+.cards-wb .recos .card{background:none}
+@media (max-width:640px){.recos{padding:20px 16px 6px}}
+
 .rail-wrap{position:relative}
 .rail{
   display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;
@@ -714,6 +753,11 @@ input{font:inherit;color:inherit}
   letter-spacing:-.032em;font-weight:600;
 }
 .coupon__meta{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink-3);flex-wrap:wrap}
+/* На отдельной странице купона карта крупнее: место освободилось после
+   удаления фотографий заведения, и Виль просил её увеличить */
+.coupon__right .map{height:230px}
+@media (max-width:900px){.coupon__right .map{height:180px}}
+
 .reveal--big{padding:18px}
 .reveal--big .reveal__code{font-size:clamp(30px,4vw,40px)}
 .coupon__actions{display:flex;gap:10px;flex-wrap:wrap}

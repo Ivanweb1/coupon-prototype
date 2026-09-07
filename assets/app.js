@@ -125,7 +125,8 @@ function buildTags() {
     host.appendChild(a);
   });
 
-  /* Подсказка, что строка продолжается за правым краем */
+  /* Подсказка, что строка продолжается за правым краем: затухание плюс
+     явная стрелка — на догадливость по скроллу полагаться нельзя */
   const row = qs("#tagsRow");
   const sync = () => {
     const more = row.scrollWidth - row.clientWidth - row.scrollLeft > 8;
@@ -134,6 +135,11 @@ function buildTags() {
   row.addEventListener("scroll", sync, { passive: true });
   window.addEventListener("resize", sync);
   sync();
+
+  const more = qs("[data-tags-more]");
+  if (more) more.onclick = () => {
+    row.scrollBy({ left: Math.round(row.clientWidth * .8), behavior: "smooth" });
+  };
 }
 
 function buildDropdown() {
