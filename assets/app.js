@@ -371,7 +371,23 @@ let fromTransform = "";
 function quickHTML(c) {
   /* Порядок блоков — сама воронка: промокод забирают раньше, чем
      успевают отвлечься на условия. Условия — позитивная инструкция
-     «как воспользоваться», а не список запретов, и не в центре внимания. */
+     «как воспользоваться», а не список запретов, и не в центре внимания.
+
+     Два варианта компоновки — на созвоне 07.09.2026 выбор не сделали.
+     side (по умолчанию) — промокод в правой колонке, как было.
+     left — промокод и кнопка уходят под картинку влево: предложение Коли,
+     чтобы уравновесить композицию, когда слева появится реальное фото. */
+  const revealBlock = `
+      <div class="reveal" data-reveal>
+        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
+        <div class="reveal__row">
+          <div class="reveal__code">${c.code}</div>
+          <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
+          <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
+        </div>
+      </div>`;
+  const left = document.body.classList.contains("quick-left");
+
   return `
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
@@ -379,6 +395,7 @@ function quickHTML(c) {
         <span class="quick__value">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
       </div>
+      ${left ? revealBlock : ""}
     </div>
     <div class="quick__side">
       <div class="quick__eyebrow">
@@ -402,14 +419,7 @@ function quickHTML(c) {
         </div>
       </div>
 
-      <div class="reveal" data-reveal>
-        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
-        <div class="reveal__row">
-          <div class="reveal__code">${c.code}</div>
-          <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
-          <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
-        </div>
-      </div>
+      ${left ? "" : revealBlock}
 
       <div>
         <div class="block-label">Как воспользоваться</div>
@@ -731,6 +741,18 @@ function initCardStyle() {
   document.body.classList.add("cards-" + style);
 }
 
+/* Компоновка попапа купона: ?quick=side (промокод справа, по умолчанию)
+   или ?quick=left (промокод под картинкой слева — вариант Коли). Выбор
+   на созвоне не сделали, поэтому оба смотрятся переключением адреса. */
+function initQuickStyle() {
+  let style = params.get("quick");
+  if (style !== "left" && style !== "side") {
+    style = localStorage.getItem("cp_quick") || "side";
+  }
+  localStorage.setItem("cp_quick", style);
+  document.body.classList.add("quick-" + style);
+}
+
 /* Счётчики у Marketplace/«Для бизнеса» на главной — те же данные,
    что и у обычных категорий, просто вынесены отдельной строкой */
 function fillFeaturedCounts() {
@@ -741,6 +763,7 @@ function fillFeaturedCounts() {
 
 function initCommon() {
   initCardStyle();
+  initQuickStyle();
   initIcons();
   fillFeaturedCounts();
   buildCityModal();
