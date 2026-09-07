@@ -203,22 +203,8 @@ input{font:inherit;color:inherit}
 .hero h1 em{font-style:normal;color:var(--ink-3)}
 .hero__sub{margin:8px 0 0;color:var(--ink-2);max-width:44ch}
 
-/* Плашка подтверждения города — вместо вопроса на входе */
-.city-hint{border-bottom:1px solid var(--line);background:var(--surface)}
-.city-hint__in{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  padding-block:9px;font-size:13px;color:var(--ink-2);
-}
-.city-hint__in svg{color:var(--ink-3);flex:0 0 auto}
-.city-hint__yes,
-.city-hint__other{
-  padding:5px 12px;border-radius:var(--r-pill);font-size:13px;font-weight:500;
-  border:1px solid var(--line-strong);color:var(--ink-2);
-  transition:background .18s,border-color .18s,color .18s;
-}
-.city-hint__yes{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.city-hint__yes:hover{opacity:.88}
-.city-hint__other:hover{border-color:var(--ink-3);color:var(--ink);background:var(--bg)}
+/* Подтверждение города теперь спрашивается попапом на входе
+   (см. .modal ниже), тихая плашка убрана */
 
 /* Расстояние до точки */
 .card__near{
@@ -823,6 +809,16 @@ input{font:inherit;color:inherit}
 .modal.is-on .modal__box{transform:none}
 .modal__box h3{margin:0 0 6px;font-size:22px;letter-spacing:-.025em;font-weight:600}
 .modal__box p{margin:0 0 18px;color:var(--ink-2);font-size:14px}
+/* Основное действие попапа — подтвердить определённый город, выбор
+   другого идёт вторым шагом */
+.modal__yes{width:100%}
+.modal__or{
+  margin:18px 0 10px;font-size:12px;color:var(--ink-4);
+  display:flex;align-items:center;gap:10px;
+}
+.modal__or::before,.modal__or::after{
+  content:"";flex:1;height:1px;background:var(--line);
+}
 .city-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
 .city-list button{
   padding:9px 15px;border:1px solid var(--line);border-radius:var(--r-pill);

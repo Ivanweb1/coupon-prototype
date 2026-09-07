@@ -24,8 +24,8 @@ const ICON = {
 };
 
 /* ---------- Состояние ---------- */
-/* Город определяется автоматически (в проде — по IP), поэтому выдача видна
-   сразу, без вопроса на входе. Подтверждение спрашиваем плашкой. */
+/* Город определяется автоматически (в проде — по IP) и подтверждается
+   попапом на входе: город — ключевой триггер сервиса. */
 const state = {
   city: localStorage.getItem("cp_city") || CITIES[0],
   cityConfirmed: localStorage.getItem("cp_city_ok") === "1",
@@ -69,20 +69,25 @@ function setCity(name) {
   });
 }
 
-/* Плашка «это ваш город?» вместо модалки на входе */
 function confirmCity() {
   state.cityConfirmed = true;
   localStorage.setItem("cp_city_ok", "1");
-  const bar = qs("#cityHint");
-  if (bar) bar.remove();
+  const modal = qs("#cityModal");
+  if (modal) modal.classList.remove("is-on");
+  document.body.classList.remove("no-scroll");
 }
 
-function initCityHint() {
-  const bar = qs("#cityHint");
-  if (!bar) return;
-  if (state.cityConfirmed) { bar.remove(); return; }
-  bar.hidden = false;
-  qs("[data-city-yes]", bar).onclick = confirmCity;
+/* Город — ключевой триггер всего сервиса, поэтому на входе спрашиваем
+   полноэкранным попапом, а не тихой плашкой: по решению с созвона
+   07.09.2026 (город определяется по IP, человек подтверждает или меняет). */
+function initCityGate() {
+  const modal = qs("#cityModal");
+  if (!modal || state.cityConfirmed) return;
+  qsa("[data-city-detected]").forEach(el => el.textContent = state.city || CITIES[0]);
+  modal.classList.add("is-on");
+  document.body.classList.add("no-scroll");
+  const yes = qs("[data-city-yes]", modal);
+  if (yes) yes.onclick = () => setCity(state.city || CITIES[0]);
 }
 
 function buildCityModal() {
@@ -424,7 +429,7 @@ function quickHTML(c) {
       </div>
 
       <div class="quick__foot">
-        <a class="btn btn--ghost" href="#">Поделиться</a>
+        <button type="button" class="btn btn--ghost" data-share>${ICON.share} Поделиться</button>
         <a class="btn btn--ghost" href="coupon.html" data-open-page>Открыть страницу купона</a>
       </div>
     </div>`;
@@ -472,12 +477,39 @@ function openQuick(c, cardEl) {
     };
   }
 
+  /* Поделиться можно только ссылкой на отдельную страницу купона: у попапа
+     своего адреса нет, поэтому кнопка отдаёт именно её (системный шаринг,
+     иначе — копирование ссылки; значки соцсетей сюда не выносим). */
+  const share = qs("[data-share]", quick);
+  if (share) share.onclick = () => shareCoupon(share, c);
+
   const rev = qs("[data-reveal]", quick);
   qs("[data-reveal-btn]", quick).onclick = () => {
     rev.classList.add("is-open");
     state.metrics.revealed++;
     paintMetrics();
   };
+}
+
+/* Ссылка на страницу купона — общая для попапа и самой страницы */
+function couponPageUrl(c) {
+  const base = location.href.replace(/[^/]*$/, "");
+  return base + "coupon.html?cat=" + c.cat.id + (EMBED ? "&embed=1" : "");
+}
+
+function shareCoupon(btn, c) {
+  const url = couponPageUrl(c);
+  const done = () => {
+    const was = btn.innerHTML;
+    btn.textContent = "Ссылка скопирована";
+    setTimeout(() => { btn.innerHTML = was; }, 1800);
+  };
+  if (navigator.share) {
+    navigator.share({ title: c.title, text: c.company, url: url }).catch(() => {});
+    return;
+  }
+  if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, done);
+  else done();
 }
 
 function closeQuick() {
@@ -581,8 +613,8 @@ function renderCouponPage() {
       </div>
 
       <div class="coupon__actions">
-        <button class="btn btn--ghost btn--lg">Поделиться</button>
-        <button class="btn btn--ghost btn--lg">Сохранить скриншотом</button>
+        <button type="button" class="btn btn--ghost btn--lg" data-share>${ICON.share} Поделиться</button>
+        <button type="button" class="btn btn--ghost btn--lg">Сохранить скриншотом</button>
       </div>
 
       <div>
@@ -609,6 +641,9 @@ function renderCouponPage() {
     state.metrics.revealed++;
     paintMetrics();
   };
+
+  const share = qs("[data-share]", qs("#couponRoot"));
+  if (share) share.onclick = () => shareCoupon(share, c);
 
   /* О компании */
   qs("#aboutName").textContent = c.company;
@@ -709,7 +744,7 @@ function initCommon() {
   initIcons();
   fillFeaturedCounts();
   buildCityModal();
-  initCityHint();
+  initCityGate();
   renderCity();
   initSearch();
   paintMetrics();
