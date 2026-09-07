@@ -313,9 +313,10 @@ function initNear(gridSel, catId) {
   };
 }
 
-/* Лента не бесконечная: сама подгружается до FEED_AUTO карточек,
-   дальше — по кнопке. Иначе до подвала невозможно доскроллить. */
-const FEED_AUTO = 8;    /* две строки по четыре — дальше по кнопке */
+/* Лента по-настоящему бесконечная — без кнопки «Показать ещё». По решению
+   с созвона 07.09.2026: кнопка создаёт лишний клик, мешает метрике
+   показов и может задвоить купон при повторном срабатывании рандомайзера.
+   Подгружаем сама по скроллу, пока не кончится FEED_MAX. */
 const FEED_MAX = 56;
 
 function initInfinite(gridSel, catId) {
@@ -327,19 +328,10 @@ function initInfinite(gridSel, catId) {
                '<span class="loader__dot"></span><span style="margin-left:6px">подгружаем ещё купоны</span>';
 
   function paint() {
-    const n = grid.children.length;
-    if (n >= FEED_MAX) {
+    if (grid.children.length >= FEED_MAX) {
       loader.innerHTML = '<span class="feed-end">Вы посмотрели все купоны' +
         (state.city ? " в городе " + state.city : "") +
         '. Новые появляются каждый день.</span>';
-      return;
-    }
-    if (n >= FEED_AUTO) {
-      loader.innerHTML = '<button class="btn btn--ghost btn--lg" data-more>Показать ещё купоны</button>';
-      qs("[data-more]", loader).onclick = () => {
-        fillFeed(gridSel, 8, catId);
-        paint();
-      };
       return;
     }
     loader.innerHTML = dots;
@@ -349,7 +341,7 @@ function initInfinite(gridSel, catId) {
 
   new IntersectionObserver(entries => {
     if (!entries[0].isIntersecting || feedBusy) return;
-    if (grid.children.length >= FEED_AUTO) return;
+    if (grid.children.length >= FEED_MAX) return;
     feedBusy = true;
     setTimeout(() => {
       fillFeed(gridSel, 8, catId);
