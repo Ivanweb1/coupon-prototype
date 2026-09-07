@@ -235,19 +235,13 @@ input{font:inherit;color:inherit}
 .select--near.is-active svg{color:rgba(255,255,255,.6)}
 
 /* Маркетплейсы и «Для бизнеса» — не рядовые категории, а отдельные
-   главенствующие ветки. Стоят своей строкой над общей лентой категорий,
-   чтобы не терялись между «кафе» и «рестораны». */
-.featured-cats{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.featured-cats a{
-  display:inline-flex;align-items:center;gap:9px;
-  height:46px;padding:0 20px;border-radius:var(--r-pill);
-  border:1.5px solid var(--ink);background:var(--surface);
-  font-weight:600;font-size:14px;color:var(--ink);
-  transition:transform .18s var(--ease), background .18s, color .18s;
-}
-.featured-cats a:hover{background:var(--ink);color:var(--bg);transform:translateY(-2px)}
-.featured-cats .tag__n{color:var(--ink-4)}
-.featured-cats a:hover .tag__n{color:rgba(255,255,255,.6)}
+   главенствующие ветки. Закреплены в той же строке, что и «Все категории»
+   (не скроллятся вместе с обычными тегами), но с жирной рамкой — видно,
+   что это не «кафе» и не «рестораны», а отдельный, более важный переход. */
+.tag--featured{border:1.5px solid var(--ink);font-weight:600;background:var(--surface)}
+.tag--featured:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tag--featured .tag__n{color:var(--ink-4)}
+.tag--featured:hover .tag__n{color:rgba(255,255,255,.6)}
 
 /* Лента популярных категорий: «Все категории» закреплены слева,
    остальные — одной строкой со свайпом вправо, без переноса на вторую */
@@ -377,13 +371,22 @@ input{font:inherit;color:inherit}
 .card__share:hover{background:#fff}
 
 /* Маркировка рекламы — обязательна на каждом объявлении отдельно,
-   но не должна привлекать внимание: мелко, на самом изображении */
+   но не должна привлекать внимание: мелко, на самом изображении.
+   Низ изображения занят заголовком/скидкой (в мягком стиле карточки они
+   наложены на фото), поэтому метка — наверху, подальше от текста. */
 .erid-stamp{
-  position:absolute;right:8px;bottom:8px;z-index:1;
+  position:absolute;top:8px;right:8px;z-index:1;
+  max-width:112px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   font-size:9px;line-height:1.3;color:rgba(21,21,20,.45);
   background:rgba(255,255,255,.55);
   padding:2px 6px;border-radius:5px;
   letter-spacing:.01em;pointer-events:none;
+}
+/* На карточке в ленте наверху справа уже живёт кнопка «Поделиться» —
+   сдвигаем метку левее, чтобы не наезжала на неё по ховеру. На тач-экранах
+   ховера не бывает, кнопка всегда невидима — там метка может стоять в углу */
+@media (hover:hover){
+  .card__media .erid-stamp{right:46px}
 }
 
 .card__value{
@@ -831,6 +834,10 @@ input{font:inherit;color:inherit}
   .tag--all{width:42px;padding:0}
   .tag--all .tag__label,
   .tag--all .chev{display:none}
+  /* Маркетплейсы/Для бизнеса тоже закреплены (не в скролле) — сжимаем
+     до иконки со счётчиком, иначе они одни съедят всю строку */
+  .tag--featured{width:auto;padding:0 10px;gap:4px}
+  .tag--featured .tag__label{display:none}
   .tag--near .tag__label{display:none}
   .tag--near .tag__label-s{display:inline}
   .tags-row{gap:8px}
