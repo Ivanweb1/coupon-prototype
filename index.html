@@ -11,28 +11,20 @@
 </head>
 <body>
 
-<!-- Верхняя полоса: вход в ЛК всегда справа сверху, отдельно от основного меню -->
-<div class="topbar">
-  <div class="wrap topbar__in">
-    <span class="topbar__note">Купоны и скидки вашего города — без регистрации и оплаты</span>
-    <span class="topbar__note topbar__note--s">Без регистрации и оплаты</span>
-    <a href="#">Стать партнёром</a>
-    <a href="#">Разместить купон</a>
-    <a href="#" class="lk">Войти в личный кабинет</a>
-  </div>
-</div>
-
-<!-- Шапка -->
+<!-- Шапка: логотип и минимум интерфейса. «Стать партнёром» — не публичная
+     история (её ищут вручную), Marketplace/«Для бизнеса» переехали в
+     ленту категорий ниже — это не рядовая навигация, а отдельные ветки. -->
 <header class="header">
   <div class="wrap header__in">
     <a class="logo" href="index.html">Логотип</a>
 
-    <nav class="nav">
-      <a href="catalog.html?cat=marketplace">Маркетплейсы</a>
-      <a href="#">Для бизнеса</a>
-    </nav>
-
     <span class="header__spacer"></span>
+
+    <div class="head-socials" aria-label="Мы в соцсетях города">
+      <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="link"></a>
+      <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="link"></a>
+      <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="link"></a>
+    </div>
 
     <button class="city-btn" data-city-open>
       <span data-icon="pin"></span>
@@ -40,20 +32,18 @@
       <span class="chev" data-icon="chev"></span>
     </button>
 
-    <a class="lk-icon" href="#" data-icon="user" aria-label="Войти в личный кабинет" title="Войти в личный кабинет"></a>
-    <button class="burger" data-burger data-icon="burger" aria-label="Меню"></button>
-  </div>
+    <!-- Единственный явный призыв к действию в шапке: заведомо простое
+         разовое действие, в отличие от входа в ЛК рядом -->
+    <a class="btn btn--solid header-cta" href="#">
+      <span data-icon="plus"></span><span class="header-cta__label">Разместить купон</span>
+    </a>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="wrap">
-      <ul>
-        <li><a href="catalog.html?cat=marketplace">Маркетплейсы</a></li>
-        <li><a href="#">Для бизнеса</a></li>
-        <li><a href="#">Стать партнёром</a></li>
-        <li><a href="#">Разместить купон</a></li>
-        <li><a href="#">Войти в личный кабинет</a></li>
-      </ul>
-    </div>
+    <!-- Повторяющееся действие с понятным ожиданием — прячем в кружок,
+         текст раскрывается по наведению, чтобы не спорить за внимание -->
+    <a class="lk-chip" href="#" aria-label="Войти в личный кабинет">
+      <span data-icon="user"></span>
+      <span class="lk-chip__label">Войти в личный кабинет</span>
+    </a>
   </div>
 </header>
 
@@ -82,6 +72,19 @@
       <input type="text" placeholder="Хочу скидку на кофе в Липецке…">
       <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
       <button class="search__go">Найти</button>
+    </div>
+
+    <!-- Marketplace и «Для бизнеса» — не рядовые категории вроде «кафе»,
+         а отдельные главенствующие ветки, поэтому своей строкой над общими -->
+    <div class="featured-cats">
+      <a href="catalog.html?cat=marketplace">
+        <span data-icon="grid"></span> Все скидки на маркетплейсах
+        <span class="tag__n" id="mpCount"></span>
+      </a>
+      <a href="catalog.html?cat=business">
+        <span data-icon="grid"></span> Скидки на всё для бизнеса
+        <span class="tag__n" id="bizCount"></span>
+      </a>
     </div>
 
     <div class="tags-row">
@@ -130,16 +133,6 @@
     </div>
 
     <div class="footer__cols">
-      <div class="fcol">
-        <h4>Мы в вашем городе</h4>
-        <p>Подписывайтесь на группу своего города — новые купоны выходят там раньше.</p>
-        <div class="city-socials">
-          <a class="soc" href="#" data-city-social="ВКонтакте"></a>
-          <a class="soc" href="#" data-city-social="Одноклассники"></a>
-          <a class="soc" href="#" data-city-social="Telegram"></a>
-          <a class="soc" href="#" data-city-social="MAX"></a>
-        </div>
-      </div>
       <div class="fcol">
         <h4>Сервис</h4>
         <ul>

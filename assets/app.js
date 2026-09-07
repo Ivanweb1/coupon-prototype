@@ -18,7 +18,9 @@ const ICON = {
   pinFill:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"/></svg>',
   burger: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   user:   '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>',
-  grid:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>'
+  grid:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>',
+  plus:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  link:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M14 10a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1"/></svg>'
 };
 
 /* ---------- Состояние ---------- */
@@ -33,9 +35,13 @@ const state = {
   seen: new Set()
 };
 
-/* Расстояние до точки */
+/* Расстояние до точки — в минутах, а не в метрах: по решению с созвона
+   07.09.2026 точная геопозиция не нужна, а «в 5 минутах» понятнее и не
+   требует точного определения местоположения пользователя. Ближе 300 м
+   считаем пешком (~5 км/ч), дальше — на транспорте по городу (~25 км/ч). */
 function fmtDist(m) {
-  return m < 1000 ? m + " м" : (m / 1000).toFixed(1).replace(".", ",") + " км";
+  const min = m < 300 ? Math.max(1, Math.round(m / 80)) : Math.max(2, Math.round(m / 420));
+  return min + " мин";
 }
 
 /* ==========================================================================
@@ -43,9 +49,11 @@ function fmtDist(m) {
    ========================================================================== */
 function renderCity() {
   qsa("[data-city-name]").forEach(el => el.textContent = state.city || "Выберите город");
+  /* Иконки соцсетей города — сам значок оставляем нетронутым (его рисует
+     initIcons), город уходит в подсказку при наведении */
   qsa("[data-city-social]").forEach(el => {
     const net = el.dataset.citySocial;
-    el.textContent = net + " · " + (state.city || "город");
+    el.title = "Мы в " + net + (state.city ? " · " + state.city : "");
   });
 }
 
@@ -105,8 +113,11 @@ function buildTags() {
   const host = qs("#tags");
   if (!host) return;
   /* Показываем все категории, отсортированные по числу активных купонов
-     в городе: строка одна, длинная — её листают вправо. */
-  CATEGORIES.slice().sort((a, b) => b.n - a.n).forEach(c => {
+     в городе: строка одна, длинная — её листают вправо. Marketplace и
+     «Для бизнеса» сюда не попадают — это отдельные ветки строкой выше,
+     а не рядовые категории вроде «кафе». */
+  CATEGORIES.filter(c => c.id !== "marketplace" && c.id !== "business")
+    .sort((a, b) => b.n - a.n).forEach(c => {
     const a = document.createElement("a");
     a.className = "tag" + (state.cat === c.id ? " is-active" : "");
     a.href = "catalog.html?cat=" + c.id + (EMBED ? "&embed=1" : "");
@@ -154,6 +165,7 @@ function cardHTML(c, compact) {
     <div class="card__media">
       <span class="card__near">${fmtDist(c.dist)}</span>
       <span class="card__share" title="Поделиться">${ICON.share}</span>
+      <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
       ${wb
         ? `<span class="card__badge">${c.value}</span>`
         : `<span class="card__value">${c.value}</span>
@@ -166,7 +178,7 @@ function cardHTML(c, compact) {
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
-        <button type="button" class="btn btn--solid" data-card-reveal>Показать купон</button>
+        <button type="button" class="btn btn--solid" data-card-reveal>Забрать купон</button>
       </div>
     </div>`;
 }
@@ -181,19 +193,29 @@ function makeCard(c, compact) {
   el.innerHTML = cardHTML(c, compact);
   el._coupon = c;
 
+  /* В ленте рекомендаций (compact) карточка не открывает поп-ап поверх
+     той же страницы — это закольцовывало бы воронку на одном и том же
+     шаге. Вместо этого переносим в каталог смежной категории и закрепляем
+     этот купон в выдаче первым (см. consumePin). */
+  const goToCategory = () => {
+    try { sessionStorage.setItem("cp_pin", JSON.stringify(c)); } catch (err) {}
+    location.href = "catalog.html?cat=" + c.cat.id + (EMBED ? "&embed=1" : "");
+  };
   const open = () => openQuick(c, el);
-  el.addEventListener("click", open);
+  const activate = compact ? goToCategory : open;
+
+  el.addEventListener("click", activate);
   el.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
   });
 
-  qs("[data-card-more]", el).onclick = e => { e.stopPropagation(); open(); };
+  qs("[data-card-more]", el).onclick = e => { e.stopPropagation(); activate(); };
 
-  /* «Показать купон» показывает код на месте самой кнопки — без лишнего
-     клика и без отдельной полосы. В ленте рекомендаций открываем купон. */
+  /* «Забрать купон» показывает код на месте самой кнопки — без лишнего
+     клика и без отдельной полосы. */
   qs("[data-card-reveal]", el).onclick = e => {
     e.stopPropagation();
-    if (compact) { open(); return; }
+    if (compact) { activate(); return; }
     revealOnCard(e.currentTarget, c);
   };
 
@@ -236,6 +258,25 @@ const impressions = new IntersectionObserver(entries => {
 /* ==========================================================================
    Лента и бесконечная подгрузка
    ========================================================================== */
+
+/* Купон, на который нажали в блоке рекомендаций другой страницы, должен
+   встать в выдаче каталога первым — забираем его до обычной подгрузки.
+   Возвращает true, если купон был закреплён (тогда лента добирает на
+   один купон меньше, чтобы не перебить обычную первую порцию). */
+function consumePin(gridSel, catId) {
+  let raw;
+  try { raw = sessionStorage.getItem("cp_pin"); } catch (e) { return false; }
+  if (!raw) return false;
+  try { sessionStorage.removeItem("cp_pin"); } catch (e) {}
+  let c;
+  try { c = JSON.parse(raw); } catch (e) { return false; }
+  if (!c || !c.cat || c.cat.id !== catId) return false;
+  const grid = qs(gridSel);
+  if (!grid) return false;
+  grid.appendChild(makeCard(c));
+  return true;
+}
+
 let feedBusy = false;
 function fillFeed(gridSel, n, catId) {
   const grid = qs(gridSel);
@@ -325,11 +366,15 @@ let originCard = null;
 let fromTransform = "";
 
 function quickHTML(c) {
+  /* Порядок блоков — сама воронка: промокод забирают раньше, чем
+     успевают отвлечься на условия. Условия — позитивная инструкция
+     «как воспользоваться», а не список запретов, и не в центре внимания. */
   return `
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
       <div class="quick__photo">
         <span class="quick__value">${c.value}</span>
+        <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
       </div>
     </div>
     <div class="quick__side">
@@ -348,28 +393,28 @@ function quickHTML(c) {
           <div class="company__req">ИНН 0000000000 · ${c.address}</div>
         </div>
         <div class="socials">
-          <a class="soc" href="#" title="Сайт">сайт</a>
-          <a class="soc" href="#" title="ВК">вк</a>
-          <a class="soc" href="#" title="Telegram">tg</a>
+          <a class="soc" href="#" title="Сайт компании">${ICON.link} Сайт</a>
+          <a class="soc" href="#" title="Компания ВКонтакте">${ICON.link} ВКонтакте</a>
+          <a class="soc" href="#" title="Компания в Telegram">${ICON.link} Telegram</a>
+        </div>
+      </div>
+
+      <div class="reveal" data-reveal>
+        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
+        <div class="reveal__row">
+          <div class="reveal__code">${c.code}</div>
+          <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
+          <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
         </div>
       </div>
 
       <div>
-        <div class="block-label">Условия</div>
+        <div class="block-label">Как воспользоваться</div>
         <ul class="terms">
           <li>${c.terms[0]}</li>
           <li>${c.terms[1]}</li>
           <li>${c.terms[2]}</li>
         </ul>
-      </div>
-
-      <div class="reveal" data-reveal>
-        <div class="block-label" style="margin:0">Промокод · ${c.until}</div>
-        <div class="reveal__row">
-          <div class="reveal__code">${c.code}</div>
-          <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Показать купон</button>
-          <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
-        </div>
       </div>
 
       <div>
@@ -383,7 +428,6 @@ function quickHTML(c) {
       <div class="quick__foot">
         <a class="btn btn--ghost" href="#">Поделиться</a>
         <a class="btn btn--ghost" href="coupon.html" data-open-page>Открыть страницу купона</a>
-        <span class="mute">осталось ${c.left} шт.</span>
       </div>
     </div>`;
 }
@@ -501,12 +545,7 @@ function renderCouponPage() {
     <div class="coupon__left">
       <div class="coupon__hero">
         <span class="coupon__value">${c.value}</span>
-      </div>
-      <div class="coupon__thumbs">
-        <div class="coupon__thumb">фото 1</div>
-        <div class="coupon__thumb">фото 2</div>
-        <div class="coupon__thumb">фото 3</div>
-        <div class="coupon__thumb">фото 4</div>
+        <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
       </div>
     </div>
 
@@ -516,8 +555,7 @@ function renderCouponPage() {
         <span>${state.city || "город"}</span><i class="dot"></i>
         <span>${ICON.eye} ${c.views}</span><i class="dot"></i>
         <span>${fmtDist(c.dist)} от вас</span><i class="dot"></i>
-        <span>осталось ${c.left} шт.</span><i class="dot"></i>
-        <span>${c.until}</span>
+        <span>Действует ${c.until}</span>
       </div>
 
       <h1>${c.title}</h1>
@@ -529,17 +567,17 @@ function renderCouponPage() {
           <div class="company__req">ИНН 0000000000 · ${c.address}</div>
         </div>
         <div class="socials">
-          <a class="soc" href="#" title="Сайт">сайт</a>
-          <a class="soc" href="#" title="ВК">вк</a>
-          <a class="soc" href="#" title="Telegram">tg</a>
+          <a class="soc" href="#" title="Сайт компании">${ICON.link} Сайт</a>
+          <a class="soc" href="#" title="Компания ВКонтакте">${ICON.link} ВКонтакте</a>
+          <a class="soc" href="#" title="Компания в Telegram">${ICON.link} Telegram</a>
         </div>
       </div>
 
       <div class="reveal reveal--big" data-reveal>
-        <div class="block-label" style="margin:0">Промокод · ${c.until}</div>
+        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
         <div class="reveal__row">
           <div class="reveal__code">${c.code}</div>
-          <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Показать купон</button>
+          <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
           <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
         </div>
       </div>
@@ -550,7 +588,7 @@ function renderCouponPage() {
       </div>
 
       <div>
-        <div class="block-label">Условия</div>
+        <div class="block-label">Как воспользоваться</div>
         <ul class="terms">
           <li>${c.terms[0]}</li>
           <li>${c.terms[1]}</li>
@@ -649,13 +687,6 @@ document.addEventListener("keydown", e => {
   }
 });
 
-function initBurger() {
-  const b = qs("[data-burger]");
-  const m = qs("#mobileMenu");
-  if (!b || !m) return;
-  b.onclick = () => m.classList.toggle("is-on");
-}
-
 /* Стиль карточек: ?cards=wb (по умолчанию) или ?cards=soft — первая версия.
    Выбор запоминается, чтобы не сбрасывался при переходе между страницами. */
 function initCardStyle() {
@@ -667,10 +698,18 @@ function initCardStyle() {
   document.body.classList.add("cards-" + style);
 }
 
+/* Счётчики у Marketplace/«Для бизнеса» на главной — те же данные,
+   что и у обычных категорий, просто вынесены отдельной строкой */
+function fillFeaturedCounts() {
+  const mp = qs("#mpCount"), biz = qs("#bizCount");
+  if (mp) mp.textContent = (CATEGORIES.find(c => c.id === "marketplace") || {}).n || "";
+  if (biz) biz.textContent = (CATEGORIES.find(c => c.id === "business") || {}).n || "";
+}
+
 function initCommon() {
   initCardStyle();
   initIcons();
-  initBurger();
+  fillFeaturedCounts();
   buildCityModal();
   initCityHint();
   renderCity();

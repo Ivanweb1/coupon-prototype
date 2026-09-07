@@ -11,17 +11,6 @@
 </head>
 <body>
 
-<div class="topbar">
-  <div class="wrap topbar__in">
-    <span class="topbar__note">Купоны и скидки вашего города — без регистрации и оплаты</span>
-    <span class="topbar__note topbar__note--s">Без регистрации и оплаты</span>
-    <a href="#">Стать партнёром</a>
-    <a href="#">Разместить купон</a>
-    <a href="#" class="lk">Войти в личный кабинет</a>
-  </div>
-</div>
-
-<!-- Шапка не меняется, поиск остаётся — но сжат в строку шапки -->
 <header class="header">
   <div class="wrap header__in">
     <a class="logo" href="index.html">Логотип</a>
@@ -35,26 +24,26 @@
 
     <span class="header__spacer"></span>
 
+    <div class="head-socials" aria-label="Мы в соцсетях города">
+      <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="link"></a>
+      <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="link"></a>
+      <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="link"></a>
+    </div>
+
     <button class="city-btn" data-city-open>
       <span data-icon="pin"></span>
       <span data-city-name>Липецк</span>
       <span class="chev" data-icon="chev"></span>
     </button>
 
-    <a class="lk-icon" href="#" data-icon="user" aria-label="Войти в личный кабинет" title="Войти в личный кабинет"></a>
-    <button class="burger" data-burger data-icon="burger" aria-label="Меню"></button>
-  </div>
+    <a class="btn btn--solid header-cta" href="#">
+      <span data-icon="plus"></span><span class="header-cta__label">Разместить купон</span>
+    </a>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="wrap">
-      <ul>
-        <li><a href="catalog.html?cat=marketplace">Маркетплейсы</a></li>
-        <li><a href="#">Для бизнеса</a></li>
-        <li><a href="#">Стать партнёром</a></li>
-        <li><a href="#">Разместить купон</a></li>
-        <li><a href="#">Войти в личный кабинет</a></li>
-      </ul>
-    </div>
+    <a class="lk-chip" href="#" aria-label="Войти в личный кабинет">
+      <span data-icon="user"></span>
+      <span class="lk-chip__label">Войти в личный кабинет</span>
+    </a>
   </div>
 </header>
 
@@ -120,16 +109,6 @@
 
     <div class="footer__cols">
       <div class="fcol">
-        <h4>Мы в вашем городе</h4>
-        <p>Подписывайтесь на группу своего города — новые купоны выходят там раньше.</p>
-        <div class="city-socials">
-          <a class="soc" href="#" data-city-social="ВКонтакте"></a>
-          <a class="soc" href="#" data-city-social="Одноклассники"></a>
-          <a class="soc" href="#" data-city-social="Telegram"></a>
-          <a class="soc" href="#" data-city-social="MAX"></a>
-        </div>
-      </div>
-      <div class="fcol">
         <h4>Сервис</h4>
         <ul>
           <li><a href="#">Как это работает</a></li>
@@ -194,7 +173,10 @@
 
   initCommon();
   buildDropdown();
-  fillFeed("#feed", 8, cat.id);
+  /* Купон из блока рекомендаций другой страницы встаёт первым, а лента
+     добирает на один меньше — иначе первая порция окажется из девяти */
+  var hasPin = consumePin("#feed", cat.id);
+  fillFeed("#feed", hasPin ? 7 : 8, cat.id);
   initInfinite("#feed", cat.id);
   initNear("#feed", cat.id);
   buildRecommendations(cat.id);
