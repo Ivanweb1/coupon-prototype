@@ -144,6 +144,9 @@
    -------------------------------------------------------------------------- */
 .lk-tw{overflow-x:auto;margin:0 -20px;padding:0 20px}
 .lk-t{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+/* В парных блоках таблицы короткие — на три колонки, и общий минимум в
+   640px выдавливал у них скролл на ровном месте */
+.lk-pair .lk-t{min-width:0}
 .lk-t th{
   text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
   color:var(--ink-4);font-weight:500;padding:0 12px 10px;white-space:nowrap;

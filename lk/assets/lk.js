@@ -111,10 +111,12 @@ function renderChrome() {
   }).join("");
   qsa("#lkNav a").forEach(a => a.onclick = e => { e.preventDefault(); go(a.getAttribute("href").split("view=")[1]); });
 
-  /* Хлебные крошки и заголовок вкладки */
+  /* В шапке только название раздела. Какой это кабинет, человек и так
+     знает: он в него вошёл, и роль у него одна. В заголовке вкладки
+     кабинет оставляем — по нему различаются две открытые вкладки. */
   const title = TITLES[state.role][state.view] || "Раздел";
   const cab = state.role === "client" ? "Кабинет клиента" : "Кабинет партнёра";
-  qs("#lkCrumbs").innerHTML = `${cab} · <b>${title}</b>`;
+  qs("#lkCrumbs").innerHTML = `<b>${title}</b>`;
   document.title = title + " — " + cab;
 
   /* Кнопка действия в шапке: партнёр публиковать купоны не может
@@ -139,8 +141,8 @@ function renderChrome() {
 
   /* Кто в кабинете */
   qs("#lkMe").innerHTML = state.role === "client"
-    ? `<div class="lk__me-ava">КП</div><div><div class="lk__me-name">Кофейня «Пример»</div><div class="lk__me-role">Клиент · Липецк</div></div>`
-    : `<div class="lk__me-ava">ИП</div><div><div class="lk__me-name">Иван Партнёров</div><div class="lk__me-role">Партнёр · Липецк</div></div>`;
+    ? `<div class="lk__me-ava">КП</div><div><div class="lk__me-name">Кофейня «Пример»</div><div class="lk__me-role">Липецк</div></div>`
+    : `<div class="lk__me-ava">ИП</div><div><div class="lk__me-name">Иван Партнёров</div><div class="lk__me-role">Липецк</div></div>`;
 
   initIcons();
 }
