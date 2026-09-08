@@ -220,15 +220,6 @@ input{font:inherit;color:inherit}
 .select--near.is-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .select--near.is-active svg{color:rgba(255,255,255,.6)}
 
-/* Маркетплейсы и «Для бизнеса» — не рядовые категории, а отдельные
-   главенствующие ветки. Закреплены в той же строке, что и «Все категории»
-   (не скроллятся вместе с обычными тегами), но с жирной рамкой — видно,
-   что это не «кафе» и не «рестораны», а отдельный, более важный переход. */
-.tag--featured{border:1.5px solid var(--ink);font-weight:600;background:var(--surface)}
-.tag--featured:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.tag--featured .tag__n{color:var(--ink-4)}
-.tag--featured:hover .tag__n{color:rgba(255,255,255,.6)}
-
 /* Лента популярных категорий: «Все категории» закреплены слева,
    остальные — одной строкой со свайпом вправо, без переноса на вторую */
 .tags-row{display:flex;align-items:center;gap:12px;min-width:0;position:relative}
@@ -282,6 +273,24 @@ input{font:inherit;color:inherit}
 .tag--all:hover{background:#000;border-color:#000;color:var(--bg)}
 .tag--all .chev{color:rgba(255,255,255,.55)}
 .tag--all svg{opacity:.8}
+
+/* Маркетплейсы и «Для бизнеса» — не рядовые категории, а отдельные
+   главенствующие ветки. Закреплены в той же строке, что и «Все категории»
+   (не скроллятся вместе с обычными тегами), но с жирной рамкой — видно,
+   что это не «кафе» и не «рестораны», а отдельный, более важный переход.
+   Блок обязан идти ПОСЛЕ .tag: специфичность одинаковая, и базовая
+   светлая рамка .tag иначе перебивает выделение. */
+.tag--featured{
+  border:1.5px solid var(--ink);
+  background:var(--surface);
+  font-weight:600;color:var(--ink);
+  box-shadow:0 0 0 3px var(--surface);   /* воздух вокруг рамки — не слипается с соседними тегами */
+}
+.tag--featured svg{color:var(--ink)}
+.tag--featured .tag__n{color:var(--ink-3)}
+.tag--featured:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tag--featured:hover svg{color:var(--bg)}
+.tag--featured:hover .tag__n{color:rgba(255,255,255,.6)}
 
 /* Выпадающий список всех категорий */
 .dd{position:relative}
