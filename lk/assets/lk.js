@@ -11,11 +11,32 @@ const qs  = (s, r = document) => r.querySelector(s);
 const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
 const P   = new URLSearchParams(location.search);
 
+/* Все иконки разделов рисуются по одному шаблону: 18px, толщина 1.7,
+   скруглённые концы. Так ряд в меню выглядит собранным. */
+const nav = d => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" ' +
+  'stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+
 const ICON = {
   plus:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
   burger: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   bell:   '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M18 9a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10.5 20a2 2 0 0 0 3 0"/></svg>',
   chev:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>',
+
+  /* Иконки разделов. Один размер, одна толщина, скруглённые концы —
+     в списке они должны читаться как ряд, а не как набор картинок. */
+  grid:   nav('<rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/>'),
+  tag:    nav('<path d="M12.6 3H5a2 2 0 0 0-2 2v7.6a2 2 0 0 0 .6 1.4l7.4 7.4a2 2 0 0 0 2.8 0l7.6-7.6a2 2 0 0 0 0-2.8L14 3.6A2 2 0 0 0 12.6 3Z"/><circle cx="7.9" cy="7.9" r="1.3"/>'),
+  pin:    nav('<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>'),
+  bag:    nav('<path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>'),
+  archive:nav('<rect x="3" y="4" width="18" height="4.5" rx="1.5"/><path d="M5 8.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5"/><path d="M10 12.5h4"/>'),
+  chart:  nav('<path d="M4 20h16"/><path d="M7.5 20v-5.5M12 20V9M16.5 20v-8"/>'),
+  card:   nav('<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18"/><path d="M6.5 14.5h3"/>'),
+  store:  nav('<path d="M4.5 9.5h15V19a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1V9.5Z"/><path d="M4.5 9.5 6 4.5h12l1.5 5"/><path d="M9.8 20v-5h4.4v5"/>'),
+  users:  nav('<circle cx="9.2" cy="8.4" r="3.2"/><path d="M3.5 19.2a5.7 5.7 0 0 1 11.4 0"/><path d="M16.2 5.6a3.2 3.2 0 0 1 0 5.6M17.3 19.2a5.7 5.7 0 0 0-1.5-3.9"/>'),
+  code:   nav('<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M7 9v6M10.5 9v6M14 9v6M17 9v6"/>'),
+  gift:   nav('<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5.2 12.5V19a1 1 0 0 0 1 1h11.6a1 1 0 0 0 1-1v-6.5"/><path d="M12 8.5V20"/><path d="M12 8.5S10.9 4 8.9 4a2.25 2.25 0 0 0 0 4.5H12Z"/><path d="M12 8.5S13.1 4 15.1 4a2.25 2.25 0 0 1 0 4.5H12Z"/>'),
+  wallet: nav('<path d="M19.5 8.5V7a2 2 0 0 0-2-2H5.5a2.5 2.5 0 0 0 0 5h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-12a2.5 2.5 0 0 1-2.5-2.5v-9"/><circle cx="16.5" cy="14.5" r="1.1"/>'),
+  user:   nav('<circle cx="12" cy="8" r="3.6"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/>'),
   exit:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>'
 };
 
@@ -42,27 +63,27 @@ const state = {
 const NAV = {
   client: [
     { group: "Купоны" },
-    { id: "dashboard",       label: "Дашборд" },
-    { id: "coupons",         label: "Мои купоны" },
-    { id: "new-regional",    label: "Создание регионального купона" },
-    { id: "new-marketplace", label: "Создание купона маркетплейса" },
-    { id: "archive",         label: "Архив купонов" },
+    { id: "dashboard",       label: "Дашборд",                        icon: "grid" },
+    { id: "coupons",         label: "Мои купоны",                     icon: "tag" },
+    { id: "new-regional",    label: "Создание регионального купона",  icon: "pin" },
+    { id: "new-marketplace", label: "Создание купона маркетплейса",   icon: "bag" },
+    { id: "archive",         label: "Архив купонов",                  icon: "archive" },
     { group: "Компания" },
-    { id: "stats",           label: "Статистика" },
-    { id: "billing",         label: "Биллинг" },
-    { id: "profile",         label: "Профиль компании" },
-    { id: "notifications",   label: "Уведомления" }
+    { id: "stats",           label: "Статистика",                     icon: "chart" },
+    { id: "billing",         label: "Биллинг",                        icon: "card" },
+    { id: "profile",         label: "Профиль компании",               icon: "store" },
+    { id: "notifications",   label: "Уведомления",                    icon: "bell" }
   ],
   partner: [
     { group: "Привлечение" },
-    { id: "dashboard",       label: "Дашборд партнёра" },
-    { id: "clients",         label: "Региональные клиенты" },
-    { id: "codes",           label: "Маркетплейс · Мои коды" },
-    { id: "bonuses",         label: "Бонусы клиентам" },
+    { id: "dashboard",       label: "Дашборд партнёра",        icon: "grid" },
+    { id: "clients",         label: "Региональные клиенты",    icon: "users" },
+    { id: "codes",           label: "Маркетплейс · Мои коды",  icon: "code" },
+    { id: "bonuses",         label: "Бонусы клиентам",         icon: "gift" },
     { group: "Деньги" },
-    { id: "payouts",         label: "Отчёты и выплаты" },
-    { id: "profile",         label: "Профиль партнёра" },
-    { id: "notifications",   label: "Уведомления" }
+    { id: "payouts",         label: "Отчёты и выплаты",        icon: "wallet" },
+    { id: "profile",         label: "Профиль партнёра",        icon: "user" },
+    { id: "notifications",   label: "Уведомления",             icon: "bell" }
   ]
 };
 
@@ -111,6 +132,7 @@ function renderChrome() {
     const on = it.id === state.view ||
                (state.view === "coupon" && it.id === (isArchived() ? "archive" : "coupons"));
     return `<a href="${href(it.id)}"${on ? ' class="is-on"' : ""}>
+      <span class="lk__nav-i" data-icon="${it.icon}"></span>
       <span>${it.label}</span>${n ? `<span class="lk__n">${n}</span>` : ""}</a>`;
   }).join("");
   qsa("#lkNav a").forEach(a => a.onclick = e => { e.preventDefault(); go(a.getAttribute("href").split("view=")[1]); });
@@ -153,28 +175,14 @@ function renderChrome() {
     ? { ava: "КП", name: "Кофейня «Пример»" }
     : { ava: "ИП", name: "Иван Партнёров" };
   me.innerHTML = `
-    <button class="lk__me-btn" data-me-toggle aria-haspopup="true" aria-expanded="false">
-      <span class="lk__me-ava">${who.ava}</span>
-      <span class="lk__me-txt">
-        <span class="lk__me-name">${who.name}</span>
-        <span class="lk__me-role">Липецк</span>
-      </span>
-      <span class="chev" data-icon="chev"></span>
-    </button>
-    <div class="lk__me-menu">
-      <a href="${href("profile")}" data-go="profile">${state.role === "client" ? "Профиль компании" : "Профиль партнёра"}</a>
-      <a href="../index.html" class="lk__me-exit"><span data-icon="exit"></span>Выйти</a>
-    </div>`;
-  const toggle = qs("[data-me-toggle]", me);
-  toggle.onclick = e => {
-    e.stopPropagation();
-    const open = me.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", open);
-  };
-  qs(".lk__me-menu", me).onclick = e => {
-    const a = e.target.closest("a");
-    if (a && a.dataset.go) { e.preventDefault(); me.classList.remove("is-open"); go(a.dataset.go); }
-  };
+    <span class="lk__me-ava">${who.ava}</span>
+    <span class="lk__me-txt">
+      <span class="lk__me-name">${who.name}</span>
+      <span class="lk__me-role">Липецк</span>
+    </span>
+    <a class="lk__me-exit" href="../index.html" title="Выйти" aria-label="Выйти">
+      <span data-icon="exit"></span>
+    </a>`;
 
   initIcons();
 }
@@ -731,15 +739,8 @@ function render() {
 }
 
 /* Шторка навигации на мобильном */
-document.addEventListener("click", () => {
-  const me = qs("#lkMe");
-  if (me) me.classList.remove("is-open");
-});
 document.addEventListener("keydown", e => {
-  if (e.key !== "Escape") return;
-  const me = qs("#lkMe");
-  if (me) me.classList.remove("is-open");
-  document.body.classList.remove("lk-nav-open");
+  if (e.key === "Escape") document.body.classList.remove("lk-nav-open");
 });
 
 qs("#lkBurger").onclick = () => document.body.classList.toggle("lk-nav-open");

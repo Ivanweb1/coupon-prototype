@@ -62,6 +62,11 @@
   font-variant-numeric:tabular-nums;
 }
 .lk__nav a.is-on .lk__n{color:rgba(255,255,255,.6)}
+/* Иконка приглушена: она помогает найти пункт взглядом, но не спорит с
+   названием. У активного пункта светлеет вместе с текстом. */
+.lk__nav-i{flex:0 0 auto;display:grid;place-items:center;color:var(--ink-4)}
+.lk__nav a:hover .lk__nav-i{color:var(--ink-3)}
+.lk__nav a.is-on .lk__nav-i{color:rgba(255,255,255,.75)}
 
 
 .lk__main{display:flex;flex-direction:column;min-width:0}
@@ -94,54 +99,32 @@
 .lk__dot.is-on{display:block}
 
 /* Учётная запись живёт в подвале бокового меню: место под разделами всё
-   равно пустует, а шапка остаётся под действия. Меню раскрывается вверх. */
+   равно пустует, а шапка остаётся под действия. Выход — иконкой справа,
+   без промежуточного меню: в кабинете это единственное действие над
+   учётной записью, профиль и так есть отдельным разделом. */
 .lk__me{
-  position:relative;margin:0 -16px -20px;padding:12px 10px;
+  display:flex;align-items:center;gap:9px;
+  margin:0 -16px -20px;padding:12px 14px;
   border-top:1px solid var(--line);
 }
-.lk__me-btn{
-  display:flex;align-items:center;gap:9px;width:100%;
-  padding:6px 8px;border-radius:var(--r-sm);
-  transition:background .16s;
-}
-.lk__me-btn:hover{background:var(--surface)}
-.lk__me-btn .chev{
-  margin-left:auto;flex:0 0 auto;color:var(--ink-4);
-  transform:rotate(180deg);transition:transform .2s var(--ease);
-}
-.lk__me.is-open .lk__me-btn .chev{transform:none}
 .lk__me-ava{
   flex:0 0 auto;width:34px;height:34px;border-radius:50%;
   background:var(--surface-2);color:var(--ink-3);
   display:grid;place-items:center;font-size:12px;font-weight:600;
 }
-.lk__me-txt{display:flex;flex-direction:column;text-align:left;min-width:0}
+.lk__me-txt{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}
 .lk__me-name,.lk__me-role{
   max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .lk__me-name{font-size:13px;font-weight:500;line-height:1.25}
 .lk__me-role{font-size:12px;color:var(--ink-3);line-height:1.25}
 
-.lk__me-menu{
-  position:absolute;bottom:calc(100% + 2px);left:10px;right:10px;z-index:60;
-  padding:6px;
-  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);
-  box-shadow:var(--shadow-2);
-  opacity:0;transform:translateY(6px);pointer-events:none;
-  transition:opacity .16s, transform .16s var(--ease);
+.lk__me-exit{
+  flex:0 0 auto;width:32px;height:32px;border-radius:var(--r-sm);
+  display:grid;place-items:center;color:var(--ink-4);
+  transition:background .16s, color .16s;
 }
-.lk__me.is-open .lk__me-menu{opacity:1;transform:none;pointer-events:auto}
-.lk__me-menu a{
-  display:block;padding:9px 10px;border-radius:var(--r-sm);
-  font-size:14px;color:var(--ink-2);
-}
-.lk__me-menu a:hover{background:var(--surface);color:var(--ink)}
-.lk__me-menu a:last-child{
-  margin-top:4px;padding-top:12px;border-top:1px solid var(--line);
-  border-radius:0 0 var(--r-sm) var(--r-sm);
-}
-.lk__me-exit{display:flex;align-items:center;gap:9px}
-.lk__me-exit svg{color:var(--ink-3)}
+.lk__me-exit:hover{background:var(--surface);color:var(--ink)}
 
 .lk__view{padding:28px;max-width:1320px;width:100%}
 
