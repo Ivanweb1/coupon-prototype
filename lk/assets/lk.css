@@ -1,0 +1,320 @@
+/* ==========================================================================
+   Личные кабинеты — Ч/Б прототип.
+   Токены, кнопки и типографика наследуются из ../assets/style.css:
+   кабинет должен читаться как тот же продукт, что и публичная часть.
+   ========================================================================== */
+
+.lk{background:var(--surface)}
+
+/* Каркас: фиксированная колонка навигации + рабочая область.
+   Ширина боковой колонки небольшая — Виль просил не перегружать интерфейс,
+   и разделов немного даже в самом полном кабинете. */
+.lk__shell{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:100vh}
+
+.lk__side{
+  position:sticky;top:0;height:100vh;
+  display:flex;flex-direction:column;gap:18px;
+  padding:20px 16px;
+  background:var(--bg);border-right:1px solid var(--line);
+  overflow-y:auto;
+}
+.lk__logo{font-weight:700;font-size:17px;letter-spacing:-.02em;padding:0 8px}
+
+/* Служебный переключатель роли: в продукте его нет */
+.lk__role{display:flex;gap:4px;padding:3px;background:var(--surface);border-radius:var(--r-pill)}
+.lk__role button{
+  flex:1;height:32px;border-radius:var(--r-pill);
+  font-size:13px;font-weight:500;color:var(--ink-3);
+  transition:background .18s, color .18s;
+}
+.lk__role button.is-on{background:var(--ink);color:var(--bg)}
+
+.lk__nav{display:flex;flex-direction:column;gap:2px;flex:1 1 auto}
+.lk__nav-group{
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-4);
+  padding:14px 10px 6px;
+}
+.lk__nav a{
+  display:flex;align-items:center;gap:10px;
+  min-height:38px;padding:8px 10px;border-radius:var(--r-sm);
+  font-size:14px;color:var(--ink-2);line-height:1.3;
+  transition:background .16s, color .16s;
+}
+.lk__nav a:hover{background:var(--surface);color:var(--ink)}
+.lk__nav a.is-on{background:var(--ink);color:var(--bg);font-weight:500}
+.lk__nav a .lk__n{
+  margin-left:auto;font-size:12px;color:var(--ink-4);
+  font-variant-numeric:tabular-nums;
+}
+.lk__nav a.is-on .lk__n{color:rgba(255,255,255,.6)}
+
+.lk__back{
+  display:flex;align-items:center;gap:8px;
+  padding:10px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--ink-3);
+}
+.lk__back:hover{color:var(--ink)}
+
+.lk__main{display:flex;flex-direction:column;min-width:0}
+
+/* Шапка рабочей области */
+.lk__top{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;gap:12px;
+  height:var(--header-h);padding:0 28px;
+  background:rgba(255,255,255,.86);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.lk__spacer{flex:1 1 auto}
+.lk__crumbs{font-size:14px;color:var(--ink-3);min-width:0}
+.lk__crumbs b{color:var(--ink);font-weight:600}
+.lk__burger{display:none;width:38px;height:38px;border-radius:var(--r-sm);color:var(--ink-2)}
+
+.lk__bell{
+  position:relative;width:38px;height:38px;border-radius:var(--r-pill);
+  display:grid;place-items:center;color:var(--ink-2);
+  border:1px solid var(--line-strong);
+}
+.lk__bell:hover{color:var(--ink);border-color:var(--ink-3)}
+.lk__dot{
+  position:absolute;top:8px;right:9px;width:7px;height:7px;border-radius:50%;
+  background:var(--ink);border:1.5px solid var(--bg);display:none;
+}
+.lk__dot.is-on{display:block}
+
+.lk__me{
+  display:flex;align-items:center;gap:9px;
+  padding-left:12px;border-left:1px solid var(--line);
+}
+.lk__me-ava{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--surface-2);color:var(--ink-3);
+  display:grid;place-items:center;font-size:12px;font-weight:600;
+}
+.lk__me-name{font-size:13px;font-weight:500;line-height:1.25}
+.lk__me-role{font-size:12px;color:var(--ink-3);line-height:1.25}
+
+.lk__view{padding:28px;max-width:1320px;width:100%}
+
+/* --------------------------------------------------------------------------
+   Заголовок раздела
+   -------------------------------------------------------------------------- */
+.lk-head{margin-bottom:20px}
+.lk-head__row{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.lk-head h1{margin:0;font-size:26px;font-weight:600;letter-spacing:-.03em}
+.lk-head p{margin:6px 0 0;color:var(--ink-3);font-size:14px;max-width:70ch}
+.lk-head__act{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+/* --------------------------------------------------------------------------
+   Карточки показателей. Ровно четыре у клиента — Коля: «4 показателя всего,
+   будет немного». Ни спарклайнов, ни графиков: Виль отдельно просил не
+   перегружать разделы с аналитикой.
+   -------------------------------------------------------------------------- */
+.lk-kpi{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+@media (max-width:1100px){.lk-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.lk-kpi{grid-template-columns:1fr}}
+.lk-kpi__c{
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:16px 18px;
+}
+.lk-kpi__l{font-size:13px;color:var(--ink-3);display:flex;align-items:center;gap:6px}
+.lk-kpi__v{
+  font-size:28px;font-weight:600;letter-spacing:-.03em;margin-top:6px;
+  font-variant-numeric:tabular-nums;
+}
+.lk-kpi__h{font-size:12px;color:var(--ink-4);margin-top:4px;line-height:1.4}
+
+/* --------------------------------------------------------------------------
+   Панель — универсальный блок раздела
+   -------------------------------------------------------------------------- */
+.lk-panel{
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:20px;margin-bottom:16px;
+}
+.lk-panel__head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.lk-panel__head h2{margin:0;font-size:17px;font-weight:600;letter-spacing:-.02em}
+.lk-panel__head .lk-panel__act{margin-left:auto;display:flex;gap:8px}
+.lk-panel__sub{margin:-8px 0 14px;font-size:13px;color:var(--ink-3)}
+
+/* --------------------------------------------------------------------------
+   Таблица. Горизонтальный скролл живёт внутри своей обёртки, страница
+   вправо не едет.
+   -------------------------------------------------------------------------- */
+.lk-tw{overflow-x:auto;margin:0 -20px;padding:0 20px}
+.lk-t{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+.lk-t th{
+  text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-4);font-weight:500;padding:0 12px 10px;white-space:nowrap;
+}
+.lk-t td{padding:13px 12px;border-top:1px solid var(--line);vertical-align:top}
+.lk-t tr:hover td{background:var(--surface)}
+.lk-t .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lk-t__title{font-weight:500;display:block}
+.lk-t__sub{font-size:12px;color:var(--ink-3);margin-top:3px;display:block}
+
+/* Статусы — точкой и текстом, без цветовой заливки: прототип чёрно-белый,
+   цвет появится на этапе дизайна и не должен быть единственным носителем
+   смысла. */
+.lk-st{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-size:13px}
+.lk-st::before{
+  content:"";width:7px;height:7px;border-radius:50%;flex:0 0 auto;
+  background:var(--ink-4);
+}
+.lk-st--live::before{background:var(--ink)}
+.lk-st--moderation::before{background:var(--ink-3);box-shadow:0 0 0 3px var(--surface-2)}
+.lk-st--draft::before{background:none;border:1.5px solid var(--ink-4)}
+.lk-st--rejected::before{background:none;border:1.5px solid var(--ink);position:relative}
+.lk-st--done::before{background:var(--surface-3)}
+
+.lk-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  height:26px;padding:0 10px;border-radius:var(--r-pill);
+  background:var(--surface);font-size:12px;color:var(--ink-2);white-space:nowrap;
+}
+.lk-erid{font-size:11px;color:var(--ink-4);white-space:nowrap}
+
+/* Фильтры над таблицей */
+.lk-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.lk-filters button{
+  height:34px;padding:0 14px;border-radius:var(--r-pill);
+  border:1px solid var(--line-strong);background:var(--bg);
+  font-size:13px;color:var(--ink-2);
+  transition:background .16s,color .16s,border-color .16s;
+}
+.lk-filters button:hover{border-color:var(--ink-3);color:var(--ink)}
+.lk-filters button.is-on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.lk-filters button .lk__n{margin-left:6px;font-size:12px;color:var(--ink-4);font-variant-numeric:tabular-nums}
+.lk-filters button.is-on .lk__n{color:rgba(255,255,255,.6)}
+
+/* --------------------------------------------------------------------------
+   Форма создания купона
+   -------------------------------------------------------------------------- */
+.lk-form{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start}
+@media (max-width:1000px){.lk-form{grid-template-columns:1fr}}
+
+/* Форма без предпросмотра: ограничиваем ширину, иначе поля растягиваются
+   на всю рабочую область и читаются тяжело */
+.lk-narrow{max-width:560px}
+
+.lk-f{display:flex;flex-direction:column;gap:16px}
+.lk-f__row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.lk-f__row{grid-template-columns:1fr}}
+
+.lk-l{display:block}
+.lk-l__t{
+  display:block;font-size:13px;font-weight:500;margin-bottom:6px;
+}
+.lk-l__h{display:block;font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.45}
+.lk-i,
+.lk-s,
+.lk-ta{
+  width:100%;height:44px;padding:0 14px;
+  border:1px solid var(--line-strong);border-radius:var(--r-sm);
+  background:var(--bg);font-size:14px;color:var(--ink);
+  transition:border-color .16s;
+}
+.lk-ta{height:auto;padding:12px 14px;resize:vertical;min-height:92px;line-height:1.5;font-family:inherit}
+.lk-i:focus,.lk-s:focus,.lk-ta:focus{outline:none;border-color:var(--ink)}
+.lk-i::placeholder,.lk-ta::placeholder{color:var(--ink-4)}
+.lk-s{appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 20px, calc(100% - 13px) 20px;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:38px}
+
+/* Поле-заглушка под загрузку изображения. Пропорция 4:5 — та же, что у
+   карточки на публичке: купоны ретранслируются в соцсети, и на сайте они
+   должны выглядеть так же (решение 04.09). */
+.lk-drop{
+  aspect-ratio:4/5;max-width:230px;
+  border:1.5px dashed var(--line-strong);border-radius:var(--r-md);
+  background:var(--surface);
+  display:grid;place-items:center;text-align:center;padding:16px;
+  color:var(--ink-3);font-size:13px;line-height:1.5;cursor:pointer;
+  transition:border-color .16s,color .16s;
+}
+.lk-drop:hover{border-color:var(--ink-3);color:var(--ink-2)}
+
+/* Живой предпросмотр карточки рядом с формой */
+.lk-prev{position:sticky;top:calc(var(--header-h) + 20px)}
+.lk-prev__card{
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  background:var(--bg);overflow:hidden;
+}
+.lk-prev__media{
+  aspect-ratio:4/5;position:relative;
+  background:var(--surface);
+  background-image:repeating-linear-gradient(135deg,var(--surface) 0 9px,var(--surface-2) 9px 18px);
+  display:grid;place-items:center;
+}
+.lk-prev__val{font-size:34px;font-weight:600;letter-spacing:-.03em}
+.lk-prev__erid{
+  position:absolute;top:10px;right:10px;
+  font-size:10px;color:var(--ink-3);
+  background:rgba(255,255,255,.86);border-radius:var(--r-pill);padding:3px 8px;
+  max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.lk-prev__body{padding:14px 16px 16px}
+.lk-prev__title{font-size:15px;font-weight:500;line-height:1.35;min-height:2.7em}
+.lk-prev__meta{font-size:12px;color:var(--ink-3);margin-top:8px}
+
+/* --------------------------------------------------------------------------
+   Пустое состояние и мелочи
+   -------------------------------------------------------------------------- */
+.lk-empty{
+  border:1px dashed var(--line-strong);border-radius:var(--r-lg);
+  padding:36px 24px;text-align:center;color:var(--ink-3);font-size:14px;
+}
+.lk-empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px}
+
+.lk-note{
+  border-left:2px solid var(--line-strong);padding:2px 0 2px 14px;
+  font-size:13px;color:var(--ink-3);line-height:1.5;margin-top:14px;
+}
+
+.lk-list{display:flex;flex-direction:column}
+.lk-list__i{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.lk-list__i:first-child{border-top:0}
+.lk-list__i.is-unread{font-weight:500}
+.lk-list__d{
+  flex:0 0 auto;width:7px;height:7px;border-radius:50%;margin-top:8px;
+  background:var(--ink);
+}
+.lk-list__i:not(.is-unread) .lk-list__d{background:var(--surface-3)}
+.lk-list__w{font-size:12px;color:var(--ink-3);margin-top:4px;font-weight:400}
+
+.lk-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.lk-pair{grid-template-columns:1fr}}
+
+/* Итоговая строка отчёта */
+.lk-total{
+  display:flex;align-items:baseline;gap:10px;
+  padding-top:14px;margin-top:4px;border-top:1px solid var(--line);
+}
+.lk-total b{font-size:22px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.lk-total span{font-size:13px;color:var(--ink-3)}
+
+/* --------------------------------------------------------------------------
+   Мобильная раскладка: боковая колонка уезжает в шторку
+   -------------------------------------------------------------------------- */
+.lk__scrim{
+  position:fixed;inset:0;z-index:40;background:rgba(21,21,20,.34);
+  opacity:0;pointer-events:none;transition:opacity .24s var(--ease-soft);
+}
+@media (max-width:900px){
+  .lk__shell{grid-template-columns:1fr}
+  .lk__side{
+    position:fixed;left:0;top:0;z-index:50;width:264px;
+    transform:translateX(-100%);transition:transform .26s var(--ease);
+    box-shadow:var(--shadow-2);
+  }
+  body.lk-nav-open .lk__side{transform:none}
+  body.lk-nav-open .lk__scrim{opacity:1;pointer-events:auto}
+  .lk__burger{display:grid;place-items:center}
+  .lk__top{padding:0 16px}
+  .lk__view{padding:18px 16px}
+  .lk__me-name,.lk__me-role{display:none}
+  .lk__me{padding-left:0;border-left:0}
+  .lk__cta span:last-child{display:none}
+  .lk__cta{width:38px;padding:0}
+  .lk-head h1{font-size:22px}
+}
