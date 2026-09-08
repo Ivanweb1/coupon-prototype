@@ -136,16 +136,6 @@ const SEEDS = {
   ]
 };
 
-/* Переписаны в позитивном ключе: инструкция «как этим пользоваться»,
-   а не список запретов — по итогам созвона 07.09.2026. */
-const TERMS = [
-  "Сохраните код или сделайте скриншот — переходить никуда не нужно.",
-  "Покажите код на кассе или назовите его администратору при оплате.",
-  "Приходите в удобное время в пределах срока действия купона.",
-  "Если нужна предварительная запись — уточните её у заведения по контактам на странице.",
-  "Одно предъявление — один гость; с компанией удобно приходить по очереди."
-];
-
 const STREETS = [
   "ул. Первомайская, 12", "пр-т Победы, 45", "ул. Советская, 8",
   "ул. Зелёная, 3, ТЦ «Рыба»", "пл. Центральная, 1", "ул. Ленина, 27"
@@ -195,9 +185,6 @@ window.makeCoupon = function (catId) {
               CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
   const pool = SEEDS[cat.id] || SEEDS.services;
   const seed = pool[Math.floor(Math.random() * pool.length)];
-  const terms = [];
-  const shuffled = TERMS.slice().sort(() => Math.random() - .5);
-  for (let i = 0; i < 3; i++) terms.push(shuffled[i]);
   const id = ++uid;
   return {
     id: id,
@@ -210,8 +197,7 @@ window.makeCoupon = function (catId) {
     address: STREETS[Math.floor(Math.random() * STREETS.length)],
     views: Math.floor(120 + Math.random() * 4200),
     dist: Math.floor(120 + Math.random() * 7800),   /* метров до точки */
-    until: makePeriod(),
-    terms: terms
+    until: makePeriod()
   };
 };
 
