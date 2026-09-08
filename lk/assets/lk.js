@@ -464,12 +464,22 @@ VIEWS["partner:dashboard"] = () => {
         { label: "Начислено всего",  value: rub(fee) },
         { label: "К выплате",        value: rub(pend.total), note: pend.date }
       ])
-    + panel("Последние клиенты",
+    + `<div class="lk-pair">
+      ${panel("Последние клиенты",
         table([{ t: "Клиент" }, { t: "С нами с" }, { t: "Купонов", num: true }],
           LK_CLIENTS.slice(0, 4).map(c => `<tr>
             <td><b class="lk-t__title">${c.name}</b><span class="lk-t__sub">${c.city} · ${LK_CLIENT_STATUSES[c.status]}</span></td>
             <td>${c.since}</td><td class="num">${c.coupons}</td></tr>`).join("")),
-        { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все клиенты</a>` });
+        { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все клиенты</a>` })}
+
+      ${panel("Ваша ссылка для приглашения", `
+        <div class="lk-f">
+          ${field("Реферальная ссылка", input("", "kupony.ru/?ref=PRTN-LIP"))}
+        </div>
+        <div class="lk-head__act" style="margin-top:14px">
+          <button class="btn btn--solid">Скопировать</button>
+        </div>`)}
+    </div>`;
 };
 
 VIEWS["partner:clients"] = () => {
@@ -504,7 +514,21 @@ VIEWS["partner:codes"] = () => {
 
 VIEWS["partner:bonuses"] = () =>
   head("Бонусы клиентам")
-  + panel("", table(
+  + kpi([
+      { label: "Лимит на месяц",  value: "5", note: "Обновляется 1 числа" },
+      { label: "Отправлено",      value: LK_BONUSES.length },
+      { label: "Использовано",    value: LK_BONUSES.filter(b => b.status === "used").length },
+      { label: "Стоимость",       value: rub(2500) }
+    ])
+  + panel("Отправить бонус", `<div class="lk-narrow">
+      <div class="lk-f">
+        ${field("Кому", select(LK_CLIENTS.map(c => c.name)))}
+        ${field("Что дарим", select(LK_BONUS_KINDS))}
+        ${field("Сообщение клиенту", `<textarea class="lk-ta" placeholder="Спасибо, что с нами. Неделя публикаций за наш счёт."></textarea>`)}
+      </div>
+      <div class="lk-head__act" style="margin-top:16px"><button class="btn btn--solid btn--lg">Отправить</button></div>
+    </div>`)
+  + panel("История", table(
       [{ t: "Бонус" }, { t: "Кому" }, { t: "Что" }, { t: "Отправлен" }, { t: "Статус" }],
       LK_BONUSES.map(b => `<tr>
         <td><b class="lk-t__title">${b.id}</b></td>
@@ -518,6 +542,7 @@ VIEWS["partner:payouts"] = () => {
     <td class="num">${p.bonusCost ? "− " + rub(p.bonusCost) : "—"}</td>
     <td class="num">${rub(p.total)}</td>
     <td>${p.status === "paid" ? "Выплачено" : "Ожидает выплаты"}</td>
+    <td class="num"><button class="btn btn--ghost">Отчёт</button></td>
   </tr>`).join("");
   const paid = LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
   const pend = LK_PAYOUTS.find(p => p.status === "pending");
@@ -536,7 +561,7 @@ VIEWS["partner:payouts"] = () => {
     </div>`
     + panel("По периодам", table(
         [{ t: "Период" }, { t: "Начислено", num: true }, { t: "Бонусы", num: true },
-         { t: "К выплате", num: true }, { t: "Статус" }], rows)
+         { t: "К выплате", num: true }, { t: "Статус" }, { t: "", num: true }], rows)
       + `<div class="lk-total"><b>${rub(paid)}</b><span>выплачено за всё время</span></div>`);
 };
 
@@ -548,15 +573,20 @@ VIEWS["partner:profile"] = () => {
     + kpi([
         { label: "Клиентов в месяц",     value: "2,0" },
         { label: "Купонов на клиента",   value: avgCoupons },
-        { label: "Начисление с клиента", value: rub(avgFee) }
+        { label: "Начисление с клиента", value: rub(avgFee) },
+        { label: "Доживает до оплаты",   value: "67%" }
       ])
-    + panel("Партнёр", `<div class="lk-narrow">
-        <div class="lk-f">
-          ${field("Имя или организация", input("", "ИП Партнёров И."))}
-          <div class="lk-f__row">${field("Телефон", input("", "+7 900 000-00-00"))}${field("Почта", input("", "partner@example.ru"))}</div>
-          ${field("Регион работы", select(LK_CITIES))}
-        </div>
-      </div>`);
+    + `<div class="lk-pair">
+      ${panel("Партнёр", `<div class="lk-f">
+        ${field("Имя или организация", input("", "ИП Партнёров И."))}
+        <div class="lk-f__row">${field("Телефон", input("", "+7 900 000-00-00"))}${field("Почта", input("", "partner@example.ru"))}</div>
+        ${field("Регион работы", select(LK_CITIES))}
+      </div>`)}
+      ${panel("Условия", `<div class="lk-f">
+        ${field("Ставка вознаграждения", input("", "20% от оплат клиента"))}
+        ${field("Реферальная ссылка", input("", "kupony.ru/?ref=PRTN-LIP"))}
+      </div>`)}
+    </div>`;
 };
 
 /* ==========================================================================
