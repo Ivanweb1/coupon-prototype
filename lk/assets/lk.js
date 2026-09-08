@@ -160,32 +160,32 @@ function go(view) {
 /* ==========================================================================
    Общие куски разметки
    ========================================================================== */
-function head(title, sub, actions) {
+function head(title, actions) {
   return `<div class="lk-head"><div class="lk-head__row">
-      <div><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div>
+      <h1>${title}</h1>
       ${actions ? `<div class="lk-head__act">${actions}</div>` : ""}
     </div></div>`;
 }
 
+/* note — короткая строка данных под числом: срок, период, остаток.
+   Пояснять, что показатель означает, в интерфейсе не нужно. */
 function kpi(items) {
   return `<div class="lk-kpi">${items.map(i => `
     <div class="lk-kpi__c">
       <div class="lk-kpi__l">${i.label}</div>
       <div class="lk-kpi__v">${i.value}</div>
-      <div class="lk-kpi__h">${i.hint}</div>
+      ${i.note ? `<div class="lk-kpi__h">${i.note}</div>` : ""}
     </div>`).join("")}</div>`;
 }
 
 function status(id) {
-  const s = LK_STATUSES[id];
-  return `<span class="lk-st lk-st--${id}" title="${s.hint}">${s.label}</span>`;
+  return `<span class="lk-st lk-st--${id}">${LK_STATUSES[id].label}</span>`;
 }
 
 function panel(title, body, opts) {
   const o = opts || {};
   return `<div class="lk-panel">
     ${title ? `<div class="lk-panel__head"><h2>${title}</h2>${o.act ? `<div class="lk-panel__act">${o.act}</div>` : ""}</div>` : ""}
-    ${o.sub ? `<p class="lk-panel__sub">${o.sub}</p>` : ""}
     ${body}</div>`;
 }
 
@@ -199,9 +199,8 @@ function empty(title, text) {
   return `<div class="lk-empty"><b>${title}</b>${text}</div>`;
 }
 
-function field(label, control, hint) {
-  return `<label class="lk-l"><span class="lk-l__t">${label}</span>${control}
-    ${hint ? `<span class="lk-l__h">${hint}</span>` : ""}</label>`;
+function field(label, control) {
+  return `<label class="lk-l"><span class="lk-l__t">${label}</span>${control}</label>`;
 }
 
 function input(ph, val) {
@@ -222,8 +221,8 @@ VIEWS["client:dashboard"] = () => {
   const sum = k => LK_COUPONS.reduce((a, c) => a + c[k], 0);
   const attention = LK_COUPONS.filter(c => c.status === "rejected" || c.status === "draft");
 
-  return head("Дашборд", "Что происходит с вашими купонами прямо сейчас.")
-    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)), hint: m.hint })))
+  return head("Дашборд")
+    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
     + `<div class="lk-pair">
       ${panel("Опубликовано сейчас", live.length
         ? table(
@@ -242,8 +241,7 @@ VIEWS["client:dashboard"] = () => {
               ${c.title}
               <div class="lk-list__w">${c.status === "rejected" ? "Отклонён: " + c.reject : "Черновик — не заполнены срок и промокод"}</div>
             </div></div>`).join("")}</div>`
-        : empty("Всё в порядке", "Купонов, которые ждут вашего действия, нет."),
-        { sub: "Купоны, которые не работают, пока вы что-то не сделаете" })}
+        : empty("Всё в порядке", "Купонов, которые ждут вашего действия, нет."))}
     </div>`;
 };
 
@@ -270,7 +268,7 @@ VIEWS["client:coupons"] = () => {
     <td class="num">${c.taken ? num(c.taken) : "—"}</td>
   </tr>`).join("");
 
-  return head("Мои купоны", "Активные, черновики и всё, что на проверке. Завершённые лежат в архиве.",
+  return head("Мои купоны",
       `<a class="btn btn--ghost" href="${href("new-marketplace")}" data-go="new-marketplace">Купон маркетплейса</a>
        <a class="btn btn--solid" href="${href("new-regional")}" data-go="new-regional">Создать купон</a>`)
     + panel("", filters + (list.length
@@ -292,25 +290,24 @@ function couponForm(kind) {
         ${field("Маркетплейс", select(LK_MARKETS))}
         ${field("Артикул товара", input("184 220 933"))}
        </div>
-       ${field("Ссылка на товар", input("https://…"), "По ней посетитель уйдёт на карточку товара — это и есть целевое действие купона.")}`
+       ${field("Ссылка на товар", input("https://…"))}`
     : `<div class="lk-f__row">
         ${field("Категория", select(["Кафе и рестораны", "Красота", "Медицина", "Авто", "Развлечения", "Услуги"]))}
         ${field("Город", select(LK_CITIES))}
        </div>
-       ${field("Адрес точки", input("ул. Первомайская, 12"), "От него считается расстояние до посетителя. Показываем его в минутах, а не в метрах.")}`;
+       ${field("Адрес точки", input("ул. Первомайская, 12"))}`;
 
   return `<div class="lk-form">
     <div>
       ${panel(isMarket ? "Товар и площадка" : "Что и где", where)}
 
       ${panel("Предложение", `<div class="lk-f">
-        ${field("Заголовок купона", input("Комбо-обед по будням до 16:00"), "Две строки максимум — столько помещается в карточке ленты.")}
+        ${field("Заголовок купона", input("Комбо-обед по будням до 16:00"))}
         <div class="lk-f__row">
           ${field("Механика", select(LK_MECHANICS.map(m => m.label), "mech"))}
-          ${field("Величина", input("−30%"), "Её видно на изображении крупно.")}
+          ${field("Величина", input("−30%"))}
         </div>
-        ${field("Изображение купона", `<div class="lk-drop">Перетащите файл<br>или выберите на компьютере<br><br>Пропорция 4:5</div>`,
-          "Та же пропорция, что в лентах соцсетей: купоны ретранслируются в ВК, ОК, Telegram и Max, и выглядеть везде должны одинаково.")}
+        ${field("Изображение купона", `<div class="lk-drop">Перетащите файл<br>или выберите на компьютере<br><br>Пропорция 4:5</div>`)}
       </div>`)}
 
       ${panel("Срок и код", `<div class="lk-f">
@@ -318,9 +315,8 @@ function couponForm(kind) {
           ${field("Действует с", input("3 сентября 2026"))}
           ${field("по", input("24 сентября 2026"))}
         </div>
-        ${field("Промокод", input("LUNCH30"), "Его посетитель увидит по кнопке «Забрать купон» и сохранит скриншотом.")}
-        ${field("Как воспользоваться", `<textarea class="lk-ta" placeholder="Покажите код на кассе или назовите администратору при оплате."></textarea>`,
-          "Пишите утвердительно — как пользоваться, а не что запрещено. Запреты противоречат самой идее сервиса.")}
+        ${field("Промокод", input("LUNCH30"))}
+        ${field("Как воспользоваться", `<textarea class="lk-ta" placeholder="Покажите код на кассе или назовите администратору при оплате."></textarea>`)}
       </div>`)}
 
       ${panel("Компания в купоне", `<div class="lk-f">
@@ -330,16 +326,14 @@ function couponForm(kind) {
         </div>
         <div class="lk-f__row">
           ${field("Telegram", input("https://t.me/…"))}
-          ${field("ERID", input("", "будет присвоен при публикации"), "Своя маркировка на каждое объявление — требование закона о рекламе.")}
+          ${field("ERID", input("", "будет присвоен при публикации"))}
         </div>
-      </div>`, { sub: "Подтягивается из профиля компании, здесь можно переопределить для этого купона" })}
+      </div>`)}
 
       <div class="lk-head__act" style="margin:0">
         <button class="btn btn--ghost btn--lg">Сохранить черновик</button>
         <button class="btn btn--solid btn--lg">Отправить на модерацию</button>
       </div>
-      <div class="lk-note">Купон появится в ленте после проверки. Обычно это занимает несколько часов;
-        если что-то нужно поправить, напишем в уведомления с причиной.</div>
     </div>
 
     <div class="lk-prev">
@@ -353,22 +347,22 @@ function couponForm(kind) {
             <div class="lk-prev__title">Комбо-обед по будням до 16:00</div>
             <div class="lk-prev__meta">Кофейня «Пример» · ${isMarket ? "Wildberries" : "Кафе и рестораны"}</div>
           </div>
-        </div>`, { sub: "Предпросмотр обновляется по мере заполнения формы" })}
+        </div>`)}
     </div>
   </div>`;
 }
 
 VIEWS["client:new-regional"] = () =>
-  head("Создание регионального купона", "Купон для конкретного города — он попадёт в ленту и в каталог категории.")
+  head("Создание регионального купона")
   + couponForm("region");
 
 VIEWS["client:new-marketplace"] = () =>
-  head("Создание купона маркетплейса", "Купон привязан к товару на площадке, а не к городу: у него нет адреса и расстояния.")
+  head("Создание купона маркетплейса")
   + couponForm("market");
 
 VIEWS["client:archive"] = () => {
   const done = LK_COUPONS.filter(c => c.status === "done");
-  return head("Архив купонов", "Завершённые купоны и их итоговые цифры. Любой можно повторить — поля подставятся заново.")
+  return head("Архив купонов")
     + panel("", done.length
       ? table([{ t: "Купон" }, { t: "Период" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
                { t: "Забрали", num: true }, { t: "Переходы", num: true }, { t: "" }],
@@ -397,14 +391,11 @@ VIEWS["client:stats"] = () => {
       <td class="num">${num(c.clicks)}</td>
     </tr>`).join("");
 
-  return head("Статистика", "Четыре показателя по всем купонам. Больше в MVP не считаем — и намеренно.")
-    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)), hint: m.hint })))
+  return head("Статистика")
+    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
     + panel("По купонам",
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
-               { t: "Забрали", num: true }, { t: "Переходы", num: true }], rows)
-        + `<div class="lk-note">Сколько людей дошло до кассы, сервис не видит: посетитель уходит со скриншотом,
-           ничего не оплачивая и не регистрируясь. Самое близкое к результату, что мы можем показать, —
-           «Купон забрали» и «Переходы к вам».</div>`);
+               { t: "Забрали", num: true }, { t: "Переходы", num: true }], rows));
 };
 
 VIEWS["client:billing"] = () => {
@@ -416,7 +407,7 @@ VIEWS["client:billing"] = () => {
     <td class="num"><button class="btn btn--ghost">Скачать</button></td>
   </tr>`).join("");
 
-  return head("Биллинг", "Пакет публикаций, счета и закрывающие документы.")
+  return head("Биллинг")
     + `<div class="lk-pair">
       ${panel("Текущий пакет", `
         <div class="lk-kpi__l">Публикаций осталось</div>
@@ -430,26 +421,25 @@ VIEWS["client:billing"] = () => {
         <div class="lk-f">
           ${field("Плательщик", input("", "ООО «Пример»"))}
           <div class="lk-f__row">${field("ИНН", input("", "4826000000"))}${field("КПП", input("", "482601001"))}</div>
-        </div>`, { sub: "Подставляются в счёт автоматически" })}
+        </div>`)}
     </div>`
     + panel("История платежей",
         table([{ t: "Дата" }, { t: "Документ" }, { t: "Сумма", num: true }, { t: "Статус" }, { t: "", num: true }], rows));
 };
 
 VIEWS["client:profile"] = () =>
-  head("Профиль компании", "То, что посетитель видит в карточке купона и в блоке «О компании».")
+  head("Профиль компании")
   + `<div class="lk-pair">
       ${panel("Компания", `<div class="lk-f">
         ${field("Название", input("", "Кофейня «Пример»"))}
-        ${field("Краткое описание", `<textarea class="lk-ta" placeholder="Своя обжарка, запись день в день, работаем с 2014 года."></textarea>`,
-          "Это описание показывается в блоке «О компании» на странице купона. Без него блоку неоткуда взять текст.")}
+        ${field("Краткое описание", `<textarea class="lk-ta" placeholder="Своя обжарка, запись день в день, работаем с 2014 года."></textarea>`)}
         <div class="lk-f__row">${field("ИНН", input("", "4826000000"))}${field("Телефон", input("", "+7 900 000-00-00"))}</div>
       </div>`)}
       ${panel("Компания в сети", `<div class="lk-f">
         ${field("Сайт", input("https://…"))}
         ${field("ВКонтакте", input("https://vk.com/…"))}
         ${field("Telegram", input("https://t.me/…"))}
-      </div>`, { sub: "Переходы по этим ссылкам — ключевая метрика проекта, поэтому они видны в каждом купоне" })}
+      </div>`)}
     </div>`
   + panel("Точки продаж", table(
       [{ t: "Адрес" }, { t: "Город" }, { t: "Режим работы" }, { t: "", num: true }],
@@ -457,9 +447,7 @@ VIEWS["client:profile"] = () =>
         <td class="num"><button class="btn btn--ghost">Изменить</button></td></tr>
        <tr><td>пр-т Победы, 45</td><td>Липецк</td><td>ежедневно 09:00–21:00</td>
         <td class="num"><button class="btn btn--ghost">Изменить</button></td></tr>`),
-      { act: `<button class="btn btn--ghost">Добавить точку</button>` })
-  + `<div class="lk-note">Если под одним юрлицом работают разные направления — например, кофейня и магазин, —
-     заводится отдельный кабинет на каждое: у них разные категории, разные посетители и разная статистика.</div>`;
+      { act: `<button class="btn btn--ghost">Добавить точку</button>` });
 
 /* ==========================================================================
    Разделы кабинета партнёра
@@ -470,12 +458,12 @@ VIEWS["partner:dashboard"] = () => {
   const fee    = LK_CLIENTS.reduce((a, c) => a + c.fee, 0);
   const pend   = LK_PAYOUTS.find(p => p.status === "pending");
 
-  return head("Дашборд партнёра", "Ваши клиенты и то, что они принесли.")
+  return head("Дашборд партнёра")
     + kpi([
-        { label: "Клиентов всего",   value: LK_CLIENTS.length, hint: "Юрлица, пришедшие по вашей ссылке" },
-        { label: "Из них платят",    value: active,            hint: trial + " ещё на пробном периоде" },
-        { label: "Начислено всего",  value: rub(fee),          hint: "За всё время работы" },
-        { label: "К выплате",        value: rub(pend.total),   hint: pend.date }
+        { label: "Клиентов всего",   value: LK_CLIENTS.length },
+        { label: "Из них платят",    value: active, note: trial + " ещё на пробном периоде" },
+        { label: "Начислено всего",  value: rub(fee) },
+        { label: "К выплате",        value: rub(pend.total), note: pend.date }
       ])
     + `<div class="lk-pair">
       ${panel("Последние клиенты",
@@ -487,16 +475,13 @@ VIEWS["partner:dashboard"] = () => {
 
       ${panel("Ваша ссылка для приглашения", `
         <div class="lk-f">
-          ${field("Реферальная ссылка", input("", "kupony.ru/?ref=PRTN-LIP"),
-            "По ней клиент попадёт на регистрацию и закрепится за вами навсегда.")}
+          ${field("Реферальная ссылка", input("", "kupony.ru/?ref=PRTN-LIP"))}
         </div>
         <div class="lk-head__act" style="margin-top:14px">
           <button class="btn btn--solid">Скопировать</button>
           <button class="btn btn--ghost">Материалы для рассылки</button>
         </div>`)}
-    </div>`
-    + `<div class="lk-note">Публиковать купоны партнёр не может — это делает сам клиент в своём кабинете.
-       Ваша задача заканчивается на приведённом юрлице, дальше считается его активность.</div>`;
+    </div>`;
 };
 
 VIEWS["partner:clients"] = () => {
@@ -509,13 +494,11 @@ VIEWS["partner:clients"] = () => {
     <td class="num">${c.fee ? rub(c.fee) : "—"}</td>
   </tr>`).join("");
 
-  return head("Региональные клиенты", "Юрлица, которые зарегистрировались по вашей ссылке.",
+  return head("Региональные клиенты",
       `<button class="btn btn--solid">Пригласить клиента</button>`)
     + panel("", table(
         [{ t: "Клиент" }, { t: "Статус" }, { t: "С нами с" }, { t: "Купонов", num: true },
-         { t: "Оплатил", num: true }, { t: "Ваше начисление", num: true }], rows)
-      + `<div class="lk-note">Статистику по самим купонам клиента вы не видите — она его.
-         Здесь только то, что относится к вашей работе: активность и начисления.</div>`);
+         { t: "Оплатил", num: true }, { t: "Ваше начисление", num: true }], rows));
 };
 
 VIEWS["partner:codes"] = () => {
@@ -527,27 +510,26 @@ VIEWS["partner:codes"] = () => {
     <td class="num">${c.income ? rub(c.income) : "—"}</td>
   </tr>`).join("");
 
-  return head("Маркетплейс · Мои коды", "Коды, по которым селлеры закрепляются за вами на площадках.",
+  return head("Маркетплейс · Мои коды",
       `<button class="btn btn--solid">Запросить код</button>`)
     + panel("", table(
         [{ t: "Код" }, { t: "Селлер" }, { t: "Статус" }, { t: "Применений", num: true }, { t: "Начислено", num: true }], rows));
 };
 
 VIEWS["partner:bonuses"] = () =>
-  head("Бонусы клиентам", "Механика «От души брат»: вы раздаёте бонусы своим клиентам из общего лимита.",
+  head("Бонусы клиентам",
       `<button class="btn btn--solid">Отправить бонус</button>`)
   + kpi([
-      { label: "Лимит на месяц",  value: "5",             hint: "Обновляется 1 числа" },
-      { label: "Отправлено",      value: LK_BONUSES.length, hint: "За всё время" },
-      { label: "Использовано",    value: LK_BONUSES.filter(b => b.status === "used").length, hint: "Клиент воспользовался" },
-      { label: "Стоимость",       value: rub(2500),       hint: "Удерживается из ваших начислений" }
+      { label: "Лимит на месяц",  value: "5", note: "Обновляется 1 числа" },
+      { label: "Отправлено",      value: LK_BONUSES.length },
+      { label: "Использовано",    value: LK_BONUSES.filter(b => b.status === "used").length },
+      { label: "Стоимость",       value: rub(2500) }
     ])
   + panel("Отправить бонус", `<div class="lk-narrow">
       <div class="lk-f">
         ${field("Кому", select(LK_CLIENTS.map(c => c.name)))}
         ${field("Что дарим", select(LK_BONUS_KINDS))}
-        ${field("Сообщение клиенту", `<textarea class="lk-ta" placeholder="Спасибо, что с нами. Неделя публикаций за наш счёт."></textarea>`,
-          "Придёт клиенту в уведомления кабинета.")}
+        ${field("Сообщение клиенту", `<textarea class="lk-ta" placeholder="Спасибо, что с нами. Неделя публикаций за наш счёт."></textarea>`)}
       </div>
       <div class="lk-head__act" style="margin-top:16px"><button class="btn btn--solid btn--lg">Отправить</button></div>
     </div>`)
@@ -570,7 +552,7 @@ VIEWS["partner:payouts"] = () => {
   const paid = LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
   const pend = LK_PAYOUTS.find(p => p.status === "pending");
 
-  return head("Отчёты и выплаты", "Приход по клиентам, удержания за бонусы и итог к перечислению.")
+  return head("Отчёты и выплаты")
     + `<div class="lk-pair">
       ${panel("К выплате", `
         <div class="lk-kpi__l">${pend.period}</div>
@@ -580,7 +562,7 @@ VIEWS["partner:payouts"] = () => {
       ${panel("Реквизиты для выплат", `<div class="lk-f">
         ${field("Получатель", input("", "ИП Партнёров И."))}
         <div class="lk-f__row">${field("ИНН", input("", "482600000000"))}${field("Счёт", input("", "40802…"))}</div>
-      </div>`, { sub: "Выплаты уходят 5 числа за прошедший месяц" })}
+      </div>`)}
     </div>`
     + panel("По периодам", table(
         [{ t: "Период" }, { t: "Начислено", num: true }, { t: "Бонусы", num: true },
@@ -592,12 +574,12 @@ VIEWS["partner:profile"] = () => {
   const avgCoupons = (LK_CLIENTS.reduce((a, c) => a + c.coupons, 0) / LK_CLIENTS.length).toFixed(1);
   const avgFee = Math.round(LK_CLIENTS.reduce((a, c) => a + c.fee, 0) / LK_CLIENTS.length);
 
-  return head("Профиль партнёра", "Ваши данные и усреднённые показатели по приведённым клиентам.")
+  return head("Профиль партнёра")
     + kpi([
-        { label: "Клиентов в месяц",     value: "2,0",          hint: "В среднем за последние три месяца" },
-        { label: "Купонов на клиента",   value: avgCoupons,     hint: "Среднее по всем вашим клиентам" },
-        { label: "Начисление с клиента", value: rub(avgFee),    hint: "Среднее за всё время" },
-        { label: "Доживает до оплаты",   value: "67%",          hint: "Доля клиентов, вышедших с пробного периода" }
+        { label: "Клиентов в месяц",     value: "2,0" },
+        { label: "Купонов на клиента",   value: avgCoupons },
+        { label: "Начисление с клиента", value: rub(avgFee) },
+        { label: "Доживает до оплаты",   value: "67%" }
       ])
     + `<div class="lk-pair">
       ${panel("Партнёр", `<div class="lk-f">
@@ -606,7 +588,7 @@ VIEWS["partner:profile"] = () => {
         ${field("Регион работы", select(LK_CITIES))}
       </div>`)}
       ${panel("Условия", `<div class="lk-f">
-        ${field("Ставка вознаграждения", input("", "20% от оплат клиента"), "Меняется по договору, в кабинете только для справки.")}
+        ${field("Ставка вознаграждения", input("", "20% от оплат клиента"))}
         ${field("Реферальная ссылка", input("", "kupony.ru/?ref=PRTN-LIP"))}
       </div>`)}
     </div>`;
@@ -617,7 +599,7 @@ VIEWS["partner:profile"] = () => {
    ========================================================================== */
 VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
   const list = LK_NOTIFICATIONS[state.role];
-  return head("Уведомления", "Всё, что сервис хочет вам сообщить.",
+  return head("Уведомления",
       `<button class="btn btn--ghost">Отметить прочитанными</button>`)
     + panel("", `<div class="lk-list">${list.map(n => `
         <div class="lk-list__i${n.unread ? " is-unread" : ""}">
@@ -637,7 +619,7 @@ function render() {
 
   host.innerHTML = view
     ? view()
-    : head("Раздел не найден", "Такого экрана в кабинете нет — выберите раздел слева.");
+    : head("Раздел не найден");
 
   /* Фильтры статусов */
   qsa("[data-f]", host).forEach(b => {

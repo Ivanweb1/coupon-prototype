@@ -5,7 +5,6 @@
 const qs  = (s, r = document) => r.querySelector(s);
 const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
 const params = new URLSearchParams(location.search);
-const EMBED = params.get("embed") === "1";
 
 const ICON = {
   search: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>',
@@ -31,8 +30,6 @@ const state = {
   cityConfirmed: localStorage.getItem("cp_city_ok") === "1",
   cat: params.get("cat") || null,
   near: false,
-  metrics: { shown: 0, opened: 0, revealed: 0 },
-  seen: new Set(),
   /* Категории купонов, которые посетитель уже раскрывал. По ним на главной
      собирается блок рекомендаций: «она понимает, какую категорию человек
      смотрит, и рекомендует 2-3 смежные» (созвон 07.09.2026). */
@@ -152,7 +149,7 @@ function buildTags() {
     .sort((a, b) => b.n - a.n).forEach(c => {
     const a = document.createElement("a");
     a.className = "tag" + (state.cat === c.id ? " is-active" : "");
-    a.href = "catalog.html?cat=" + c.id + (EMBED ? "&embed=1" : "");
+    a.href = "catalog.html?cat=" + c.id;
     a.innerHTML = c.name + ' <span class="tag__n">' + c.n + "</span>";
     host.appendChild(a);
   });
@@ -180,7 +177,7 @@ function buildDropdown() {
   const panel = qs(".dd__panel", dd);
   CATEGORIES.forEach(c => {
     const a = document.createElement("a");
-    a.href = "catalog.html?cat=" + c.id + (EMBED ? "&embed=1" : "");
+    a.href = "catalog.html?cat=" + c.id;
     a.innerHTML = c.name + " <span>" + c.n + "</span>";
     panel.appendChild(a);
   });
@@ -237,7 +234,7 @@ function makeCard(c, compact) {
      этот купон в выдаче первым (см. consumePin). */
   const goToCategory = () => {
     try { sessionStorage.setItem("cp_pin", JSON.stringify(c)); } catch (err) {}
-    location.href = "catalog.html?cat=" + c.cat.id + (EMBED ? "&embed=1" : "");
+    location.href = "catalog.html?cat=" + c.cat.id;
   };
   const open = () => openQuick(c, el);
   const activate = compact ? goToCategory : open;
@@ -257,7 +254,6 @@ function makeCard(c, compact) {
     revealOnCard(e.currentTarget, c);
   };
 
-  impressions.observe(el);
   return el;
 }
 
@@ -267,9 +263,7 @@ function revealOnCard(btn, c) {
     btn.classList.add("is-code");
     btn.textContent = c.code;
     btn.title = "Нажмите, чтобы скопировать";
-    state.metrics.revealed++;
     noteInterest(c.cat && c.cat.id);
-    paintMetrics();
     return;
   }
   const done = () => {
@@ -280,19 +274,6 @@ function revealOnCard(btn, c) {
   else done();
 }
 
-/* Показ засчитывается, когда карточка реально попала в экран */
-const impressions = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const key = e.target.dataset.id + "@" + (e.target.closest(".rail") ? "rail" : "grid");
-    if (!state.seen.has(key)) {
-      state.seen.add(key);
-      state.metrics.shown++;
-      paintMetrics();
-    }
-    impressions.unobserve(e.target);
-  });
-}, { threshold: .5 });
 
 /* ==========================================================================
    Лента и бесконечная подгрузка
@@ -346,7 +327,6 @@ function initNear(gridSel, catId) {
     state.near = !state.near;
     btn.classList.toggle("is-active", state.near);
     grid.innerHTML = "";
-    state.seen.clear();
     fillFeed(gridSel, 8, catId);
     initInfinite(gridSel, catId);
   };
@@ -501,9 +481,7 @@ function openQuick(c, cardEl) {
   const overlay = qs("#overlay");
   quick.innerHTML = quickHTML(c);
 
-  state.metrics.opened++;
   noteInterest(c.cat && c.cat.id);
-  paintMetrics();
 
   const r = cardEl.getBoundingClientRect();
   const qw = quick.offsetWidth;
@@ -533,7 +511,7 @@ function openQuick(c, cardEl) {
   /* Переносим на страницу купона именно тот купон, который открыли */
   const page = qs("[data-open-page]", quick);
   if (page) {
-    page.href = "coupon.html?cat=" + c.cat.id + (EMBED ? "&embed=1" : "");
+    page.href = "coupon.html?cat=" + c.cat.id;
     page.onclick = () => {
       try { sessionStorage.setItem("cp_coupon", JSON.stringify(c)); } catch (e) {}
     };
@@ -548,15 +526,13 @@ function openQuick(c, cardEl) {
   const rev = qs("[data-reveal]", quick);
   qs("[data-reveal-btn]", quick).onclick = () => {
     rev.classList.add("is-open");
-    state.metrics.revealed++;
-    paintMetrics();
   };
 }
 
 /* Ссылка на страницу купона — общая для попапа и самой страницы */
 function couponPageUrl(c) {
   const base = location.href.replace(/[^/]*$/, "");
-  return base + "coupon.html?cat=" + c.cat.id + (EMBED ? "&embed=1" : "");
+  return base + "coupon.html?cat=" + c.cat.id;
 }
 
 function shareCoupon(btn, c) {
@@ -703,8 +679,6 @@ function renderCouponPage() {
   const rev = qs("[data-reveal]", qs("#couponRoot"));
   qs("[data-reveal-btn]", rev).onclick = () => {
     rev.classList.add("is-open");
-    state.metrics.revealed++;
-    paintMetrics();
   };
 
   const share = qs("[data-share]", qs("#couponRoot"));
@@ -739,13 +713,6 @@ function renderCouponPage() {
   buildRecommendations(c.cat.id);
 }
 
-function paintMetrics() {
-  const m = state.metrics;
-  const s = qs("#mShown"), o = qs("#mOpened"), r = qs("#mRevealed");
-  if (s) s.textContent = m.shown;
-  if (o) o.textContent = m.opened;
-  if (r) r.textContent = m.revealed;
-}
 
 
 /* ==========================================================================
@@ -760,7 +727,7 @@ function initSearch() {
     const input = qs("input", form);
     const go = () => {
       const q = encodeURIComponent(input.value.trim());
-      location.href = "catalog.html?q=" + q + (EMBED ? "&embed=1" : "");
+      location.href = "catalog.html?q=" + q;
     };
     const btn = qs(".search__go", form);
     if (btn) btn.onclick = go;
@@ -776,12 +743,6 @@ function initSearch() {
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") {
     if (qs("#quick") && qs("#quick").classList.contains("is-on")) closeQuick();
-    const mv = qs("#mobileView");
-    if (mv && mv.classList.contains("is-on")) {
-      mv.classList.remove("is-on");
-      qs("iframe", mv).src = "";
-      document.body.classList.remove("no-scroll");
-    }
   }
 });
 
@@ -825,7 +786,6 @@ function initCommon() {
   initCityGate();
   renderCity();
   initSearch();
-  paintMetrics();
   const ov = qs("#overlay");
   if (ov) ov.onclick = closeQuick;
 }

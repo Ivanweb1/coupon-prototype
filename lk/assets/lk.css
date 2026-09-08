@@ -109,7 +109,6 @@
 .lk-head{margin-bottom:20px}
 .lk-head__row{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .lk-head h1{margin:0;font-size:26px;font-weight:600;letter-spacing:-.03em}
-.lk-head p{margin:6px 0 0;color:var(--ink-3);font-size:14px;max-width:70ch}
 .lk-head__act{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 
 /* --------------------------------------------------------------------------
@@ -141,7 +140,6 @@
 .lk-panel__head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .lk-panel__head h2{margin:0;font-size:17px;font-weight:600;letter-spacing:-.02em}
 .lk-panel__head .lk-panel__act{margin-left:auto;display:flex;gap:8px}
-.lk-panel__sub{margin:-8px 0 14px;font-size:13px;color:var(--ink-3)}
 
 /* --------------------------------------------------------------------------
    Таблица. Горизонтальный скролл живёт внутри своей обёртки, страница
@@ -214,7 +212,6 @@
 .lk-l__t{
   display:block;font-size:13px;font-weight:500;margin-bottom:6px;
 }
-.lk-l__h{display:block;font-size:12px;color:var(--ink-3);margin-top:6px;line-height:1.45}
 .lk-i,
 .lk-s,
 .lk-ta{
@@ -276,10 +273,6 @@
 }
 .lk-empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px}
 
-.lk-note{
-  border-left:2px solid var(--line-strong);padding:2px 0 2px 14px;
-  font-size:13px;color:var(--ink-3);line-height:1.5;margin-top:14px;
-}
 
 .lk-list{display:flex;flex-direction:column}
 .lk-list__i{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
@@ -330,28 +323,3 @@
 }
 
 
-/* ==========================================================================
-   Страница выбора кабинета. В продукте её нет — после входа человек попадает
-   сразу в свой кабинет. Нужна только для показа.
-   ========================================================================== */
-.lk-pick{background:var(--bg)}
-.pick{max-width:840px;margin:0 auto;padding:56px 24px 72px}
-.pick__logo{display:inline-block;font-weight:700;font-size:17px;letter-spacing:-.02em;margin-bottom:48px}
-.pick h1{margin:0;font-size:32px;font-weight:600;letter-spacing:-.03em}
-.pick__sub{margin:8px 0 28px;color:var(--ink-3);font-size:15px}
-
-.pick__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-@media (max-width:720px){.pick__grid{grid-template-columns:1fr}}
-
-.pick__c{
-  display:block;padding:24px;
-  border:1px solid var(--line);border-radius:var(--r-lg);background:var(--bg);
-  transition:transform .18s var(--ease), border-color .18s, box-shadow .18s;
-}
-.pick__c:hover{transform:translateY(-2px);border-color:var(--ink-3);box-shadow:var(--shadow-1)}
-.pick__t{font-size:19px;font-weight:600;letter-spacing:-.02em}
-.pick__c p{margin:10px 0 0;font-size:14px;color:var(--ink-2);line-height:1.55}
-.pick__n{margin-top:16px;font-size:12px;color:var(--ink-4)}
-
-.pick__back{display:inline-block;margin-top:32px;font-size:13px;color:var(--ink-3)}
-.pick__back:hover{color:var(--ink)}
