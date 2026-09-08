@@ -129,6 +129,8 @@
   margin-top:4px;padding-top:12px;border-top:1px solid var(--line);
   border-radius:0 0 var(--r-sm) var(--r-sm);
 }
+.lk__me-exit{display:flex;align-items:center;gap:9px}
+.lk__me-exit svg{color:var(--ink-3)}
 
 .lk__view{padding:28px;max-width:1320px;width:100%}
 
