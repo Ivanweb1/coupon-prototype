@@ -32,8 +32,20 @@ const state = {
   cat: params.get("cat") || null,
   near: false,
   metrics: { shown: 0, opened: 0, revealed: 0 },
-  seen: new Set()
+  seen: new Set(),
+  /* Категории купонов, которые посетитель уже раскрывал. По ним на главной
+     собирается блок рекомендаций: «она понимает, какую категорию человек
+     смотрит, и рекомендует 2-3 смежные» (созвон 07.09.2026). */
+  interest: []
 };
+
+function noteInterest(catId) {
+  if (!catId) return;
+  const i = state.interest.indexOf(catId);
+  if (i !== -1) state.interest.splice(i, 1);
+  state.interest.unshift(catId);
+  state.interest.length = Math.min(state.interest.length, 5);
+}
 
 /* Расстояние до точки — в минутах, а не в метрах: по решению с созвона
    07.09.2026 точная геопозиция не нужна, а «в 5 минутах» понятнее и не
@@ -47,8 +59,23 @@ function fmtDist(m) {
 /* ==========================================================================
    Город
    ========================================================================== */
+/* Родительный падеж города для подписи «Все скидки Липецка». Правил ровно
+   столько, сколько нужно списку CITIES; города с дефисом склоняем по первой
+   части («Ростов-на-Дону» → «Ростова-на-Дону»). Для реального справочника
+   городов падежи придут из базы вместе с самим городом. */
+function cityGen(name) {
+  if (!name) return "города";
+  const dash = name.indexOf("-");
+  if (dash > 0) return cityGen(name.slice(0, dash)) + name.slice(dash);
+  if (/[ьи]$/.test(name)) return name.replace(/ь$/, "и");   /* Казань → Казани */
+  if (/а$/.test(name))    return name.replace(/а$/, "ы");   /* Москва → Москвы */
+  if (/[жшчщц]$/.test(name)) return name + "а";             /* Воронеж → Воронежа */
+  return name + "а";                                        /* Липецк → Липецка */
+}
+
 function renderCity() {
   qsa("[data-city-name]").forEach(el => el.textContent = state.city || "Выберите город");
+  qsa("[data-city-gen]").forEach(el => el.textContent = cityGen(state.city));
   /* Иконки соцсетей города — сам значок оставляем нетронутым (его рисует
      initIcons), город уходит в подсказку при наведении */
   qsa("[data-city-social]").forEach(el => {
@@ -241,6 +268,7 @@ function revealOnCard(btn, c) {
     btn.textContent = c.code;
     btn.title = "Нажмите, чтобы скопировать";
     state.metrics.revealed++;
+    noteInterest(c.cat && c.cat.id);
     paintMetrics();
     return;
   }
@@ -343,6 +371,7 @@ function initInfinite(gridSel, catId) {
       loader.innerHTML = '<span class="feed-end">Вы посмотрели все купоны' +
         (state.city ? " в городе " + state.city : "") +
         '. Новые появляются каждый день.</span>';
+      showFeedRecos(catId);
       return;
     }
     loader.innerHTML = dots;
@@ -360,6 +389,28 @@ function initInfinite(gridSel, catId) {
       paint();
     }, 320);
   }, { rootMargin: "300px" }).observe(loader);
+}
+
+/* Хвост бесконечной ленты. На созвоне 07.09.2026 блок рекомендаций был
+   привязан к концу выдачи: «когда вот эта кнопка кончится, кончится вся
+   выдача — блок рекомендаций». Кнопку «Показать ещё» убрали, но сам блок
+   остался нужен, поэтому показываем его там же — когда лента исчерпана.
+   Категорию берём из того, что посетитель раскрывал (state.interest), а не
+   из общего топа: рекомендация должна отвечать на просмотренное. */
+function showFeedRecos(catId) {
+  const host = qs("#feedRecos");
+  if (!host || host.dataset.on === "1") return;
+  const base = catId || state.interest[0] ||
+               CATEGORIES.filter(c => c.id !== "marketplace" && c.id !== "business")
+                 .sort((a, b) => b.n - a.n)[0].id;
+  const cat = CATEGORIES.find(c => c.id === base) || CATEGORIES[0];
+  const src = qs("#recosSource");
+  if (src) src.textContent = state.interest.length
+    ? "Вы смотрели «" + cat.name + "»"
+    : "Популярное в городе — «" + cat.name + "»";
+  buildRecommendations(cat.id);
+  host.dataset.on = "1";
+  host.hidden = false;
 }
 
 /* ==========================================================================
@@ -451,6 +502,7 @@ function openQuick(c, cardEl) {
   quick.innerHTML = quickHTML(c);
 
   state.metrics.opened++;
+  noteInterest(c.cat && c.cat.id);
   paintMetrics();
 
   const r = cardEl.getBoundingClientRect();
@@ -539,16 +591,24 @@ function closeQuick() {
 function buildRecommendations(catId) {
   const rail = qs("#rail");
   if (!rail) return;
+  rail.innerHTML = "";
   const cat = CATEGORIES.find(c => c.id === catId) || CATEGORIES[0];
+
+  /* Смежные категории сверяем со справочником: makeCoupon на неизвестный id
+     молча отдаёт случайную категорию, и в подборке оказываются купоны, к
+     смежным никак не относящиеся. Блок обещает «не прямых конкурентов» —
+     значит, показывать он должен ровно то, что назвал в подписи. */
+  const adjacent = cat.adjacent
+    .map(id => CATEGORIES.find(c => c.id === id))
+    .filter(Boolean);
+  if (!adjacent.length) return;
+
   const label = qs("#railLabel");
-  if (label) {
-    label.textContent = cat.adjacent
-      .map(id => (CATEGORIES.find(c => c.id === id) || {}).name)
-      .filter(Boolean).join(" · ");
-  }
+  if (label) label.textContent = adjacent.map(c => c.name).join(" · ");
+
   const used = new Set();
   for (let i = 0; i < 9; i++) {
-    const id = cat.adjacent[i % cat.adjacent.length];
+    const id = adjacent[i % adjacent.length].id;
     let c = makeCoupon(id);
     for (let t = 0; t < 12 && used.has(c.title + c.company); t++) c = makeCoupon(id);
     used.add(c.title + c.company);

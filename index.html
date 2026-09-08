@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260907180431">
+<link rel="stylesheet" href="assets/style.css?v=20260908115602">
 </head>
 <body>
 
@@ -21,6 +21,7 @@
     <span class="header__spacer"></span>
 
     <div class="head-socials" aria-label="Мы в соцсетях города">
+      <span class="head-socials__label">Все скидки <span data-city-gen>Липецка</span> —</span>
       <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="link"></a>
       <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="link"></a>
       <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="link"></a>
@@ -119,6 +120,26 @@
     </div>
   </section>
 
+  <!-- Рекомендации в хвосте ленты. По созвону 07.09.2026 блок привязан к
+       концу выдачи и должен читаться не как её продолжение, а как подборка,
+       поэтому та же обособленная подложка, что в каталоге и на купоне.
+       Скрыт, пока лента не кончилась. -->
+  <section class="section" id="feedRecos" hidden>
+    <div class="recos">
+      <div class="recos__head">
+        <span class="recos__eyebrow">Рекомендации</span>
+        <h2>Что ещё посмотреть</h2>
+        <p class="recos__sub">
+          <span id="recosSource">Популярное в городе</span> ·
+          смежные категории: <span id="railLabel">—</span>
+        </p>
+      </div>
+      <div class="rail-wrap">
+        <div class="rail" id="rail"></div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <!-- Подвал -->
@@ -189,8 +210,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260907180431"></script>
-<script src="assets/app.js?v=20260907180431"></script>
+<script src="assets/data.js?v=20260908115602"></script>
+<script src="assets/app.js?v=20260908115602"></script>
 <script>
   initCommon();
   buildTags();

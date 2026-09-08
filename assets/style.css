@@ -102,6 +102,11 @@ input{font:inherit;color:inherit}
 /* Иконки соцсетей города — компактно в шапке главной, рядом с призывом
    подписаться, а не в подвале, куда при бесконечной ленте не доскроллить */
 .head-socials{display:flex;align-items:center;gap:6px}
+/* Подпись-триггер у иконок: без неё значки читаются как служебные и их
+   просто не замечают (на созвоне это проверили голосованием — увидел один
+   из двоих). Тон приглушённый: задача — объяснить, а не создать пятно. */
+.head-socials__label{font-size:13px;color:var(--ink-3);white-space:nowrap;margin-right:2px}
+@media (max-width:1200px){.head-socials__label{display:none}}
 .head-socials .soc{width:34px;height:34px;padding:0;justify-content:center;border-radius:var(--r-pill)}
 
 /* «Разместить купон» — единственный явный призыв к действию в шапке.

@@ -11,7 +11,7 @@ window.CATEGORIES = [
   { id: "beauty",    name: "Красота",            n: 128, adjacent: ["cosmetology", "medicine", "fitness"] },
   { id: "cosmetology", name: "Косметология",     n: 74,  adjacent: ["medicine", "beauty", "spa"] },
   { id: "medicine",  name: "Медицина",           n: 96,  adjacent: ["cosmetology", "fitness", "leisure"] },
-  { id: "food",      name: "Кафе и рестораны",   n: 204, adjacent: ["leisure", "delivery", "kids"] },
+  { id: "food",      name: "Кафе и рестораны",   n: 204, adjacent: ["leisure", "travel", "kids"] },
   { id: "auto",      name: "Авто",               n: 87,  adjacent: ["autogoods", "wash", "services"] },
   { id: "wash",      name: "Автомойки",          n: 41,  adjacent: ["auto", "autogoods", "services"] },
   { id: "autogoods", name: "Автотовары",         n: 63,  adjacent: ["auto", "wash", "marketplace"] },
@@ -164,6 +164,24 @@ function makeErid(id) {
   return "2Vt" + (100000000 + id * 7919 % 899999999).toString(36).toUpperCase();
 }
 
+/* Срок действия — конкретными датами, а не «ещё 12 дней»: Коля отдельно
+   просил выписывать период («срок две недели, с 1 сентября по 14 сентября»),
+   иначе на странице не видно, до какого числа купон живой. Внутри одного
+   месяца месяц не повторяем: «с 1 по 14 сентября». */
+const MONTHS_GEN = ["января", "февраля", "марта", "апреля", "мая", "июня",
+  "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+
+function makePeriod() {
+  const from = new Date();
+  from.setDate(from.getDate() - Math.floor(Math.random() * 6));
+  const to = new Date(from);
+  to.setDate(to.getDate() + [10, 14, 21, 30][Math.floor(Math.random() * 4)]);
+  return from.getMonth() === to.getMonth()
+    ? "с " + from.getDate() + " по " + to.getDate() + " " + MONTHS_GEN[to.getMonth()]
+    : "с " + from.getDate() + " " + MONTHS_GEN[from.getMonth()] +
+      " по " + to.getDate() + " " + MONTHS_GEN[to.getMonth()];
+}
+
 /* Одна и та же акция может быть у разных компаний — так лента
    не выглядит повтором, когда офферов-заготовок мало. */
 const BRANDS = ["Рыба", "Название", "Пример", "Компания", "Бренд"];
@@ -192,7 +210,7 @@ window.makeCoupon = function (catId) {
     address: STREETS[Math.floor(Math.random() * STREETS.length)],
     views: Math.floor(120 + Math.random() * 4200),
     dist: Math.floor(120 + Math.random() * 7800),   /* метров до точки */
-    until: ["до 30 сентября", "до конца месяца", "ещё 12 дней", "до 15 октября"][Math.floor(Math.random() * 4)],
+    until: makePeriod(),
     terms: terms
   };
 };
