@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кабинет клиента — прототип купонного сервиса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Токены, кнопки и типографика берутся из публичной части: кабинет —
+     тот же продукт, а не отдельный интерфейс -->
+<link rel="stylesheet" href="../assets/style.css?v=20260908130258">
+<link rel="stylesheet" href="assets/lk.css?v=20260908130258">
+</head>
+<body class="lk" data-role="client">
+
+<!-- Кабинеты разведены по отдельным страницам: у клиента и партнёра
+     разные роли, разные данные и разные права, и на показе их удобнее
+     открывать двумя вкладками. Разделы внутри кабинета по-прежнему
+     рисуются в #lkView — заводить под каждый отдельный файл незачем,
+     кабинет живёт за авторизацией и в поиске не участвует. -->
+<div class="lk__shell">
+
+  <aside class="lk__side" id="lkSide">
+    <a class="lk__logo" href="../index.html" title="Вернуться на публичную часть">
+      <span>Логотип</span>
+    </a>
+
+    <!-- Ссылка на соседний кабинет — служебная, только для показа.
+         В продукте роль приходит из учётной записи, и попасть из одного
+         кабинета в другой нельзя. -->
+    <a class="lk__other" href="partner.html">Посмотреть кабинет партнёра</a>
+
+    <nav class="lk__nav" id="lkNav"></nav>
+
+    <a class="lk__back" href="../index.html">
+      <span data-icon="link"></span> Открыть публичную часть
+    </a>
+  </aside>
+
+  <div class="lk__main">
+    <header class="lk__top">
+      <button class="lk__burger" id="lkBurger" aria-label="Меню кабинета">
+        <span data-icon="burger"></span>
+      </button>
+      <div class="lk__crumbs" id="lkCrumbs"></div>
+      <span class="lk__spacer"></span>
+      <a class="btn btn--solid lk__cta" href="?view=new-regional" id="lkCta">
+        <span data-icon="plus"></span><span>Создать купон</span>
+      </a>
+      <a class="lk__bell" href="?view=notifications" id="lkBell" aria-label="Уведомления">
+        <span data-icon="bell"></span>
+        <i class="lk__dot" id="lkDot"></i>
+      </a>
+      <div class="lk__me" id="lkMe"></div>
+    </header>
+
+    <main class="lk__view" id="lkView"></main>
+  </div>
+
+</div>
+
+<div class="lk__scrim" id="lkScrim"></div>
+
+<script src="assets/lk-data.js?v=20260908130258"></script>
+<script src="assets/lk.js?v=20260908130258"></script>
+</body>
+</html>

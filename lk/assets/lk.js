@@ -1,8 +1,10 @@
 /* ==========================================================================
    Личные кабинеты — логика прототипа.
-   Один каркас, разделы рисуются в #lkView. Роль и раздел живут в адресе
-   (?role=client&view=coupons), чтобы ссылку на конкретный экран можно было
-   скинуть в чат при согласовании.
+   Кабинеты разведены по страницам: client.html и partner.html. Роль берётся
+   из data-role страницы и внутри кабинета не меняется — ровно как в
+   продукте, где она закреплена за учётной записью. Разделы внутри кабинета
+   рисуются в #lkView, номер раздела живёт в адресе (?view=coupons), чтобы
+   ссылку на конкретный экран можно было скинуть в чат при согласовании.
    ========================================================================== */
 
 const qs  = (s, r = document) => r.querySelector(s);
@@ -27,7 +29,7 @@ const rub = n => n.toLocaleString("ru-RU") + " ₽";
 
 /* ---------- Состояние ---------- */
 const state = {
-  role: P.get("role") === "partner" ? "partner" : "client",
+  role: document.body.dataset.role === "partner" ? "partner" : "client",
   view: P.get("view") || "dashboard",
   filter: "all"
 };
@@ -78,8 +80,8 @@ const TITLES = {
   }
 };
 
-function href(view, role) {
-  return "?role=" + (role || state.role) + "&view=" + view;
+function href(view) {
+  return "?view=" + view;
 }
 
 /* Счётчики в навигации — только там, где число реально помогает выбрать
@@ -100,12 +102,6 @@ function navCount(id) {
 }
 
 function renderChrome() {
-  /* Переключатель роли */
-  qs("#lkRole").innerHTML = `
-    <button data-role="client"${state.role === "client" ? ' class="is-on"' : ""}>Клиент</button>
-    <button data-role="partner"${state.role === "partner" ? ' class="is-on"' : ""}>Партнёр</button>`;
-  qsa("#lkRole button").forEach(b => b.onclick = () => go("dashboard", b.dataset.role));
-
   /* Меню */
   qs("#lkNav").innerHTML = NAV[state.role].map(it => {
     if (it.group) return `<div class="lk__nav-group">${it.group}</div>`;
@@ -149,8 +145,7 @@ function renderChrome() {
   initIcons();
 }
 
-function go(view, role) {
-  if (role) state.role = role;
+function go(view) {
   state.view = view;
   state.filter = "all";
   history.replaceState(null, "", href(view));
