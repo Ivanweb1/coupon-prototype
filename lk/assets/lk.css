@@ -68,8 +68,6 @@
   border-bottom:1px solid var(--line);
 }
 .lk__spacer{flex:1 1 auto}
-.lk__crumbs{font-size:14px;color:var(--ink-3);min-width:0}
-.lk__crumbs b{color:var(--ink);font-weight:600}
 .lk__burger{display:none;width:38px;height:38px;border-radius:var(--r-sm);color:var(--ink-2)}
 
 .lk__bell{
