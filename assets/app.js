@@ -687,15 +687,10 @@ function renderCouponPage() {
         <button type="button" class="btn btn--ghost btn--lg">Сохранить скриншотом</button>
       </div>
 
-      <div>
-        <div class="block-label">Как воспользоваться</div>
-        <ul class="terms">
-          <li>${c.terms[0]}</li>
-          <li>${c.terms[1]}</li>
-          <li>${c.terms[2]}</li>
-        </ul>
-      </div>
-
+      <!-- Короткий список условий здесь не повторяем: он дословно совпадал
+           с попапом, а страница по решению созвона должна давать больше,
+           а не то же самое. Развёрнутые правила — отдельной секцией ниже,
+           чтобы не спорить за внимание с промокодом. -->
       <div>
         <div class="block-label">Где действует</div>
         <div class="map">
