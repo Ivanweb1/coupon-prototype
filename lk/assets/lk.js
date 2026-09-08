@@ -126,17 +126,17 @@ function renderChrome() {
   const cab = state.role === "client" ? "Кабинет клиента" : "Кабинет партнёра";
   document.title = title + " — " + cab;
 
-  /* Кнопка действия в шапке есть только у клиента: он публикует купоны.
-     Партнёр этого не может (решение созвона 04.09), а чем он занимается
-     в один клик — на созвонах не проговаривали, поэтому кнопки нет. */
+  /* Главное действие кабинета. У клиента это публикация купона, у партнёра
+     — привлечение юрлиц-клиентов: другой работы у него нет, купоны он
+     публиковать не может (решение созвона 04.09). Обе кнопки ведут туда,
+     где действие совершается. */
   const cta = qs("#lkCta");
-  if (state.role === "client") {
-    cta.hidden = false;
-    cta.href = href("new-regional");
-    cta.onclick = e => { e.preventDefault(); go("new-regional"); };
-  } else {
-    cta.hidden = true;
-  }
+  const main = state.role === "client"
+    ? { view: "new-regional", label: "Создать купон" }
+    : { view: "clients",      label: "Пригласить клиента" };
+  cta.href = href(main.view);
+  cta.lastElementChild.textContent = main.label;
+  cta.onclick = e => { e.preventDefault(); go(main.view); };
 
   /* Колокольчик */
   const unread = LK_NOTIFICATIONS[state.role].filter(n => n.unread).length;
@@ -538,22 +538,12 @@ VIEWS["partner:dashboard"] = () => {
         { label: "Начислено всего",  value: rub(fee) },
         { label: "К выплате",        value: rub(pend.total), note: pend.date }
       ])
-    + `<div class="lk-pair">
-      ${panel("Последние клиенты",
+    + panel("Последние клиенты",
         table([{ t: "Клиент" }, { t: "С нами с" }, { t: "Купонов", num: true }],
           LK_CLIENTS.slice(0, 4).map(c => `<tr>
             <td><b class="lk-t__title">${c.name}</b><span class="lk-t__sub">${c.city} · ${LK_CLIENT_STATUSES[c.status]}</span></td>
             <td>${c.since}</td><td class="num">${c.coupons}</td></tr>`).join("")),
-        { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все клиенты</a>` })}
-
-      ${panel("Ваша ссылка для приглашения", `
-        <div class="lk-f">
-          ${field("Реферальная ссылка", input("", "kupony.ru/?ref=PRTN-LIP"))}
-        </div>
-        <div class="lk-head__act" style="margin-top:14px">
-          <button class="btn btn--solid">Скопировать</button>
-        </div>`)}
-    </div>`;
+        { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все клиенты</a>` });
 };
 
 VIEWS["partner:clients"] = () => {
@@ -567,6 +557,15 @@ VIEWS["partner:clients"] = () => {
   </tr>`).join("");
 
   return head("Региональные клиенты")
+    + panel("Ваша ссылка для приглашения", `
+        <div class="lk-narrow">
+          <div class="lk-f">
+            ${field("Реферальная ссылка", input("", "kupony.ru/?ref=PRTN-LIP"))}
+          </div>
+          <div class="lk-head__act" style="margin-top:14px">
+            <button class="btn btn--solid">Скопировать</button>
+          </div>
+        </div>`)
     + panel("", table(
         [{ t: "Клиент" }, { t: "Статус" }, { t: "С нами с" }, { t: "Купонов", num: true },
          { t: "Оплатил", num: true }, { t: "Ваше начисление", num: true }], rows));
