@@ -515,9 +515,50 @@ input{font:inherit;color:inherit}
 
 .rail-wrap{position:relative}
 .rail{
-  display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;
-  padding:4px 4px 18px;margin:0 -4px;
-  scrollbar-width:thin;
+  display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x proximity;
+  padding:4px;margin:0 -4px;
+  /* Полосу прокрутки прячем: листание показывают стрелки и затухание
+     у края — так же, как в ленте категорий на главной */
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.rail::-webkit-scrollbar{display:none}
+
+/* Стрелки листания. Появляются только с той стороны, куда есть куда
+   листать: на догадливость по скроллу полагаться нельзя — это отдельно
+   проговаривали на созвоне про ленту категорий. */
+.rail-nav{
+  position:absolute;top:calc(50% - 9px);transform:translateY(-50%);z-index:3;
+  width:38px;height:38px;border-radius:var(--r-pill);
+  display:grid;place-items:center;
+  background:var(--bg);border:1px solid var(--line-strong);color:var(--ink-2);
+  box-shadow:var(--shadow-1);
+  opacity:0;pointer-events:none;
+  transition:opacity .2s var(--ease-soft), background .18s, color .18s, border-color .18s;
+}
+.rail-nav.is-on{opacity:1;pointer-events:auto}
+.rail-nav:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.rail-nav--prev{left:-6px}
+.rail-nav--next{right:-6px}
+.rail-nav .chev{display:grid}
+.rail-nav--prev .chev{transform:rotate(90deg)}
+.rail-nav--next .chev{transform:rotate(-90deg)}
+
+/* Затухание у края — подсказка, что ряд продолжается */
+.rail-wrap::before,
+.rail-wrap::after{
+  content:"";position:absolute;top:0;bottom:0;width:44px;z-index:2;
+  pointer-events:none;opacity:0;transition:opacity .2s var(--ease-soft);
+}
+/* Цвет затухания — подложка блока рекомендаций, она серая, не белая */
+.rail-wrap::before{left:0;background:linear-gradient(to right,var(--surface),transparent)}
+.rail-wrap::after{right:0;background:linear-gradient(to left,var(--surface),transparent)}
+.rail-wrap.can-prev::before,
+.rail-wrap.can-next::after{opacity:1}
+
+@media (max-width:640px){
+  .rail-nav{display:none}
+  .rail-wrap::before,.rail-wrap::after{width:24px}
 }
 .rail .card{flex:0 0 236px;scroll-snap-align:start}
 .rail .card .card__media{aspect-ratio:16/10}

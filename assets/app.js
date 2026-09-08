@@ -599,6 +599,46 @@ function buildRecommendations(catId) {
     used.add(c.title + c.company);
     rail.appendChild(makeCard(c, true));
   }
+
+  initRailNav(rail);
+}
+
+/* Листание рекомендаций. Полоса прокрутки скрыта, поэтому нужны явные
+   стрелки: на созвоне отдельно проговаривали, что на догадливость по
+   скроллу полагаться нельзя. Стрелка показывается только с той стороны,
+   куда действительно есть куда листать. */
+function initRailNav(rail) {
+  const wrap = rail.parentElement;
+  if (!wrap || wrap.dataset.nav === "1") return;
+  wrap.dataset.nav = "1";
+
+  const mk = dir => {
+    const b = document.createElement("button");
+    b.className = "rail-nav rail-nav--" + dir;
+    b.type = "button";
+    b.setAttribute("aria-label", dir === "prev" ? "Назад" : "Дальше");
+    b.innerHTML = '<span class="chev">' + ICON.chev + "</span>";
+    b.onclick = () => rail.scrollBy({
+      left: Math.round(rail.clientWidth * .8) * (dir === "prev" ? -1 : 1),
+      behavior: "smooth"
+    });
+    wrap.appendChild(b);
+    return b;
+  };
+  const prev = mk("prev"), next = mk("next");
+
+  const sync = () => {
+    const max = rail.scrollWidth - rail.clientWidth;
+    const canPrev = rail.scrollLeft > 4;
+    const canNext = rail.scrollLeft < max - 4;
+    prev.classList.toggle("is-on", canPrev);
+    next.classList.toggle("is-on", canNext);
+    wrap.classList.toggle("can-prev", canPrev);
+    wrap.classList.toggle("can-next", canNext);
+  };
+  rail.addEventListener("scroll", sync, { passive: true });
+  window.addEventListener("resize", sync);
+  sync();
 }
 
 /* ==========================================================================
