@@ -93,19 +93,63 @@
 }
 .lk__dot.is-on{display:block}
 
-.lk__me{
+.lk__me{position:relative;padding-left:12px;border-left:1px solid var(--line)}
+.lk__me-btn{
   display:flex;align-items:center;gap:9px;
-  padding-left:12px;border-left:1px solid var(--line);
+  padding:4px 8px 4px 4px;border-radius:var(--r-pill);
+  transition:background .16s;
 }
+.lk__me-btn:hover{background:var(--surface)}
+.lk__me-btn .chev{color:var(--ink-4);transition:transform .2s var(--ease)}
+.lk__me.is-open .lk__me-btn .chev{transform:rotate(180deg)}
 .lk__me-ava{
-  width:34px;height:34px;border-radius:50%;
+  flex:0 0 auto;width:34px;height:34px;border-radius:50%;
   background:var(--surface-2);color:var(--ink-3);
   display:grid;place-items:center;font-size:12px;font-weight:600;
 }
+.lk__me-txt{display:flex;flex-direction:column;text-align:left}
 .lk__me-name{font-size:13px;font-weight:500;line-height:1.25}
 .lk__me-role{font-size:12px;color:var(--ink-3);line-height:1.25}
 
+.lk__me-menu{
+  position:absolute;top:calc(100% + 8px);right:0;z-index:60;
+  min-width:210px;padding:6px;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);
+  box-shadow:var(--shadow-2);
+  opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .16s, transform .16s var(--ease);
+}
+.lk__me.is-open .lk__me-menu{opacity:1;transform:none;pointer-events:auto}
+.lk__me-menu a{
+  display:block;padding:9px 10px;border-radius:var(--r-sm);
+  font-size:14px;color:var(--ink-2);
+}
+.lk__me-menu a:hover{background:var(--surface);color:var(--ink)}
+.lk__me-menu a:last-child{
+  margin-top:4px;padding-top:12px;border-top:1px solid var(--line);
+  border-radius:0 0 var(--r-sm) var(--r-sm);
+}
+
 .lk__view{padding:28px;max-width:1320px;width:100%}
+
+/* Строка под заголовком карточки купона: статус, категория, срок */
+.lk-sub{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:-12px 0 20px;font-size:14px;color:var(--ink-3);
+}
+.lk-sub .dot{width:3px;height:3px;border-radius:50%;background:var(--ink-4)}
+.lk-reason{margin:0;font-size:14px;color:var(--ink-2);line-height:1.55}
+
+/* Строка купона открывает его карточку */
+.lk-t tr[data-coupon]{cursor:pointer}
+.lk-t tr[data-coupon]:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+[data-coupon-row]{cursor:pointer}
+[data-coupon-row]:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:var(--r-sm)}
+
+/* Заблокированные поля: видно, что правка сейчас недоступна */
+.lk-i:disabled,.lk-s:disabled,.lk-ta:disabled{
+  background:var(--surface);color:var(--ink-2);cursor:default;
+}
 
 /* --------------------------------------------------------------------------
    Заголовок раздела

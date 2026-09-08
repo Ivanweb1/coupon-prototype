@@ -31,6 +31,7 @@ const rub = n => n.toLocaleString("ru-RU") + " ₽";
 const state = {
   role: document.body.dataset.role === "partner" ? "partner" : "client",
   view: P.get("view") || "dashboard",
+  id: P.get("id") ? Number(P.get("id")) : null,
   filter: "all"
 };
 
@@ -69,7 +70,7 @@ const TITLES = {
     dashboard: "Дашборд", coupons: "Мои купоны",
     "new-regional": "Создание регионального купона",
     "new-marketplace": "Создание купона маркетплейса",
-    archive: "Архив купонов", stats: "Статистика", billing: "Биллинг",
+    archive: "Архив купонов", coupon: "Купон", stats: "Статистика", billing: "Биллинг",
     profile: "Профиль компании", notifications: "Уведомления"
   },
   partner: {
@@ -80,8 +81,8 @@ const TITLES = {
   }
 };
 
-function href(view) {
-  return "?view=" + view;
+function href(view, id) {
+  return "?view=" + view + (id ? "&id=" + id : "");
 }
 
 /* Счётчики в навигации — только там, где число реально помогает выбрать
@@ -106,7 +107,9 @@ function renderChrome() {
   qs("#lkNav").innerHTML = NAV[state.role].map(it => {
     if (it.group) return `<div class="lk__nav-group">${it.group}</div>`;
     const n = navCount(it.id);
-    return `<a href="${href(it.id)}"${it.id === state.view ? ' class="is-on"' : ""}>
+    const on = it.id === state.view ||
+               (state.view === "coupon" && it.id === (isArchived() ? "archive" : "coupons"));
+    return `<a href="${href(it.id)}"${on ? ' class="is-on"' : ""}>
       <span>${it.label}</span>${n ? `<span class="lk__n">${n}</span>` : ""}</a>`;
   }).join("");
   qsa("#lkNav a").forEach(a => a.onclick = e => { e.preventDefault(); go(a.getAttribute("href").split("view=")[1]); });
@@ -115,7 +118,11 @@ function renderChrome() {
      страницы прямо под ней и подсвечено в меню слева. Шапка остаётся под
      действия. В заголовке вкладки браузера кабинет и раздел сохраняем —
      по ним различаются открытые вкладки. */
-  const title = TITLES[state.role][state.view] || "Раздел";
+  /* Купоны видит только клиент: в кабинете партнёра раздела нет, и его
+     название не должно просачиваться даже в заголовок вкладки. */
+  const cur = state.role === "client" && state.view === "coupon" && state.id
+    ? LK_COUPONS.find(c => c.id === state.id) : null;
+  const title = cur ? cur.title : (TITLES[state.role][state.view] || "Раздел");
   const cab = state.role === "client" ? "Кабинет клиента" : "Кабинет партнёра";
   document.title = title + " — " + cab;
 
@@ -138,18 +145,44 @@ function renderChrome() {
   bell.href = href("notifications");
   bell.onclick = e => { e.preventDefault(); go("notifications"); };
 
-  /* Кто в кабинете */
-  qs("#lkMe").innerHTML = state.role === "client"
-    ? `<div class="lk__me-ava">КП</div><div><div class="lk__me-name">Кофейня «Пример»</div><div class="lk__me-role">Липецк</div></div>`
-    : `<div class="lk__me-ava">ИП</div><div><div class="lk__me-name">Иван Партнёров</div><div class="lk__me-role">Липецк</div></div>`;
+  /* Кто в кабинете. По клику — профиль и выход: без выхода кабинет
+     некуда закрыть. Выход возвращает на публичную часть. */
+  const me = qs("#lkMe");
+  const who = state.role === "client"
+    ? { ava: "КП", name: "Кофейня «Пример»" }
+    : { ava: "ИП", name: "Иван Партнёров" };
+  me.innerHTML = `
+    <button class="lk__me-btn" data-me-toggle aria-haspopup="true" aria-expanded="false">
+      <span class="lk__me-ava">${who.ava}</span>
+      <span class="lk__me-txt">
+        <span class="lk__me-name">${who.name}</span>
+        <span class="lk__me-role">Липецк</span>
+      </span>
+      <span class="chev" data-icon="chev"></span>
+    </button>
+    <div class="lk__me-menu">
+      <a href="${href("profile")}" data-go="profile">${state.role === "client" ? "Профиль компании" : "Профиль партнёра"}</a>
+      <a href="../index.html">Выйти</a>
+    </div>`;
+  const toggle = qs("[data-me-toggle]", me);
+  toggle.onclick = e => {
+    e.stopPropagation();
+    const open = me.classList.toggle("is-open");
+    toggle.setAttribute("aria-expanded", open);
+  };
+  qs(".lk__me-menu", me).onclick = e => {
+    const a = e.target.closest("a");
+    if (a && a.dataset.go) { e.preventDefault(); me.classList.remove("is-open"); go(a.dataset.go); }
+  };
 
   initIcons();
 }
 
-function go(view) {
+function go(view, id) {
   state.view = view;
+  state.id = id || null;
   state.filter = "all";
-  history.replaceState(null, "", href(view));
+  history.replaceState(null, "", href(view, id));
   document.body.classList.remove("lk-nav-open");
   render();
   qs("#lkView").scrollIntoView({ block: "start" });
@@ -202,12 +235,13 @@ function field(label, control) {
   return `<label class="lk-l"><span class="lk-l__t">${label}</span>${control}</label>`;
 }
 
-function input(ph, val) {
-  return `<input class="lk-i" placeholder="${ph}"${val ? ` value="${val}"` : ""}>`;
+function input(ph, val, locked) {
+  return `<input class="lk-i" placeholder="${ph}"${val ? ` value="${val}"` : ""}${locked ? " disabled" : ""}>`;
 }
 
-function select(opts, name) {
-  return `<select class="lk-s"${name ? ` data-f="${name}"` : ""}>${opts.map(o => `<option>${o}</option>`).join("")}</select>`;
+function select(opts, name, val, locked) {
+  return `<select class="lk-s"${name ? ` data-f="${name}"` : ""}${locked ? " disabled" : ""}>` +
+    opts.map(o => `<option${o === val ? " selected" : ""}>${o}</option>`).join("") + `</select>`;
 }
 
 /* ==========================================================================
@@ -226,7 +260,7 @@ VIEWS["client:dashboard"] = () => {
       ${panel("Опубликовано сейчас", live.length
         ? table(
             [{ t: "Купон" }, { t: "Действует" }, { t: "Забрали", num: true }],
-            live.map(c => `<tr>
+            live.map(c => `<tr data-coupon="${c.id}" tabindex="0">
               <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${c.kind === "market" ? c.market : c.city} · ${c.value}</span></td>
               <td>${c.from} — ${c.to}</td>
               <td class="num">${num(c.taken)}</td></tr>`).join("")
@@ -236,7 +270,7 @@ VIEWS["client:dashboard"] = () => {
 
       ${panel("Требует внимания", attention.length
         ? `<div class="lk-list">${attention.map(c => `
-            <div class="lk-list__i is-unread"><i class="lk-list__d"></i><div>
+            <div class="lk-list__i is-unread" data-coupon-row="${c.id}" tabindex="0"><i class="lk-list__d"></i><div>
               ${c.title}
               <div class="lk-list__w">${c.status === "rejected" ? "Отклонён: " + c.reject : "Черновик — не заполнены срок и промокод"}</div>
             </div></div>`).join("")}</div>`
@@ -256,7 +290,7 @@ VIEWS["client:coupons"] = () => {
       .map(s => `<button data-f="${s}"${state.filter === s ? ' class="is-on"' : ""}>${LK_STATUSES[s].label}<span class="lk__n">${counts[s]}</span></button>`).join("")}
   </div>`;
 
-  const rows = list.map(c => `<tr>
+  const rows = list.map(c => `<tr data-coupon="${c.id}" tabindex="0">
     <td><b class="lk-t__title">${c.title}</b>
         <span class="lk-t__sub">${c.kind === "market" ? c.market + " · арт. " + c.article : c.cat + " · " + c.city}</span></td>
     <td><span class="lk-chip">${c.value}</span></td>
@@ -282,69 +316,78 @@ VIEWS["client:coupons"] = () => {
    (переходы туда — ключевая метрика), изображение 4:5 под ленты соцсетей.
    Полей намеренно немного: Виль просил Ивана согласовывать сложность
    карточки с Павлом, чтобы не переделывать интерфейс создания купона. */
-function couponForm(kind) {
+function couponForm(kind, c, locked) {
   const isMarket = kind === "market";
+  /* Купон на модерации, опубликованный и завершённый показываем теми же
+     полями, но недоступными для правки: что именно с ними можно делать —
+     остановить, отозвать, продлить — на созвонах не проговаривали, и
+     придумывать эти действия я не стал. */
+  const v = c || {};
+  const ro = locked ? ' disabled' : '';
+
   const where = isMarket
     ? `<div class="lk-f__row">
-        ${field("Маркетплейс", select(LK_MARKETS))}
-        ${field("Артикул товара", input("184 220 933"))}
+        ${field("Маркетплейс", select(LK_MARKETS, null, v.market, locked))}
+        ${field("Артикул товара", input("184 220 933", v.article, locked))}
        </div>
-       ${field("Ссылка на товар", input("https://…"))}`
+       ${field("Ссылка на товар", input("https://…", null, locked))}`
     : `<div class="lk-f__row">
-        ${field("Категория", select(["Кафе и рестораны", "Красота", "Медицина", "Авто", "Развлечения", "Услуги"]))}
-        ${field("Город", select(LK_CITIES))}
+        ${field("Категория", select(["Кафе и рестораны", "Красота", "Медицина", "Авто", "Развлечения", "Услуги"], null, v.cat, locked))}
+        ${field("Город", select(LK_CITIES, null, v.city, locked))}
        </div>
-       ${field("Адрес точки", input("ул. Первомайская, 12"))}`;
+       ${field("Адрес точки", input("ул. Первомайская, 12", null, locked))}`;
+
+  const mech = (LK_MECHANICS.find(m => m.id === v.mech) || {}).label;
 
   return `<div class="lk-form">
     <div>
       ${panel(isMarket ? "Товар и площадка" : "Что и где", where)}
 
       ${panel("Предложение", `<div class="lk-f">
-        ${field("Заголовок купона", input("Комбо-обед по будням до 16:00"))}
+        ${field("Заголовок купона", input("Комбо-обед по будням до 16:00", v.title, locked))}
         <div class="lk-f__row">
-          ${field("Механика", select(LK_MECHANICS.map(m => m.label), "mech"))}
-          ${field("Величина", input("−30%"))}
+          ${field("Механика", select(LK_MECHANICS.map(m => m.label), "mech", mech, locked))}
+          ${field("Величина", input("−30%", v.value, locked))}
         </div>
         ${field("Изображение купона", `<div class="lk-drop">Перетащите файл<br>или выберите на компьютере<br><br>Пропорция 4:5</div>`)}
       </div>`)}
 
       ${panel("Срок и код", `<div class="lk-f">
         <div class="lk-f__row">
-          ${field("Действует с", input("3 сентября 2026"))}
-          ${field("по", input("24 сентября 2026"))}
+          ${field("Действует с", input("3 сентября 2026", v.from === "—" ? null : v.from, locked))}
+          ${field("по", input("24 сентября 2026", v.to === "—" ? null : v.to, locked))}
         </div>
-        ${field("Промокод", input("LUNCH30"))}
-        ${field("Как воспользоваться", `<textarea class="lk-ta" placeholder="Покажите код на кассе или назовите администратору при оплате."></textarea>`)}
+        ${field("Промокод", input("LUNCH30", v.code === "—" ? null : v.code, locked))}
+        ${field("Как воспользоваться", `<textarea class="lk-ta" placeholder="Покажите код на кассе или назовите администратору при оплате."${ro}></textarea>`)}
       </div>`)}
 
       ${panel("Компания в купоне", `<div class="lk-f">
         <div class="lk-f__row">
-          ${field("Сайт", input("https://…"))}
-          ${field("ВКонтакте", input("https://vk.com/…"))}
+          ${field("Сайт", input("https://…", null, locked))}
+          ${field("ВКонтакте", input("https://vk.com/…", null, locked))}
         </div>
         <div class="lk-f__row">
-          ${field("Telegram", input("https://t.me/…"))}
-          ${field("ERID", input("", "будет присвоен при публикации"))}
+          ${field("Telegram", input("https://t.me/…", null, locked))}
+          ${field("ERID", input("", v.erid && v.erid !== "—" ? v.erid : "будет присвоен при публикации", true))}
         </div>
       </div>`)}
 
-      <div class="lk-head__act" style="margin:0">
+      ${locked ? "" : `<div class="lk-head__act" style="margin:0">
         <button class="btn btn--ghost btn--lg">Сохранить черновик</button>
         <button class="btn btn--solid btn--lg">Отправить на модерацию</button>
-      </div>
+      </div>`}
     </div>
 
     <div class="lk-prev">
       ${panel("Так купон увидят в ленте", `
         <div class="lk-prev__card">
           <div class="lk-prev__media">
-            <span class="lk-prev__erid">Реклама · erid: 2Vt…</span>
-            <span class="lk-prev__val" id="pvVal">−30%</span>
+            <span class="lk-prev__erid">Реклама · erid: ${v.erid && v.erid !== "—" ? v.erid : "2Vt…"}</span>
+            <span class="lk-prev__val" id="pvVal">${v.value || "−30%"}</span>
           </div>
           <div class="lk-prev__body">
-            <div class="lk-prev__title">Комбо-обед по будням до 16:00</div>
-            <div class="lk-prev__meta">Кофейня «Пример» · ${isMarket ? "Wildberries" : "Кафе и рестораны"}</div>
+            <div class="lk-prev__title">${v.title || "Комбо-обед по будням до 16:00"}</div>
+            <div class="lk-prev__meta">Кофейня «Пример» · ${v.cat || v.market || (isMarket ? "Wildberries" : "Кафе и рестораны")}</div>
           </div>
         </div>`)}
     </div>
@@ -365,7 +408,7 @@ VIEWS["client:archive"] = () => {
     + panel("", done.length
       ? table([{ t: "Купон" }, { t: "Период" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
                { t: "Забрали", num: true }, { t: "Переходы", num: true }, { t: "" }],
-          done.map(c => `<tr>
+          done.map(c => `<tr data-coupon="${c.id}" tabindex="0">
             <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${c.city || c.market} · ${c.value}</span></td>
             <td>${c.from} — ${c.to}</td>
             <td class="num">${num(c.shown)}</td>
@@ -381,7 +424,7 @@ VIEWS["client:stats"] = () => {
   const sum = k => LK_COUPONS.reduce((a, c) => a + c[k], 0);
   const rows = LK_COUPONS.filter(c => c.shown > 0)
     .sort((a, b) => b.taken - a.taken)
-    .map(c => `<tr>
+    .map(c => `<tr data-coupon="${c.id}" tabindex="0">
       <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${c.city || c.market}</span></td>
       <td>${status(c.status)}</td>
       <td class="num">${num(c.shown)}</td>
@@ -447,6 +490,37 @@ VIEWS["client:profile"] = () =>
        <tr><td>пр-т Победы, 45</td><td>Липецк</td><td>ежедневно 09:00–21:00</td>
         <td class="num"><button class="btn btn--ghost">Изменить</button></td></tr>`),
       { act: `<button class="btn btn--ghost">Добавить точку</button>` });
+
+/* Карточка купона. Черновик и отклонённый открываются на редактирование —
+   ради этого статус «черновик» и существует. Остальные показываем теми же
+   полями, но заблокированными: что можно делать с уже опубликованным
+   купоном, на созвонах не обсуждали. */
+function isArchived() {
+  const c = LK_COUPONS.find(x => x.id === state.id);
+  return !!c && c.status === "done";
+}
+
+VIEWS["client:coupon"] = () => {
+  const c = LK_COUPONS.find(x => x.id === state.id);
+  if (!c) return head("Купон не найден")
+    + empty("Такого купона нет", "Вернитесь к списку и выберите другой.");
+
+  const editable = c.status === "draft" || c.status === "rejected";
+  const back = isArchived() ? "archive" : "coupons";
+
+  return head(c.title,
+      `<a class="btn btn--ghost" href="${href(back)}" data-go="${back}">К списку</a>`)
+    + `<div class="lk-sub">${status(c.status)}<i class="dot"></i>
+        <span>${c.kind === "market" ? c.market + " · арт. " + c.article : c.cat + " · " + c.city}</span>
+        ${c.from === "—" ? "" : `<i class="dot"></i><span>${c.from} — ${c.to}</span>`}</div>`
+    + (c.status === "rejected"
+        ? panel("Причина отклонения", `<p class="lk-reason">${c.reject}</p>`)
+        : "")
+    + (c.shown
+        ? kpi(LK_METRICS.map(m => ({ label: m.label, value: num(c[m.id]) })))
+        : "")
+    + couponForm(c.kind, c, !editable);
+};
 
 /* ==========================================================================
    Разделы кабинета партнёра
@@ -625,6 +699,21 @@ function render() {
   /* Внутренние переходы из карточек */
   qsa("[data-go]", host).forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
 
+  qsa("[data-coupon-row]", host).forEach(el => {
+    el.onclick = () => go("coupon", Number(el.dataset.couponRow));
+    el.onkeydown = e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); }
+    };
+  });
+
+  /* Строка таблицы купонов открывает сам купон */
+  qsa("tr[data-coupon]", host).forEach(tr => {
+    tr.onclick = () => go("coupon", Number(tr.dataset.coupon));
+    tr.onkeydown = e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tr.click(); }
+    };
+  });
+
   /* Живой предпросмотр величины скидки в форме создания */
   const val = qs("#pvVal", host);
   if (val) {
@@ -642,6 +731,17 @@ function render() {
 }
 
 /* Шторка навигации на мобильном */
+document.addEventListener("click", () => {
+  const me = qs("#lkMe");
+  if (me) me.classList.remove("is-open");
+});
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  const me = qs("#lkMe");
+  if (me) me.classList.remove("is-open");
+  document.body.classList.remove("lk-nav-open");
+});
+
 qs("#lkBurger").onclick = () => document.body.classList.toggle("lk-nav-open");
 qs("#lkScrim").onclick  = () => document.body.classList.remove("lk-nav-open");
 
