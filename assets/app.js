@@ -212,8 +212,15 @@ function cardHTML(c, compact) {
         <b>${c.company}</b><i class="dot"></i><span>${c.cat.name}</span>
       </div>
       <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
-        <button type="button" class="btn btn--solid" data-card-reveal>Забрать купон</button>
+        ${compact
+          /* В рекомендациях кнопка не показывает код: по решению созвона
+             07.09.2026 она переносит в смежную категорию и закрепляет этот
+             купон первым, чтобы воронка запускалась заново, а не
+             закольцовывалась на том же шаге. Раз действие другое — и
+             надпись другая: «Забрать купон» здесь обещала бы код. */
+          ? `<button type="button" class="btn btn--solid btn--wide" data-card-reveal>Смотреть в категории</button>`
+          : `<button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal>Забрать купон</button>`}
       </div>
     </div>`;
 }
@@ -244,7 +251,9 @@ function makeCard(c, compact) {
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
   });
 
-  qs("[data-card-more]", el).onclick = e => { e.stopPropagation(); activate(); };
+  /* В рекомендациях «Подробнее» не рисуется — карточка там одна кнопка */
+  const more = qs("[data-card-more]", el);
+  if (more) more.onclick = e => { e.stopPropagation(); activate(); };
 
   /* «Забрать купон» показывает код на месте самой кнопки — без лишнего
      клика и без отдельной полосы. */

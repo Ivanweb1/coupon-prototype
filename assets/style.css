@@ -524,7 +524,7 @@ input{font:inherit;color:inherit}
 .rail .card .card__value{font-size:24px;bottom:56px}
 .rail .card .card__body{padding:10px 12px 12px}
 /* в «виджете» одно действие — иначе кнопки не помещаются */
-.rail .card .card__actions .btn--ghost{display:none}
+/* В рекомендациях у карточки одна кнопка, «Подробнее» там не рисуется */
 .rail .card .card__actions .btn--solid{flex:1}
 
 /* ==========================================================================
