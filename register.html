@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Регистрация клиента — прототип купонного сервиса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260909e">
+<link rel="stylesheet" href="assets/register.css?v=20260909a">
+</head>
+<body>
+
+<!-- Шапка нарочно простая: это конверсионная страница, а не витрина —
+     геоселектор и соцсети города здесь только отвлекали бы от формы -->
+<header class="header">
+  <div class="wrap header__in">
+    <a class="logo" href="index.html">Логотип</a>
+    <span class="header__spacer"></span>
+    <a class="btn btn--ghost" href="lk/client.html">Уже есть кабинет — войти</a>
+  </div>
+</header>
+
+<main class="wrap reg">
+  <div class="reg__intro">
+    <h1>Разместите купон бесплатно</h1>
+    <p class="reg__lead">Регистрация — только для бизнеса: ООО, ИП или самозанятые. Покупатели получают код без оплаты, вы платите за размещение на витрине и в соцсетях.</p>
+  </div>
+
+  <div class="reg__card">
+    <ol class="reg__steps">
+      <li class="is-on" data-reg-step><span>1</span>Реквизиты</li>
+      <li data-reg-step><span>2</span>Почта</li>
+      <li data-reg-step><span>3</span>Готово</li>
+    </ol>
+
+    <!-- Экран 1 — ТЗ §4.3.1 п.1: минимум полей, достаточный для закрывающих
+         документов, а не только ИНН. КПП и юр.адрес сюда не входят — по
+         ТЗ §4.3.2 их дозаполняют при выставлении счёта, не при регистрации. -->
+    <section class="reg__screen is-on" data-reg-screen="form">
+
+      <div class="reg__f">
+        <span class="reg__l">Тип организации</span>
+        <div class="reg__chips">
+          <button type="button" class="reg__chip is-on" data-org="ООО">ООО</button>
+          <button type="button" class="reg__chip" data-org="ИП">ИП</button>
+          <button type="button" class="reg__chip" data-org="Самозанятый">Самозанятый</button>
+        </div>
+      </div>
+
+      <label class="reg__f">
+        <span class="reg__l">ИНН</span>
+        <div class="reg__inline">
+          <input class="reg__i" data-reg-inn placeholder="10 цифр — как у ООО" inputmode="numeric">
+          <button type="button" class="btn btn--ghost" data-reg-inn-check>Найти по ИНН</button>
+        </div>
+      </label>
+      <p class="reg__hint" data-reg-inn-hint hidden></p>
+
+      <label class="reg__f">
+        <span class="reg__l">Название компании</span>
+        <input class="reg__i" data-reg-name placeholder="Появится после поиска по ИНН — или впишите вручную" disabled>
+      </label>
+
+      <div class="reg__row--2">
+        <label class="reg__f">
+          <span class="reg__l">Город</span>
+          <select class="reg__i reg__i--select" data-reg-city></select>
+        </label>
+        <label class="reg__f">
+          <span class="reg__l">Телефон</span>
+          <input class="reg__i" data-reg-phone placeholder="+7 900 000-00-00">
+        </label>
+      </div>
+
+      <label class="reg__f">
+        <span class="reg__l">Email</span>
+        <input class="reg__i" data-reg-email type="email" placeholder="you@company.ru">
+      </label>
+
+      <label class="reg__f">
+        <span class="reg__l">Пароль</span>
+        <input class="reg__i" data-reg-pass type="password" placeholder="Не короче 8 символов">
+      </label>
+      <p class="reg__note">Восстановить доступ можно только через email — SMS не используется.</p>
+
+      <label class="reg__f">
+        <span class="reg__l">Коротко о компании</span>
+        <textarea class="reg__ta" data-reg-about placeholder="Своя пекарня, доставка по городу, работаем с 2019 года."></textarea>
+      </label>
+      <p class="reg__note">Это описание попадёт на страницу купона в блок «О компании» — без него ему неоткуда взять текст.</p>
+
+      <div class="reg__f">
+        <span class="reg__l">Куда присылать уведомления о статусе</span>
+        <div class="reg__checks">
+          <label class="reg__check"><input type="checkbox"><span>Telegram</span></label>
+          <label class="reg__check"><input type="checkbox"><span>Max</span></label>
+        </div>
+        <p class="reg__note" style="margin-top:2px">Почта — всегда, её вы подтвердите на следующем шаге. SMS не используется.</p>
+      </div>
+
+      <label class="reg__check reg__consent">
+        <input type="checkbox" data-reg-consent>
+        <span>Соглашаюсь с офертой и политикой обработки персональных данных</span>
+      </label>
+
+      <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-submit>Отправить заявку</button>
+    </section>
+
+    <!-- Экран 2 — ТЗ §4.3.1 п.2: почта подтверждается кодом до продолжения -->
+    <section class="reg__screen" data-reg-screen="email">
+      <p class="reg__lead">Код отправлен на <b data-reg-email-out></b>. Впишите его, чтобы подтвердить почту.</p>
+      <label class="reg__f">
+        <span class="reg__l">Код из письма</span>
+        <input class="reg__i reg__i--code" data-reg-code placeholder="0000" inputmode="numeric" maxlength="4">
+      </label>
+      <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-confirm>Подтвердить</button>
+      <div class="reg__resend">
+        <button type="button" class="btn btn--ghost" data-reg-resend>Отправить код ещё раз</button>
+        <span class="reg__resend-ok" data-reg-resend-ok hidden>Отправили ещё раз</span>
+      </div>
+    </section>
+
+    <!-- Экран 3 — ТЗ §4.3.1 пп.4-5: карточка в Б24, модерация, кабинет уже доступен -->
+    <section class="reg__screen" data-reg-screen="done">
+      <div class="reg__done-i">✓</div>
+      <h2 class="reg__done-h">Заявка отправлена</h2>
+      <p class="reg__lead">Карточка компании автоматически создана в Битрикс24 — заявка ушла на модерацию.</p>
+      <ul class="reg__done-list">
+        <li>Кабинет клиента уже доступен — можно посмотреть тарифы и заполнить профиль.</li>
+        <li>Опубликовать купон получится после решения модератора — обычно это занимает несколько часов.</li>
+        <li data-reg-manual-note hidden>ИНН не нашёлся по базе, поэтому модерация будет усиленной — возможно, с вами свяжутся для уточнения реквизитов.</li>
+      </ul>
+      <a class="btn btn--solid btn--lg btn--wide" href="lk/client.html">Перейти в кабинет</a>
+    </section>
+  </div>
+</main>
+
+<script src="assets/data.js?v=20260909c"></script>
+<script src="assets/register.js?v=20260909a"></script>
+</body>
+</html>
