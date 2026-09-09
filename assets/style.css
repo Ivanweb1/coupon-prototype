@@ -219,6 +219,11 @@ input{font:inherit;color:inherit}
   background:rgba(255,255,255,.86);border-radius:var(--r-pill);
   padding:4px 9px;
 }
+/* У купона маркетплейса нет точки на карте: вместо минут — площадка */
+.card__near--mp{
+  background:rgba(21,21,20,.82);color:#fff;font-weight:600;letter-spacing:.01em;
+}
+
 .tag__label-s{display:none}
 .tag--near svg,.select--near svg{color:var(--ink-3)}
 .tag--near.is-active svg{color:rgba(255,255,255,.6)}
@@ -301,7 +306,7 @@ input{font:inherit;color:inherit}
 .dd{position:relative}
 .dd__panel{
   position:absolute;top:calc(100% + 10px);left:0;z-index:50;
-  width:min(560px,calc(100vw - 40px));
+  width:min(780px,calc(100vw - 40px));
   background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);
   box-shadow:var(--shadow-2);padding:16px;
   display:none;grid-template-columns:repeat(3,1fr);gap:4px 16px;
@@ -314,7 +319,18 @@ input{font:inherit;color:inherit}
 }
 .dd__panel a:hover{background:var(--surface);color:var(--ink)}
 .dd__panel a span{color:var(--ink-4);font-size:12px;font-variant-numeric:tabular-nums}
-@media (max-width:640px){.dd__panel{grid-template-columns:1fr 1fr}}
+
+/* Единственное место, где видны сразу все три раздела и их ниши: раздел
+   заголовком колонки, ниши под ним. Плоским списком тут не обойтись —
+   ниша «Одежда» есть и в маркетплейсах, и в городе, и это разные ссылки. */
+.dd__group{display:flex;flex-direction:column;gap:2px}
+.dd__l1{
+  border-bottom:1px solid var(--line);margin-bottom:6px;padding-bottom:10px;
+  color:var(--ink)!important;
+}
+.dd__l1 b{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.dd__l2{font-size:13px}
+@media (max-width:640px){.dd__panel{grid-template-columns:1fr}}
 
 
 /* ==========================================================================
@@ -937,6 +953,31 @@ input{font:inherit;color:inherit}
 .city-list button:hover{transform:translateY(-2px);border-color:var(--ink-3);color:var(--ink)}
 .city-list button.is-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 
+/* «Вся область» — не ещё один город в общем ряду, а другая выдача:
+   домашний город остаётся прежним, меняется область поиска. */
+.city-region{
+  width:100%;display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  padding:13px 16px;margin-bottom:12px;text-align:left;
+  border:1px solid var(--line);border-radius:var(--r-md);
+  transition:border-color .18s,background .18s;
+}
+.city-region:hover{border-color:var(--ink-3);background:var(--surface)}
+.city-region b{font-size:15px;font-weight:600;color:var(--ink)}
+.city-region span{font-size:12px;color:var(--ink-4)}
+.city-region.is-active{background:var(--ink);border-color:var(--ink)}
+.city-region.is-active b{color:var(--bg)}
+.city-region.is-active span{color:rgba(255,255,255,.6)}
+
+/* Город без каталога честно помечен «скоро»: пустая выдача хуже, чем
+   прямой ответ, что сервис туда ещё не пришёл */
+.city-list button.is-soon{
+  color:var(--ink-4);border-style:dashed;cursor:default;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.city-list button.is-soon:hover{transform:none;border-color:var(--line);color:var(--ink-4)}
+.city-soon{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-4)}
+.modal__note{margin:0 0 18px!important;font-size:12px!important;color:var(--ink-4)!important}
+
 /* ==========================================================================
    Подгрузка ленты
    ========================================================================== */
@@ -1006,3 +1047,40 @@ input{font:inherit;color:inherit}
   .footer__cta p{font-size:16px}
   .footer{margin-top:44px}
 }
+
+
+/* ==========================================================================
+   Адрес страницы, подзаголовок раздела и переход «город ↔ область»
+   ==========================================================================
+   ЧПУ выведен на экран намеренно: по ТЗ v7.0 §3.2.11 раздел L1 обязателен
+   в пути, а одна и та же ниша в разных разделах даёт разные страницы —
+   на согласовании это видно только через сам адрес. */
+.chpu{
+  margin:10px 0 0;font-size:12px;color:var(--ink-4);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:.01em;
+}
+.cat-hint{margin:10px 0 0;font-size:14px;color:var(--ink-2);max-width:62ch}
+.cat-hint:empty{display:none}
+
+/* Переход на выдачу всей области — рядом с самой лентой, а не в настройках:
+   это соседняя страница каталога, и вести к ней должно из выдачи */
+.section__alt{
+  font-size:13px;color:var(--ink-3);border-bottom:1px solid var(--line);
+  transition:color .18s,border-color .18s;
+}
+.section__alt:hover{color:var(--ink);border-color:var(--ink-3)}
+
+/* Строка ниш в каталоге: та же лента, что на главной, но без плашек
+   разделов — раздел здесь уже выбран */
+.tags-row--catalog{margin:18px 0 0}
+
+/* Купон маркетплейса действует в корзине, а не по адресу: вместо карты —
+   площадка и ссылка на карточку товара */
+.market-where{
+  border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface);
+  padding:16px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;
+}
+.market-where b{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.market-where span{font-size:13px;color:var(--ink-3)}
+.market-where .soc{margin-top:6px}

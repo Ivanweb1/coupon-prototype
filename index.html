@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260908204649">
+<link rel="stylesheet" href="assets/style.css?v=20260909">
 </head>
 <body>
 
@@ -21,7 +21,7 @@
     <span class="header__spacer"></span>
 
     <div class="head-socials" aria-label="Мы в соцсетях города">
-      <span class="head-socials__label">Все скидки <span data-city-gen>Липецка</span> —</span>
+      <span class="head-socials__label">Все скидки <span data-geo-gen>Липецка</span> —</span>
       <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="link"></a>
       <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="link"></a>
       <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="link"></a>
@@ -29,7 +29,7 @@
 
     <button class="city-btn" data-city-open>
       <span data-icon="pin"></span>
-      <span data-city-name>Липецк</span>
+      <span data-geo-short>Липецк</span>
       <span class="chev" data-icon="chev"></span>
     </button>
 
@@ -76,19 +76,21 @@
         </button>
         <span class="dd__panel"></span>
       </span>
-      <!-- Marketplace и «Для бизнеса» — не рядовые категории вроде «кафе»,
-           а отдельные главенствующие ветки: закреплены сразу за «Все
-           категории», выделены рамкой, но в той же строке, а не отдельным
-           блоком — двумя рядами это читалось как разные секции -->
-      <a class="tag tag--featured" href="catalog.html?cat=marketplace">
-        <span data-icon="grid"></span>
+      <!-- Маркетплейсы и «Для бизнеса» — не рядовые категории вроде «кафе»,
+           а отдельные разделы витрины (L1 по ТЗ v7.0 §3.2.10): закреплены
+           сразу за «Все категории», выделены рамкой, но в той же строке, а
+           не отдельным блоком — двумя рядами это читалось как разные секции.
+           Строка справа — ниши L2 региональных купонов: у каждого раздела
+           свой набор ниш, и переключаются они вместе с разделом. -->
+      <a class="tag tag--featured" data-l1-link="marketplace" href="#">
+        <span data-icon="bag"></span>
         <span class="tag__label">Маркетплейсы</span>
-        <span class="tag__n" id="mpCount"></span>
+        <span class="tag__n"></span>
       </a>
-      <a class="tag tag--featured" href="catalog.html?cat=business">
-        <span data-icon="grid"></span>
+      <a class="tag tag--featured" data-l1-link="for-business" href="#">
+        <span data-icon="case"></span>
         <span class="tag__label">Для бизнеса</span>
-        <span class="tag__n" id="bizCount"></span>
+        <span class="tag__n"></span>
       </a>
       <button class="tag tag--near" data-near aria-label="Рядом со мной">
         <span data-icon="pin"></span>
@@ -111,7 +113,8 @@
 
   <section class="section">
     <div class="section__head">
-      <h2>Купоны в городе <span data-city-name>Липецк</span></h2>
+      <h2>Купоны <span data-geo-in>в городе Липецк</span></h2>
+      <a class="section__alt" id="scopeAlt" href="#">Показать всю область</a>
     </div>
     <div class="grid" id="feed"></div>
     <div class="loader" id="loader">
@@ -196,7 +199,9 @@
 
 <!-- Выбор города -->
 <!-- Город спрашиваем полноэкранным попапом на входе: это ключевой триггер
-     сервиса, тихой плашкой его пропускают -->
+     сервиса, тихой плашкой его пропускают. Домашний город и область поиска
+     по ТЗ v7.0 разведены, поэтому «вся область» стоит здесь же отдельной
+     строкой, а не прячется в фильтрах каталога. -->
 <div class="modal" id="cityModal">
   <div class="modal__box">
     <h3>Вы в городе <span data-city-detected>Липецк</span>?</h3>
@@ -204,17 +209,19 @@
     <button class="btn btn--solid btn--lg modal__yes" data-city-yes>
       Да, я в городе <span data-city-detected>Липецк</span>
     </button>
-    <div class="modal__or">или выберите другой город</div>
+    <div class="modal__or">или выберите другую выдачу</div>
+    <div data-region-row></div>
     <div class="city-list"></div>
+    <p class="modal__note">Города других областей — по мере запуска сервиса.</p>
     <button class="btn btn--ghost" data-city-close>Позже</button>
   </div>
 </div>
 
-<script src="assets/data.js?v=20260908204649"></script>
-<script src="assets/app.js?v=20260908204649"></script>
+<script src="assets/data.js?v=20260909"></script>
+<script src="assets/app.js?v=20260909"></script>
 <script>
   initCommon();
-  buildTags();
+  buildTags("regional");
   buildDropdown();
   fillFeed("#feed", 8);
   initInfinite("#feed");

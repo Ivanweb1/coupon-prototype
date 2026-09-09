@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260908204649">
+<link rel="stylesheet" href="assets/style.css?v=20260909">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
     <span class="header__spacer"></span>
 
     <div class="head-socials" aria-label="Мы в соцсетях города">
-      <span class="head-socials__label">Все скидки <span data-city-gen>Липецка</span> —</span>
+      <span class="head-socials__label">Все скидки <span data-geo-gen>Липецка</span> —</span>
       <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="link"></a>
       <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="link"></a>
       <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="link"></a>
@@ -33,7 +33,7 @@
 
     <button class="city-btn" data-city-open>
       <span data-icon="pin"></span>
-      <span data-city-name>Липецк</span>
+      <span data-geo-short>Липецк</span>
       <span class="chev" data-icon="chev"></span>
     </button>
 
@@ -51,12 +51,13 @@
 
 <main class="wrap">
 
-  <div class="crumbs">
-    <a href="index.html">Главная</a> ·
-    <span data-city-name>Липецк</span> ·
-    <span id="crumbCat">Категория</span>
-  </div>
+  <!-- Путь: гео → раздел L1 → ниша L2. Ниже — сам ЧПУ по ТЗ v7.0 §3.2.11:
+       на согласовании по нему видно, что раздел в адресе обязателен и что
+       одна и та же ниша в разных разделах даёт разные страницы. -->
+  <div class="crumbs" id="crumbs"></div>
   <h1 class="page-title" id="catTitle">Категория</h1>
+  <p class="cat-hint" id="catHint"></p>
+  <div class="chpu" id="chpu"></div>
 
   <div class="toolbar">
     <span class="dd" id="allCats">
@@ -67,10 +68,22 @@
       <span class="dd__panel"></span>
     </span>
     <button class="select select--near" data-near><span data-icon="pin"></span> Рядом со мной</button>
-    <button class="select" data-city-open>Город: <span data-city-name>Липецк</span> <span class="chev" data-icon="chev"></span></button>
+    <!-- Город и «вся область» — одна и та же ручка: по ТЗ это переход между
+         /city/ и /region/, поэтому переключатель стоит в выдаче, а не в
+         настройках. Сам список городов открывается кнопкой рядом. -->
+    <button class="select" id="scopeBtn">Город: <b>Липецк</b></button>
+    <button class="select" data-city-open>Сменить <span class="chev" data-icon="chev"></span></button>
     <button class="select">Сортировка: сначала новые <span class="chev" data-icon="chev"></span></button>
-    <button class="select">Только действующие <span class="chev" data-icon="chev"></span></button>
     <span class="toolbar__count" id="catCount">— купонов</span>
+  </div>
+
+  <!-- Строка ниш текущего раздела: из «Маркетплейсов» нельзя провалиться
+       в региональную «Еду», это соседняя ветка витрины -->
+  <div class="tags-row tags-row--catalog">
+    <div class="tags" id="tagsRow"><span id="tags"></span></div>
+    <button class="tags-more" data-tags-more aria-label="Показать больше ниш">
+      <span class="chev" data-icon="chev"></span>
+    </button>
   </div>
 
   <section class="section">
@@ -158,34 +171,20 @@
     <button class="btn btn--solid btn--lg modal__yes" data-city-yes>
       Да, я в городе <span data-city-detected>Липецк</span>
     </button>
-    <div class="modal__or">или выберите другой город</div>
+    <div class="modal__or">или выберите другую выдачу</div>
+    <div data-region-row></div>
     <div class="city-list"></div>
+    <p class="modal__note">Города других областей — по мере запуска сервиса.</p>
     <button class="btn btn--ghost" data-city-close>Позже</button>
   </div>
 </div>
 
-<script src="assets/data.js?v=20260908204649"></script>
-<script src="assets/app.js?v=20260908204649"></script>
+<script src="assets/data.js?v=20260909"></script>
+<script src="assets/app.js?v=20260909"></script>
 <script>
-  var catId = state.cat || "beauty";
-  var cat = CATEGORIES.find(function (c) { return c.id === catId; }) || CATEGORIES[0];
-  state.cat = cat.id;
-
-  document.getElementById("catTitle").textContent = cat.name;
-  document.getElementById("crumbCat").textContent = cat.name;
-  document.getElementById("catSelectLabel").textContent = "Категория: " + cat.name;
-  document.getElementById("catCount").textContent = cat.n + " купонов";
-  document.title = cat.name + " — каталог купонов";
-
   initCommon();
   buildDropdown();
-  /* Купон из блока рекомендаций другой страницы встаёт первым, а лента
-     добирает на один меньше — иначе первая порция окажется из девяти */
-  var hasPin = consumePin("#feed", cat.id);
-  fillFeed("#feed", hasPin ? 7 : 8, cat.id);
-  initInfinite("#feed", cat.id);
-  initNear("#feed", cat.id);
-  buildRecommendations(cat.id);
+  renderCatalog();
 </script>
 </body>
 </html>
