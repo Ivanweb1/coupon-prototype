@@ -1,7 +1,7 @@
 /* ==========================================================================
    Данные-заглушки для прототипа личных кабинетов.
    Все цифры и названия — рыба. Набор полей отражает решения созвонов
-   04.09.2026 и 07.09.2026, а не выдуманную структуру.
+   04.09.2026 и 07.09.2026 и требования ТЗ v7.0, а не выдуманную структуру.
    ========================================================================== */
 
 /* Статусы купона. Коля 04.09: «статусы: черновик, опубликован, завершено —
@@ -18,7 +18,10 @@ window.LK_STATUSES = {
 /* Ровно четыре показателя: Коля — «4 показателя всего, будет немного»,
    Виль — не перегружать разделы с аналитикой. Взяты те, что реально
    считаются на публичке, включая переходы на ресурсы компании: их Виль
-   назвал ключевой метрикой проекта. */
+   назвал ключевой метрикой проекта.
+   Расхождение: ТЗ v7.0 §3.2.6 фиксирует три показателя (по встрече 03.09,
+   то есть до созвона 04.09) и «Показов» в нём нет. Оставлено как решили на
+   созвоне; свести к трём — вопрос к заказчику. */
 window.LK_METRICS = [
   { id: "shown",  label: "Показы" },
   { id: "opened", label: "Просмотры" },
@@ -26,7 +29,80 @@ window.LK_METRICS = [
   { id: "clicks", label: "Переходы к вам" }
 ];
 
-window.LK_CITIES  = ["Липецк", "Воронеж", "Тамбов", "Елец"];
+/* ==========================================================================
+   Справочники, общие с публичной частью
+   ========================================================================== */
+
+/* Города запуска — Липецкая область (ТЗ v7.0 §3.2.9). Купон размещается
+   в нескольких городах сразу (city_ids[]), поэтому в мастере это не
+   выпадающий список, а мультивыбор. region_k — множитель города в цене. */
+window.LK_CITIES = [
+  { name: "Липецк", k: 1 },
+  { name: "Елец",   k: 0.7 },
+  { name: "Грязи",  k: 0.5 }
+];
+
+/* Два уровня категорий (ТЗ v7.0 §3.2.10). Раздел выбирается тем, какой
+   мастер открыт, ниша — списком внутри него. base — ставка ниши для
+   калькулятора, рыба: пять критериев тарифа ещё не посчитаны (задача
+   Will Charges со встречи 02.09). */
+window.LK_VERTICALS = {
+  regional:       { name: "Региональные",  hint: "Купон в каталоге города по нише" },
+  marketplace:    { name: "Маркетплейсы",  hint: "Купон селлера на площадке" },
+  "for-business": { name: "Для бизнеса",   hint: "Предложение для компаний" }
+};
+
+window.LK_NICHES = {
+  regional: [
+    { name: "Кафе и рестораны", base: 1400 },
+    { name: "Красота",          base: 1200 },
+    { name: "Косметология",     base: 1500 },
+    { name: "Медицина",         base: 1800 },
+    { name: "Авто",             base: 1300 },
+    { name: "Фитнес и спорт",   base: 1100 },
+    { name: "Развлечения",      base: 1000 },
+    { name: "Детям",            base: 900 },
+    { name: "Товары для дома",  base: 1000 },
+    { name: "Услуги",           base: 1100 }
+  ],
+  marketplace: [
+    { name: "Одежда и обувь",  base: 1600 },
+    { name: "Товары для дома", base: 1400 },
+    { name: "Электроника",     base: 1900 },
+    { name: "Красота",         base: 1500 },
+    { name: "Детям",           base: 1200 },
+    { name: "Автотовары",      base: 1300 }
+  ],
+  "for-business": [
+    { name: "Услуги для бизнеса",  base: 2000 },
+    { name: "Реклама и маркетинг", base: 2200 },
+    { name: "IT и сервисы",        base: 2400 },
+    { name: "Оборудование",        base: 1800 },
+    { name: "Обучение персонала",  base: 1600 },
+    { name: "Логистика",           base: 1500 }
+  ]
+};
+
+/* Срок размещения тарифными корзинами, а не «сколько угодно дней»: по ТЗ
+   §4.11 досрочное снятие пересчитывается именно по корзинам. */
+window.LK_DURATIONS = [
+  { days: 3,  label: "3 дня",   k: 1 },
+  { days: 7,  label: "7 дней",  k: 2.1 },
+  { days: 14, label: "14 дней", k: 3.8 },
+  { days: 21, label: "21 день", k: 5.2 },
+  { days: 30, label: "30 дней", k: 6.5 }
+];
+
+/* Каналы публикации. Сайт входит всегда, четыре соцсети включены по
+   умолчанию (ТЗ §3.2.5). Автопостинг идёт в каналы города. */
+window.LK_CHANNELS = [
+  { id: "site", label: "Сайт сервиса",   k: 0,    fixed: true },
+  { id: "vk",   label: "ВКонтакте",      k: 0.15 },
+  { id: "ok",   label: "Одноклассники",  k: 0.10 },
+  { id: "tg",   label: "Telegram",       k: 0.15 },
+  { id: "max",  label: "Max",            k: 0.10 }
+];
+
 window.LK_MARKETS = ["Wildberries", "Ozon", "Яндекс Маркет", "Мегамаркет"];
 
 window.LK_MECHANICS = [
@@ -37,122 +113,245 @@ window.LK_MECHANICS = [
   { id: "friend",    label: "Приведи друга",        sample: "−15%" }
 ];
 
-/* Купоны клиента. kind: region — обычный городской купон, market — купон
-   маркетплейса (у него вместо города площадка и артикул). */
-window.LK_COUPONS = [
-  { id: 1041, title: "Комбо-обед по будням до 16:00", value: "−30%", mech: "percent",
-    kind: "region", cat: "Кафе и рестораны", city: "Липецк", status: "live",
-    from: "3 сентября", to: "24 сентября", code: "LUNCH30", erid: "2Vt1NJILR",
-    shown: 18420, opened: 2140, taken: 486, clicks: 173 },
-
-  { id: 1039, title: "Каждая пятая чашка кофе в подарок", value: "0 ₽", mech: "gift",
-    kind: "region", cat: "Кафе и рестораны", city: "Липецк", status: "live",
-    from: "1 сентября", to: "30 сентября", code: "FIFTH", erid: "2Vt1NKPQW",
-    shown: 12060, opened: 1508, taken: 361, clicks: 96 },
-
-  { id: 1036, title: "Завтраки: два по цене одного", value: "2 = 1", mech: "twoforone",
-    kind: "region", cat: "Кафе и рестораны", city: "Воронеж", status: "moderation",
-    from: "10 сентября", to: "10 октября", code: "MORNING", erid: "2Vt1NLTRB",
-    shown: 0, opened: 0, taken: 0, clicks: 0 },
-
-  { id: 1034, title: "Ужин на двоих со скидкой", value: "−500 ₽", mech: "amount",
-    kind: "region", cat: "Кафе и рестораны", city: "Липецк", status: "draft",
-    from: "—", to: "—", code: "—", erid: "—",
-    shown: 0, opened: 0, taken: 0, clicks: 0 },
-
-  { id: 1031, title: "Набор соусов к заказу от 1 500 ₽", value: "−15%", mech: "percent",
-    kind: "market", market: "Wildberries", article: "184 220 933", status: "live",
-    from: "28 августа", to: "28 сентября", code: "SAUCE15", erid: "2Vt1NMXZC",
-    shown: 9310, opened: 1104, taken: 298, clicks: 214 },
-
-  { id: 1028, title: "Кофе в зёрнах: скидка на первый заказ", value: "−20%", mech: "percent",
-    kind: "market", market: "Ozon", article: "902 118 447", status: "rejected",
-    from: "—", to: "—", code: "—", erid: "—",
-    reject: "На изображении не читается величина скидки",
-    shown: 0, opened: 0, taken: 0, clicks: 0 },
-
-  { id: 1019, title: "Бизнес-ланч в августе", value: "−25%", mech: "percent",
-    kind: "region", cat: "Кафе и рестораны", city: "Липецк", status: "done",
-    from: "1 августа", to: "31 августа", code: "AUG25", erid: "2Vt1NGHJK",
-    shown: 24180, opened: 3016, taken: 702, clicks: 241 },
-
-  { id: 1012, title: "Кофе с собой дешевле по утрам", value: "−100 ₽", mech: "amount",
-    kind: "region", cat: "Кафе и рестораны", city: "Липецк", status: "done",
-    from: "15 июля", to: "15 августа", code: "TOGO", erid: "2Vt1NFDSA",
-    shown: 16740, opened: 1962, taken: 415, clicks: 118 }
-];
-
-/* Клиенты партнёра — юрлица, которых он привёл. Публиковать купоны партнёр
-   не может (решение 04.09), поэтому здесь только их показатели. */
-window.LK_CLIENTS = [
-  { id: 1, name: "Кофейня «Пример»",   city: "Липецк",  since: "12 июля",    coupons: 6, status: "active", paid: 22000, fee: 4400 },
-  { id: 2, name: "Сервис «Компания»",  city: "Липецк",  since: "24 июля",    coupons: 3, status: "active", paid: 14000, fee: 2800 },
-  { id: 3, name: "Студия «Название»",  city: "Воронеж", since: "2 августа",  coupons: 4, status: "active", paid: 18000, fee: 3600 },
-  { id: 4, name: "Клиника «Бренд»",    city: "Липецк",  since: "9 августа",  coupons: 2, status: "trial",  paid: 0,     fee: 0 },
-  { id: 5, name: "Автомойка «Рыба»",   city: "Елец",    since: "21 августа", coupons: 1, status: "trial",  paid: 0,     fee: 0 },
-  { id: 6, name: "Магазин «Пример-2»", city: "Липецк",  since: "3 июня",     coupons: 0, status: "paused", paid: 8000,  fee: 1600 }
-];
-
-window.LK_CLIENT_STATUSES = {
-  active: "Работает",
-  trial:  "Пробный период",
-  paused: "Приостановлен"
+/* ==========================================================================
+   Баланс клиента: монеты и бонусы (ТЗ v7.0 §4.3.2)
+   ==========================================================================
+   Это две разные сущности на одном балансе, и в интерфейсе они не
+   складываются: монета примерно равна рублю и не сгорает, бонус деньгами
+   не является и живёт 365 дней. Тарифов и пакетов публикаций в модели нет
+   вообще — оплачивается каждое размещение. */
+window.LK_BALANCE = {
+  coins: 12400,
+  bonuses: 3500,
+  bonusBurn: "28 февраля 2027",
+  spentMonth: 8600
 };
 
-/* Коды партнёра на маркетплейсах: «привязаны маркетплейсы, работа по кодам» */
-window.LK_CODES = [
-  { code: "PRTN-LIP-01", market: "Wildberries",   seller: "Кофейня «Пример»",   used: 148, income: 7400, status: "active" },
-  { code: "PRTN-LIP-02", market: "Ozon",          seller: "Магазин «Пример-2»", used: 63,  income: 3150, status: "active" },
-  { code: "PRTN-VRN-01", market: "Яндекс Маркет", seller: "Студия «Название»",  used: 27,  income: 1350, status: "active" },
-  { code: "PRTN-LIP-03", market: "Мегамаркет",    seller: "—",                  used: 0,   income: 0,    status: "free" }
+/* Минимум реальных денег в оплате размещения: бонусами целиком закрыть
+   публикацию нельзя. */
+window.LK_MIN_COINS = 1;
+
+/* История операций. Статьи — те, что перечислены в ТЗ: пополнение картой,
+   СБП и по счёту, бонусы от сервиса, бонусы от партнёра, списание за
+   размещение. Монеты и бонусы в каждой строке показаны раздельно. */
+window.LK_LEDGER = [
+  { date: "7 сентября",  what: "Купон «Комбо-обед по будням до 16:00», 21 день, Липецк и Елец", kind: "spend",
+    coins: -2400, bonuses: -600, doc: "" },
+  { date: "5 сентября",  what: "Пул «От души брат», партнёр Иван Партнёров", kind: "bonus-partner",
+    coins: 0, bonuses: 2500, doc: "" },
+  { date: "3 сентября",  what: "Купон «Каждая пятая чашка кофе в подарок», 30 дней, Липецк", kind: "spend",
+    coins: -3200, bonuses: 0, doc: "" },
+  { date: "1 сентября",  what: "Зачислено 10 000 монет", kind: "topup-sbp",
+    coins: 10000, bonuses: 0, doc: "Чек № 2209" },
+  { date: "28 августа",  what: "Юбилейный десятый купон", kind: "bonus-service",
+    coins: 0, bonuses: 1600, doc: "" },
+  { date: "18 июля",     what: "Зачислено 6 000 монет", kind: "topup-invoice",
+    coins: 6000, bonuses: 0, doc: "Счёт № 2098, акт" },
+  { date: "1 июля",      what: "Зачислено 4 000 монет", kind: "topup-card",
+    coins: 4000, bonuses: 0, doc: "Чек № 2044" }
 ];
 
-/* Бонусы, которые партнёр раздаёт своим клиентам. На созвоне 04.09 это
-   названо «раздача бонусов и их отправка своим клиентам»; рабочее имя
-   механики в структуре — «От души брат». Набор видов бонуса — рыба,
-   на созвонах его не проговаривали. */
-window.LK_BONUS_KINDS = [
-  "Неделя публикаций в подарок",
-  "Скидка 20% на пакет купонов",
-  "Продление пробного периода"
+window.LK_LEDGER_KINDS = {
+  "topup-card":    "Пополнение картой",
+  "topup-sbp":     "Пополнение СБП",
+  "topup-invoice": "Пополнение по счёту",
+  "bonus-service": "Бонусы сервиса",
+  "bonus-partner": "Бонусы от партнёра",
+  spend:           "Списание за размещение"
+};
+
+/* ==========================================================================
+   Купоны клиента
+   ==========================================================================
+   l1 — раздел витрины, niche — ниша внутри него. cities — города
+   размещения: их может быть несколько. code — промокод для посетителя,
+   partnerCode — промокод партнёра, он бывает только у маркетплейса. */
+window.LK_COUPONS = [
+  { id: 1041, title: "Комбо-обед по будням до 16:00", value: "−30%", mech: "percent",
+    l1: "regional", niche: "Кафе и рестораны", cities: ["Липецк", "Елец"], status: "live",
+    from: "3 сентября", to: "24 сентября", days: 21, code: "LUNCH30", erid: "2Vt1NJILR",
+    channels: ["site", "vk", "ok", "tg", "max"], paidCoins: 2400, paidBonuses: 600,
+    secret: true, shown: 18420, opened: 2140, taken: 486, clicks: 173 },
+
+  { id: 1039, title: "Каждая пятая чашка кофе в подарок", value: "0 ₽", mech: "gift",
+    l1: "regional", niche: "Кафе и рестораны", cities: ["Липецк"], status: "live",
+    from: "1 сентября", to: "30 сентября", days: 30, code: "FIFTH", erid: "2Vt1NKPQW",
+    channels: ["site", "vk", "tg"], paidCoins: 3200, paidBonuses: 0,
+    secret: false, shown: 12060, opened: 1508, taken: 361, clicks: 96 },
+
+  { id: 1036, title: "Завтраки: два по цене одного", value: "2 = 1", mech: "twoforone",
+    l1: "regional", niche: "Кафе и рестораны", cities: ["Елец"], status: "moderation",
+    from: "10 сентября", to: "10 октября", days: 30, code: "MORNING", erid: "2Vt1NLTRB",
+    channels: ["site", "vk", "ok", "tg", "max"], paidCoins: 1800, paidBonuses: 400,
+    secret: false, shown: 0, opened: 0, taken: 0, clicks: 0 },
+
+  { id: 1034, title: "Ужин на двоих со скидкой", value: "−500 ₽", mech: "amount",
+    l1: "regional", niche: "Кафе и рестораны", cities: ["Липецк"], status: "draft",
+    from: "—", to: "—", days: 7, code: "—", erid: "—",
+    channels: ["site", "vk", "ok", "tg", "max"], paidCoins: 0, paidBonuses: 0,
+    secret: false, shown: 0, opened: 0, taken: 0, clicks: 0 },
+
+  { id: 1031, title: "Набор соусов к заказу от 1 500 ₽", value: "−15%", mech: "percent",
+    l1: "marketplace", niche: "Товары для дома", market: "Wildberries", article: "184 220 933",
+    cities: ["Липецк"], status: "live", partnerCode: "PRTLIP01",
+    from: "28 августа", to: "28 сентября", days: 30, code: "SAUCE15", erid: "2Vt1NMXZC",
+    channels: ["site", "vk", "tg"], paidCoins: 5100, paidBonuses: 0,
+    secret: false, shown: 9310, opened: 1104, taken: 298, clicks: 214 },
+
+  { id: 1028, title: "Кофе в зёрнах: скидка на первый заказ", value: "−20%", mech: "percent",
+    l1: "marketplace", niche: "Товары для дома", market: "Ozon", article: "902 118 447",
+    cities: ["Липецк"], status: "rejected", partnerCode: "",
+    from: "—", to: "—", days: 14, code: "—", erid: "—",
+    reject: "На изображении не читается величина скидки",
+    channels: ["site", "vk", "ok", "tg", "max"], paidCoins: 0, paidBonuses: 0,
+    secret: false, shown: 0, opened: 0, taken: 0, clicks: 0 },
+
+  { id: 1024, title: "Кофе-брейк для офиса: первый заказ", value: "−25%", mech: "percent",
+    l1: "for-business", niche: "Услуги для бизнеса", cities: ["Липецк"], status: "live",
+    from: "2 сентября", to: "2 октября", days: 30, code: "OFFICE25", erid: "2Vt1NPRTY",
+    channels: ["site", "tg"], paidCoins: 4200, paidBonuses: 0,
+    secret: false, shown: 4180, opened: 620, taken: 88, clicks: 61 },
+
+  { id: 1019, title: "Бизнес-ланч в августе", value: "−25%", mech: "percent",
+    l1: "regional", niche: "Кафе и рестораны", cities: ["Липецк"], status: "done",
+    from: "1 августа", to: "31 августа", days: 30, code: "AUG25", erid: "2Vt1NGHJK",
+    channels: ["site", "vk", "ok", "tg", "max"], paidCoins: 3000, paidBonuses: 1000,
+    secret: false, shown: 24180, opened: 3016, taken: 702, clicks: 241 },
+
+  { id: 1012, title: "Кофе с собой дешевле по утрам", value: "−100 ₽", mech: "amount",
+    l1: "regional", niche: "Кафе и рестораны", cities: ["Липецк", "Грязи"], status: "done",
+    from: "15 июля", to: "15 августа", days: 30, code: "TOGO", erid: "2Vt1NFDSA",
+    channels: ["site", "vk", "tg"], paidCoins: 2600, paidBonuses: 0,
+    secret: false, shown: 16740, opened: 1962, taken: 415, clicks: 118 }
 ];
+
+/* ==========================================================================
+   Партнёр
+   ==========================================================================
+   Ставки зафиксированы в ТЗ §4.4: партнёру 20% с суммы, которую клиент
+   заплатил за размещение; селлеру маркетплейса скидка 15%, если он указал
+   промокод партнёра при публикации. */
+window.LK_RATES = { fee: 20, discount: 15 };
+
+/* Клиенты региона. Закрепление постоянное и идёт по городу организации —
+   реферальных ссылок на регистрацию в продукте нет (ТЗ §3.2.7). Баланс
+   виден при любом статусе: он нужен партнёру, чтобы решать, кому дарить
+   бонусы. */
+window.LK_CLIENTS = [
+  { id: 1, name: "Кофейня «Пример»",   sphere: "Кафе и рестораны", city: "Липецк",
+    email: "hello@primer.ru",   phone: "+7 900 000-00-01", since: "12 июля",
+    coupons: 6, last: "5 сентября",  status: "active",   paid: 22000, fee: 4400,
+    coins: 3400, bonuses: 2500 },
+  { id: 2, name: "Сервис «Компания»",  sphere: "Авто", city: "Липецк",
+    email: "info@company.ru",   phone: "+7 900 000-00-02", since: "24 июля",
+    coupons: 3, last: "1 сентября",  status: "active",   paid: 14000, fee: 2800,
+    coins: 1200, bonuses: 0 },
+  { id: 3, name: "Студия «Название»",  sphere: "Красота", city: "Елец",
+    email: "studio@name.ru",    phone: "+7 900 000-00-03", since: "2 августа",
+    coupons: 4, last: "28 августа",  status: "active",   paid: 18000, fee: 3600,
+    coins: 800,  bonuses: 1500 },
+  { id: 4, name: "Клиника «Бренд»",    sphere: "Медицина", city: "Липецк",
+    email: "clinic@brand.ru",   phone: "+7 900 000-00-04", since: "9 августа",
+    coupons: 0, last: "—",           status: "new",      paid: 0,     fee: 0,
+    coins: 0,    bonuses: 0 },
+  { id: 5, name: "Автомойка «Рыба»",   sphere: "Автомойки", city: "Грязи",
+    email: "wash@ryba.ru",      phone: "+7 900 000-00-05", since: "21 августа",
+    coupons: 0, last: "—",           status: "new",      paid: 0,     fee: 0,
+    coins: 0,    bonuses: 0 },
+  { id: 6, name: "Магазин «Пример-2»", sphere: "Товары для дома", city: "Липецк",
+    email: "shop@primer2.ru",   phone: "+7 900 000-00-06", since: "3 июня",
+    coupons: 2, last: "20 июня",     status: "inactive", paid: 8000,  fee: 1600,
+    coins: 500,  bonuses: 0 }
+];
+
+/* Статусы клиента по ТЗ §3.2.7: новый — зарегистрировался, но не оплатил;
+   активный — есть размещения; неактивный — больше двух месяцев без новых. */
+window.LK_CLIENT_STATUSES = {
+  new:      "Новый",
+  active:   "Активный",
+  inactive: "Неактивный"
+};
+
+/* Промокоды для селлеров маркетплейсов. Формат — 8 символов латиницей, по
+   префиксу видно партнёра (ТЗ §4.4.3). Один код базовый, остальные
+   выдаются под канал или конкретного селлера, с комментарием «кому отдал».
+   Выдача новых — с задержкой и лимитом: это антифрод из того же раздела. */
+window.LK_CODES = [
+  { code: "PRTLIP01", base: true,  comment: "Базовый код — в подпись и визитки",
+    market: "—",             used: 148, income: 7400, status: "active" },
+  { code: "PRTLIP02", base: false, comment: "Магазину «Пример-2», чат в Telegram",
+    market: "Ozon",          used: 63,  income: 3150, status: "active" },
+  { code: "PRTLIP03", base: false, comment: "Студии «Название», созвон 2 сентября",
+    market: "Яндекс Маркет", used: 27,  income: 1350, status: "active" },
+  { code: "PRTLIP04", base: false, comment: "",
+    market: "—",             used: 0,   income: 0,    status: "free" }
+];
+
+window.LK_CODE_LIMITS = { perHour: 1, delayMin: 10 };
+
+/* Пул «От души брат». Лимит задаёт администратор на календарный месяц,
+   раздаёт партнёр вручную, остаток не переносится (ТЗ §4.4.2). */
+window.LK_BONUS_POOL = {
+  month: "сентябрь",
+  limit: 15000,
+  spent: 9500,
+  resets: "1 октября"
+};
 
 window.LK_BONUSES = [
-  { id: "B-114", to: "Кофейня «Пример»",   kind: "Неделя публикаций в подарок", sent: "2 сентября",  status: "used" },
-  { id: "B-112", to: "Студия «Название»",  kind: "Скидка 20% на пакет купонов", sent: "29 августа",  status: "sent" },
-  { id: "B-109", to: "Клиника «Бренд»",    kind: "Продление пробного периода",  sent: "22 августа",  status: "used" },
-  { id: "B-104", to: "Автомойка «Рыба»",   kind: "Неделя публикаций в подарок", sent: "15 августа",  status: "expired" }
+  { id: "B-114", to: "Кофейня «Пример»",   amount: 2500, sent: "5 сентября",  status: "used" },
+  { id: "B-112", to: "Студия «Название»",  amount: 3000, sent: "29 августа",  status: "sent" },
+  { id: "B-109", to: "Клиника «Бренд»",    amount: 2000, sent: "22 августа",  status: "used" },
+  { id: "B-104", to: "Автомойка «Рыба»",   amount: 2000, sent: "15 августа",  status: "expired" }
 ];
 
 window.LK_BONUS_STATUSES = { sent: "Отправлен", used: "Использован", expired: "Истёк" };
 
-/* Отчёты и выплаты партнёра — «со статьями по расходам и приходу» */
+/* Выплаты. Период — календарный месяц, деньги уходят через 14 дней после
+   его закрытия: столько отведено на споры по завершённым купонам. */
 window.LK_PAYOUTS = [
-  { period: "Сентябрь 2026", income: 5200,  bonusCost: 500,  total: 4700,  status: "pending", date: "к выплате 5 октября" },
-  { period: "Август 2026",   income: 12400, bonusCost: 2000, total: 10400, status: "paid",    date: "выплачено 5 сентября" },
-  { period: "Июль 2026",     income: 9800,  bonusCost: 1500, total: 8300,  status: "paid",    date: "выплачено 5 августа" },
-  { period: "Июнь 2026",     income: 4600,  bonusCost: 0,    total: 4600,  status: "paid",    date: "выплачено 5 июля" }
+  { period: "Сентябрь 2026", income: 5000,  total: 5000,  status: "pending", date: "к выплате 14 октября" },
+  { period: "Август 2026",   income: 12400, total: 12400, status: "paid",    date: "выплачено 14 сентября" },
+  { period: "Июль 2026",     income: 9800,  total: 9800,  status: "paid",    date: "выплачено 14 августа" },
+  { period: "Июнь 2026",     income: 4600,  total: 4600,  status: "paid",    date: "выплачено 14 июля" }
 ];
 
-/* Биллинг клиента */
-window.LK_BILLING = [
-  { date: "1 сентября", doc: "Счёт № 2209", sum: 6000, what: "Пакет публикаций, сентябрь", status: "paid" },
-  { date: "1 августа",  doc: "Счёт № 2141", sum: 6000, what: "Пакет публикаций, август",   status: "paid" },
-  { date: "18 июля",    doc: "Счёт № 2098", sum: 2000, what: "Дополнительные публикации",  status: "paid" },
-  { date: "1 июля",     doc: "Счёт № 2044", sum: 6000, what: "Пакет публикаций, июль",     status: "paid" }
+/* Детализация к текущему периоду: по ТЗ отчёт строится построчно —
+   ID купона и сумма, отдельно по клиентам региона и по кодам МП. */
+window.LK_PAYOUT_ROWS = [
+  { id: 1041, coupon: "Комбо-обед по будням до 16:00", client: "Кофейня «Пример»",
+    contour: "region", code: "", paid: 2400, fee: 480 },
+  { id: 1039, coupon: "Каждая пятая чашка кофе в подарок", client: "Кофейня «Пример»",
+    contour: "region", code: "", paid: 3200, fee: 640 },
+  { id: 1031, coupon: "Набор соусов к заказу от 1 500 ₽", client: "Магазин «Пример-2»",
+    contour: "market", code: "PRTLIP02", paid: 5100, fee: 1020 },
+  { id: 1022, coupon: "Окрашивание любой сложности", client: "Студия «Название»",
+    contour: "region", code: "", paid: 4300, fee: 860 },
+  { id: 1017, coupon: "Комплект ковриков в салон", client: "Селлер «Бренд»",
+    contour: "market", code: "PRTLIP03", paid: 10000, fee: 2000 }
+];
+
+/* ==========================================================================
+   Уведомления
+   ==========================================================================
+   Каналы по ТЗ §4.3.1: почта, Telegram и Max на выбор. SMS не используем. */
+window.LK_NOTIFY_CHANNELS = [
+  { id: "email", label: "Почта",    value: "hello@primer.ru",  on: true },
+  { id: "tg",    label: "Telegram", value: "@primer_coffee",   on: true },
+  { id: "max",   label: "Max",      value: "не подключён",     on: false }
 ];
 
 window.LK_NOTIFICATIONS = {
   client: [
     { when: "сегодня, 09:14", unread: true,  text: "Купон «Комбо-обед по будням до 16:00» прошёл модерацию и опубликован." },
     { when: "вчера, 18:02",   unread: true,  text: "Купон «Кофе в зёрнах» отклонён: на изображении не читается величина скидки." },
-    { when: "6 сентября",     unread: false, text: "Купон «Бизнес-ланч в августе» завершён — срок действия закончился." },
-    { when: "1 сентября",     unread: false, text: "Счёт № 2209 оплачен, пакет публикаций продлён до 1 октября." }
+    { when: "5 сентября",     unread: false, text: "Партнёр начислил 2 500 бонусов. Потратить их можно на размещение купонов." },
+    { when: "1 сентября",     unread: false, text: "Пополнение на 10 000 ₽ зачислено, чек отправлен на почту." }
   ],
   partner: [
-    { when: "сегодня, 11:40", unread: true,  text: "Новый клиент по вашей ссылке: Автомойка «Рыба», Елец." },
-    { when: "5 сентября",     unread: false, text: "Выплата за август — 10 400 ₽ — отправлена на реквизиты." },
-    { when: "2 сентября",     unread: false, text: "Бонус «Неделя публикаций в подарок» использован Кофейней «Пример»." },
-    { when: "29 августа",     unread: false, text: "Код PRTN-VRN-01 привязан к Студии «Название»." }
+    { when: "сегодня, 11:40", unread: true,  text: "Новый клиент в вашем регионе: Автомойка «Рыба», Грязи." },
+    { when: "6 сентября",     unread: true,  text: "У клиента «Кофейня «Пример»» купон 1019 — размещение завершено." },
+    { when: "14 сентября",    unread: false, text: "Выплата за август — 12 400 ₽ — отправлена на реквизиты." },
+    { when: "2 сентября",     unread: false, text: "Код PRTLIP03 применён при публикации купона селлером." }
   ]
 };
