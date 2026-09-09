@@ -77,13 +77,19 @@
     <span class="toolbar__count" id="catCount">— купонов</span>
   </div>
 
-  <!-- Строка ниш текущего раздела: из «Маркетплейсов» нельзя провалиться
-       в региональную «Еду», это соседняя ветка витрины -->
-  <div class="tags-row tags-row--catalog">
-    <div class="tags" id="tagsRow"><span id="tags"></span></div>
-    <button class="tags-more" data-tags-more aria-label="Показать больше ниш">
-      <span class="chev" data-icon="chev"></span>
-    </button>
+  <!-- Те же два уровня, что и на главной: сверху разделы, снизу ниши
+       текущего раздела. Из «Маркетплейсов» нельзя провалиться в
+       региональную «Еду» — это соседняя ветка витрины. -->
+  <div class="cats cats--catalog">
+    <div class="tags-row cats__l1">
+      <div class="verticals" id="verticals"></div>
+    </div>
+    <div class="tags-row cats__l2">
+      <div class="tags" id="tagsRow"><span id="tags"></span></div>
+      <button class="tags-more" data-tags-more aria-label="Показать больше ниш">
+        <span class="chev" data-icon="chev"></span>
+      </button>
+    </div>
   </div>
 
   <section class="section">

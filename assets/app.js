@@ -207,23 +207,58 @@ function buildCityModal() {
    Категории: раздел L1 и ниши L2
    ========================================================================== */
 
-/* Строка ниш. На главной это ниши региональных купонов: маркетплейсы и
-   «Для бизнеса» — не рядовые категории вроде кафе, а отдельные ветки,
-   они стоят закреплёнными плашками слева. На странице раздела строка
-   показывает ниши уже этого раздела. */
+/* Верхняя строка — разделы витрины. Их три, они не скроллятся и стоят
+   отдельным рядом: раздел и ниша это разные уровни, и одной строкой они
+   читались как один плоский список фишек. */
+const L1_ICON = { regional: "pin", marketplace: "bag", "for-business": "case" };
+
+function buildVerticals(active, onPick) {
+  const host = qs("#verticals");
+  if (!host) return;
+  host.innerHTML = "";
+  VERTICALS.forEach(v => {
+    const el = document.createElement(onPick ? "button" : "a");
+    el.className = "tag tag--l1" + (v.slug === active ? " is-active" : "");
+    if (onPick) el.type = "button"; else el.href = catalogUrl(v.slug);
+    el.innerHTML =
+      '<span data-icon="' + L1_ICON[v.slug] + '"></span>' +
+      '<span class="tag__label">' + v.name + "</span>" +
+      '<span class="tag__n">' + countOf(v.slug) + "</span>";
+    if (onPick) el.onclick = () => onPick(v.slug);
+    host.appendChild(el);
+  });
+  initIcons();
+}
+
+/* Нижняя строка — ниши выбранного раздела. Первым чипом идёт сам раздел
+   целиком: со страницы ниши иначе некуда вернуться на уровень выше, а
+   хлебных крошек в первом экране нет. */
 function buildTags(l1) {
   const host = qs("#tags");
   if (!host) return;
-  const vertical = l1 || "regional";
+  const vertical = findVertical(l1) || VERTICALS[0];
   host.innerHTML = "";
 
-  catsOf(vertical).sort((a, b) => b.n - a.n).forEach(c => {
+  const whole = document.createElement("a");
+  whole.className = "tag tag--whole" +
+    (state.l1 === vertical.slug && !state.l2 ? " is-active" : "");
+  whole.href = catalogUrl(vertical.slug);
+  whole.innerHTML = 'Весь раздел <span class="tag__n">' + countOf(vertical.slug) + "</span>";
+  host.appendChild(whole);
+
+  catsOf(vertical.slug).sort((a, b) => b.n - a.n).forEach(c => {
     const a = document.createElement("a");
     a.className = "tag" + (state.l2 === c.slug && state.l1 === c.l1 ? " is-active" : "");
     a.href = catUrl(c);
     a.innerHTML = c.name + ' <span class="tag__n">' + c.n + "</span>";
     host.appendChild(a);
   });
+
+  /* «Рядом со мной» — фильтр региональной выдачи: у купона маркетплейса и
+     у предложения для бизнеса нет точки на карте, там кнопке нечего
+     фильтровать. */
+  const near = qs("[data-near]");
+  if (near) near.hidden = vertical.slug !== "regional";
 
   /* Подсказка, что строка продолжается за правым краем: затухание плюс
      явная стрелка — на догадливость по скроллу полагаться нельзя */
@@ -239,6 +274,21 @@ function buildTags(l1) {
   if (more) more.onclick = () => {
     row.scrollBy({ left: Math.round(row.clientWidth * .8), behavior: "smooth" });
   };
+  row.scrollLeft = 0;
+}
+
+/* Связка двух строк. На главной раздел переключается на месте: лента внизу
+   остаётся витриной города целиком, и уводить с неё по клику на раздел
+   незачем — в сам раздел ведёт чип «Весь раздел». В каталоге раздел это
+   уже страница, поэтому там строка разделов — обычные ссылки. */
+function initCategories(navigate) {
+  let shown = state.l1 || "regional";
+  const paint = () => {
+    buildVerticals(shown, navigate ? null : pick);
+    buildTags(shown);
+  };
+  const pick = slug => { shown = slug; paint(); };
+  paint();
 }
 
 /* «Все категории» — единственное место, где видны сразу все три раздела и
@@ -840,9 +890,9 @@ function renderCatalog() {
   const hint = qs("#catHint");
   if (hint) hint.textContent = cat ? "" : (v ? v.hint : "");
 
-  /* Строка ниш всегда показывает ниши текущего раздела: из «Маркетплейсов»
-     нельзя провалиться в региональную «Еду», это соседняя ветка витрины. */
-  buildTags(state.l1);
+  /* Обе строки показывают текущий раздел: из «Маркетплейсов» нельзя
+     провалиться в региональную «Еду», это соседняя ветка витрины. */
+  initCategories(true);
 
   const count = qs("#catCount");
   if (count) count.textContent = (cat ? cat.n : (v ? countOf(v.slug) : "1 800")) + " купонов";
