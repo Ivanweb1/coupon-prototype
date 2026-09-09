@@ -897,8 +897,7 @@ function openCodeRequestModal() {
   openModal(`
     <h3>Запросить новый код</h3>
     <p class="lk-note">Код появляется не сразу — на выдачу уходит около
-    ${LK_CODE_LIMITS.delayMin} минут, это та же антифрод-задержка, что и в
-    ТЗ.</p>
+    ${LK_CODE_LIMITS.delayMin} минут, это антифрод-задержка.</p>
     <div class="lk-f">
       ${field("Кому отдан", input("Например, «Магазину «Пример-2»»"))}
       ${field("Площадка", select(["—"].concat(LK_MARKETS)))}
