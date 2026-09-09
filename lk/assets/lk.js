@@ -506,14 +506,19 @@ function couponForm(l1, c, locked) {
 
       ${locked ? "" : panel("Чем платим", `
         <div class="lk-pay" id="lkPay">
-          <div class="lk-pay__row"><span>Монеты</span><b data-pay="coins">${rub(fee.total)}</b></div>
+          <div class="lk-pay__ends"><span>Монетами</span><span>Бонусами</span></div>
           <input class="lk-range" type="range" min="0" max="100" value="0" data-pay-range>
-          <div class="lk-pay__row"><span>Бонусы</span><b data-pay="bonuses">0 ₽</b></div>
-          <div class="lk-pay__hint">На балансе ${num(LK_BALANCE.coins)} монет
-            и ${num(LK_BALANCE.bonuses)} бонусов</div>
+          <div class="lk-pay__sums">
+            <b data-pay="coins">${rub(fee.total)}</b>
+            <b data-pay="bonuses">0 ₽</b>
+          </div>
+          <div class="lk-pay__hint" data-pay-hint>Бонусами пока не платите —
+            доступно ${num(LK_BALANCE.bonuses)}. Перетащите ползунок вправо,
+            чтобы часть суммы списалась ими.</div>
         </div>
-        <div class="lk-note">Бонусами можно закрыть почти всё размещение, но
-        хотя бы одна монета уходит реальными деньгами. Бонусы не возвращаются.</div>`)}
+        <div class="lk-note">Хотя бы одна монета в каждой публикации уходит
+        реальными деньгами — бонусами закрыть размещение целиком нельзя.
+        Списанные бонусы не возвращаются.</div>`)}
     </div>
   </div>`;
 }
@@ -907,14 +912,29 @@ VIEWS["partner:profile"] = () => {
    Уведомления — общий раздел для обоих кабинетов
    ==========================================================================
    Каналы по ТЗ §4.3.1: почта, Telegram и Max на выбор. SMS не используем
-   вообще — это отдельное решение, а не недоделка прототипа. */
+   вообще — это отдельное решение, а не недоделка прототипа.
+
+   Канал без привязки (Max) нельзя просто включить галочкой — присылать
+   уведомления некуда, пока не указан контакт. Поэтому вместо статичной
+   подписи «не подключён» у такого канала — поле ввода: включил канал,
+   вписал ник, нажал «Сохранить». Само сохранение, как и везде в
+   прототипе, ничего не пишет на сервер — только подтверждает действие. */
 VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
   const list = LK_NOTIFICATIONS[state.role];
-  const channels = LK_NOTIFY_CHANNELS.map(ch => `
-    <div class="lk-chrow">
-      ${check(ch.label, ch.on, null, false)}
-      <span class="lk-chrow__v">${ch.value}</span>
-    </div>`).join("");
+  const channels = LK_NOTIFY_CHANNELS.map(ch => {
+    const linked = ch.value !== "не подключён";
+    return `
+    <div class="lk-chrow" data-notify-row="${ch.id}">
+      <label class="lk-ch${ch.on ? " is-on" : ""}">
+        <input type="checkbox" data-notify-ch="${ch.id}"${ch.on ? " checked" : ""}>
+        <span>${ch.label}</span>
+      </label>
+      ${linked
+        ? `<span class="lk-chrow__v">${ch.value}</span>`
+        : `<input class="lk-i lk-chrow__inp" data-notify-handle="${ch.id}"
+             placeholder="Ник в ${ch.label}, например @primer_coffee">`}
+    </div>`;
+  }).join("");
 
   return head("Уведомления",
       `<button class="btn btn--ghost">Отметить прочитанными</button>`)
@@ -927,7 +947,11 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
       ${panel("Куда присылать", channels
         + `<div class="lk-note" style="margin-top:14px">Почта нужна всегда:
            на неё приходят чеки и решения модерации. Telegram и Max — на
-           выбор, SMS сервис не отправляет.</div>`)}
+           выбор, SMS сервис не отправляет.</div>`
+        + `<div class="lk-head__act" style="margin-top:14px">
+             <button class="btn btn--solid" data-notify-save>Сохранить</button>
+             <span class="lk-save-ok" data-notify-ok hidden>Изменения сохранены</span>
+           </div>`)}
     </div>`;
 };
 
@@ -1016,13 +1040,39 @@ function render() {
 
     /* Две суммы одной ручкой: бегунок делит цену между монетами и бонусами.
        Бонусами нельзя закрыть всё — минимум одна монета уходит реальными
-       деньгами (ТЗ §4.3.2), поэтому доля бонусов упирается в потолок. */
+       деньгами (ТЗ §4.3.2), поэтому доля бонусов упирается в потолок раньше,
+       чем ползунок доезжает до правого края. Подсказка под слайдером и
+       говорит, где сейчас этот потолок, а не молчит о нём. */
     function splitPay(total) {
-      const want = Math.round(total * Number(range.value) / 100);
-      const bonuses = Math.min(want, LK_BALANCE.bonuses, Math.max(0, total - LK_MIN_COINS));
+      const pct = Number(range.value);
+      const cap = Math.min(LK_BALANCE.bonuses, Math.max(0, total - LK_MIN_COINS));
+      const want = Math.round(total * pct / 100);
+      const bonuses = Math.min(want, cap);
       const coins = total - bonuses;
       qs('[data-pay="coins"]', pay).textContent   = rub(coins);
       qs('[data-pay="bonuses"]', pay).textContent = rub(bonuses);
+
+      const hint = qs("[data-pay-hint]", pay);
+      if (hint) {
+        if (cap <= 0) {
+          hint.textContent = "Бонусов на балансе нет — размещение целиком монетами.";
+        } else if (bonuses === 0) {
+          hint.textContent = "Бонусами пока не платите — доступно " + num(cap) +
+            ". Перетащите ползунок вправо, чтобы часть суммы списалась ими.";
+        } else if (want > cap) {
+          hint.textContent = "Бонусами покрыт максимум — " + num(bonuses) +
+            " из " + num(LK_BALANCE.bonuses) + " на балансе. Остальные " +
+            rub(coins) + " — монетами.";
+        } else {
+          hint.textContent = "Бонусами покрыто " + num(bonuses) +
+            ", монетами — " + rub(coins) + ".";
+        }
+      }
+
+      /* Заливка слева от ползунка — обычный способ показать, что элемент
+         реально двигается, а не просто рисунок под цифрами */
+      range.style.background =
+        "linear-gradient(to right, var(--ink) " + pct + "%, var(--surface-2) " + pct + "%)";
     }
 
     qsa("[data-city]", host).forEach(b => b.onclick = () => {
@@ -1045,6 +1095,34 @@ function render() {
   qsa(".lk-ch input:not([data-ch]):not([disabled])", host).forEach(i => {
     i.onchange = () => i.closest(".lk-ch").classList.toggle("is-on", i.checked);
   });
+
+  /* Канал без привязки (Max) неактивен, пока не включена галочка: вводить
+     ник, который не к чему присылать, незачем. Включили — поле оживает и
+     сразу берёт фокус. */
+  qsa("[data-notify-ch]", host).forEach(cb => {
+    const row = cb.closest("[data-notify-row]");
+    const inp = row && qs("[data-notify-handle]", row);
+    if (!inp) return;
+    const sync = focus => {
+      inp.disabled = !cb.checked;
+      if (focus && cb.checked) inp.focus();
+    };
+    sync(false);
+    cb.addEventListener("change", () => sync(true));
+  });
+
+  /* «Сохранить» в уведомлениях: как и все формы прототипа, значения
+     никуда не пишутся — только подтверждаем нажатие тем же способом, что
+     и «Скопировано» на публичке. */
+  const notifySave = qs("[data-notify-save]", host);
+  if (notifySave) {
+    notifySave.onclick = () => {
+      const ok = qs("[data-notify-ok]", host);
+      ok.hidden = false;
+      clearTimeout(notifySave._hideTimer);
+      notifySave._hideTimer = setTimeout(() => { ok.hidden = true; }, 2400);
+    };
+  }
 
   initIcons(host);
 }
