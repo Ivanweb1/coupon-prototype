@@ -498,3 +498,30 @@
 
 .lk-t tr[data-client]{cursor:pointer}
 .lk-t tr[data-client]:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+
+/* --------------------------------------------------------------------------
+   Модалка кабинета. То же визуальное решение, что у попапа купона на
+   публичке (.overlay/.modal__box в ../assets/style.css), но свой узел —
+   в ЛК он нужен для коротких действий вроде запроса промокода.
+   -------------------------------------------------------------------------- */
+.lk-modal-ov{
+  position:fixed;inset:0;z-index:60;
+  background:rgba(21,21,20,.34);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .2s var(--ease-soft);
+}
+.lk-modal-ov.is-on{opacity:1;pointer-events:auto}
+.lk-modal{
+  position:relative;width:100%;max-width:420px;
+  background:var(--bg);border-radius:var(--r-lg);box-shadow:var(--shadow-2);
+  padding:24px;transform:translateY(8px);transition:transform .2s var(--ease-soft);
+}
+.lk-modal-ov.is-on .lk-modal{transform:none}
+.lk-modal__x{
+  position:absolute;top:14px;right:14px;width:30px;height:30px;
+  border-radius:50%;color:var(--ink-3);display:grid;place-items:center;
+}
+.lk-modal__x::before{content:"✕";font-size:13px}
+.lk-modal__x:hover{background:var(--surface);color:var(--ink)}
+.lk-modal__body h3{margin:0 0 8px;padding-right:24px;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.lk-modal__body .lk-f{margin-top:14px}

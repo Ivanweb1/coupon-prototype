@@ -89,7 +89,10 @@ const state = {
   role: document.body.dataset.role === "partner" ? "partner" : "client",
   view: P.get("view") || "dashboard",
   id: P.get("id") ? Number(P.get("id")) : null,
-  filter: "all"
+  filter: "all",
+  /* Момент последнего запроса промокода — антифрод-лимит §4.4.3 считается
+     от него, живёт только в рамках открытой вкладки (демо, не бэкенд). */
+  codeRequestAt: null
 };
 
 /* ==========================================================================
@@ -298,6 +301,39 @@ function check(label, on, name, locked) {
   return `<label class="lk-ch${on ? " is-on" : ""}">
     <input type="checkbox"${on ? " checked" : ""}${name ? ` data-f="${name}"` : ""}${locked ? " disabled" : ""}>
     <span>${label}</span></label>`;
+}
+
+/* ==========================================================================
+   Модалка — общий контейнер для коротких действий (пока только запрос
+   промокода партнёра). Один DOM-узел на страницу, содержимое подставляется
+   под конкретный вызов; открыть/закрыть можно из любого VIEWS.
+   ========================================================================== */
+function modalRoot() {
+  let el = document.getElementById("lkModal");
+  if (el) return el;
+  el = document.createElement("div");
+  el.id = "lkModal";
+  el.className = "lk-modal-ov";
+  el.innerHTML = `<div class="lk-modal" role="dialog" aria-modal="true">
+    <button class="lk-modal__x" type="button" aria-label="Закрыть" data-modal-close></button>
+    <div class="lk-modal__body"></div>
+  </div>`;
+  document.body.appendChild(el);
+  el.addEventListener("click", e => { if (e.target === el) closeModal(); });
+  qs("[data-modal-close]", el).onclick = closeModal;
+  return el;
+}
+function openModal(bodyHtml) {
+  const el = modalRoot();
+  qs(".lk-modal__body", el).innerHTML = bodyHtml;
+  qsa("[data-modal-close]", el).forEach(b => b.onclick = closeModal);
+  el.classList.add("is-on");
+  initIcons(el);
+  return el;
+}
+function closeModal() {
+  const el = document.getElementById("lkModal");
+  if (el) el.classList.remove("is-on");
 }
 
 /* Где размещён купон. Городов у купона может быть несколько (city_ids[]),
@@ -798,7 +834,9 @@ VIEWS["partner:client"] = () => {
    него по списку кодов нельзя понять, кто чей. */
 VIEWS["partner:codes"] = () => {
   const rows = LK_CODES.map(c => `<tr>
-    <td><b class="lk-t__title">${c.code}</b>${c.base ? `<span class="lk-t__sub">базовый</span>` : ""}</td>
+    <td><b class="lk-t__title">${c.status === "queued" ? "В очереди…" : c.code}</b>
+        ${c.base ? `<span class="lk-t__sub">базовый</span>`
+          : c.status === "queued" ? `<span class="lk-t__sub">будет готов через ~${LK_CODE_LIMITS.delayMin} мин</span>` : ""}</td>
     <td>${c.comment || "<span class='lk-t__sub'>кому отдан, не записано</span>"}</td>
     <td>${c.market === "—" ? "<span class='lk-t__sub'>—</span>" : c.market}</td>
     <td class="num">${c.used ? num(c.used) : "—"}</td>
@@ -808,7 +846,7 @@ VIEWS["partner:codes"] = () => {
   const total = LK_CODES.reduce((a, c) => a + c.income, 0);
 
   return head("Маркетплейс · Мои коды",
-      `<button class="btn btn--solid">Запросить новый код</button>`)
+      `<button class="btn btn--solid" type="button" data-request-code>Запросить новый код</button>`)
     + panel("", table(
         [{ t: "Код" }, { t: "Кому отдан" }, { t: "Площадка" },
          { t: "Публикаций", num: true }, { t: "Начислено", num: true }], rows)
@@ -824,6 +862,71 @@ VIEWS["partner:codes"] = () => {
             не чаще ${LK_CODE_LIMITS.perHour} в час.</li>
       </ul>`);
 };
+
+/* Запрос нового кода — антифрод-очередь из ТЗ §4.4.3: не чаще
+   LK_CODE_LIMITS.perHour в час, готовность через LK_CODE_LIMITS.delayMin
+   минут. Таймер настоящий: если оставить вкладку открытой, код сам
+   переходит из «в очереди» в рабочий — как и было бы после бэкенда. */
+function nextCodeAllowedAt() {
+  if (!state.codeRequestAt || !LK_CODE_LIMITS.perHour) return null;
+  const at = state.codeRequestAt + (60 * 60 * 1000) / LK_CODE_LIMITS.perHour;
+  return at > Date.now() ? at : null;
+}
+
+function nextCodeValue() {
+  const nums = LK_CODES.map(c => /^PRTLIP(\d+)$/.exec(c.code)).filter(Boolean).map(m => +m[1]);
+  const n = (nums.length ? Math.max(...nums) : 0) + 1;
+  return "PRTLIP" + String(n).padStart(2, "0");
+}
+
+function openCodeRequestModal() {
+  const wait = nextCodeAllowedAt();
+  if (wait) {
+    const min = Math.max(1, Math.ceil((wait - Date.now()) / 60000));
+    openModal(`
+      <h3>Пока нельзя</h3>
+      <p class="lk-note">Антифрод-лимит — не чаще ${LK_CODE_LIMITS.perHour}
+      нового кода в час. Следующий запрос будет доступен примерно через
+      ${min} мин.</p>
+      <div class="lk-head__act" style="margin-top:18px">
+        <button class="btn btn--ghost" type="button" data-modal-close>Понятно</button>
+      </div>`);
+    return;
+  }
+
+  openModal(`
+    <h3>Запросить новый код</h3>
+    <p class="lk-note">Код появляется не сразу — на выдачу уходит около
+    ${LK_CODE_LIMITS.delayMin} минут, это та же антифрод-задержка, что и в
+    ТЗ.</p>
+    <div class="lk-f">
+      ${field("Кому отдан", input("Например, «Магазину «Пример-2»»"))}
+      ${field("Площадка", select(["—"].concat(LK_MARKETS)))}
+    </div>
+    <div class="lk-head__act" style="margin-top:18px">
+      <button class="btn btn--ghost" type="button" data-modal-close>Отмена</button>
+      <button class="btn btn--solid" type="button" data-code-submit>Отправить заявку</button>
+    </div>`);
+
+  const box = qs("#lkModal .lk-modal__body");
+  const commentInp = qs(".lk-i", box);
+  const marketSel = qs(".lk-s", box);
+  qs("[data-code-submit]", box).onclick = () => {
+    const code = nextCodeValue();
+    LK_CODES.unshift({
+      code, base: false, comment: commentInp.value.trim(),
+      market: marketSel.value, used: 0, income: 0, status: "queued"
+    });
+    state.codeRequestAt = Date.now();
+    closeModal();
+    if (state.role === "partner" && state.view === "codes") render();
+    setTimeout(() => {
+      const c = LK_CODES.find(x => x.code === code);
+      if (c) c.status = "active";
+      if (state.role === "partner" && state.view === "codes") render();
+    }, LK_CODE_LIMITS.delayMin * 60000);
+  };
+}
 
 /* Пул «От души брат». Лимит на календарный месяц задаёт администратор,
    раздаёт партнёр вручную, остаток не переносится (ТЗ §4.4.2). Бонусы —
@@ -1012,6 +1115,10 @@ function render() {
   /* Внутренние переходы из карточек */
   qsa("[data-go]", host).forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
 
+  /* Запрос нового кода партнёра — открывает модалку (§4.4.3) */
+  const codeBtn = qs("[data-request-code]", host);
+  if (codeBtn) codeBtn.onclick = () => openCodeRequestModal();
+
   qsa("[data-coupon-row]", host).forEach(el => {
     el.onclick = () => go("coupon", Number(el.dataset.couponRow));
     el.onkeydown = e => {
@@ -1162,9 +1269,11 @@ function render() {
   initIcons(host);
 }
 
-/* Шторка навигации на мобильном */
+/* Шторка навигации на мобильном и модалка — закрываются по Escape */
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape") document.body.classList.remove("lk-nav-open");
+  if (e.key !== "Escape") return;
+  document.body.classList.remove("lk-nav-open");
+  closeModal();
 });
 
 qs("#lkBurger").onclick = () => document.body.classList.toggle("lk-nav-open");
