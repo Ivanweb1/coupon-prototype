@@ -236,31 +236,33 @@ window.LK_RATES = { fee: 20, discount: 15 };
 /* Клиенты региона. Закрепление постоянное и идёт по городу организации —
    реферальных ссылок на регистрацию в продукте нет (ТЗ §3.2.7). Баланс
    виден при любом статусе: он нужен партнёру, чтобы решать, кому дарить
-   бонусы. */
+   бонусы. Статуса тут нет — он не хранится, а считается в lk.js
+   (clientStatus) по правилу ТЗ §3.2.7/§4.4.4 от поля last: новый — нет
+   купонов; неактивный — > 2 месяцев без размещений; иначе активный. */
 window.LK_CLIENTS = [
   { id: 1, name: "Кофейня «Пример»",   sphere: "Кафе и рестораны", city: "Липецк",
     email: "hello@primer.ru",   phone: "+7 900 000-00-01", since: "12 июля",
-    coupons: 6, last: "5 сентября",  status: "active",   paid: 22000, fee: 4400,
+    coupons: 6, last: "5 сентября",  paid: 22000, fee: 4400,
     coins: 3400, bonuses: 2500 },
   { id: 2, name: "Сервис «Компания»",  sphere: "Авто", city: "Липецк",
     email: "info@company.ru",   phone: "+7 900 000-00-02", since: "24 июля",
-    coupons: 3, last: "1 сентября",  status: "active",   paid: 14000, fee: 2800,
+    coupons: 3, last: "1 сентября",  paid: 14000, fee: 2800,
     coins: 1200, bonuses: 0 },
   { id: 3, name: "Студия «Название»",  sphere: "Красота", city: "Елец",
     email: "studio@name.ru",    phone: "+7 900 000-00-03", since: "2 августа",
-    coupons: 4, last: "28 августа",  status: "active",   paid: 18000, fee: 3600,
+    coupons: 4, last: "28 августа",  paid: 18000, fee: 3600,
     coins: 800,  bonuses: 1500 },
   { id: 4, name: "Клиника «Бренд»",    sphere: "Медицина", city: "Липецк",
     email: "clinic@brand.ru",   phone: "+7 900 000-00-04", since: "9 августа",
-    coupons: 0, last: "—",           status: "new",      paid: 0,     fee: 0,
+    coupons: 0, last: "—",           paid: 0,     fee: 0,
     coins: 0,    bonuses: 0 },
   { id: 5, name: "Автомойка «Рыба»",   sphere: "Автомойки", city: "Грязи",
     email: "wash@ryba.ru",      phone: "+7 900 000-00-05", since: "21 августа",
-    coupons: 0, last: "—",           status: "new",      paid: 0,     fee: 0,
+    coupons: 0, last: "—",           paid: 0,     fee: 0,
     coins: 0,    bonuses: 0 },
   { id: 6, name: "Магазин «Пример-2»", sphere: "Товары для дома", city: "Липецк",
     email: "shop@primer2.ru",   phone: "+7 900 000-00-06", since: "3 июня",
-    coupons: 2, last: "20 июня",     status: "inactive", paid: 8000,  fee: 1600,
+    coupons: 2, last: "20 июня",     paid: 8000,  fee: 1600,
     coins: 500,  bonuses: 0 }
 ];
 

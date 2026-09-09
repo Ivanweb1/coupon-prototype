@@ -50,22 +50,38 @@ function initIcons(root = document) {
 const num = n => n.toLocaleString("ru-RU");
 const rub = n => n.toLocaleString("ru-RU") + " ₽";
 
-/* Разбор дат вида «9 августа» для сортировки — рыба без года, поэтому
-   считаем ближайшим прошедшим годом (текущий, а декабрьские даты позже
-   текущего месяца — прошлым годом). Нужно только для сортировки «свежее
-   выше», точная дата не показывается. */
+/* Разбор дат вида «9 августа» — рыба без года, поэтому считаем ближайшим
+   прошедшим годом (текущий, а даты позже сегодняшнего месяца/дня —
+   прошлым годом). Используется и для сортировки «свежее выше», и для
+   статуса клиента партнёра (ниже) — точная дата нигде не показывается. */
 const RU_MONTHS = ["январ", "феврал", "март", "апрел", "ма", "июн", "июл",
   "август", "сентябр", "октябр", "ноябр", "декабр"];
-function ruDateKey(str) {
+function ruDate(str) {
   const m = /^(\d{1,2})\s+(\S+)/.exec(str || "");
-  if (!m) return -Infinity;
+  if (!m) return null;
   const day = +m[1];
   const month = RU_MONTHS.findIndex(p => m[2].toLowerCase().startsWith(p));
-  if (month < 0) return -Infinity;
+  if (month < 0) return null;
   const now = new Date();
   let year = now.getFullYear();
   if (month > now.getMonth() || (month === now.getMonth() && day > now.getDate())) year -= 1;
-  return year * 400 + month * 31 + day;
+  return new Date(year, month, day);
+}
+function ruDateKey(str) {
+  const d = ruDate(str);
+  return d ? d.getTime() : -Infinity;
+}
+
+/* Статус клиента партнёра — не поле из БД, а расчёт по правилу ТЗ §3.2.7
+   и §4.4.4: «новый» — ещё не публиковал купоны; «неактивный» — с
+   последнего размещения прошло больше 2 месяцев; иначе «активный».
+   Дата последнего размещения — c.last («—» у тех, кто ещё не публиковал). */
+function clientStatus(c) {
+  if (!c.coupons) return "new";
+  const last = ruDate(c.last);
+  if (!last) return "active";
+  const monthsAgo = (Date.now() - last.getTime()) / (1000 * 60 * 60 * 24 * 30.44);
+  return monthsAgo > 2 ? "inactive" : "active";
 }
 
 /* ---------- Состояние ---------- */
@@ -697,8 +713,8 @@ VIEWS["client:coupon"] = () => {
    подтверждается промокодом на каждой публикации. Ставка в обоих одна:
    20% с суммы, которую клиент реально заплатил. */
 VIEWS["partner:dashboard"] = () => {
-  const active   = LK_CLIENTS.filter(c => c.status === "active").length;
-  const fresh    = LK_CLIENTS.filter(c => c.status === "new").length;
+  const active   = LK_CLIENTS.filter(c => clientStatus(c) === "active").length;
+  const fresh    = LK_CLIENTS.filter(c => clientStatus(c) === "new").length;
   const fee      = LK_CLIENTS.reduce((a, c) => a + c.fee, 0);
   const pend     = LK_PAYOUTS.find(p => p.status === "pending");
 
@@ -713,7 +729,7 @@ VIEWS["partner:dashboard"] = () => {
         table([{ t: "Клиент" }, { t: "С нами с" }, { t: "Купонов", num: true }],
           LK_CLIENTS.slice().sort((a, b) => ruDateKey(b.since) - ruDateKey(a.since)).slice(0, 4)
             .map(c => `<tr data-client="${c.id}" tabindex="0">
-            <td><b class="lk-t__title">${c.name}</b><span class="lk-t__sub">${c.city} · ${LK_CLIENT_STATUSES[c.status]}</span></td>
+            <td><b class="lk-t__title">${c.name}</b><span class="lk-t__sub">${c.city} · ${LK_CLIENT_STATUSES[clientStatus(c)]}</span></td>
             <td>${c.since}</td><td class="num">${c.coupons}</td></tr>`).join("")),
         { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все клиенты</a>` });
 };
@@ -725,7 +741,7 @@ VIEWS["partner:dashboard"] = () => {
 VIEWS["partner:clients"] = () => {
   const rows = LK_CLIENTS.map(c => `<tr data-client="${c.id}" tabindex="0">
     <td><b class="lk-t__title">${c.name}</b><span class="lk-t__sub">${c.sphere} · ${c.city}</span></td>
-    <td><span class="lk-cst lk-cst--${c.status}">${LK_CLIENT_STATUSES[c.status]}</span></td>
+    <td><span class="lk-cst lk-cst--${clientStatus(c)}">${LK_CLIENT_STATUSES[clientStatus(c)]}</span></td>
     <td>${c.since}</td>
     <td class="num">${c.coupons || "—"}</td>
     <td class="num">${c.paid ? rub(c.paid) : "—"}</td>
@@ -752,7 +768,7 @@ VIEWS["partner:client"] = () => {
 
   return head(c.name,
       `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">К списку</a>`)
-    + `<div class="lk-sub"><span class="lk-cst lk-cst--${c.status}">${LK_CLIENT_STATUSES[c.status]}</span>
+    + `<div class="lk-sub"><span class="lk-cst lk-cst--${clientStatus(c)}">${LK_CLIENT_STATUSES[clientStatus(c)]}</span>
         <i class="dot"></i><span>${c.sphere}</span><i class="dot"></i><span>${c.city}</span></div>`
     + kpi([
         { label: "Купонов размещено", value: c.coupons || "—", note: c.last === "—" ? "" : "последний " + c.last },
@@ -825,7 +841,7 @@ VIEWS["partner:bonuses"] = () => {
       ])
     + `<div class="lk-pair">
       ${panel("Начислить бонусы", `<div class="lk-f">
-        ${field("Кому", select(LK_CLIENTS.filter(c => c.status !== "new").map(c => c.name)))}
+        ${field("Кому", select(LK_CLIENTS.filter(c => clientStatus(c) !== "new").map(c => c.name)))}
         ${field("Сколько бонусов", input("2 500"))}
         ${field("Сообщение клиенту", `<textarea class="lk-ta" placeholder="Спасибо, что с нами. Следующее размещение за наш счёт."></textarea>`)}
       </div>
