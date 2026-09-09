@@ -285,43 +285,37 @@ input{font:inherit;color:inherit}
 .tag--all .chev{color:rgba(255,255,255,.55)}
 .tag--all svg{opacity:.8}
 
-/* Два уровня категорий — две строки (ТЗ v7.0 §3.2.10). Одной строкой
-   раздел и ниша выглядели одинаковыми фишками одного списка, и второго
-   уровня не было видно вовсе. Разделов всего три, они не скроллятся и
-   стоят наверху; ниши выбранного раздела листаются строкой ниже.
+/* Маркетплейсы и «Для бизнеса» — не рядовые категории, а отдельные
+   главенствующие ветки. Закреплены в той же строке, что и «Все категории»
+   (не скроллятся вместе с обычными тегами), но с жирной рамкой — видно,
+   что это не «кафе» и не «рестораны», а отдельный, более важный переход.
+   Ниши у них свои (ТЗ v7.0 §3.2.10), поэтому у плашки стрелка и свой
+   список: иначе второго уровня в этих разделах не видно вовсе.
    Блок обязан идти ПОСЛЕ .tag: специфичность одинаковая, и базовая
    светлая рамка .tag иначе перебивает выделение. */
-.cats{display:flex;flex-direction:column;gap:6px}
-.cats--catalog{margin-top:18px}
-.cats__l1{gap:10px}
-.verticals{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
-
-/* Раздел витрины: жирная рамка и вес — видно, что это не «кафе» и не
-   «рестораны», а более крупный переход */
-.tag--l1{
+.tag--featured{
   border:1.5px solid var(--ink);
   background:var(--surface);
   font-weight:600;color:var(--ink);
+  box-shadow:0 0 0 3px var(--surface);   /* воздух вокруг рамки — не слипается с соседними тегами */
 }
-.tag--l1 svg{color:var(--ink)}
-.tag--l1 .tag__n{color:var(--ink-3)}
-.tag--l1:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.tag--l1:hover svg{color:var(--bg)}
-.tag--l1:hover .tag__n{color:rgba(255,255,255,.6)}
-.tag--l1.is-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-.tag--l1.is-active svg{color:var(--bg)}
+.tag--featured svg{color:var(--ink)}
+.tag--featured .tag__n{color:var(--ink-3)}
+.tag--featured .chev{color:var(--ink-3);margin-left:-2px}
+.tag--featured:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tag--featured:hover svg{color:var(--bg)}
+.tag--featured:hover .tag__n,
+.tag--featured:hover .chev{color:rgba(255,255,255,.6)}
+.tag--featured.is-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.tag--featured.is-active svg{color:var(--bg)}
+.tag--featured.is-active .tag__n,
+.tag--featured.is-active .chev{color:rgba(255,255,255,.6)}
+/* Раскрытый список — перевёрнутая стрелка: обычная связка «меню открыто» */
+.dd--l1.is-open .tag--featured{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.dd--l1.is-open .tag--featured svg{color:var(--bg)}
+.dd--l1.is-open .tag--featured .tag__n{color:rgba(255,255,255,.6)}
+.dd--l1.is-open .tag--featured .chev{transform:rotate(180deg);color:rgba(255,255,255,.6)}
 
-/* Ниши — второй уровень: строка ниже, ростом меньше, без рамки-акцента.
-   Разница в высоте и весе и есть то, чем один уровень отличается от
-   другого: без неё оба ряда снова читаются как один список. */
-.cats__l2 .tag{height:36px;padding:0 14px;font-size:13px}
-
-/* Первым чипом — сам раздел целиком: со страницы ниши иначе некуда
-   подняться на уровень выше */
-.tag--whole{
-  border-style:dashed;border-color:var(--ink-3);color:var(--ink);font-weight:600;
-}
-.tag--whole.is-active{background:var(--ink);border-style:solid;border-color:var(--ink);color:var(--bg)}
 
 /* Выпадающий список всех категорий */
 .dd{position:relative}
@@ -339,6 +333,16 @@ input{font:inherit;color:inherit}
   transition:background .16s,color .16s;
 }
 .dd__panel a:hover{background:var(--surface);color:var(--ink)}
+/* Список ниш раздела — одной колонкой: их шесть, в три колонки они
+   выглядели бы шире и важнее, чем весь остальной каталог */
+.dd__panel--l1{
+  width:min(300px,calc(100vw - 40px));
+  grid-template-columns:1fr;
+  max-height:min(70vh,420px);overflow-y:auto;
+}
+.dd__panel--l1 .dd__l2.is-active{background:var(--ink);color:var(--bg)}
+.dd__panel--l1 .dd__l2.is-active span{color:rgba(255,255,255,.6)}
+
 .dd__panel a span{color:var(--ink-4);font-size:12px;font-variant-numeric:tabular-nums}
 
 /* Единственное место, где видны сразу все три раздела и их ниши: раздел
@@ -1045,25 +1049,11 @@ input{font:inherit;color:inherit}
   .tag--all{width:42px;padding:0}
   .tag--all .tag__label,
   .tag--all .chev{display:none}
-  /* Разделы стоят своей строкой и подписи сохраняют: без них на телефоне
-     оставались две одинаковые иконки со счётчиками, по которым нельзя
-     понять, куда ведёт каждая. Не влезают — строка листается вбок, как и
-     ниши под ней; переносом она распадалась на три этажа. */
-  .tag--l1{padding:0 12px;gap:6px;height:38px;font-size:13px}
-  .tag--l1 .tag__n{display:none}
-  .cats__l1{gap:8px}
-  .verticals{
-    flex:1 1 auto;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;
-    scrollbar-width:none;-ms-overflow-style:none;
-    margin-right:calc(-1 * var(--pad));padding-right:var(--pad);
-  }
-  .verticals::-webkit-scrollbar{display:none}
-  /* Три раздела на 375px не помещаются никогда — затухание у правого края
-     показывает, что строка продолжается */
-  .verticals{
-    -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 32px),transparent);
-            mask-image:linear-gradient(to right,#000 calc(100% - 32px),transparent);
-  }
+  /* Маркетплейсы/Для бизнеса тоже закреплены (не в скролле) — сжимаем
+     до иконки со счётчиком и стрелкой, иначе они одни съедят всю строку */
+  .tag--featured{width:auto;padding:0 10px;gap:4px}
+  .tag--featured .tag__label{display:none}
+  .dd__panel--l1{width:min(260px,calc(100vw - 32px))}
   .tag--near .tag__label{display:none}
   .tag--near .tag__label-s{display:inline}
   .tags-row{gap:8px}

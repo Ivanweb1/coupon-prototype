@@ -207,44 +207,14 @@ function buildCityModal() {
    Категории: раздел L1 и ниши L2
    ========================================================================== */
 
-/* Верхняя строка — разделы витрины. Их три, они не скроллятся и стоят
-   отдельным рядом: раздел и ниша это разные уровни, и одной строкой они
-   читались как один плоский список фишек. */
-const L1_ICON = { regional: "pin", marketplace: "bag", "for-business": "case" };
-
-function buildVerticals(active, onPick) {
-  const host = qs("#verticals");
-  if (!host) return;
-  host.innerHTML = "";
-  VERTICALS.forEach(v => {
-    const el = document.createElement(onPick ? "button" : "a");
-    el.className = "tag tag--l1" + (v.slug === active ? " is-active" : "");
-    if (onPick) el.type = "button"; else el.href = catalogUrl(v.slug);
-    el.innerHTML =
-      '<span data-icon="' + L1_ICON[v.slug] + '"></span>' +
-      '<span class="tag__label">' + v.name + "</span>" +
-      '<span class="tag__n">' + countOf(v.slug) + "</span>";
-    if (onPick) el.onclick = () => onPick(v.slug);
-    host.appendChild(el);
-  });
-  initIcons();
-}
-
-/* Нижняя строка — ниши выбранного раздела. Первым чипом идёт сам раздел
-   целиком: со страницы ниши иначе некуда вернуться на уровень выше, а
-   хлебных крошек в первом экране нет. */
+/* Строка ниш. На главной это ниши региональных купонов: у маркетплейсов и
+   «Для бизнеса» ниши свои и раскрываются из их же плашек. На странице
+   раздела строка показывает ниши уже этого раздела. */
 function buildTags(l1) {
   const host = qs("#tags");
   if (!host) return;
   const vertical = findVertical(l1) || VERTICALS[0];
   host.innerHTML = "";
-
-  const whole = document.createElement("a");
-  whole.className = "tag tag--whole" +
-    (state.l1 === vertical.slug && !state.l2 ? " is-active" : "");
-  whole.href = catalogUrl(vertical.slug);
-  whole.innerHTML = 'Весь раздел <span class="tag__n">' + countOf(vertical.slug) + "</span>";
-  host.appendChild(whole);
 
   catsOf(vertical.slug).sort((a, b) => b.n - a.n).forEach(c => {
     const a = document.createElement("a");
@@ -277,19 +247,22 @@ function buildTags(l1) {
   row.scrollLeft = 0;
 }
 
-/* Связка двух строк. На главной раздел переключается на месте: лента внизу
-   остаётся витриной города целиком, и уводить с неё по клику на раздел
-   незачем — в сам раздел ведёт чип «Весь раздел». В каталоге раздел это
-   уже страница, поэтому там строка разделов — обычные ссылки. */
-function initCategories(navigate) {
-  let shown = state.l1 || "regional";
-  const paint = () => {
-    buildVerticals(shown, navigate ? null : pick);
-    buildTags(shown);
+/* Раскрытие любого списка в строке категорий. Списков теперь несколько —
+   «Все категории» и по одному на закреплённый раздел, — поэтому открытый
+   всегда ровно один: два развёрнутых меню рядом перекрывают друг друга. */
+function initDD(dd) {
+  qs("[data-dd-toggle]", dd).onclick = e => {
+    e.stopPropagation();
+    const open = dd.classList.contains("is-open");
+    qsa(".dd.is-open").forEach(x => x.classList.remove("is-open"));
+    dd.classList.toggle("is-open", !open);
   };
-  const pick = slug => { shown = slug; paint(); };
-  paint();
+  qs(".dd__panel", dd).onclick = e => e.stopPropagation();
 }
+
+document.addEventListener("click", () => {
+  qsa(".dd.is-open").forEach(dd => dd.classList.remove("is-open"));
+});
 
 /* «Все категории» — единственное место, где видны сразу все три раздела и
    их ниши. Отдельную страницу-каталог категорий не делаем: решение Ивана
@@ -319,22 +292,40 @@ function buildDropdown() {
     panel.appendChild(g);
   });
 
-  qs("[data-dd-toggle]", dd).onclick = e => {
-    e.stopPropagation();
-    dd.classList.toggle("is-open");
-  };
-  document.addEventListener("click", () => dd.classList.remove("is-open"));
-  panel.onclick = e => e.stopPropagation();
+  initDD(dd);
 }
 
-/* Закреплённые ветки на главной: ссылка ведёт на страницу раздела L1,
-   счётчик — сумма по его нишам */
-function fillFeatured() {
-  qsa("[data-l1-link]").forEach(el => {
-    const l1 = el.dataset.l1Link;
-    el.href = catalogUrl(l1);
-    const n = qs(".tag__n", el);
-    if (n) n.textContent = countOf(l1);
+/* Закреплённые разделы — маркетплейсы и «Для бизнеса». Ниши у них свои, и
+   до правки их не было видно вовсе: плашка просто уводила на страницу
+   раздела. Теперь у плашки стрелка и свой список — видно, что внутри, не
+   уходя с главной. Первой строкой — сам раздел целиком. */
+function buildL1Dropdowns() {
+  qsa(".dd--l1").forEach(dd => {
+    const v = findVertical(dd.dataset.l1);
+    if (!v) return;
+
+    const n = qs(".tag__n", dd);
+    if (n) n.textContent = countOf(v.slug);
+    if (state.l1 === v.slug) qs(".tag", dd).classList.add("is-active");
+
+    const panel = qs(".dd__panel", dd);
+    panel.innerHTML = "";
+
+    const all = document.createElement("a");
+    all.className = "dd__l1";
+    all.href = catalogUrl(v.slug);
+    all.innerHTML = "<b>Все купоны раздела</b><span>" + countOf(v.slug) + "</span>";
+    panel.appendChild(all);
+
+    catsOf(v.slug).forEach(c => {
+      const a = document.createElement("a");
+      a.className = "dd__l2" + (state.l1 === c.l1 && state.l2 === c.slug ? " is-active" : "");
+      a.href = catUrl(c);
+      a.innerHTML = c.name + "<span>" + c.n + "</span>";
+      panel.appendChild(a);
+    });
+
+    initDD(dd);
   });
 }
 
@@ -890,9 +881,9 @@ function renderCatalog() {
   const hint = qs("#catHint");
   if (hint) hint.textContent = cat ? "" : (v ? v.hint : "");
 
-  /* Обе строки показывают текущий раздел: из «Маркетплейсов» нельзя
+  /* Строка ниш показывает текущий раздел: из «Маркетплейсов» нельзя
      провалиться в региональную «Еду», это соседняя ветка витрины. */
-  initCategories(true);
+  buildTags(state.l1);
 
   const count = qs("#catCount");
   if (count) count.textContent = (cat ? cat.n : (v ? countOf(v.slug) : "1 800")) + " купонов";
@@ -1216,7 +1207,6 @@ function initCommon() {
   initCardStyle();
   initQuickStyle();
   initIcons();
-  fillFeatured();
   initScopeAlt();
   buildCityModal();
   initCityGate();

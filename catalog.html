@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260909b">
+<link rel="stylesheet" href="assets/style.css?v=20260909c">
 </head>
 <body>
 
@@ -77,19 +77,14 @@
     <span class="toolbar__count" id="catCount">— купонов</span>
   </div>
 
-  <!-- Те же два уровня, что и на главной: сверху разделы, снизу ниши
-       текущего раздела. Из «Маркетплейсов» нельзя провалиться в
-       региональную «Еду» — это соседняя ветка витрины. -->
-  <div class="cats cats--catalog">
-    <div class="tags-row cats__l1">
-      <div class="verticals" id="verticals"></div>
-    </div>
-    <div class="tags-row cats__l2">
-      <div class="tags" id="tagsRow"><span id="tags"></span></div>
-      <button class="tags-more" data-tags-more aria-label="Показать больше ниш">
-        <span class="chev" data-icon="chev"></span>
-      </button>
-    </div>
+  <!-- Строка ниш текущего раздела: из «Маркетплейсов» нельзя провалиться
+       в региональную «Еду», это соседняя ветка витрины. Сами разделы
+       переключаются списком «Категория» в фильтрах выше. -->
+  <div class="tags-row tags-row--catalog">
+    <div class="tags" id="tagsRow"><span id="tags"></span></div>
+    <button class="tags-more" data-tags-more aria-label="Показать больше ниш">
+      <span class="chev" data-icon="chev"></span>
+    </button>
   </div>
 
   <section class="section">
@@ -185,8 +180,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260909b"></script>
-<script src="assets/app.js?v=20260909b"></script>
+<script src="assets/data.js?v=20260909c"></script>
+<script src="assets/app.js?v=20260909c"></script>
 <script>
   initCommon();
   buildDropdown();
