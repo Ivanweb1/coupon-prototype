@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260909c">
+<link rel="stylesheet" href="assets/style.css?v=20260909d">
 </head>
 <body>
 
@@ -68,50 +68,57 @@
     </div>
 
     <div class="tags-row">
-      <span class="dd" id="allCats">
-        <button class="tag tag--all" data-dd-toggle>
-          <span data-icon="grid"></span>
-          <span class="tag__label">Все категории</span>
+      <!-- Верхний ярус: три главных раздела витрины — крупнее и весомее
+           нижнего ряда, чтобы иерархия «разделы → ниши» читалась сама собой -->
+      <div class="tags-row__main">
+        <span class="dd" id="allCats">
+          <button class="tag tag--all" data-dd-toggle>
+            <span data-icon="grid"></span>
+            <span class="tag__label">Все категории</span>
+            <span class="chev" data-icon="chev"></span>
+          </button>
+          <span class="dd__panel"></span>
+        </span>
+        <!-- Маркетплейсы и «Для бизнеса» — не рядовые категории вроде «кафе»,
+             а отдельные разделы витрины (L1 по ТЗ v7.0 §3.2.10): закреплены
+             сразу за «Все категории», выделены рамкой, в верхнем ряду.
+             У каждого своя стрелка и свой список ниш: ниши у разделов разные,
+             и «Одежда» на маркетплейсах — не та же категория, что «Одежда» в
+             городе. -->
+        <span class="dd dd--l1" data-l1="marketplace">
+          <button class="tag tag--featured" data-dd-toggle>
+            <span data-icon="bag"></span>
+            <span class="tag__label">Маркетплейсы</span>
+            <span class="tag__n"></span>
+            <span class="chev" data-icon="chev"></span>
+          </button>
+          <span class="dd__panel dd__panel--l1"></span>
+        </span>
+        <span class="dd dd--l1" data-l1="for-business">
+          <button class="tag tag--featured" data-dd-toggle>
+            <span data-icon="case"></span>
+            <span class="tag__label">Для бизнеса</span>
+            <span class="tag__n"></span>
+            <span class="chev" data-icon="chev"></span>
+          </button>
+          <span class="dd__panel dd__panel--l1"></span>
+        </span>
+      </div>
+      <!-- Нижний ярус: «Рядом со мной» и ниши региональных купонов —
+           визуально мельче верхнего ряда, второй по значимости уровень -->
+      <div class="tags-row__sub">
+        <button class="tag tag--near" data-near aria-label="Рядом со мной">
+          <span data-icon="pin"></span>
+          <span class="tag__label">Рядом со мной</span>
+          <span class="tag__label-s">Рядом</span>
+        </button>
+        <div class="tags" id="tagsRow"><span id="tags"></span></div>
+        <!-- Явная стрелка, а не только затухание справа: на созвоне отдельно
+             проговаривали, что на догадливость по скроллу полагаться нельзя -->
+        <button class="tags-more" data-tags-more aria-label="Показать больше категорий">
           <span class="chev" data-icon="chev"></span>
         </button>
-        <span class="dd__panel"></span>
-      </span>
-      <!-- Маркетплейсы и «Для бизнеса» — не рядовые категории вроде «кафе»,
-           а отдельные разделы витрины (L1 по ТЗ v7.0 §3.2.10): закреплены
-           сразу за «Все категории», выделены рамкой, но в той же строке, а
-           не отдельным блоком — двумя рядами это читалось как разные секции.
-           У каждого своя стрелка и свой список ниш: ниши у разделов разные,
-           и «Одежда» на маркетплейсах — не та же категория, что «Одежда» в
-           городе. Строка справа — ниши региональных купонов. -->
-      <span class="dd dd--l1" data-l1="marketplace">
-        <button class="tag tag--featured" data-dd-toggle>
-          <span data-icon="bag"></span>
-          <span class="tag__label">Маркетплейсы</span>
-          <span class="tag__n"></span>
-          <span class="chev" data-icon="chev"></span>
-        </button>
-        <span class="dd__panel dd__panel--l1"></span>
-      </span>
-      <span class="dd dd--l1" data-l1="for-business">
-        <button class="tag tag--featured" data-dd-toggle>
-          <span data-icon="case"></span>
-          <span class="tag__label">Для бизнеса</span>
-          <span class="tag__n"></span>
-          <span class="chev" data-icon="chev"></span>
-        </button>
-        <span class="dd__panel dd__panel--l1"></span>
-      </span>
-      <button class="tag tag--near" data-near aria-label="Рядом со мной">
-        <span data-icon="pin"></span>
-        <span class="tag__label">Рядом со мной</span>
-        <span class="tag__label-s">Рядом</span>
-      </button>
-      <div class="tags" id="tagsRow"><span id="tags"></span></div>
-      <!-- Явная стрелка, а не только затухание справа: на созвоне отдельно
-           проговаривали, что на догадливость по скроллу полагаться нельзя -->
-      <button class="tags-more" data-tags-more aria-label="Показать больше категорий">
-        <span class="chev" data-icon="chev"></span>
-      </button>
+      </div>
     </div>
 
   </div>

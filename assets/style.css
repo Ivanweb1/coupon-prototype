@@ -230,10 +230,17 @@ input{font:inherit;color:inherit}
 .select--near.is-active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .select--near.is-active svg{color:rgba(255,255,255,.6)}
 
-/* Лента популярных категорий: «Все категории» закреплены слева,
-   остальные — одной строкой со свайпом вправо, без переноса на вторую */
-.tags-row{display:flex;align-items:center;gap:12px;min-width:0;position:relative}
-.tags-row .dd{flex:0 0 auto}
+/* Лента категорий — два яруса. Верхний: «Все категории» + разделы
+   витрины (Маркетплейсы/Для бизнеса), закреплены, не скроллятся.
+   Нижний: «Рядом со мной» + ниши, одной строкой со свайпом вправо,
+   без переноса — и визуально мельче верхнего, чтобы иерархия
+   «разделы → ниши» читалась без подписей. */
+.tags-row{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tags-row__main{display:flex;align-items:center;gap:12px;min-width:0}
+.tags-row__main .dd{flex:0 0 auto}
+.tags-row__sub{display:flex;align-items:center;gap:8px;min-width:0;position:relative}
+.tags-row__sub .tag{height:34px;padding:0 13px;font-size:13px;gap:6px}
+.tags-row__sub .tag__n{font-size:11px}
 
 /* Стрелка в конце ленты категорий. Затухания справа мало: на созвоне
    отдельно проговаривали, что на догадливость по скроллу полагаться
