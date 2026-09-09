@@ -21,7 +21,9 @@ const ICON = {
   plus:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
   link:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M14 10a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1"/></svg>',
   bag:    '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h16l-1.2 11.2a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
-  case:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/></svg>'
+  case:   '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/></svg>',
+  phone:  '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 10.8a15.7 15.7 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.4c1 .3 2 .5 3.1.5a1.5 1.5 0 0 1 1.5 1.5V20a1.5 1.5 0 0 1-1.5 1.5C10.7 21.5 3 13.8 3 4.5A1.5 1.5 0 0 1 4.5 3h3.1A1.5 1.5 0 0 1 9.1 4.5c0 1.1.2 2.1.5 3.1a1.5 1.5 0 0 1-.4 1.5Z"/></svg>',
+  mail:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>'
 };
 
 /* ==========================================================================
@@ -589,8 +591,11 @@ function quickHTML(c) {
         <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
         <div class="reveal__row">
           <div class="reveal__code">${c.code}</div>
-          <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
-          <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
+          <div class="reveal__actions">
+            <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
+            <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
+            <button type="button" class="btn btn--ghost btn--lg" data-share>${ICON.share} Поделиться</button>
+          </div>
         </div>
       </div>`;
   const left = document.body.classList.contains("quick-left");
@@ -670,7 +675,6 @@ function quickHTML(c) {
       ${whereBlock}
 
       <div class="quick__foot">
-        <button type="button" class="btn btn--ghost" data-share>${ICON.share} Поделиться</button>
         <a class="btn btn--ghost" href="coupon.html" data-open-page>Открыть страницу купона</a>
       </div>
     </div>`;
@@ -1191,23 +1195,10 @@ function initQuickStyle() {
   document.body.classList.add("quick-" + style);
 }
 
-/* Переход «город ↔ вся область» рядом с самой выдачей. По ТЗ это смена
-   адреса на /region/, поэтому ссылка ведёт на другую страницу, а не
-   переключает состояние текущей. */
-function initScopeAlt() {
-  const alt = qs("#scopeAlt");
-  if (!alt) return;
-  alt.textContent = isRegion()
-    ? "Показать только " + state.city.name
-    : "Показать всю " + REGION.acc;
-  alt.onclick = e => { e.preventDefault(); goGeo(isRegion() ? "city" : "region"); };
-}
-
 function initCommon() {
   initCardStyle();
   initQuickStyle();
   initIcons();
-  initScopeAlt();
   buildCityModal();
   initCityGate();
   renderGeo();
