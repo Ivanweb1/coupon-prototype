@@ -50,6 +50,24 @@ function initIcons(root = document) {
 const num = n => n.toLocaleString("ru-RU");
 const rub = n => n.toLocaleString("ru-RU") + " ₽";
 
+/* Разбор дат вида «9 августа» для сортировки — рыба без года, поэтому
+   считаем ближайшим прошедшим годом (текущий, а декабрьские даты позже
+   текущего месяца — прошлым годом). Нужно только для сортировки «свежее
+   выше», точная дата не показывается. */
+const RU_MONTHS = ["январ", "феврал", "март", "апрел", "ма", "июн", "июл",
+  "август", "сентябр", "октябр", "ноябр", "декабр"];
+function ruDateKey(str) {
+  const m = /^(\d{1,2})\s+(\S+)/.exec(str || "");
+  if (!m) return -Infinity;
+  const day = +m[1];
+  const month = RU_MONTHS.findIndex(p => m[2].toLowerCase().startsWith(p));
+  if (month < 0) return -Infinity;
+  const now = new Date();
+  let year = now.getFullYear();
+  if (month > now.getMonth() || (month === now.getMonth() && day > now.getDate())) year -= 1;
+  return year * 400 + month * 31 + day;
+}
+
 /* ---------- Состояние ---------- */
 const state = {
   role: document.body.dataset.role === "partner" ? "partner" : "client",
@@ -693,7 +711,8 @@ VIEWS["partner:dashboard"] = () => {
       ])
     + panel("Последние клиенты",
         table([{ t: "Клиент" }, { t: "С нами с" }, { t: "Купонов", num: true }],
-          LK_CLIENTS.slice(0, 4).map(c => `<tr data-client="${c.id}" tabindex="0">
+          LK_CLIENTS.slice().sort((a, b) => ruDateKey(b.since) - ruDateKey(a.since)).slice(0, 4)
+            .map(c => `<tr data-client="${c.id}" tabindex="0">
             <td><b class="lk-t__title">${c.name}</b><span class="lk-t__sub">${c.city} · ${LK_CLIENT_STATUSES[c.status]}</span></td>
             <td>${c.since}</td><td class="num">${c.coupons}</td></tr>`).join("")),
         { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все клиенты</a>` });
