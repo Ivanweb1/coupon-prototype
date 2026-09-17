@@ -947,7 +947,8 @@ function openQuick(c, cardEl) {
    единственный URL /coupon/{id}/, две копии под разными путями запрещены. */
 function couponPageUrl(c) {
   const base = location.href.replace(/[^/]*$/, "");
-  return base + "coupon.html?id=" + c.id + "&cat=" + c.cat.id;
+  const page = document.body.classList.contains("dz") ? "coupon-design.html" : "coupon.html";
+  return base + page + "?id=" + c.id + "&cat=" + c.cat.id;
 }
 
 function shareCoupon(btn, c) {
@@ -1059,7 +1060,8 @@ function initRailNav(rail) {
 function renderCrumbs(hostSel, tail) {
   const host = qs(hostSel);
   if (!host) return;
-  const parts = [`<a href="index.html">Главная</a>`];
+  const home = document.body.classList.contains("dz") ? "index-design-2.html" : "index.html";
+  const parts = [`<a href="${home}">Главная</a>`];
   parts.push(`<a href="${catalogUrl()}">${geoName()}</a>`);
   if (state.l1) {
     const v = findVertical(state.l1);
@@ -1249,6 +1251,7 @@ function currentCoupon() {
 
 function renderCouponPage() {
   const c = currentCoupon();
+  const dz = document.body.classList.contains("dz");
   state.l1 = c.cat.l1;
   state.l2 = c.cat.slug;
   if (c.cat.adult) adultGate();
@@ -1375,6 +1378,186 @@ function renderCouponPage() {
   /* SEO-текст: тот самый «просто текст» под каждую связку ниша/город.
      Раздел в заголовке назван прямо — по нему видно, что «Одежда» в
      маркетплейсах и «Одежда» в городе это две разные страницы. */
+  qs("#seoTitle").textContent =
+    c.cat.name + " · " + c.cat.vertical.name.toLowerCase() + " " + geoIn() +
+    ": купон «" + c.title + "»";
+  qs("#seoLead").textContent = c.market
+    ? "Скидка действует по промокоду на " + c.market + ". Чтобы получить её, " +
+      "не нужно ничего оплачивать и регистрироваться: откройте код и введите " +
+      "его в корзине при оформлении заказа."
+    : "Скидка действует " + geoIn() + " по промокоду. Чтобы получить её, не нужно " +
+      "ничего оплачивать и регистрироваться: откройте код, сделайте скриншот и " +
+      "предъявите его на месте.";
+  qs("#seoTail").textContent =
+    "Другие предложения ниши «" + c.cat.name + "» в разделе «" +
+    c.cat.vertical.name + "» смотрите в каталоге — список обновляется каждый день.";
+
+  buildRecommendations(c.cat);
+}
+
+/* ==========================================================================
+   Страница купона — дизайн-версия (coupon-design.html)
+   ==========================================================================
+   Структура и тексты — из прототипа (renderCouponPage), вид — из главной и
+   поп-апа: фото 4:5 слева, промокод сразу под заголовком как единственный
+   акцентный блок, компания строкой со значками, серая карта. Страница даёт
+   больше поп-апа: развёрнутые шаги и правила, «О компании» с контактами,
+   другие купоны компании и подборку смежных ниш. */
+function renderCouponDesign() {
+  const c = currentCoupon();
+  if (!c.photo) c.photo = COUPON_PHOTOS[Math.floor(Math.random() * COUPON_PHOTOS.length)];
+  state.l1 = c.cat.l1;
+  state.l2 = c.cat.slug;
+  if (c.cat.adult) adultGate();
+
+  document.title = c.title + " — " + c.company + ", " + c.city.name;
+  renderCrumbs("#crumbs", c.title);
+
+  const mp = c.market && MARKET_LOGO[c.market];
+  const whereBlock = c.market
+    ? `<div class="cpd__where">
+        <div class="block-label">Где действует</div>
+        ${mp
+          ? `<div class="market-where market-where--logo">
+              <div class="market-where__text">
+                <img class="market-where__logo" src="assets/brand/mp/${mp}-full.svg" alt="${c.market}">
+                <span>Код вводится в корзине на площадке</span>
+              </div>
+              <a class="soc market-where__go" href="#">
+                <img class="mp-ic" src="assets/brand/mp/${mp}.svg" alt=""> Открыть карточку товара
+              </a>
+            </div>`
+          : `<div class="market-where">
+              <b>${c.market}</b>
+              <span>Код вводится в корзине на площадке при оформлении заказа</span>
+              <a class="soc" href="#">${ICON.link} Открыть карточку товара</a>
+            </div>`}
+      </div>`
+    : `<div class="cpd__where">
+        <div class="block-label">Где действует <span class="block-label__aside">· ${fmtDist(c.dist)} от вас</span></div>
+        <div class="map map--live">
+          <iframe src="https://yandex.ru/map-widget/v1/?ll=39.599200%2C52.608800&z=16&pt=39.599200%2C52.608800%2Cpm2rdl&l=map"
+                  title="Карта: ${c.city.name}, ${c.address}" loading="lazy" allowfullscreen></iframe>
+          <span class="map__addr">${ICON.pinFill} ${c.city.name}, ${c.address}</span>
+        </div>
+      </div>`;
+
+  qs("#couponRoot").innerHTML = `
+    <div class="cpd__media">
+      <div class="cpd__photo has-photo" style="background:url('${c.photo}') center/cover no-repeat">
+        <span class="cpd__value">${c.value}</span>
+        <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
+      </div>
+    </div>
+
+    <div class="cpd__info">
+      <div class="quick__eyebrow cpd__eyebrow">
+        <a href="${catalogUrl(c.cat.l1)}">${c.cat.vertical.name}</a><i class="dot"></i>
+        <a href="${catUrl(c.cat)}">${c.cat.name}</a><i class="dot"></i>
+        <span>${c.market ? c.market : c.city.name}</span><i class="dot"></i>
+        <span>${ICON.eye} ${c.views}</span>
+      </div>
+
+      <h1 class="cpd__h1">${c.title}</h1>
+
+      <div class="reveal reveal--big" data-reveal>
+        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
+        <div class="reveal__row">
+          <div class="reveal__code">${c.code}</div>
+          <div class="reveal__actions">
+            <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
+            <button type="button" class="btn btn--ghost btn--lg" data-share>${ICON.share} Поделиться</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="company">
+        ${companyLogo(c)}
+        <div>
+          <div class="company__name">${c.company}</div>
+          <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
+        </div>
+        <div class="socials socials--icons">
+          <a class="soc soc--icon" href="#" title="Сайт компании" aria-label="Сайт компании">${ICON.site}</a>
+          <a class="soc soc--icon" href="#" title="Компания ВКонтакте" aria-label="Компания ВКонтакте">${ICON.vk}</a>
+          <a class="soc soc--icon" href="#" title="Компания в Telegram" aria-label="Компания в Telegram">${ICON.tg}</a>
+        </div>
+      </div>
+
+      ${whereBlock}
+    </div>`;
+
+  const root = qs("#couponRoot");
+  const rev = qs("[data-reveal]", root);
+  qs("[data-reveal-btn]", rev).onclick = e => {
+    rev.classList.add("is-open");
+    e.currentTarget.disabled = true;
+    noteInterest(c.cat.id);
+  };
+  const share = qs("[data-share]", root);
+  share.onclick = () => shareCoupon(share, c);
+
+  /* Как работает: шаги карточками в ряд, правила — списком в две колонки */
+  const r = RULES[c.cat.l1] || RULES.regional;
+  qs("#rules").innerHTML = `
+    <ol class="cpd-steps">
+      ${r.steps.map((st, i) => `<li><b>${i + 1}</b><h3>${st[0]}</h3><p>${st[1]}</p></li>`).join("")}
+    </ol>
+    <div class="cpd-terms">
+      <div class="block-label">Как пользоваться купоном правильно</div>
+      <ul class="terms">${r.terms.map(t => `<li>${t}</li>`).join("")}</ul>
+    </div>`;
+
+  /* О компании — описание из профиля продавца и все контакты с подписями:
+     в поп-апе значки, здесь места хватает на полные подписи */
+  qs("#about").innerHTML = `
+    <div class="cpd-about__main">
+      <div class="cpd-about__head">
+        ${companyLogo(c)}
+        <div>
+          <div class="company__name">${c.company}</div>
+          <div class="company__req">ИНН 0000000000</div>
+        </div>
+      </div>
+      <p>${c.company} ${c.market
+        ? "продаёт на " + c.market + " с 2021 года. Отгрузка со склада площадки, возврат по правилам маркетплейса."
+        : "работает в городе с 2014 года. Своя команда, собственное оборудование, запись день в день."}</p>
+      <dl class="cpd-about__facts">
+        ${c.market
+          ? `<div><dt>Площадка</dt><dd>${c.market}</dd></div>
+             <div><dt>Где применить</dt><dd>В корзине при оформлении заказа</dd></div>`
+          : `<div><dt>Адрес</dt><dd>${c.city.name}, ${c.address}</dd></div>
+             <div><dt>Режим работы</dt><dd>Ежедневно, 10:00–21:00</dd></div>`}
+      </dl>
+    </div>
+    <div class="cpd-about__links">
+      <div class="block-label">Компания в сети</div>
+      <a class="soc" href="#" title="Сайт компании">${ICON.site} Сайт</a>
+      <a class="soc" href="#" title="Компания ВКонтакте">${ICON.vk} ВКонтакте</a>
+      <a class="soc" href="#" title="Компания в Telegram">${ICON.tg} Telegram</a>
+      <a class="soc" href="tel:+70000000000" title="Позвонить в компанию"><span class="cpd-ic">${ICON.phone}</span> +7 (000) 000-00-00</a>
+      <a class="soc" href="mailto:info@example.ru" title="Написать на почту компании"><span class="cpd-ic">${ICON.mail}</span> info@example.ru</a>
+    </div>`;
+
+  /* Другие купоны той же компании */
+  const own = qs("#companyFeed");
+  const used = new Set([c.title]);
+  for (let i = 0; i < 4; i++) {
+    let x = makeCoupon(c.cat.id, c.city);
+    let tries = 0;
+    while (used.has(x.title) && tries < 14) { x = makeCoupon(c.cat.id, c.city); tries++; }
+    if (used.has(x.title)) break;
+    used.add(x.title);
+    x.company = c.company;
+    x.address = c.address;
+    x.market = c.market;
+    const card = makeCard(x);
+    own.appendChild(card);
+    applyPhoto(card);
+  }
+  if (!own.children.length) own.closest(".section").remove();
+  qs("#companyFeedLabel").textContent = c.company;
+
   qs("#seoTitle").textContent =
     c.cat.name + " · " + c.cat.vertical.name.toLowerCase() + " " + geoIn() +
     ": купон «" + c.title + "»";

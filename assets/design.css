@@ -878,3 +878,193 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   font-family:var(--font-display);font-weight:700;font-size:17px;line-height:1;
   box-shadow:inset 0 0 0 1px rgba(34,26,25,.06);
 }
+
+/* ==========================================================================
+   Страница купона (coupon-design.html)
+   ==========================================================================
+   Те же правила, что у поп-апа: фото 4:5 слева на розовой подложке,
+   промокод под заголовком — единственный акцентный блок, компания строкой
+   со значками, серая карта. Ниже — то, чего нет в поп-апе: шаги, правила,
+   «О компании», другие купоны и подборка. */
+.dz .crumbs{padding-top:22px;font-size:13px;color:var(--ink-3)}
+.dz .crumbs a{color:var(--ink-2);transition:color .18s}
+.dz .crumbs a:hover{color:var(--brand)}
+
+.cpd{
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr);
+  gap:48px;align-items:start;margin-top:22px;
+}
+
+/* Фото — липкое, пока листается правая колонка */
+.cpd__media{
+  position:sticky;top:96px;padding:18px;border-radius:32px;
+  background:
+    radial-gradient(120% 60% at 0% 0%, #FDE3DF 0%, rgba(253,227,223,0) 70%),
+    var(--brand-50);
+}
+.cpd__photo{
+  position:relative;aspect-ratio:4/5;border-radius:24px;overflow:hidden;
+  box-shadow:0 30px 50px -30px rgba(80,14,10,.55);
+}
+.cpd__photo::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(20,10,8,.28) 0%,rgba(20,10,8,0) 30%,rgba(20,10,8,0) 64%,rgba(20,10,8,.34) 100%);
+}
+.cpd__photo::after{
+  content:"";position:absolute;right:18px;bottom:18px;width:20px;height:34px;
+  background:url("brand/logo-white.png") center/contain no-repeat;opacity:.9;
+}
+.cpd__value{
+  position:absolute;left:20px;bottom:20px;z-index:1;
+  padding:10px 20px 12px;border-radius:16px;
+  background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-weight:800;line-height:1;letter-spacing:-.03em;
+  font-size:clamp(34px,3.6vw,52px);
+}
+.cpd__photo .erid-stamp{top:14px;right:16px;left:auto;z-index:1}
+
+.cpd__info{display:flex;flex-direction:column;gap:18px;padding-top:6px;min-width:0}
+.cpd__eyebrow{font-size:13px;padding-right:0}
+.cpd__eyebrow a{transition:color .18s}
+.cpd__eyebrow a:hover{color:var(--brand)}
+.cpd__eyebrow > a:first-child{
+  height:28px;padding:0 12px;border-radius:var(--r-pill);display:inline-flex;align-items:center;
+  background:var(--brand-50);color:var(--brand-700);font-weight:600;
+}
+.cpd__h1{
+  margin:0;font-family:var(--font-display);font-weight:700;
+  font-size:clamp(28px,3vw,44px);line-height:1.08;letter-spacing:-.035em;
+  text-wrap:balance;
+}
+
+/* Промокод — как в поп-апе, только крупнее */
+.cpd .reveal{
+  padding:18px 20px;gap:10px;border-color:#EFA39C;
+  background:linear-gradient(135deg,#FFF1EF 0%,#FDE4E1 100%);
+  box-shadow:0 18px 34px -24px rgba(221,68,60,.6);
+}
+.cpd .reveal .block-label{color:var(--brand-700)}
+.cpd .reveal__code{font-size:clamp(28px,2.8vw,38px)}
+.cpd .reveal .btn--lg{height:50px;padding:0 24px;font-size:15px}
+.cpd .reveal .btn--ghost{background:#fff;border-color:var(--line-strong)}
+
+/* Компания — строкой, значки справа */
+.cpd .company{flex-wrap:nowrap;padding:14px 16px;border-radius:20px;gap:14px}
+.cpd .company__logo{width:46px;height:46px;border-radius:14px}
+.cpd .company__logo--mono{font-size:20px}
+.cpd .company__name{font-size:15px}
+.cpd .socials--icons{width:auto;margin-left:auto;gap:8px;flex-wrap:nowrap}
+.cpd .soc--icon{width:40px;height:40px;padding:0;justify-content:center;border:0;background:none;--soc-idle:#F3EEED;--soc-g:#8F8684}
+.cpd .soc--icon:hover{background:none;transform:translateY(-2px)}
+.cpd .soc--icon .soc-ic{width:40px;height:40px}
+
+.cpd .block-label{margin-bottom:8px}
+.cpd .map--live{height:260px;border-radius:22px;padding:0;display:block;overflow:hidden}
+
+/* ---------- Как работает: шаги карточками + правила ---------- */
+.cpd-steps{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;
+  margin:0;padding:0;list-style:none;
+}
+.cpd-steps li{
+  position:relative;padding:20px 20px 22px;border-radius:24px;
+  background:#fff;border:1px solid var(--line);
+  transition:transform .25s var(--ease),box-shadow .25s;
+}
+.cpd-steps li:hover{transform:translateY(-4px);box-shadow:0 22px 36px -26px rgba(80,14,10,.4)}
+.cpd-steps b{
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:var(--brand-50);color:var(--brand);
+  font-family:var(--font-display);font-size:14px;font-weight:700;
+}
+.cpd-steps li + li::before{
+  content:"";position:absolute;left:-12px;top:34px;width:9px;height:9px;
+  border-top:1.5px solid var(--ink-4);border-right:1.5px solid var(--ink-4);
+  transform:translate(-50%,-50%) rotate(45deg);
+}
+.cpd-steps h3{margin:16px 0 6px;font-size:16px;font-weight:600;letter-spacing:-.015em;line-height:1.25}
+.cpd-steps p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2)}
+
+.cpd-terms{
+  margin-top:14px;padding:22px 24px;border-radius:24px;background:var(--surface);
+}
+.cpd-terms .terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 36px}
+.cpd-terms .terms li{font-size:14px}
+.cpd-terms .terms li::before{background:var(--brand)}
+
+/* ---------- О компании ---------- */
+.cpd-about{
+  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;align-items:stretch;
+}
+.cpd-about__main{padding:24px;border-radius:24px;border:1px solid var(--line);background:#fff}
+.cpd-about__head{display:flex;align-items:center;gap:14px}
+.cpd-about__head .company__logo{width:52px;height:52px;border-radius:16px;font-size:22px}
+.cpd-about__head .company__name{font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:-.02em}
+.cpd-about__main p{margin:16px 0 0;max-width:62ch;color:var(--ink-2);line-height:1.6;font-size:15px}
+.cpd-about__facts{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
+  margin:18px 0 0;padding-top:18px;border-top:1px solid var(--line);
+}
+.cpd-about__facts dt{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.cpd-about__facts dd{margin:4px 0 0;font-size:14px;color:var(--ink)}
+
+.cpd-about__links{
+  padding:20px;border-radius:24px;background:var(--surface);
+  display:flex;flex-direction:column;gap:8px;
+}
+.cpd-about__links .block-label{margin:0 0 4px}
+.cpd-about__links .soc{
+  width:100%;height:46px;justify-content:flex-start;gap:10px;padding:0 14px 0 8px;
+  background:#fff;border-color:transparent;font-size:14px;color:var(--ink);
+  --soc-idle:#F3EEED;--soc-g:#8F8684;
+}
+.cpd-about__links .soc:hover{border-color:var(--line-strong);background:#fff;color:var(--ink)}
+.cpd-about__links .soc-ic{width:30px;height:30px}
+.cpd-ic{
+  width:30px;height:30px;border-radius:50%;flex:0 0 auto;
+  display:grid;place-items:center;background:#F3EEED;color:#8F8684;
+  transition:background .2s,color .2s;
+}
+.cpd-about__links .soc:hover .cpd-ic{background:var(--ink);color:#fff}
+
+/* SEO-текст — тихо, в конце */
+.dz .seo{margin-top:56px;border-top-color:var(--line);color:var(--ink-3)}
+.dz .seo h2{font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--ink-2)}
+
+@media (max-width:1100px){
+  .cpd-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cpd-steps li + li::before{display:none}
+}
+@media (max-width:900px){
+  .cpd{grid-template-columns:1fr;gap:22px}
+  .cpd__media{position:static;padding:12px;border-radius:26px}
+  .cpd__photo{width:min(100%,calc(58vh * .8));margin:0 auto}
+  .cpd-about{grid-template-columns:1fr}
+  .cpd-terms .terms{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .cpd-steps{grid-template-columns:1fr}
+  .cpd .reveal .btn--lg{height:44px;padding:0 18px}
+  .cpd .company{flex-wrap:wrap}
+  .cpd .socials--icons{margin-left:60px}
+  .cpd .map--live{height:200px}
+  .cpd-about__facts{grid-template-columns:1fr}
+}
+
+/* Правая колонка тянется до низа фото: карта забирает остаток высоты */
+.cpd{align-items:stretch}
+.cpd__media{align-self:start}
+.cpd__where{flex:1;display:flex;flex-direction:column}
+.cpd .cpd__where .map--live{flex:1;height:auto;min-height:240px}
+@media (max-width:900px){.cpd .cpd__where .map--live{flex:none;height:240px;min-height:0}}
+
+/* Телефон: фото не отдаёт весь первый экран — заголовок и промокод должны
+   быть рядом (правило прототипа). Пропорция 4:5 сохраняется. */
+@media (max-width:640px){
+  .cpd__media{padding:10px;border-radius:22px}
+  .cpd__photo{width:min(100%,calc(36vh * .8));border-radius:18px}
+  .cpd__value{left:10px;bottom:10px;padding:6px 12px 8px;border-radius:12px;font-size:24px}
+  .cpd__photo .erid-stamp{font-size:9px;top:8px;right:10px}
+  .cpd__photo::after{right:10px;bottom:10px;width:13px;height:22px}
+  .cpd__h1{font-size:26px}
+}

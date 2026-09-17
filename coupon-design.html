@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Все купоны — скидки Липецка бесплатно</title>
+<title>Купон — Все купоны</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -13,11 +13,8 @@
 </head>
 <body class="dz cards-wb">
 
-<!-- ===================================================================
-     ДИЗАЙН. Копия главной для перехода от Ч/Б прототипа к дизайну.
-     Идём по блокам: сейчас готов первый — шапка и первый экран.
-     Остальная страница пока в стилях прототипа.
-     =================================================================== -->
+<!-- ДИЗАЙН. Отдельная страница купона в стиле главной и поп-апа
+     (index-design-2.html). Структура — из прототипа coupon.html. -->
 <header class="header dz-header">
   <div class="wrap header__in">
     <a class="dz-logo" href="index-design-2.html" aria-label="Все купоны — на главную">
@@ -52,130 +49,59 @@
 </header>
 
 
-<!-- Первый экран, вариант Б — компактный, без красной подложки. По высоте
-     как в прототипе: заголовок, поиск и категории видны сразу, лента
-     начинается на первом экране. Фирменный цвет — в акцентах: город,
-     кнопка поиска, «Все категории». Шар из логотипа с парой купонов —
-     небольшой акцент справа, а не иллюстрация на пол-экрана. -->
-<section class="hero dz-hero dz-hero--lite">
-  <div class="wrap hero__in">
-
-    <div class="dzl">
-      <div class="dzl__text">
-        <span class="dzl__eyebrow"><i></i>Бесплатно · без регистрации</span>
-        <h1 class="dzl__h1">Все скидки <span class="dzl__city" data-geo-gen>Липецка</span> в&nbsp;одном месте</h1>
-        <ol class="dzl__steps" aria-label="Как это работает">
-          <li><b>1</b>Находите купон</li>
-          <li><b>2</b>Сохраняете скриншот</li>
-          <li><b>3</b>Платите со скидкой</li>
-        </ol>
-      </div>
-
-      <div class="dzl__art" aria-hidden="true">
-        <img class="dzl__balloon" src="assets/brand/logo-red.png" alt="" width="357" height="600">
-        <div class="dzl__ticket dzl__ticket--1"><b>−30%</b><span>Комбо-обед</span></div>
-        <div class="dzl__ticket dzl__ticket--2"><b>2 = 1</b><span>Маникюр</span></div>
-      </div>
-    </div>
-
-    <div class="search dzl__search">
-      <span class="search__icon" data-icon="search"></span>
-      <input type="text" placeholder="Кофе, маникюр, шиномонтаж…" aria-label="Поиск купонов">
-      <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
-      <button class="search__go"><span class="dz-go-l">Найти скидку</span><span class="dz-go-s">Найти</span></button>
-    </div>
-
-    <div class="tags-row dz-tags">
-      <!-- Верхний ярус: три главных раздела витрины — крупнее и весомее
-           нижнего ряда, чтобы иерархия «разделы → ниши» читалась сама собой -->
-      <div class="tags-row__main">
-        <span class="dd" id="allCats">
-          <button class="tag tag--all" data-dd-toggle>
-            <span data-icon="grid"></span>
-            <span class="tag__label">Все категории</span>
-            <span class="chev" data-icon="chev"></span>
-          </button>
-          <span class="dd__panel"></span>
-        </span>
-        <!-- Маркетплейсы и «Для бизнеса» — не рядовые категории вроде «кафе»,
-             а отдельные разделы витрины (L1 по ТЗ v7.0 §3.2.10): закреплены
-             сразу за «Все категории», выделены рамкой, в верхнем ряду.
-             У каждого своя стрелка и свой список ниш: ниши у разделов разные,
-             и «Одежда» на маркетплейсах — не та же категория, что «Одежда» в
-             городе. -->
-        <span class="dd dd--l1" data-l1="marketplace">
-          <button class="tag tag--featured" data-dd-toggle>
-            <span data-icon="bag"></span>
-            <span class="tag__label">Маркетплейсы</span>
-            <span class="tag__n"></span>
-            <span class="chev" data-icon="chev"></span>
-          </button>
-          <span class="dd__panel dd__panel--l1"></span>
-        </span>
-        <span class="dd dd--l1" data-l1="for-business">
-          <button class="tag tag--featured" data-dd-toggle>
-            <span data-icon="case"></span>
-            <span class="tag__label">Для бизнеса</span>
-            <span class="tag__n"></span>
-            <span class="chev" data-icon="chev"></span>
-          </button>
-          <span class="dd__panel dd__panel--l1"></span>
-        </span>
-      </div>
-      <!-- Нижний ярус: «Рядом со мной» и ниши региональных купонов —
-           визуально мельче верхнего ряда, второй по значимости уровень -->
-      <div class="tags-row__sub">
-        <button class="tag tag--near" data-near aria-label="Рядом со мной">
-          <span data-icon="pin"></span>
-          <span class="tag__label">Рядом со мной</span>
-          <span class="tag__label-s">Рядом</span>
-        </button>
-        <div class="tags" id="tagsRow"><span id="tags"></span></div>
-        <!-- Явная стрелка, а не только затухание справа: на созвоне отдельно
-             проговаривали, что на догадливость по скроллу полагаться нельзя -->
-        <button class="tags-more" data-tags-more aria-label="Показать больше категорий">
-          <span class="chev" data-icon="chev"></span>
-        </button>
-      </div>
-    </div>
-
-  </div>
-</section>
-
 <main class="wrap">
 
+  <!-- Путь: гео → раздел → ниша → купон. Адрес у купона один и без гео
+       (ТЗ v7.0 §3.2.11), иначе поиск получает дубли одной страницы. -->
+  <div class="crumbs" id="crumbs"></div>
+
+  <div class="cpd" id="couponRoot"></div>
+
+  <!-- Развёрнутые шаги и правила — то, ради чего полная страница нужна:
+       поп-ап держит быстрый путь, здесь отвечаем на вопросы, из-за которых
+       человек мог бы не дойти до кассы. Формулировки утвердительные
+       (созвон 07.09.2026). Текст — рыба. -->
+  <section class="section">
+    <div class="section__head">
+      <h2>Как работает купон</h2>
+    </div>
+    <div id="rules"></div>
+  </section>
 
   <section class="section">
     <div class="section__head">
-      <h2>Купоны <span data-geo-in>в городе Липецк</span></h2>
-      <span class="dz-section-note">Новые предложения каждый день</span>
+      <h2>О компании</h2>
     </div>
-    <div class="grid" id="feed"></div>
-    <div class="loader" id="loader">
-      <span class="loader__dot"></span><span class="loader__dot"></span><span class="loader__dot"></span>
-      <span style="margin-left:6px">подгружаем ещё купоны</span>
-    </div>
+    <!-- Описание — из профиля продавца в ЛК; вместо фото заведения — ссылки
+         на сайт и соцсети: переходы туда — ключевая метрика -->
+    <div class="cpd-about" id="about"></div>
   </section>
 
-  <!-- Рекомендации в хвосте ленты. По созвону 07.09.2026 блок привязан к
-       концу выдачи и должен читаться не как её продолжение, а как подборка,
-       поэтому та же обособленная подложка, что в каталоге и на купоне.
-       Скрыт, пока лента не кончилась. -->
-  <section class="section" id="feedRecos" hidden>
+  <section class="section">
+    <div class="section__head">
+      <h2>Другие купоны · <span id="companyFeedLabel">компания</span></h2>
+    </div>
+    <div class="grid" id="companyFeed"></div>
+  </section>
+
+  <section class="section">
     <div class="recos">
       <div class="recos__head">
         <span class="recos__eyebrow">Рекомендации</span>
-        <h2>Что ещё посмотреть</h2>
-        <p class="recos__sub">
-          <span id="recosSource">Популярное в городе</span> ·
-          смежные категории: <span id="railLabel">—</span>
-        </p>
+        <h2>Смотрят вместе с этим</h2>
+        <p class="recos__sub">Смежные категории — не прямые конкуренты этого купона: <span id="railLabel">—</span></p>
       </div>
       <div class="rail-wrap">
         <div class="rail" id="rail"></div>
       </div>
     </div>
   </section>
+
+  <div class="seo">
+    <h2 id="seoTitle">Категория в городе</h2>
+    <p id="seoLead"></p>
+    <p id="seoTail"></p>
+  </div>
 
 </main>
 
@@ -288,11 +214,7 @@
 <script>
   initCommon();
   buildDropdown();
-  buildL1Dropdowns();
-  buildTags("regional");
-  fillFeed("#feed", 8);
-  initInfinite("#feed");
-  initNear("#feed");
+  renderCouponDesign();
 </script>
 </body>
 </html>
