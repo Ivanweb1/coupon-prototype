@@ -814,3 +814,12 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   transition:color .18s,gap .18s var(--ease);
 }
 .quick__more:hover{color:var(--brand);gap:10px}
+
+/* Вариант side: соцсети компании — значками в строку с названием,
+   карта ниже, чтобы окно не вытягивалось */
+.dz .quick .company:has(.socials--icons){flex-wrap:nowrap}
+.dz .quick .socials--icons{width:auto;margin-left:auto;padding-top:0;border-top:0;gap:6px;flex-wrap:nowrap}
+.dz .quick .soc--icon{width:36px;height:36px;padding:0;justify-content:center;border:0;background:none}
+.dz .quick .soc--icon:hover{background:none;transform:translateY(-2px)}
+.dz .quick .soc--icon .soc-ic{width:36px;height:36px}
+.dz.quick-side .quick .map--live{height:124px}

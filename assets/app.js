@@ -768,20 +768,29 @@ function quickHTML(c) {
       </div>
       <h3>${c.title}</h3>
 
+      ${left ? "" : revealBlock}
+
       <div class="company">
         <div class="company__logo">лого</div>
         <div>
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
         </div>
-        <div class="socials">
-          <a class="soc" href="#" title="Сайт компании">${dz ? ICON.site : ICON.link} Сайт</a>
-          <a class="soc" href="#" title="Компания ВКонтакте">${dz ? ICON.vk : ICON.link} ВКонтакте</a>
-          <a class="soc" href="#" title="Компания в Telegram">${dz ? ICON.tg : ICON.link} Telegram</a>
-        </div>
+        ${dz
+          /* В дизайн-версии (решение Ивана 17.09.2026) — промокод сразу под
+             заголовком, а сайт и соцсети компании — значками без подписей
+             в одну строку с названием, чтобы блок компании стал на строку ниже */
+          ? `<div class="socials socials--icons">
+              <a class="soc soc--icon" href="#" title="Сайт компании" aria-label="Сайт компании">${ICON.site}</a>
+              <a class="soc soc--icon" href="#" title="Компания ВКонтакте" aria-label="Компания ВКонтакте">${ICON.vk}</a>
+              <a class="soc soc--icon" href="#" title="Компания в Telegram" aria-label="Компания в Telegram">${ICON.tg}</a>
+            </div>`
+          : `<div class="socials">
+          <a class="soc" href="#" title="Сайт компании">${ICON.link} Сайт</a>
+          <a class="soc" href="#" title="Компания ВКонтакте">${ICON.link} ВКонтакте</a>
+          <a class="soc" href="#" title="Компания в Telegram">${ICON.link} Telegram</a>
+        </div>`}
       </div>
-
-      ${left ? "" : revealBlock}
 
       <!-- Единственное место, где сервис быстро объясняет, как этим
            пользоваться. Виль на созвоне 07.09.2026 просил свести условия
