@@ -95,6 +95,7 @@ const state = {
   sec: "all",
   q: "",
   sort: "new",
+  couponPage: 1,
   /* Механика, с которой открыть конструктор — из «Топовых механик» */
   preMech: null,
   /* Момент последнего запроса промокода — антифрод-лимит §4.4.3 считается
@@ -264,6 +265,7 @@ function go(view, id, opts) {
   state.filter = "all";
   state.sec = "all";
   state.q = "";
+  state.couponPage = 1;
   state.preMech = (opts && opts.mech) || null;
   history.replaceState(null, "", href(view, id));
   document.body.classList.remove("lk-nav-open");
@@ -624,7 +626,10 @@ VIEWS["client:dashboard"] = () => {
   const attention = LK_COUPONS.filter(c => c.status === "rejected" || c.status === "draft");
   const mechLabel = id => (LK_MECHANICS.find(m => m.id === id) || {}).label || id;
 
-  return head("Привлекай тех, кто уже ищет, что купить")
+  return head(
+      "Привлекай тех, кто уже ищет, что купить",
+      `<a class="btn lk-head__more" href="${href("stats")}" data-go="stats">Подробнее</a>`
+    )
     + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
     + `<div class="lk-pair">
       ${panel("Опубликовано сейчас", live.length
@@ -695,8 +700,8 @@ VIEWS["client:dashboard"] = () => {
 
 /* Мои купоны — рабочий стол воронки (созвон 10.09). У каждой строки слева
    действие по статусу; метрик достаточно, цены здесь нет. Фильтры в два
-   уровня: раздел витрины и статус, плюс поиск и сортировка. Список
-   раскрывается вниз одной лентой, без страниц. */
+   уровня: раздел витрины и статус, плюс поиск, сортировка и постраничная
+   навигация. */
 const COUPON_ACTIONS = {
   draft:      [["Редактировать", "edit"], ["Опубликовать", "edit"]],
   moderation: [["Снять с модерации", "unmod"]],
@@ -720,12 +725,21 @@ VIEWS["client:coupons"] = () => {
   bySec.forEach(c => counts[c.status] = (counts[c.status] || 0) + 1);
   let list = state.filter === "all" ? bySec : bySec.filter(c => c.status === state.filter);
 
+  const needle = state.q.trim().toLowerCase();
+  if (needle) list = list.filter(c => c.title.toLowerCase().indexOf(needle) !== -1);
+
   const sorters = {
     new:   (a, b) => b.id - a.id,
     taken: (a, b) => b.taken - a.taken,
     shown: (a, b) => b.shown - a.shown
   };
   list = list.slice().sort(sorters[state.sort] || sorters.new);
+
+  const pageSize = 5;
+  const pageCount = Math.max(1, Math.ceil(list.length / pageSize));
+  state.couponPage = Math.min(Math.max(1, state.couponPage || 1), pageCount);
+  const pageStart = (state.couponPage - 1) * pageSize;
+  const pageList = list.slice(pageStart, pageStart + pageSize);
 
   const secs = [["all", "Все мои купоны"]].concat(Object.keys(LK_VERTICALS).map(k => [k, "Купоны · " + LK_VERTICALS[k].name]));
   const secRow = `<div class="lk-filters lk-filters--sec">${secs.map(([k, label]) => {
@@ -748,7 +762,7 @@ VIEWS["client:coupons"] = () => {
   </div>`;
 
   const mech = c => (LK_MECHANICS.find(m => m.id === c.mech) || {}).label || "—";
-  const rows = list.map(c => `<tr data-coupon="${c.id}" tabindex="0" data-title="${c.title.toLowerCase()}">
+  const rows = pageList.map(c => `<tr data-coupon="${c.id}" tabindex="0" data-title="${c.title.toLowerCase()}">
     <td class="lk-t__acts">${couponActions(c)}</td>
     <td><b class="lk-t__title">${c.title}</b>
         <span class="lk-t__sub">${LK_VERTICALS[c.l1].name} · ${c.niche} · ${where(c)}</span></td>
@@ -760,13 +774,27 @@ VIEWS["client:coupons"] = () => {
     <td class="num">${c.taken ? num(c.taken) : "—"}</td>
   </tr>`).join("");
 
+  const pagination = list.length > pageSize ? `<nav class="lk-page" aria-label="Страницы списка купонов">
+    <span class="lk-page__meta">${pageStart + 1}–${Math.min(pageStart + pageSize, list.length)} из ${list.length}</span>
+    <div class="lk-page__nav">
+      <button type="button" class="lk-page__btn lk-page__arrow" data-page="${state.couponPage - 1}"
+        aria-label="Предыдущая страница"${state.couponPage === 1 ? " disabled" : ""}>←</button>
+      ${Array.from({ length: pageCount }, (_, i) => i + 1).map(page => `
+        <button type="button" class="lk-page__btn${page === state.couponPage ? " is-current" : ""}"
+          data-page="${page}"${page === state.couponPage ? ' aria-current="page"' : ""}>${page}</button>`).join("")}
+      <button type="button" class="lk-page__btn lk-page__arrow" data-page="${state.couponPage + 1}"
+        aria-label="Следующая страница"${state.couponPage === pageCount ? " disabled" : ""}>→</button>
+    </div>
+  </nav>` : "";
+
   return head("Мои купоны",
       `<button class="btn btn--solid" data-create>Создать купон</button>`)
     + panel("", secRow + filters + tools + (list.length
         ? table([{ t: "Действие" }, { t: "Купон" }, { t: "Механика" }, { t: "Статус" }, { t: "Срок действия" },
-                 { t: "Показы", num: true }, { t: "Забрали", num: true }], rows)
-          + `<div class="lk-empty" data-q-empty hidden><b>Ничего не нашли</b>Проверьте название или сбросьте поиск.</div>`
-        : empty("Здесь пока пусто", state.sec === "all"
+                 { t: "Показы", num: true }, { t: "Забрали", num: true }], rows) + pagination
+        : needle
+          ? empty("Ничего не нашли", "Проверьте название или сбросьте поиск.")
+          : empty("Здесь пока пусто", state.sec === "all"
             ? "Смените фильтр, чтобы увидеть остальные купоны."
             : "В этом разделе у вас нет купонов. Создайте первый — кнопка справа вверху.")));
 };
@@ -1903,11 +1931,16 @@ function render() {
   /* Фильтры статусов */
   qsa("[data-f]", host).forEach(b => {
     if (b.tagName !== "BUTTON") return;
-    b.onclick = () => { state.filter = b.dataset.f; render(); };
+    b.onclick = () => { state.filter = b.dataset.f; state.couponPage = 1; render(); };
   });
 
   /* Мои купоны: раздел, действия по статусу, поиск, сортировка */
-  qsa("[data-sec]", host).forEach(b => b.onclick = () => { state.sec = b.dataset.sec; state.filter = "all"; render(); });
+  qsa("[data-sec]", host).forEach(b => b.onclick = () => {
+    state.sec = b.dataset.sec;
+    state.filter = "all";
+    state.couponPage = 1;
+    render();
+  });
   qsa("[data-act]", host).forEach(b => b.onclick = e => {
     e.stopPropagation();
     const id = Number(b.dataset.id);
@@ -1916,20 +1949,28 @@ function render() {
     go(b.dataset.act === "repeat" ? "repeat" : "coupon", id);
   });
   const sortSel = qs("[data-sort]", host);
-  if (sortSel) sortSel.onchange = () => { state.sort = sortSel.value; render(); };
+  if (sortSel) sortSel.onchange = () => { state.sort = sortSel.value; state.couponPage = 1; render(); };
   const qInp = qs("[data-q]", host);
   if (qInp) {
-    const applyQ = () => {
+    qInp.oninput = e => {
+      if (e.isComposing) return;
       state.q = qInp.value;
-      const needle = qInp.value.trim().toLowerCase();
-      const rows = qsa("tr[data-title]", host);
-      rows.forEach(r => { r.hidden = !!needle && r.dataset.title.indexOf(needle) === -1; });
-      const none = qs("[data-q-empty]", host);
-      if (none) none.hidden = rows.some(r => !r.hidden);
+      state.couponPage = 1;
+      render();
+      const nextQ = qs("[data-q]", host);
+      if (nextQ) {
+        nextQ.focus();
+        nextQ.setSelectionRange(nextQ.value.length, nextQ.value.length);
+      }
     };
-    qInp.oninput = applyQ;
-    applyQ();
   }
+  qsa("[data-page]", host).forEach(b => b.onclick = () => {
+    if (b.disabled) return;
+    state.couponPage = Number(b.dataset.page) || 1;
+    render();
+    const listTop = qs(".lk-tools", host);
+    if (listTop) listTop.scrollIntoView({ block: "start", behavior: "smooth" });
+  });
 
   /* Дашборд: создание купона, бонусы, консультация, ИИ-консультант */
   qsa("[data-create]", host).forEach(b => b.onclick = () => openCreateModal());
