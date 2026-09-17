@@ -644,6 +644,23 @@ let fromTransform = "";
    логотипа пока нет — для него остаётся текстовое название. */
 const MARKET_LOGO = { "Wildberries": "wildberries", "Ozon": "ozon", "Яндекс Маркет": "yandex-market" };
 
+/* Логотип компании для примера: монограмма по первой букве названия в
+   кавычках («Бренд» → Б) на спокойном цветном круге. Цвет стабилен для
+   компании и не совпадает с красным сервиса. Реальные логотипы придут
+   из профиля компании в ЛК. */
+const LOGO_TONES = [
+  ["#E8EEF6", "#3B5B86"], ["#E9F2EA", "#3F6B47"], ["#F4EDE3", "#8A5A2B"],
+  ["#EEEAF6", "#5B4A8A"], ["#E6F2F1", "#2F6E69"], ["#F3EAEA", "#7A3E45"]
+];
+function companyLogo(c) {
+  if (!document.body.classList.contains("dz")) return '<div class="company__logo">лого</div>';
+  const name = (c.company.match(/«([^»]+)»/) || [, c.company])[1];
+  let h = 0;
+  for (const ch of c.company) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  const [bg, fg] = LOGO_TONES[h % LOGO_TONES.length];
+  return `<div class="company__logo company__logo--mono" style="--lg-bg:${bg};--lg-fg:${fg}" aria-hidden="true">${name.trim()[0].toUpperCase()}</div>`;
+}
+
 function quickHTML(c) {
   /* Порядок блоков — сама воронка: промокод забирают раньше, чем
      успевают отвлечься на условия. Условия — позитивная инструкция
@@ -754,7 +771,7 @@ function quickHTML(c) {
       ${revealBlock}
       ${termsBlock}
       <div class="company">
-        <div class="company__logo">лого</div>
+        ${companyLogo(c)}
         <div>
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000</div>
@@ -788,7 +805,7 @@ function quickHTML(c) {
       ${left ? "" : revealBlock}
 
       <div class="company">
-        <div class="company__logo">лого</div>
+        ${companyLogo(c)}
         <div>
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>

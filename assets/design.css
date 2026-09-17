@@ -871,3 +871,10 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz .market-where--logo .market-where__go{height:auto;min-height:40px;align-self:stretch;padding:0 18px 0 10px}
 .dz .market-where--logo .mp-ic{filter:grayscale(1);opacity:.5;transition:filter .2s,opacity .2s}
 .dz .market-where--logo .market-where__go:hover .mp-ic{filter:none;opacity:1}
+
+/* Логотип компании для примера — монограмма */
+.dz .company__logo--mono{
+  background:var(--lg-bg);color:var(--lg-fg);
+  font-family:var(--font-display);font-weight:700;font-size:17px;line-height:1;
+  box-shadow:inset 0 0 0 1px rgba(34,26,25,.06);
+}
