@@ -53,6 +53,17 @@
 .dz-header .city-btn [data-icon="pin"]{color:var(--brand)}
 .dz-header .head-socials .soc:hover{border-color:var(--brand-300);color:var(--brand)}
 
+/* Иконки соцсетей: в покое — нейтральная серая плашка, чтобы не спорить
+   с красным брендом, при наведении — фирменный цвет соцсети */
+.soc-ic{display:block;border-radius:50%;overflow:hidden}
+.soc-ic__bg{fill:var(--soc-idle,#9C9391);transition:fill .2s}
+.soc:hover .soc-ic__bg{fill:var(--soc-c)}
+.dz-header .head-socials .soc{width:32px;height:32px;border:0;background:none}
+.dz-header .head-socials .soc:hover{background:none}
+.dz-header .head-socials .soc-ic{width:32px;height:32px}
+.dz .footer .soc{--soc-idle:rgba(255,255,255,.22)}
+.dz .footer .soc-ic{width:20px;height:20px;margin-left:-4px}
+
 /* «Разместить купон» — тёмным: красный на этой странице отдан покупателю
    (поиск, скидки), а бизнесу — спокойный, но заметный призыв */
 .dz-header .header-cta{background:var(--ink);height:44px}
