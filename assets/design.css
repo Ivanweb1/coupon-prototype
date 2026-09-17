@@ -1579,3 +1579,16 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   background:#fff;border-color:var(--brand);color:var(--brand);
 }
 .dz.quick-side .quick__foot .btn:hover{background:var(--brand);border-color:var(--brand);color:#fff}
+
+/* Кнопка «Поделиться» на карточке убрана: она ничего не делала, а по
+   ховеру перекрывала маркировку. Метка ерид встаёт в правый угол и
+   выравнивается по центру белой плашки с минутами слева. */
+.dz .card__share{display:none}
+.dz .card__media .erid-stamp{
+  top:10px;right:10px;left:auto;height:24px;
+  display:flex;align-items:center;
+}
+/* На узкой карточке метка по-прежнему переносится строкой ниже плашки */
+@container (max-width: 235px){
+  .dz .card__media .erid-stamp{top:40px;left:11px;right:auto;height:auto}
+}
