@@ -13,8 +13,39 @@ const reg = { orgType: "ООО", manual: false };
 /* Город — из общего справочника публички (ТЗ §3.2.9): те же три активных
    города, что и в остальном прототипе, без отдельного списка на страницу. */
 function fillCities() {
-  const sel = qs("[data-reg-city]");
-  sel.innerHTML = ACTIVE_CITIES.map(c => `<option value="${c.slug}">${c.name}</option>`).join("");
+  const box = qs("[data-reg-cities]");
+  box.innerHTML = ACTIVE_CITIES.map((c, i) =>
+    `<button type="button" class="reg__chip${i === 0 ? " is-on" : ""}" data-reg-city="${c.slug}">${c.name}</button>`).join("");
+  qsa("[data-reg-city]", box).forEach(b => b.onclick = () => {
+    /* Хотя бы один город обязателен */
+    if (b.classList.contains("is-on") && qsa("[data-reg-city].is-on", box).length === 1) return;
+    b.classList.toggle("is-on");
+  });
+}
+
+/* Категория — из общего справочника ниш, сгруппирована по разделам.
+   18+ в регистрации не предлагаем отдельно: раздел модерируется. */
+function fillCategories() {
+  const sel = qs("[data-reg-cat]");
+  sel.innerHTML = VERTICALS.map(v => `<optgroup label="${v.name}">${
+    catsOf(v.slug).filter(c => !c.adult).map(c => `<option value="${c.id}">${c.name}</option>`).join("")
+  }</optgroup>`).join("");
+}
+
+/* Где обслуживаете клиентов: города и адреса нужны только тем, у кого
+   есть точки. Онлайн и «вся Россия» — без адресов (созвон 14.09). */
+function initGeo() {
+  qsa("[data-geo]").forEach(b => b.onclick = () => {
+    qsa("[data-geo]").forEach(x => x.classList.toggle("is-on", x === b));
+    qsa("[data-geo-pane]").forEach(p => { p.hidden = p.dataset.geoPane !== b.dataset.geo; });
+  });
+  qs("[data-reg-addr-add]").onclick = () => {
+    const inp = document.createElement("input");
+    inp.className = "reg__i";
+    inp.placeholder = "Ещё один адрес";
+    qs("[data-reg-addrs]").appendChild(inp);
+    inp.focus();
+  };
 }
 
 function showStep(name) {
@@ -94,6 +125,8 @@ function confirmEmail() {
 
 document.addEventListener("DOMContentLoaded", () => {
   fillCities();
+  fillCategories();
+  initGeo();
 
   qsa("[data-org]").forEach(b => b.onclick = () => {
     qsa("[data-org]").forEach(x => x.classList.remove("is-on"));

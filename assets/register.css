@@ -98,3 +98,9 @@
 .reg__done-h{margin:0 0 8px;text-align:center;font-size:22px;font-weight:600;letter-spacing:-.02em}
 .reg__done-list{margin:18px 0 22px;padding:0 0 0 18px;display:flex;flex-direction:column;gap:9px}
 .reg__done-list li{font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+
+/* Регистрация после созвона 14.09: география и адреса */
+[data-geo-pane][hidden]{display:none}
+.reg__addrs{display:flex;flex-direction:column;gap:8px}
+.reg__plus{align-self:flex-start;padding:4px 0;font-size:14px;font-weight:500;color:var(--ink)}
+.reg__plus:hover{text-decoration:underline}

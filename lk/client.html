@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <!-- Токены, кнопки и типографика берутся из публичной части: кабинет —
      тот же продукт, а не отдельный интерфейс -->
-<link rel="stylesheet" href="../assets/style.css?v=20260909e">
-<link rel="stylesheet" href="assets/lk.css?v=20260909d">
+<link rel="stylesheet" href="../assets/style.css?v=20260917a">
+<link rel="stylesheet" href="assets/lk.css?v=20260917a">
 </head>
 <body class="lk" data-role="client">
 
@@ -29,8 +29,6 @@
 
     <nav class="lk__nav" id="lkNav"></nav>
 
-    <div class="lk__me" id="lkMe"></div>
-
   </aside>
 
   <div class="lk__main">
@@ -39,6 +37,7 @@
         <span data-icon="burger"></span>
       </button>
       <span class="lk__spacer"></span>
+      <a class="lk__wallet" href="?view=billing" id="lkWallet" hidden></a>
       <a class="btn btn--solid lk__cta" href="?view=new-regional" id="lkCta">
         <span data-icon="plus"></span><span>Создать купон</span>
       </a>
@@ -46,6 +45,7 @@
         <span data-icon="bell"></span>
         <i class="lk__dot" id="lkDot"></i>
       </a>
+      <div class="lk__me" id="lkMe"></div>
     </header>
 
     <main class="lk__view" id="lkView"></main>
@@ -55,7 +55,7 @@
 
 <div class="lk__scrim" id="lkScrim"></div>
 
-<script src="assets/lk-data.js?v=20260909d"></script>
-<script src="assets/lk.js?v=20260909d"></script>
+<script src="assets/lk-data.js?v=20260917a"></script>
+<script src="assets/lk.js?v=20260917a"></script>
 </body>
 </html>

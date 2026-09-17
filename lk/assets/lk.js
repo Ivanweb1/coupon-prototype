@@ -90,6 +90,13 @@ const state = {
   view: P.get("view") || "dashboard",
   id: P.get("id") ? Number(P.get("id")) : null,
   filter: "all",
+  /* Мои купоны (созвон 10.09): раздел, поиск и сортировка. Раздел при
+     каждом заходе на вкладку сбрасывается на «Все мои купоны». */
+  sec: "all",
+  q: "",
+  sort: "new",
+  /* Механика, с которой открыть конструктор — из «Топовых механик» */
+  preMech: null,
   /* Момент последнего запроса промокода — антифрод-лимит §4.4.3 считается
      от него, живёт только в рамках открытой вкладки (демо, не бэкенд). */
   codeRequestAt: null
@@ -103,9 +110,6 @@ const NAV = {
     { group: "Купоны" },
     { id: "dashboard",       label: "Дашборд",                        icon: "grid" },
     { id: "coupons",         label: "Мои купоны",                     icon: "tag" },
-    { id: "new-regional",    label: "Создание регионального купона",  icon: "pin" },
-    { id: "new-marketplace", label: "Создание купона маркетплейса",   icon: "bag" },
-    { id: "new-business",    label: "Создание купона для бизнеса",    icon: "case" },
     { id: "archive",         label: "Архив купонов",                  icon: "archive" },
     { group: "Компания" },
     { id: "stats",           label: "Статистика",                     icon: "chart" },
@@ -132,7 +136,7 @@ const TITLES = {
     "new-regional": "Создание регионального купона",
     "new-marketplace": "Создание купона маркетплейса",
     "new-business": "Создание купона для бизнеса",
-    archive: "Архив купонов", coupon: "Купон", stats: "Статистика", billing: "Биллинг",
+    archive: "Архив купонов", coupon: "Купон", repeat: "Опубликовать снова", stats: "Статистика", billing: "Биллинг",
     profile: "Профиль компании", notifications: "Уведомления"
   },
   partner: {
@@ -152,7 +156,7 @@ function href(view, id) {
 function navCount(id) {
   const live = LK_COUPONS.filter(c => c.status !== "done");
   if (state.role === "client") {
-    if (id === "coupons") return live.length;
+    if (id === "coupons") return LK_COUPONS.length;
     if (id === "archive") return LK_COUPONS.filter(c => c.status === "done").length;
     if (id === "notifications") return LK_NOTIFICATIONS.client.filter(n => n.unread).length || "";
   } else {
@@ -171,6 +175,7 @@ function renderChrome() {
     const n = navCount(it.id);
     const on = it.id === state.view ||
                (state.view === "coupon" && it.id === (isArchived() ? "archive" : "coupons")) ||
+               (/^(new-|repeat)/.test(state.view) && it.id === "coupons") ||
                (state.view === "client" && it.id === "clients");
     return `<a href="${href(it.id)}"${on ? ' class="is-on"' : ""}>
       <span class="lk__nav-i" data-icon="${it.icon}"></span>
@@ -203,7 +208,23 @@ function renderChrome() {
     : { view: "codes",        label: "Выдать промокод" };
   cta.href = href(main.view);
   cta.lastElementChild.textContent = main.label;
-  cta.onclick = e => { e.preventDefault(); go(main.view); };
+  /* У клиента одна кнопка на все разделы: сначала выбор раздела, потом
+     конструктор под него (созвон 10.09 — три пункта в меню убраны) */
+  cta.onclick = e => {
+    e.preventDefault();
+    if (state.role === "client") openCreateModal(); else go(main.view);
+  };
+
+  /* Кошелёк (созвон 10.09): баланс виден всегда, бонусы отдельно —
+     клиент сразу замечает начисления. Клик ведёт в биллинг. */
+  const wallet = qs("#lkWallet");
+  if (wallet) {
+    wallet.hidden = state.role !== "client";
+    wallet.href = href("billing");
+    wallet.innerHTML = `<span data-icon="wallet"></span>
+      <b>${num(LK_BALANCE.coins)}</b><i>+${num(LK_BALANCE.bonuses)} бонусов</i>`;
+    wallet.onclick = e => { e.preventDefault(); go("billing"); };
+  }
 
   /* Колокольчик */
   const unread = LK_NOTIFICATIONS[state.role].filter(n => n.unread).length;
@@ -214,27 +235,36 @@ function renderChrome() {
 
   /* Кто в кабинете. По клику — профиль и выход: без выхода кабинет
      некуда закрыть. Выход возвращает на публичную часть. */
+  /* Созвон 14.09: аватар и название компании — в шапке, чтобы кабинет
+     выглядел своим. Клик по имени — профиль. */
   const me = qs("#lkMe");
   const acc = state.role === "client"
-    ? { ava: "КП", name: "Кофейня «Пример»" }
-    : { ava: "ИП", name: "Иван Партнёров" };
+    ? { ava: LK_COMPANY.ava, name: LK_COMPANY.name, sub: "ИНН " + LK_COMPANY.inn }
+    : { ava: "ИП", name: "Иван Партнёров", sub: "Партнёр · Липецк" };
   me.innerHTML = `
-    <span class="lk__me-ava">${acc.ava}</span>
-    <span class="lk__me-txt">
-      <span class="lk__me-name">${acc.name}</span>
-      <span class="lk__me-role">Липецк</span>
-    </span>
+    <a class="lk__me-link" href="${href("profile")}" data-go="profile">
+      <span class="lk__me-ava">${acc.ava}</span>
+      <span class="lk__me-txt">
+        <span class="lk__me-name">${acc.name}</span>
+        <span class="lk__me-role">${acc.sub}</span>
+      </span>
+    </a>
     <a class="lk__me-exit" href="../index.html" title="Выйти" aria-label="Выйти">
       <span data-icon="exit"></span>
     </a>`;
 
+  qsa("[data-go]", me).forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
+
   initIcons();
 }
 
-function go(view, id) {
+function go(view, id, opts) {
   state.view = view;
   state.id = id || null;
   state.filter = "all";
+  state.sec = "all";
+  state.q = "";
+  state.preMech = (opts && opts.mech) || null;
   history.replaceState(null, "", href(view, id));
   document.body.classList.remove("lk-nav-open");
   render();
@@ -323,8 +353,9 @@ function modalRoot() {
   qs("[data-modal-close]", el).onclick = closeModal;
   return el;
 }
-function openModal(bodyHtml) {
+function openModal(bodyHtml, opts) {
   const el = modalRoot();
+  qs(".lk-modal", el).classList.toggle("lk-modal--wide", !!(opts && opts.wide));
   qs(".lk-modal__body", el).innerHTML = bodyHtml;
   qsa("[data-modal-close]", el).forEach(b => b.onclick = closeModal);
   el.classList.add("is-on");
@@ -336,14 +367,221 @@ function closeModal() {
   if (el) el.classList.remove("is-on");
 }
 
+/* ==========================================================================
+   Модалки кабинета клиента
+   ========================================================================== */
+
+/* «Создать купон» — один вход во все разделы (созвон 10.09): сначала
+   раздел, потом конструктор под него. mech — механика из «Топовых
+   механик», с ней конструктор откроется уже заполненным. */
+function openCreateModal(mech) {
+  const opts = [
+    ["new-regional",    "Региональный купон", "Скидка в заведении или магазине вашего города — по коду с экрана"],
+    ["new-marketplace", "Купон маркетплейса", "Промокод на товар на Wildberries, Ozon и других площадках"],
+    ["new-business",    "Купон для бизнеса",  "Предложение для компаний: услуги, оборудование, подряд"]
+  ];
+  const el = openModal(`
+    <h3>Какой купон создаём?</h3>
+    <p class="lk-modal__lead">От раздела зависят поля конструктора и то, где купон увидят.</p>
+    <div class="lk-pick">${opts.map(o => `
+      <button type="button" class="lk-pick__i" data-pick="${o[0]}">
+        <b>${o[1]}</b><span>${o[2]}</span>
+      </button>`).join("")}</div>`, { wide: true });
+  qsa("[data-pick]", el).forEach(b => b.onclick = () => {
+    closeModal();
+    go(b.dataset.pick, null, { mech: mech });
+  });
+}
+
+/* Прогресс по способам получить бонусы живёт в рамках вкладки — это демо */
+const bonusDone = {};
+
+function openBonusWays() {
+  const el = openModal(`
+    <h3>Как получить бонусы</h3>
+    <p class="lk-modal__lead">Бонусами можно оплатить часть размещения. Хотя бы
+    одна монета в каждой публикации всё равно уходит деньгами.</p>
+    <div class="lk-ways" data-ways></div>`, { wide: true });
+
+  const paint = () => {
+    qs("[data-ways]", el).innerHTML = LK_BONUS_WAYS.map(w => {
+      const used = bonusDone[w.id];
+      const label = used
+        ? (w.monthly ? "Доступно в октябре" : w.once ? "Получено" : "Готово")
+        : w.act;
+      return `<div class="lk-ways__i${used && (w.once || w.monthly) ? " is-used" : ""}">
+        <div class="lk-ways__t"><b>${w.title}</b><span>${w.note}</span></div>
+        <div class="lk-ways__r">+${w.reward}</div>
+        <button class="btn ${used ? "btn--ghost" : "btn--solid"}" data-way="${w.id}"${used && (w.once || w.monthly) ? " disabled" : ""}>${label}</button>
+      </div>`;
+    }).join("");
+    qsa("[data-way]", el).forEach(b => b.onclick = () => {
+      const id = b.dataset.way;
+      if (id === "survey") { openSurvey(); return; }
+      bonusDone[id] = true;
+      if (id === "register") { LK_BALANCE.bonuses += 500; renderChrome(); }
+      paint();
+    });
+  };
+  paint();
+}
+
+/* Консультация специалиста (созвон 14.09): бесплатно, форма, а не чат.
+   Пояснение сразу отсекает жалобы и технические вопросы; одна заявка на
+   купон; перезваниваем по телефону в течение 48 часов. */
+const consultSent = {};
+
+function openConsult() {
+  const own = LK_COUPONS.filter(c => c.status !== "done");
+  const el = openModal(`
+    <h3>Консультация специалиста</h3>
+    <div class="lk-warn" style="margin:10px 0 0">Здесь помогают придумать
+    предложение и настроить купон, чтобы его забирали. С техническими
+    вопросами и жалобами — в поддержку, так вам ответят быстрее.</div>
+    <div class="lk-f">
+      ${field("По какому купону", `<select class="lk-s" data-c-coupon>
+        <option value="new">Новый купон — ещё не создан</option>
+        ${own.map(c => `<option value="${c.id}"${consultSent[c.id] ? " disabled" : ""}>${c.title}${consultSent[c.id] ? " — заявка уже отправлена" : ""}</option>`).join("")}
+      </select>`)}
+      ${field("Что хотите получить", `<textarea class="lk-ta" placeholder="Например: открываем вторую точку и хотим привести новых гостей в будни"></textarea>`)}
+      ${field("Телефон для звонка", `<input class="lk-i" value="+7 900 000-00-00">`)}
+    </div>
+    <div class="lk-note" style="margin-top:10px">Это не онлайн-чат: специалист
+    позвонит в течение 48 часов. На один купон — одна заявка.</div>
+    <div class="lk-head__act" style="margin:16px 0 0">
+      <button class="btn btn--solid btn--lg" data-c-send>Отправить заявку</button>
+    </div>`, { wide: true });
+
+  qs("[data-c-send]", el).onclick = () => {
+    const sel = qs("[data-c-coupon]", el).value;
+    if (sel !== "new") consultSent[sel] = true;
+    qs(".lk-modal__body", el).innerHTML = `
+      <h3>Заявка принята</h3>
+      <p class="lk-modal__lead">Специалист позвонит в течение 48 часов по
+      рабочим дням. Если вопрос решится раньше — просто скажите об этом при звонке.</p>
+      <div class="lk-head__act" style="margin:16px 0 0">
+        <button class="btn btn--solid" data-modal-close>Понятно</button>
+      </div>`;
+    qsa("[data-modal-close]", el).forEach(b => b.onclick = closeModal);
+  };
+}
+
+/* ИИ-консультант (эскиз 14.09). В прототипе — заготовленные ответы по
+   ключевым словам, чтобы показать сценарий, а не модель. */
+const AI_ANSWERS = [
+  [/механик|скидк|предложен/i, "Для кофейни в Липецке сейчас лучше всего работает «Подарок к покупке» — например, десерт к любому напитку. Такой купон забирают чаще, чем скидку в процентах. Создать купон с этой механикой?"],
+  [/срок|дней|долго/i, "Советуем 30 дней: за первую неделю купон только набирает показы в ленте и соцсетях. Короткий срок обычно заканчивается раньше, чем о купоне узнают."],
+  [/бонус/i, "Бонусы дают за регистрацию, анкету о компании, приглашённых друзей и репосты. Ими можно оплатить часть размещения — хотя бы одна монета уходит деньгами."],
+  [/соцсет|канал|вконтакт|telegram|телеграм/i, "Соцсети увеличивают просмотры купона в 3–4 раза каждая. Если убрать все, купон увидят только на сайте — почти все компании в вашей нише их оставляют."],
+  [/заголов|назван/i, "Хороший заголовок начинается с выгоды и называет компанию: «Десерт в подарок к кофе — кофейня «Пример»». Короче 60 знаков, без капса."]
+];
+
+function openAiChat() {
+  const el = openModal(`
+    <h3>ИИ-консультант</h3>
+    <div class="lk-chat" data-chat>
+      <div class="lk-chat__m">Здравствуйте! Помогу выбрать механику, срок и заголовок
+      купона. О чём спросите?</div>
+    </div>
+    <div class="lk-chat__chips">
+      ${["Какую механику выбрать?", "Какой срок поставить?", "Как получить бонусы?"]
+        .map(q => `<button type="button" class="lk-chipbtn" data-chat-q>${q}</button>`).join("")}
+    </div>
+    <div class="lk-chat__in">
+      <input class="lk-i" placeholder="Напишите вопрос" data-chat-input>
+      <button class="btn btn--solid" data-chat-send>Отправить</button>
+    </div>`, { wide: true });
+
+  const box = qs("[data-chat]", el);
+  const inp = qs("[data-chat-input]", el);
+  const say = (text, me) => {
+    box.insertAdjacentHTML("beforeend", `<div class="lk-chat__m${me ? " is-me" : ""}">${text}</div>`);
+    box.scrollTop = box.scrollHeight;
+  };
+  const ask = q => {
+    if (!q.trim()) return;
+    say(q.replace(/</g, "&lt;"), true);
+    inp.value = "";
+    const hit = AI_ANSWERS.find(a => a[0].test(q));
+    setTimeout(() => say(hit ? hit[1] : "Уточните, пожалуйста: вопрос про механику, срок, заголовок, бонусы или каналы публикации?"), 700);
+  };
+  qs("[data-chat-send]", el).onclick = () => ask(inp.value);
+  inp.onkeydown = e => { if (e.key === "Enter") ask(inp.value); };
+  qsa("[data-chat-q]", el).forEach(b => b.onclick = () => ask(b.textContent));
+  inp.focus();
+}
+
+/* Анкета о компании (созвон 14.09): регистрация сокращена до обязательных
+   полей, остальное — здесь, за бонусы. Список вопросов — черновой, его
+   собирает Павел; ответы помогают подсказкам и ИИ-консультанту. */
+function openSurvey() {
+  const q = (label, opts) => field(label, `<select class="lk-s">${opts.map(o => `<option>${o}</option>`).join("")}</select>`);
+  const el = openModal(`
+    <h3>Расскажите о компании — получите 700 бонусов</h3>
+    <p class="lk-modal__lead">Ответы помогут подсказывать механики и сроки
+    именно под ваш бизнес. Займёт около 5 минут.</p>
+    <div class="lk-f">
+      <div class="lk-f__row">
+        ${q("Как давно работает бизнес", ["Меньше года", "1–3 года", "Больше 3 лет"])}
+        ${q("Сколько сотрудников", ["До 5", "6–20", "Больше 20"])}
+      </div>
+      <div class="lk-f__row">
+        ${q("Сколько точек или филиалов", ["Одна", "2–5", "Больше 5", "Работаем онлайн"])}
+        ${field("Средний чек, ₽", `<input class="lk-i" placeholder="650">`)}
+      </div>
+      ${q("Сколько готовы отдать на привлечение одного клиента", ["До 5% чека", "5–10%", "10–20%", "Пока не знаю"])}
+      ${q("Опыт в рекламе", ["Запускаю впервые", "Пробовал(а) разное", "Работаю с маркетологом"])}
+      ${field("Кто ваши клиенты", `<textarea class="lk-ta" placeholder="Студенты рядом с вузом, офисы в центре, семьи на выходных"></textarea>`)}
+    </div>
+    <div class="lk-head__act" style="margin:16px 0 0">
+      <button class="btn btn--ghost" data-modal-close>Позже</button>
+      <button class="btn btn--solid" data-survey-send>Отправить и получить бонусы</button>
+    </div>`, { wide: true });
+
+  qs("[data-survey-send]", el).onclick = () => {
+    bonusDone.survey = true;
+    LK_BALANCE.bonuses += 700;
+    renderChrome();
+    try { localStorage.setItem("lk_survey", "done"); } catch (e) {}
+    qs(".lk-modal__body", el).innerHTML = `
+      <h3>Спасибо! Начислили 700 бонусов</h3>
+      <p class="lk-modal__lead">Бонусы уже на балансе — ими можно оплатить часть следующего размещения.</p>
+      <div class="lk-head__act" style="margin:16px 0 0">
+        <button class="btn btn--solid" data-modal-close>Отлично</button>
+      </div>`;
+    qsa("[data-modal-close]", el).forEach(b => b.onclick = closeModal);
+    if (state.view === "dashboard") render();
+  };
+}
+
+/* При первом заходе в кабинет — приглашение пройти анкету (Дима, 14.09).
+   Показываем один раз на браузер, чтобы не мешать работе. */
+function maybeSurveyPrompt() {
+  let seen = null;
+  try { seen = localStorage.getItem("lk_survey"); } catch (e) { return; }
+  if (seen) return;
+  try { localStorage.setItem("lk_survey", "shown"); } catch (e) {}
+  const el = openModal(`
+    <h3>Добро пожаловать в кабинет!</h3>
+    <p class="lk-modal__lead">Ответьте на несколько вопросов о компании — начислим
+    700 бонусов на оплату размещения, а подсказки в конструкторе станут точнее.
+    Первый купон вы и так размещаете бесплатно.</p>
+    <div class="lk-head__act" style="margin:16px 0 0">
+      <button class="btn btn--ghost" data-modal-close>Позже</button>
+      <button class="btn btn--solid" data-survey-open>Заполнить анкету</button>
+    </div>`, { wide: true });
+  qs("[data-survey-open]", el).onclick = openSurvey;
+}
+
 /* Где размещён купон. Городов у купона может быть несколько (city_ids[]),
    у маркетплейсного вместо города площадка: он действует в корзине. */
 function where(c) {
   if (c.l1 === "marketplace") return c.market;
   if (!c.cities || !c.cities.length) return "город не выбран";
-  return c.cities.length > 2
-    ? c.cities.slice(0, 2).join(", ") + " и ещё " + (c.cities.length - 2)
-    : c.cities.join(", ");
+  /* Созвон 10.09: не «километровой» строкой, а первый город и счётчик */
+  return c.cities.length > 1
+    ? c.cities[0] + " +" + (c.cities.length - 1)
+    : c.cities[0];
 }
 
 /* ==========================================================================
@@ -353,7 +591,7 @@ function where(c) {
    Ставка берётся с ниши, а не с раздела. Города складываются: купон в двух
    городах — две витрины и два автопоста. Сами коэффициенты — заглушка,
    пять критериев тарифа ещё не посчитаны (задача Will Charges). */
-function calcFee(nicheName, cityNames, days, channelIds) {
+function calcFee(nicheName, cityNames, days, channelIds, secret) {
   const list = [].concat(LK_NICHES.regional, LK_NICHES.marketplace, LK_NICHES["for-business"]);
   const niche = list.find(n => n.name === nicheName) || list[0];
   const dur = LK_DURATIONS.find(d => d.days === days) || LK_DURATIONS[1];
@@ -366,7 +604,9 @@ function calcFee(nicheName, cityNames, days, channelIds) {
     const ch = LK_CHANNELS.find(x => x.id === id);
     return a + (ch ? ch.k : 0);
   }, 0));
-  return { base: base, extra: extra, total: base + extra };
+  /* Тайный покупатель — за каждый город отдельный визит (созвон 10.09) */
+  const check = secret ? LK_SECRET.price * (cityNames || []).length : 0;
+  return { base: base, extra: extra, secret: check, total: base + extra + check };
 }
 
 /* ==========================================================================
@@ -374,12 +614,17 @@ function calcFee(nicheName, cityNames, days, channelIds) {
    ========================================================================== */
 const VIEWS = {};
 
+/* Дашборд — по эскизу Вилла и Павла (созвон 14.09). Это вход в воронку:
+   под каждым блоком действие — исправить купон, получить бонусы,
+   пополнить, создать купон с сильной механикой, позвать эксперта.
+   Заголовок — слоган вместо слова «Дашборд» (созвон 10.09). */
 VIEWS["client:dashboard"] = () => {
   const live = LK_COUPONS.filter(c => c.status === "live");
   const sum = k => LK_COUPONS.reduce((a, c) => a + c[k], 0);
   const attention = LK_COUPONS.filter(c => c.status === "rejected" || c.status === "draft");
+  const mechLabel = id => (LK_MECHANICS.find(m => m.id === id) || {}).label || id;
 
-  return head("Дашборд")
+  return head("Привлекай тех, кто уже ищет, что купить")
     + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
     + `<div class="lk-pair">
       ${panel("Опубликовано сейчас", live.length
@@ -391,35 +636,124 @@ VIEWS["client:dashboard"] = () => {
               <td class="num">${num(c.taken)}</td></tr>`).join("")
           )
         : empty("Пока ничего не опубликовано", "Созданные купоны появятся здесь после модерации."),
-        { act: `<a class="btn btn--ghost" href="${href("coupons")}" data-go="coupons">Все купоны</a>` })}
+        { act: `<a class="btn btn--ghost" href="${href("coupons")}" data-go="coupons">Подробнее</a>` })}
 
       ${panel("Требует внимания", attention.length
         ? `<div class="lk-list">${attention.map(c => `
-            <div class="lk-list__i is-unread" data-coupon-row="${c.id}" tabindex="0"><i class="lk-list__d"></i><div>
+            <div class="lk-list__i lk-att is-unread"><i class="lk-list__d"></i><div class="lk-att__txt">
               ${c.title}
               <div class="lk-list__w">${c.status === "rejected" ? "Отклонён: " + c.reject : "Черновик — не заполнены срок и промокод"}</div>
-            </div></div>`).join("")}</div>`
+            </div>
+            <button class="btn btn--solid" data-open-coupon="${c.id}">Исправить</button></div>`).join("")}</div>`
         : empty("Всё в порядке", "Купонов, которые ждут вашего действия, нет."))}
+    </div>
+
+    <div class="lk-panel lk-bal">
+      <div class="lk-bal__part">
+        <div class="lk-bal__n"><span>Бонусы</span><b>${num(LK_BALANCE.bonuses)}</b></div>
+        <div class="lk-bal__n lk-bal__n--burn"><span>Скоро сгорят</span><b>${num(LK_BONUS_BURN_SOON.amount)}</b>
+          <em>до ${LK_BONUS_BURN_SOON.date}</em></div>
+        <button class="btn btn--ghost" data-bonus-ways>Получить бонусы</button>
+      </div>
+      <div class="lk-bal__part">
+        <div class="lk-bal__n"><span>Баланс</span><b>${num(LK_BALANCE.coins)}</b></div>
+        <a class="btn btn--solid" href="${href("billing")}" data-go="billing">Пополнить</a>
+      </div>
+    </div>`
+
+    + panel("Топовые механики в ваших нишах", table(
+        [{ t: "Ниша" }, { t: "Механика" }, { t: "Эффект" }, { t: "", num: true }],
+        LK_TOP_MECHANICS.map(m => `<tr>
+          <td>${m.niche}</td>
+          <td><b class="lk-t__title">${mechLabel(m.mech)}</b></td>
+          <td class="lk-t__muted">${m.effect}</td>
+          <td class="num"><button class="btn btn--solid" data-create-mech="${m.mech}">+ Создать купон</button></td>
+        </tr>`).join(""))
+      + `<div class="lk-note" style="margin-top:12px">Подборка — по опыту похожих
+        компаний. Когда в сервисе накопится статистика, её будем считать по
+        вашему городу.</div>`)
+
+    + `<div class="lk-panel lk-help">
+      <h2 class="lk-help__h">Не знаете, какое предложение выбрать или как привлечь больше клиентов?</h2>
+      <p class="lk-help__lead">Получите помощь эксперта или задайте вопрос ИИ-консультанту.</p>
+      <div class="lk-help__grid">
+        <div class="lk-help__c">
+          <b>Консультация специалиста</b>
+          <p>Маркетолог сервиса разберёт вашу задачу и подскажет, с каким
+          предложением выйти, чтобы купон забирали. Перезвоним в течение 48 часов.</p>
+          <button class="btn btn--ghost btn--lg" data-consult>Получить консультацию</button>
+        </div>
+        <div class="lk-help__c">
+          <b>ИИ-консультант</b>
+          <p>Ответит сразу: подскажет механику, срок и заголовок купона,
+          объяснит, как работают бонусы и каналы публикации.</p>
+          <button class="btn btn--solid btn--lg" data-ai-chat>Задать вопрос в чате</button>
+        </div>
+      </div>
     </div>`;
 };
 
+/* Мои купоны — рабочий стол воронки (созвон 10.09). У каждой строки слева
+   действие по статусу; метрик достаточно, цены здесь нет. Фильтры в два
+   уровня: раздел витрины и статус, плюс поиск и сортировка. Список
+   раскрывается вниз одной лентой, без страниц. */
+const COUPON_ACTIONS = {
+  draft:      [["Редактировать", "edit"], ["Опубликовать", "edit"]],
+  moderation: [["Снять с модерации", "unmod"]],
+  rejected:   [["Редактировать", "edit"]],
+  done:       [["Опубликовать снова", "repeat"]],
+  live:       []
+};
+const STATUS_TAB = { draft: "Черновики", moderation: "На модерации", live: "Опубликованы", rejected: "Отклонены", done: "Архив" };
+
+function couponActions(c) {
+  const acts = COUPON_ACTIONS[c.status] || [];
+  return acts.length
+    ? `<div class="lk-acts">${acts.map((a, i) => `<button class="btn ${i === acts.length - 1 && c.status !== "moderation" ? "btn--solid" : "btn--ghost"}"
+        data-act="${a[1]}" data-id="${c.id}">${a[0]}</button>`).join("")}</div>`
+    : `<span class="lk-t__sub">—</span>`;
+}
+
 VIEWS["client:coupons"] = () => {
-  const all = LK_COUPONS.filter(c => c.status !== "done");
+  const bySec = state.sec === "all" ? LK_COUPONS : LK_COUPONS.filter(c => c.l1 === state.sec);
   const counts = {};
-  all.forEach(c => counts[c.status] = (counts[c.status] || 0) + 1);
-  const list = state.filter === "all" ? all : all.filter(c => c.status === state.filter);
+  bySec.forEach(c => counts[c.status] = (counts[c.status] || 0) + 1);
+  let list = state.filter === "all" ? bySec : bySec.filter(c => c.status === state.filter);
+
+  const sorters = {
+    new:   (a, b) => b.id - a.id,
+    taken: (a, b) => b.taken - a.taken,
+    shown: (a, b) => b.shown - a.shown
+  };
+  list = list.slice().sort(sorters[state.sort] || sorters.new);
+
+  const secs = [["all", "Все мои купоны"]].concat(Object.keys(LK_VERTICALS).map(k => [k, "Купоны · " + LK_VERTICALS[k].name]));
+  const secRow = `<div class="lk-filters lk-filters--sec">${secs.map(([k, label]) => {
+    const n = k === "all" ? LK_COUPONS.length : LK_COUPONS.filter(c => c.l1 === k).length;
+    return `<button data-sec="${k}"${state.sec === k ? ' class="is-on"' : ""}>${label}<span class="lk__n">${n}</span></button>`;
+  }).join("")}</div>`;
 
   const filters = `<div class="lk-filters">
-    <button data-f="all"${state.filter === "all" ? ' class="is-on"' : ""}>Все<span class="lk__n">${all.length}</span></button>
-    ${Object.keys(LK_STATUSES).filter(s => s !== "done" && counts[s])
-      .map(s => `<button data-f="${s}"${state.filter === s ? ' class="is-on"' : ""}>${LK_STATUSES[s].label}<span class="lk__n">${counts[s]}</span></button>`).join("")}
+    <button data-f="all"${state.filter === "all" ? ' class="is-on"' : ""}>Все статусы<span class="lk__n">${bySec.length}</span></button>
+    ${["draft", "moderation", "live", "rejected", "done"].filter(s => counts[s])
+      .map(s => `<button data-f="${s}"${state.filter === s ? ' class="is-on"' : ""}>${STATUS_TAB[s]}<span class="lk__n">${counts[s]}</span></button>`).join("")}
   </div>`;
 
-  const rows = list.map(c => `<tr data-coupon="${c.id}" tabindex="0">
+  const tools = `<div class="lk-tools">
+    <input class="lk-i lk-tools__q" type="search" placeholder="Поиск по названию купона" data-q value="${state.q}">
+    <select class="lk-s lk-tools__sort" data-sort>
+      ${[["new", "Сначала новые"], ["taken", "Больше всего забрали"], ["shown", "Больше всего показов"]]
+        .map(([k, l]) => `<option value="${k}"${state.sort === k ? " selected" : ""}>${l}</option>`).join("")}
+    </select>
+  </div>`;
+
+  const mech = c => (LK_MECHANICS.find(m => m.id === c.mech) || {}).label || "—";
+  const rows = list.map(c => `<tr data-coupon="${c.id}" tabindex="0" data-title="${c.title.toLowerCase()}">
+    <td class="lk-t__acts">${couponActions(c)}</td>
     <td><b class="lk-t__title">${c.title}</b>
-        <span class="lk-t__sub">${c.niche} · ${where(c)}</span></td>
-    <td><span class="lk-chip">${c.value}</span></td>
-    <td>${status(c.status)}${c.status === "rejected" ? `<div class="lk-t__sub">${c.reject}</div>` : ""}</td>
+        <span class="lk-t__sub">${LK_VERTICALS[c.l1].name} · ${c.niche} · ${where(c)}</span></td>
+    <td>${mech(c)}<div class="lk-t__sub"><span class="lk-chip">${c.value}</span></div></td>
+    <td>${c.status === "done" ? `<span class="lk-st lk-st--done">Архив</span>` : status(c.status)}${c.status === "rejected" ? `<div class="lk-t__sub">${c.reject}</div>` : ""}</td>
     <td>${c.from === "—" ? "<span class='lk-t__sub'>срок не задан</span>" : c.from + " — " + c.to}
         <div class="lk-erid">erid: ${c.erid}</div></td>
     <td class="num">${c.shown ? num(c.shown) : "—"}</td>
@@ -427,12 +761,26 @@ VIEWS["client:coupons"] = () => {
   </tr>`).join("");
 
   return head("Мои купоны",
-      `<a class="btn btn--ghost" href="${href("new-marketplace")}" data-go="new-marketplace">Купон маркетплейса</a>
-       <a class="btn btn--solid" href="${href("new-regional")}" data-go="new-regional">Создать купон</a>`)
-    + panel("", filters + (list.length
-        ? table([{ t: "Купон" }, { t: "Скидка" }, { t: "Статус" }, { t: "Срок действия" },
+      `<button class="btn btn--solid" data-create>Создать купон</button>`)
+    + panel("", secRow + filters + tools + (list.length
+        ? table([{ t: "Действие" }, { t: "Купон" }, { t: "Механика" }, { t: "Статус" }, { t: "Срок действия" },
                  { t: "Показы", num: true }, { t: "Забрали", num: true }], rows)
-        : empty("В этом статусе купонов нет", "Смените фильтр, чтобы увидеть остальные.")));
+          + `<div class="lk-empty" data-q-empty hidden><b>Ничего не нашли</b>Проверьте название или сбросьте поиск.</div>`
+        : empty("Здесь пока пусто", state.sec === "all"
+            ? "Смените фильтр, чтобы увидеть остальные купоны."
+            : "В этом разделе у вас нет купонов. Создайте первый — кнопка справа вверху.")));
+};
+
+/* Повторная публикация купона из архива: те же условия, новые даты и
+   промокод, заново на модерацию */
+VIEWS["client:repeat"] = () => {
+  const c = LK_COUPONS.find(x => x.id === state.id);
+  if (!c) return head("Купон не найден");
+  const copy = Object.assign({}, c, { status: "draft", from: "—", to: "—", code: "—", erid: "—" });
+  return head("Опубликовать снова",
+      `<a class="btn btn--ghost" href="${href("coupons")}" data-go="coupons">К списку</a>`)
+    + `<div class="lk-sub"><span>Условия взяты из купона «${c.title}». Задайте новые даты и промокод.</span></div>`
+    + couponForm(c.l1, copy, false);
 };
 
 /* Форма создания купона. Набор полей выведен из созвонов, а не придуман:
@@ -449,14 +797,16 @@ VIEWS["client:coupons"] = () => {
    на купон. Текст на превью накладывается сразу, без нейросети. */
 function couponForm(l1, c, locked) {
   const isMarket = l1 === "marketplace";
-  const v = c || {};
+  const v = c || (state.preMech ? { mech: state.preMech } : {});
   const ro = locked ? " disabled" : "";
   const vert = LK_VERTICALS[l1];
   const niches = LK_NICHES[l1].map(n => n.name);
   const cities = v.cities || [LK_CITIES[0].name];
   const chans = v.channels || LK_CHANNELS.map(x => x.id);
   const days = v.days || 14;
-  const fee = calcFee(v.niche || niches[0], cities, days, chans.filter(x => x !== "site"));
+  const fee = calcFee(v.niche || niches[0], cities, days, chans.filter(x => x !== "site"), !!v.secret);
+  const reach = LK_REACH[v.niche || niches[0]] || LK_REACH.base;
+  const times = n => String(n).replace(".", ",");
   const clean = x => x && x !== "—" ? x : null;
   /* Адреса купона. У созданного купона — первая точка компании, у нового
      ничего не отмечено: адрес клиент выбирает сам. */
@@ -506,7 +856,7 @@ function couponForm(l1, c, locked) {
     ? `<label class="lk-ch is-on is-fixed"><input type="checkbox" checked disabled><span>${ch.label}</span><i>входит всегда</i></label>`
     : `<label class="lk-ch${chans.indexOf(ch.id) !== -1 ? " is-on" : ""}">
         <input type="checkbox" data-ch="${ch.id}"${chans.indexOf(ch.id) !== -1 ? " checked" : ""}${ro}>
-        <span>${ch.label}</span><i>+${Math.round(ch.k * 100)}%</i></label>`).join("");
+        <span>${ch.label}</span><i data-reach="${ch.id}">просмотры × ${times(reach[ch.id])}</i></label>`).join("");
 
   const mech = (LK_MECHANICS.find(m => m.id === v.mech) || {}).label;
 
@@ -533,6 +883,11 @@ function couponForm(l1, c, locked) {
           <div class="lk-img__up" data-img-pane="upload">
             <button type="button" class="lk-drop" data-img-drop>Перетащите файл<br>или выберите на компьютере<br><br>Пропорция 4:5</button>
             <div class="lk-f">
+              <div class="lk-warn lk-warn--tight">Используйте только изображения,
+              на которые у вас есть права. Картинки из поиска почти всегда
+              кому-то принадлежат — правообладатели выставляют за них претензии
+              на десятки тысяч рублей. Ответственность несёт компания, см.
+              <a href="#" class="lk-link">оферту</a>.</div>
               <div data-img-rights>${check("Подтверждаю, что у компании есть права на это изображение", false, "rights")}</div>
               <div class="lk-note">Скидку, заголовок и срок наложим поверх
               картинки сами — писать их на изображении не нужно. Своё
@@ -575,10 +930,15 @@ function couponForm(l1, c, locked) {
 
       ${panel("Предложение", `<div class="lk-f">
         ${field("Заголовок купона", input("Комбо-обед по будням до 16:00", v.title, locked, "title"))}
+        ${locked ? "" : `<div class="lk-ai" data-ai-titles>
+          <div class="lk-ai__h">Варианты от нейросети — нажмите, чтобы подставить</div>
+          <div class="lk-ai__list" data-ai-list></div>
+        </div>`}
         <div class="lk-f__row">
           ${field("Механика", select(LK_MECHANICS.map(m => m.label), "mech", mech, locked))}
           ${field("Величина", input("−30%", v.value, locked, "value"))}
         </div>
+        ${locked ? "" : `<div class="lk-tip" data-tip-mech hidden></div>`}
         <div class="lk-f__row">
           ${field("Действует с", input("3 сентября 2026", clean(v.from), locked, "from"))}
           ${field("по", input("24 сентября 2026", clean(v.to), locked, "to"))}
@@ -586,8 +946,17 @@ function couponForm(l1, c, locked) {
         <div class="lk-f__row">
           ${field("Срок размещения", select(LK_DURATIONS.map(d => d.label), "days",
               (LK_DURATIONS.find(d => d.days === days) || {}).label, locked))}
-          ${field("Промокод", input("LUNCH30", clean(v.code), locked, "code"))}
+          ${isMarket
+            ? field("Промокод", input("Код из кабинета продавца", clean(v.code), locked, "code"))
+            : field("Промокод — напишите сами или сгенерируйте", `<div class="lk-code">
+                ${input("LUNCH30", clean(v.code), locked, "code")}
+                ${locked ? "" : `<button type="button" class="btn btn--ghost" data-code-gen>Сгенерировать</button>`}
+              </div>`)}
         </div>
+        ${locked ? "" : `<div class="lk-tip" data-tip-days hidden></div>`}
+        ${locked ? "" : `<div class="lk-note">${isMarket
+          ? "Промокод создаётся в кабинете продавца на площадке — впишите его как есть."
+          : "В сгенерированный код добавляем префикс сервиса — так видно, что клиент пришёл от нас. Свой код публикуем без изменений."}</div>`}
         ${field("Как воспользоваться", `<textarea class="lk-ta" placeholder="Покажите код на кассе или назовите администратору при оплате."${ro}></textarea>`)}
       </div>`)}
 
@@ -603,27 +972,42 @@ function couponForm(l1, c, locked) {
 
       ${panel("Компания в купоне", `<div class="lk-f">
         <div class="lk-f__row">
-          ${field("Сайт", input("https://…", null, locked))}
-          ${field("ВКонтакте", input("https://vk.com/…", null, locked))}
+          ${field("Сайт", input("https://…", LK_COMPANY.site, locked))}
+          ${field("ВКонтакте", input("https://vk.com/…", LK_COMPANY.vk, locked))}
         </div>
         <div class="lk-f__row">
-          ${field("Telegram", input("https://t.me/…", null, locked))}
+          ${field("Telegram", input("https://t.me/…", LK_COMPANY.tg, locked))}
           ${field("ERID", input("", clean(v.erid) || "будет присвоен при публикации", true))}
         </div>
+        ${locked ? "" : `<div class="lk-note">Ссылки подставили из профиля компании — для этого купона их можно поправить.</div>`}
       </div>`)}
 
       ${panel("Каналы публикации", `
-        <div class="lk-checks">${channelRows}</div>
-        <div class="lk-note" style="margin-top:12px">Соцсети включены по
-        умолчанию. Публикуем в каналы выбранных городов, макеты собираются
-        сами: один под сайт, один под ВКонтакте и Одноклассники, один под
-        Telegram и Max.</div>`)}
+        <div class="lk-checks" data-channels>${channelRows}</div>
+        <div class="lk-reach" data-reach-msg></div>
+        <div class="lk-note" style="margin-top:12px">Публикуем в каналы выбранных
+        городов, макеты собираются сами: один под сайт, один под ВКонтакте и
+        Одноклассники, один под Telegram и Max.</div>`)}
 
-      ${panel("Проверка", `
-        ${check("Проверить тайным покупателем", !!v.secret, null, locked)}
-        <div class="lk-note" style="margin-top:10px">Наш человек придёт по
-        купону и проверит, что скидку дали. На карточке появится бейдж
-        «Проверено тайным покупателем».</div>`)}
+      <div class="lk-panel lk-secret">
+        <div class="lk-secret__top">
+          <div>
+            <div class="lk-secret__k">Проверка тайным покупателем</div>
+            <h2 class="lk-secret__h">Проверенному купону доверяют в ${LK_SECRET.trust} раз больше</h2>
+          </div>
+          <div class="lk-secret__badge">✓ Проверено</div>
+        </div>
+        <ul class="lk-secret__list">
+          <li>К вам придёт живой человек и воспользуется купоном, как обычный гость</li>
+          <li>Визит — в течение ${LK_SECRET.days} после публикации</li>
+          <li>После проверки на купоне появится бейдж «Проверено тайным покупателем»</li>
+        </ul>
+        <div class="lk-secret__foot">
+          ${check("Добавить проверку", !!v.secret, "secret", locked)}
+          <b data-secret-price>${rub(LK_SECRET.price * cities.length)}</b>
+        </div>
+        <div class="lk-note">${rub(LK_SECRET.price)} за каждый город размещения.</div>
+      </div>
 
       ${imgPanel}
 
@@ -654,6 +1038,7 @@ function couponForm(l1, c, locked) {
             <div class="lk-prev__title" data-pv-title>${v.title || "Комбо-обед по будням до 16:00"}</div>
             <div class="lk-prev__tags" data-pv-tags></div>
             <div class="lk-prev__meta">Кофейня «Пример» · <span id="pvNiche">${v.niche || niches[0]}</span></div>
+            <div class="lk-prev__trust" data-pv-trust${v.secret ? "" : " hidden"}>✓ Проверено тайным покупателем · доверие × ${LK_SECRET.trust}</div>
           </div>
         </div>
         ${locked ? "" : `<div class="lk-note" style="margin-top:12px">Текст
@@ -664,6 +1049,7 @@ function couponForm(l1, c, locked) {
         <div class="lk-calc" id="lkCalc">
           <div class="lk-calc__row"><span>Ниша, города и срок</span><b data-calc="base">${rub(fee.base)}</b></div>
           <div class="lk-calc__row"><span>Пакет соцсетей</span><b data-calc="extra">${rub(fee.extra)}</b></div>
+          <div class="lk-calc__row"><span>Тайный покупатель</span><b data-calc="secret">${fee.secret ? rub(fee.secret) : "—"}</b></div>
           <div class="lk-calc__row lk-calc__row--total"><span>Итого</span><b data-calc="total">${rub(fee.total)}</b></div>
         </div>
         <div class="lk-note">Считается по нише, городам и сроку. Коэффициенты
@@ -826,6 +1212,98 @@ function initCouponBuilder(host) {
     });
   }
 
+  /* Варианты заголовка от нейросети (созвон 10.09): свой заголовок
+     остаётся, рядом — варианты с пояснением; клик подставляет вариант.
+     В прототипе варианты собираются по шаблонам из ниши и механики. */
+  const aiList = qs("[data-ai-list]", form);
+  function paintTitles() {
+    if (!aiList) return;
+    const value = val("value") || "−30%";
+    const m = LK_MECHANICS.find(x => x.label === val("mech")) || LK_MECHANICS[0];
+    const company = LK_COMPANY.name;
+    /* Уже подставленный вариант не обрастает хвостами при повторной
+       подсказке: снимаем то, что добавляют шаблоны */
+    const own = val("title")
+      .replace(" — " + company, "").replace(": только до конца месяца", "")
+      .replace(/ по будням$/, "").replace(value + " · ", "");
+    const core = own || { gift: "Подарок к покупке", twoforone: "Второй напиток бесплатно",
+      amount: "Скидка на весь чек", percent: "Скидка на меню", friend: "Скидка за друга" }[m.id];
+    const vars = [
+      [core + " — " + company, "с названием компании: так купон узнают в ленте"],
+      [(m.id === "gift" || m.id === "twoforone" ? "" : value + " · ") + core + " по будням", "выгода в начале — заметнее при пролистывании"],
+      [core + ": только до конца месяца", "ограничение по времени — купон забирают быстрее"]
+    ];
+    aiList.innerHTML = vars.map(v => `<button type="button" class="lk-ai__i" data-ai-pick>
+      <b>${v[0]}</b><span>${v[1]}</span></button>`).join("");
+  }
+  if (aiList) {
+    let t;
+    form.addEventListener("input", e => {
+      if (e.target.matches('[data-f="title"], [data-f="value"]')) { clearTimeout(t); t = setTimeout(paintTitles, 500); }
+    });
+    form.addEventListener("change", e => { if (e.target.matches('[data-f="mech"]')) paintTitles(); });
+    aiList.addEventListener("click", e => {
+      const b = e.target.closest("[data-ai-pick]");
+      if (!b) return;
+      const inp = f("title");
+      inp.value = qs("b", b).textContent;
+      inp.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    paintTitles();
+  }
+
+  /* Подсказки при выборе механики и срока (созвон 10.09): мягко
+     подталкиваем к выгодным сценариям, выбор остаётся за клиентом. */
+  const tipMech = qs("[data-tip-mech]", form);
+  const tipDays = qs("[data-tip-days]", form);
+  function paintTips() {
+    if (tipMech) {
+      const niche = val("niche");
+      const adv = LK_MECH_ADVICE[niche] || LK_MECH_ADVICE.base;
+      const rec = LK_MECHANICS.find(x => x.id === adv.mech);
+      const cur = val("mech");
+      tipMech.hidden = !rec || rec.label === cur;
+      if (rec) tipMech.innerHTML = `<span>В нише «${niche}» лучше работает «${rec.label}» — ${adv.why}.</span>
+        <button type="button" class="btn btn--ghost" data-tip-mech-apply>Выбрать</button>`;
+    }
+    if (tipDays) {
+      const d = LK_DURATIONS.find(x => x.label === val("days"));
+      tipDays.hidden = !d || d.days >= LK_RECOMMENDED_DAYS;
+      tipDays.innerHTML = `<span>Короткий срок: купон не успеет набрать просмотры. Рекомендуем ${LK_RECOMMENDED_DAYS} дней.</span>
+        <button type="button" class="btn btn--ghost" data-tip-days-apply>Поставить ${LK_RECOMMENDED_DAYS} дней</button>`;
+    }
+  }
+  form.addEventListener("change", e => { if (e.target.matches('[data-f="mech"], [data-f="days"], [data-f="niche"]')) paintTips(); });
+  form.addEventListener("click", e => {
+    const setSel = (name, label) => {
+      const el = f(name);
+      el.value = label;
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    };
+    if (e.target.closest("[data-tip-mech-apply]")) {
+      const adv = LK_MECH_ADVICE[val("niche")] || LK_MECH_ADVICE.base;
+      setSel("mech", LK_MECHANICS.find(x => x.id === adv.mech).label);
+    }
+    if (e.target.closest("[data-tip-days-apply]")) {
+      setSel("days", LK_DURATIONS.find(x => x.days === LK_RECOMMENDED_DAYS).label);
+    }
+  });
+  paintTips();
+
+  /* Генерация промокода (созвон 10.09): код собран из механики и срока,
+     с префиксом сервиса. Свой код клиента публикуем как есть. */
+  const codeGen = qs("[data-code-gen]", form);
+  if (codeGen) codeGen.onclick = () => {
+    const m = LK_MECHANICS.find(x => x.label === val("mech")) || LK_MECHANICS[0];
+    const tag = { percent: "SALE", amount: "MINUS", twoforone: "TWO", gift: "GIFT", friend: "FRIEND" }[m.id];
+    const d = LK_DURATIONS.find(x => x.label === val("days"));
+    const digits = (val("value").match(/\d+/) || [""])[0];
+    const code = "KP-" + tag + (digits || (d ? d.days : "")) + "-" + Math.floor(100 + Math.random() * 900);
+    const inp = f("code");
+    inp.value = code;
+    inp.dispatchEvent(new Event("input", { bubbles: true }));
+  };
+
   if (img) {
     const tabs = qsa("[data-img-tab]", img);
     tabs.forEach(t => t.onclick = () => {
@@ -933,7 +1411,7 @@ VIEWS["client:archive"] = () => {
             <td class="num">${num(c.opened)}</td>
             <td class="num">${num(c.taken)}</td>
             <td class="num">${num(c.clicks)}</td>
-            <td class="num"><button class="btn btn--ghost">Повторить</button></td>
+            <td class="num"><button class="btn btn--solid" data-act="repeat" data-id="${c.id}">Опубликовать снова</button></td>
           </tr>`).join(""))
       : empty("Архив пуст", "Сюда попадают купоны, у которых закончился срок действия."));
 };
@@ -1043,7 +1521,9 @@ VIEWS["client:coupon"] = () => {
   const back = isArchived() ? "archive" : "coupons";
 
   return head(c.title,
-      `<a class="btn btn--ghost" href="${href(back)}" data-go="${back}">К списку</a>`)
+      (c.status === "moderation" ? `<button class="btn btn--ghost" data-unmod="${c.id}">Снять с модерации</button>` : "")
+      + (c.status === "done" ? `<button class="btn btn--solid" data-act="repeat" data-id="${c.id}">Опубликовать снова</button>` : "")
+      + `<a class="btn btn--ghost" href="${href(back)}" data-go="${back}">К списку</a>`)
     + `<div class="lk-sub">${status(c.status)}<i class="dot"></i>
         <span>${LK_VERTICALS[c.l1].name} · ${c.niche}</span><i class="dot"></i><span>${where(c)}</span>
         ${c.from === "—" ? "" : `<i class="dot"></i><span>${c.from} — ${c.to}</span>`}</div>`
@@ -1426,6 +1906,45 @@ function render() {
     b.onclick = () => { state.filter = b.dataset.f; render(); };
   });
 
+  /* Мои купоны: раздел, действия по статусу, поиск, сортировка */
+  qsa("[data-sec]", host).forEach(b => b.onclick = () => { state.sec = b.dataset.sec; state.filter = "all"; render(); });
+  qsa("[data-act]", host).forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    const id = Number(b.dataset.id);
+    const c = LK_COUPONS.find(x => x.id === id);
+    if (b.dataset.act === "unmod") { c.status = "draft"; render(); return; }
+    go(b.dataset.act === "repeat" ? "repeat" : "coupon", id);
+  });
+  const sortSel = qs("[data-sort]", host);
+  if (sortSel) sortSel.onchange = () => { state.sort = sortSel.value; render(); };
+  const qInp = qs("[data-q]", host);
+  if (qInp) {
+    const applyQ = () => {
+      state.q = qInp.value;
+      const needle = qInp.value.trim().toLowerCase();
+      const rows = qsa("tr[data-title]", host);
+      rows.forEach(r => { r.hidden = !!needle && r.dataset.title.indexOf(needle) === -1; });
+      const none = qs("[data-q-empty]", host);
+      if (none) none.hidden = rows.some(r => !r.hidden);
+    };
+    qInp.oninput = applyQ;
+    applyQ();
+  }
+
+  /* Дашборд: создание купона, бонусы, консультация, ИИ-консультант */
+  qsa("[data-create]", host).forEach(b => b.onclick = () => openCreateModal());
+  qsa("[data-create-mech]", host).forEach(b => b.onclick = () => openCreateModal(b.dataset.createMech));
+  qsa("[data-open-coupon]", host).forEach(b => b.onclick = () => go("coupon", Number(b.dataset.openCoupon)));
+  qsa("[data-bonus-ways]", host).forEach(b => b.onclick = openBonusWays);
+  qsa("[data-consult]", host).forEach(b => b.onclick = openConsult);
+  qsa("[data-ai-chat]", host).forEach(b => b.onclick = openAiChat);
+  qsa("[data-unmod]", host).forEach(b => b.onclick = () => {
+    const c = LK_COUPONS.find(x => x.id === Number(b.dataset.unmod));
+    c.status = "draft";
+    render();
+  });
+  if (state.role === "client" && state.view === "dashboard") maybeSurveyPrompt();
+
   /* Внутренние переходы из карточек */
   qsa("[data-go]", host).forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
 
@@ -1473,13 +1992,79 @@ function render() {
     const cities = () => qsa("[data-city].is-on", host).map(b => b.dataset.city);
     const chans  = () => qsa("[data-ch]", host).filter(i => i.checked).map(i => i.dataset.ch);
 
+    /* Каналы публикации (созвон 10.09): у включённого — «просмотры × N»,
+       у снятого строка краснеет и пишет, во сколько раз упадут просмотры.
+       Под списком — пояснение под конкретный набор снятых галочек: здесь
+       конец воронки, и соцсети решают бо́льшую часть цены. */
+    const fmt = n => String(n).replace(".", ",");
+    function paintReach(niche, adult) {
+      const reach = LK_REACH[niche] || LK_REACH.base;
+      const off = [];
+      qsa("[data-ch]", host).forEach(i => {
+        const row = i.closest(".lk-ch");
+        const lbl = qs("[data-reach]", row);
+        const id = i.dataset.ch;
+        row.classList.toggle("is-off", !i.checked && !adult);
+        lbl.textContent = adult ? "недоступно для 18+"
+          : i.checked ? "просмотры × " + fmt(reach[id]) : "просмотры упадут в " + fmt(reach[id]) + " раза";
+        if (!i.checked) off.push({ id: id, label: qs("span", row).textContent });
+      });
+
+      const msg = qs("[data-reach-msg]", host);
+      if (!msg) return;
+      const total = Object.keys(reach).length;
+      let text = "";
+      let bad = true;
+      if (adult) {
+        text = "Купоны 18+ публикуем только на сайте, за подтверждением возраста — в соцсети они не уходят.";
+        bad = false;
+      } else if (!off.length) {
+        text = "Все соцсети включены — так размещаются почти все компании ниши «" + niche + "».";
+        bad = false;
+      } else if (off.length === 1) {
+        const o = off[0];
+        text = LK_REACH_KEEP[o.id] + "% компаний ниши оставляют " + o.label +
+          ". Без него просмотров купона станет в " + fmt(reach[o.id]) + " раза меньше.";
+      } else if (off.length < total) {
+        text = "Вы убрали " + off.map(o => o.label).join(" и ") +
+          " — просмотры купона упадут в " + off.length + "–" + (off.length + 2) +
+          " раза. Так размещаются меньше 10% компаний вашей ниши.";
+      } else {
+        text = "Купон увидят только на сайте — просмотров станет в 5–6 раз меньше. " +
+          "Без соцсетей не размещается почти никто в вашей нише.";
+      }
+      msg.textContent = text;
+      msg.classList.toggle("is-bad", bad);
+    }
+
+    const secretCb = qs('[data-f="secret"]', host);
     const recalc = () => {
+      const niche = nicheSel && nicheSel.value;
+      const nicheRec = LK_NICHES.regional.find(n => n.name === niche);
+      const adult = !!(nicheRec && nicheRec.adult);
+
+      /* 18+ в соцсети не уходит (созвон 14.09): каналы гасим и блокируем */
+      qsa("[data-ch]", host).forEach(i => {
+        if (adult) { i.checked = false; i.disabled = true; }
+        else if (i.dataset.adultOff) { i.checked = true; i.disabled = false; }
+        i.dataset.adultOff = adult ? "1" : "";
+        i.closest(".lk-ch").classList.toggle("is-on", i.checked);
+      });
+
       const dur = LK_DURATIONS.find(d => d.label === (daysSel && daysSel.value));
-      const fee = calcFee(nicheSel && nicheSel.value, cities(), dur ? dur.days : 14, chans());
+      const fee = calcFee(niche, cities(), dur ? dur.days : 14, chans(), !!(secretCb && secretCb.checked));
       qs('[data-calc="base"]', calc).textContent  = rub(fee.base);
       qs('[data-calc="extra"]', calc).textContent = rub(fee.extra);
+      qs('[data-calc="secret"]', calc).textContent = fee.secret ? rub(fee.secret) : "—";
       qs('[data-calc="total"]', calc).textContent = rub(fee.total);
       if (pvNiche && nicheSel) pvNiche.textContent = nicheSel.value;
+
+      const sp = qs("[data-secret-price]", host);
+      if (sp) sp.textContent = rub(LK_SECRET.price * Math.max(1, cities().length));
+      const trust = qs("[data-pv-trust]", host);
+      if (trust && secretCb) trust.hidden = !secretCb.checked;
+
+      paintReach(niche, adult);
       if (range) splitPay(fee.total);
       return fee;
     };
@@ -1532,6 +2117,7 @@ function render() {
       recalc();
     });
     if (nicheSel) nicheSel.onchange = recalc;
+    if (secretCb) secretCb.addEventListener("change", recalc);
     if (daysSel)  daysSel.onchange = recalc;
     if (range)    range.oninput = recalc;
     recalc();

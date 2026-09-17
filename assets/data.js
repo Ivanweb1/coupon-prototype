@@ -79,6 +79,9 @@ window.CATEGORIES = [
   { l1: "regional", slug: "pitomtsy",      name: "Питомцы",          n: 31,  adjacent: ["uslugi", "meditsina", "dom"] },
   { l1: "regional", slug: "uslugi",        name: "Услуги",           n: 121, adjacent: ["remont", "obuchenie", "dom"] },
   { l1: "regional", slug: "puteshestviya", name: "Путешествия",      n: 44,  adjacent: ["razvlecheniya", "eda", "spa"] },
+  /* 18+ (созвон 14.09): купоны под блюром до подтверждения возраста, в
+     соцсети, рекомендации и общую ленту не попадают, смежных ниш нет */
+  { l1: "regional", slug: "18plus",        name: "18+",              n: 23,  adjacent: [], adult: true },
 
   /* --- L1: маркетплейсы. Свои ниши: slug повторяет региональные, но это
          другие категории и другие адреса --- */
@@ -220,6 +223,11 @@ const SEEDS = {
       ["Химчистка мягкой мебели", "−25%", "Клининг «Название»"],
       ["Уборка квартиры после ремонта", "−15%", "Клининг «Рыба»"]
     ],
+    "18plus": [
+      ["Товары для взрослых: скидка на первый заказ", "−20%", "Магазин «Рыба»"],
+      ["Бельё и аксессуары: второй товар в подарок", "2 = 1", "Бутик «Название»"],
+      ["Кальянная: второй кальян в подарок по будням", "2 = 1", "Лаунж «Рыба»"]
+    ],
     puteshestviya: [
       ["Скидка на тур при раннем бронировании", "−12%", "Агентство «Рыба»"],
       ["Вторые сутки в отеле", "−50%", "Отель «Название»"],
@@ -343,8 +351,9 @@ function swapBrand(company) {
 /* catId — «раздел/ниша». city — город купона: в выдаче области он у каждого
    купона свой, поэтому лежит на самом купоне, а не берётся из шапки. */
 window.makeCoupon = function (catId, city) {
+  const safe = CATEGORIES.filter(c => !c.adult);
   const cat = findCat(catId) ||
-              CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+              safe[Math.floor(Math.random() * safe.length)];
   const pool = SEEDS[cat.l1][cat.slug] || SEEDS.regional.uslugi;
   const seed = pool[Math.floor(Math.random() * pool.length)];
   const id = ++uid;
@@ -391,7 +400,7 @@ window.makeBatch = function (n, catId, city) {
 /* Лента раздела целиком или всей витрины города: ниша у каждого купона
    своя. l1 = null — вся витрина (главная). */
 window.makeMixedBatch = function (n, l1, city) {
-  const pool = l1 ? catsOf(l1) : CATEGORIES;
+  const pool = (l1 ? catsOf(l1) : CATEGORIES).filter(c => !c.adult);
   /* Ниши в общей выдаче встречаются пропорционально своему объёму, а не
      поровну: иначе девять ниш «Для бизнеса» дают в ленте города столько же
      купонов, сколько двести кафе, и витрина перестаёт быть похожей на

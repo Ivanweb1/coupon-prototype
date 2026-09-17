@@ -1115,3 +1115,17 @@ input{font:inherit;color:inherit}
 .market-where b{font-size:16px;font-weight:600;letter-spacing:-.01em}
 .market-where span{font-size:13px;color:var(--ink-3)}
 .market-where .soc{margin-top:6px}
+
+/* ==========================================================================
+   Категория 18+: блюр до подтверждения возраста (созвон 14.09)
+   ========================================================================== */
+body.is-adult-lock #feed,
+body.is-adult-lock #couponRoot{filter:blur(18px);pointer-events:none;user-select:none}
+.adult{text-align:center}
+.adult__mark{
+  width:64px;height:64px;margin:0 auto 14px;border-radius:50%;
+  display:grid;place-items:center;border:2px solid var(--ink);
+  font-size:20px;font-weight:700;letter-spacing:-.02em;
+}
+.adult__act{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.adult__act .btn{flex:1 1 160px}

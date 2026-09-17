@@ -560,7 +560,7 @@ function showFeedRecos() {
   let cat = null;
   if (state.l1 && state.l2) cat = findCat(state.l1 + "/" + state.l2);
   if (!cat && state.interest.length) cat = findCat(state.interest[0]);
-  if (!cat) cat = catsOf(state.l1 || "regional").sort((a, b) => b.n - a.n)[0];
+  if (!cat || cat.adult) cat = catsOf(state.l1 || "regional").filter(c => !c.adult).sort((a, b) => b.n - a.n)[0];
 
   const src = qs("#recosSource");
   if (src) src.textContent = state.interest.length
@@ -773,7 +773,10 @@ function buildRecommendations(cat) {
   const rail = qs("#rail");
   if (!rail) return;
   rail.innerHTML = "";
-  if (!cat) return;
+  /* У 18+ смежных ниш нет — блок рекомендаций целиком скрываем */
+  const sec = rail.closest(".section");
+  if (sec) sec.hidden = !!(cat && cat.adult);
+  if (!cat || cat.adult) return;
 
   /* Смежные ниши берём внутри своего раздела: «одежда» на маркетплейсах и
      «одежда» в городе — разные категории, и подмешивать одну в выдачу
@@ -910,7 +913,43 @@ function renderCatalog() {
   fillFeed("#feed", hasPin ? 7 : 8);
   initInfinite("#feed");
   initNear("#feed");
-  buildRecommendations(cat || catsOf(state.l1 || "regional").sort((a, b) => b.n - a.n)[0]);
+  buildRecommendations(cat || catsOf(state.l1 || "regional").filter(c => !c.adult).sort((a, b) => b.n - a.n)[0]);
+  if (cat && cat.adult) adultGate();
+}
+
+/* ==========================================================================
+   Категория 18+ (созвон 14.09)
+   ==========================================================================
+   Как на Ozon: купоны заблюрены, пока посетитель не подтвердит возраст.
+   «Да» снимает блюр до конца сессии, «Нет» уводит из категории. */
+function adultGate() {
+  let ok = false;
+  try { ok = sessionStorage.getItem("cp_adult") === "1"; } catch (e) {}
+  if (ok) return;
+  document.body.classList.add("is-adult-lock");
+  let el = qs("#adultGate");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "adultGate";
+    el.className = "modal is-on";
+    el.innerHTML = `<div class="modal__box adult">
+      <div class="adult__mark">18+</div>
+      <h3>Раздел для взрослых</h3>
+      <p>Здесь купоны на товары и услуги, которые можно показывать только
+      совершеннолетним. Вам уже исполнилось 18 лет?</p>
+      <div class="adult__act">
+        <button class="btn btn--ghost btn--lg" data-adult-no>Нет</button>
+        <button class="btn btn--solid btn--lg" data-adult-yes>Да, мне есть 18</button>
+      </div>
+    </div>`;
+    document.body.appendChild(el);
+  }
+  qs("[data-adult-yes]", el).onclick = () => {
+    try { sessionStorage.setItem("cp_adult", "1"); } catch (e) {}
+    document.body.classList.remove("is-adult-lock");
+    el.remove();
+  };
+  qs("[data-adult-no]", el).onclick = () => { location.href = catalogUrl("regional"); };
 }
 
 /* ==========================================================================
@@ -1000,6 +1039,7 @@ function renderCouponPage() {
   const c = currentCoupon();
   state.l1 = c.cat.l1;
   state.l2 = c.cat.slug;
+  if (c.cat.adult) adultGate();
 
   document.title = c.title + " — " + c.company + ", " + c.city.name;
   renderCrumbs("#crumbs", c.title);

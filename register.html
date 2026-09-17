@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260909e">
-<link rel="stylesheet" href="assets/register.css?v=20260909a">
+<link rel="stylesheet" href="assets/style.css?v=20260917a">
+<link rel="stylesheet" href="assets/register.css?v=20260917a">
 </head>
 <body>
 
@@ -63,16 +63,44 @@
         <input class="reg__i" data-reg-name placeholder="Появится после поиска по ИНН — или впишите вручную" disabled>
       </label>
 
-      <div class="reg__row--2">
-        <label class="reg__f">
-          <span class="reg__l">Город</span>
-          <select class="reg__i reg__i--select" data-reg-city></select>
-        </label>
-        <label class="reg__f">
-          <span class="reg__l">Телефон</span>
-          <input class="reg__i" data-reg-phone placeholder="+7 900 000-00-00">
-        </label>
+      <!-- Созвон 14.09: при регистрации — только то, без чего не собрать
+           документы и шапку купона. Категория, география и адреса сюда
+           входят; всё остальное — в анкету в кабинете за бонусы. -->
+      <label class="reg__f">
+        <span class="reg__l">Категория бизнеса</span>
+        <select class="reg__i reg__i--select" data-reg-cat></select>
+      </label>
+
+      <div class="reg__f">
+        <span class="reg__l">Где вы обслуживаете клиентов</span>
+        <div class="reg__chips">
+          <button type="button" class="reg__chip is-on" data-geo="points">В городах, по адресам</button>
+          <button type="button" class="reg__chip" data-geo="online">Онлайн</button>
+          <button type="button" class="reg__chip" data-geo="russia">По всей России</button>
+        </div>
       </div>
+
+      <div class="reg__f" data-geo-pane="points">
+        <span class="reg__l">Города</span>
+        <div class="reg__chips" data-reg-cities></div>
+      </div>
+
+      <div class="reg__f" data-geo-pane="points">
+        <span class="reg__l">Адреса точек</span>
+        <div class="reg__addrs" data-reg-addrs>
+          <input class="reg__i" placeholder="Липецк, ул. Первомайская, 12">
+        </div>
+        <button type="button" class="reg__plus" data-reg-addr-add>+ Добавить адрес</button>
+        <p class="reg__note" style="margin-top:2px">Адреса сохраним в карточку компании — при создании купона они уже будут в списке.</p>
+      </div>
+
+      <p class="reg__note" data-geo-pane="online" hidden>Купоны онлайн-бизнеса публикуются по областям или на всю Россию — выберете при создании купона.</p>
+      <p class="reg__note" data-geo-pane="russia" hidden>Подходит для маркетплейсов и компаний, которые работают с клиентами из любого региона.</p>
+
+      <label class="reg__f">
+        <span class="reg__l">Телефон</span>
+        <input class="reg__i" data-reg-phone placeholder="+7 900 000-00-00">
+      </label>
 
       <label class="reg__f">
         <span class="reg__l">Email</span>
@@ -128,6 +156,8 @@
       <h2 class="reg__done-h">Заявка отправлена</h2>
       <p class="reg__lead">Карточка компании автоматически создана в Битрикс24 — заявка ушла на модерацию.</p>
       <ul class="reg__done-list">
+        <li>Первый купон размещаете бесплатно.</li>
+        <li>В кабинете ждёт короткая анкета о компании — за неё начислим 700 бонусов на оплату следующих размещений.</li>
         <li>Кабинет клиента уже доступен — можно посмотреть тарифы и заполнить профиль.</li>
         <li>Опубликовать купон получится после решения модератора — обычно это занимает несколько часов.</li>
         <li data-reg-manual-note hidden>ИНН не нашёлся по базе, поэтому модерация будет усиленной — возможно, с вами свяжутся для уточнения реквизитов.</li>
@@ -137,7 +167,7 @@
   </div>
 </main>
 
-<script src="assets/data.js?v=20260909c"></script>
-<script src="assets/register.js?v=20260909a"></script>
+<script src="assets/data.js?v=20260917a"></script>
+<script src="assets/register.js?v=20260917a"></script>
 </body>
 </html>
