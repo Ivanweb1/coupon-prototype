@@ -525,3 +525,118 @@
 .lk-modal__x:hover{background:var(--surface);color:var(--ink)}
 .lk-modal__body h3{margin:0 0 8px;padding-right:24px;font-size:19px;font-weight:600;letter-spacing:-.02em}
 .lk-modal__body .lk-f{margin-top:14px}
+
+/* --------------------------------------------------------------------------
+   Конструктор купона (созвон 16.09.2026)
+   -------------------------------------------------------------------------- */
+[data-addr-row][hidden],
+[data-addr-add][hidden],
+[data-img] [hidden]{display:none!important}
+
+/* Адреса применения купона */
+.lk-addr .lk-checks{margin:0 -12px}
+.lk-addr__add{margin-top:8px}
+.lk-addr__plus{
+  margin:6px 0 10px;padding:6px 0;
+  font-size:14px;font-weight:500;color:var(--ink);
+}
+.lk-addr__plus:hover{text-decoration:underline}
+
+/* Прогресс заполнения над превью */
+.lk-prog{margin-bottom:14px}
+.lk-prog__t{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-3);margin-bottom:8px}
+.lk-prog__t b{color:var(--ink);font-variant-numeric:tabular-nums}
+.lk-prog__bar{height:6px;border-radius:var(--r-pill);background:var(--surface-2);overflow:hidden}
+.lk-prog__bar i{display:block;height:100%;width:0;background:var(--ink);border-radius:inherit;transition:width .3s var(--ease, ease)}
+
+/* Превью: текст накладывается сразу, картинка — последней */
+.lk-prev__media{overflow:hidden}
+.lk-prev__val{position:relative;z-index:1}
+.lk-prev__erid{z-index:2}
+.lk-prev__hold{
+  position:absolute;left:0;right:0;bottom:14px;text-align:center;
+  font-size:12px;color:var(--ink-3);
+}
+.lk-prev__media.has-img .lk-prev__hold{display:none}
+.lk-prev__media.has-img .lk-prev__val{
+  background:#fff;border-radius:var(--r-pill);padding:4px 16px;
+}
+.lk-prev__title.is-empty{color:var(--ink-4)}
+.lk-prev__tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.lk-prev__tags:empty{display:none}
+.lk-prev__tags span{
+  font-size:11px;line-height:1;padding:5px 9px;border-radius:var(--r-pill);
+  background:var(--surface);color:var(--ink-2);
+}
+
+/* Водяной знак. Пока купон создаётся — по диагонали на всё изображение,
+   после публикации — маленький в углу. Рисунок знака — за Иваном. */
+.lk-wm{
+  position:absolute;inset:-40%;
+  display:flex;flex-wrap:wrap;align-content:center;justify-content:center;
+  gap:26px 34px;transform:rotate(-30deg);pointer-events:none;
+  opacity:0;transition:opacity .3s;
+}
+.lk-prev__media.has-img .lk-wm{opacity:1}
+.lk-wm span{
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.42);white-space:nowrap;
+}
+.lk-wm-corner{
+  position:absolute;left:10px;bottom:10px;z-index:2;
+  display:flex;align-items:center;gap:5px;
+  font-size:9px;color:var(--ink-2);
+  background:rgba(255,255,255,.86);border-radius:var(--r-pill);padding:3px 8px 3px 4px;
+}
+.lk-wm-corner i{width:10px;height:10px;border-radius:50%;background:var(--ink)}
+
+/* Заглушки изображений: своё и варианты генерации */
+.lk-up{background:linear-gradient(180deg,#c9c8c5,#6f6d69)}
+.lk-gen--1{background:radial-gradient(circle at 32% 36%,#dedddb 0 20%,transparent 21%),linear-gradient(160deg,#8d8b87,#3d3c39)}
+.lk-gen--2{background:radial-gradient(ellipse at 60% 68%,#b3b1ad 0 30%,transparent 31%),linear-gradient(200deg,#dedddb,#6f6d69)}
+.lk-gen--3{background:linear-gradient(135deg,transparent 44%,rgba(255,255,255,.3) 44% 56%,transparent 56%),linear-gradient(180deg,#55534f,#b3b1ad)}
+.lk-gen--4{background:radial-gradient(circle at 50% 45%,#f5f5f4 0 15%,#8d8b87 16% 30%,transparent 31%),#2b2a28}
+
+/* Блок изображения */
+.lk-img__lock{
+  border:1px dashed var(--line-strong);border-radius:var(--r-md);
+  padding:18px 20px;font-size:13px;line-height:1.55;color:var(--ink-3);
+}
+.lk-img__lock b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.lk-img__todo{margin:10px 0 0;padding-left:18px;color:var(--ink-2)}
+.lk-img__todo:empty{display:none}
+
+.lk-seg{
+  display:inline-flex;padding:3px;margin-bottom:16px;
+  background:var(--surface);border-radius:var(--r-pill);
+}
+.lk-seg button{
+  padding:8px 16px;border-radius:var(--r-pill);
+  font-size:13px;font-weight:500;color:var(--ink-3);
+}
+.lk-seg button.is-on{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+.lk-img__up{display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:560px){.lk-img__up{grid-template-columns:1fr}}
+.lk-img__up .lk-drop{width:100%;font:inherit;font-size:13px}
+.lk-drop.is-done{border-style:solid;border-color:var(--ink);color:var(--ink)}
+[data-img-rights] .lk-ch{margin:0 -12px}
+[data-img-rights].is-warn .lk-ch{background:var(--surface-2);animation:lkShake .35s}
+@keyframes lkShake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+.lk-img__bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.lk-img__left{margin-left:auto;font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.lk-img__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.lk-img__grid:empty{display:none}
+.lk-img__v{
+  aspect-ratio:4/5;border-radius:var(--r-sm);position:relative;
+  border:2px solid transparent;outline:none;
+}
+.lk-img__v span{
+  position:absolute;left:6px;bottom:6px;font-size:11px;
+  background:rgba(255,255,255,.86);border-radius:var(--r-pill);padding:2px 7px;color:var(--ink-2);
+}
+.lk-img__v.is-on{border-color:var(--ink);box-shadow:0 0 0 2px var(--bg) inset}
+.lk-img__v.is-busy{background:var(--surface-2);animation:lkPulse 1s ease-in-out infinite alternate}
+@keyframes lkPulse{to{background:var(--surface-3)}}
+.lk-img__out{grid-column:1/-1;font-size:13px;color:var(--ink-2)}

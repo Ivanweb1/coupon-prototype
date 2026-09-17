@@ -288,8 +288,8 @@ function field(label, control) {
   return `<label class="lk-l"><span class="lk-l__t">${label}</span>${control}</label>`;
 }
 
-function input(ph, val, locked) {
-  return `<input class="lk-i" placeholder="${ph}"${val ? ` value="${val}"` : ""}${locked ? " disabled" : ""}>`;
+function input(ph, val, locked, name) {
+  return `<input class="lk-i" placeholder="${ph}"${name ? ` data-f="${name}"` : ""}${val ? ` value="${val}"` : ""}${locked ? " disabled" : ""}>`;
 }
 
 function select(opts, name, val, locked) {
@@ -439,8 +439,14 @@ VIEWS["client:coupons"] = () => {
    срок — двумя датами (Коля просил период, а не «сколько дней»), ЕРИД
    уникальный на каждое объявление, ссылки на сайт и соцсети обязательны
    (переходы туда — ключевая метрика), изображение 4:5 под ленты соцсетей.
-   Полей намеренно немного: Виль просил Ивана согласовывать сложность
-   карточки с Павлом, чтобы не переделывать интерфейс создания купона. */
+
+   Устройство — по созвону 16.09.2026. Квиз «один экран — один вопрос»
+   отклонили: остаётся одна страница с превью справа, чтобы был виден
+   прогресс и любой блок можно было поправить. Сначала то, что меняет
+   купон (ниша, предложение со сроком и кодом), потом города и адреса.
+   Изображение — отдельный последний блок: генерация стоит денег, поэтому
+   открывается, только когда заполнено остальное, и ограничена попытками
+   на купон. Текст на превью накладывается сразу, без нейросети. */
 function couponForm(l1, c, locked) {
   const isMarket = l1 === "marketplace";
   const v = c || {};
@@ -451,16 +457,21 @@ function couponForm(l1, c, locked) {
   const chans = v.channels || LK_CHANNELS.map(x => x.id);
   const days = v.days || 14;
   const fee = calcFee(v.niche || niches[0], cities, days, chans.filter(x => x !== "site"));
+  const clean = x => x && x !== "—" ? x : null;
+  /* Адреса купона. У созданного купона — первая точка компании, у нового
+     ничего не отмечено: адрес клиент выбирает сам. */
+  const addrs = v.addresses || (c ? [LK_ADDRESSES[0].addr] : []);
+  /* Картинка есть у всего, что уже уходило на модерацию */
+  const img = v.img || (c && c.status !== "draft" ? "upload" : null);
 
-  /* Где размещаем. У маркетплейса это площадка и артикул: город там нужен
-     для тарифа и автопоста, а не для витрины. */
-  const place = isMarket
+  /* У маркетплейса вместо адреса точки — площадка и артикул */
+  const market = isMarket
     ? `<div class="lk-f__row">
         ${field("Маркетплейс", select(LK_MARKETS, null, v.market, locked))}
-        ${field("Артикул товара", input("184 220 933", v.article, locked))}
+        ${field("Артикул товара", input("184 220 933", v.article, locked, "article"))}
        </div>
        ${field("Ссылка на карточку товара", input("https://…", null, locked))}`
-    : field("Адрес точки", input("ул. Первомайская, 12", null, locked));
+    : "";
 
   /* Города — мультивыбор: купон размещается сразу в нескольких (city_ids[]),
      и каждый добавленный город увеличивает цену. Одним выпадающим списком
@@ -468,6 +479,28 @@ function couponForm(l1, c, locked) {
   const cityChips = LK_CITIES.map(x => `
     <button type="button" class="lk-chipbtn${cities.indexOf(x.name) !== -1 ? " is-on" : ""}"
       data-city="${x.name}"${ro}>${x.name}</button>`).join("");
+
+  /* Адреса применения купона (созвон 16.09): у сетевых точек их бывает
+     несколько, поэтому список с «+ Добавить адрес». Сначала показываем
+     точки из карточки компании, новый адрес ищется по базе адресов и
+     сохраняется в карточку — в следующий раз не тратим запрос на поиск. */
+  const addrBlock = isMarket ? "" : `
+    <div class="lk-addr">
+      <span class="lk-l__t">Адреса, где действует купон</span>
+      <div class="lk-checks" data-addr-list>
+        ${LK_ADDRESSES.map(a => addrRow(a, addrs.indexOf(a.addr) !== -1, locked)).join("")}
+      </div>
+      ${locked ? "" : `
+        <div class="lk-addr__add" data-addr-add hidden>
+          <input class="lk-i" list="lkAddrSuggest" placeholder="Начните вводить адрес" data-addr-input>
+          <datalist id="lkAddrSuggest">${LK_ADDRESS_SUGGEST.map(s =>
+            `<option value="${s.city}, ${s.addr}">`).join("")}</datalist>
+        </div>
+        <button type="button" class="lk-addr__plus" data-addr-plus>+ Добавить адрес</button>
+        <div class="lk-note">Адреса берём из карточки компании. Новый найдём
+        по базе адресов и сохраним в карточку — в следующий раз он будет в
+        этом списке.</div>`}
+    </div>`;
 
   const channelRows = LK_CHANNELS.map(ch => ch.fixed
     ? `<label class="lk-ch is-on is-fixed"><input type="checkbox" checked disabled><span>${ch.label}</span><i>входит всегда</i></label>`
@@ -477,38 +510,106 @@ function couponForm(l1, c, locked) {
 
   const mech = (LK_MECHANICS.find(m => m.id === v.mech) || {}).label;
 
+  /* Блок изображения. Два пути: свой креатив или генерация. Свой — дешевле
+     для нас и быстрее для клиента, поэтому он открыт по умолчанию. */
+  const imgPanel = locked
+    ? panel("Изображение купона", `<div class="lk-note">${img === "gen"
+        ? "Сгенерировано в сервисе" : "Загружено компанией"}. Скидка, заголовок
+        и срок наложены поверх текстом.</div>`)
+    : panel("Изображение купона", `
+      <div class="lk-img" data-img>
+        <div class="lk-img__lock" data-img-lock>
+          <b>Откроется, когда купон заполнен</b>
+          Картинку подбираем последней: к этому моменту понятно, что за
+          предложение, и промпт для генерации соберётся из ваших ответов.
+          <ul class="lk-img__todo" data-img-todo></ul>
+        </div>
+        <div data-img-body hidden>
+          <div class="lk-seg">
+            <button type="button" class="is-on" data-img-tab="upload">Загрузить своё</button>
+            <button type="button" data-img-tab="gen">Сгенерировать</button>
+          </div>
+
+          <div class="lk-img__up" data-img-pane="upload">
+            <button type="button" class="lk-drop" data-img-drop>Перетащите файл<br>или выберите на компьютере<br><br>Пропорция 4:5</button>
+            <div class="lk-f">
+              <div data-img-rights>${check("Подтверждаю, что у компании есть права на это изображение", false, "rights")}</div>
+              <div class="lk-note">Скидку, заголовок и срок наложим поверх
+              картинки сами — писать их на изображении не нужно. Своё
+              изображение не тратит попытки генерации.</div>
+            </div>
+          </div>
+
+          <div class="lk-f" data-img-pane="gen" hidden>
+            <label class="lk-l"><span class="lk-l__t">Промпт</span>
+              <textarea class="lk-ta" data-img-prompt></textarea></label>
+            <div class="lk-img__bar">
+              <button type="button" class="btn btn--ghost" data-img-rebuild>Собрать из полей заново</button>
+              <span class="lk-img__left" data-img-left></span>
+              <button type="button" class="btn btn--solid" data-img-gen>Сгенерировать</button>
+            </div>
+            <div class="lk-img__grid" data-img-grid></div>
+            <div class="lk-note">Промпт собран из ниши, предложения и городов —
+            поправьте его, если нужно. На один купон ${LK_GEN_LIMIT} попыток,
+            каждая занимает несколько секунд. Понравившийся вариант выберите
+            кликом.</div>
+          </div>
+        </div>
+      </div>`);
+
+  /* Водяной знак (созвон 16.09): пока купон создаётся — по диагонали на всё
+     изображение, после публикации — маленький в углу, навсегда. Текст
+     знака — заглушка, знак рисует Иван вместе с дизайном купона. */
+  const wm = locked
+    ? `<span class="lk-wm-corner"><i></i>Сделано на сервисе</span>`
+    : `<div class="lk-wm" aria-hidden="true">${Array(18).fill("<span>Сделано на сервисе</span>").join("")}</div>`;
+  const mediaCls = locked && img ? " has-img " + (img === "gen" ? "lk-gen--2" : "lk-up") : "";
+
   return `<div class="lk-form">
     <div>
       ${panel("Раздел и ниша", `<div class="lk-f">
         <div class="lk-note">${vert.name} · ${vert.hint}</div>
         ${field("Ниша", select(niches, "niche", v.niche, locked))}
-        ${place}
+        ${market}
       </div>`)}
-
-      ${panel("Города размещения", `
-        <div class="lk-chips">${cityChips}</div>
-        <div class="lk-note" style="margin-top:12px">Купон появится в каталоге
-        каждого выбранного города и уйдёт в его соцсети. Города других
-        областей — по мере запуска сервиса.</div>`)}
 
       ${panel("Предложение", `<div class="lk-f">
-        ${field("Заголовок купона", input("Комбо-обед по будням до 16:00", v.title, locked))}
+        ${field("Заголовок купона", input("Комбо-обед по будням до 16:00", v.title, locked, "title"))}
         <div class="lk-f__row">
           ${field("Механика", select(LK_MECHANICS.map(m => m.label), "mech", mech, locked))}
-          ${field("Величина", input("−30%", v.value, locked))}
+          ${field("Величина", input("−30%", v.value, locked, "value"))}
         </div>
-        ${field("Изображение купона", `<div class="lk-drop">Перетащите файл<br>или выберите на компьютере<br><br>Пропорция 4:5</div>`)}
+        <div class="lk-f__row">
+          ${field("Действует с", input("3 сентября 2026", clean(v.from), locked, "from"))}
+          ${field("по", input("24 сентября 2026", clean(v.to), locked, "to"))}
+        </div>
+        <div class="lk-f__row">
+          ${field("Срок размещения", select(LK_DURATIONS.map(d => d.label), "days",
+              (LK_DURATIONS.find(d => d.days === days) || {}).label, locked))}
+          ${field("Промокод", input("LUNCH30", clean(v.code), locked, "code"))}
+        </div>
+        ${field("Как воспользоваться", `<textarea class="lk-ta" placeholder="Покажите код на кассе или назовите администратору при оплате."${ro}></textarea>`)}
       </div>`)}
 
-      ${panel("Срок и код", `<div class="lk-f">
-        <div class="lk-f__row">
-          ${field("Действует с", input("3 сентября 2026", v.from === "—" ? null : v.from, locked))}
-          ${field("по", input("24 сентября 2026", v.to === "—" ? null : v.to, locked))}
+      ${panel(isMarket ? "Города размещения" : "Города и адреса", `<div class="lk-f">
+        <div>
+          <div class="lk-chips">${cityChips}</div>
+          <div class="lk-note" style="margin-top:12px">Купон появится в каталоге
+          каждого выбранного города и уйдёт в его соцсети. Города других
+          областей — по мере запуска сервиса.</div>
         </div>
-        ${field("Срок размещения", select(LK_DURATIONS.map(d => d.label), "days",
-            (LK_DURATIONS.find(d => d.days === days) || {}).label, locked))}
-        ${field("Промокод", input("LUNCH30", v.code === "—" ? null : v.code, locked))}
-        ${field("Как воспользоваться", `<textarea class="lk-ta" placeholder="Покажите код на кассе или назовите администратору при оплате."${ro}></textarea>`)}
+        ${addrBlock}
+      </div>`)}
+
+      ${panel("Компания в купоне", `<div class="lk-f">
+        <div class="lk-f__row">
+          ${field("Сайт", input("https://…", null, locked))}
+          ${field("ВКонтакте", input("https://vk.com/…", null, locked))}
+        </div>
+        <div class="lk-f__row">
+          ${field("Telegram", input("https://t.me/…", null, locked))}
+          ${field("ERID", input("", clean(v.erid) || "будет присвоен при публикации", true))}
+        </div>
       </div>`)}
 
       ${panel("Каналы публикации", `
@@ -518,22 +619,13 @@ function couponForm(l1, c, locked) {
         сами: один под сайт, один под ВКонтакте и Одноклассники, один под
         Telegram и Max.</div>`)}
 
-      ${panel("Компания в купоне", `<div class="lk-f">
-        <div class="lk-f__row">
-          ${field("Сайт", input("https://…", null, locked))}
-          ${field("ВКонтакте", input("https://vk.com/…", null, locked))}
-        </div>
-        <div class="lk-f__row">
-          ${field("Telegram", input("https://t.me/…", null, locked))}
-          ${field("ERID", input("", v.erid && v.erid !== "—" ? v.erid : "будет присвоен при публикации", true))}
-        </div>
-      </div>`)}
-
       ${panel("Проверка", `
         ${check("Проверить тайным покупателем", !!v.secret, null, locked)}
         <div class="lk-note" style="margin-top:10px">Наш человек придёт по
         купону и проверит, что скидку дали. На карточке появится бейдж
         «Проверено тайным покупателем».</div>`)}
+
+      ${imgPanel}
 
       ${locked ? "" : `
         <div class="lk-warn">После публикации условия купона изменить нельзя.
@@ -547,16 +639,26 @@ function couponForm(l1, c, locked) {
 
     <div class="lk-prev">
       ${panel("Так купон увидят в ленте", `
+        ${locked ? "" : `<div class="lk-prog">
+          <div class="lk-prog__t"><span>Купон заполнен</span><b data-prog-n>0%</b></div>
+          <div class="lk-prog__bar"><i data-prog-bar></i></div>
+        </div>`}
         <div class="lk-prev__card">
-          <div class="lk-prev__media">
-            <span class="lk-prev__erid">Реклама · erid: ${v.erid && v.erid !== "—" ? v.erid : "2Vt…"}</span>
+          <div class="lk-prev__media${mediaCls}" data-pv-media>
+            <span class="lk-prev__erid">Реклама · erid: ${clean(v.erid) || "2Vt…"}</span>
             <span class="lk-prev__val" id="pvVal">${v.value || "−30%"}</span>
+            <span class="lk-prev__hold">Изображение — последним шагом</span>
+            ${wm}
           </div>
           <div class="lk-prev__body">
-            <div class="lk-prev__title">${v.title || "Комбо-обед по будням до 16:00"}</div>
+            <div class="lk-prev__title" data-pv-title>${v.title || "Комбо-обед по будням до 16:00"}</div>
+            <div class="lk-prev__tags" data-pv-tags></div>
             <div class="lk-prev__meta">Кофейня «Пример» · <span id="pvNiche">${v.niche || niches[0]}</span></div>
           </div>
-        </div>`)}
+        </div>
+        ${locked ? "" : `<div class="lk-note" style="margin-top:12px">Текст
+        появляется на купоне сразу, пока вы заполняете поля. Изображение
+        добавляется в конце, до публикации по нему идёт водяной знак.</div>`}`)}
 
       ${panel("Стоимость размещения", `
         <div class="lk-calc" id="lkCalc">
@@ -591,6 +693,219 @@ function couponForm(l1, c, locked) {
         Списанные бонусы не возвращаются.</div>`)}
     </div>
   </div>`;
+}
+
+/* Строка адреса в форме купона. data-addr-city — чтобы прятать точки
+   городов, которые в купоне не выбраны. */
+function addrRow(a, on, locked) {
+  return `<label class="lk-ch${on ? " is-on" : ""}" data-addr-row data-addr-city="${a.city}">
+    <input type="checkbox" data-addr-cb value="${a.addr}"${on ? " checked" : ""}${locked ? " disabled" : ""}>
+    <span>${a.addr}</span><i>${a.city}</i></label>`;
+}
+
+const plural = (n, one, few, many) => {
+  const d = n % 10, h = n % 100;
+  return d === 1 && h !== 11 ? one : d >= 2 && d <= 4 && (h < 12 || h > 14) ? few : many;
+};
+
+/* ==========================================================================
+   Конструктор купона (созвон 16.09.2026)
+   ==========================================================================
+   Превью обновляется на каждое поле, но только текстом: перегенерация
+   картинки — это деньги и 3–4 секунды ожидания, поэтому изображение
+   появляется одним отдельным шагом в конце. Генерация в прототипе
+   имитируется задержкой, варианты — серые заглушки. */
+function initCouponBuilder(host) {
+  const form = qs(".lk-form", host);
+  if (!form) return;
+
+  const f   = name => qs(`[data-f="${name}"]`, form);
+  const val = name => { const el = f(name); return el ? el.value.trim() : ""; };
+  const media   = qs("[data-pv-media]", form);
+  const pvVal   = qs("#pvVal", form);
+  const pvTitle = qs("[data-pv-title]", form);
+  const pvTags  = qs("[data-pv-tags]", form);
+  const isMarket = !!f("article");
+
+  const cities = () => qsa("[data-city].is-on", form).map(b => b.dataset.city);
+  const addrs  = () => qsa("[data-addr-cb]", form)
+    .filter(i => i.checked && !i.closest("[data-addr-row]").hidden).map(i => i.value);
+
+  /* Что должно быть заполнено, прежде чем откроется изображение */
+  const need = () => [
+    ["Заголовок купона", val("title")],
+    ["Величина скидки", val("value")],
+    ["Срок действия — обе даты", val("from") && val("to")],
+    ["Промокод", val("code")],
+    isMarket ? ["Артикул товара", val("article")] : ["Хотя бы один адрес", addrs().length]
+  ];
+
+  const img = qs("[data-img]", form);
+  const st = { src: null, variant: 0, variants: [], chosen: -1, left: LK_GEN_LIMIT, busy: false, touched: false };
+
+  function sync() {
+    const m = LK_MECHANICS.find(x => x.label === val("mech"));
+    pvVal.textContent = val("value") || (m && m.sample) || "−30%";
+
+    const title = val("title");
+    pvTitle.textContent = title || "Заголовок купона";
+    pvTitle.classList.toggle("is-empty", !title);
+
+    /* Точки городов, которые сняли, прячем — и в купон они не идут */
+    const cs = cities();
+    qsa("[data-addr-row]", form).forEach(r => { r.hidden = cs.indexOf(r.dataset.addrCity) === -1; });
+
+    const tags = [];
+    if (val("from") && val("to")) tags.push(val("from") + " — " + val("to"));
+    if (cs.length) tags.push(cs.join(", "));
+    const a = addrs();
+    if (a.length === 1) tags.push(a[0]);
+    if (a.length > 1) tags.push(a.length + " " + plural(a.length, "адрес", "адреса", "адресов"));
+    pvTags.innerHTML = tags.map(t => `<span>${t}</span>`).join("");
+
+    if (!img) return;
+
+    const list = need();
+    const missing = list.filter(x => !x[1]).map(x => x[0]);
+    const pct = Math.round((list.length - missing.length + (st.src ? 1 : 0)) / (list.length + 1) * 100);
+    qs("[data-prog-n]", form).textContent = pct + "%";
+    qs("[data-prog-bar]", form).style.width = pct + "%";
+
+    qs("[data-img-lock]", img).hidden = !missing.length;
+    qs("[data-img-body]", img).hidden = !!missing.length;
+    qs("[data-img-todo]", img).innerHTML = missing.map(x => `<li>${x}</li>`).join("");
+
+    const prompt = qs("[data-img-prompt]", img);
+    if (!st.touched) prompt.value = buildPrompt();
+  }
+
+  function buildPrompt() {
+    const cs = cities();
+    return "Рекламное фото для купона: " + (val("title") || "предложение компании") +
+      ". Ниша — " + val("niche").toLowerCase() + "." +
+      (cs.length ? " Город — " + cs.join(", ") + "." : "") +
+      " Вертикальный кадр 4:5, товар или услуга крупно, спокойный фон." +
+      " Без текста на изображении: скидку и условия наложим сверху.";
+  }
+
+  /* Что стоит на превью: своё изображение или выбранный вариант генерации */
+  function paintMedia() {
+    media.className = "lk-prev__media" + (st.src
+      ? " has-img " + (st.src === "upload" ? "lk-up" : "lk-gen--" + st.variants[st.chosen])
+      : "");
+  }
+
+  /* Поля, адреса, города. Города переключаются кликом, класс меняется
+     в своём обработчике — поэтому синхронизируемся после него. */
+  form.addEventListener("input", sync);
+  form.addEventListener("change", e => {
+    if (e.target.matches("[data-addr-cb]")) e.target.closest(".lk-ch").classList.toggle("is-on", e.target.checked);
+    sync();
+  });
+  form.addEventListener("click", e => { if (e.target.closest("[data-city]")) setTimeout(sync); });
+
+  /* «+ Добавить адрес». В продукте — живой поиск по базе адресов,
+     в прототипе — подсказки браузера из заготовленного списка. */
+  const plus = qs("[data-addr-plus]", form);
+  if (plus) {
+    const add = qs("[data-addr-add]", form);
+    const inp = qs("[data-addr-input]", form);
+    plus.onclick = () => { add.hidden = false; inp.focus(); };
+    inp.addEventListener("change", () => {
+      const s = LK_ADDRESS_SUGGEST.find(x => x.city + ", " + x.addr === inp.value);
+      if (!s) return;
+      if (!qsa("[data-addr-cb]", form).some(i => i.value === s.addr)) {
+        LK_ADDRESSES.push(s);
+        qs("[data-addr-list]", form).insertAdjacentHTML("beforeend", addrRow(s, true, false));
+      }
+      const chip = qs(`[data-city="${s.city}"]`, form);
+      if (chip && !chip.classList.contains("is-on")) chip.click();
+      inp.value = "";
+      add.hidden = true;
+      sync();
+    });
+  }
+
+  if (img) {
+    const tabs = qsa("[data-img-tab]", img);
+    tabs.forEach(t => t.onclick = () => {
+      tabs.forEach(x => x.classList.toggle("is-on", x === t));
+      qsa("[data-img-pane]", img).forEach(p => { p.hidden = p.dataset.imgPane !== t.dataset.imgTab; });
+    });
+
+    /* Без подтверждения прав файл не принимаем — это обязательное условие */
+    const drop = qs("[data-img-drop]", img);
+    const rights = qs('[data-f="rights"]', img);
+    drop.onclick = () => {
+      const box = qs("[data-img-rights]", img);
+      if (!rights.checked) {
+        box.classList.remove("is-warn");
+        void box.offsetWidth;
+        box.classList.add("is-warn");
+        return;
+      }
+      st.src = "upload";
+      drop.classList.add("is-done");
+      drop.innerHTML = "Изображение загружено<br><br>Нажмите, чтобы заменить";
+      paintMedia();
+      paintGen();
+      sync();
+    };
+    rights.addEventListener("change", () => qs("[data-img-rights]", img).classList.remove("is-warn"));
+
+    qs("[data-img-prompt]", img).addEventListener("input", () => { st.touched = true; });
+    qs("[data-img-rebuild]", img).onclick = () => {
+      st.touched = false;
+      qs("[data-img-prompt]", img).value = buildPrompt();
+    };
+
+    const genBtn = qs("[data-img-gen]", img);
+    const grid = qs("[data-img-grid]", img);
+
+    function paintGen() {
+      qs("[data-img-left]", img).textContent = st.left > 0
+        ? "Осталось " + st.left + " из " + LK_GEN_LIMIT
+        : "Попытки закончились";
+      genBtn.disabled = st.busy || st.left <= 0;
+      genBtn.textContent = st.busy ? "Генерируем…" : st.variants.length ? "Ещё вариант" : "Сгенерировать";
+      grid.innerHTML = st.variants.map((k, i) => `
+        <button type="button" class="lk-img__v lk-gen--${k}${st.src === "gen" && i === st.chosen ? " is-on" : ""}"
+          data-img-pick="${i}"><span>Вариант ${i + 1}</span></button>`).join("")
+        + (st.busy ? `<div class="lk-img__v is-busy"><span>Генерируем…</span></div>` : "")
+        + (st.left <= 0 ? `<div class="lk-img__out">Попытки на этот купон закончились. Выберите
+            один из вариантов или загрузите своё изображение.</div>` : "");
+    }
+
+    genBtn.onclick = () => {
+      if (st.busy || st.left <= 0) return;
+      st.busy = true;
+      st.left--;
+      paintGen();
+      setTimeout(() => {
+        st.variants.push(st.variants.length % 4 + 1);
+        st.chosen = st.variants.length - 1;
+        st.src = "gen";
+        st.busy = false;
+        paintGen();
+        paintMedia();
+        sync();
+      }, 3200);
+    };
+
+    grid.addEventListener("click", e => {
+      const b = e.target.closest("[data-img-pick]");
+      if (!b) return;
+      st.chosen = Number(b.dataset.imgPick);
+      st.src = "gen";
+      paintGen();
+      paintMedia();
+      sync();
+    });
+
+    paintGen();
+  }
+
+  sync();
 }
 
 VIEWS["client:new-regional"] = () =>
@@ -1141,18 +1456,8 @@ function render() {
     };
   });
 
-  /* Живой предпросмотр величины скидки в форме создания */
-  const val = qs("#pvVal", host);
-  if (val) {
-    const mech = qs('[data-f="mech"]', host);
-    const size = qsa(".lk-i", host).find(i => i.placeholder === "−30%");
-    const sync = () => {
-      const m = LK_MECHANICS.find(x => x.label === (mech && mech.value));
-      val.textContent = (size && size.value) || (m && m.sample) || "−30%";
-    };
-    if (mech) mech.onchange = sync;
-    if (size) size.oninput = sync;
-  }
+  /* Конструктор купона: превью, адреса и блок изображения */
+  initCouponBuilder(host);
 
   /* Калькулятор размещения. Цена собирается из ниши, городов, срока и
      пакета соцсетей — по ТЗ §4.3.5 клиент должен видеть её прямо в мастере,
