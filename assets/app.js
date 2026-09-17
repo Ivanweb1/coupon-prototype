@@ -382,6 +382,60 @@ function cardHTML(c, compact) {
     </div>`;
 }
 
+/* Фото купонов в дизайн-версии (body.dz). Реальных креативов пока нет —
+   раздаём четыре картинки случайно, но так, чтобы одинаковые не стояли
+   рядом: ни с соседом слева, ни через одну, ни с карточкой над ней в
+   сетке. Вызывается после того, как карточка уже вставлена в контейнер. */
+const COUPON_PHOTOS = ["beauty", "coffee", "entertainment", "fitness"]
+  .map(n => "assets/coupons/" + n + ".jpg");
+
+function applyPhoto(card) {
+  if (!document.body.classList.contains("dz")) return;
+  const host = card.parentElement;
+  if (!host) return;
+  const kids = Array.from(host.children);
+  const i = kids.indexOf(card);
+  const tpl = getComputedStyle(host).gridTemplateColumns;
+  const cols = !tpl || tpl === "none" ? 1 : tpl.split(" ").length;
+  const photoAt = j => j >= 0 && kids[j]._coupon ? kids[j]._coupon.photo : null;
+  /* Строго: весь ряд без повторов, плюс не как сверху. Если так уже не
+     выходит (в ряду 4 карточки, а картинок тоже 4), — хотя бы не как
+     слева и сверху. В ленте-рельсе (1 «колонка») — не как две предыдущие. */
+  const row = [];
+  for (let j = i - (cols > 1 ? i % cols : 2); j < i; j++) row.push(photoAt(j));
+  /* Проверка наперёд: после выбора оставшиеся картинки должны без повторов
+     расставиться по остатку ряда, не совпадая с картинками над ними —
+     иначе последняя карточка ряда упрётся в тупик. */
+  const rowEnd = cols > 1 ? i - (i % cols) + cols : i + 1;
+  const fits = (left, j) => j >= rowEnd || left.some(p =>
+    p !== photoAt(j - cols) && fits(left.filter(q => q !== p), j + 1));
+  let pool = COUPON_PHOTOS.filter(p => !row.includes(p) && p !== photoAt(i - cols) &&
+    fits(COUPON_PHOTOS.filter(q => q !== p && !row.includes(q)), i + 1));
+  if (!pool.length) pool = COUPON_PHOTOS.filter(p => p !== photoAt(i - 1) && p !== photoAt(i - cols));
+  const c = card._coupon;
+  c.photo = pool[Math.floor(Math.random() * pool.length)];
+  const media = qs(".card__media", card);
+  media.style.background = 'url("' + c.photo + '") center/cover no-repeat';
+  media.classList.add("has-photo");
+  host._photoCols = cols;
+  photoHosts.add(host);
+}
+
+/* Число колонок сетки зависит от ширины окна: соседи, разведённые при
+   четырёх колонках, при трёх могут оказаться рядом. Поэтому при смене
+   раскладки раздаём картинки заново по порядку. */
+const photoHosts = new Set();
+window.addEventListener("resize", () => {
+  photoHosts.forEach(host => {
+    const tpl = getComputedStyle(host).gridTemplateColumns;
+    const cols = !tpl || tpl === "none" ? 1 : tpl.split(" ").length;
+    if (cols === host._photoCols) return;
+    const kids = Array.from(host.children).filter(k => k._coupon);
+    kids.forEach(k => { k._coupon.photo = null; });
+    kids.forEach(applyPhoto);
+  });
+});
+
 function makeCard(c, compact) {
   const el = document.createElement("div");
   el.className = "card card-in";
@@ -467,7 +521,9 @@ function consumePin(gridSel) {
   if (!c || !c.cat || c.cat.l1 !== state.l1 || c.cat.slug !== state.l2) return false;
   const grid = qs(gridSel);
   if (!grid) return false;
-  grid.appendChild(makeCard(c));
+  const card = makeCard(c);
+  grid.appendChild(card);
+  applyPhoto(card);
   return true;
 }
 
@@ -489,6 +545,7 @@ function fillFeed(gridSel, n) {
     const card = makeCard(c);
     card.style.animationDelay = (i % 8) * 40 + "ms";
     grid.appendChild(card);
+    applyPhoto(card);
   });
 }
 
@@ -626,7 +683,7 @@ function quickHTML(c) {
   return `
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
-      <div class="quick__photo">
+      <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
         <span class="quick__value">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
       </div>
@@ -794,7 +851,9 @@ function buildRecommendations(cat) {
     let c = makeCoupon(id, feedCity());
     for (let t = 0; t < 12 && used.has(c.title + c.company); t++) c = makeCoupon(id, feedCity());
     used.add(c.title + c.company);
-    rail.appendChild(makeCard(c, true));
+    const card = makeCard(c, true);
+    rail.appendChild(card);
+    applyPhoto(card);
   }
 
   initRailNav(rail);

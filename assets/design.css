@@ -493,6 +493,15 @@
 .dz .card:nth-child(6n+5) .card__media{background:linear-gradient(150deg,#F6DCD3 0%,#D98A74 100%)}
 .dz .card:nth-child(6n+6) .card__media{background:linear-gradient(150deg,#E8E0F3 0%,#B8A6D9 100%)}
 
+/* Фото купона: вместо светлых бликов — лёгкое затемнение сверху и снизу,
+   чтобы плашки расстояния, выгоды и erid читались на любом снимке */
+.dz .card__media.has-photo::before,
+.dz .quick__photo.has-photo::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(20,10,8,.28) 0%,rgba(20,10,8,0) 32%,rgba(20,10,8,0) 62%,rgba(20,10,8,.32) 100%);
+}
+.dz .has-photo .erid-stamp{color:rgba(255,255,255,.82);z-index:1}
+
 .dz.cards-wb .card:hover .card__media{
   transform:translateY(-5px) rotate(-.6deg);
   box-shadow:0 22px 40px -20px rgba(80,14,10,.45);
