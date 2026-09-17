@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260918v">
-<link rel="stylesheet" href="assets/design.css?v=20260918v">
+<link rel="stylesheet" href="assets/style.css?v=20260918w">
+<link rel="stylesheet" href="assets/design.css?v=20260918w">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz cards-wb">
@@ -150,21 +150,15 @@
       </div>
     </div>
 
-    <!-- Подвал в пять колонок: бренд с соцсетями города, три списка ссылок
-         и сообщества маркетплейсов справа — так не остаётся пустого угла
-         ни сверху справа, ни снизу. -->
+    <!-- Подвал в два яруса. Сверху бренд и три списка ссылок — колонки
+         выходят одной высоты. Снизу строкой соцсети города и паблики
+         маркетплейсов: раньше они стояли столбиком в колонке бренда и
+         в колонке справа, из-за чего под остальными колонками и справа
+         внизу оставалась пустота. -->
     <div class="dz-foot">
       <div class="dz-foot__brand">
         <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
         <p class="dz-foot__tag">Все скидки <span data-geo-gen>Липецка</span> в одном месте. Бесплатно и без регистрации: нашли купон, сохранили код, показали на кассе.</p>
-        <div class="footer-soc-group">
-          <span class="footer-soc-group__label">Мы в соцсетях <span data-geo-gen>города</span></span>
-          <div class="footer-soc-group__row">
-            <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
-            <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
-            <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
-          </div>
-        </div>
       </div>
 
       <div class="fcol">
@@ -194,11 +188,22 @@
           <li><a href="#">Города сервиса</a></li>
         </ul>
       </div>
+    </div>
 
-      <!-- Паблики маркетплейсов общие на всю Россию (созвон 09.09.2026),
-           поэтому стоят отдельной колонкой, а не рядом с соцсетями города -->
-      <div class="fcol dz-foot__mp">
-        <h4>Сообщества маркетплейсов</h4>
+    <!-- Нижний ярус: слева соцсети города, справа — паблики маркетплейсов.
+         Паблики общие на всю Россию (созвон 09.09.2026), поэтому стоят
+         отдельной группой, а не вперемешку с городскими. -->
+    <div class="dz-foot-socs">
+      <div class="footer-soc-group">
+        <span class="footer-soc-group__label">Мы в соцсетях <span data-geo-gen>города</span></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
+          <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
+          <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
+        </div>
+      </div>
+      <div class="footer-soc-group dz-foot__mp">
+        <span class="footer-soc-group__label">Сообщества маркетплейсов</span>
         <div class="footer-soc-group__row">
           <a class="soc" href="#" title="Сообщество Wildberries"><img class="soc-ic soc-ic--img" src="assets/brand/mp/wildberries.svg" alt=""> Wildberries</a>
           <a class="soc" href="#" title="Сообщество Ozon"><img class="soc-ic soc-ic--img" src="assets/brand/mp/ozon.svg" alt=""> Ozon</a>
@@ -241,8 +246,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260918v"></script>
-<script src="assets/app.js?v=20260918v"></script>
+<script src="assets/data.js?v=20260918w"></script>
+<script src="assets/app.js?v=20260918w"></script>
 <script>
   initCommon();
   buildDropdown();

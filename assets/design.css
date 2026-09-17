@@ -1503,17 +1503,17 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .cats-b .tags-row__main .tag .tag__label{font-weight:500}
 
 /* ==========================================================================
-   Подвал дизайн-версии: пять колонок вместо трёх
+   Подвал дизайн-версии: два яруса
    ==========================================================================
-   Раньше справа сверху и снизу оставалась пустота: ссылки шли в три
-   колонки, а соцсети — отдельной строкой во всю ширину. Теперь бренд с
-   соцсетями города слева, три списка ссылок и паблики маркетплейсов
-   справа — ряд заполнен целиком. */
+   Пять колонок в один ряд оставляли пустоту: соцсети города стояли
+   столбиком и тянули колонку бренда вниз, а списки ссылок кончались
+   высоко. Теперь верхний ярус — бренд и три списка одной высоты, нижний —
+   соцсети города и паблики маркетплейсов строкой во всю ширину. */
 .dz-foot{
-  display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,.9fr)) minmax(0,1.1fr);
-  gap:36px;padding:44px 0 34px;
+  display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));
+  gap:36px;padding:44px 0 30px;
 }
-.dz-foot__brand{display:flex;flex-direction:column;gap:16px;max-width:38ch}
+.dz-foot__brand{display:flex;flex-direction:column;gap:16px;max-width:42ch}
 .dz-foot .dz-foot-brand{margin:0}
 .dz-foot__tag{margin:0;font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.62)}
 .dz-foot__tag [data-geo-gen]{color:#fff}
@@ -1522,8 +1522,15 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   color:rgba(255,255,255,.5);font-weight:600;
 }
 .dz-foot .fcol ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
-.dz-foot .footer-soc-group__row{flex-direction:column;align-items:flex-start;gap:8px}
-.dz-foot__mp .footer-soc-group__row .soc{width:100%;justify-content:flex-start}
+
+/* Нижний ярус — те же колонки, что сверху: соцсети города над колонкой
+   бренда, паблики маркетплейсов — над тремя списками ссылок */
+.dz-foot-socs{
+  display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,3fr);
+  gap:36px;padding:0 0 32px;
+}
+.dz-foot-socs .footer-soc-group{gap:12px}
+.dz-foot-socs .footer-soc-group__row{display:flex;flex-wrap:wrap;gap:8px}
 
 .dz .footer__legal{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .dz-foot__top{
@@ -1534,12 +1541,14 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz-foot__top:hover{background:#fff;color:var(--ink);border-color:#fff}
 
 @media (max-width:1100px){
-  .dz-foot{grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr));gap:30px 28px}
+  .dz-foot{grid-template-columns:minmax(0,1.2fr) repeat(2,minmax(0,1fr));gap:30px 28px}
   .dz-foot__brand{grid-column:span 3;max-width:60ch}
+  .dz-foot-socs{grid-template-columns:1fr;gap:22px}
 }
 @media (max-width:680px){
-  .dz-foot{grid-template-columns:1fr;gap:26px;padding:32px 0 26px}
+  .dz-foot{grid-template-columns:1fr;gap:26px;padding:32px 0 22px}
   .dz-foot__brand{grid-column:auto}
+  .dz-foot-socs{padding-bottom:24px}
   .dz-foot__top{margin-left:0}
 }
 /* Логотип в подвале крупнее и выровнен по шару, а не по краю картинки */
@@ -1550,3 +1559,23 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .dz-foot .dz-foot-brand img{height:52px}
   .dz-foot .dz-foot-brand span{font-size:17px}
 }
+
+/* Правки 18.09.2026 ===================================================== */
+
+/* Число у чипса категории выравнивается по базовой линии названия: кегль
+   у него меньше, и при центровке по высоте цифры «висели» выше строки.
+   В варианте Б число стоит под названием — там сдвиг не нужен. */
+.dz:not(.cats-b) .tag__n{position:relative;top:1px}
+
+/* Площадка на карточке маркетплейса — белой плашкой со словесным
+   логотипом вместо названия текстом: логотипы узнаваемее, плашка та же,
+   что у минут до точки. */
+.dz .card__near--mp{background:#fff;color:var(--ink);padding:0 9px}
+.dz .card__near--mp .mp-logo{height:12px;width:auto;display:block}
+
+/* «Открыть страницу купона» — белая кнопка с фирменной обводкой: спорить
+   с «Забрать купон» она не должна, но и теряться на сером не годится */
+.dz.quick-side .quick__foot .btn{
+  background:#fff;border-color:var(--brand);color:var(--brand);
+}
+.dz.quick-side .quick__foot .btn:hover{background:var(--brand);border-color:var(--brand);color:#fff}

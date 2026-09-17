@@ -221,8 +221,9 @@ input{font:inherit;color:inherit}
 }
 /* У купона маркетплейса нет точки на карте: вместо минут — площадка */
 .card__near--mp{
-  background:rgba(21,21,20,.82);color:#fff;font-weight:600;letter-spacing:.01em;
+  background:rgba(255,255,255,.92);color:var(--ink);font-weight:600;letter-spacing:.01em;
 }
+.card__near--mp .mp-logo{height:12px;width:auto;display:block}
 
 .tag__label-s{display:none}
 .tag--near svg,.select--near svg{color:var(--ink-3)}

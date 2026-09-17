@@ -405,6 +405,20 @@ function buildL1Dropdowns() {
 /* ==========================================================================
    Карточка купона
    ========================================================================== */
+/* Площадку показываем её словесным логотипом: он узнаваемее названия
+   текстом. Для площадки без файла логотипа остаётся название. */
+const MP_MARKS = {
+  "Wildberries":   "wildberries-full.svg",
+  "Ozon":          "ozon-full.svg",
+  "Яндекс Маркет": "yandex-market-full.svg"
+};
+function mpMark(name) {
+  const file = MP_MARKS[name];
+  return file
+    ? '<img class="mp-logo" src="assets/brand/mp/' + file + '" alt="' + name + '">'
+    : name;
+}
+
 function cardHTML(c, compact) {
   /* Два варианта карточки. wb — плотная, как на маркетплейсах: заголовок
      под фото. soft — наша первая версия: заголовок наложен на фото. */
@@ -413,7 +427,7 @@ function cardHTML(c, compact) {
   /* У купона маркетплейса нет расстояния: он действует в корзине, а не в
      точке на карте. Вместо минут показываем площадку. */
   const corner = c.market
-    ? '<span class="card__near card__near--mp">' + c.market + "</span>"
+    ? '<span class="card__near card__near--mp">' + mpMark(c.market) + "</span>"
     : '<span class="card__near">' + fmtDist(c.dist) + "</span>";
 
   /* Город в подписи нужен только в выдаче области: в выдаче города он у
