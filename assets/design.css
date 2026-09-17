@@ -445,3 +445,236 @@
   .dz-hero--lite .dzl__search .search__voice{display:none}
   .dz-hero--lite .dzl__search .search__go{height:42px;padding:0 16px}
 }
+
+/* ==========================================================================
+   Блок 2. Лента купонов — общий для обоих вариантов первого экрана
+   ==========================================================================
+   Карточка — фото, под ним заголовок (плотная раскладка как на
+   маркетплейсах). Выгода — красным «билетиком» на фото: её видно первой
+   при пролистывании. Пока реальных фото нет, заглушки — тёплые градиенты
+   в тон бренду, а не серая штриховка. В углу — маленький шар из логотипа:
+   тот самый постоянный знак «сделано на сервисе» из созвона 16.09. */
+.dz .section{padding-top:40px}
+.dz .section__head{align-items:center;margin-bottom:22px}
+.dz .section__head h2{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(22px,2vw,30px);letter-spacing:-.03em;line-height:1.15;
+}
+.dz-section-note{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:500;color:var(--ink-3);
+}
+.dz-section-note::before{
+  content:"";width:8px;height:8px;border-radius:50%;background:var(--brand);
+  animation:dzPingRed 2.4s ease-out infinite;
+}
+
+.dz .grid{gap:30px 18px}
+
+.dz .card__media{
+  border:0;border-radius:20px;
+  background:linear-gradient(150deg,#FCD9CF 0%,#F4A493 100%);
+}
+.dz .card__media::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:
+    radial-gradient(60% 45% at 78% 22%, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 70%),
+    radial-gradient(70% 50% at 10% 100%, rgba(120,30,20,.10) 0%, rgba(120,30,20,0) 70%);
+}
+.dz .card__media::after{
+  content:"";position:absolute;right:11px;bottom:10px;width:13px;height:22px;
+  background:url("brand/logo-white.png") center/contain no-repeat;
+  opacity:.85;filter:drop-shadow(0 1px 2px rgba(80,14,10,.25));
+}
+/* Разные тёплые заглушки, чтобы лента не сливалась в одну плашку */
+.dz .card:nth-child(6n+2) .card__media{background:linear-gradient(150deg,#FDE9C8 0%,#F3BE7A 100%)}
+.dz .card:nth-child(6n+3) .card__media{background:linear-gradient(150deg,#F9D6DE 0%,#E98FA6 100%)}
+.dz .card:nth-child(6n+4) .card__media{background:linear-gradient(150deg,#E4EDD9 0%,#A9C58E 100%)}
+.dz .card:nth-child(6n+5) .card__media{background:linear-gradient(150deg,#F6DCD3 0%,#D98A74 100%)}
+.dz .card:nth-child(6n+6) .card__media{background:linear-gradient(150deg,#E8E0F3 0%,#B8A6D9 100%)}
+
+.dz.cards-wb .card:hover .card__media{
+  transform:translateY(-5px) rotate(-.6deg);
+  box-shadow:0 22px 40px -20px rgba(80,14,10,.45);
+}
+.dz .card__near{
+  top:10px;left:10px;height:24px;padding:0 9px;
+  display:inline-flex;align-items:center;
+  background:#fff;color:var(--ink);font-size:11px;font-weight:600;
+  box-shadow:0 2px 8px rgba(80,14,10,.12);
+}
+.dz .card__near--mp{background:var(--ink);color:#fff}
+.dz .erid-stamp{color:rgba(34,26,25,.5)}
+.dz .card__share{background:#fff;color:var(--ink)}
+.dz .card__share:hover{color:var(--brand)}
+
+/* Выгода — «билетик» с вырезами, как купоны на первом экране */
+.dz.cards-wb .card__badge{
+  left:10px;bottom:10px;
+  padding:6px 13px 7px;border-radius:10px;
+  background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:-.03em;
+  -webkit-mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+
+.dz.cards-wb .card__body{padding:13px 2px 0;gap:9px}
+.dz.cards-wb .card__title{font-size:15px;font-weight:600;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+.dz.cards-wb .card__meta{font-size:12.5px;color:var(--ink-3)}
+.dz .card__meta b{color:var(--ink-2)}
+
+.dz .card__actions .btn{height:40px}
+.dz .card__actions .btn--ghost{border-color:var(--line-strong);color:var(--ink-2)}
+.dz .card__actions .btn--ghost:hover{border-color:var(--ink-3);background:var(--surface)}
+.dz .btn--solid{background:var(--brand);color:#fff}
+.dz .btn--solid:hover{background:var(--brand-600);opacity:1}
+.dz .header-cta.btn--solid{background:var(--ink)}
+.dz .header-cta.btn--solid:hover{background:#000}
+.dz .btn.is-code{
+  background:var(--brand-50);color:var(--brand-700);
+  box-shadow:inset 0 0 0 1.5px var(--brand);
+}
+
+.dz .loader__dot{background:var(--brand)}
+
+/* ==========================================================================
+   Блок 3. Рекомендации в хвосте ленты
+   ========================================================================== */
+.dz .recos{
+  border:0;border-radius:32px;padding:32px 30px 18px;
+  background:
+    radial-gradient(520px 240px at 100% 0%, #FDE3DF 0%, rgba(253,227,223,0) 70%),
+    var(--brand-50);
+}
+.dz .recos__eyebrow{
+  background:#fff;border:0;color:var(--brand);font-weight:700;
+  box-shadow:0 2px 10px rgba(169,42,36,.1);
+}
+.dz .recos__head h2{
+  font-family:var(--font-display);font-weight:700;font-size:clamp(20px,1.8vw,26px);letter-spacing:-.03em;
+}
+.dz .recos .card{background:none}
+.dz .rail-wrap::before{background:linear-gradient(to right,var(--brand-50),transparent)}
+.dz .rail-wrap::after{background:linear-gradient(to left,var(--brand-50),transparent)}
+.dz .rail-nav:hover{background:var(--brand);border-color:var(--brand)}
+@media (max-width:640px){.dz .recos{padding:22px 16px 10px;border-radius:24px}}
+
+/* ==========================================================================
+   Блок 4. Купон поверх ленты
+   ========================================================================== */
+.dz .overlay{background:rgba(34,20,18,.5)}
+.dz .quick{border-radius:30px}
+.dz .quick__media{background:var(--brand-50);border-right:0}
+.dz .quick__photo{
+  border:0;border-radius:22px;
+  background:linear-gradient(150deg,#FCD9CF 0%,#F4A493 100%);
+  box-shadow:0 24px 40px -24px rgba(80,14,10,.5);
+}
+.dz .quick__value{
+  left:16px;bottom:16px;padding:8px 16px 10px;border-radius:14px;
+  background:var(--brand);color:#fff;text-shadow:none;
+  font-family:var(--font-display);font-weight:800;font-size:clamp(26px,2.6vw,36px);
+}
+.dz .quick h3{font-family:var(--font-display);font-weight:700;font-size:22px;letter-spacing:-.03em;line-height:1.2}
+.dz .quick__close:hover{color:var(--brand)}
+.dz .company{border-color:var(--line);background:#fff}
+.dz .company__logo{background:var(--brand-50);color:var(--brand-300)}
+.dz .soc:hover{border-color:var(--brand-300);color:var(--brand-700);background:var(--brand-50)}
+.dz .terms li::before{background:var(--brand)}
+.dz .block-label{color:var(--ink-3);font-weight:600}
+.dz .map__pin{color:var(--brand)}
+.dz .quick__photo::after{
+  content:"";position:absolute;right:14px;bottom:14px;width:16px;height:27px;
+  background:url("brand/logo-white.png") center/contain no-repeat;opacity:.9;
+}
+
+/* Промокод — главное действие окна: пунктир, как линия отрыва на купоне */
+.dz .reveal{
+  border:2px dashed var(--brand-300);border-radius:18px;
+  background:var(--brand-50);
+}
+.dz .reveal__code{font-family:var(--font-display);color:var(--ink);letter-spacing:.12em}
+.dz .reveal.is-open{border-style:solid;border-color:var(--brand);background:#fff}
+.dz .reveal__done{color:var(--brand-700);font-weight:500}
+
+/* ==========================================================================
+   Блок 5. Выбор города
+   ========================================================================== */
+.dz .modal__box{border-radius:30px}
+.dz .modal__box h3{font-family:var(--font-display);font-weight:700;letter-spacing:-.03em}
+.dz .modal__yes{background:var(--brand)}
+.dz .modal__yes:hover{background:var(--brand-600)}
+.dz .city-list button:hover{border-color:var(--brand-300);color:var(--brand-700)}
+.dz .city-list button.is-active,
+.dz .city-region.is-active{background:var(--brand);border-color:var(--brand)}
+.dz .city-region:hover{border-color:var(--brand-300);background:var(--brand-50)}
+
+/* ==========================================================================
+   Блок 6. Подвал
+   ==========================================================================
+   Покупатель долистал ленту — самое время позвать бизнес. Отдельная
+   красная плашка с обещанием «первый купон бесплатно», под ней — тёмный
+   подвал со ссылками и соцсетями. */
+.dz .footer{margin-top:110px;border:0;background:var(--ink);color:#fff}
+.dz-biz{
+  position:relative;overflow:hidden;isolation:isolate;
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:32px;
+  margin:0 0 -16px;transform:translateY(-56px);
+  padding:44px 48px;border-radius:32px;
+  background:
+    radial-gradient(520px 300px at 100% 0%, #EE6A60 0%, rgba(238,106,96,0) 70%),
+    var(--brand);
+  box-shadow:0 30px 60px -30px rgba(80,14,10,.6);
+}
+.dz-biz__k{
+  display:inline-block;padding:5px 12px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.18);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+}
+.dz-biz h2{
+  margin:14px 0 0;max-width:18em;
+  font-family:var(--font-display);font-weight:700;font-size:clamp(24px,2.6vw,38px);line-height:1.1;letter-spacing:-.035em;
+}
+.dz-biz p{margin:12px 0 0;max-width:52ch;font-size:16px;color:rgba(255,255,255,.88)}
+.dz-biz__acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.dz-biz__acts .btn{height:48px;padding:0 24px;font-size:15px;font-weight:600}
+.dz-biz__acts .dz-btn-white{background:#fff;color:var(--brand-700)}
+.dz-biz__acts .dz-btn-white:hover{background:var(--brand-50)}
+.dz-biz__acts .dz-btn-line{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6);color:#fff}
+.dz-biz__acts .dz-btn-line:hover{background:rgba(255,255,255,.12)}
+.dz-biz__art{height:190px;width:auto;margin-right:12px;transform:rotate(8deg);animation:dzFloatBiz 7s ease-in-out infinite}
+@keyframes dzFloatBiz{0%,100%{transform:rotate(8deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+
+.dz .footer__cols{padding:4px 0 36px;border:0}
+.dz .fcol h4{color:rgba(255,255,255,.5)}
+.dz .fcol a{color:rgba(255,255,255,.86)}
+.dz .fcol a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.dz .footer__socials{border-top:1px solid rgba(255,255,255,.12)}
+.dz .footer-soc-group__label{color:rgba(255,255,255,.5)}
+.dz .footer .soc{border-color:rgba(255,255,255,.2);color:#fff}
+.dz .footer .soc:hover{background:#fff;color:var(--ink);border-color:#fff}
+.dz .footer__legal{border-top:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5)}
+.dz .footer__legal a:hover{color:#fff}
+.dz .footer .erid{color:rgba(255,255,255,.4)}
+.dz-foot-brand{display:flex;align-items:center;gap:10px;margin:0 0 26px}
+.dz-foot-brand img{height:40px;width:auto}
+.dz-foot-brand span{font-family:var(--font-display);font-weight:700;font-size:14px;line-height:1.02;text-transform:uppercase}
+
+@media (max-width:900px){
+  .dz-biz{grid-template-columns:1fr;padding:30px 24px;border-radius:26px;transform:translateY(-40px)}
+  .dz-biz__art{position:absolute;right:-20px;bottom:-30px;height:150px;opacity:.25;z-index:-1}
+  .dz .footer{margin-top:80px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .dz-biz__art,.dz-section-note::before{animation:none}
+}
+
+/* На узкой карточке метка рекламы наезжала на плашку расстояния —
+   переносим её строкой ниже */
+@container (max-width: 235px){
+  .dz .card__media .erid-stamp{top:40px;left:11px;right:auto}
+}
