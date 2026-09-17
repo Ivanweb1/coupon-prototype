@@ -1497,46 +1497,82 @@ function renderCouponDesign() {
   const share = qs("[data-share]", root);
   share.onclick = () => shareCoupon(share, c);
 
-  /* Как работает: шаги карточками в ряд, правила — списком в две колонки */
+  /* Как работает: шаги на одной «ленте» с пунктиром между номерами —
+     как линия отрыва купона; правила — белой карточкой с галочками */
+  const CHECK = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
   const r = RULES[c.cat.l1] || RULES.regional;
   qs("#rules").innerHTML = `
-    <ol class="cpd-steps">
-      ${r.steps.map((st, i) => `<li><b>${i + 1}</b><h3>${st[0]}</h3><p>${st[1]}</p></li>`).join("")}
-    </ol>
-    <div class="cpd-terms">
-      <div class="block-label">Как пользоваться купоном правильно</div>
-      <ul class="terms">${r.terms.map(t => `<li>${t}</li>`).join("")}</ul>
+    <div class="cpd-how">
+      <ol class="cpd-steps">
+        ${r.steps.map((st, i) => `<li><b>${i + 1}</b><h3>${st[0]}</h3><p>${st[1]}</p></li>`).join("")}
+      </ol>
+      <div class="cpd-terms">
+        <div class="cpd-terms__head">
+          <h3>Как пользоваться правильно</h3>
+          <p>Коротко о частых вопросах — без мелкого шрифта</p>
+        </div>
+        <ul class="cpd-terms__list">${r.terms.map(t => `<li><i>${CHECK}</i><span>${t}</span></li>`).join("")}</ul>
+      </div>
     </div>`;
 
-  /* О компании — описание из профиля продавца и все контакты с подписями:
-     в поп-апе значки, здесь места хватает на полные подписи */
+  /* О компании. Выводим ровно то, что компания заполняет в ЛК
+     («Профиль компании»): название, краткое описание, ИНН, телефон, сайт,
+     ВКонтакте, Telegram и точки продаж с адресом и режимом работы.
+     Точек может быть несколько — показываем все, ближайшую первой. */
+  const CLOCK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>';
+  const points = c.market ? [] : [
+    { addr: c.address, hours: "ежедневно 10:00–21:00", dist: c.dist },
+    { addr: c.address === "пр-т Победы, 45" ? "ул. Первомайская, 12" : "пр-т Победы, 45",
+      hours: "ежедневно 09:00–22:00", dist: c.dist + 1400 }
+  ];
+  const contacts = [
+    { ic: ICON.site, k: "Сайт", v: "example.ru", href: "#" },
+    { ic: ICON.vk, k: "ВКонтакте", v: "vk.com/example", href: "#" },
+    { ic: ICON.tg, k: "Telegram", v: "@example", href: "#" },
+    { ic: `<span class="cpd-ic">${ICON.phone}</span>`, k: "Телефон", v: "+7 (000) 000-00-00", href: "tel:+70000000000" }
+  ];
+
   qs("#about").innerHTML = `
     <div class="cpd-about__main">
       <div class="cpd-about__head">
         ${companyLogo(c)}
         <div>
-          <div class="company__name">${c.company}</div>
+          <div class="cpd-about__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000</div>
         </div>
       </div>
-      <p>${c.company} ${c.market
+      <p class="cpd-about__lead">${c.company} ${c.market
         ? "продаёт на " + c.market + " с 2021 года. Отгрузка со склада площадки, возврат по правилам маркетплейса."
         : "работает в городе с 2014 года. Своя команда, собственное оборудование, запись день в день."}</p>
-      <dl class="cpd-about__facts">
-        ${c.market
-          ? `<div><dt>Площадка</dt><dd>${c.market}</dd></div>
-             <div><dt>Где применить</dt><dd>В корзине при оформлении заказа</dd></div>`
-          : `<div><dt>Адрес</dt><dd>${c.city.name}, ${c.address}</dd></div>
-             <div><dt>Режим работы</dt><dd>Ежедневно, 10:00–21:00</dd></div>`}
-      </dl>
+
+      <div class="block-label">${c.market ? "Где продаёт" : "Точки продаж · " + points.length}</div>
+      ${c.market
+        ? `<div class="cpd-points"><div class="cpd-point">
+            ${MARKET_LOGO[c.market]
+              ? `<img class="cpd-point__mp" src="assets/brand/mp/${MARKET_LOGO[c.market]}.svg" alt="">`
+              : `<span class="cpd-point__pin">${ICON.bag}</span>`}
+            <div><b>${c.market}</b><span>Промокод вводится в корзине при оформлении заказа</span></div>
+          </div></div>`
+        : `<div class="cpd-points">${points.map((pt, i) => `
+            <div class="cpd-point">
+              <span class="cpd-point__pin">${ICON.pinFill}</span>
+              <div>
+                <b>${c.city.name}, ${pt.addr}</b>
+                <span>${CLOCK} ${pt.hours}</span>
+              </div>
+              <em${i === 0 ? ' class="is-near"' : ""}>${fmtDist(pt.dist)}</em>
+            </div>`).join("")}</div>`}
     </div>
+
     <div class="cpd-about__links">
       <div class="block-label">Компания в сети</div>
-      <a class="soc" href="#" title="Сайт компании">${ICON.site} Сайт</a>
-      <a class="soc" href="#" title="Компания ВКонтакте">${ICON.vk} ВКонтакте</a>
-      <a class="soc" href="#" title="Компания в Telegram">${ICON.tg} Telegram</a>
-      <a class="soc" href="tel:+70000000000" title="Позвонить в компанию"><span class="cpd-ic">${ICON.phone}</span> +7 (000) 000-00-00</a>
-      <a class="soc" href="mailto:info@example.ru" title="Написать на почту компании"><span class="cpd-ic">${ICON.mail}</span> info@example.ru</a>
+      <div class="cpd-contacts">
+        ${contacts.map(x => `
+          <a class="soc cpd-contact" href="${x.href}" title="${x.k}">
+            ${x.ic}
+            <span><small>${x.k}</small>${x.v}</span>
+          </a>`).join("")}
+      </div>
     </div>`;
 
   /* Другие купоны той же компании */

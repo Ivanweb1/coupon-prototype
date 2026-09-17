@@ -749,7 +749,48 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz-biz__acts .dz-btn-white:hover{background:var(--brand-50)}
 .dz-biz__acts .dz-btn-line{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6);color:#fff}
 .dz-biz__acts .dz-btn-line:hover{background:rgba(255,255,255,.12)}
-.dz-biz__art{height:190px;width:auto;margin-right:12px;transform:rotate(8deg);animation:dzFloatBiz 7s ease-in-out infinite}
+/* Фон справа: зерно, как у первого экрана, и пунктирные кольца вокруг шара —
+   «линии отрыва» купона, расходящиеся от логотипа */
+.dz-biz::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:.16;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.dz-biz::after{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  right:-120px;top:50%;width:640px;height:640px;transform:translateY(-50%);border-radius:50%;
+  background:
+    radial-gradient(circle, transparent 0 139px, rgba(255,255,255,.22) 140px 141.5px, transparent 142px),
+    radial-gradient(circle, transparent 0 219px, rgba(255,255,255,.16) 220px 221.5px, transparent 222px),
+    radial-gradient(circle, transparent 0 299px, rgba(255,255,255,.1) 300px 301.5px, transparent 302px);
+  -webkit-mask:repeating-conic-gradient(#000 0 4deg, transparent 4deg 7deg);
+          mask:repeating-conic-gradient(#000 0 4deg, transparent 4deg 7deg);
+}
+.dz-biz__art{position:relative;width:360px;height:230px;margin-right:8px}
+.dz-biz__balloon{
+  position:absolute;left:50%;top:50%;height:200px;width:auto;
+  transform:translate(-50%,-50%) rotate(8deg);
+  animation:dzFloatBalloon 7s ease-in-out infinite;
+}
+@keyframes dzFloatBalloon{
+  0%,100%{transform:translate(-50%,-50%) rotate(8deg)}
+  50%{transform:translate(-50%,calc(-50% - 8px)) rotate(5deg)}
+}
+.dz-biz__card{
+  position:absolute;display:flex;flex-direction:column;gap:2px;
+  padding:12px 16px 13px;border-radius:16px;background:#fff;color:var(--ink);
+  box-shadow:0 22px 40px -18px rgba(60,10,6,.55);
+  animation:dzBob 6s ease-in-out infinite;
+}
+.dz-biz__card span{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.dz-biz__card b{font-family:var(--font-display);font-size:30px;font-weight:800;letter-spacing:-.04em;line-height:1.05;color:var(--brand)}
+.dz-biz__card em{font-style:normal;font-size:12px;font-weight:600;color:#2F8A4E}
+.dz-biz__card--stat{--rot:-6deg;left:0;top:18px;transform:rotate(-6deg)}
+.dz-biz__card--pub{--rot:5deg;right:0;bottom:14px;gap:8px;animation-duration:7s;animation-delay:-2.5s;transform:rotate(5deg)}
+.dz-biz__socs{display:flex;gap:6px}
+.dz-biz__socs .soc-ic{width:28px;height:28px}
+.dz-biz__socs .soc-ic__bg{fill:var(--soc-c)}
+.dz-biz__socs .soc-ic__s{stroke:#fff}
 @keyframes dzFloatBiz{0%,100%{transform:rotate(8deg)}50%{transform:translateY(-8px) rotate(5deg)}}
 
 .dz .footer__cols{padding:4px 0 36px;border:0}
@@ -769,12 +810,14 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 
 @media (max-width:900px){
   .dz-biz{grid-template-columns:1fr;padding:30px 24px;border-radius:26px;transform:translateY(-40px)}
-  .dz-biz__art{position:absolute;right:-20px;bottom:-30px;height:150px;opacity:.25;z-index:-1}
+  .dz-biz__art{position:absolute;right:-40px;bottom:-40px;width:200px;height:200px;opacity:.25;z-index:-1;margin:0}
+  .dz-biz__card{display:none}
+  .dz-biz::after{right:-260px;top:auto;bottom:-320px;transform:none}
   .dz .footer{margin-top:80px}
 }
 
 @media (prefers-reduced-motion:reduce){
-  .dz-biz__art,.dz-section-note::before{animation:none}
+  .dz-biz__art,.dz-biz__balloon,.dz-biz__card,.dz-section-note::before{animation:none}
 }
 
 /* На узкой карточке метка рекламы наезжала на плашку расстояния —
@@ -961,94 +1004,142 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .cpd .block-label{margin-bottom:8px}
 .cpd .map--live{height:260px;border-radius:22px;padding:0;display:block;overflow:hidden}
 
-/* ---------- Как работает: шаги карточками + правила ---------- */
+/* ---------- Как работает: лента шагов + правила ---------- */
+.cpd-how{
+  padding:30px 30px 14px;border-radius:32px;
+  background:
+    radial-gradient(520px 240px at 100% 0%, #FDE3DF 0%, rgba(253,227,223,0) 70%),
+    var(--brand-50);
+}
 .cpd-steps{
-  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;
+  position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;
   margin:0;padding:0;list-style:none;
 }
-.cpd-steps li{
-  position:relative;padding:20px 20px 22px;border-radius:24px;
-  background:#fff;border:1px solid var(--line);
-  transition:transform .25s var(--ease),box-shadow .25s;
+/* пунктир «линии отрыва» через номера шагов */
+.cpd-steps::before{
+  content:"";position:absolute;left:24px;right:calc(25% - 42px);top:23px;height:0;
+  border-top:2px dashed var(--brand-300);opacity:.7;
 }
-.cpd-steps li:hover{transform:translateY(-4px);box-shadow:0 22px 36px -26px rgba(80,14,10,.4)}
+.cpd-steps li{position:relative;padding:0 6px 0 0}
 .cpd-steps b{
-  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
-  background:var(--brand-50);color:var(--brand);
-  font-family:var(--font-display);font-size:14px;font-weight:700;
+  position:relative;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;
+  background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-size:18px;font-weight:700;
+  box-shadow:0 0 0 6px var(--brand-50),0 12px 22px -12px rgba(221,68,60,.8);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
 }
-.cpd-steps li + li::before{
-  content:"";position:absolute;left:-12px;top:34px;width:9px;height:9px;
-  border-top:1.5px solid var(--ink-4);border-right:1.5px solid var(--ink-4);
-  transform:translate(-50%,-50%) rotate(45deg);
-}
-.cpd-steps h3{margin:16px 0 6px;font-size:16px;font-weight:600;letter-spacing:-.015em;line-height:1.25}
-.cpd-steps p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.cpd-steps li:hover b{transform:translateY(-3px) rotate(-6deg)}
+.cpd-steps h3{margin:18px 0 6px;font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-.02em;line-height:1.25}
+.cpd-steps p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
 
 .cpd-terms{
-  margin-top:14px;padding:22px 24px;border-radius:24px;background:var(--surface);
+  display:grid;grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr);gap:28px;
+  margin:30px -16px 0;padding:24px 26px;border-radius:24px;background:#fff;
+  box-shadow:0 16px 34px -28px rgba(80,14,10,.45);
 }
-.cpd-terms .terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 36px}
-.cpd-terms .terms li{font-size:14px}
-.cpd-terms .terms li::before{background:var(--brand)}
+.cpd-terms__head h3{margin:0;font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.cpd-terms__head p{margin:8px 0 0;font-size:13.5px;color:var(--ink-3);line-height:1.5}
+.cpd-terms__list{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px;
+  margin:0;padding:0;list-style:none;
+}
+.cpd-terms__list li{display:flex;gap:10px;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.cpd-terms__list i{
+  flex:0 0 auto;width:20px;height:20px;margin-top:1px;border-radius:50%;
+  display:grid;place-items:center;background:var(--brand-50);color:var(--brand);
+}
 
-/* ---------- О компании ---------- */
+/* ---------- О компании: две равные по высоте колонки ---------- */
 .cpd-about{
-  display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;align-items:stretch;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:stretch;
 }
-.cpd-about__main{padding:24px;border-radius:24px;border:1px solid var(--line);background:#fff}
+.cpd-about__main{
+  display:flex;flex-direction:column;
+  padding:26px;border-radius:28px;border:1px solid var(--line);background:#fff;
+}
 .cpd-about__head{display:flex;align-items:center;gap:14px}
-.cpd-about__head .company__logo{width:52px;height:52px;border-radius:16px;font-size:22px}
-.cpd-about__head .company__name{font-family:var(--font-display);font-weight:700;font-size:18px;letter-spacing:-.02em}
-.cpd-about__main p{margin:16px 0 0;max-width:62ch;color:var(--ink-2);line-height:1.6;font-size:15px}
-.cpd-about__facts{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;
-  margin:18px 0 0;padding-top:18px;border-top:1px solid var(--line);
+.cpd-about__head .company__logo{width:56px;height:56px;border-radius:18px;font-size:24px}
+.cpd-about__name{font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:-.025em;line-height:1.15}
+.cpd-about__lead{margin:16px 0 20px;color:var(--ink-2);line-height:1.6;font-size:15px}
+.cpd-about__main .block-label{margin-bottom:10px}
+
+.cpd-points{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.cpd-point{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:16px;background:var(--surface);
 }
-.cpd-about__facts dt{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
-.cpd-about__facts dd{margin:4px 0 0;font-size:14px;color:var(--ink)}
+.cpd-point__pin{
+  flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:#fff;color:var(--brand);
+}
+.cpd-point__pin svg{width:16px;height:16px}
+.cpd-point__mp{width:34px;height:34px;border-radius:50%;flex:0 0 auto}
+.cpd-point > div{min-width:0;flex:1}
+.cpd-point b{display:block;font-size:14px;font-weight:600;color:var(--ink)}
+.cpd-point span{display:flex;align-items:center;gap:5px;margin-top:2px;font-size:12.5px;color:var(--ink-3)}
+.cpd-point em{
+  flex:0 0 auto;font-style:normal;font-size:12px;font-weight:600;color:var(--ink-3);
+  height:24px;padding:0 9px;border-radius:var(--r-pill);display:inline-flex;align-items:center;background:#fff;
+}
+.cpd-point em.is-near{background:var(--brand);color:#fff}
 
 .cpd-about__links{
-  padding:20px;border-radius:24px;background:var(--surface);
-  display:flex;flex-direction:column;gap:8px;
+  display:flex;flex-direction:column;
+  padding:26px;border-radius:28px;background:var(--surface);
 }
-.cpd-about__links .block-label{margin:0 0 4px}
-.cpd-about__links .soc{
-  width:100%;height:46px;justify-content:flex-start;gap:10px;padding:0 14px 0 8px;
-  background:#fff;border-color:transparent;font-size:14px;color:var(--ink);
+.cpd-about__links .block-label{margin:0 0 12px}
+.cpd-contacts{
+  flex:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:10px;
+}
+.cpd-about__links .cpd-contact{
+  width:auto;height:auto;min-height:0;padding:16px;border-radius:20px;
+  flex-direction:column;align-items:flex-start;justify-content:space-between;gap:14px;
+  background:#fff;border:1px solid transparent;color:var(--ink);white-space:normal;
   --soc-idle:#F3EEED;--soc-g:#8F8684;
+  transition:border-color .2s,transform .25s var(--ease),box-shadow .25s;
 }
-.cpd-about__links .soc:hover{border-color:var(--line-strong);background:#fff;color:var(--ink)}
-.cpd-about__links .soc-ic{width:30px;height:30px}
+.cpd-about__links .cpd-contact:hover{
+  border-color:var(--line-strong);background:#fff;transform:translateY(-3px);
+  box-shadow:0 18px 30px -24px rgba(80,14,10,.45);
+}
+.cpd-contact .soc-ic,.cpd-contact .cpd-ic{width:40px;height:40px}
+.cpd-contact > span:last-child{display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:600;word-break:break-word}
+.cpd-contact small{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
 .cpd-ic{
-  width:30px;height:30px;border-radius:50%;flex:0 0 auto;
-  display:grid;place-items:center;background:#F3EEED;color:#8F8684;
-  transition:background .2s,color .2s;
+  border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
+  background:#F3EEED;color:#8F8684;transition:background .2s,color .2s;
 }
-.cpd-about__links .soc:hover .cpd-ic{background:var(--ink);color:#fff}
+.cpd-contact:hover .cpd-ic{background:var(--ink);color:#fff}
 
 /* SEO-текст — тихо, в конце */
 .dz .seo{margin-top:56px;border-top-color:var(--line);color:var(--ink-3)}
 .dz .seo h2{font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--ink-2)}
 
 @media (max-width:1100px){
-  .cpd-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .cpd-steps li + li::before{display:none}
+  .cpd-steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:30px}
+  .cpd-steps::before{display:none}
+  .cpd-terms{grid-template-columns:1fr;gap:16px}
 }
 @media (max-width:900px){
   .cpd{grid-template-columns:1fr;gap:22px}
   .cpd__media{position:static;padding:12px;border-radius:26px}
   .cpd__photo{width:min(100%,calc(58vh * .8));margin:0 auto}
   .cpd-about{grid-template-columns:1fr}
-  .cpd-terms .terms{grid-template-columns:1fr}
 }
 @media (max-width:640px){
-  .cpd-steps{grid-template-columns:1fr}
+  .cpd-how{padding:22px 16px 12px;border-radius:24px}
+  .cpd-steps{grid-template-columns:1fr;row-gap:20px}
+  .cpd-steps li{display:grid;grid-template-columns:48px 1fr;column-gap:14px}
+  .cpd-steps b{grid-row:span 2}
+  .cpd-steps h3{margin:4px 0 4px}
+  .cpd-terms{margin:22px -6px 0;padding:18px}
+  .cpd-terms__list{grid-template-columns:1fr}
   .cpd .reveal .btn--lg{height:44px;padding:0 18px}
   .cpd .company{flex-wrap:wrap}
   .cpd .socials--icons{margin-left:60px}
   .cpd .map--live{height:200px}
-  .cpd-about__facts{grid-template-columns:1fr}
+  .cpd-about__main,.cpd-about__links{padding:18px;border-radius:22px}
+}
 }
 
 /* Правая колонка тянется до низа фото: карта забирает остаток высоты */
@@ -1068,3 +1159,9 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .cpd__photo::after{right:10px;bottom:10px;width:13px;height:22px}
   .cpd__h1{font-size:26px}
 }
+
+/* Кнопки карточек — на одной линии во всём ряду, сколько бы строк ни
+   занимал заголовок: карточка тянется на высоту ряда, кнопки уходят вниз */
+.dz .card{display:flex;flex-direction:column}
+.dz .card__body{flex:1}
+.dz .card__actions{margin-top:auto}

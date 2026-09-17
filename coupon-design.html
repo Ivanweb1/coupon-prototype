@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260917y">
-<link rel="stylesheet" href="assets/design.css?v=20260917y">
+<link rel="stylesheet" href="assets/style.css?v=20260918c">
+<link rel="stylesheet" href="assets/design.css?v=20260918c">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz cards-wb">
@@ -119,7 +119,20 @@
           <a class="btn dz-btn-line" href="#">Стать партнёром сервиса</a>
         </div>
       </div>
-      <img class="dz-biz__art" src="assets/brand/logo-white.png" alt="" width="357" height="600">
+      <!-- Справа — мини-сцена того, что получает бизнес: публикация в
+           соцсетях города и счётчик забранных купонов. Цифры — рыба. -->
+      <div class="dz-biz__art" aria-hidden="true">
+        <img class="dz-biz__balloon" src="assets/brand/logo-white.png" alt="" width="357" height="600">
+        <div class="dz-biz__card dz-biz__card--stat">
+          <span>Забрали купон</span>
+          <b>128</b>
+          <em>+24 за неделю</em>
+        </div>
+        <div class="dz-biz__card dz-biz__card--pub">
+          <span>Опубликовано</span>
+          <div class="dz-biz__socs"><i data-icon="site"></i><i data-icon="vk"></i><i data-icon="tg"></i><i data-icon="ok"></i></div>
+        </div>
+      </div>
     </div>
 
     <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
@@ -209,8 +222,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260917y"></script>
-<script src="assets/app.js?v=20260917y"></script>
+<script src="assets/data.js?v=20260918c"></script>
+<script src="assets/app.js?v=20260918c"></script>
 <script>
   initCommon();
   buildDropdown();
