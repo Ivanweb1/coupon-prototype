@@ -1368,3 +1368,44 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .cats-b .tags-row__main .tag{height:50px;padding:0 14px 0 6px;font-size:13.5px}
   .cats-b .tags-row__main .tag > [data-icon]:not(.chev){width:36px;height:36px}
 }
+
+/* Шапка: отделяем от страницы — сплошной фон, линия снизу и фирменная
+   полоска сверху; при прокрутке добавляется мягкая тень */
+.dz-header{
+  background:rgba(255,255,255,.96);
+  border-top:3px solid var(--brand);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(255,255,255,.6);
+  transition:box-shadow .25s,border-color .25s;
+}
+.dz-header.is-scrolled{
+  border-bottom-color:transparent;
+  box-shadow:0 12px 30px -18px rgba(80,14,10,.35),0 1px 0 var(--line);
+}
+
+/* Б — всё на 30% компактнее (17.09.2026): капсулы разделов и круги ниш.
+   Шрифты уменьшены мягче, чтобы подписи оставались читаемыми. */
+.cats-b .tags-row__main{gap:10px}
+.cats-b .tags-row__main .tag{height:42px;padding:0 14px 0 6px;gap:8px;font-size:13px}
+.cats-b .tags-row__main .tag > [data-icon]:not(.chev){width:31px;height:31px}
+.cats-b .tags-row__main .tag > [data-icon]:not(.chev) svg{width:16px;height:16px}
+.cats-b .tags-row__main .tag .tag__n{font-size:11.5px}
+.cats-b .tags-row__sub{margin-top:4px}
+.cats-b .tags{gap:4px}
+.cats-b .tags-row__sub .tag--niche,
+.cats-b .tags-row__sub .tag--near{width:76px;gap:6px;font-size:11.5px}
+.cats-b .tag--niche .tag__ic,
+.cats-b .tags-row__sub .tag--near::before{width:50px;height:50px}
+.cats-b .tags-row__sub .tag--near::before{background-size:22px}
+.cats-b .tag--niche .tag__ic svg{width:22px;height:22px}
+.cats-b .tag--niche .tag__name{min-height:0}
+.cats-b .tag--niche .tag__n{margin-top:-4px;font-size:10.5px}
+.cats-b .tags-more{top:25px}
+@media (max-width:640px){
+  .cats-b .tags-row__main .tag{height:38px;font-size:12px}
+  .cats-b .tags-row__sub .tag--niche,.cats-b .tags-row__sub .tag--near{width:68px;font-size:11px}
+  .cats-b .tag--niche .tag__ic,.cats-b .tags-row__sub .tag--near::before{width:44px;height:44px}
+  .cats-b .tag--niche .tag__ic svg{width:20px;height:20px}
+}
+.cats-b .tags-row__sub .tag--near .tag__label{display:none}
+.cats-b .tags-row__sub .tag--near .tag__label-s{display:block}

@@ -275,6 +275,28 @@ function buildTags(l1) {
     host.appendChild(a);
   });
 
+  /* Вариант «круги» (?cats=b): подписи под кругами переносятся, и ряд
+     выглядит рваным. Поэтому сначала ставим ниши с подписью в одну строку,
+     затем в две — внутри каждой группы порядок по числу купонов сохраняется */
+  if (document.body.classList.contains("cats-b")) {
+    const byCount = Array.from(host.children);
+    const lines = el => {
+      const name = qs(".tag__name", el);
+      return Math.round(name.getBoundingClientRect().height / parseFloat(getComputedStyle(name).lineHeight));
+    };
+    const sortByLines = () => {
+      /* 18+ всегда в конце ряда — как и раньше, не выносим её вперёд */
+      const adult = byCount.filter(el => el.href.includes("18plus"));
+      const rest = byCount.filter(el => !adult.includes(el));
+      const one = rest.filter(el => lines(el) <= 1);
+      const many = rest.filter(el => lines(el) > 1);
+      [...one, ...many, ...adult].forEach(el => host.appendChild(el));
+    };
+    sortByLines();
+    /* переносы зависят от шрифта — пересортируем, когда он догрузится */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sortByLines);
+  }
+
   /* «Рядом со мной» — фильтр региональной выдачи: у купона маркетплейса и
      у предложения для бизнеса нет точки на карте, там кнопке нечего
      фильтровать. */
@@ -1725,10 +1747,21 @@ function initCatsStyle() {
   if (v === "a" || v === "b" || v === "c") document.body.classList.add("cats-" + v);
 }
 
+/* Шапка дизайн-версии отделяется от страницы: тонкая линия всегда,
+   а после начала прокрутки — мягкая тень, чтобы шапка «парила» над лентой */
+function initHeaderShadow() {
+  const h = qs(".dz-header");
+  if (!h) return;
+  const sync = () => h.classList.toggle("is-scrolled", window.scrollY > 4);
+  window.addEventListener("scroll", sync, { passive: true });
+  sync();
+}
+
 function initCommon() {
   initCardStyle();
   initQuickStyle();
   initCatsStyle();
+  initHeaderShadow();
   initIcons();
   buildCityModal();
   initCityGate();
