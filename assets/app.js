@@ -811,7 +811,7 @@ function quickHTML(c) {
       ${whereBlock}
 
       <div class="quick__foot">
-        <a class="btn btn--ghost" href="coupon.html" data-open-page>Открыть страницу купона</a>
+        <a class="btn btn--ghost" href="coupon.html" data-open-page>Открыть страницу купона${dz ? ' <span class="quick__foot-arrow">→</span>' : ""}</a>
       </div>
     </div>`;
 }

@@ -823,3 +823,28 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz .quick .soc--icon:hover{background:none;transform:translateY(-2px)}
 .dz .quick .soc--icon .soc-ic{width:36px;height:36px}
 .dz.quick-side .quick .map--live{height:124px}
+
+/* Правки 17.09.2026 (вариант side и общие для поп-апа) ------------------ */
+
+/* Страница купона — кнопкой во всю ширину: без пустоты справа, но
+   спокойной (серая подложка), чтобы не спорить с «Забрать купон» */
+.dz.quick-side .quick__foot{border-top:0;padding-top:2px}
+.dz.quick-side .quick__foot .btn{
+  width:100%;height:44px;justify-content:center;gap:8px;
+  background:var(--surface-2);border-color:transparent;color:var(--ink);
+}
+.dz.quick-side .quick__foot .btn:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.quick__foot-arrow{transition:transform .2s var(--ease)}
+.dz .quick__foot .btn:hover .quick__foot-arrow{transform:translateX(4px)}
+
+/* Карта в сером — ориентир, а не картинка; цвет возвращается при наведении */
+.dz .map--live iframe{filter:grayscale(1) contrast(.92) brightness(1.03);transition:filter .3s}
+.dz .map--live:hover iframe{filter:none}
+
+/* Промокод — чуть больше веса: тёплый градиент и мягкая красная тень */
+.dz .quick .reveal{
+  border-color:#EFA39C;
+  background:linear-gradient(135deg,#FFF1EF 0%,#FDE4E1 100%);
+  box-shadow:0 14px 28px -20px rgba(221,68,60,.55);
+}
+.dz .quick .reveal .block-label{color:var(--brand-700)}
