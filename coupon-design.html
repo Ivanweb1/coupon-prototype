@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260918p">
-<link rel="stylesheet" href="assets/design.css?v=20260918p">
+<link rel="stylesheet" href="assets/style.css?v=20260918q">
+<link rel="stylesheet" href="assets/design.css?v=20260918q">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz cards-wb">
@@ -33,19 +33,24 @@
       <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
     </div>
 
-    <!-- Порядок справа: город — ключевой триггер сервиса, потом соцсети
-         города значками, «Разместить купон» и кабинет -->
-    <button class="city-btn" data-city-open>
-      <span data-icon="pin"></span>
-      <span data-geo-short>Липецк</span>
-      <span class="chev" data-icon="chev"></span>
-    </button>
-
-    <div class="head-socials" aria-label="Мы в соцсетях города">
-      <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="vk"></a>
-      <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="tg"></a>
-      <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="ok"></a>
+    <!-- Справа две группы по смыслу. Для жителя — город и соцсети этого
+         города одной плашкой («Липецк в соцсетях»). Для бизнеса и аккаунта —
+         «Разместить купон» и кабинет, отдельно, с увеличенным отступом:
+         иначе значки соцсетей рядом с кнопкой для бизнеса читаются как
+         соцсети для бизнеса. -->
+    <div class="dz-city-group">
+      <button class="city-btn" data-city-open>
+        <span data-icon="pin"></span>
+        <span data-geo-short>Липецк</span>
+        <span class="chev" data-icon="chev"></span>
+      </button>
+      <div class="head-socials" aria-label="Мы в соцсетях города">
+        <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="vk"></a>
+        <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="tg"></a>
+        <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="ok"></a>
+      </div>
     </div>
+
 
     <a class="btn btn--solid header-cta" href="register.html">
       <span data-icon="plus"></span><span class="header-cta__label">Разместить купон</span>
@@ -232,8 +237,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260918p"></script>
-<script src="assets/app.js?v=20260918p"></script>
+<script src="assets/data.js?v=20260918q"></script>
+<script src="assets/app.js?v=20260918q"></script>
 <script>
   initCommon();
   buildDropdown();

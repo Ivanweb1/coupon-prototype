@@ -1463,3 +1463,37 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .dz-header .header__in{justify-content:flex-end}
   .dz-header .dz-logo{margin-right:auto}
 }
+
+/* Шапка: город и соцсети города — одна плашка; всё справа одной высоты (44,
+   при прокрутке 40); перед группой «Разместить купон · кабинет» отступ больше */
+.dz-city-group{
+  display:flex;align-items:center;flex:0 0 auto;
+  height:44px;padding:0 5px 0 0;margin-right:10px;
+  border:1px solid var(--line-strong);border-radius:var(--r-pill);background:#fff;
+  transition:height .25s var(--ease),border-color .18s;
+}
+.dz-header .dz-city-group .city-btn{
+  height:100%;border:0;background:none;border-radius:var(--r-pill) 0 0 var(--r-pill);
+  padding:0 12px 0 14px;position:relative;
+}
+.dz-header .dz-city-group .city-btn::after{
+  content:"";position:absolute;right:0;top:11px;bottom:11px;width:1px;background:var(--line-strong);
+}
+.dz-header .dz-city-group .city-btn:hover{background:var(--brand-50)}
+.dz-header .dz-city-group .head-socials{padding-left:6px;gap:2px}
+.dz-header .dz-city-group .head-socials .soc,
+.dz-header .dz-city-group .head-socials .soc-ic{width:32px;height:32px}
+.dz-header .header-cta,.dz-header .lk-chip{height:44px}
+.dz-header .lk-chip [data-icon]{width:42px;height:42px}
+
+.dz-header.is-scrolled .dz-city-group{height:40px}
+.dz-header.is-scrolled .dz-city-group .city-btn{height:100%}
+.dz-header.is-scrolled .dz-city-group .city-btn::after{top:9px;bottom:9px}
+.dz-header.is-scrolled .dz-city-group .head-socials .soc,
+.dz-header.is-scrolled .dz-city-group .head-socials .soc-ic{width:30px;height:30px}
+
+@media (max-width:820px){
+  .dz-city-group{padding:0;margin-right:0}
+  .dz-header .dz-city-group .city-btn{border-radius:var(--r-pill)}
+  .dz-header .dz-city-group .city-btn::after{display:none}
+}
