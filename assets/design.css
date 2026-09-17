@@ -863,3 +863,11 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 }
 .dz .market-where--logo .market-where__go:hover{border-color:var(--ink-3);background:#fff}
 .mp-ic{display:block;width:28px;height:28px;border-radius:50%}
+/* Логотип и подпись — по левому краю; кнопка — на всю высоту этой пары,
+   значок площадки серый, в цвете только при наведении, как в подвале */
+.dz .market-where--logo{align-items:stretch}
+.market-where__text{align-items:flex-start;justify-content:center}
+.market-where__logo{object-fit:contain;object-position:left center}
+.dz .market-where--logo .market-where__go{height:auto;min-height:40px;align-self:stretch;padding:0 18px 0 10px}
+.dz .market-where--logo .mp-ic{filter:grayscale(1);opacity:.5;transition:filter .2s,opacity .2s}
+.dz .market-where--logo .market-where__go:hover .mp-ic{filter:none;opacity:1}

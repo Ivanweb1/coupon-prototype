@@ -1424,10 +1424,14 @@ function initCardStyle() {
    на созвоне не сделали, поэтому оба смотрятся переключением адреса. */
 function initQuickStyle() {
   let style = params.get("quick");
+  /* В дизайн-версии основной выбран 17.09.2026 — side. Без параметра в
+     адресе всегда он, запомненный вариант не подхватываем; остальные
+     варианты открываются только явно через ?quick=. */
+  const dz = document.body.classList.contains("dz");
   if (style !== "left" && style !== "side" && style !== "focus") {
-    style = localStorage.getItem("cp_quick") || "side";
+    style = dz ? "side" : (localStorage.getItem("cp_quick") || "side");
   }
-  localStorage.setItem("cp_quick", style);
+  if (!dz) localStorage.setItem("cp_quick", style);
   document.body.classList.add("quick-" + style);
 }
 
