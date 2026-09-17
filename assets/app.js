@@ -1743,7 +1743,10 @@ function initQuickStyle() {
    сравнение вариантов, а не настройка. */
 function initCatsStyle() {
   if (!document.body.classList.contains("dz")) return;
-  const v = params.get("cats");
+  /* Основным выбран вариант A (17.09.2026) — он и идёт без параметра.
+     ?cats=b и ?cats=c открывают другие варианты, ?cats=off — строку
+     прототипа без значков. */
+  const v = params.get("cats") || "a";
   if (v === "a" || v === "b" || v === "c") document.body.classList.add("cats-" + v);
 }
 
