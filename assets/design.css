@@ -1526,9 +1526,12 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 /* Нижний ярус — те же колонки, что сверху: соцсети города над колонкой
    бренда, паблики маркетплейсов — над тремя списками ссылок */
 .dz-foot-socs{
-  display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,3fr);
+  display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));
   gap:36px;padding:0 0 32px;
 }
+/* Колонки те же, что в верхнем ярусе: паблики маркетплейсов начинаются
+   ровно от левого края списка «Сервис», а не с собственного отступа */
+.dz-foot-socs .dz-foot__mp{grid-column:2 / -1}
 .dz-foot-socs .footer-soc-group{gap:12px}
 .dz-foot-socs .footer-soc-group__row{display:flex;flex-wrap:wrap;gap:8px}
 
