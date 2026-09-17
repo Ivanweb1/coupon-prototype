@@ -639,6 +639,11 @@ function showFeedRecos() {
 let originCard = null;
 let fromTransform = "";
 
+/* Логотипы площадок для дизайн-версии: файлы assets/brand/mp/<ключ>.svg
+   (круглый значок) и <ключ>-full.svg (логотип шрифтом). У Мегамаркета
+   логотипа пока нет — для него остаётся текстовое название. */
+const MARKET_LOGO = { "Wildberries": "wildberries", "Ozon": "ozon", "Яндекс Маркет": "yandex-market" };
+
 function quickHTML(c) {
   /* Порядок блоков — сама воронка: промокод забирают раньше, чем
      успевают отвлечься на условия. Условия — позитивная инструкция
@@ -677,11 +682,23 @@ function quickHTML(c) {
   const whereBlock = c.market
     ? `<div>
         <div class="block-label">Где действует</div>
-        <div class="market-where">
+        ${dz && MARKET_LOGO[c.market]
+          /* Площадка — её логотипом, кнопка к товару — справа с круглым
+             значком той же площадки */
+          ? `<div class="market-where market-where--logo">
+              <div class="market-where__text">
+                <img class="market-where__logo" src="assets/brand/mp/${MARKET_LOGO[c.market]}-full.svg" alt="${c.market}">
+                <span>Код вводится в корзине на площадке</span>
+              </div>
+              <a class="soc market-where__go" href="#">
+                <img class="mp-ic" src="assets/brand/mp/${MARKET_LOGO[c.market]}.svg" alt=""> Открыть карточку товара
+              </a>
+            </div>`
+          : `<div class="market-where">
           <b>${c.market}</b>
           <span>Код вводится в корзине на площадке</span>
           <a class="soc" href="#">${ICON.link} Открыть карточку товара</a>
-        </div>
+        </div>`}
       </div>`
     : `<div>
         <div class="block-label">Где действует${focus

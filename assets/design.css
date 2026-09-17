@@ -848,3 +848,18 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   box-shadow:0 14px 28px -20px rgba(221,68,60,.55);
 }
 .dz .quick .reveal .block-label{color:var(--brand-700)}
+
+/* Где действует — купон маркетплейса: логотип площадки слева,
+   переход к товару справа кнопкой с круглым значком площадки */
+.dz .market-where--logo{
+  flex-direction:row;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;
+  border-radius:18px;
+}
+.market-where__text{display:flex;flex-direction:column;gap:8px;min-width:0}
+.market-where__logo{display:block;height:22px;width:auto;max-width:170px}
+.dz .market-where--logo .market-where__go{
+  margin-top:0;height:40px;padding:0 16px 0 6px;gap:8px;
+  background:#fff;border-color:var(--line-strong);color:var(--ink);font-size:13.5px;font-weight:500;
+}
+.dz .market-where--logo .market-where__go:hover{border-color:var(--ink-3);background:#fff}
+.mp-ic{display:block;width:28px;height:28px;border-radius:50%}
