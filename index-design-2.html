@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20260918t">
-<link rel="stylesheet" href="assets/design.css?v=20260918t">
+<link rel="stylesheet" href="assets/style.css?v=20260918v">
+<link rel="stylesheet" href="assets/design.css?v=20260918v">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz cards-wb">
@@ -227,9 +227,23 @@
       </div>
     </div>
 
-    <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
+    <!-- Подвал в пять колонок: бренд с соцсетями города, три списка ссылок
+         и сообщества маркетплейсов справа — так не остаётся пустого угла
+         ни сверху справа, ни снизу. -->
+    <div class="dz-foot">
+      <div class="dz-foot__brand">
+        <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
+        <p class="dz-foot__tag">Все скидки <span data-geo-gen>Липецка</span> в одном месте. Бесплатно и без регистрации: нашли купон, сохранили код, показали на кассе.</p>
+        <div class="footer-soc-group">
+          <span class="footer-soc-group__label">Мы в соцсетях <span data-geo-gen>города</span></span>
+          <div class="footer-soc-group__row">
+            <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
+            <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
+            <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
+          </div>
+        </div>
+      </div>
 
-    <div class="footer__cols">
       <div class="fcol">
         <h4>Сервис</h4>
         <ul>
@@ -257,22 +271,11 @@
           <li><a href="#">Города сервиса</a></li>
         </ul>
       </div>
-    </div>
 
-    <!-- Продублировали соцсети из шапки — так их видно и тем, кто скроллит
-         до конца, — и добавили паблики маркетплейсов: по решению созвона
-         09.09.2026 они общие на всю Россию, без привязки к городу. -->
-    <div class="footer__socials">
-      <div class="footer-soc-group">
-        <span class="footer-soc-group__label">Мы в соцсетях <span data-geo-gen>города</span></span>
-        <div class="footer-soc-group__row">
-          <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
-          <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
-          <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
-        </div>
-      </div>
-      <div class="footer-soc-group">
-        <span class="footer-soc-group__label">Сообщества маркетплейсов</span>
+      <!-- Паблики маркетплейсов общие на всю Россию (созвон 09.09.2026),
+           поэтому стоят отдельной колонкой, а не рядом с соцсетями города -->
+      <div class="fcol dz-foot__mp">
+        <h4>Сообщества маркетплейсов</h4>
         <div class="footer-soc-group__row">
           <a class="soc" href="#" title="Сообщество Wildberries"><img class="soc-ic soc-ic--img" src="assets/brand/mp/wildberries.svg" alt=""> Wildberries</a>
           <a class="soc" href="#" title="Сообщество Ozon"><img class="soc-ic soc-ic--img" src="assets/brand/mp/ozon.svg" alt=""> Ozon</a>
@@ -285,7 +288,8 @@
       <span>© 2026 Все купоны</span>
       <a href="#">Политика конфиденциальности</a>
       <a href="#">Пользовательское соглашение</a>
-      <span class="erid">Реклама. Рекламодатель — ООО «Название»<br>ERID: XXXXXXXXXXXXXXXX</span>
+      <!-- Лента бесконечная: вернуться к поиску вручную долго -->
+      <button type="button" class="dz-foot__top" data-to-top>Наверх ↑</button>
     </div>
   </div>
 </footer>
@@ -314,8 +318,8 @@
   </div>
 </div>
 
-<script src="assets/data.js?v=20260918t"></script>
-<script src="assets/app.js?v=20260918t"></script>
+<script src="assets/data.js?v=20260918v"></script>
+<script src="assets/app.js?v=20260918v"></script>
 <script>
   initCommon();
   buildDropdown();

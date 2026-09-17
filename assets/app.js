@@ -1778,6 +1778,8 @@ function initCommon() {
   initQuickStyle();
   initCatsStyle();
   initHeaderShadow();
+  const top = qs("[data-to-top]");
+  if (top) top.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
   initIcons();
   buildCityModal();
   initCityGate();

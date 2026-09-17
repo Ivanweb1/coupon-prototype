@@ -1501,3 +1501,52 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 /* Б — названия разделов чуть легче: 700 в Unbounded на мелком кегле грязнит */
 .cats-b .tags-row__main .tag{font-weight:500}
 .cats-b .tags-row__main .tag .tag__label{font-weight:500}
+
+/* ==========================================================================
+   Подвал дизайн-версии: пять колонок вместо трёх
+   ==========================================================================
+   Раньше справа сверху и снизу оставалась пустота: ссылки шли в три
+   колонки, а соцсети — отдельной строкой во всю ширину. Теперь бренд с
+   соцсетями города слева, три списка ссылок и паблики маркетплейсов
+   справа — ряд заполнен целиком. */
+.dz-foot{
+  display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,.9fr)) minmax(0,1.1fr);
+  gap:36px;padding:44px 0 34px;
+}
+.dz-foot__brand{display:flex;flex-direction:column;gap:16px;max-width:38ch}
+.dz-foot .dz-foot-brand{margin:0}
+.dz-foot__tag{margin:0;font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.62)}
+.dz-foot__tag [data-geo-gen]{color:#fff}
+.dz-foot .fcol h4{
+  margin:0 0 14px;font-size:12px;letter-spacing:.07em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);font-weight:600;
+}
+.dz-foot .fcol ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+.dz-foot .footer-soc-group__row{flex-direction:column;align-items:flex-start;gap:8px}
+.dz-foot__mp .footer-soc-group__row .soc{width:100%;justify-content:flex-start}
+
+.dz .footer__legal{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.dz-foot__top{
+  margin-left:auto;height:36px;padding:0 16px;border-radius:var(--r-pill);
+  border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:13px;font-weight:500;
+  transition:background .18s,color .18s,border-color .18s;
+}
+.dz-foot__top:hover{background:#fff;color:var(--ink);border-color:#fff}
+
+@media (max-width:1100px){
+  .dz-foot{grid-template-columns:minmax(0,1.3fr) repeat(2,minmax(0,1fr));gap:30px 28px}
+  .dz-foot__brand{grid-column:span 3;max-width:60ch}
+}
+@media (max-width:680px){
+  .dz-foot{grid-template-columns:1fr;gap:26px;padding:32px 0 26px}
+  .dz-foot__brand{grid-column:auto}
+  .dz-foot__top{margin-left:0}
+}
+/* Логотип в подвале крупнее и выровнен по шару, а не по краю картинки */
+.dz-foot .dz-foot-brand{gap:14px;align-items:center}
+.dz-foot .dz-foot-brand img{height:64px}
+.dz-foot .dz-foot-brand span{font-size:19px;line-height:1.05;letter-spacing:-.01em}
+@media (max-width:680px){
+  .dz-foot .dz-foot-brand img{height:52px}
+  .dz-foot .dz-foot-brand span{font-size:17px}
+}
