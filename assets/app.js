@@ -8,9 +8,10 @@ const params = new URLSearchParams(location.search);
 
 const ICON = {
   /* Соцсети: плашка серая, цвет бренда — при наведении (см. design.css) */
-  vk: '<svg class="soc-ic" style="--soc-c:#0077FF" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect class="soc-ic__bg" width="32" height="32"/><path fill="#fff" d="M16.8 21.615c-6.15 0-9.656-4.208-9.8-11.22h3.093c.099 5.142 2.364 7.318 4.163 7.767v-7.768h2.904v4.433c1.771-.19 3.641-2.212 4.27-4.442h2.896a8.57 8.57 0 0 1-3.938 5.602A8.87 8.87 0 0 1 25 21.615h-3.192c-.683-2.131-2.391-3.785-4.648-4.01v4.01h-.36"/></svg>',
-  tg: '<svg class="soc-ic" style="--soc-c:#2AABEE" width="18" height="18" viewBox="0 0 248 248" aria-hidden="true"><rect class="soc-ic__bg" width="248" height="248"/><path fill="#fff" d="M129.362 93.057q-16.659 6.93-66.588 28.682-8.107 3.225-8.494 6.308c-.436 3.475 3.916 4.844 9.842 6.707l.12.038q1.155.361 2.377.756c5.83 1.895 13.672 4.113 17.749 4.201q5.547.12 12.382-4.574 46.65-31.491 48.162-31.833c.711-.162 1.696-.365 2.364.228.668.594.602 1.718.531 2.019-.431 1.838-17.512 17.718-26.351 25.936l-.074.068c-2.717 2.526-4.64 4.315-5.037 4.726-.894.93-1.807 1.81-2.684 2.655-5.415 5.221-9.477 9.136.226 15.53 4.649 3.064 8.373 5.6 12.085 8.128l.031.02c4.064 2.768 8.119 5.53 13.365 8.968 1.336.876 2.613 1.787 3.856 2.673 4.731 3.372 8.981 6.402 14.232 5.919 3.051-.281 6.202-3.149 7.803-11.706 3.782-20.221 11.218-64.035 12.936-82.09.15-1.582-.039-3.606-.191-4.495-.152-.888-.47-2.155-1.625-3.092-1.368-1.11-3.48-1.344-4.424-1.328-4.295.076-10.884 2.367-42.593 15.556"/></svg>',
-  ok: '<svg class="soc-ic" style="--soc-c:#FF7700" width="18" height="18" viewBox="0 0 44 44" aria-hidden="true"><rect class="soc-ic__bg" width="44" height="44"/><path fill="#fff" d="M26.868 19.87a6.85 6.85 0 0 1-2.229 1.492 6.88 6.88 0 0 1-7.5-1.492 6.87 6.87 0 0 1-1.875-3.51 6.84 6.84 0 0 1 .392-3.955 6.9 6.9 0 0 1 2.527-3.08 6.96 6.96 0 0 1 3.82-1.18 6.96 6.96 0 0 1 3.83 1.177 6.9 6.9 0 0 1 2.532 3.086 6.84 6.84 0 0 1 .389 3.962 6.87 6.87 0 0 1-1.886 3.512zm-4.877-7.978a3.15 3.15 0 0 0-2.21.917 3.105 3.105 0 0 0 0 4.397c.586.584 1.38.914 2.21.918a3.15 3.15 0 0 0 2.21-.918 3.1 3.1 0 0 0 .913-2.198c0-.824-.328-1.615-.914-2.199a3.15 3.15 0 0 0-2.209-.917m7.239 10.017 2.014 2.753a.315.315 0 0 1-.05.434 14.2 14.2 0 0 1-5.725 2.79l3.889 7.495a.316.316 0 0 1-.123.43.3.3 0 0 1-.16.041h-4.17a.32.32 0 0 1-.296-.19l-2.605-6.182-2.618 6.181a.32.32 0 0 1-.295.191H14.92c-.244 0-.386-.255-.283-.471l3.902-7.494c-2.054-.484-4.03-1.402-5.724-2.791a.32.32 0 0 1-.064-.434l2.027-2.74a.334.334 0 0 1 .475-.064 10.5 10.5 0 0 0 6.75 2.677c2.503 0 4.84-1.045 6.752-2.677.128-.127.359-.102.475.051"/></svg>',
+  vk: '<svg class="soc-ic" style="--soc-c:#0077FF" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect class="soc-ic__bg" width="32" height="32"/><path class="soc-ic__g" d="M16.8 21.615c-6.15 0-9.656-4.208-9.8-11.22h3.093c.099 5.142 2.364 7.318 4.163 7.767v-7.768h2.904v4.433c1.771-.19 3.641-2.212 4.27-4.442h2.896a8.57 8.57 0 0 1-3.938 5.602A8.87 8.87 0 0 1 25 21.615h-3.192c-.683-2.131-2.391-3.785-4.648-4.01v4.01h-.36"/></svg>',
+  tg: '<svg class="soc-ic" style="--soc-c:#2AABEE" width="18" height="18" viewBox="0 0 248 248" aria-hidden="true"><rect class="soc-ic__bg" width="248" height="248"/><path class="soc-ic__g" d="M129.362 93.057q-16.659 6.93-66.588 28.682-8.107 3.225-8.494 6.308c-.436 3.475 3.916 4.844 9.842 6.707l.12.038q1.155.361 2.377.756c5.83 1.895 13.672 4.113 17.749 4.201q5.547.12 12.382-4.574 46.65-31.491 48.162-31.833c.711-.162 1.696-.365 2.364.228.668.594.602 1.718.531 2.019-.431 1.838-17.512 17.718-26.351 25.936l-.074.068c-2.717 2.526-4.64 4.315-5.037 4.726-.894.93-1.807 1.81-2.684 2.655-5.415 5.221-9.477 9.136.226 15.53 4.649 3.064 8.373 5.6 12.085 8.128l.031.02c4.064 2.768 8.119 5.53 13.365 8.968 1.336.876 2.613 1.787 3.856 2.673 4.731 3.372 8.981 6.402 14.232 5.919 3.051-.281 6.202-3.149 7.803-11.706 3.782-20.221 11.218-64.035 12.936-82.09.15-1.582-.039-3.606-.191-4.495-.152-.888-.47-2.155-1.625-3.092-1.368-1.11-3.48-1.344-4.424-1.328-4.295.076-10.884 2.367-42.593 15.556"/></svg>',
+  site: '<svg class="soc-ic" style="--soc-c:#DD443C" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect class="soc-ic__bg" width="24" height="24"/><g class="soc-ic__s" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="6.6"/><path d="M5.6 12h12.8M12 5.4c1.9 1.9 2.8 4.1 2.8 6.6s-.9 4.7-2.8 6.6c-1.9-1.9-2.8-4.1-2.8-6.6s.9-4.7 2.8-6.6Z"/></g></svg>',
+  ok: '<svg class="soc-ic" style="--soc-c:#FF7700" width="18" height="18" viewBox="0 0 44 44" aria-hidden="true"><rect class="soc-ic__bg" width="44" height="44"/><path class="soc-ic__g" d="M26.868 19.87a6.85 6.85 0 0 1-2.229 1.492 6.88 6.88 0 0 1-7.5-1.492 6.87 6.87 0 0 1-1.875-3.51 6.84 6.84 0 0 1 .392-3.955 6.9 6.9 0 0 1 2.527-3.08 6.96 6.96 0 0 1 3.82-1.18 6.96 6.96 0 0 1 3.83 1.177 6.9 6.9 0 0 1 2.532 3.086 6.84 6.84 0 0 1 .389 3.962 6.87 6.87 0 0 1-1.886 3.512zm-4.877-7.978a3.15 3.15 0 0 0-2.21.917 3.105 3.105 0 0 0 0 4.397c.586.584 1.38.914 2.21.918a3.15 3.15 0 0 0 2.21-.918 3.1 3.1 0 0 0 .913-2.198c0-.824-.328-1.615-.914-2.199a3.15 3.15 0 0 0-2.209-.917m7.239 10.017 2.014 2.753a.315.315 0 0 1-.05.434 14.2 14.2 0 0 1-5.725 2.79l3.889 7.495a.316.316 0 0 1-.123.43.3.3 0 0 1-.16.041h-4.17a.32.32 0 0 1-.296-.19l-2.605-6.182-2.618 6.181a.32.32 0 0 1-.295.191H14.92c-.244 0-.386-.255-.283-.471l3.902-7.494c-2.054-.484-4.03-1.402-5.724-2.791a.32.32 0 0 1-.064-.434l2.027-2.74a.334.334 0 0 1 .475-.064 10.5 10.5 0 0 0 6.75 2.677c2.503 0 4.84-1.045 6.752-2.677.128-.127.359-.102.475.051"/></svg>',
   search: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>',
   mic:    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
   pin:    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>',
@@ -660,6 +661,8 @@ function quickHTML(c) {
         </div>
       </div>`;
   const left = document.body.classList.contains("quick-left");
+  /* В дизайн-версии у сайта и соцсетей компании — фирменные значки */
+  const dz = document.body.classList.contains("dz");
 
   /* Купон маркетплейса действует на площадке: вместо адреса и минут —
      площадка и ссылка на карточку товара. */
@@ -709,9 +712,9 @@ function quickHTML(c) {
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
         </div>
         <div class="socials">
-          <a class="soc" href="#" title="Сайт компании">${ICON.link} Сайт</a>
-          <a class="soc" href="#" title="Компания ВКонтакте">${ICON.link} ВКонтакте</a>
-          <a class="soc" href="#" title="Компания в Telegram">${ICON.link} Telegram</a>
+          <a class="soc" href="#" title="Сайт компании">${dz ? ICON.site : ICON.link} Сайт</a>
+          <a class="soc" href="#" title="Компания ВКонтакте">${dz ? ICON.vk : ICON.link} ВКонтакте</a>
+          <a class="soc" href="#" title="Компания в Telegram">${dz ? ICON.tg : ICON.link} Telegram</a>
         </div>
       </div>
 
@@ -741,10 +744,48 @@ function quickHTML(c) {
     </div>`;
 }
 
+/* Картинка в поп-апе — во всю высоту правой колонки, но строго 4:5.
+   Одним CSS это не решается: высота окна задаётся текстом, а ширина
+   левой колонки — высотой картинки. Если просто растягивать колонку
+   внутри окна фиксированной ширины, получается замкнутый круг (картинка
+   шире → текст уже → окно выше → картинка ещё шире). Поэтому ширину
+   текста фиксируем (CSS), меряем его высоту и под неё добавляем окну
+   колонку с картинкой. Не влезает по ширине экрана — картинка меньше
+   и центрируется в колонке. */
+function fitQuickMedia() {
+  const quick = qs("#quick");
+  if (!quick || !document.body.classList.contains("dz") ||
+      document.body.classList.contains("quick-left")) return;
+  const media = qs(".quick__media", quick);
+  const side = qs(".quick__side", quick);
+  const photo = qs(".quick__photo", quick);
+  if (!media || !side || !photo) return;
+  quick.style.width = media.style.flexBasis = photo.style.height = photo.style.width = "";
+  if (getComputedStyle(quick).flexDirection === "column") return;
+
+  const pad = parseFloat(getComputedStyle(media).paddingTop) * 2;
+  const maxH = parseFloat(getComputedStyle(quick).maxHeight) || window.innerHeight * .88;
+  const sideW = side.offsetWidth;
+  const h = Math.min(side.scrollHeight, maxH);
+  const ideal = (h - pad) * .8 + pad;
+  const w = Math.max(200, Math.min(ideal, window.innerWidth - 40 - sideW));
+  media.style.flexBasis = w + "px";
+  quick.style.width = Math.min(w + sideW, window.innerWidth - 40) + "px";
+  if (w < ideal) {
+    photo.style.width = (w - pad) + "px";
+    photo.style.height = (w - pad) / .8 + "px";
+  }
+}
+window.addEventListener("resize", () => {
+  const quick = qs("#quick");
+  if (quick && quick.classList.contains("is-on")) fitQuickMedia();
+});
+
 function openQuick(c, cardEl) {
   const quick = qs("#quick");
   const overlay = qs("#overlay");
   quick.innerHTML = quickHTML(c);
+  fitQuickMedia();
 
   noteInterest(c.cat.id);
 
@@ -791,6 +832,7 @@ function openQuick(c, cardEl) {
   const rev = qs("[data-reveal]", quick);
   qs("[data-reveal-btn]", quick).onclick = () => {
     rev.classList.add("is-open");
+    fitQuickMedia();
   };
 }
 
@@ -1155,9 +1197,9 @@ function renderCouponPage() {
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
         </div>
         <div class="socials">
-          <a class="soc" href="#" title="Сайт компании">${ICON.link} Сайт</a>
-          <a class="soc" href="#" title="Компания ВКонтакте">${ICON.link} ВКонтакте</a>
-          <a class="soc" href="#" title="Компания в Telegram">${ICON.link} Telegram</a>
+          <a class="soc" href="#" title="Сайт компании">${dz ? ICON.site : ICON.link} Сайт</a>
+          <a class="soc" href="#" title="Компания ВКонтакте">${dz ? ICON.vk : ICON.link} ВКонтакте</a>
+          <a class="soc" href="#" title="Компания в Telegram">${dz ? ICON.tg : ICON.link} Telegram</a>
         </div>
       </div>
 
