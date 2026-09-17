@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Все купоны — скидки Липецка бесплатно</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260917a">
+<link rel="stylesheet" href="assets/design.css?v=20260917a">
+<link rel="icon" href="assets/brand/logo-red.png">
+</head>
+<body class="dz">
+
+<!-- ===================================================================
+     ДИЗАЙН. Копия главной для перехода от Ч/Б прототипа к дизайну.
+     Идём по блокам: сейчас готов первый — шапка и первый экран.
+     Остальная страница пока в стилях прототипа.
+     =================================================================== -->
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+
+    <span class="header__spacer"></span>
+
+    <div class="head-socials" aria-label="Мы в соцсетях города">
+      <span class="head-socials__label">Все скидки <span data-geo-gen>Липецка</span> —</span>
+      <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="link"></a>
+      <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="link"></a>
+      <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="link"></a>
+    </div>
+
+    <button class="city-btn" data-city-open>
+      <span data-icon="pin"></span>
+      <span data-geo-short>Липецк</span>
+      <span class="chev" data-icon="chev"></span>
+    </button>
+
+    <a class="btn btn--solid header-cta" href="register.html">
+      <span data-icon="plus"></span><span class="header-cta__label">Разместить купон</span>
+    </a>
+
+    <a class="lk-chip" href="lk/client.html" aria-label="Войти в личный кабинет">
+      <span data-icon="user"></span>
+      <span class="lk-chip__label">Войти в личный кабинет</span>
+    </a>
+  </div>
+</header>
+
+
+<!-- Первый экран. Главное обещание — «бесплатно и без квестов»: этим
+     сервис отличается от BigLion, где за купон платят. Три шага под
+     поиском объясняют механику за секунду, до первого купона в ленте.
+     Справа — фирменный шар из логотипа, на котором «летят» купоны. -->
+<section class="hero dz-hero">
+  <div class="wrap hero__in">
+
+    <div class="dz-stage">
+      <div class="dz-stage__text">
+        <span class="dz-eyebrow"><i></i>Бесплатно · без регистрации</span>
+
+        <h1 class="dz-h1">Все скидки <span class="dz-h1__city" data-geo-gen>Липецка</span> в&nbsp;одном месте</h1>
+
+        <p class="dz-sub">Купоны кафе, салонов, магазинов и продавцов с маркетплейсов. Открыли код, сохранили скриншот — показали на кассе.</p>
+
+        <div class="search dz-search">
+          <span class="search__icon" data-icon="search"></span>
+          <input type="text" placeholder="Кофе, маникюр, шиномонтаж…" aria-label="Поиск купонов">
+          <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
+          <button class="search__go"><span class="dz-go-l">Найти скидку</span><span class="dz-go-s">Найти</span></button>
+        </div>
+
+        <ol class="dz-steps" aria-label="Как это работает">
+          <li><b>1</b>Находите купон</li>
+          <li><b>2</b>Сохраняете скриншот</li>
+          <li><b>3</b>Платите со скидкой</li>
+        </ol>
+      </div>
+
+      <div class="dz-stage__art" aria-hidden="true">
+        <span class="dz-dot dz-dot--1"></span>
+        <span class="dz-dot dz-dot--2"></span>
+        <span class="dz-dot dz-dot--3"></span>
+
+        <img class="dz-balloon" src="assets/brand/logo-white.png" alt="" width="357" height="600">
+
+        <div class="dz-ticket dz-ticket--1">
+          <span class="dz-ticket__val">−30%</span>
+          <span class="dz-ticket__t">Комбо-обед по будням</span>
+          <span class="dz-ticket__c">Кафе «Рыба» · 4 мин</span>
+        </div>
+        <div class="dz-ticket dz-ticket--2">
+          <span class="dz-ticket__val">2 = 1</span>
+          <span class="dz-ticket__t">Маникюр с покрытием</span>
+          <span class="dz-ticket__c">Студия «Название»</span>
+        </div>
+        <div class="dz-ticket dz-ticket--3">
+          <span class="dz-ticket__val">0 ₽</span>
+          <span class="dz-ticket__t">Пробная неделя в клубе</span>
+          <span class="dz-ticket__c">Фитнес «Рыба»</span>
+        </div>
+      </div>
+
+      <dl class="dz-facts">
+        <div><dt>1 800+</dt><dd>купонов в городе</dd></div>
+        <div><dt>до −50%</dt><dd>на первый визит</dd></div>
+        <div><dt>0 ₽</dt><dd>за любой код</dd></div>
+      </dl>
+    </div>
+
+    <div class="tags-row dz-tags">
+      <!-- Верхний ярус: три главных раздела витрины — крупнее и весомее
+           нижнего ряда, чтобы иерархия «разделы → ниши» читалась сама собой -->
+      <div class="tags-row__main">
+        <span class="dd" id="allCats">
+          <button class="tag tag--all" data-dd-toggle>
+            <span data-icon="grid"></span>
+            <span class="tag__label">Все категории</span>
+            <span class="chev" data-icon="chev"></span>
+          </button>
+          <span class="dd__panel"></span>
+        </span>
+        <!-- Маркетплейсы и «Для бизнеса» — не рядовые категории вроде «кафе»,
+             а отдельные разделы витрины (L1 по ТЗ v7.0 §3.2.10): закреплены
+             сразу за «Все категории», выделены рамкой, в верхнем ряду.
+             У каждого своя стрелка и свой список ниш: ниши у разделов разные,
+             и «Одежда» на маркетплейсах — не та же категория, что «Одежда» в
+             городе. -->
+        <span class="dd dd--l1" data-l1="marketplace">
+          <button class="tag tag--featured" data-dd-toggle>
+            <span data-icon="bag"></span>
+            <span class="tag__label">Маркетплейсы</span>
+            <span class="tag__n"></span>
+            <span class="chev" data-icon="chev"></span>
+          </button>
+          <span class="dd__panel dd__panel--l1"></span>
+        </span>
+        <span class="dd dd--l1" data-l1="for-business">
+          <button class="tag tag--featured" data-dd-toggle>
+            <span data-icon="case"></span>
+            <span class="tag__label">Для бизнеса</span>
+            <span class="tag__n"></span>
+            <span class="chev" data-icon="chev"></span>
+          </button>
+          <span class="dd__panel dd__panel--l1"></span>
+        </span>
+      </div>
+      <!-- Нижний ярус: «Рядом со мной» и ниши региональных купонов —
+           визуально мельче верхнего ряда, второй по значимости уровень -->
+      <div class="tags-row__sub">
+        <button class="tag tag--near" data-near aria-label="Рядом со мной">
+          <span data-icon="pin"></span>
+          <span class="tag__label">Рядом со мной</span>
+          <span class="tag__label-s">Рядом</span>
+        </button>
+        <div class="tags" id="tagsRow"><span id="tags"></span></div>
+        <!-- Явная стрелка, а не только затухание справа: на созвоне отдельно
+             проговаривали, что на догадливость по скроллу полагаться нельзя -->
+        <button class="tags-more" data-tags-more aria-label="Показать больше категорий">
+          <span class="chev" data-icon="chev"></span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<main class="wrap">
+
+
+  <section class="section">
+    <div class="section__head">
+      <h2>Купоны <span data-geo-in>в городе Липецк</span></h2>
+    </div>
+    <div class="grid" id="feed"></div>
+    <div class="loader" id="loader">
+      <span class="loader__dot"></span><span class="loader__dot"></span><span class="loader__dot"></span>
+      <span style="margin-left:6px">подгружаем ещё купоны</span>
+    </div>
+  </section>
+
+  <!-- Рекомендации в хвосте ленты. По созвону 07.09.2026 блок привязан к
+       концу выдачи и должен читаться не как её продолжение, а как подборка,
+       поэтому та же обособленная подложка, что в каталоге и на купоне.
+       Скрыт, пока лента не кончилась. -->
+  <section class="section" id="feedRecos" hidden>
+    <div class="recos">
+      <div class="recos__head">
+        <span class="recos__eyebrow">Рекомендации</span>
+        <h2>Что ещё посмотреть</h2>
+        <p class="recos__sub">
+          <span id="recosSource">Популярное в городе</span> ·
+          смежные категории: <span id="railLabel">—</span>
+        </p>
+      </div>
+      <div class="rail-wrap">
+        <div class="rail" id="rail"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Подвал -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__cta">
+      <p>Хотите публиковать свои купоны или приводить клиентов?</p>
+      <a class="btn btn--ghost btn--lg" href="#">Стать партнёром сервиса</a>
+      <a class="btn btn--solid btn--lg" href="#">Войти в личный кабинет</a>
+    </div>
+
+    <div class="footer__cols">
+      <div class="fcol">
+        <h4>Сервис</h4>
+        <ul>
+          <li><a href="#">Как это работает</a></li>
+          <li><a href="#">Вопросы и ответы</a></li>
+          <li><a href="#">Обучение по сервису</a></li>
+          <li><a href="#">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Бизнесу</h4>
+        <ul>
+          <li><a href="register.html">Разместить купон</a></li>
+          <li><a href="#">Купоны для маркетплейсов</a></li>
+          <li><a href="#">Тарифы</a></li>
+          <li><a href="#">Документы</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Партнёрам</h4>
+        <ul>
+          <li><a href="#">Партнёрская программа</a></li>
+          <li><a href="#">Бонусы и выплаты</a></li>
+          <li><a href="#">Стать партнёром</a></li>
+          <li><a href="#">Города сервиса</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Продублировали соцсети из шапки — так их видно и тем, кто скроллит
+         до конца, — и добавили паблики маркетплейсов: по решению созвона
+         09.09.2026 они общие на всю Россию, без привязки к городу. -->
+    <div class="footer__socials">
+      <div class="footer-soc-group">
+        <span class="footer-soc-group__label">Мы в соцсетях <span data-geo-gen>города</span></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="link"></span> ВКонтакте</a>
+          <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="link"></span> Telegram</a>
+          <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="link"></span> Одноклассники</a>
+        </div>
+      </div>
+      <div class="footer-soc-group">
+        <span class="footer-soc-group__label">Сообщества маркетплейсов</span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" title="Сообщество Wildberries"><span data-icon="link"></span> Wildberries</a>
+          <a class="soc" href="#" title="Сообщество Ozon"><span data-icon="link"></span> Ozon</a>
+          <a class="soc" href="#" title="Сообщество Яндекс Маркет"><span data-icon="link"></span> Яндекс Маркет</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <span>© 2026 Название</span>
+      <a href="#">Политика конфиденциальности</a>
+      <a href="#">Пользовательское соглашение</a>
+      <span class="erid">Реклама. Рекламодатель — ООО «Название»<br>ERID: XXXXXXXXXXXXXXXX</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Раскрытие купона -->
+<div class="overlay" id="overlay"></div>
+<div class="quick" id="quick"></div>
+
+<!-- Выбор города -->
+<!-- Город спрашиваем полноэкранным попапом на входе: это ключевой триггер
+     сервиса, тихой плашкой его пропускают. Домашний город и область поиска
+     по ТЗ v7.0 разведены, поэтому «вся область» стоит здесь же отдельной
+     строкой, а не прячется в фильтрах каталога. -->
+<div class="modal" id="cityModal">
+  <div class="modal__box">
+    <h3>Вы в городе <span data-city-detected>Липецк</span>?</h3>
+    <p>Определили автоматически. Покажем купоны, которые действуют рядом с вами.</p>
+    <button class="btn btn--solid btn--lg modal__yes" data-city-yes>
+      Да, я в городе <span data-city-detected>Липецк</span>
+    </button>
+    <div class="modal__or">или выберите другую выдачу</div>
+    <div data-region-row></div>
+    <div class="city-list"></div>
+    <p class="modal__note">Города других областей — по мере запуска сервиса.</p>
+    <button class="btn btn--ghost" data-city-close>Позже</button>
+  </div>
+</div>
+
+<script src="assets/data.js?v=20260917a"></script>
+<script src="assets/app.js?v=20260917a"></script>
+<script>
+  initCommon();
+  buildDropdown();
+  buildL1Dropdowns();
+  buildTags("regional");
+  fillFeed("#feed", 8);
+  initInfinite("#feed");
+  initNear("#feed");
+</script>
+</body>
+</html>

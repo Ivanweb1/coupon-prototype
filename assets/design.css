@@ -1,0 +1,322 @@
+/* ==========================================================================
+   Все купоны — дизайн поверх прототипа
+   ==========================================================================
+   Переход от Ч/Б прототипа к дизайну идёт по блокам на копии главной
+   (index-design.html). Структура и поведение — из прототипа, здесь только
+   внешний вид. Цвет — из логотипа (#DD443C). Характер — от самого знака:
+   рукописные буквы внутри воздушного шара, лёгкость и праздник, а не
+   «скидочный» крик. Отсюда крупная округлая гарнитура Unbounded для
+   заголовков, купоны-«билетики» и мягкое парение вместо мигающих плашек.
+   ========================================================================== */
+
+:root{
+  --brand:#DD443C;
+  --brand-600:#C8362F;
+  --brand-700:#A92A24;
+  --brand-300:#F08F88;
+  --brand-100:#FBE3E1;
+  --brand-50:#FEF3F2;
+
+  --ink:#221A19;
+  --ink-2:#5B514F;
+  --ink-3:#8F8583;
+  --ink-4:#B8AFAD;
+  --line:#EFE7E5;
+  --line-strong:#DDD2D0;
+  --surface:#FAF6F5;
+  --surface-2:#F3ECEA;
+
+  --font-display:"Unbounded", "Onest", ui-sans-serif, sans-serif;
+}
+
+/* ==========================================================================
+   Шапка
+   ========================================================================== */
+.dz-header{background:rgba(255,255,255,.9);border-bottom-color:transparent}
+.dz-header .header__in{height:76px}
+
+.dz-logo{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.dz-logo__mark{
+  height:46px;width:auto;
+  transform-origin:50% 90%;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.dz-logo:hover .dz-logo__mark{transform:rotate(-8deg) translateY(-2px)}
+.dz-logo__word{
+  font-family:var(--font-display);font-weight:700;
+  font-size:14px;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;
+  color:var(--ink);
+}
+
+.dz-header .city-btn{border-color:var(--line-strong);background:#fff}
+.dz-header .city-btn:hover{border-color:var(--brand-300);background:var(--brand-50)}
+.dz-header .city-btn [data-icon="pin"]{color:var(--brand)}
+.dz-header .head-socials .soc:hover{border-color:var(--brand-300);color:var(--brand)}
+
+/* «Разместить купон» — тёмным: красный на этой странице отдан покупателю
+   (поиск, скидки), а бизнесу — спокойный, но заметный призыв */
+.dz-header .header-cta{background:var(--ink);height:44px}
+.dz-header .header-cta:hover{opacity:1;background:#000}
+.dz-header .lk-chip{height:44px;border-color:var(--line-strong)}
+.dz-header .lk-chip [data-icon]{width:42px;height:42px}
+
+/* ==========================================================================
+   Первый экран
+   ========================================================================== */
+.dz-hero{border-bottom:0;background:none}
+.dz-hero .hero__in{padding-block:8px 30px;gap:24px}
+
+.dz-stage{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+  grid-template-areas:"text art" "facts art";
+  column-gap:40px;
+  padding:64px 64px 48px;
+  border-radius:36px;
+  color:#fff;
+  background:
+    radial-gradient(760px 520px at 88% 8%, #EE6A60 0%, rgba(238,106,96,0) 62%),
+    radial-gradient(640px 420px at -6% 110%, #B92F28 0%, rgba(185,47,40,0) 64%),
+    var(--brand);
+}
+/* Лёгкое зерно — плоский красный на большой площади смотрится пластиком */
+.dz-stage::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:.16;mix-blend-mode:soft-light;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.dz-stage__text{grid-area:text;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+
+.dz-eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  height:34px;padding:0 14px 0 12px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);
+  font-size:13px;font-weight:600;letter-spacing:.01em;
+}
+.dz-eyebrow i{
+  width:8px;height:8px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 0 rgba(255,255,255,.7);
+  animation:dzPing 2.4s ease-out infinite;
+}
+@keyframes dzPing{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.65)}
+  70%,100%{box-shadow:0 0 0 9px rgba(255,255,255,0)}
+}
+
+.dz-hero h1.dz-h1{
+  margin:22px 0 0;
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(34px,4.1vw,66px);line-height:1.04;letter-spacing:-.035em;
+  white-space:normal;max-width:12.5em;
+  text-wrap:balance;
+}
+/* Город — «наклейкой», как буквы логотипа: сразу видно, что витрина своя */
+.dz-h1__city{
+  display:inline-block;
+  padding:.02em .22em .08em;margin:0 .02em;
+  border-radius:.22em;
+  background:#fff;color:var(--brand);
+  transform:rotate(-2.5deg);
+  box-shadow:0 .12em 0 rgba(120,22,17,.25);
+}
+
+.dz-sub{
+  margin:20px 0 0;max-width:46ch;
+  font-size:18px;line-height:1.5;color:rgba(255,255,255,.88);
+}
+
+/* Поиск — главный инструмент экрана: крупный, белый, с красной кнопкой */
+.dz-hero .dz-search{
+  width:100%;max-width:640px;margin-top:32px;
+  padding:8px 8px 8px 22px;gap:12px;
+  background:#fff;border:0;
+  box-shadow:0 22px 50px -18px rgba(96,16,12,.55);
+  color:var(--ink);
+}
+.dz-hero .dz-search:focus-within{box-shadow:0 0 0 4px rgba(255,255,255,.35), 0 22px 50px -18px rgba(96,16,12,.55)}
+.dz-hero .dz-search input{font-size:17px;padding:13px 0}
+.dz-hero .dz-search input::placeholder{color:var(--ink-4)}
+.dz-hero .dz-search .search__icon{color:var(--brand)}
+.dz-hero .dz-search .search__voice{color:var(--ink-3)}
+.dz-hero .dz-search .search__voice:hover{background:var(--brand-50);color:var(--brand)}
+.dz-hero .dz-search .search__go{
+  height:52px;padding:0 26px;
+  background:var(--brand);color:#fff;font-weight:600;font-size:15px;
+  transition:background .2s, transform .2s var(--ease);
+}
+.dz-hero .dz-search .search__go:hover{background:var(--brand-600);opacity:1}
+
+/* Три шага — механика сервиса за секунду чтения */
+.dz-steps{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;
+  margin:22px 0 0;padding:0;list-style:none;
+  font-size:14px;font-weight:500;color:rgba(255,255,255,.92);
+}
+.dz-steps li{display:flex;align-items:center;gap:9px;position:relative}
+.dz-steps li + li::before{
+  content:"";position:absolute;left:-15px;top:50%;
+  width:8px;height:8px;border-top:1.5px solid rgba(255,255,255,.5);border-right:1.5px solid rgba(255,255,255,.5);
+  transform:translateY(-50%) rotate(45deg);
+}
+.dz-steps b{
+  width:26px;height:26px;border-radius:50%;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.18);
+  font-family:var(--font-display);font-size:12px;font-weight:700;
+}
+
+/* Цифры доверия — внизу, под текстом */
+.dz-facts{
+  grid-area:facts;align-self:end;
+  display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0 44px;
+  margin:44px 0 0;padding-top:24px;
+  border-top:1px solid rgba(255,255,255,.22);
+}
+.dz-facts div{min-width:0}
+.dz-facts dt{font-family:var(--font-display);font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.dz-facts dd{margin:4px 0 0;font-size:13px;color:rgba(255,255,255,.76)}
+
+/* ---------- Шар и купоны ---------- */
+.dz-stage__art{grid-area:art;position:relative;min-height:470px}
+
+.dz-balloon{
+  position:absolute;left:50%;top:50%;
+  height:min(96%,470px);width:auto;
+  margin-left:40px;
+  transform:translate(-44%,-50%) rotate(6deg);
+  filter:drop-shadow(0 30px 40px rgba(96,16,12,.28));
+  animation:dzFloat 7s ease-in-out infinite;
+}
+@keyframes dzFloat{
+  0%,100%{transform:translate(-44%,-50%) rotate(6deg)}
+  50%{transform:translate(-44%,-53%) rotate(3deg)}
+}
+
+.dz-ticket{
+  --rot:-7deg;
+  position:absolute;z-index:2;
+  width:216px;padding:16px 18px 14px;
+  display:flex;flex-direction:column;gap:4px;
+  background:#fff;color:var(--ink);border-radius:18px;
+  box-shadow:0 24px 44px -20px rgba(80,14,10,.6);
+  transform:rotate(var(--rot));
+  animation:dzBob 6s ease-in-out infinite;
+  /* Вырезы по бокам — купон читается как билетик, а не как карточка */
+  -webkit-mask:
+    radial-gradient(circle 9px at left 66%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 9px at right 66%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle 9px at left 66%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 9px at right 66%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+@keyframes dzBob{
+  0%,100%{transform:translateY(0) rotate(var(--rot))}
+  50%{transform:translateY(-12px) rotate(calc(var(--rot) + 2deg))}
+}
+.dz-ticket__val{
+  font-family:var(--font-display);font-size:30px;font-weight:800;letter-spacing:-.04em;line-height:1;
+  color:var(--brand);
+}
+.dz-ticket__t{font-size:14px;font-weight:600;line-height:1.3;margin-top:4px}
+.dz-ticket__c{
+  margin-top:8px;padding-top:9px;
+  border-top:1.5px dashed var(--line-strong);
+  font-size:12px;color:var(--ink-3);
+}
+.dz-ticket--1{--rot:-8deg;top:8%;left:-6%;animation-duration:6.4s}
+.dz-ticket--2{--rot:7deg;top:34%;right:-9%;animation-duration:7.2s;animation-delay:-2s}
+.dz-ticket--3{--rot:-5deg;bottom:3%;left:-2%;animation-duration:5.8s;animation-delay:-4s}
+
+.dz-dot{position:absolute;border-radius:50%;background:rgba(255,255,255,.14)}
+.dz-dot--1{width:120px;height:120px;right:-30px;top:-20px}
+.dz-dot--2{width:22px;height:22px;left:44%;top:4%;background:rgba(255,255,255,.4)}
+.dz-dot--3{width:54px;height:54px;right:18%;bottom:-6px;background:rgba(255,255,255,.12)}
+
+/* ---------- Появление экрана: одна волна, не россыпь эффектов ---------- */
+.dz-stage__text > *,.dz-facts{animation:dzUp .7s var(--ease) both}
+.dz-eyebrow{animation-delay:.05s}
+.dz-h1{animation-delay:.12s}
+.dz-sub{animation-delay:.2s}
+.dz-search{animation-delay:.28s}
+.dz-steps{animation-delay:.36s}
+.dz-facts{animation-delay:.44s}
+@keyframes dzUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.dz-stage__art{animation:dzIn 1s .15s var(--ease) both}
+@keyframes dzIn{from{opacity:0;transform:translateY(30px) scale(.96)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .dz-stage *,.dz-stage__art{animation:none !important}
+}
+
+/* ==========================================================================
+   Категории под первым экраном — в фирменном цвете
+   ========================================================================== */
+.dz .tag{border-color:var(--line)}
+.dz .tag:hover{border-color:var(--brand-300);color:var(--brand-700);background:var(--brand-50)}
+.dz .tag.is-active{background:var(--brand);border-color:var(--brand);color:#fff}
+.dz .tag--all{background:var(--brand);border-color:var(--brand);color:#fff}
+.dz .tag--all:hover{background:var(--brand-600);border-color:var(--brand-600);color:#fff}
+.dz .tag--featured{border-color:var(--ink);background:#fff;box-shadow:none}
+.dz .tag--featured:hover,
+.dz .dd--l1.is-open .tag--featured{background:var(--ink);border-color:var(--ink);color:#fff}
+.dz .tag--near svg{color:var(--brand)}
+.dz .tags-more:hover{background:var(--brand);border-color:var(--brand)}
+
+/* ==========================================================================
+   Адаптив
+   ========================================================================== */
+@media (max-width:1180px){
+  .dz-stage{padding:48px 44px 40px;column-gap:24px}
+  .dz-ticket{width:188px;padding:14px 15px 12px}
+  .dz-ticket__val{font-size:26px}
+  .dz-facts{gap:0 28px}
+}
+
+@media (max-width:900px){
+  .dz-header .header__in{height:auto}
+  .dz-stage{
+    grid-template-columns:1fr;
+    grid-template-areas:"text" "art" "facts";
+    padding:32px 22px 26px;border-radius:26px;
+  }
+  .dz-hero h1.dz-h1{font-size:clamp(30px,8vw,44px);margin-top:18px}
+  .dz-sub{font-size:16px;margin-top:14px}
+  .dz-hero .dz-search{margin-top:22px;padding:6px 6px 6px 16px}
+  .dz-hero .dz-search input{font-size:16px;padding:10px 0}
+  .dz-hero .dz-search .search__go{height:46px;padding:0 18px}
+  .dz-stage__art{min-height:300px;margin-top:10px}
+  .dz-balloon{height:300px}
+  .dz-ticket--1{top:4%;left:0}
+  .dz-ticket--2{top:44%;right:0}
+  .dz-ticket--3{display:none}
+  .dz-facts{margin-top:18px;gap:0 20px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dz-facts dt{font-size:20px}
+  .dz-facts dd{font-size:12px}
+}
+
+.dz-go-s{display:none}
+
+@media (max-width:560px){
+  .dz-go-l{display:none}
+  .dz-go-s{display:inline}
+  /* На телефоне первый экран — это поиск и категории: иллюстрация
+     отодвигала их на второй экран, оставляем только цифры доверия */
+  .dz-stage__art{display:none}
+  .dz-steps{flex-direction:column;align-items:flex-start;gap:8px}
+  .dz-steps li + li::before{display:none}
+  .dz-stage::after{
+    content:"";position:absolute;right:-34px;top:-18px;z-index:-1;
+    width:150px;height:252px;opacity:.14;transform:rotate(12deg);
+    background:url("brand/logo-white.png") center/contain no-repeat;
+  }
+  .dz-logo__word{display:none}
+  .dz-logo__mark{height:40px}
+  .dz-facts{gap:0 12px}
+  .dz-facts dt{font-size:17px;white-space:nowrap}
+  .dz-hero .hero__in{padding-top:4px}
+  .dz-hero .dz-search .search__voice{display:none}
+  .dz-hero .dz-search .search__go{padding:0 16px;font-size:14px}
+  .dz-steps{font-size:13px;gap:8px 20px}
+}
