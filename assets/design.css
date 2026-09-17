@@ -1373,7 +1373,7 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
    полоска сверху; при прокрутке добавляется мягкая тень */
 .dz-header{
   background:rgba(255,255,255,.96);
-  border-top:3px solid var(--brand);
+
   border-bottom:1px solid var(--line);
   box-shadow:0 1px 0 rgba(255,255,255,.6);
   transition:box-shadow .25s,border-color .25s;
@@ -1409,3 +1409,8 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 }
 .cats-b .tags-row__sub .tag--near .tag__label{display:none}
 .cats-b .tags-row__sub .tag--near .tag__label-s{display:block}
+
+/* Б — все круги на одной линии: элементы разной высоты (1–2 строки подписи,
+   у «Рядом» нет числа) прижаты к верху, а не центрированы */
+.cats-b .tags{align-items:flex-start}
+.cats-b .tags-row__sub .tag--near{margin-top:6px}
