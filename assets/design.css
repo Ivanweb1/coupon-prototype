@@ -671,6 +671,19 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
     linear-gradient(rgba(221,68,60,.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(221,68,60,.07) 1px, transparent 1px);
 }
+.dz .quick .map--live{
+  height:170px;display:block;padding:0;overflow:hidden;background:var(--surface);
+}
+.dz .map--live iframe{display:block;width:100%;height:100%;border:0}
+.dz .map__addr{
+  position:absolute;left:10px;top:10px;max-width:calc(100% - 130px);
+  display:inline-flex;align-items:center;gap:6px;
+  height:30px;padding:0 12px 0 9px;border-radius:var(--r-pill);
+  background:#fff;box-shadow:0 4px 14px rgba(34,20,18,.14);
+  font-size:12.5px;font-weight:500;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;
+}
+.dz .map__addr svg{color:var(--brand);flex:0 0 auto;width:14px;height:14px}
 .dz .quick__foot{padding-top:12px;border-top:1px solid var(--line)}
 .dz .quick__foot .btn{height:40px;padding:0 18px;border-color:var(--line-strong);font-weight:600}
 .dz .quick__foot .btn:hover{border-color:var(--ink);background:var(--ink);color:#fff}
@@ -681,8 +694,16 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   background:var(--brand-50);
 }
 .dz .reveal__code{font-family:var(--font-display);color:var(--ink);letter-spacing:.12em}
-.dz .reveal.is-open{border-style:solid;border-color:var(--brand);background:#fff}
-.dz .reveal__done{color:var(--brand-700);font-weight:500}
+/* После «Забрать купон» блок не перестраивается: снимается только блюр
+   с кода, «Забрать купон» гаснет, а главным действием становится
+   «Поделиться» — код уже у человека, дальше его можно только передать */
+.dz .reveal.is-open .reveal__cta{
+  display:inline-flex;pointer-events:none;
+  background:var(--surface-2);color:var(--ink-4);box-shadow:none;
+}
+.dz .reveal.is-open .reveal__done{display:none}
+.dz .reveal.is-open [data-share]{background:var(--brand);border-color:var(--brand);color:#fff}
+.dz .reveal.is-open [data-share]:hover{background:var(--brand-600);border-color:var(--brand-600)}
 
 /* ==========================================================================
    Блок 5. Выбор города
@@ -761,3 +782,35 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 @container (max-width: 235px){
   .dz .card__media .erid-stamp{top:40px;left:11px;right:auto}
 }
+
+/* ==========================================================================
+   Поп-ап, вариант ?quick=focus
+   ==========================================================================
+   Промокод сразу под заголовком — единственный блок с цветной рамкой.
+   Компания и карта без собственных рамок, отделены тонкими линиями, чтобы
+   не спорить с промокодом. Страница купона — ссылкой, а не кнопкой. */
+.dz.quick-focus .quick__side{gap:14px}
+.dz.quick-focus .quick h3{margin-bottom:2px}
+.dz.quick-focus .quick .reveal{padding:14px 16px}
+.dz.quick-focus .quick .reveal__code{font-size:28px}
+
+.dz.quick-focus .quick .company{
+  border:0;border-top:1px solid var(--line);border-radius:0;background:none;
+  padding:14px 0 0;
+}
+.dz.quick-focus .quick .socials{border-top:0;padding-top:0;padding-left:48px}
+
+.dz.quick-focus .quick .map--live{height:190px}
+.dz.quick-focus .quick__side > div:has(> .map),
+.dz.quick-focus .quick__side > div:has(> .market-where){
+  border-top:1px solid var(--line);padding-top:14px;
+}
+.block-label__aside{text-transform:none;letter-spacing:0;font-weight:500;color:var(--ink-3)}
+
+.dz.quick-focus .quick__foot{border-top:0;padding-top:0;display:flex;justify-content:flex-end}
+.quick__more{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:14px;font-weight:600;color:var(--ink);
+  transition:color .18s,gap .18s var(--ease);
+}
+.quick__more:hover{color:var(--brand);gap:10px}

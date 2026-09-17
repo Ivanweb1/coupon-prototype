@@ -647,7 +647,10 @@ function quickHTML(c) {
      Два варианта компоновки — на созвоне 07.09.2026 выбор не сделали.
      side (по умолчанию) — промокод в правой колонке, как было.
      left — промокод и кнопка уходят под картинку влево: предложение Коли,
-     чтобы уравновесить композицию, когда слева появится реальное фото. */
+     чтобы уравновесить композицию, когда слева появится реальное фото.
+     focus — предложение Ивана 17.09.2026: промокод сразу под заголовком
+     как единственный акцентный блок, компания без рамки ниже, адрес
+     только на карте, минуты — у заголовка «Где действует». */
   const revealBlock = `
       <div class="reveal" data-reveal>
         <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
@@ -661,6 +664,7 @@ function quickHTML(c) {
         </div>
       </div>`;
   const left = document.body.classList.contains("quick-left");
+  const focus = document.body.classList.contains("quick-focus");
   /* В дизайн-версии у сайта и соцсетей компании — фирменные значки */
   const dz = document.body.classList.contains("dz");
 
@@ -680,12 +684,71 @@ function quickHTML(c) {
         </div>
       </div>`
     : `<div>
-        <div class="block-label">Где действует</div>
-        <div class="map">
+        <div class="block-label">Где действует${focus
+          ? ` <span class="block-label__aside">· ${fmtDist(c.dist)} от вас</span>` : ""}</div>
+        ${dz
+          /* Живая карта-виджет Яндекса без ключа API. Точка пока одна на
+             все купоны — центр Липецка: реальных адресов в прототипе нет */
+          ? `<div class="map map--live">
+              <iframe src="https://yandex.ru/map-widget/v1/?ll=39.599200%2C52.608800&z=16&pt=39.599200%2C52.608800%2Cpm2rdl&l=map"
+                      title="Карта: ${c.city.name}, ${c.address}" loading="lazy" allowfullscreen></iframe>
+              <span class="map__addr">${ICON.pinFill} ${c.city.name}, ${c.address}</span>
+            </div>`
+          : `<div class="map">
           <span class="map__pin">${ICON.pinFill}</span>
           <span style="margin-top:34px">${c.city.name}, ${c.address}</span>
-        </div>
+        </div>`}
       </div>`;
+
+  const socials = `
+        <div class="socials">
+          <a class="soc" href="#" title="Сайт компании">${dz ? ICON.site : ICON.link} Сайт</a>
+          <a class="soc" href="#" title="Компания ВКонтакте">${dz ? ICON.vk : ICON.link} ВКонтакте</a>
+          <a class="soc" href="#" title="Компания в Telegram">${dz ? ICON.tg : ICON.link} Telegram</a>
+        </div>`;
+  const termsBlock = `
+      <div>
+        <div class="block-label">Как воспользоваться</div>
+        <ul class="terms">
+          <li>Сохраните код или сделайте скриншот — переходить никуда не нужно.</li>
+          <li>${c.market
+                ? "Введите код в корзине на площадке при оформлении заказа."
+                : "Покажите код на кассе или назовите администратору при оплате."}</li>
+        </ul>
+      </div>`;
+  const mediaBlock = `
+    <button class="quick__close" data-quick-close>${ICON.close}</button>
+    <div class="quick__media">
+      <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
+        <span class="quick__value">${c.value}</span>
+        <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
+      </div>
+      ${left ? revealBlock : ""}
+    </div>`;
+
+  if (focus) return `${mediaBlock}
+    <div class="quick__side">
+      <div class="quick__eyebrow">
+        <span>${c.cat.vertical.name}</span><i class="dot"></i>
+        <span>${c.cat.name}</span>
+        ${isRegion() && !c.market ? `<i class="dot"></i><span>${c.city.name}</span>` : ""}
+      </div>
+      <h3>${c.title}</h3>
+      ${revealBlock}
+      ${termsBlock}
+      <div class="company">
+        <div class="company__logo">лого</div>
+        <div>
+          <div class="company__name">${c.company}</div>
+          <div class="company__req">ИНН 0000000000</div>
+        </div>
+        ${socials}
+      </div>
+      ${whereBlock}
+      <div class="quick__foot">
+        <a class="quick__more" href="coupon.html" data-open-page>Открыть страницу купона ${ICON.arrow || "→"}</a>
+      </div>
+    </div>`;
 
   return `
     <button class="quick__close" data-quick-close>${ICON.close}</button>
@@ -832,6 +895,7 @@ function openQuick(c, cardEl) {
   const rev = qs("[data-reveal]", quick);
   qs("[data-reveal-btn]", quick).onclick = () => {
     rev.classList.add("is-open");
+    qs("[data-reveal-btn]", rev).disabled = true;
     fitQuickMedia();
   };
 }
@@ -1328,12 +1392,13 @@ function initCardStyle() {
   document.body.classList.add("cards-" + style);
 }
 
-/* Компоновка попапа купона: ?quick=side (промокод справа, по умолчанию)
-   или ?quick=left (промокод под картинкой слева — вариант Коли). Выбор
+/* Компоновка попапа купона: ?quick=side (промокод справа, по умолчанию),
+   ?quick=left (промокод под картинкой слева — вариант Коли) или
+   ?quick=focus (промокод первым, компания без рамки — вариант Ивана). Выбор
    на созвоне не сделали, поэтому оба смотрятся переключением адреса. */
 function initQuickStyle() {
   let style = params.get("quick");
-  if (style !== "left" && style !== "side") {
+  if (style !== "left" && style !== "side" && style !== "focus") {
     style = localStorage.getItem("cp_quick") || "side";
   }
   localStorage.setItem("cp_quick", style);
