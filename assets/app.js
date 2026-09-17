@@ -217,17 +217,61 @@ function buildCityModal() {
 /* Строка ниш. На главной это ниши региональных купонов: у маркетплейсов и
    «Для бизнеса» ниши свои и раскрываются из их же плашек. На странице
    раздела строка показывает ниши уже этого раздела. */
+/* Значки ниш для вариантов строки категорий (?cats=a|b|c, дизайн-версия).
+   Линейные, 24×24, цвет — currentColor. Нет значка — берётся «сетка». */
+const CAT_PATH = {
+  eda: '<path d="M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H15.6"/><path d="M8.5 3.5v3M12 3.5v3"/>',
+  krasota: '<path d="M8.5 21h7v-9h-7z"/><path d="M9.5 12V7.5L14.5 4v8"/>',
+  kosmetologiya: '<path d="M12 3.5l1.7 4.3L18 9.5l-4.3 1.7L12 15.5l-1.7-4.3L6 9.5l4.3-1.7z"/><path d="M18 15l.7 1.8 1.8.7-1.8.7L18 20l-.7-1.8-1.8-.7 1.8-.7z"/>',
+  meditsina: '<path d="M9.5 4h5v5.5H20v5h-5.5V20h-5v-5.5H4v-5h5.5z"/>',
+  avto: '<path d="M4 16.5v-4.5l2.2-5h11.6l2.2 5v4.5z"/><path d="M5 16.5v2.5h3v-2.5M16 16.5v2.5h3v-2.5"/><path d="M7.5 12.5h.01M16.5 12.5h.01"/>',
+  avtomoyki: '<path d="M12 3.5s5.5 6.2 5.5 10.3a5.5 5.5 0 0 1-11 0C6.5 9.7 12 3.5 12 3.5z"/><path d="M9.5 14a2.5 2.5 0 0 0 2.5 2.5"/>',
+  avtotovary: '<circle cx="12" cy="12" r="3"/><path d="M12 3.5v2.5M12 18v2.5M3.5 12H6M18 12h2.5M6 6l1.8 1.8M16.2 16.2 18 18M6 18l1.8-1.8M16.2 7.8 18 6"/>',
+  sport: '<path d="M7 7.5v9M4 9.5v5M17 7.5v9M20 9.5v5M7 12h10"/>',
+  spa: '<path d="M12 20c-4.5 0-7.5-3.5-7.5-8 4 0 7.5 3 7.5 8zm0 0c4.5 0 7.5-3.5 7.5-8-4 0-7.5 3-7.5 8z"/><path d="M12 12c-1.8-1.8-1.8-5.2 0-8 1.8 2.8 1.8 6.2 0 8z"/>',
+  razvlecheniya: '<path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/><path d="M14 6.5v11" stroke-dasharray="1.5 2"/>',
+  detyam: '<circle cx="12" cy="13.5" r="6"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><path d="M10 14.5h.01M14 14.5h.01M10.5 17h3"/>',
+  obuchenie: '<path d="M3.5 5.5h7v13h-7zM13.5 5.5h7v13h-7z"/>',
+  dom: '<path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/>',
+  remont: '<path d="M14 3.5 20.5 10l-3 3L11 6.5z"/><path d="M12.5 8 4 16.5 7.5 20 16 11.5"/>',
+  odezhda: '<path d="M8.5 4 12 6l3.5-2 5 4-2.8 3-1.7-1V20h-8v-10l-1.7 1-2.8-3z"/>',
+  pitomtsy: '<circle cx="7" cy="10" r="1.8"/><circle cx="10.5" cy="6.5" r="1.8"/><circle cx="14.5" cy="6.5" r="1.8"/><circle cx="18" cy="10" r="1.8"/><path d="M12 12c-3 0-5.5 3-5.5 5.2 0 1.8 1.6 2.3 3 2 1.2-.3 1.8-.7 2.5-.7s1.3.4 2.5.7c1.4.3 3-.2 3-2C17.5 15 15 12 12 12z"/>',
+  uslugi: '<circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.3 2.4 2.4 4.8-5"/>',
+  puteshestviya: '<path d="M3.5 12.5 20.5 5 15 20.5l-3-5.5z"/><path d="m12 15 3.5-4"/>',
+  "18plus": '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+  elektronika: '<rect x="7" y="3.5" width="10" height="17" rx="2"/><path d="M11 17.5h2"/>',
+  reklama: '<path d="M4 10v4h3l7 4V6l-7 4z"/><path d="M17.5 9.5a3.5 3.5 0 0 1 0 5"/>',
+  it: '<rect x="3.5" y="5" width="17" height="11" rx="1.5"/><path d="M8 20h8M12 16v4"/>',
+  oborudovanie: '<path d="M4 20V9l5 3V9l5 3V5h6v15z"/>',
+  logistika: '<path d="M3.5 7h10v9h-10zM13.5 10h4l3 3v3h-7z"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/>'
+};
+CAT_PATH["uslugi-dlya-biznesa"] = CAT_PATH.uslugi;
+const CAT_TONES = [
+  ["#FDE7E4", "#C8362F"], ["#E8EEF6", "#3B5B86"], ["#E9F2EA", "#3F6B47"], ["#F6EDDD", "#9A6420"],
+  ["#EEEAF6", "#5B4A8A"], ["#E3F2F1", "#2F6E69"], ["#F7E6EE", "#9A3D66"]
+];
+function catIcon(slug, size) {
+  const d = CAT_PATH[slug] || '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+}
+
 function buildTags(l1) {
   const host = qs("#tags");
   if (!host) return;
   const vertical = findVertical(l1) || VERTICALS[0];
   host.innerHTML = "";
 
-  catsOf(vertical.slug).sort((a, b) => b.n - a.n).forEach(c => {
+  /* В вариантах ?cats=a|b|c у ниши есть значок на цветном круге; без
+     варианта значок скрыт стилями и строка выглядит как раньше */
+  catsOf(vertical.slug).sort((a, b) => b.n - a.n).forEach((c, i) => {
     const a = document.createElement("a");
-    a.className = "tag" + (state.l2 === c.slug && state.l1 === c.l1 ? " is-active" : "");
+    a.className = "tag tag--niche" + (state.l2 === c.slug && state.l1 === c.l1 ? " is-active" : "");
     a.href = catUrl(c);
-    a.innerHTML = c.name + ' <span class="tag__n">' + c.n + "</span>";
+    const [bg, fg] = CAT_TONES[i % CAT_TONES.length];
+    a.style.setProperty("--ct-bg", bg);
+    a.style.setProperty("--ct-fg", fg);
+    a.innerHTML = '<span class="tag__ic">' + catIcon(c.slug, 20) + '</span>' +
+      '<span class="tag__name">' + c.name + '</span> <span class="tag__n">' + c.n + "</span>";
     host.appendChild(a);
   });
 
@@ -1671,9 +1715,20 @@ function initQuickStyle() {
   document.body.classList.add("quick-" + style);
 }
 
+/* Варианты оформления строки категорий на дизайн-главной (17.09.2026):
+   ?cats=a — значки у ниш, ?cats=b — круги как сторис, ?cats=c — разделы
+   карточками. Без параметра — текущая строка. Не запоминаем: это
+   сравнение вариантов, а не настройка. */
+function initCatsStyle() {
+  if (!document.body.classList.contains("dz")) return;
+  const v = params.get("cats");
+  if (v === "a" || v === "b" || v === "c") document.body.classList.add("cats-" + v);
+}
+
 function initCommon() {
   initCardStyle();
   initQuickStyle();
+  initCatsStyle();
   initIcons();
   buildCityModal();
   initCityGate();

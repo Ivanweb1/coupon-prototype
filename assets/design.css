@@ -674,7 +674,11 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz .quick .map--live{
   height:170px;display:block;padding:0;overflow:hidden;background:var(--surface);
 }
-.dz .map--live iframe{display:block;width:100%;height:100%;border:0}
+.dz .map--live{position:relative}
+/* iframe абсолютом: у растянутого flex-блока высота «auto», и процент
+   внутри не считается — карта оставалась 150px, а ниже торчала подложка */
+.dz .map--live iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}
+.dz .map--live .map__addr{z-index:1}
 .dz .map__addr{
   position:absolute;left:10px;top:10px;max-width:calc(100% - 130px);
   display:inline-flex;align-items:center;gap:6px;
@@ -1140,13 +1144,15 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .cpd .map--live{height:200px}
   .cpd-about__main,.cpd-about__links{padding:18px;border-radius:22px}
 }
-}
 
 /* Правая колонка тянется до низа фото: карта забирает остаток высоты */
 .cpd{align-items:stretch}
 .cpd__media{align-self:start}
 .cpd__where{flex:1;display:flex;flex-direction:column}
-.cpd .cpd__where .map--live{flex:1;height:auto;min-height:240px}
+.cpd .cpd__where .map--live{flex:1;height:auto;min-height:150px}
+/* низ карты — на одной линии с низом фото (у фото 18px отступа подложки) */
+.cpd__info{padding-bottom:18px}
+@media (max-width:900px){.cpd__info{padding-bottom:0}}
 @media (max-width:900px){.cpd .cpd__where .map--live{flex:none;height:240px;min-height:0}}
 
 /* Телефон: фото не отдаёт весь первый экран — заголовок и промокод должны
@@ -1165,3 +1171,126 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz .card{display:flex;flex-direction:column}
 .dz .card__body{flex:1}
 .dz .card__actions{margin-top:auto}
+
+/* «Компания в сети» на странице купона — значки сразу в цвете: это блок
+   контактов, а не второстепенные ссылки, и переходы по ним — ключевая метрика */
+.cpd-contact .soc-ic__bg,.cpd-contact:hover .soc-ic__bg{fill:var(--soc-c)}
+.cpd-contact .soc-ic__g,.cpd-contact:hover .soc-ic__g{fill:#fff}
+.cpd-contact .soc-ic__s,.cpd-contact:hover .soc-ic__s{stroke:#fff}
+.cpd-contact .cpd-ic,.cpd-contact:hover .cpd-ic{background:#2F9E5B;color:#fff}
+.cpd-about__links .cpd-contact:hover{color:var(--ink)}
+
+/* ==========================================================================
+   Строка категорий — варианты для сравнения (?cats=a|b|c)
+   ========================================================================== */
+.tag__ic,.tag__sub{display:none}
+
+/* ---------- А. Значки у ниш ----------
+   Чипсы как были, у каждой ниши — цветной круг со значком */
+.cats-a .tags-row__sub .tag--niche,
+.cats-c .tags-row__sub .tag--niche{height:40px;padding:0 14px 0 5px;gap:8px;background:#fff}
+.cats-a .tag--niche .tag__ic,
+.cats-c .tag--niche .tag__ic{
+  display:grid;place-items:center;width:30px;height:30px;border-radius:50%;
+  background:var(--ct-bg);color:var(--ct-fg);transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.cats-a .tag--niche .tag__ic svg,
+.cats-c .tag--niche .tag__ic svg{width:17px;height:17px}
+.cats-a .tag--niche:hover .tag__ic,
+.cats-c .tag--niche:hover .tag__ic{transform:rotate(-10deg) scale(1.08)}
+.cats-a .tags-row__sub .tag--near,
+.cats-c .tags-row__sub .tag--near{height:40px;background:var(--brand-50);border-color:transparent;color:var(--brand-700);font-weight:600}
+.dz.cats-a .tag--niche.is-active .tag__ic,
+.dz.cats-c .tag--niche.is-active .tag__ic{background:rgba(255,255,255,.2);color:#fff}
+
+/* ---------- Б. Круги как сторис ----------
+   Крупный круг со значком и подпись под ним — как категории WB/Ozon и
+   сторис в Instagram. Кольцо бренда появляется при наведении. */
+.cats-b .tags-row__sub{align-items:flex-start;margin-top:8px}
+.cats-b .tags{gap:6px;padding:6px 0 4px}
+.cats-b .tags-row__sub .tag--niche,
+.cats-b .tags-row__sub .tag--near{
+  height:auto;width:96px;padding:0;border:0;background:none;border-radius:0;
+  flex-direction:column;gap:8px;white-space:normal;text-align:center;
+  font-size:12.5px;line-height:1.2;font-weight:500;color:var(--ink);
+}
+.cats-b .tags-row__sub .tag--niche:hover,
+.cats-b .tags-row__sub .tag--near:hover{background:none;transform:none;color:var(--ink)}
+.cats-b .tag--niche .tag__ic{
+  display:grid;place-items:center;width:72px;height:72px;border-radius:50%;
+  background:var(--ct-bg);color:var(--ct-fg);position:relative;
+  box-shadow:0 0 0 3px #fff, 0 0 0 5px transparent;
+  transition:box-shadow .25s, transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.cats-b .tag--niche .tag__ic svg{width:32px;height:32px;stroke-width:1.5}
+.cats-b .tag--niche:hover .tag__ic{transform:translateY(-3px);box-shadow:0 0 0 3px #fff, 0 0 0 5px var(--brand-300)}
+.cats-b .tag--niche .tag__name{display:block;min-height:2.4em}
+.cats-b .tag--niche .tag__n{display:block;margin-top:-6px;font-size:11px;color:var(--ink-4)}
+.dz.cats-b .tag--niche.is-active{background:none;color:var(--brand-700)}
+.dz.cats-b .tag--niche.is-active .tag__ic{box-shadow:0 0 0 3px #fff, 0 0 0 5px var(--brand)}
+/* «Рядом со мной» — первым кругом, в красном */
+.cats-b .tags-row__sub .tag--near::before{
+  content:"";order:-1;width:72px;height:72px;border-radius:50%;
+  background:var(--brand) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.6'%3E%3Cpath d='M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z'/%3E%3Ccircle cx='12' cy='10' r='2.6'/%3E%3C/svg%3E") center/32px no-repeat;
+  box-shadow:0 0 0 3px #fff, 0 0 0 5px transparent;transition:box-shadow .25s, transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.cats-b .tags-row__sub .tag--near:hover::before{transform:translateY(-3px);box-shadow:0 0 0 3px #fff, 0 0 0 5px var(--brand-300)}
+.cats-b .tags-row__sub .tag--near [data-icon]{display:none}
+.cats-b .tags-row__sub .tag--near .tag__label{display:block}
+.cats-b .tags-row__sub .tag--near .tag__label-s{display:none}
+.dz.cats-b .tags-row__sub .tag--near.is-active{background:none;color:var(--brand-700)}
+.dz.cats-b .tags-row__sub .tag--near.is-active::before{box-shadow:0 0 0 3px #fff, 0 0 0 5px var(--brand)}
+.cats-b .tags-more{top:36px}
+
+/* ---------- В. Разделы карточками ----------
+   Три ветки витрины — крупными карточками с подписью, ниши под ними
+   со значками, как в варианте А */
+.cats-c .tags-row__main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.cats-c .tags-row__main .dd{display:block}
+.cats-c .tags-row__main .tag{
+  width:100%;height:auto;min-height:84px;padding:14px 16px;border-radius:22px;
+  display:grid;grid-template-columns:48px 1fr auto;grid-template-rows:auto auto;
+  column-gap:14px;row-gap:2px;align-items:center;justify-content:stretch;text-align:left;
+}
+.cats-c .tags-row__main .tag > [data-icon]:not(.chev){
+  grid-row:span 2;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
+}
+.cats-c .tags-row__main .tag > [data-icon]:not(.chev) svg{width:24px;height:24px;opacity:1}
+.cats-c .tags-row__main .tag__label{grid-column:2;font-family:var(--font-display);font-size:17px;font-weight:700;letter-spacing:-.02em}
+.cats-c .tags-row__main .tag__sub{display:block;grid-column:2;grid-row:2;font-size:12.5px;font-weight:500;white-space:normal;line-height:1.35}
+.cats-c .tags-row__main .tag .tag__n{grid-column:3;grid-row:1;font-size:13px;font-weight:600}
+.cats-c .tags-row__main .tag .chev{grid-column:3;grid-row:2;justify-self:end;margin:0;width:auto;height:auto;background:none}
+
+.dz.cats-c .tags-row__main .tag--all{
+  background:
+    radial-gradient(260px 120px at 100% 0%, #EE6A60 0%, rgba(238,106,96,0) 70%),
+    var(--brand);
+  border-color:transparent;box-shadow:0 18px 30px -22px rgba(221,68,60,.9);
+}
+.cats-c .tags-row__main .tag--all > [data-icon]{background:rgba(255,255,255,.18)}
+.cats-c .tags-row__main .tag--all .tag__sub{color:rgba(255,255,255,.8)}
+.dz.cats-c .tags-row__main .tag--featured{background:#fff;border:1px solid var(--line-strong)}
+.dz.cats-c .tags-row__main .tag--featured:hover,
+.dz.cats-c .dd--l1.is-open .tag--featured{background:#fff;color:var(--ink);border-color:var(--ink);transform:translateY(-3px);box-shadow:0 18px 30px -24px rgba(34,26,25,.45)}
+.cats-c .tags-row__main .tag--featured > [data-icon]{background:var(--surface-2)}
+.dz.cats-c .tags-row__main .tag--featured:hover svg,
+.dz.cats-c .dd--l1.is-open .tag--featured svg{color:var(--ink)}
+.cats-c .tags-row__main .dd--l1[data-l1="marketplace"] .tag > [data-icon]:not(.chev){background:#EEE6FB;color:#6B2BD9}
+.cats-c .tags-row__main .dd--l1[data-l1="marketplace"] .tag > [data-icon]:not(.chev) svg{color:#6B2BD9}
+.cats-c .tags-row__main .dd--l1[data-l1="for-business"] .tag > [data-icon]:not(.chev){background:#E6EEF8}
+.cats-c .tags-row__main .dd--l1[data-l1="for-business"] .tag > [data-icon]:not(.chev) svg{color:#3B5B86}
+.cats-c .tags-row__main .tag--featured .tag__sub{color:var(--ink-3)}
+.dz.cats-c .tags-row__main .tag--featured:hover .tag__n,
+.dz.cats-c .tags-row__main .tag--featured:hover .chev{color:var(--ink-3)}
+.cats-c .tags-row__main .dd__panel{top:calc(100% + 8px)}
+.cats-c .tags-row{gap:14px}
+
+@media (max-width:900px){
+  .cats-c .tags-row__main{grid-template-columns:1fr}
+  .cats-c .tags-row__main .tag{min-height:68px}
+}
+@media (max-width:640px){
+  .cats-b .tags-row__sub .tag--niche,.cats-b .tags-row__sub .tag--near{width:78px;font-size:11.5px}
+  .cats-b .tag--niche .tag__ic,.cats-b .tags-row__sub .tag--near::before{width:60px;height:60px}
+  .cats-b .tag--niche .tag__ic svg{width:26px;height:26px}
+}
