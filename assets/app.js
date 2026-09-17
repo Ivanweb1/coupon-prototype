@@ -1755,6 +1755,19 @@ function initHeaderShadow() {
   const sync = () => h.classList.toggle("is-scrolled", window.scrollY > 4);
   window.addEventListener("scroll", sync, { passive: true });
   sync();
+
+  /* Компактный поиск в шапке показываем, когда большой поиск первого
+     экрана ушёл под шапку. Если на странице своего поиска нет (страница
+     купона) — поиск в шапке виден всегда. */
+  const big = qs(".dz-hero .search");
+  if (!big) { h.classList.add("has-search"); return; }
+  const syncSearch = () => {
+    const r = big.getBoundingClientRect();
+    h.classList.toggle("has-search", r.bottom < h.getBoundingClientRect().bottom);
+  };
+  window.addEventListener("scroll", syncSearch, { passive: true });
+  window.addEventListener("resize", syncSearch);
+  syncSearch();
 }
 
 function initCommon() {
