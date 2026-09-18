@@ -374,14 +374,10 @@
 
 .dzl__eyebrow{
   display:inline-flex;align-items:center;gap:8px;
-  height:28px;padding:0 12px 0 10px;border-radius:var(--r-pill);
+  height:28px;padding:0 12px;border-radius:var(--r-pill);
   background:var(--brand-50);color:var(--brand-700);
   font-size:12px;font-weight:600;letter-spacing:.01em;
   animation:dzUp .6s var(--ease) both;
-}
-.dzl__eyebrow i{
-  width:7px;height:7px;border-radius:50%;background:var(--brand);
-  animation:dzPingRed 2.4s ease-out infinite;
 }
 @keyframes dzPingRed{
   0%{box-shadow:0 0 0 0 rgba(221,68,60,.45)}
@@ -500,6 +496,10 @@
 .dz-section-note{
   display:inline-flex;align-items:center;gap:8px;
   font-size:13px;font-weight:500;color:var(--ink-3);
+}
+.dz-section-note::before{
+  content:"";width:8px;height:8px;border-radius:50%;background:var(--brand);
+  animation:dzPingRed 2.4s ease-out infinite;
 }
 
 .dz .grid{gap:30px 18px}
