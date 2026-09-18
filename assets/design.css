@@ -736,8 +736,9 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
    Блок 6. Подвал
    ==========================================================================
    Покупатель долистал ленту — самое время позвать бизнес. Отдельная
-   красная плашка с обещанием «первый купон бесплатно», под ней — тёмный
-   подвал со ссылками и соцсетями. */
+   тёмная плашка с обещанием «первый купон бесплатно»: бизнес на сайте
+   везде тёмный, как «Разместить купон» в шапке, красный — покупателю.
+   Плашка на тон светлее подвала и с тонкой рамкой, чтобы не слиться с ним. */
 .dz .footer{margin-top:110px;border:0;background:var(--ink);color:#fff}
 .dz-biz{
   position:relative;overflow:hidden;isolation:isolate;
@@ -745,9 +746,10 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   margin:0 0 -16px;transform:translateY(-56px);
   padding:44px 48px;border-radius:32px;
   background:
-    radial-gradient(520px 300px at 100% 0%, #EE6A60 0%, rgba(238,106,96,0) 70%),
-    var(--brand);
-  box-shadow:0 30px 60px -30px rgba(80,14,10,.6);
+    radial-gradient(520px 300px at 100% 0%, #4A3C3A 0%, rgba(74,60,58,0) 70%),
+    #2E2423;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08), 0 30px 60px -30px rgba(20,12,11,.7);
+  color:#fff;
 }
 .dz-biz__k{
   display:inline-block;padding:5px 12px;border-radius:var(--r-pill);
@@ -760,8 +762,8 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz-biz p{margin:12px 0 0;max-width:52ch;font-size:16px;color:rgba(255,255,255,.88)}
 .dz-biz__acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
 .dz-biz__acts .btn{height:48px;padding:0 24px;font-size:15px;font-weight:600}
-.dz-biz__acts .dz-btn-white{background:#fff;color:var(--brand-700)}
-.dz-biz__acts .dz-btn-white:hover{background:var(--brand-50)}
+.dz-biz__acts .dz-btn-white{background:#fff;color:var(--ink)}
+.dz-biz__acts .dz-btn-white:hover{background:#EFEAE9}
 .dz-biz__acts .dz-btn-line{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6);color:#fff}
 .dz-biz__acts .dz-btn-line:hover{background:rgba(255,255,255,.12)}
 /* Фон справа: зерно, как у первого экрана, и пунктирные кольца вокруг шара —
