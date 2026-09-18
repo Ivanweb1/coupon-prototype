@@ -410,7 +410,8 @@ function buildL1Dropdowns() {
 const MP_MARKS = {
   "Wildberries":   "wildberries-full.svg",
   "Ozon":          "ozon-full.svg",
-  "Яндекс Маркет": "yandex-market-full.svg"
+  "Яндекс Маркет": "yandex-market-full.svg",
+  "Мегамаркет":    "megamarket-full.svg"
 };
 function mpMark(name) {
   const file = MP_MARKS[name];
@@ -720,9 +721,8 @@ let originCard = null;
 let fromTransform = "";
 
 /* Логотипы площадок для дизайн-версии: файлы assets/brand/mp/<ключ>.svg
-   (круглый значок) и <ключ>-full.svg (логотип шрифтом). У Мегамаркета
-   логотипа пока нет — для него остаётся текстовое название. */
-const MARKET_LOGO = { "Wildberries": "wildberries", "Ozon": "ozon", "Яндекс Маркет": "yandex-market" };
+   (круглый значок) и <ключ>-full.svg (логотип шрифтом). */
+const MARKET_LOGO = { "Wildberries": "wildberries", "Ozon": "ozon", "Яндекс Маркет": "yandex-market", "Мегамаркет": "megamarket" };
 
 /* Логотип компании для примера: монограмма по первой букве названия в
    кавычках («Бренд» → Б) на спокойном цветном круге. Цвет стабилен для
