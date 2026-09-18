@@ -501,10 +501,6 @@
   display:inline-flex;align-items:center;gap:8px;
   font-size:13px;font-weight:500;color:var(--ink-3);
 }
-.dz-section-note::before{
-  content:"";width:8px;height:8px;border-radius:50%;background:var(--brand);
-  animation:dzPingRed 2.4s ease-out infinite;
-}
 
 .dz .grid{gap:30px 18px}
 
