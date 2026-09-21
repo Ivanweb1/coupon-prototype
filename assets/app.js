@@ -19,6 +19,12 @@ const ICON = {
   share:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg>',
   close:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   eye:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>',
+  /* Метрики карточки — созвон 21.09.2026. Коля: «копировать — два
+     смещённых квадратика, всем знакомо; глазок — просмотры; использование
+     — галочкой». Значки одной толщины со значками ниш, чтобы столбик не
+     выбивался из остального интерфейса. */
+  copy:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
+  used:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.2 5.2L20 7"/></svg>',
   pinFill:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"/></svg>',
   burger: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
   user:   '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>',
@@ -445,11 +451,38 @@ function cardHTML(c, compact) {
   const onOwnPage = state.l1 === c.cat.l1 && state.l2 === c.cat.slug;
   const cat = onOwnPage ? "" : '<i class="dot"></i><span>' + c.cat.name + "</span>";
 
+  /* Столбик метрик справа на картинке — созвон 21.09.2026. Коля предложил
+     его по образцу Instagram, Вилл добавил: метрики видны всегда, а не по
+     наведению, потому что наведение — уже спровоцированное действие, и
+     прятать за ним доказательство живого купона незачем. Просмотры и
+     «воспользовались» — числа, копирование и «поделиться» — действия.
+     В рекомендациях столбика нет: там карточка — одна кнопка перехода. */
+  const stats = dz3() && !compact ? `
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: ${c.views}">${ICON.eye}<b>${fmtNum(c.views)}</b></span>
+        <span class="card__stat" title="Воспользовались: ${c.uses}">${ICON.used}<b>${fmtNum(c.uses)}</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy title="Скопировать код">${ICON.copy}</button>
+        <button type="button" class="card__stat card__stat--act" data-card-share title="Поделиться">${ICON.share}</button>
+      </div>` : "";
+
+  /* Код поверх изображения. Вилл: «когда это захотят спиздить — а это
+     обязательно спиздят — пусть на белой плашке рядом с кодом стоит наш
+     знак, чтобы каждая собака видела, откуда купон». Поэтому по нажатию
+     «Забрать купон» код появляется не только на кнопке, но и крупно по
+     центру картинки, вместе с логотипом. */
+  const codeOverlay = dz3() && !compact ? `
+      <div class="card__code" data-card-code hidden aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>` : "";
+
   return `
     <div class="card__media">
       ${corner}
       <span class="card__share" title="Поделиться">${ICON.share}</span>
       <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
+      ${stats}
+      ${codeOverlay}
       ${wb
         ? `<span class="card__badge">${c.value}</span>`
         : `<span class="card__value">${c.value}</span>
@@ -488,6 +521,15 @@ const COUPON_PHOTOS_WARM = ["beauty", "coffee", "entertainment", "fitness"]
   .map(n => "assets/coupons/" + n + ".jpg");
 const COUPON_PHOTOS_WILD = ["acid", "beer", "cobalt", "magenta", "neon", "teal"]
   .map(n => "assets/coupons/wild/" + n + ".jpg");
+/* Форма плашки с выгодой — созвон 21.09.2026. Вилл: «билетик» не выдержит
+   текстовый оффер вроде «первый раз бесплатно» и перетягивает внимание с
+   кнопок действия; предложил круг. Диме билетик нравится. Решения не
+   приняли — Коля попросил 2–3 варианта, поэтому форма переключается
+   адресом: ?value=ticket (как было), ?value=round (круг), ?value=plate
+   (белая плашка с красными буквами, по умолчанию). */
+const VALUE_SHAPE = (location.search.match(/[?&]value=(ticket|round|plate)/) || [, "plate"])[1];
+document.documentElement.classList.add("val-" + VALUE_SHAPE);
+
 const PICS_WILD = /[?&]pics=wild/.test(location.search);
 const COUPON_PHOTOS = PICS_WILD ? COUPON_PHOTOS_WILD : COUPON_PHOTOS_WARM;
 if (PICS_WILD) document.documentElement.classList.add("pics-wild");
@@ -539,6 +581,12 @@ window.addEventListener("resize", () => {
   });
 });
 
+function dz3() { return document.body.classList.contains("dz3"); }
+
+/* 4 219 вместо 4219: на плашке в 40 пикселей четыре слитные цифры
+   читаются как один ком. */
+function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+
 function makeCard(c, compact) {
   const el = document.createElement("div");
   el.className = "card card-in";
@@ -577,7 +625,45 @@ function makeCard(c, compact) {
     revealOnCard(e.currentTarget, c);
   };
 
+  /* Копирование прямо со столбика метрик: код открывается и копируется
+     одним нажатием, карточка при этом не открывается. */
+  const copyBtn = qs("[data-card-copy]", el);
+  if (copyBtn) copyBtn.onclick = e => {
+    e.stopPropagation();
+    showCardCode(el, c);
+    const back = copyBtn.innerHTML;
+    const done = () => {
+      copyBtn.classList.add("is-done");
+      copyBtn.innerHTML = ICON.used;
+      setTimeout(() => { copyBtn.classList.remove("is-done"); copyBtn.innerHTML = back; }, 1600);
+    };
+    if (navigator.clipboard) navigator.clipboard.writeText(c.code).then(done, done);
+    else done();
+  };
+
+  /* Делимся только ссылкой на страницу купона — решение созвона
+     07.09.2026: значки соцсетей в шаринг не вшиваем. */
+  const shareBtn = qs("[data-card-share]", el);
+  if (shareBtn) shareBtn.onclick = e => {
+    e.stopPropagation();
+    const url = location.origin + location.pathname.replace(/[^/]*$/, "coupon.html");
+    if (navigator.share) navigator.share({ title: c.title, url: url }).catch(() => {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(url).catch(() => {});
+  };
+
   return el;
+}
+
+/* Код крупно по центру картинки, рядом — наш знак. Вилл на созвоне
+   21.09.2026: купоны будут воровать скриншотами, и пусть воруют, но
+   вместе с нашим логотипом. Плашка белая: на чужом снимке любого цвета
+   это единственный фон, на котором код точно прочитают. */
+function showCardCode(card, c) {
+  const box = qs("[data-card-code]", card);
+  if (!box) return;
+  qs(".card__code-val", box).textContent = c.code;
+  box.hidden = false;
+  box.removeAttribute("aria-hidden");
 }
 
 /* Первое нажатие — код на месте кнопки, второе — копирование */
@@ -586,6 +672,7 @@ function revealOnCard(btn, c) {
     btn.classList.add("is-code");
     btn.textContent = c.code;
     btn.title = "Нажмите, чтобы скопировать";
+    showCardCode(btn.closest(".card"), c);
     noteInterest(c.cat.id);
     return;
   }
@@ -772,7 +859,12 @@ function quickHTML(c) {
      только на карте, минуты — у заголовка «Где действует». */
   const revealBlock = `
       <div class="reveal" data-reveal>
-        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
+        <div class="block-label" style="margin:0">Промокод</div>
+        <!-- Срок действия отдельной строкой. Коля на созвоне 21.09.2026:
+             «я тут вижу кнопку „забрать купон“, и только с четвёртого раза
+             увидел срок действия» — раньше он был подписью в общей строке
+             с заголовком блока и терялся. -->
+        <div class="reveal__until">Действует ${c.until}</div>
         <div class="reveal__row">
           <div class="reveal__code">${c.code}</div>
           <div class="reveal__actions">
@@ -838,15 +930,20 @@ function quickHTML(c) {
           <a class="soc" href="#" title="Компания в Telegram">${dz ? ICON.tg : ICON.link} Telegram</a>
         </div>`;
   const termsBlock = `
-      <div>
-        <div class="block-label">Как воспользоваться</div>
+      <!-- Свёрнуто по умолчанию — решение созвона 21.09.2026. Коля: кнопка
+           «Открыть страницу купона» должна быть видна сразу, без прокрутки;
+           Вилл: условий «как воспользоваться» может быть много, поэтому
+           раскрывающийся список, и скролл появляется только после
+           раскрытия, а не встречает пользователя на входе. -->
+      <details class="terms-fold">
+        <summary class="block-label">Как воспользоваться</summary>
         <ul class="terms">
           <li>Сохраните код или сделайте скриншот — переходить никуда не нужно.</li>
           <li>${c.market
                 ? "Введите код в корзине на площадке при оформлении заказа."
                 : "Покажите код на кассе или назовите администратору при оплате."}</li>
         </ul>
-      </div>`;
+      </details>`;
   const mediaBlock = `
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
@@ -929,15 +1026,20 @@ function quickHTML(c) {
            и выкинуть «мишуру про 30 дней, один купон одного человека»:
            такие оговорки становились центром внимания и противоречили
            самой концепции. Развёрнутые правила живут на странице купона. -->
-      <div>
-        <div class="block-label">Как воспользоваться</div>
+      <!-- Свёрнуто по умолчанию — решение созвона 21.09.2026. Коля: кнопка
+           «Открыть страницу купона» должна быть видна сразу, без прокрутки;
+           Вилл: условий «как воспользоваться» может быть много, поэтому
+           раскрывающийся список, и скролл появляется только после
+           раскрытия, а не встречает пользователя на входе. -->
+      <details class="terms-fold">
+        <summary class="block-label">Как воспользоваться</summary>
         <ul class="terms">
           <li>Сохраните код или сделайте скриншот — переходить никуда не нужно.</li>
           <li>${c.market
                 ? "Введите код в корзине на площадке при оформлении заказа."
                 : "Покажите код на кассе или назовите администратору при оплате."}</li>
         </ul>
-      </div>
+      </details>
 
       ${whereBlock}
 

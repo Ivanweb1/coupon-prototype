@@ -1,0 +1,227 @@
+/* ==========================================================================
+   Все купоны — правки по созвону 21.09.2026. Заход 2: карточка и попап
+   ==========================================================================
+   Продолжение design-3.css. Разделены намеренно: заход 1 менял палитру
+   насквозь, заход 2 трогает только купон — карточку в ленте и попап.
+   Так видно, что откуда взялось, и откатить можно по отдельности.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Плашка с выгодой: три формы на выбор
+   --------------------------------------------------------------------------
+   Решения на созвоне не приняли. Вилл: «билетик» не выдержит текстовый
+   оффер вроде «первый раз бесплатно» и тянет внимание на себя, тогда как
+   собирать его должны оффер и кнопки действий; предложил круг. Диме
+   билетик нравится. Коля попросил 2–3 варианта — вот они, переключаются
+   адресом:
+
+   ?value=ticket — как было, красный билетик с вырезами
+   ?value=round  — круг, предложение Вилла
+   ?value=plate  — белая плашка с красными буквами, по умолчанию
+
+   Почему по умолчанию белая: на проверке дикими картинками красная плашка
+   пропадает на мадженте и розовом — красное на красноватом сливается.
+   Белая держится на всех шести фонах и говорит на том же языке, что белый
+   чип с минутами слева сверху. Ширина у неё по содержимому, так что
+   текстовый оффер тоже помещается. */
+
+.val-plate .dz3.cards-wb .card__badge{
+  left:10px;bottom:10px;max-width:calc(100% - 54px);
+  padding:7px 13px;border-radius:12px;
+  background:#fff;color:var(--brand);
+  font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.03em;
+  line-height:1.1;text-align:left;white-space:normal;
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.45);
+  -webkit-mask:none;mask:none;
+}
+
+/* Та же плашка в попапе: выгода там крупнее, но форма и цвет должны
+   совпадать с лентой — иначе при раскрытии купона меняется не только
+   размер, но и сам объект, и связь между карточкой и попапом рвётся. */
+.val-plate .dz3 .quick__value{
+  background:#fff;color:var(--brand);
+  box-shadow:0 6px 20px -8px rgba(0,0,0,.45);
+}
+.val-round .dz3 .quick__value{
+  width:104px;height:104px;padding:0;border-radius:50%;
+  display:grid;place-items:center;text-align:center;line-height:1.05;
+  font-size:clamp(20px,2vw,26px);
+}
+
+/* Круг. Текст в нём ужимается, длинный оффер не помещается — это и надо
+   увидеть своими глазами, прежде чем выбирать форму. */
+.val-round .dz3.cards-wb .card__badge{
+  left:10px;bottom:10px;
+  width:62px;height:62px;padding:0;border-radius:50%;
+  display:grid;place-items:center;text-align:center;
+  background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-size:14px;font-weight:800;letter-spacing:-.04em;
+  line-height:1.05;
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.45);
+  -webkit-mask:none;mask:none;
+}
+
+/* --------------------------------------------------------------------------
+   Столбик метрик справа на картинке
+   --------------------------------------------------------------------------
+   Коля предложил его по образцу Instagram: «справа, одной третью или
+   четвертью — поделиться, просмотры». Вилл добавил, что метрики видны
+   всегда, а не по наведению: наведение — уже спровоцированное действие,
+   и прятать за ним доказательство живого купона незачем.
+
+   Плашка сплошная белая по той же причине, что и плашка с выгодой: на
+   чужом снимке любого цвета это единственный фон, на котором значки
+   читаются гарантированно. */
+.dz3 .card__stats{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:7px 5px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.93);
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.4);
+}
+.dz3 .card__stat{
+  display:flex;flex-direction:column;align-items:center;gap:1px;
+  min-width:30px;padding:4px 2px;border:0;background:none;
+  color:var(--ink-2);font:inherit;line-height:1;
+}
+.dz3 .card__stat b{
+  font-size:10px;font-weight:600;letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;color:var(--ink-3);
+}
+.dz3 .card__stat--act{cursor:pointer;border-radius:50%;transition:color .18s,background .18s}
+.dz3 .card__stat--act:hover{color:var(--brand);background:var(--surface)}
+.dz3 .card__stat--act.is-done{color:var(--brand)}
+
+/* Узкая карточка (по шесть в ряд): столбик из четырёх занял бы полкартинки
+   — оставляем только числа, действия остаются на кнопках под картинкой. */
+@container (max-width: 235px){
+  .dz3 .card__stat--act{display:none}
+}
+
+/* --------------------------------------------------------------------------
+   Код поверх изображения
+   --------------------------------------------------------------------------
+   Вилл: «нажимаешь „Забрать купон“ — и прямо посередине изображения
+   появляется белая плашка с кодом, а на ней наш знак и название. Это
+   обязательно спиздят — пусть пиздят вместе с логотипом».
+   Знак стоит внутри той же плашки, что и код: обрезать его, не обрезав
+   код, нельзя, а купон без кода никому не нужен. Это и есть ответ Павлу
+   про авитовскую ватермарку, которую просто отрезают по углу. */
+/* display:grid перебивает [hidden] — без этой строки плашка видна всегда */
+.dz3 .card__code[hidden]{display:none}
+.dz3 .card__code{
+  position:absolute;inset:0;z-index:2;
+  /* flex, а не grid: у grid две строки расходятся по высоте контейнера, и
+     код с подписью разъезжаются на две отдельные плашки — а нужна одна */
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  /* справа оставляем место под столбик метрик: плашка с кодом не должна
+     его закрывать — просмотры и «воспользовались» по решению созвона
+     видны всегда, в том числе в этот момент */
+  padding:14px 52px 14px 14px;
+  background:rgba(20,16,15,.38);
+  animation:dz3CodeIn .28s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes dz3CodeIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+.dz3 .card__code-val{
+  display:block;max-width:100%;
+  padding:14px 16px 10px;border-radius:14px 14px 0 0;
+  background:#fff;color:var(--ink);
+  font-family:var(--font-display);font-size:clamp(15px,2.1vw,21px);font-weight:800;
+  letter-spacing:.1em;font-variant-numeric:tabular-nums;text-align:center;
+  overflow-wrap:anywhere;
+}
+.dz3 .card__code-mark{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:7px 16px 10px;border-radius:0 0 14px 14px;
+  background:#fff;border-top:1px dashed var(--line-strong);
+  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--brand);
+}
+.dz3 .card__code-mark img{height:15px;width:auto;display:block}
+
+/* --------------------------------------------------------------------------
+   Метка erid
+   --------------------------------------------------------------------------
+   Вилл: «я хочу его не видеть, а я его вижу. Смешай серый, зелёный и синий
+   и высветли — должен получиться цвет пыли, тогда на любом изображении он
+   будет почти незаметен». Цвет теперь фиксированный, а не белый поверх
+   фото: раньше на светлом снимке метка исчезала совсем, на тёмном была
+   яркой — то есть вела себя по-разному на каждой картинке.
+
+   Вопрос к юристу, не к дизайну: маркировка рекламы должна оставаться
+   различимой. «Почти незаметно» и «неразличимо» — разные вещи, и границу
+   между ними проводит закон. Тень оставлена намеренно: без неё на светлом
+   фоне метка пропадает полностью. */
+.dz3 .erid-stamp,
+.dz3 .has-photo .erid-stamp{
+  color:#B9C0BE;
+  text-shadow:0 1px 2px rgba(0,0,0,.30);
+  font-size:10px;letter-spacing:.01em;
+}
+/* На узкой карточке метка переносится под чип с минутами и занимает почти
+   всю ширину — в такой пропорции 10px читаются как заголовок. Мельче. */
+@container (max-width: 235px){
+  .dz3 .card__media .erid-stamp{font-size:8.5px}
+}
+
+/* Наш знак в углу: чистое белое пропадало на неоново-жёлтом. Тень плотнее
+   и нейтральнее — держится и на светлом, и на тёмном. */
+.dz3 .card__media::after{
+  opacity:.95;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.55));
+}
+
+/* --------------------------------------------------------------------------
+   Воздух под длинные названия
+   --------------------------------------------------------------------------
+   Вилл: названия компаний и офферы в демо короткие, в жизни будут длиннее,
+   и воздух между кнопками и картинкой надо закладывать сразу. Павел просил
+   не решать это на вёрстке по факту, а отрисовать оба случая сразу:
+   влезает — две строки, не влезает — многоточие.
+
+   Поэтому под заголовок отведены ровно две строки всегда. У короткого
+   оффера вторая остаётся пустой, зато кнопки во всём ряду стоят на одной
+   линии, а не пляшут по высоте вслед за длиной названия. */
+.dz3.cards-wb .card__title{
+  min-height:calc(2 * 1.32em);
+  -webkit-line-clamp:2;
+}
+.dz3.cards-wb .card__body{gap:10px;padding-bottom:2px}
+.dz3 .card__meta{min-height:1.4em}
+.dz3 .card__meta b{max-width:14em}
+
+/* Кнопки поровну. Было 60 на 40 в пользу «Подробнее»; Коля попросил
+   50 на 50 — коду маркетплейса нужно место, там бывает 8–12 знаков. */
+.dz3 .card__actions{gap:8px}
+.dz3 .card__actions .btn{flex:1 1 0;min-width:0;padding:0 10px}
+
+/* --------------------------------------------------------------------------
+   Попап
+   -------------------------------------------------------------------------- */
+
+/* Срок действия — отдельной строкой с весом. Коля: «я тут вижу кнопку
+   „забрать купон“, и только с четвёртого раза увидел срок действия
+   промокода» — раньше он был подписью в одной строке с заголовком блока. */
+.dz3 .reveal__until{
+  margin:2px 0 8px;
+  font-size:13px;font-weight:600;color:var(--ink-2);
+}
+
+/* «Как воспользоваться» — свёрнуто по умолчанию. Коля: кнопка «Открыть
+   страницу купона» должна быть видна сразу, без прокрутки. Вилл: условий
+   может быть много, поэтому раскрывающийся список — и скролл появляется
+   только после раскрытия, а не встречает на входе. */
+.dz3 .terms-fold{border-top:1px solid var(--line);padding-top:10px}
+.dz3 .terms-fold > summary{
+  display:flex;align-items:center;gap:8px;
+  margin:0;cursor:pointer;list-style:none;user-select:none;
+}
+.dz3 .terms-fold > summary::-webkit-details-marker{display:none}
+.dz3 .terms-fold > summary::after{
+  content:"";width:7px;height:7px;margin-left:auto;
+  border-right:1.6px solid var(--ink-3);border-bottom:1.6px solid var(--ink-3);
+  transform:rotate(45deg) translateY(-2px);transition:transform .2s;
+}
+.dz3 .terms-fold[open] > summary::after{transform:rotate(-135deg) translateY(1px)}
+.dz3 .terms-fold > summary:hover{color:var(--brand)}
+.dz3 .terms-fold .terms{margin-top:8px}

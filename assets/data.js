@@ -358,6 +358,7 @@ window.makeCoupon = function (catId, city) {
   const seed = pool[Math.floor(Math.random() * pool.length)];
   const id = ++uid;
   const home = city || ACTIVE_CITIES[Math.floor(Math.random() * ACTIVE_CITIES.length)];
+  const views = Math.floor(120 + Math.random() * 4200);
   return {
     id: id,
     cat: cat,
@@ -372,7 +373,12 @@ window.makeCoupon = function (catId, city) {
     market: cat.l1 === "marketplace"
       ? MARKETS[Math.floor(Math.random() * MARKETS.length)] : null,
     address: STREETS[Math.floor(Math.random() * STREETS.length)],
-    views: Math.floor(120 + Math.random() * 4200),
+    views: views,
+    /* Сколько раз купоном воспользовались. Просил Коля на созвоне
+       21.09.2026: одних просмотров мало, нужен второй счётчик — он и есть
+       доказательство, что скидка живая, а не висит для вида. Держим долей
+       от просмотров, иначе числа выглядят выдуманными. */
+    uses: Math.floor(views * (0.04 + Math.random() * 0.14)),
     dist: Math.floor(120 + Math.random() * 7800),   /* метров до точки */
     until: makePeriod()
   };
