@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Стать партнёром — Все купоны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260918y">
+<link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<link rel="stylesheet" href="assets/design-3.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260921a">
+<link rel="icon" href="assets/brand/logo-red.png">
+</head>
+<body class="dz dz3 cards-wb">
+
+<!-- ===================================================================
+     Стать партнёром. Единственная задача, которую Вилл на созвоне
+     21.09.2026 назвал срочной: «эту форму надо сделать, она важна
+     сейчас, а всё остальное в принципе не так уж и важно».
+
+     Смысл формы — отсеивать, а не собирать. Дословно: «всех подряд
+     обрабатывать — ну её нахуй. Здесь должна быть конкретная форма, в
+     которой написано, кто вы, что вы, имеете ли вы опыт в рекламном
+     бизнесе, вы рекламное агентство или нет».
+
+     Вторым экраном — города присутствия. Карту Вилл сам же и отговорил
+     рисовать: закрашивать районные центры и сёла нечем, а цель страницы
+     не похвастаться покрытием, а привлечь партнёра. Его вывод: «взять
+     тупо списком все эти города, и напротив каждого свободного написать
+     жирно и понятно — свободно».
+     =================================================================== -->
+
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+    <span class="header__spacer"></span>
+    <a class="btn btn--ghost" href="index-design-3.html">На витрину</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="pt-hero">
+    <span class="pt-hero__k">Партнёрам</span>
+    <h1>Откройте сервис скидок в своём городе</h1>
+    <p class="pt-hero__sub">
+      Партнёр запускает «Все купоны» в своём городе: приводит местный бизнес на витрину,
+      ведёт городские сообщества и получает долю с размещений. Площадку, витрину,
+      кабинеты и модерацию даём мы.
+    </p>
+  </section>
+
+  <div class="pt-cols">
+
+    <!-- Форма. Поля не «оставьте контакт», а квалификация: по ответам
+         заявку можно отсортировать, не читая каждую. Поэтому опыт и тип
+         компании — выбором, а не свободным текстом. -->
+    <div class="pt-card">
+      <h2>Заявка на партнёрство</h2>
+      <p class="pt-card__note">
+        Отвечаем по будням. Если город уже занят — предложим свободный рядом.
+      </p>
+
+      <form class="pt-form" data-partner-form>
+
+        <div class="pt-row">
+          <label class="pt-field">
+            <span>Имя и фамилия</span>
+            <input type="text" name="name" autocomplete="name" placeholder="Иван Петров" required>
+          </label>
+          <label class="pt-field">
+            <span>Город</span>
+            <input type="text" name="city" placeholder="Липецк" required>
+          </label>
+        </div>
+
+        <div class="pt-row">
+          <label class="pt-field">
+            <span>Телефон</span>
+            <input type="tel" name="phone" autocomplete="tel" placeholder="+7 900 000-00-00" required>
+          </label>
+          <label class="pt-field">
+            <span>Почта</span>
+            <input type="email" name="email" autocomplete="email" placeholder="you@mail.ru" required>
+          </label>
+        </div>
+
+        <!-- «Кто вы» — первый вопрос Вилла -->
+        <div class="pt-field">
+          <span>Кто вы</span>
+          <div class="pt-choice">
+            <label><input type="radio" name="who" value="agency" checked><span>Рекламное агентство</span></label>
+            <label><input type="radio" name="who" value="smm"><span>SMM или маркетолог</span></label>
+            <label><input type="radio" name="who" value="media"><span>Городское медиа, паблик</span></label>
+            <label><input type="radio" name="who" value="business"><span>Свой бизнес в городе</span></label>
+            <label><input type="radio" name="who" value="private"><span>Частное лицо</span></label>
+          </div>
+        </div>
+
+        <!-- «Имеете ли вы опыт в рекламном бизнесе» — второй вопрос -->
+        <div class="pt-field">
+          <span>Опыт в рекламе и продажах</span>
+          <div class="pt-choice">
+            <label><input type="radio" name="exp" value="3plus" checked><span>Больше 3 лет</span></label>
+            <label><input type="radio" name="exp" value="1-3"><span>1–3 года</span></label>
+            <label><input type="radio" name="exp" value="less"><span>Меньше года</span></label>
+            <label><input type="radio" name="exp" value="none"><span>Опыта нет</span></label>
+          </div>
+        </div>
+
+        <div class="pt-field">
+          <span>Есть ли своя клиентская база в городе</span>
+          <div class="pt-choice">
+            <label><input type="radio" name="base" value="yes" checked><span>Да, работаю с местным бизнесом</span></label>
+            <label><input type="radio" name="base" value="part"><span>Частично</span></label>
+            <label><input type="radio" name="base" value="no"><span>Нет</span></label>
+          </div>
+        </div>
+
+        <label class="pt-field">
+          <span>Сайт, портфолио или сообщество</span>
+          <input type="url" name="link" placeholder="https://">
+          <span class="pt-field__hint">Необязательно, но с ссылкой заявку рассматриваем быстрее.</span>
+        </label>
+
+        <label class="pt-field">
+          <span>Коротко о себе</span>
+          <textarea name="about" placeholder="Чем занимаетесь, почему интересен этот проект, сколько времени готовы уделять"></textarea>
+        </label>
+
+        <label class="pt-consent">
+          <input type="checkbox" name="pd" required>
+          <span>Согласен на обработку персональных данных по 152-ФЗ и с условиями партнёрской программы.</span>
+        </label>
+
+        <button class="btn btn--solid btn--lg pt-submit" type="submit">Отправить заявку</button>
+      </form>
+    </div>
+
+    <!-- Правая колонка: что даём и что ждём. Условия вознаграждения сюда
+         не вписаны намеренно — ставку на созвонах не обсуждали. -->
+    <aside class="pt-side">
+      <div class="pt-card">
+        <h2>Что вы получаете</h2>
+        <ul class="pt-list">
+          <li>Город закрепляется за вами: на этой территории купоны продаёте вы.</li>
+          <li>Готовая витрина, кабинеты клиента и партнёра, модерация купонов — на нашей стороне.</li>
+          <li>Кабинет партнёра: свои клиенты, отчёты, выплаты, бонусы клиентам.</li>
+          <li>Материалы для продаж и городские сообщества под вашим ведением.</li>
+        </ul>
+      </div>
+      <div class="pt-card">
+        <h2>Что нужно от вас</h2>
+        <ul class="pt-list">
+          <li>Понимание местного рынка и готовность работать с бизнесом вживую.</li>
+          <li>Время: партнёрство — это работа, а не пассивный доход.</li>
+          <li>ИП или юрлицо для выплат — оформить можно после одобрения заявки.</li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Города присутствия. Списком, без карты — решение Вилла. Отметка
+       «свободно» набрана акцентом: по ней страница и работает.
+       Города взяты из данных прототипа (Липецкая область); занятость —
+       заглушка, реальных партнёров пока нет. -->
+  <section class="pt-cities" id="cities">
+    <div class="pt-cities__head">
+      <h2>Города присутствия</h2>
+      <span class="pt-cities__note">Липецкая область · дальше — по мере запуска</span>
+    </div>
+    <div class="pt-grid">
+      <div class="pt-city pt-city--busy"><span>Липецк</span><span class="pt-city__busy">занят</span></div>
+      <div class="pt-city pt-city--busy"><span>Елец</span><span class="pt-city__busy">занят</span></div>
+      <div class="pt-city"><span>Грязи</span><span class="pt-city__free">свободно</span></div>
+      <div class="pt-city"><span>Данков</span><span class="pt-city__free">свободно</span></div>
+      <div class="pt-city"><span>Задонск</span><span class="pt-city__free">свободно</span></div>
+      <div class="pt-city"><span>Лебедянь</span><span class="pt-city__free">свободно</span></div>
+      <div class="pt-city"><span>Усмань</span><span class="pt-city__free">свободно</span></div>
+      <div class="pt-city"><span>Чаплыгин</span><span class="pt-city__free">свободно</span></div>
+      <div class="pt-city"><span>Добринка</span><span class="pt-city__free">свободно</span></div>
+      <div class="pt-city"><span>Лев Толстой</span><span class="pt-city__free">свободно</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="dz-foot-legal">
+      <p class="dz-foot-legal__req">
+        ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 ·
+        г. Липецк, ул. Название, 1
+      </p>
+      <p class="dz-foot-legal__pd">
+        Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону,
+        третьим лицам не передаём.
+      </p>
+    </div>
+    <div class="footer__legal">
+      <span>© 2026 Все купоны</span>
+      <a href="#">Политика конфиденциальности</a>
+      <a href="#">Пользовательское соглашение</a>
+      <a href="index-design-3.html">На витрину</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Форма ничего не отправляет: это прототип. Показываем, что заявка ушла,
+   и на этом всё — что происходит дальше, на созвонах не разбирали. */
+document.querySelector("[data-partner-form]").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const card = e.target.closest(".pt-card");
+  card.innerHTML =
+    '<h2>Заявка отправлена</h2>' +
+    '<p class="pt-card__note">Посмотрим её по будням и свяжемся. ' +
+    'Если город уже занят — предложим свободный рядом.</p>';
+  card.scrollIntoView({ behavior: "smooth", block: "center" });
+});
+</script>
+</body>
+</html>
