@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 72" role="img" aria-label="Все купоны">
+  <defs>
+    <mask id="ball-cutout">
+      <rect width="72" height="72" fill="#fff"/>
+      <path d="M21 36c0-9 7-16 16-16s16 7 16 16-7 16-16 16c-4 0-7-1-10-3l-10 4 3-11c-1-2-1-4 1-6Z" fill="#000"/>
+      <circle cx="37" cy="36" r="6.5" fill="#fff"/>
+    </mask>
+  </defs>
+  <g fill="#fff">
+    <circle cx="36" cy="36" r="32" mask="url(#ball-cutout)"/>
+    <circle cx="37" cy="36" r="6.5"/>
+    <text x="84" y="49" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" letter-spacing="-1">Все купоны</text>
+  </g>
+</svg>

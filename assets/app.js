@@ -425,7 +425,32 @@ const MP_MARKS = {
   "Яндекс Маркет": "yandex-market-full.svg",
   "Мегамаркет":    "megamarket-full.svg"
 };
+
+/* Плашка площадки словом, а не логотипом — решение Ивана 21.09.2026.
+   Чужие логотипы на наших карточках — это и разрешения на использование
+   знаков, и чужая типографика в нашей сетке: четыре разных начертания в
+   одной ленте разваливают её сильнее, чем цветные значки категорий.
+   Название набирается нашим шрифтом, цвет берём фирменный у площадки.
+
+   Цвета фирменные, но две площадки пришлось выбирать, а не брать готовый,
+   и обе замены стоит подтвердить:
+
+   Wildberries — логотип градиентный, от фиолетового к розовому. Тёмный
+   конец #7303FA сливается с фиолетовым Мегамаркета, поэтому взят розовый
+   #CB11AB: он отличается от соседа и даёт белому тексту контраст 5:1.
+   Яндекс Маркет — основной жёлтый #FFDD00 с белым текстом нечитаем
+   вообще, поэтому взят их второй фирменный, оранжево-красный. */
+const MP_COLOR = {
+  "Wildberries":   "#CB11AB",
+  "Ozon":          "#005BFF",
+  "Яндекс Маркет": "#FF5226",
+  "Мегамаркет":    "#8654CC"
+};
 function mpMark(name) {
+  if (document.body.classList.contains("dz3")) {
+    const color = MP_COLOR[name] || "#1B1B1B";
+    return '<span class="mp-name" style="--mp:' + color + '">' + name + "</span>";
+  }
   const file = MP_MARKS[name];
   return file
     ? '<img class="mp-logo" src="assets/brand/mp/' + file + '" alt="' + name + '">'
@@ -517,8 +542,16 @@ function cardHTML(c, compact) {
    (кислотно-зелёный, тёмно-коричневый, синий, маджента, неон, бирюза),
    чтобы проверить, что плашки, выгода и метка erid читаются на любом
    снимке, а не только на тёплом. */
-const COUPON_PHOTOS_WARM = ["beauty", "coffee", "entertainment", "fitness"]
-  .map(n => "assets/coupons/" + n + ".jpg");
+/* Двенадцать вместо четырёх: при четырёх на четыре колонки раскладка без
+   повторов упиралась в тупик и лента выглядела зациклённой. Тон у каждой
+   свой и подобран нарочно вразнобой — тёплый красноватый кадр ровно один
+   из двенадцати, чтобы гармония не держалась на подборе под фирменный
+   цвет. Это и был упрёк Вилла на созвоне 21.09.2026. */
+const COUPON_PHOTOS_WARM = [
+  "eda-cool", "krasota-green", "odezhda-dark", "razvlecheniya-blue",
+  "sport-teal", "avto-steel", "meditsina-white", "detyam-yellow",
+  "dom-beige", "pitomtsy-brown", "obuchenie-purple", "biz-warm"
+].map(n => "assets/coupons/" + n + ".jpg");
 const COUPON_PHOTOS_WILD = ["acid", "beer", "cobalt", "magenta", "neon", "teal"]
   .map(n => "assets/coupons/wild/" + n + ".jpg");
 /* Форма плашки с выгодой — созвон 21.09.2026. Вилл: «билетик» не выдержит
@@ -527,6 +560,14 @@ const COUPON_PHOTOS_WILD = ["acid", "beer", "cobalt", "magenta", "neon", "teal"]
    приняли — Коля попросил 2–3 варианта, поэтому форма переключается
    адресом: ?value=ticket (как было), ?value=round (круг), ?value=plate
    (белая плашка с красными буквами, по умолчанию). */
+/* Заголовочный шрифт — решение Ивана 21.09.2026. Unbounded уходит: Вилл
+   не смог объяснить, чем он плох, но сформулировал риск — эту гарнитуру
+   придётся ретранслировать в посты и наружку, и как она там ляжет, никто
+   не знает. Берём то, чем уже набран текст. Онест по умолчанию, Manrope
+   вторым кандидатом: ?font=manrope. */
+const FONT_MODE = (location.search.match(/[?&]font=(onest|manrope)/) || [, "onest"])[1];
+document.documentElement.classList.add("font-" + FONT_MODE);
+
 const VALUE_SHAPE = (location.search.match(/[?&]value=(ticket|round|plate)/) || [, "plate"])[1];
 document.documentElement.classList.add("val-" + VALUE_SHAPE);
 
@@ -891,14 +932,15 @@ function quickHTML(c) {
         ${dz && MARKET_LOGO[c.market]
           /* Площадка — её логотипом, кнопка к товару — справа с круглым
              значком той же площадки */
+          /* Площадка названием на фирменном фоне, а не логотипом: та же
+             правка, что и на карточке (Иван, 21.09.2026) — чужие знаки с
+             наших материалов убираем целиком, а не только из ленты. */
           ? `<div class="market-where market-where--logo">
               <div class="market-where__text">
-                <img class="market-where__logo" src="assets/brand/mp/${MARKET_LOGO[c.market]}-full.svg" alt="${c.market}">
+                ${mpMark(c.market)}
                 <span>Код вводится в корзине на площадке</span>
               </div>
-              <a class="soc market-where__go" href="#">
-                <img class="mp-ic" src="assets/brand/mp/${MARKET_LOGO[c.market]}.svg" alt=""> Открыть карточку товара
-              </a>
+              <a class="soc market-where__go" href="#">Открыть карточку товара</a>
             </div>`
           : `<div class="market-where">
           <b>${c.market}</b>
