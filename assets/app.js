@@ -250,6 +250,10 @@ const CAT_TONES = [
   ["#FDE7E4", "#C8362F"], ["#E8EEF6", "#3B5B86"], ["#E9F2EA", "#3F6B47"], ["#F6EDDD", "#9A6420"],
   ["#EEEAF6", "#5B4A8A"], ["#E3F2F1", "#2F6E69"], ["#F7E6EE", "#9A3D66"]
 ];
+/* Правка созвона 21.09.2026: разноцветные значки ниш создавали «мясо» —
+   семь пастельных тонов без общепринятого значения цвета. В dz3 все значки
+   одноцветные, красно-белые; отличает нишу сам знак и подпись, а не оттенок. */
+const CAT_TONES_MONO = ["#FFFFFF", "#DD443C"];
 function catIcon(slug, size) {
   const d = CAT_PATH[slug] || '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>';
   return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
@@ -267,7 +271,9 @@ function buildTags(l1) {
     const a = document.createElement("a");
     a.className = "tag tag--niche" + (state.l2 === c.slug && state.l1 === c.l1 ? " is-active" : "");
     a.href = catUrl(c);
-    const [bg, fg] = CAT_TONES[i % CAT_TONES.length];
+    const [bg, fg] = document.body.classList.contains("dz3")
+      ? CAT_TONES_MONO
+      : CAT_TONES[i % CAT_TONES.length];
     a.style.setProperty("--ct-bg", bg);
     a.style.setProperty("--ct-fg", fg);
     a.innerHTML = '<span class="tag__ic">' + catIcon(c.slug, 20) + '</span>' +
@@ -472,8 +478,19 @@ function cardHTML(c, compact) {
    раздаём четыре картинки случайно, но так, чтобы одинаковые не стояли
    рядом: ни с соседом слева, ни через одну, ни с карточкой над ней в
    сетке. Вызывается после того, как карточка уже вставлена в контейнер. */
-const COUPON_PHOTOS = ["beauty", "coffee", "entertainment", "fitness"]
+/* Правка созвона 21.09.2026. Вилл: все демо-картинки подобраны в
+   красно-розовых тонах, поэтому лента и выглядит гармонично — «это
+   читерство». Режим ?pics=wild подставляет нарочно неудобные фоны
+   (кислотно-зелёный, тёмно-коричневый, синий, маджента, неон, бирюза),
+   чтобы проверить, что плашки, выгода и метка erid читаются на любом
+   снимке, а не только на тёплом. */
+const COUPON_PHOTOS_WARM = ["beauty", "coffee", "entertainment", "fitness"]
   .map(n => "assets/coupons/" + n + ".jpg");
+const COUPON_PHOTOS_WILD = ["acid", "beer", "cobalt", "magenta", "neon", "teal"]
+  .map(n => "assets/coupons/wild/" + n + ".jpg");
+const PICS_WILD = /[?&]pics=wild/.test(location.search);
+const COUPON_PHOTOS = PICS_WILD ? COUPON_PHOTOS_WILD : COUPON_PHOTOS_WARM;
+if (PICS_WILD) document.documentElement.classList.add("pics-wild");
 
 function applyPhoto(card) {
   if (!document.body.classList.contains("dz")) return;
