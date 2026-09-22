@@ -1702,7 +1702,7 @@ VIEWS["partner:clients"] = () => {
     <td>${c.since}</td>
     <td class="num">${c.coupons || "—"}</td>
     <td class="num">${c.paid ? rub(c.paid) : "—"}</td>
-    <td class="num">${c.fee ? rub(c.fee) : "—"}</td>
+    <td class="num lk-t__key">${c.fee ? rub(c.fee) : "—"}</td>
   </tr>`).join("");
 
   return head("Региональные клиенты",
@@ -1710,7 +1710,7 @@ VIEWS["partner:clients"] = () => {
        <button class="btn btn--ghost">Выгрузить в Excel</button>`)
     + panel("", table(
         [{ t: "Клиент" }, { t: "Статус" }, { t: "С нами с" }, { t: "Купонов", num: true },
-         { t: "Оплатил", num: true }, { t: "Ваше начисление", num: true }], rows)
+         { t: "Оплатил", num: true }, { t: "Ваше начисление", num: true, key: true }], rows)
       + `<div class="lk-total"><span>Клиенты закреплены за вами по городу
          организации. Закрепление постоянное, новых добавляет
          администратор.</span></div>`);
@@ -1761,7 +1761,7 @@ VIEWS["partner:codes"] = () => {
     <td>${c.comment || "<span class='lk-t__sub'>кому отдан, не записано</span>"}</td>
     <td>${c.market === "—" ? "<span class='lk-t__sub'>—</span>" : c.market}</td>
     <td class="num">${c.used ? num(c.used) : "—"}</td>
-    <td class="num">${c.income ? rub(c.income) : "—"}</td>
+    <td class="num lk-t__key">${c.income ? rub(c.income) : "—"}</td>
   </tr>`).join("");
 
   const total = LK_CODES.reduce((a, c) => a + c.income, 0);
@@ -1770,7 +1770,7 @@ VIEWS["partner:codes"] = () => {
       `<button class="btn btn--solid" type="button" data-request-code>Запросить новый код</button>`)
     + panel("", table(
         [{ t: "Код" }, { t: "Кому отдан" }, { t: "Площадка" },
-         { t: "Публикаций", num: true }, { t: "Начислено", num: true }], rows)
+         { t: "Публикаций", num: true }, { t: "Начислено", num: true, key: true }], rows)
       + `<div class="lk-total"><b>${rub(total)}</b><span>начислено по кодам за всё время</span></div>`)
     + panel("Как это работает", `
       <ul class="lk-rules">
@@ -1851,6 +1851,12 @@ function openCodeRequestModal() {
 /* Пул «От души брат». Лимит на календарный месяц задаёт администратор,
    раздаёт партнёр вручную, остаток не переносится (ТЗ §4.4.2). Бонусы —
    только региональным клиентам: в маркетплейсах работает промокод. */
+/* Бонус проходит те же три состояния, что купон и выплата: сработал
+   (клиент потратил), ждёт (отправлен, но не потрачен), вышел из игры
+   (сгорел). Карта — чтобы не заводить свой словарь цветов на каждый
+   раздел. */
+const BONUS_STATE = { used: "ok", sent: "wait", expired: "done" };
+
 VIEWS["partner:bonuses"] = () => {
   const left = LK_BONUS_POOL.limit - LK_BONUS_POOL.spent;
   const share = Math.round(LK_BONUS_POOL.spent / LK_BONUS_POOL.limit * 100);
@@ -1888,7 +1894,7 @@ VIEWS["partner:bonuses"] = () => {
           <td>${b.to}</td>
           <td class="num">${num(b.amount)}</td>
           <td>${b.sent}</td>
-          <td>${LK_BONUS_STATUSES[b.status]}</td></tr>`).join("")));
+          <td><span class="lk-st lk-st--${BONUS_STATE[b.status]}">${LK_BONUS_STATUSES[b.status]}</span></td></tr>`).join("")));
 };
 
 /* Отчёты. Период — календарный месяц, деньги уходят через 14 дней после
@@ -1899,8 +1905,10 @@ VIEWS["partner:payouts"] = () => {
   const rows = LK_PAYOUTS.map(p => `<tr>
     <td><b class="lk-t__title">${p.period}</b><span class="lk-t__sub">${p.date}</span></td>
     <td class="num">${rub(p.income)}</td>
-    <td class="num">${rub(p.total)}</td>
-    <td>${p.status === "paid" ? "Выплачено" : "Ожидает выплаты"}</td>
+    <td class="num lk-t__key">${rub(p.total)}</td>
+    <td>${p.status === "paid"
+      ? `<span class="lk-st lk-st--done">Выплачено</span>`
+      : `<span class="lk-st lk-st--wait">Ожидает выплаты</span>`}</td>
     <td class="num"><button class="btn btn--ghost">Скачать</button></td>
   </tr>`).join("");
 
@@ -1908,7 +1916,7 @@ VIEWS["partner:payouts"] = () => {
     <td><b class="lk-t__title">${r.coupon}</b><span class="lk-t__sub">купон ${r.id} · ${r.client}</span></td>
     <td>${r.contour === "market" ? "Маркетплейс · " + r.code : "Регион"}</td>
     <td class="num">${rub(r.paid)}</td>
-    <td class="num">${rub(r.fee)}</td>
+    <td class="num lk-t__key">${rub(r.fee)}</td>
   </tr>`).join("");
 
   const paid = LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
@@ -1931,9 +1939,9 @@ VIEWS["partner:payouts"] = () => {
     </div>`
     + panel("Детализация · " + pend.period, table(
         [{ t: "Купон" }, { t: "Контур" }, { t: "Клиент заплатил", num: true },
-         { t: "Ваши " + LK_RATES.fee + "%", num: true }], detail))
+         { t: "Ваши " + LK_RATES.fee + "%", num: true, key: true }], detail))
     + panel("По периодам", table(
-        [{ t: "Период" }, { t: "Начислено", num: true }, { t: "К выплате", num: true },
+        [{ t: "Период" }, { t: "Начислено", num: true }, { t: "К выплате", num: true, key: true },
          { t: "Статус" }, { t: "", num: true }], rows)
       + `<div class="lk-total"><b>${rub(paid)}</b><span>выплачено за всё время</span></div>`);
 };
