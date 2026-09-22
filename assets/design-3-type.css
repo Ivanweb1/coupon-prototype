@@ -32,10 +32,16 @@
 
 .dz3 .dzl__h1,
 .dz3 .dz-biz h2,
-.dz3 .recos__head h2,
-.dz3 .section__head h2,
 .dz3 .quick h3{
   font-weight:800;
+  letter-spacing:-.02em;
+}
+
+/* Заголовки секций в ленте — легче (правка Ивана 22.09.2026): в 800 они
+   спорили с первым экраном, хотя это подписи разделов, а не главное. */
+.dz3 .recos__head h2,
+.dz3 .section__head h2{
+  font-weight:600;
   letter-spacing:-.02em;
 }
 

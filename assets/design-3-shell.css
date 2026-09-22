@@ -23,21 +23,11 @@
 .dz3 .dz-hero--lite .dzl{margin-bottom:58px}
 .dz3 .dz-hero--lite .dzl__search{margin-bottom:44px}
 
-/* Строка поиска над верёвочкой: линия должна уходить за неё, а не поверх */
-.dz3 .dz-hero--lite .dzl__search{position:relative;z-index:1}
-
-/* Верёвочка. Лежит подложкой на всю ширину первого экрана; точки пути
-   подогнаны так, чтобы начало совпадало с хвостом шара справа, а конец
-   уходил вниз слева — уже за строкой поиска. */
-.dz3 .dz-hero--lite{position:relative;overflow:hidden}
-.dz3 .dzl__string{
-  position:absolute;left:0;right:0;top:110px;
-  width:100%;height:240px;z-index:0;pointer-events:none;
-  color:var(--brand);opacity:.45;
-}
-/* На узком экране шар скрыт (см. design.css), и верёвочке не от чего идти */
+/* Верёвочка от шара, протянутая под строку поиска, убрана по просьбе
+   Ивана 22.09.2026. На созвоне 21.09 Вилл предложил её сам и сам же
+   назвал вкусовщиной — воздух вокруг поиска держится отступами, линия
+   для этого не нужна. */
 @media (max-width:900px){
-  .dz3 .dzl__string{display:none}
   .dz3 .dz-hero--lite .dzl{margin-bottom:26px}
   .dz3 .dz-hero--lite .dzl__search{margin-bottom:22px}
 }

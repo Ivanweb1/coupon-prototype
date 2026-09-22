@@ -21,7 +21,10 @@ const ICON = {
   /* Instagram — из списка Коли для соцсетей компании. На публичке нашего
      сервиса не ставим: здесь он доступен компании как её собственная
      ссылка, и вопрос о размещении решает не дизайн. */
-  instagram: '<svg class="soc-ic" style="--soc-c:#E4405F" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect class="soc-ic__bg" width="32" height="32"/><path class="soc-ic__g" fill-rule="evenodd" d="M10.1 3h11.8A7.1 7.1 0 0 1 29 10.1v11.8a7.1 7.1 0 0 1-7.1 7.1H10.1A7.1 7.1 0 0 1 3 21.9V10.1A7.1 7.1 0 0 1 10.1 3Zm0 2.6a4.5 4.5 0 0 0-4.5 4.5v11.8a4.5 4.5 0 0 0 4.5 4.5h11.8a4.5 4.5 0 0 0 4.5-4.5V10.1a4.5 4.5 0 0 0-4.5-4.5H10.1ZM16 9.3a6.7 6.7 0 1 1 0 13.4 6.7 6.7 0 0 1 0-13.4Zm0 2.6a4.1 4.1 0 1 0 0 8.2 4.1 4.1 0 0 0 0-8.2Zm7-4.2a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2Z"/></svg>',
+  /* Фирменный знак Instagram, файлом от Ивана (22.09.2026) — как и MAX,
+     он многоцветный, поэтому подключается картинкой и гасится в серый
+     фильтром, а не заливкой. */
+  instagram: '<img class="soc-ic soc-ic--img" src="assets/brand/soc/instagram.svg" alt="" aria-hidden="true">',
   site: '<svg class="soc-ic" style="--soc-c:#DD443C" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect class="soc-ic__bg" width="24" height="24"/><g class="soc-ic__s" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="6.6"/><path d="M5.6 12h12.8M12 5.4c1.9 1.9 2.8 4.1 2.8 6.6s-.9 4.7-2.8 6.6c-1.9-1.9-2.8-4.1-2.8-6.6s.9-4.7 2.8-6.6Z"/></g></svg>',
   ok: '<svg class="soc-ic" style="--soc-c:#FF7700" width="18" height="18" viewBox="0 0 44 44" aria-hidden="true"><rect class="soc-ic__bg" width="44" height="44"/><path class="soc-ic__g" d="M26.868 19.87a6.85 6.85 0 0 1-2.229 1.492 6.88 6.88 0 0 1-7.5-1.492 6.87 6.87 0 0 1-1.875-3.51 6.84 6.84 0 0 1 .392-3.955 6.9 6.9 0 0 1 2.527-3.08 6.96 6.96 0 0 1 3.82-1.18 6.96 6.96 0 0 1 3.83 1.177 6.9 6.9 0 0 1 2.532 3.086 6.84 6.84 0 0 1 .389 3.962 6.87 6.87 0 0 1-1.886 3.512zm-4.877-7.978a3.15 3.15 0 0 0-2.21.917 3.105 3.105 0 0 0 0 4.397c.586.584 1.38.914 2.21.918a3.15 3.15 0 0 0 2.21-.918 3.1 3.1 0 0 0 .913-2.198c0-.824-.328-1.615-.914-2.199a3.15 3.15 0 0 0-2.209-.917m7.239 10.017 2.014 2.753a.315.315 0 0 1-.05.434 14.2 14.2 0 0 1-5.725 2.79l3.889 7.495a.316.316 0 0 1-.123.43.3.3 0 0 1-.16.041h-4.17a.32.32 0 0 1-.296-.19l-2.605-6.182-2.618 6.181a.32.32 0 0 1-.295.191H14.92c-.244 0-.386-.255-.283-.471l3.902-7.494c-2.054-.484-4.03-1.402-5.724-2.791a.32.32 0 0 1-.064-.434l2.027-2.74a.334.334 0 0 1 .475-.064 10.5 10.5 0 0 0 6.75 2.677c2.503 0 4.84-1.045 6.752-2.677.128-.127.359-.102.475.051"/></svg>',
   search: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>',
@@ -294,7 +297,10 @@ const CAT_TONES = [
 /* Правка созвона 21.09.2026: разноцветные значки ниш создавали «мясо» —
    семь пастельных тонов без общепринятого значения цвета. В dz3 все значки
    одноцветные, красно-белые; отличает нишу сам знак и подпись, а не оттенок. */
-const CAT_TONES_MONO = ["#FFFFFF", "#DD443C"];
+/* Заливка круга — еле заметный серый (правка Ивана 22.09.2026): белый
+   круг на белой странице держался только обводкой, теперь форма читается
+   сама, но не спорит со знаком внутри. */
+const CAT_TONES_MONO = ["#F4F4F4", "#DD443C"];
 function catIcon(slug, size) {
   const d = CAT_PATH[slug] || '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>';
   return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
@@ -951,12 +957,9 @@ function quickHTML(c) {
      только на карте, минуты — у заголовка «Где действует». */
   const revealBlock = `
       <div class="reveal" data-reveal>
-        <div class="block-label" style="margin:0">Промокод</div>
-        <!-- Срок действия отдельной строкой. Коля на созвоне 21.09.2026:
-             «я тут вижу кнопку „забрать купон“, и только с четвёртого раза
-             увидел срок действия» — раньше он был подписью в общей строке
-             с заголовком блока и терялся. -->
-        <div class="reveal__until">Действует ${c.until}</div>
+        <!-- Промокод и срок — снова одной строкой (правка Ивана
+             22.09.2026): отдельная строка со сроком разрывала блок. -->
+        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
         <div class="reveal__row">
           <div class="reveal__code">${c.code}</div>
           <div class="reveal__actions">
@@ -966,6 +969,17 @@ function quickHTML(c) {
           </div>
         </div>
       </div>`;
+  /* Плашка с кодом поверх снимка — та же механика, что на карточке ленты
+     (правка Ивана 22.09.2026): «Забрать купон» в попапе печатает код по
+     центру фотографии вместе с нашим знаком, чтобы снимок экрана уносили
+     вместе с ним. */
+  const codeOverlay = document.body.classList.contains("dz3")
+    ? `<div class="card__code quick__code" data-quick-code hidden aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>`
+    : "";
+
   const left = document.body.classList.contains("quick-left");
   const focus = document.body.classList.contains("quick-focus");
   /* В дизайн-версии у сайта и соцсетей компании — фирменные значки */
@@ -1043,6 +1057,7 @@ function quickHTML(c) {
       <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
         <span class="quick__value">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
+        ${codeOverlay}
       </div>
       ${left ? revealBlock : ""}
     </div>`;
@@ -1059,7 +1074,7 @@ function quickHTML(c) {
       ${termsBlock}
       <div class="company">
         ${companyLogo(c)}
-        <div>
+        <div class="company__text">
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000</div>
         </div>
@@ -1077,6 +1092,7 @@ function quickHTML(c) {
       <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
         <span class="quick__value">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
+        ${codeOverlay}
       </div>
       ${left ? revealBlock : ""}
     </div>
@@ -1093,7 +1109,7 @@ function quickHTML(c) {
 
       <div class="company">
         ${companyLogo(c)}
-        <div>
+        <div class="company__text">
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
         </div>
@@ -1244,6 +1260,12 @@ function openQuick(c, cardEl) {
   qs("[data-reveal-btn]", quick).onclick = () => {
     rev.classList.add("is-open");
     qs("[data-reveal-btn]", rev).disabled = true;
+    const box = qs("[data-quick-code]", quick);
+    if (box) {
+      qs(".card__code-val", box).textContent = c.code;
+      box.hidden = false;
+      box.removeAttribute("aria-hidden");
+    }
     fitQuickMedia();
   };
 }
@@ -1607,7 +1629,7 @@ function renderCouponPage() {
 
       <div class="company">
         <div class="company__logo">лого</div>
-        <div>
+        <div class="company__text">
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
         </div>
@@ -1778,7 +1800,7 @@ function renderCouponDesign() {
 
       <div class="company">
         ${companyLogo(c)}
-        <div>
+        <div class="company__text">
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
         </div>

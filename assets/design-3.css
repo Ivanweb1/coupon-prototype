@@ -55,12 +55,13 @@
    попросил убрать первым делом. Фон белый. */
 .dz3 .dz-hero--lite{background:#fff}
 
-/* Плашка «Бесплатно · без регистрации»: на сером фоне красный текст
-   выглядел приглушённо-розовым пятном. Белая плашка с красной обводкой —
-   то же выделение в базовой палитре. */
+/* Плашка «Бесплатно · без регистрации»: красный текст на белом, без
+   рамки — правка Ивана 22.09.2026. Обводка добавляла первому экрану
+   лишний контур рядом с полем поиска и рядом категорий. */
 .dz3 .dzl__eyebrow{
   background:#fff;color:var(--brand);
-  box-shadow:inset 0 0 0 1.5px var(--brand);
+  box-shadow:none;
+  padding:0;
 }
 
 /* ==========================================================================
@@ -83,6 +84,19 @@
 .dz3 .tag--all:hover > [data-icon]:not(.chev),
 .dz3 #allCats.is-open .tag--all > [data-icon]:not(.chev){background:rgba(255,255,255,.2);color:#fff}
 .dz3 .tag--all:focus-visible{box-shadow:0 0 0 4px var(--brand-100)}
+
+/* Закреплённые разделы («Маркетплейсы», «Для бизнеса»): под курсором
+   кнопка заливалась тёмным, поэтому её знаки красились в белый. В dz3
+   кнопка остаётся белой — и белые знаки на ней просто пропадали: и
+   стрелка, и значок раздела. Красим их заодно с буквами. */
+.dz3 .tag--featured:hover .chev,
+.dz3 .tag--featured:hover .tag__n,
+.dz3 .dd--l1.is-open .tag--featured .chev,
+.dz3 .dd--l1.is-open .tag--featured .tag__n{color:var(--brand)}
+.dz3 .tag--featured:hover svg,
+.dz3 .dd--l1.is-open .tag--featured svg{color:inherit}
+.dz3 .tag--featured:hover > [data-icon]:not(.chev) svg,
+.dz3 .dd--l1.is-open .tag--featured > [data-icon]:not(.chev) svg{color:var(--brand)}
 
 /* Значок ниши: белый кружок с красным знаком, в выбранном состоянии
    инвертируется вместе с кнопкой. Цвета задаёт app.js, здесь — обводка,
@@ -163,6 +177,17 @@ body.dz3:not(.quick-left) .quick__media{background:var(--surface)}
 
 /* Логотип компании-заглушка: на сером кружке буквы были почти невидимы. */
 .dz3 .company__logo{background:var(--surface-2);color:var(--ink-3)}
+
+/* Блок компании держит одну строку при любом названии (правка Ивана
+   22.09.2026). Раньше длинное название толкало ряд значков вниз или
+   сжимало его: название переносилось, блок рос. Теперь текстовая колонка
+   ужимается и обрезается многоточием, а шесть значков стоят рядом и не
+   сжимаются — они сами по себе ссылка, и переходы по ним считаются. */
+.dz3 .quick .company{flex-wrap:nowrap}
+.dz3 .quick .company__text{flex:1 1 auto;min-width:0}
+.dz3 .quick .company__name,
+.dz3 .quick .company__req{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dz3 .quick .socials--icons{flex:0 0 auto;flex-wrap:nowrap;margin-left:auto}
 
 /* ==========================================================================
    Полоса «Для бизнеса» в подвале
