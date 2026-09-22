@@ -794,11 +794,24 @@ VIEWS["client:coupons"] = () => {
   const pageStart = (state.couponPage - 1) * pageSize;
   const pageList = list.slice(pageStart, pageStart + pageSize);
 
-  const secs = [["all", "Все мои купоны"]].concat(Object.keys(LK_VERTICALS).map(k => [k, "Купоны · " + LK_VERTICALS[k].name]));
-  const secRow = `<div class="lk-filters lk-filters--sec">${secs.map(([k, label]) => {
-    const n = k === "all" ? LK_COUPONS.length : LK_COUPONS.filter(c => c.l1 === k).length;
-    return `<button data-sec="${k}"${state.sec === k ? ' class="is-on"' : ""}>${label}<span class="lk__n">${n}</span></button>`;
-  }).join("")}</div>`;
+  /* Фильтров два, но ярус один. Статус — рабочая воронка (черновик →
+     модерация → опубликован → отклонён → архив): его переключают постоянно,
+     и счётчик у каждого состояния сразу показывает, где скопилась работа,
+     поэтому статусы остаются чипами в один ряд.
+
+     Раздел витрины переключают редко — он уехал в выпадающий список к
+     поиску и сортировке. Раньше он занимал второй ярус чипов, и два ряда
+     плашек подряд читались тяжелее, чем сама таблица под ними. Счётчики
+     из чипов перенесены в подписи пунктов, чтобы ничего не потерялось, а
+     «Только …» в названии не даёт прочитать пункт как раздел меню. */
+  const secs = [["all", "Все мои купоны"]]
+    .concat(Object.keys(LK_VERTICALS).map(k => [k, "Только " + LK_VERTICALS[k].name.toLowerCase()]));
+  const secSelect = `<select class="lk-s lk-tools__sec" data-sec-select aria-label="Раздел витрины">
+    ${secs.map(([k, label]) => {
+      const n = k === "all" ? LK_COUPONS.length : LK_COUPONS.filter(c => c.l1 === k).length;
+      return `<option value="${k}"${state.sec === k ? " selected" : ""}>${label} (${n})</option>`;
+    }).join("")}
+  </select>`;
 
   const filters = `<div class="lk-filters">
     <button data-f="all"${state.filter === "all" ? ' class="is-on"' : ""}>Все статусы<span class="lk__n">${bySec.length}</span></button>
@@ -806,7 +819,10 @@ VIEWS["client:coupons"] = () => {
       .map(s => `<button data-f="${s}"${state.filter === s ? ' class="is-on"' : ""}>${STATUS_TAB[s]}<span class="lk__n">${counts[s]}</span></button>`).join("")}
   </div>`;
 
+  /* Порядок слева направо — от широкого к узкому: какой набор берём,
+     что в нём ищем, чем его упорядочить. */
   const tools = `<div class="lk-tools">
+    ${secSelect}
     <input class="lk-i lk-tools__q" type="search" placeholder="Поиск по названию купона" data-q value="${state.q}">
     <select class="lk-s lk-tools__sort" data-sort>
       ${[["new", "Сначала новые"], ["taken", "Больше всего забрали"], ["shown", "Больше всего показов"]]
@@ -842,7 +858,7 @@ VIEWS["client:coupons"] = () => {
 
   return head("Мои купоны",
       `<button class="btn btn--solid" data-create>Создать купон</button>`)
-    + panel("", secRow + filters + tools + (list.length
+    + panel("", filters + tools + (list.length
         ? table([{ t: "Действие" }, { t: "Купон" }, { t: "Механика" }, { t: "Статус" }, { t: "Срок действия" },
                  { t: "Показы", num: true }, { t: "Забрали", num: true }], rows) + pagination
         : needle
@@ -1987,13 +2003,16 @@ function render() {
     b.onclick = () => { state.filter = b.dataset.f; state.couponPage = 1; render(); };
   });
 
-  /* Мои купоны: раздел, действия по статусу, поиск, сортировка */
-  qsa("[data-sec]", host).forEach(b => b.onclick = () => {
-    state.sec = b.dataset.sec;
+  /* Мои купоны: раздел, действия по статусу, поиск, сортировка.
+     Смена раздела сбрасывает статус: в новом разделе прежнего статуса
+     может не быть вовсе, и список молча оказался бы пустым. */
+  const secSel = qs("[data-sec-select]", host);
+  if (secSel) secSel.onchange = () => {
+    state.sec = secSel.value;
     state.filter = "all";
     state.couponPage = 1;
     render();
-  });
+  };
   qsa("[data-act]", host).forEach(b => b.onclick = e => {
     e.stopPropagation();
     const id = Number(b.dataset.id);

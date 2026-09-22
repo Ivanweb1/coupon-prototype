@@ -749,9 +749,13 @@
 .lk-help__c p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2);flex:1 1 auto}
 .lk-help__c .btn{align-self:flex-start}
 
-/* Мои купоны: разделы, поиск, действия слева */
-.lk-filters--sec{padding-bottom:14px;border-bottom:1px solid var(--line)}
+/* Мои купоны: разделы, поиск, действия слева.
+   Раздел витрины, поиск и сортировка стоят одной строкой — от широкого к
+   узкому: какой набор берём, что в нём ищем, чем его упорядочить. Раньше
+   раздел занимал отдельный ярус чипов над статусами, и два ряда плашек
+   подряд весили больше, чем таблица под ними. */
 .lk-tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.lk-tools__sec{flex:0 0 220px}
 .lk-tools__q{flex:1 1 260px}
 .lk-tools__sort{flex:0 0 230px}
 .lk-t__acts{width:1%;white-space:nowrap}
