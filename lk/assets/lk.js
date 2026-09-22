@@ -306,9 +306,18 @@ function panel(title, body, opts) {
     ${body}</div>`;
 }
 
+/* key — колонка с итоговой метрикой. «Забрали» это то, ради чего сервис
+   и нужен: показы и просмотры объясняют, как до него дошли, а купон,
+   который забрали, — результат. В таблице из четырёх одинаковых столбцов
+   цифр он ничем не выделялся, хотя в статистике список ещё и отсортирован
+   именно по нему. */
 function table(cols, rows) {
+  const th = c => {
+    const cls = [c.num ? "num" : "", c.key ? "lk-t__key" : ""].filter(Boolean).join(" ");
+    return `<th${cls ? ` class="${cls}"` : ""}>${c.t}</th>`;
+  };
   return `<div class="lk-tw"><table class="lk-t">
-    <thead><tr>${cols.map(c => `<th${c.num ? ' class="num"' : ""}>${c.t}</th>`).join("")}</tr></thead>
+    <thead><tr>${cols.map(th).join("")}</tr></thead>
     <tbody>${rows}</tbody></table></div>`;
 }
 
@@ -687,11 +696,11 @@ VIEWS["client:dashboard"] = () => {
     + `<div class="lk-pair">
       ${panel("Опубликовано сейчас", live.length
         ? table(
-            [{ t: "Купон" }, { t: "Действует" }, { t: "Забрали", num: true }],
+            [{ t: "Купон" }, { t: "Действует" }, { t: "Забрали", num: true, key: true }],
             live.map(c => `<tr data-coupon="${c.id}" tabindex="0">
               <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${where(c)} · ${c.value}</span></td>
               <td>${c.from} — ${c.to}</td>
-              <td class="num">${num(c.taken)}</td></tr>`).join("")
+              <td class="num lk-t__key">${num(c.taken)}</td></tr>`).join("")
           )
         : empty("Пока ничего не опубликовано", "Созданные купоны появятся здесь после модерации."),
         { act: `<a class="btn btn--ghost" href="${href("coupons")}" data-go="coupons">Подробнее</a>` })}
@@ -843,7 +852,7 @@ VIEWS["client:coupons"] = () => {
     <td>${c.from === "—" ? "<span class='lk-t__sub'>срок не задан</span>" : c.from + " — " + c.to}
         <div class="lk-erid">erid: ${c.erid}</div></td>
     <td class="num">${c.shown ? num(c.shown) : "—"}</td>
-    <td class="num">${c.taken ? num(c.taken) : "—"}</td>
+    <td class="num lk-t__key">${c.taken ? num(c.taken) : "—"}</td>
   </tr>`).join("");
 
   const pagination = list.length > pageSize ? `<nav class="lk-page" aria-label="Страницы списка купонов">
@@ -863,7 +872,7 @@ VIEWS["client:coupons"] = () => {
       `<button class="btn btn--solid" data-create>Создать купон</button>`)
     + panel("", filters + tools + (list.length
         ? table([{ t: "Действие" }, { t: "Купон" }, { t: "Механика" }, { t: "Статус" }, { t: "Срок действия" },
-                 { t: "Показы", num: true }, { t: "Забрали", num: true }], rows) + pagination
+                 { t: "Показы", num: true }, { t: "Забрали", num: true, key: true }], rows) + pagination
         : needle
           ? empty("Ничего не нашли", "Проверьте название или сбросьте поиск.")
           : empty("Здесь пока пусто", state.sec === "all"
@@ -1513,13 +1522,13 @@ VIEWS["client:archive"] = () => {
   return head("Архив купонов")
     + panel("", done.length
       ? table([{ t: "Купон" }, { t: "Период" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
-               { t: "Забрали", num: true }, { t: "Переходы", num: true }, { t: "" }],
+               { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }, { t: "" }],
           done.map(c => `<tr data-coupon="${c.id}" tabindex="0">
             <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${where(c)} · ${c.value}</span></td>
             <td>${c.from} — ${c.to}</td>
             <td class="num">${num(c.shown)}</td>
             <td class="num">${num(c.opened)}</td>
-            <td class="num">${num(c.taken)}</td>
+            <td class="num lk-t__key">${num(c.taken)}</td>
             <td class="num">${num(c.clicks)}</td>
             <td class="num"><button class="btn btn--ghost" data-act="repeat" data-id="${c.id}">Опубликовать снова</button></td>
           </tr>`).join(""))
@@ -1535,7 +1544,7 @@ VIEWS["client:stats"] = () => {
       <td>${status(c.status)}</td>
       <td class="num">${num(c.shown)}</td>
       <td class="num">${num(c.opened)}</td>
-      <td class="num">${num(c.taken)}</td>
+      <td class="num lk-t__key">${num(c.taken)}</td>
       <td class="num">${num(c.clicks)}</td>
     </tr>`).join("");
 
@@ -1543,7 +1552,7 @@ VIEWS["client:stats"] = () => {
     + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
     + panel("По купонам",
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
-               { t: "Забрали", num: true }, { t: "Переходы", num: true }], rows));
+               { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }], rows));
 };
 
 /* Биллинг. Пакетов и тарифов в модели нет: по ТЗ §4.3.2 на балансе лежат
@@ -1605,6 +1614,13 @@ VIEWS["client:profile"] = () =>
         ${field("Telegram", input("https://t.me/…"))}
       </div>`)}
     </div>`
+  /* Поля профиля можно было править, но сохранить — нет: кнопки в разделе
+     просто не было. Она здесь такая же, как в «Уведомлениях», и с тем же
+     подтверждением строкой рядом, без модалок. */
+  + `<div class="lk-head__act" style="margin:-4px 0 16px">
+       <button class="btn btn--solid" data-save>Сохранить</button>
+       <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
+     </div>`
   + panel("Точки продаж", table(
       [{ t: "Адрес" }, { t: "Город" }, { t: "Режим работы" }, { t: "", num: true }],
       `<tr><td>ул. Первомайская, 12</td><td>Липецк</td><td>ежедневно 08:00–22:00</td>
@@ -1991,8 +2007,8 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
            на неё приходят чеки и решения модерации. Telegram и Max — на
            выбор, SMS сервис не отправляет.</div>`
         + `<div class="lk-head__act" style="margin-top:14px">
-             <button class="btn btn--solid" data-notify-save>Сохранить</button>
-             <span class="lk-save-ok" data-notify-ok hidden>Изменения сохранены</span>
+             <button class="btn btn--solid" data-save>Сохранить</button>
+             <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
            </div>`)}
     </div>`;
 };
@@ -2274,15 +2290,18 @@ function render() {
   /* «Сохранить» в уведомлениях: как и все формы прототипа, значения
      никуда не пишутся — только подтверждаем нажатие тем же способом, что
      и «Скопировано» на публичке. */
-  const notifySave = qs("[data-notify-save]", host);
-  if (notifySave) {
-    notifySave.onclick = () => {
-      const ok = qs("[data-notify-ok]", host);
+  /* Сохранение формы раздела — профиль, каналы уведомлений. Прототип
+     ничего не сохраняет, поэтому подтверждение короткой строкой рядом с
+     кнопкой: то же решение, что «Скопировано» на публичке. */
+  qsa("[data-save]", host).forEach(btn => {
+    btn.onclick = () => {
+      const ok = qs("[data-save-ok]", btn.parentNode);
+      if (!ok) return;
       ok.hidden = false;
-      clearTimeout(notifySave._hideTimer);
-      notifySave._hideTimer = setTimeout(() => { ok.hidden = true; }, 2400);
+      clearTimeout(btn._hideTimer);
+      btn._hideTimer = setTimeout(() => { ok.hidden = true; }, 2400);
     };
-  }
+  });
 
   initIcons(host);
 }
