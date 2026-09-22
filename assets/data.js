@@ -307,7 +307,7 @@ const STREETS = [
   "ул. Зелёная, 3, ТЦ «Рыба»", "пл. Центральная, 1", "ул. Ленина, 27"
 ];
 
-const MARKETS = ["Wildberries", "Ozon", "Яндекс Маркет", "Мегамаркет"];
+const MARKETS = ["Wildberries", "Ozon", "Яндекс Маркет", "М.Видео"];
 
 let uid = 0;
 function makeCode() {

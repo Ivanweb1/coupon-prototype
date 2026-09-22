@@ -133,6 +133,13 @@
    Везде одна и та же пара: розовая подложка плюс розовый радиальный
    градиент поверх. Оставляем ровную серую заливку. */
 .dz3 .recos{background:var(--surface)}
+
+/* Засветление у края ленты рекомендаций доходило только до границы
+   обёртки, а сам ряд выступает за неё на 4px (padding:4px; margin:0 -4px —
+   чтобы тени карточек не срезались). В этот просвет карточка выезжала
+   незатушёванной. Растягиваем затухание на те же 4px. */
+.dz3 .rail-wrap::before{left:-4px}
+.dz3 .rail-wrap::after{right:-4px}
 .dz3 .quick__media,
 body.dz3:not(.quick-left) .quick__media{background:var(--surface)}
 .dz3 .quick__photo{background:#EDEDED}

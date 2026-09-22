@@ -13,7 +13,11 @@ const ICON = {
   /* MAX. Вилл на созвоне 21.09.2026 отдельно просил не забывать его:
      «государство заставляет о нём помнить, и вариантов нет». Цвет —
      фирменный #471AFF, как и у остальных, проступает при наведении. */
-  max: '<svg class="soc-ic" style="--soc-c:#471AFF" width="18" height="18" viewBox="0 0 32 32" aria-hidden="true"><rect class="soc-ic__bg" width="32" height="32"/><path class="soc-ic__g" d="M16.24.08C25.05.08 31.96 7.23 31.96 16.05S24.83 31.84 16.33 31.84c-3.02 0-4.48-.43-6.84-2.1-.16-.11-.38-.08-.52.06-1.81 1.94-6.46 3.3-6.67.65 0-4.6-2.3-7.59-2.3-14.5C0 6.9 7.43.08 16.24.08Zm.25 7.86c-4.18-.22-7.45 2.69-8.17 7.23-.6 3.76.46 8.35 1.36 8.58.39.1 1.31-.61 1.98-1.24.13-.12.32-.14.47-.05 1.05.64 2.23 1.12 3.54 1.19 4.29.22 8.1-3.14 8.32-7.43.23-4.3-3.2-8.05-7.5-8.28Z"/></svg>',
+  /* Фирменный знак MAX, файлом от Ивана (22.09.2026). Остальные значки
+     рисуются одним путём на нашем сером круге, а этот — готовый логотип
+     с градиентом, поэтому он подключается картинкой и ведёт себя как
+     логотипы маркетплейсов: серый в покое, цветной под курсором. */
+  max: '<img class="soc-ic soc-ic--img" src="assets/brand/soc/max.svg" alt="" aria-hidden="true">',
   /* Instagram — из списка Коли для соцсетей компании. На публичке нашего
      сервиса не ставим: здесь он доступен компании как её собственная
      ссылка, и вопрос о размещении решает не дизайн. */
@@ -453,8 +457,9 @@ function buildL1Dropdowns() {
 const MP_MARKS = {
   "Wildberries":   "wildberries-full.svg",
   "Ozon":          "ozon-full.svg",
-  "Яндекс Маркет": "yandex-market-full.svg",
-  "Мегамаркет":    "megamarket-full.svg"
+  "Яндекс Маркет": "yandex-market-full.svg"
+  /* У М.Видео словесного логотипа в наборе нет — на страницах, где площадка
+     показывается чужим знаком, останется её название текстом. */
 };
 
 /* Плашка площадки словом, а не логотипом — решение Ивана 21.09.2026.
@@ -475,7 +480,11 @@ const MP_COLOR = {
   "Wildberries":   "#CB11AB",
   "Ozon":          "#005BFF",
   "Яндекс Маркет": "#FF5226",
-  "Мегамаркет":    "#8654CC"
+
+  /* М.Видео — фирменный красный площадки. Он почти совпадает с нашим
+     #DD443C: на плашке площадка читается как наш собственный акцент.
+     Под вопросом, вынести на согласование. */
+  "М.Видео":       "#E30613"
 };
 function mpMark(name) {
   if (document.body.classList.contains("dz3")) {
@@ -738,19 +747,30 @@ function showCardCode(card, c) {
   box.removeAttribute("aria-hidden");
 }
 
-/* Первое нажатие — код на месте кнопки, второе — копирование */
+/* Первое нажатие открывает код, второе — копирует.
+   Где код печатается поверх картинки (design-3), кнопка его не дублирует:
+   он и так крупно на снимке, а в кнопке лишь отнимал бы место у действия.
+   На прежних страницах плашки на картинке нет, поэтому там код по-прежнему
+   встаёт в саму кнопку — иначе его негде показать. */
 function revealOnCard(btn, c) {
-  if (!btn.classList.contains("is-code")) {
-    btn.classList.add("is-code");
-    btn.textContent = c.code;
+  const card = btn.closest(".card");
+  const onPhoto = !!qs("[data-card-code]", card);
+
+  if (!btn.classList.contains("is-open")) {
+    btn.classList.add("is-open");
+    if (!onPhoto) {
+      btn.classList.add("is-code");
+      btn.textContent = c.code;
+    }
     btn.title = "Нажмите, чтобы скопировать";
-    showCardCode(btn.closest(".card"), c);
+    showCardCode(card, c);
     noteInterest(c.cat.id);
     return;
   }
+  const back = btn.textContent;
   const done = () => {
     btn.textContent = "Скопировано";
-    setTimeout(() => { btn.textContent = c.code; }, 1600);
+    setTimeout(() => { btn.textContent = back; }, 1600);
   };
   if (navigator.clipboard) navigator.clipboard.writeText(c.code).then(done, done);
   else done();
@@ -898,7 +918,7 @@ let fromTransform = "";
 
 /* Логотипы площадок для дизайн-версии: файлы assets/brand/mp/<ключ>.svg
    (круглый значок) и <ключ>-full.svg (логотип шрифтом). */
-const MARKET_LOGO = { "Wildberries": "wildberries", "Ozon": "ozon", "Яндекс Маркет": "yandex-market", "Мегамаркет": "megamarket" };
+const MARKET_LOGO = { "Wildberries": "wildberries", "Ozon": "ozon", "Яндекс Маркет": "yandex-market", "М.Видео": "mvideo" };
 
 /* Логотип компании для примера: монограмма по первой букве названия в
    кавычках («Бренд» → Б) на спокойном цветном круге. Цвет стабилен для
