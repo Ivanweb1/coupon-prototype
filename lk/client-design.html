@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кабинет клиента — прототип купонного сервиса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Токены, кнопки и типографика берутся из публичной части: кабинет —
+     тот же продукт, а не отдельный интерфейс -->
+<link rel="stylesheet" href="../assets/style.css?v=20260917a">
+<link rel="stylesheet" href="assets/lk.css?v=20260917a">
+<!-- Дизайн — отдельным слоем, чтобы client.html остался эталоном «как
+     было» и разницу можно было показать двумя ссылками (так же, как
+     index-design-2.html на публичке) -->
+<link rel="stylesheet" href="assets/lk-design.css?v=20260922a">
+<link rel="icon" href="../assets/brand/logo-red.png">
+</head>
+<body class="lk lkd" data-role="client">
+
+<!-- ===================================================================
+     ДИЗАЙН КАБИНЕТА. Копия кабинета клиента для перехода от Ч/Б
+     прототипа к дизайну. Идём по одному экрану: сейчас готовы каркас
+     (меню, шапка) и дашборд. Остальные разделы пока в стилях прототипа
+     и наследуют только базу — палитру, шрифт и кнопки.
+     =================================================================== -->
+<div class="lk__shell">
+
+  <aside class="lk__side" id="lkSide">
+    <a class="lk__logo" href="../index-design-3.html" title="Вернуться на публичную часть">
+      <img class="lkd-logo__mark" src="../assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="lkd-logo__word">Все<br>купоны</span>
+    </a>
+    <span class="lkd-side__tag">Кабинет компании</span>
+
+    <nav class="lk__nav" id="lkNav"></nav>
+
+  </aside>
+
+  <div class="lk__main">
+    <header class="lk__top">
+      <button class="lk__burger" id="lkBurger" aria-label="Меню кабинета">
+        <span data-icon="burger"></span>
+      </button>
+      <span class="lk__spacer"></span>
+      <a class="lk__wallet" href="?view=billing" id="lkWallet" hidden></a>
+      <a class="btn btn--solid lk__cta" href="?view=new-regional" id="lkCta">
+        <span data-icon="plus"></span><span>Создать купон</span>
+      </a>
+      <a class="lk__bell" href="?view=notifications" id="lkBell" aria-label="Уведомления">
+        <span data-icon="bell"></span>
+        <i class="lk__dot" id="lkDot"></i>
+      </a>
+      <div class="lk__me" id="lkMe"></div>
+    </header>
+
+    <main class="lk__view" id="lkView"></main>
+  </div>
+
+</div>
+
+<div class="lk__scrim" id="lkScrim"></div>
+
+<script src="assets/lk-data.js?v=20260917a"></script>
+<script src="assets/lk.js?v=20260917a"></script>
+</body>
+</html>
