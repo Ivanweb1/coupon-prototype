@@ -1774,6 +1774,13 @@ function renderCouponDesign() {
       <div class="cpd__photo has-photo" style="background:url('${c.photo}') center/cover no-repeat">
         <span class="cpd__value">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
+        <!-- Код поверх снимка с нашим знаком — та же механика, что на
+             карточке ленты и в попапе: купон уносят скриншотом, пусть
+             уносят вместе с логотипом. -->
+        <div class="card__code quick__code" data-quick-code hidden aria-hidden="true">
+          <span class="card__code-val"></span>
+          <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+        </div>
       </div>
     </div>
 
@@ -1804,10 +1811,16 @@ function renderCouponDesign() {
           <div class="company__name">${c.company}</div>
           <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
         </div>
+        <!-- Шесть ссылок, как в попапе: созвон 21.09.2026, «сайт, ВК,
+             Одноклассники, MAX, Телега, Инста». Какие из них показывать,
+             компания отметит галочками в кабинете. -->
         <div class="socials socials--icons">
           <a class="soc soc--icon" href="#" title="Сайт компании" aria-label="Сайт компании">${ICON.site}</a>
           <a class="soc soc--icon" href="#" title="Компания ВКонтакте" aria-label="Компания ВКонтакте">${ICON.vk}</a>
           <a class="soc soc--icon" href="#" title="Компания в Telegram" aria-label="Компания в Telegram">${ICON.tg}</a>
+          <a class="soc soc--icon" href="#" title="Компания в Одноклассниках" aria-label="Компания в Одноклассниках">${ICON.ok}</a>
+          <a class="soc soc--icon" href="#" title="Компания в MAX" aria-label="Компания в MAX">${ICON.max}</a>
+          <a class="soc soc--icon" href="#" title="Компания в Instagram" aria-label="Компания в Instagram">${ICON.instagram}</a>
         </div>
       </div>
 
@@ -1819,6 +1832,12 @@ function renderCouponDesign() {
   qs("[data-reveal-btn]", rev).onclick = e => {
     rev.classList.add("is-open");
     e.currentTarget.disabled = true;
+    const box = qs("[data-quick-code]", root);
+    if (box) {
+      qs(".card__code-val", box).textContent = c.code;
+      box.hidden = false;
+      box.removeAttribute("aria-hidden");
+    }
     noteInterest(c.cat.id);
   };
   const share = qs("[data-share]", root);

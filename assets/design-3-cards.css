@@ -111,6 +111,9 @@
 .dz3 .card__code[hidden]{display:none}
 .dz3 .card__code{
   position:absolute;inset:0;z-index:2;
+  /* Затемнение повторяет скругление снимка: там, где у родителя нет
+     обрезки, прямые углы плашки торчали за скруглённым фото. */
+  border-radius:inherit;
   /* flex, а не grid: у grid две строки расходятся по высоте контейнера, и
      код с подписью разъезжаются на две отдельные плашки — а нужна одна */
   display:flex;flex-direction:column;align-items:center;justify-content:center;

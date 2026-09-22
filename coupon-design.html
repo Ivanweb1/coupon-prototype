@@ -7,18 +7,27 @@
 <title>Купон — Все купоны</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- Unbounded убран из заголовков (решение Ивана 21.09.2026): всё набрано
+     одним шрифтом, Onest. Manrope — второй кандидат, ?font=manrope. -->
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css?v=20260918y">
 <link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<!-- Новая база (созвон 21.09.2026 и правки Ивана) — тем же слоем, что на
+     главной, плюс лист, который переводит на неё саму страницу купона -->
+<link rel="stylesheet" href="assets/design-3.css?v=20260922a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260922a">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260922a">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260922a">
+<link rel="stylesheet" href="assets/design-3-coupon.css?v=20260922a">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
-<body class="dz cards-wb">
+<body class="dz dz3 cards-wb">
 
 <!-- ДИЗАЙН. Отдельная страница купона в стиле главной и поп-апа
-     (index-design-2.html). Структура — из прототипа coupon.html. -->
+     (index-design-3.html). Структура — из прототипа coupon.html. -->
 <header class="header dz-header">
   <div class="wrap header__in">
-    <a class="dz-logo" href="index-design-2.html" aria-label="Все купоны — на главную">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
       <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
       <span class="dz-logo__word">Все<br>купоны</span>
     </a>
@@ -132,7 +141,7 @@
         <p>Первый купон — бесплатно. Публикуем на сайте и в соцсетях города, а вы видите, сколько людей забрали скидку.</p>
         <div class="dz-biz__acts">
           <a class="btn dz-btn-white" href="register.html">Разместить купон</a>
-          <a class="btn dz-btn-line" href="#">Стать партнёром сервиса</a>
+          <a class="btn dz-btn-line" href="partner.html">Стать партнёром сервиса</a>
         </div>
       </div>
       <!-- Справа — мини-сцена того, что получает бизнес: публикация в
@@ -162,31 +171,44 @@
         <p class="dz-foot__tag">Все скидки <span data-geo-gen>Липецка</span> в одном месте. Бесплатно и без регистрации: нашли купон, сохранили код, показали на кассе.</p>
       </div>
 
+      <!-- «Обучение по сервису» убрано с публички (созвон 21.09.2026).
+           Никто на встрече не смог объяснить, что за этой кнопкой лежит;
+           Коля уточнил, что справочная для партнёров живёт в личном
+           кабинете, для авторизованных. Вилл: «публично можем слить
+           ценную инфу, давай уберём». -->
       <div class="fcol">
         <h4>Сервис</h4>
         <ul>
           <li><a href="#">Как это работает</a></li>
           <li><a href="#">Вопросы и ответы</a></li>
-          <li><a href="#">Обучение по сервису</a></li>
           <li><a href="#">Контакты</a></li>
         </ul>
       </div>
+      <!-- Было «Разместить купон» и «Купоны для маркетплейсов» отдельными
+           пунктами. Вилл на созвоне 21.09.2026 закрыл вопрос в пользу
+           сокращения: делить разделы здесь смысла нет, потому что у любого
+           пути первый шаг один — регистрация. Открытый калькулятор без
+           регистрации он зарубил: «потыкает и уйдёт — это не новый клиент,
+           а у нас есть себестоимость для него потыкать». -->
       <div class="fcol">
         <h4>Бизнесу</h4>
         <ul>
-          <li><a href="register.html">Разместить купон</a></li>
-          <li><a href="#">Купоны для маркетплейсов</a></li>
+          <li><a href="register.html">Зарегистрироваться</a></li>
           <li><a href="#">Тарифы</a></li>
           <li><a href="#">Документы</a></li>
         </ul>
       </div>
+      <!-- «Города сервиса» Вилла смущало как формулировка — стало
+           «Города присутствия». «Бонусы и выплаты» оставлены под вопросом:
+           Павел подозревает, что пункт достался от ранних версий ТЗ и уже
+           неактуален, Дима хотел бы видеть условия открыто. Не решено. -->
       <div class="fcol">
         <h4>Партнёрам</h4>
         <ul>
+          <li><a href="partner.html">Стать партнёром</a></li>
+          <li><a href="partner.html#cities">Города присутствия</a></li>
           <li><a href="#">Партнёрская программа</a></li>
           <li><a href="#">Бонусы и выплаты</a></li>
-          <li><a href="#">Стать партнёром</a></li>
-          <li><a href="#">Города сервиса</a></li>
         </ul>
       </div>
     </div>
@@ -201,6 +223,8 @@
           <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
           <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
           <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
+          <!-- MAX. Вилл: «добавь его везде, не забудь» -->
+          <a class="soc" href="#" data-city-social="MAX" title="Мы в MAX"><span data-icon="max"></span> MAX</a>
         </div>
       </div>
       <div class="footer-soc-group dz-foot__mp">
@@ -209,15 +233,44 @@
           <a class="soc" href="#" title="Сообщество Wildberries"><img class="soc-ic soc-ic--img" src="assets/brand/mp/wildberries.svg" alt=""> Wildberries</a>
           <a class="soc" href="#" title="Сообщество Ozon"><img class="soc-ic soc-ic--img" src="assets/brand/mp/ozon.svg" alt=""> Ozon</a>
           <a class="soc" href="#" title="Сообщество Яндекс Маркет"><img class="soc-ic soc-ic--img" src="assets/brand/mp/yandex-market.svg" alt=""> Яндекс Маркет</a>
-          <a class="soc" href="#" title="Сообщество Мегамаркет"><img class="soc-ic soc-ic--img" src="assets/brand/mp/megamarket.svg" alt=""> Мегамаркет</a>
+          <a class="soc" href="#" title="Сообщество М.Видео"><img class="soc-ic soc-ic--img" src="assets/brand/mp/mvideo.svg" alt=""> М.Видео</a>
         </div>
       </div>
+    </div>
+
+    <!-- Строка «по вопросам рекламы» — предложение Коли на созвоне
+         21.09.2026: отдельный адрес для тех, кто хочет не типовой тариф,
+         а персональное предложение. По сути сбор лидов, поэтому почта
+         открытая, а не форма. -->
+    <div class="dz-foot-ad">
+      <div>
+        <span class="dz-foot-ad__k">По вопросам рекламы</span>
+        <p>Нужен нетиповой формат, город под ключ или объём — напишите, соберём предложение под задачу.</p>
+      </div>
+      <a class="btn dz-foot-ad__mail" href="mailto:reklama@vsekupony.ru">reklama@vsekupony.ru</a>
+    </div>
+
+    <!-- Реквизиты и 152-ФЗ. Вилл с Колей: плашку о персональных данных
+         вешаем обязательно, «чтобы никто не боялся, что это незаконно».
+         Данные физлиц мы не собираем, но данные бизнеса — собираем,
+         поэтому строка нужна. Реквизиты — заглушка: юрлица у сервиса на
+         момент прототипа ещё нет. -->
+    <div class="dz-foot-legal">
+      <p class="dz-foot-legal__req">
+        ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 ·
+        г. Липецк, ул. Название, 1
+      </p>
+      <p class="dz-foot-legal__pd">
+        Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону,
+        третьим лицам не передаём. Пользователю для поиска купонов регистрация не нужна.
+      </p>
     </div>
 
     <div class="footer__legal">
       <span>© 2026 Все купоны</span>
       <a href="#">Политика конфиденциальности</a>
       <a href="#">Пользовательское соглашение</a>
+      <a href="#">Согласие на обработку данных</a>
       <!-- Лента бесконечная: вернуться к поиску вручную долго -->
       <button type="button" class="dz-foot__top" data-to-top>Наверх ↑</button>
     </div>
