@@ -179,6 +179,98 @@
 .lkd .lk-t th.lk-t__key{color:var(--ink-2)}
 
 /* --------------------------------------------------------------------------
+   Превью купона в мастере = карточка из ленты
+   --------------------------------------------------------------------------
+   Превью должно показывать будущий купон глазами посетителя, а значит
+   совпадать с тем, что посетитель и увидит. Значения сняты с настоящей
+   карточки: .cards-wb .card__badge и .card__title в style.css, плашка
+   выгоды из design-3-cards.css, метка erid и угловая плашка оттуда же.
+
+   Главное отличие от прежнего превью: выгода была гигантской цифрой по
+   центру картинки, а в ленте она белой плашкой в левом нижнем углу.
+   Человек сверял превью с лентой и видел два разных купона. */
+.lkd .lk-prev__badge{
+  position:absolute;left:10px;bottom:10px;z-index:2;
+  max-width:calc(100% - 54px);padding:7px 13px;border-radius:12px;
+  background:#fff;color:var(--brand);
+  font-family:"Onest",ui-sans-serif,system-ui,sans-serif;
+  font-size:16px;font-weight:800;letter-spacing:-.03em;line-height:1.1;
+  font-variant-numeric:tabular-nums;
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.45);
+}
+/* Знак сервиса уходит в правый нижний угол — там он и стоит на карточке
+   в ленте. Слева внизу теперь плашка выгоды, и вдвоём они налезали. */
+.lkd .lk-wm-corner{left:auto;right:10px}
+
+/* Подпись-заглушка уходит в центр картинки: снизу теперь стоит плашка
+   выгоды, и на прежнем месте они налезали друг на друга. */
+.lkd .lk-prev__hold{
+  top:50%;bottom:auto;transform:translateY(-50%);
+  padding:0 14px;line-height:1.4;
+}
+
+/* Плашка в углу: город у регионального купона, площадка у маркетплейсного */
+.lkd .lk-prev__near{
+  position:absolute;top:10px;left:10px;z-index:2;
+  display:inline-flex;align-items:center;max-width:calc(100% - 96px);
+  padding:4px 9px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.88);
+  font-size:11px;font-weight:500;color:var(--ink-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.lkd .lk-prev__near.is-empty{color:var(--ink-4)}
+
+/* Столбик метрик справа на фото — по .dz3 .card__stats в design-3-cards.css */
+.lkd .lk-prev__stats{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:11px 5px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.93);
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.4);
+  pointer-events:none;
+}
+.lkd .lk-prev__stat{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  min-width:30px;padding:2px;color:var(--ink-2);line-height:1;
+}
+.lkd .lk-prev__stat i{display:flex}
+.lkd .lk-prev__stat b{
+  font-size:10px;font-weight:600;letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;color:var(--ink-3);
+}
+
+.lkd .lk-prev__body{padding:10px 2px 0;display:flex;flex-direction:column;gap:6px}
+/* Заголовок в ленте — ровно одна строка (dz3.cards-wb .card__title) */
+.lkd .lk-prev__title{
+  font-size:13.5px;font-weight:500;line-height:1.32;letter-spacing:-.005em;
+  min-height:0;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
+}
+.lkd .lk-prev__meta{
+  display:flex;align-items:center;gap:8px;min-width:0;margin:0;
+  font-size:11.5px;color:var(--ink-3);
+}
+.lkd .lk-prev__meta b{
+  font-weight:500;color:var(--ink-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+/* Кнопки — часть картинки, а не управление: превью ничего не делает.
+   Ширина пополам, как в ленте (.dz3 .card__actions .btn{flex:1 1 0}):
+   было 60 на 40 в пользу «Подробнее», Коля попросил поровну — коду
+   маркетплейса нужно место, там бывает 8–12 знаков. */
+.lkd .lk-prev__acts{display:flex;gap:8px;pointer-events:none}
+.lkd .lk-prev__acts .btn{flex:1 1 0;min-width:0;padding:0 10px}
+
+/* Прогресс заполнения — своей плашкой над превью, не внутри него */
+.lkd .lk-prog__box{padding:16px 18px}
+.lkd .lk-prog__box .lk-prog{margin:0}
+
+/* Выбор раздела купона: под курсором значок заливается фирменным, а не
+   чёрным — выбор раздела это шаг к созданию купона, то есть действие. */
+.lkd .lk-pick__i:hover{border-color:var(--brand);background:var(--brand-50)}
+.lkd .lk-pick__i:hover .lk-pick__ic{background:var(--brand);color:#fff}
+
+/* --------------------------------------------------------------------------
    Чат ИИ-консультанта
    --------------------------------------------------------------------------
    Поле переписки высотой 280px, а в начале разговора в нём одна реплика —

@@ -38,7 +38,15 @@ const ICON = {
   gift:   nav('<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5.2 12.5V19a1 1 0 0 0 1 1h11.6a1 1 0 0 0 1-1v-6.5"/><path d="M12 8.5V20"/><path d="M12 8.5S10.9 4 8.9 4a2.25 2.25 0 0 0 0 4.5H12Z"/><path d="M12 8.5S13.1 4 15.1 4a2.25 2.25 0 0 1 0 4.5H12Z"/>'),
   wallet: nav('<path d="M19.5 8.5V7a2 2 0 0 0-2-2H5.5a2.5 2.5 0 0 0 0 5h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-12a2.5 2.5 0 0 1-2.5-2.5v-9"/><circle cx="16.5" cy="14.5" r="1.1"/>'),
   user:   nav('<circle cx="12" cy="8" r="3.6"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/>'),
-  exit:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>'
+  exit:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>',
+
+  /* Столбик метрик на карточке в ленте — те же четыре знака, что в
+     assets/app.js. Превью в мастере показывает будущий купон глазами
+     посетителя, значит и столбик на нём должен быть тот же. */
+  eye:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>',
+  used:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.2 5.2L20 7"/></svg>',
+  copy:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
+  share:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg>'
 };
 
 function initIcons(root = document) {
@@ -411,18 +419,25 @@ function closeModal() {
 /* «Создать купон» — один вход во все разделы (созвон 10.09): сначала
    раздел, потом конструктор под него. mech — механика из «Топовых
    механик», с ней конструктор откроется уже заполненным. */
+/* Три раздела витрины — те же, что закреплены плашками на главной, и
+   значки у них те же: точка на карте у регионального, сумка у
+   маркетплейса, портфель у «для бизнеса». Человек уже видел их на
+   витрине, и узнать раздел по знаку он должен раньше, чем дочитает
+   подпись. Без значков три одинаковые рамки различались только текстом,
+   и выбор упирался в чтение. */
 function openCreateModal(mech) {
   const opts = [
-    ["new-regional",    "Региональный купон", "Скидка в заведении или магазине вашего города — по коду с экрана"],
-    ["new-marketplace", "Купон маркетплейса", "Промокод на товар на Wildberries, Ozon и других площадках"],
-    ["new-business",    "Купон для бизнеса",  "Предложение для компаний: услуги, оборудование, подряд"]
+    ["new-regional",    "pin",  "Региональный купон", "Скидка в заведении или магазине вашего города — по коду с экрана"],
+    ["new-marketplace", "bag",  "Купон маркетплейса", "Промокод на товар на Wildberries, Ozon и других площадках"],
+    ["new-business",    "case", "Купон для бизнеса",  "Предложение для компаний: услуги, оборудование, подряд"]
   ];
   const el = openModal(`
     <h3>Какой купон создаём?</h3>
     <p class="lk-modal__lead">От раздела зависят поля конструктора и то, где купон увидят.</p>
     <div class="lk-pick">${opts.map(o => `
       <button type="button" class="lk-pick__i" data-pick="${o[0]}">
-        <b>${o[1]}</b><span>${o[2]}</span>
+        <span class="lk-pick__ic" data-icon="${o[1]}"></span>
+        <span class="lk-pick__t"><b>${o[2]}</b><span>${o[3]}</span></span>
       </button>`).join("")}</div>`, { wide: true });
   qsa("[data-pick]", el).forEach(b => b.onclick = () => {
     closeModal();
@@ -960,7 +975,7 @@ function couponForm(l1, c, locked) {
   /* У маркетплейса вместо адреса точки — площадка и артикул */
   const market = isMarket
     ? `<div class="lk-f__row">
-        ${field("Маркетплейс", select(LK_MARKETS, null, v.market, locked))}
+        ${field("Маркетплейс", select(LK_MARKETS, "market", v.market, locked))}
         ${field("Артикул товара", input("184 220 933", v.article, locked, "article"))}
        </div>
        ${field("Ссылка на карточку товара", input("https://…", null, locked))}`
@@ -1165,23 +1180,57 @@ function couponForm(l1, c, locked) {
     </div>
 
     <div class="lk-prev">
-      ${panel("Так купон увидят в ленте", `
-        ${locked ? "" : `<div class="lk-prog">
+      <!-- Прогресс заполнения стоит ОТДЕЛЬНО и ВЫШЕ панели с превью.
+           Раньше он лежал внутри неё, под заголовком «Так купон увидят в
+           ленте», и читался как часть будущего купона — будто шкалу
+           увидит и посетитель. Это про форму, а не про купон, поэтому у
+           него своя плашка, а заголовок превью стоит вплотную к карточке,
+           которую называет. -->
+      ${locked ? "" : `<div class="lk-panel lk-prog__box">
+        <div class="lk-prog">
           <div class="lk-prog__t"><span>Купон заполнен</span><b data-prog-n>0%</b></div>
           <div class="lk-prog__bar"><i data-prog-bar></i></div>
-        </div>`}
+        </div>
+      </div>`}
+      ${panel("Так купон увидят в ленте", `
+        <!-- Превью повторяет карточку из ленты, а не пересказывает её своими
+             средствами: те же места у метки erid и плашки выгоды, тот же
+             заголовок под фото, та же строка «компания · ниша» и те же две
+             кнопки внизу. Смысл превью в том, чтобы увидеть будущий купон
+             глазами посетителя, а для этого он должен совпадать с тем, что
+             посетитель и увидит.
+
+             Плашка выгоды переехала из центра картинки в левый нижний угол
+             — в ленте она там. Чипы со сроком и городом убраны: на
+             настоящей карточке их нет, а город виден плашкой в углу.
+             Кнопки внизу не нажимаются, это часть картинки. -->
         <div class="lk-prev__card">
           <div class="lk-prev__media${mediaCls}" data-pv-media>
+            <span class="lk-prev__near" data-pv-near>${
+              isMarket ? (v.market || LK_MARKETS[0]) : (cities[0] || "Город не выбран")}</span>
             <span class="lk-prev__erid">Реклама · erid: ${clean(v.erid) || "2Vt…"}</span>
-            <span class="lk-prev__val" id="pvVal">${v.value || "−30%"}</span>
+            <span class="lk-prev__badge" id="pvVal">${v.value || "−30%"}</span>
+            <!-- Столбик метрик — как на карточке в ленте: просмотры,
+                 «воспользовались», копирование кода и «поделиться». У
+                 нового купона счётчики нулевые, и это правда: он ещё не
+                 показывался. Значки не нажимаются, это часть картинки. -->
+            <div class="lk-prev__stats" aria-hidden="true">
+              <span class="lk-prev__stat"><i data-icon="eye"></i><b>${c ? num(c.opened) : 0}</b></span>
+              <span class="lk-prev__stat"><i data-icon="used"></i><b>${c ? num(c.taken) : 0}</b></span>
+              <span class="lk-prev__stat"><i data-icon="copy"></i></span>
+              <span class="lk-prev__stat"><i data-icon="share"></i></span>
+            </div>
             <span class="lk-prev__hold">Изображение — последним шагом</span>
             ${wm}
           </div>
           <div class="lk-prev__body">
             <div class="lk-prev__title" data-pv-title>${v.title || "Комбо-обед по будням до 16:00"}</div>
-            <div class="lk-prev__tags" data-pv-tags></div>
-            <div class="lk-prev__meta">Кофейня «Пример» · <span id="pvNiche">${v.niche || niches[0]}</span></div>
+            <div class="lk-prev__meta"><b>Кофейня «Пример»</b><i class="dot"></i><span id="pvNiche">${v.niche || niches[0]}</span></div>
             <div class="lk-prev__trust" data-pv-trust${v.secret ? "" : " hidden"}>✓ Проверено тайным покупателем · доверие × ${LK_SECRET.trust}</div>
+            <div class="lk-prev__acts" aria-hidden="true">
+              <span class="btn btn--ghost btn--wide">Подробнее</span>
+              <span class="btn btn--solid">Забрать купон</span>
+            </div>
           </div>
         </div>
         ${locked ? "" : `<div class="lk-note" style="margin-top:12px">Текст
@@ -1253,7 +1302,7 @@ function initCouponBuilder(host) {
   const media   = qs("[data-pv-media]", form);
   const pvVal   = qs("#pvVal", form);
   const pvTitle = qs("[data-pv-title]", form);
-  const pvTags  = qs("[data-pv-tags]", form);
+  const pvNear  = qs("[data-pv-near]", form);
   const isMarket = !!f("article");
 
   const cities = () => qsa("[data-city].is-on", form).map(b => b.dataset.city);
@@ -1284,13 +1333,14 @@ function initCouponBuilder(host) {
     const cs = cities();
     qsa("[data-addr-row]", form).forEach(r => { r.hidden = cs.indexOf(r.dataset.addrCity) === -1; });
 
-    const tags = [];
-    if (val("from") && val("to")) tags.push(val("from") + " — " + val("to"));
-    if (cs.length) tags.push(cs.join(", "));
-    const a = addrs();
-    if (a.length === 1) tags.push(a[0]);
-    if (a.length > 1) tags.push(a.length + " " + plural(a.length, "адрес", "адреса", "адресов"));
-    pvTags.innerHTML = tags.map(t => `<span>${t}</span>`).join("");
+    /* Плашка в углу картинки — то же, что на карточке в ленте: у
+       регионального купона город, у маркетплейсного площадка. Срок и
+       адреса в превью не показываем: на настоящей карточке их нет. */
+    if (pvNear) {
+      const mk = isMarket && f("market") ? f("market").value : "";
+      pvNear.textContent = mk || cs[0] || "Город не выбран";
+      pvNear.classList.toggle("is-empty", !mk && !cs.length);
+    }
 
     if (!img) return;
 
