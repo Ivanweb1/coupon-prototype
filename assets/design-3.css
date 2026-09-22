@@ -81,8 +81,22 @@
 .dz3 #allCats.is-open .tag--all{background:var(--brand);border-color:var(--brand);color:#fff}
 .dz3 .tag--all:hover .tag__sub,
 .dz3 #allCats.is-open .tag--all .tag__sub{color:rgba(255,255,255,.8)}
+/* Значок «Все категорий» — красный круг с белым знаком (правка Ивана
+   22.09.2026): это главная точка входа в категории, и она обозначается
+   заливкой, а не бледной подложкой, как у рядовых ниш. */
+.dz3.cats-a .tags-row__main .tag--all > [data-icon]:not(.chev),
+.dz3.cats-b .tags-row__main .tag--all > [data-icon]:not(.chev){
+  background:var(--brand);color:#fff;
+}
+.dz3.cats-a .tags-row__main .tag--all > [data-icon]:not(.chev) svg,
+.dz3.cats-b .tags-row__main .tag--all > [data-icon]:not(.chev) svg{color:#fff}
+
+/* Под курсором и с раскрытым списком кнопка сама становится красной —
+   тогда круг внутри отделяется от неё белой полупрозрачной заливкой. */
 .dz3 .tag--all:hover > [data-icon]:not(.chev),
 .dz3 #allCats.is-open .tag--all > [data-icon]:not(.chev){background:rgba(255,255,255,.2);color:#fff}
+.dz3 .tag--all:hover > [data-icon]:not(.chev) svg,
+.dz3 #allCats.is-open .tag--all > [data-icon]:not(.chev) svg{color:#fff}
 .dz3 .tag--all:focus-visible{box-shadow:0 0 0 4px var(--brand-100)}
 
 /* Закреплённые разделы («Маркетплейсы», «Для бизнеса»): под курсором

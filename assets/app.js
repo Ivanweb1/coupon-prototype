@@ -1946,9 +1946,51 @@ function initIcons() {
   qsa("[data-icon]").forEach(el => el.innerHTML = ICON[el.dataset.icon] || "");
 }
 
+/* Подсказки, которые «печатаются» в пустом поле поиска. Вилл на созвоне
+   21.09.2026: поле не замечают и им не пользуются. Воздух вокруг него уже
+   добавлен, движущаяся строка — вторая половина ответа: в неподвижном
+   интерфейсе глаз цепляется за единственное, что шевелится. Фразы — то,
+   что человек действительно ищет в городе, а не названия категорий. */
+const SEARCH_HINTS = [
+  "кофе с собой", "маникюр рядом", "шиномонтаж", "пицца навынос",
+  "мужская стрижка", "мойка машины", "суши", "фитнес на месяц"
+];
+
+/* Печатаем в placeholder, а не в value: пустое поле остаётся пустым,
+   поэтому клик, ввод и автозаполнение ведут себя как обычно. Анимация
+   останавливается, как только человек взялся за поле, и не запускается
+   вовсе, если в системе выключены анимации. */
+function typeHints(input) {
+  const rest = input.placeholder;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  let word = 0, len = 0, dir = 1, timer = null;
+
+  const step = () => {
+    const text = SEARCH_HINTS[word];
+    len += dir;
+    input.placeholder = text.slice(0, len) + "|";
+    let pause = dir > 0 ? 65 : 30;
+    if (dir > 0 && len === text.length) { dir = -1; pause = 1500; }
+    else if (dir < 0 && len === 0) { dir = 1; word = (word + 1) % SEARCH_HINTS.length; pause = 260; }
+    timer = setTimeout(step, pause);
+  };
+  timer = setTimeout(step, 900);
+
+  const stop = () => {
+    clearTimeout(timer);
+    input.placeholder = rest;
+    input.removeEventListener("focus", stop);
+    input.removeEventListener("input", stop);
+  };
+  input.addEventListener("focus", stop);
+  input.addEventListener("input", stop);
+}
+
 function initSearch() {
   qsa(".search").forEach(form => {
     const input = qs("input", form);
+    if (document.body.classList.contains("dz3")) typeHints(input);
     const go = () => {
       const q = encodeURIComponent(input.value.trim());
       location.href = catalogUrl(state.l1, state.l2) + "&q=" + q;
