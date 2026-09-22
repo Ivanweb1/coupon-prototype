@@ -57,15 +57,24 @@
    что за кабинет открыт — как на публичке, где под лого сразу видно,
    какой это сервис. */
 .lkd .lk__logo{
-  height:auto;margin:0 -16px;padding:22px 26px 14px;
+  height:auto;margin:0 -16px;padding:18px 26px 14px;
   display:flex;align-items:center;gap:10px;
   border-bottom:0;
 }
-.lkd-logo__mark{display:block;width:20px;height:auto;flex:0 0 auto}
+/* Ровно те же значения, что у .dz-logo в design.css и .dz3 в
+   design-3-type.css: знак 46px по высоте, слово прописными в 14px без
+   межбуквенного сжатия, наклон знака при наведении. Кабинет и витрина —
+   один продукт, и логотип в них должен быть не «похожим», а тем же. */
+.lkd-logo__mark{
+  display:block;height:46px;width:auto;flex:0 0 auto;
+  transform-origin:50% 90%;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.lkd .lk__logo:hover .lkd-logo__mark{transform:rotate(-8deg) translateY(-2px)}
 .lkd-logo__word{
   font-family:"Onest",ui-sans-serif,system-ui,sans-serif;
-  font-weight:800;font-size:15px;line-height:1.05;letter-spacing:-.01em;
-  color:var(--ink);
+  font-weight:700;font-size:14px;line-height:1.02;letter-spacing:0;
+  text-transform:uppercase;color:var(--ink);
 }
 .lkd-side__tag{
   display:block;margin:0 -16px 14px;padding:0 26px 16px;
