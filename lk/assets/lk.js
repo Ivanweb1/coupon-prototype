@@ -446,10 +446,15 @@ function openBonusWays() {
       const label = used
         ? (w.monthly ? "Доступно в октябре" : w.once ? "Получено" : "Готово")
         : w.act;
+      /* Кнопки здесь контурные, хотя это и действия: способов шесть, они
+         равноценны, и сплошной заливкой список превращался в столбец
+         красного, где ни одна строка не выделялась. То же решение, что в
+         архиве купонов: красной кнопка становится под курсором — на той
+         строке, которую человек и правда выбрал. */
       return `<div class="lk-ways__i${used && (w.once || w.monthly) ? " is-used" : ""}">
         <div class="lk-ways__t"><b>${w.title}</b><span>${w.note}</span></div>
         <div class="lk-ways__r">+${w.reward}</div>
-        <button class="btn ${used ? "btn--ghost" : "btn--solid"}" data-way="${w.id}"${used && (w.once || w.monthly) ? " disabled" : ""}>${label}</button>
+        <button class="btn btn--ghost" data-way="${w.id}"${used && (w.once || w.monthly) ? " disabled" : ""}>${label}</button>
       </div>`;
     }).join("");
     qsa("[data-way]", el).forEach(b => b.onclick = () => {
