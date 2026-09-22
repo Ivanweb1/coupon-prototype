@@ -819,15 +819,18 @@ VIEWS["client:coupons"] = () => {
       .map(s => `<button data-f="${s}"${state.filter === s ? ' class="is-on"' : ""}>${STATUS_TAB[s]}<span class="lk__n">${counts[s]}</span></button>`).join("")}
   </div>`;
 
-  /* Порядок слева направо — от широкого к узкому: какой набор берём,
-     что в нём ищем, чем его упорядочить. */
+  /* Слева — два списка, которыми набирают и раскладывают список: раздел и
+     порядок. Оба управляют одним и тем же — что и в каком порядке лежит в
+     таблице, — поэтому стоят рядом, а не по разным краям строки. Поиск
+     занимает весь остаток: он не настройка списка, а способ выдернуть из
+     него одну строку. */
   const tools = `<div class="lk-tools">
     ${secSelect}
-    <input class="lk-i lk-tools__q" type="search" placeholder="Поиск по названию купона" data-q value="${state.q}">
     <select class="lk-s lk-tools__sort" data-sort>
       ${[["new", "Сначала новые"], ["taken", "Больше всего забрали"], ["shown", "Больше всего показов"]]
         .map(([k, l]) => `<option value="${k}"${state.sort === k ? " selected" : ""}>${l}</option>`).join("")}
     </select>
+    <input class="lk-i lk-tools__q" type="search" placeholder="Поиск по названию купона" data-q value="${state.q}">
   </div>`;
 
   const mech = c => (LK_MECHANICS.find(m => m.id === c.mech) || {}).label || "—";
@@ -1495,6 +1498,16 @@ VIEWS["client:new-business"] = () =>
   head("Создание купона для бизнеса")
   + couponForm("for-business");
 
+/* Архив — итоги отработавших купонов: четыре метрики за весь срок и
+   возможность запустить купон заново.
+
+   «Опубликовать снова» здесь контурная, а не сплошная, хотя в «Моих
+   купонах» действие в строке сплошное. Разница по смыслу: там кнопка
+   появляется только у части строк и двигает купон по воронке — это и
+   правда призыв к действию. Здесь она одинакова у каждой строки, и
+   сплошной заливкой архив превращался в столбец красного, где ни одна
+   строка не срочнее соседней. Красной кнопка становится под курсором —
+   на той строке, которую человек и правда собрался нажать. */
 VIEWS["client:archive"] = () => {
   const done = LK_COUPONS.filter(c => c.status === "done");
   return head("Архив купонов")
@@ -1508,7 +1521,7 @@ VIEWS["client:archive"] = () => {
             <td class="num">${num(c.opened)}</td>
             <td class="num">${num(c.taken)}</td>
             <td class="num">${num(c.clicks)}</td>
-            <td class="num"><button class="btn btn--solid" data-act="repeat" data-id="${c.id}">Опубликовать снова</button></td>
+            <td class="num"><button class="btn btn--ghost" data-act="repeat" data-id="${c.id}">Опубликовать снова</button></td>
           </tr>`).join(""))
       : empty("Архив пуст", "Сюда попадают купоны, у которых закончился срок действия."));
 };
