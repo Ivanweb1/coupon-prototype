@@ -46,6 +46,10 @@
 .reg__screen.is-on{display:block}
 
 .reg__f{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+/* display:flex у класса перебивает [hidden] из стилей браузера, и скрытый
+   блок продолжал занимать место: над пустотой висела подпись «Выберите
+   свою компанию» ещё до поиска по ИНН. */
+.reg__f[hidden]{display:none}
 .reg__l{font-size:13px;font-weight:500}
 .reg__row--2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:520px){.reg__row--2{grid-template-columns:1fr}}

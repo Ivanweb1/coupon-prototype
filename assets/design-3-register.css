@@ -1,0 +1,282 @@
+/* ==========================================================================
+   Регистрация клиента — дизайн. База dz3, созвоны 21–22.09.2026
+   ==========================================================================
+   Слой поверх register.css. Разметку и поведение формы не трогаем:
+   register.js держится за те же .reg__* и data-reg-*, и часть узлов он
+   рисует сам (чипы городов, карточки найденных организаций). Поэтому
+   дизайн приходит стилями, а не новыми классами.
+
+   Цветовое правило — то же, что на витрине: красный обозначает выбор и
+   действие, остальное белое, серое и чёрное. Брендовым набраны ровно три
+   вещи: текущий шаг, выбранный чип и кнопка отправки. Красить в красный
+   ещё и рамки полей нельзя — форма станет тревожной там, где ошибок
+   пока нет.
+
+   Поля и карточки повторяют форму «Стать партнёром» (.pt-*): у сервиса
+   две формы на публичке, и разными им быть не с чего.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Первый экран
+   --------------------------------------------------------------------------
+   Заголовок по левому краю, а не по центру, как было в Ч/Б: центр держится,
+   пока страница — одна колонка. Здесь справа встала колонка со справкой, и
+   центрированный заголовок повис бы между двумя колонками, не принадлежа
+   ни одной. Плашка «Бизнесу» — та же, что «Партнёрам» на соседней форме. */
+.rg-hero{padding:48px 0 0}
+.rg-hero__k{
+  display:inline-flex;align-items:center;height:28px;padding:0 12px;
+  border-radius:var(--r-pill);
+  background:#fff;color:var(--brand);box-shadow:inset 0 0 0 1.5px var(--brand);
+  font-size:12px;font-weight:600;
+}
+.rg-hero h1{
+  margin:16px 0 0;max-width:20ch;
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(28px,3.1vw,44px);line-height:1.08;letter-spacing:-.02em;
+  color:var(--ink);
+}
+.rg-hero__sub{margin:14px 0 0;max-width:62ch;font-size:17px;line-height:1.55;color:var(--ink-2)}
+
+/* --------------------------------------------------------------------------
+   Две колонки
+   --------------------------------------------------------------------------
+   Форма длинная — на широком экране справа от неё оставалось полполосы
+   пустоты. Туда уходит то, что раньше было разбросано по подписям под
+   полями и по экрану «готово»: что человек получает и что ему
+   понадобится под рукой. Колонка липкая — она отвечает на вопросы,
+   которые возникают в середине формы, а не в её начале.
+
+   Порядок в разметке — форма первой: на телефоне колонки складываются
+   в столбик, и справка не должна стоять между заголовком и первым полем. */
+.rg-cols{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:32px;margin:38px 0 0;padding-bottom:20px;
+  align-items:start;
+}
+@media (max-width:980px){.rg-cols{grid-template-columns:1fr;gap:26px}}
+
+.rg-side{display:grid;gap:16px;align-content:start;position:sticky;top:96px}
+@media (max-width:980px){.rg-side{position:static}}
+
+.rg-side__card{border:1px solid var(--line);border-radius:24px;padding:22px 24px;background:#fff}
+.rg-side__card h2{
+  margin:0;font-family:var(--font-display);font-weight:800;
+  font-size:18px;letter-spacing:-.02em;color:var(--ink);
+}
+.rg-side__note{margin:10px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink-3)}
+
+/* Галочка-маска вместо маркера списка — тот же знак, что в правой колонке
+   формы партнёра, чтобы два списка на публичке не расходились. */
+.rg-list{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:11px}
+.rg-list li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:14px;line-height:1.5;color:var(--ink-2)}
+.rg-list li::before{
+  content:"";width:22px;height:22px;border-radius:50%;
+  background:var(--brand);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.6 4.6L19 7.5'/%3E%3C/svg%3E") center/16px no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.6 4.6L19 7.5'/%3E%3C/svg%3E") center/16px no-repeat;
+}
+/* Второй список — не обещания, а чек-лист «что приготовить». Галочка тут
+   читалась бы как «уже сделано», поэтому маркер нейтральный. */
+.rg-list--plain li{grid-template-columns:8px 1fr;gap:12px;align-items:start}
+.rg-list--plain li::before{
+  width:6px;height:6px;margin-top:9px;border-radius:50%;
+  background:var(--line-strong);-webkit-mask:none;mask:none;
+}
+
+/* --------------------------------------------------------------------------
+   Карточка формы
+   --------------------------------------------------------------------------
+   В dz3 карточки держатся обводкой, а не тенью: на белом фоне витрины
+   тени давали грязь. Радиус 24 — как у .pt-card и у карточек ленты. */
+.dz3 .reg__card{
+  max-width:none;margin:0;
+  border:1px solid var(--line);border-radius:24px;
+  box-shadow:none;
+  padding:28px;
+}
+@media (max-width:640px){.dz3 .reg__card{padding:20px;border-radius:20px}}
+
+/* --------------------------------------------------------------------------
+   Шаги
+   --------------------------------------------------------------------------
+   Индикатор остаётся тремя равными долями с подчёркиванием — по нему
+   видно, что регистрация это последовательность, а не одна длинная форма.
+   Ч/Б вариант помечал текущий шаг чёрным; здесь текущий — красный, а
+   пройденный — серый кружок с галочкой вместо цифры: цифра пройденного
+   шага спорила с цифрой текущего. */
+.dz3 .reg__steps li{font-size:12.5px;font-weight:500;border-bottom-width:2px}
+.dz3 .reg__steps li span{
+  width:22px;height:22px;font-size:11.5px;font-weight:700;
+  background:var(--surface);color:var(--ink-3);
+}
+.dz3 .reg__steps li.is-on{color:var(--ink);border-color:var(--brand)}
+.dz3 .reg__steps li.is-on span{background:var(--brand);color:#fff}
+.dz3 .reg__steps li.is-done{color:var(--ink-3);border-color:var(--line-strong)}
+.dz3 .reg__steps li.is-done span{
+  background:var(--ink);color:transparent;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.6 4.6L19 7.5'/%3E%3C/svg%3E");
+  background-size:13px;background-position:center;background-repeat:no-repeat;
+}
+
+/* --------------------------------------------------------------------------
+   Поля
+   --------------------------------------------------------------------------
+   Высота 46, радиус 12, обводка в полтора пикселя — один в один с формой
+   партнёра. Фокус: красная рамка и серое кольцо вокруг. Кольцо серое не
+   по недосмотру — в dz3 бывшие розовые оттенки бренда обнулены в
+   нейтральные ступени серого, и второй красный контур вокруг первого
+   давал бы на поле два красных слоя подряд. */
+.dz3 .reg__l{font-size:13px;font-weight:600;color:var(--ink-2)}
+.dz3 .reg__f{gap:7px;margin-bottom:18px}
+
+.dz3 .reg__i,
+.dz3 .reg__ta{
+  height:46px;border-radius:12px;
+  border:1.5px solid var(--line-strong);
+  font-size:15px;
+  transition:border-color .18s, box-shadow .18s;
+}
+.dz3 .reg__ta{height:auto;min-height:96px;padding:12px 14px}
+.dz3 .reg__i:focus,
+.dz3 .reg__ta:focus{border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-100)}
+.dz3 .reg__i:disabled{background:var(--surface);border-color:var(--line);color:var(--ink-3)}
+
+/* Стрелка селекта собрана из двух градиентов и привязана к высоте поля —
+   поле подросло на два пикселя, значит и стрелка опускается на столько же. */
+.dz3 .reg__i--select{background-position:calc(100% - 18px) 21px, calc(100% - 13px) 21px}
+
+/* Код из письма: цифры крупные и табличные, чтобы четыре знака не гуляли
+   по ширине, пока их набирают. */
+.dz3 .reg__i--code{
+  height:56px;max-width:180px;font-size:22px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+/* Код страны — подпись, а не поле: радиус и толщина обводки должны
+   совпасть с соседним полем, иначе стык расходится на полпикселя. */
+.dz3 .reg__tel-cc{
+  border-width:1.5px;border-right:0;border-radius:12px 0 0 12px;
+  background:var(--surface);font-size:14.5px;
+}
+.dz3 .reg__tel .reg__i{border-radius:0 12px 12px 0}
+.dz3 .reg__tel:focus-within .reg__tel-cc{border-color:var(--brand)}
+
+/* Кнопка «Найти по ИНН» — ростом с поле, иначе строка ломается по высоте */
+.dz3 .reg__inline .btn{height:46px;border-width:1.5px;border-radius:12px}
+.dz3 .reg__inline .btn:hover{border-color:var(--brand);color:var(--brand);background:#fff}
+/* На телефоне кнопка съедала половину строки, и подсказка в поле
+   обрывалась на середине: «10 цифр — как у ОО…». Ставим в столбик —
+   поле получает всю ширину, кнопка идёт под ним. */
+@media (max-width:460px){
+  .dz3 .reg__inline{flex-direction:column}
+  .dz3 .reg__inline .btn{width:100%}
+}
+
+.dz3 .reg__hint,
+.dz3 .reg__note{margin:-10px 0 18px;font-size:13px;color:var(--ink-3)}
+/* Отказ базы и незаполненное согласие — единственное место, где красный
+   обозначает не выбор, а проблему. Он здесь и уместен: другого красного
+   на экране в этот момент нет. */
+.dz3 .reg__hint.is-bad{color:var(--brand);font-weight:500}
+
+/* --------------------------------------------------------------------------
+   Чипы: инверсия вместо оттенков
+   --------------------------------------------------------------------------
+   Правило с витрины, дословно с созвона 21.09.2026: покой — белая кнопка
+   с чёрными буквами, наведение — красная обводка и красные буквы,
+   выбрано — сплошной красный с белыми. Тип организации, география и
+   города ходят по нему же, что и категории в ленте. */
+.dz3 .reg__chip{
+  height:40px;padding:0 15px;display:inline-flex;align-items:center;
+  border:1.5px solid var(--line-strong);background:#fff;color:var(--ink);
+  font-size:14px;
+}
+.dz3 .reg__chip:hover{border-color:var(--brand);color:var(--brand);background:#fff}
+.dz3 .reg__chip.is-on{background:var(--brand);border-color:var(--brand);color:#fff}
+.dz3 .reg__chips{gap:8px}
+
+/* --------------------------------------------------------------------------
+   Найденное по ИНН
+   --------------------------------------------------------------------------
+   Организацию выбирают явно: по одному ИНН бывает и головная компания, и
+   обособленное подразделение. Поэтому выбранная карточка помечается
+   красной обводкой, а не заливкой — внутри неё реквизиты, и заливка их
+   бы придавила. */
+.dz3 .reg__found-i{
+  padding:14px 16px;border:1.5px solid var(--line-strong);border-radius:14px;
+}
+.dz3 .reg__found-i:hover{border-color:var(--brand);background:#fff}
+.dz3 .reg__found-i.is-on{border-color:var(--brand);background:var(--brand-50)}
+.dz3 .reg__found-i b{font-size:14.5px;font-weight:700}
+
+/* --------------------------------------------------------------------------
+   Галочки, согласие, кнопки
+   -------------------------------------------------------------------------- */
+.dz3 .reg__check input{accent-color:var(--brand);width:19px;height:19px}
+.dz3 .reg__consent{
+  margin:14px 0 22px;padding:14px 16px;
+  border:1.5px solid var(--line);border-radius:14px;background:var(--surface);
+  align-items:flex-start;font-size:13px;color:var(--ink-2);
+}
+.dz3 .reg__consent input{margin-top:1px}
+.dz3 .reg__consent.is-bad{border-color:var(--brand);background:#fff;color:var(--brand)}
+
+.dz3 .reg__plus{color:var(--brand);font-weight:600}
+.dz3 .reg__plus:hover{text-decoration:underline}
+
+.dz3 .reg__screen .btn--lg{height:52px;font-size:15px;font-weight:600}
+/* .btn--wide в style.css растягивается через flex:1 и работает только
+   внутри флекс-строки. Здесь кнопка стоит в блоке одна — растягиваем её
+   шириной, иначе главное действие экрана сжимается до своей надписи. */
+.dz3 .reg__screen .btn--wide{display:flex;width:100%}
+
+/* --------------------------------------------------------------------------
+   Экран «готово»
+   --------------------------------------------------------------------------
+   Единственное место в форме, где красный заливает крупное пятно. Это
+   конец пути, дальше на экране действий нет, спорить кружку не с чем. */
+.dz3 .reg__done-i{
+  width:60px;height:60px;background:var(--brand);color:transparent;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.6 4.6L19 7.5'/%3E%3C/svg%3E");
+  background-size:28px;background-position:center;background-repeat:no-repeat;
+  margin-bottom:18px;
+}
+.dz3 .reg__done-h{
+  font-family:var(--font-display);font-weight:800;font-size:26px;letter-spacing:-.02em;
+}
+.dz3 .reg__screen[data-reg-screen="done"] .reg__lead{text-align:center;max-width:44ch;margin:0 auto}
+.dz3 .reg__done-list{list-style:none;padding:0;margin:22px 0 24px;gap:11px}
+.dz3 .reg__done-list li{
+  display:grid;grid-template-columns:22px 1fr;gap:10px;
+  font-size:14px;line-height:1.5;color:var(--ink-2);
+}
+.dz3 .reg__done-list li::before{
+  content:"";width:22px;height:22px;border-radius:50%;
+  background:var(--brand);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.6 4.6L19 7.5'/%3E%3C/svg%3E") center/16px no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.6 4.6L19 7.5'/%3E%3C/svg%3E") center/16px no-repeat;
+}
+/* Пункты списка стали грид-ячейками ради галочки в первой колонке, а
+   display у класса перебивает [hidden] из стилей браузера. Строку про
+   усиленную модерацию register.js прячет именно так — возвращаем ей
+   способность прятаться. */
+.dz3 .reg__done-list li[hidden]{display:none}
+/* Строка про усиленную модерацию появляется только при отказе базы —
+   это предупреждение, а не пункт списка достижений. */
+.dz3 .reg__done-list li[data-reg-manual-note]{color:var(--brand)}
+.dz3 .reg__done-list li[data-reg-manual-note]::before{background:var(--ink-4)}
+
+/* Экран подтверждения почты: на нём одна строка текста, одно поле и одна
+   кнопка. По левому краю, во всю ширину карточки, это выглядело обрывком
+   длинной формы, а не отдельным шагом — собираем в узкий столбик по
+   центру, вокруг кода. */
+.dz3 .reg__screen[data-reg-screen="email"]{
+  max-width:380px;margin:0 auto;padding:6px 0 4px;text-align:center;
+}
+.dz3 .reg__screen[data-reg-screen="email"] .reg__lead{margin-bottom:24px}
+.dz3 .reg__screen[data-reg-screen="email"] .reg__f{align-items:center;gap:10px}
+.dz3 .reg__i--code{margin:0 auto}
+.dz3 .reg__resend{margin-top:14px;justify-content:center}
+.dz3 .reg__resend .btn{border:0;color:var(--brand);font-weight:600;padding:0}
+.dz3 .reg__resend .btn:hover{background:none;text-decoration:underline;transform:none}
