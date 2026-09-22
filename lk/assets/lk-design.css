@@ -220,6 +220,13 @@
 }
 .lkd .lk-prev__near.is-empty{color:var(--ink-4)}
 
+/* Рамки вокруг карточки нет: в ленте .cards-wb .card{border:0} — обводка
+   там только у фотографии, и радиус у неё свой, 14px. Прежняя рамка
+   обводила карточку целиком вместе с кнопками, отчего превью читалось
+   как ещё одна панель формы, а не как купон в ленте. */
+.lkd .lk-prev__card{border:0;background:none;border-radius:0;overflow:visible}
+.lkd .lk-prev__media{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+
 /* Столбик метрик справа на фото — по .dz3 .card__stats в design-3-cards.css */
 .lkd .lk-prev__stats{
   position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:2;
