@@ -28,8 +28,14 @@
   /* Те же нейтральные ступени, что в design-3: без розовой примеси */
   --ink:#1B1B1B;
   --ink-2:#565656;
-  --ink-3:#8A8A8A;
-  --ink-4:#B6B6B6;
+  /* Две нижние ступени серого темнее, чем на публичке. Там светло-серым
+     набраны подписи, которые можно и пропустить; здесь им набраны шапки
+     колонок, счётчики и вторые строки таблиц — то, к чему возвращаешься
+     каждый раз, чтобы понять, что означает число в ячейке. На белом
+     #B6B6B6 давал контраст 2.0 при норме 4.5: колонку приходилось
+     угадывать. Ступени остались четырьмя различимыми, просто плотнее. */
+  --ink-3:#767676;
+  --ink-4:#949494;
   --line:#E8E8E8;
   --line-strong:#D3D3D3;
   --surface:#F6F6F6;
@@ -162,6 +168,43 @@
    а просто главное число строки. */
 .lkd .lk-t td.lk-t__key{font-weight:600;color:var(--ink)}
 .lkd .lk-t th.lk-t__key{color:var(--ink-2)}
+
+/* --------------------------------------------------------------------------
+   Строка таблицы как ссылка
+   --------------------------------------------------------------------------
+   Клик по строке открывает карточку купона или клиента — это основной путь
+   к ней, других входов почти нет. При этом строка ничем не отличалась от
+   обычной: ни стрелки, ни подписи, только курсор менялся, когда до строки
+   уже довели мышь. Пока не ткнёшь наугад, способ не найти.
+
+   Стрелка у правого края появляется на наведении и с клавиатуры — так она
+   не засоряет таблицу в покое, но отвечает на вопрос «сюда можно нажать?»
+   ровно в тот момент, когда он возникает. Место под неё отведено всегда,
+   поэтому от наведения колонки не дёргаются.
+
+   Строки, где в последней ячейке уже стоит кнопка (архив), исключены:
+   там стрелка спорила бы с «Опубликовать снова». */
+.lkd .lk-t tr[data-coupon]:not(:has(td:last-child .btn)) > td:last-child,
+.lkd .lk-t tr[data-client]:not(:has(td:last-child .btn)) > td:last-child{
+  position:relative;padding-right:26px;
+}
+.lkd .lk-t tr[data-coupon]:not(:has(td:last-child .btn)) > td:last-child::after,
+.lkd .lk-t tr[data-client]:not(:has(td:last-child .btn)) > td:last-child::after{
+  content:"";position:absolute;right:10px;top:50%;
+  width:6px;height:6px;margin-top:-4px;
+  border-right:1.5px solid var(--ink-3);border-top:1.5px solid var(--ink-3);
+  transform:rotate(45deg);
+  opacity:0;transition:opacity .16s, right .16s;
+}
+/* Условие :not(:has(…)) повторено и здесь не для красоты: :has() поднимает
+   вес селектора, и без него правило ниже проигрывало бы объявлению выше,
+   а стрелка не показывалась бы вовсе. */
+.lkd .lk-t tr[data-coupon]:not(:has(td:last-child .btn)):hover > td:last-child::after,
+.lkd .lk-t tr[data-client]:not(:has(td:last-child .btn)):hover > td:last-child::after,
+.lkd .lk-t tr[data-coupon]:not(:has(td:last-child .btn)):focus-visible > td:last-child::after,
+.lkd .lk-t tr[data-client]:not(:has(td:last-child .btn)):focus-visible > td:last-child::after{
+  opacity:1;right:6px;
+}
 
 /* --------------------------------------------------------------------------
    Статусы
