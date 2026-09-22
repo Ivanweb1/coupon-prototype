@@ -798,14 +798,25 @@
 .lk-modal__lead{margin:0;font-size:14px;line-height:1.55;color:var(--ink-3)}
 
 .lk-pick{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+/* Значок раздела слева, текст колонкой справа — те же три знака, что у
+   закреплённых разделов на витрине */
 .lk-pick__i{
-  display:flex;flex-direction:column;gap:4px;text-align:left;
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;
+  gap:14px;text-align:left;
   padding:16px 18px;border:1px solid var(--line-strong);border-radius:var(--r-md);
   transition:border-color .16s,background .16s;
 }
 .lk-pick__i:hover{border-color:var(--ink);background:var(--surface)}
+.lk-pick__ic{
+  flex:0 0 auto;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--surface-2);color:var(--ink-2);
+  transition:background .16s,color .16s;
+}
+.lk-pick__i:hover .lk-pick__ic{background:var(--ink);color:var(--bg)}
+.lk-pick__t{display:flex;flex-direction:column;gap:4px;min-width:0}
 .lk-pick__i b{font-size:15px;font-weight:600}
-.lk-pick__i span{font-size:13px;color:var(--ink-3)}
+.lk-pick__i .lk-pick__t span{font-size:13px;color:var(--ink-3)}
 
 .lk-ways{display:flex;flex-direction:column;margin-top:14px}
 .lk-ways__i{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
