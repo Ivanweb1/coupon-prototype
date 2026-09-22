@@ -284,15 +284,41 @@ function head(title, actions) {
     </div></div>`;
 }
 
+/* Четыре показателя клиента — не четыре независимых числа, а одна цепочка:
+   купон показали в ленте, его открыли, забрали код, перешли к компании.
+   Каждый следующий шаг — подмножество предыдущего, но по четырём
+   одинаковым карточкам этого не видно, и 84 890 рядом с 903 читаются как
+   несвязанные величины.
+
+   Варианты показа переключаются адресом, как варианты карточки и попапа
+   на публичке:
+
+     ?kpi=flat  — как сейчас, четыре равные карточки (по умолчанию);
+     ?kpi=steps — между карточками стрелка: видно цепочку, цифр не прибавилось;
+     ?kpi=conv  — в стрелке процент перехода: видно, где теряем.
+
+   Графика нет ни в одном: Виль просил не перегружать разделы с аналитикой,
+   и это остаётся рядом плиток, а не диаграммой. */
+const KPI_MODE = ["steps", "conv"].indexOf(P.get("kpi")) >= 0 ? P.get("kpi") : "flat";
+
 /* note — короткая строка данных под числом: срок, период, остаток.
    Пояснять, что показатель означает, в интерфейсе не нужно. */
-function kpi(items) {
-  return `<div class="lk-kpi">${items.map(i => `
-    <div class="lk-kpi__c">
+function kpi(items, opts) {
+  const funnel = !!(opts && opts.funnel) && KPI_MODE !== "flat";
+  const cells = items.map((i, n) => {
+    /* Доля считается от предыдущего шага, а не от первого: падение слишком
+       крутое, и от первого последние два шага дали бы 2,8% и 1,1% — числа,
+       по которым ничего не решишь. */
+    const prev = n > 0 ? items[n - 1].raw : null;
+    const step = funnel && prev ? Math.round(i.raw / prev * 100) + "%" : "";
+    return `<div class="lk-kpi__c">
+      ${funnel && n > 0 ? `<span class="lk-kpi__step">${KPI_MODE === "conv" ? step : ""}</span>` : ""}
       <div class="lk-kpi__l">${i.label}</div>
       <div class="lk-kpi__v">${i.value}</div>
       ${i.note ? `<div class="lk-kpi__h">${i.note}</div>` : ""}
-    </div>`).join("")}</div>`;
+    </div>`;
+  }).join("");
+  return `<div class="lk-kpi${funnel ? " lk-kpi--funnel" : ""}">${cells}</div>`;
 }
 
 function status(id) {
@@ -692,7 +718,7 @@ VIEWS["client:dashboard"] = () => {
       "Привлекай тех, кто уже ищет, что купить",
       `<a class="btn lk-head__more" href="${href("stats")}" data-go="stats">Подробнее</a>`
     )
-    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
+    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)), raw: sum(m.id) })), { funnel: true })
     + `<div class="lk-pair">
       ${panel("Опубликовано сейчас", live.length
         ? table(
@@ -1552,7 +1578,7 @@ VIEWS["client:stats"] = () => {
     </tr>`).join("");
 
   return head("Статистика")
-    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
+    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)), raw: sum(m.id) })), { funnel: true })
     + panel("По купонам",
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
                { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }], rows));
@@ -1660,7 +1686,7 @@ VIEWS["client:coupon"] = () => {
         ? panel("Причина отклонения", `<p class="lk-reason">${c.reject}</p>`)
         : "")
     + (c.shown
-        ? kpi(LK_METRICS.map(m => ({ label: m.label, value: num(c[m.id]) })))
+        ? kpi(LK_METRICS.map(m => ({ label: m.label, value: num(c[m.id]), raw: c[m.id] })), { funnel: true })
         : "")
     + couponForm(c.l1, c, !editable);
 };
