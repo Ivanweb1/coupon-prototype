@@ -226,7 +226,12 @@
   background:var(--ink-4);
 }
 .lk-st--live::before{background:var(--ink)}
-.lk-st--moderation::before{background:var(--ink-3);box-shadow:0 0 0 3px var(--surface-2)}
+.lk-st--moderation::before,
+.lk-st--wait::before{background:var(--ink-3);box-shadow:0 0 0 3px var(--surface-2)}
+/* Состояния не только у купона: у выплаты и у начисленного бонуса они
+   те же по смыслу — сработало, ждёт, вышло из игры. Общие модификаторы,
+   чтобы не заводить третий словарь статусов на те же три состояния. */
+.lk-st--ok::before{background:var(--ink)}
 .lk-st--draft::before{background:none;border:1.5px solid var(--ink-4)}
 .lk-st--rejected::before{background:none;border:1.5px solid var(--ink);position:relative}
 .lk-st--done::before{background:var(--surface-3)}
