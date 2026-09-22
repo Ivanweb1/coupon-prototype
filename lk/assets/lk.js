@@ -545,6 +545,7 @@ function openSurvey() {
     LK_BALANCE.bonuses += 700;
     renderChrome();
     try { localStorage.setItem("lk_survey", "done"); } catch (e) {}
+    hideSurveyPill();
     qs(".lk-modal__body", el).innerHTML = `
       <h3>Спасибо! Начислили 700 бонусов</h3>
       <p class="lk-modal__lead">Бонусы уже на балансе — ими можно оплатить часть следующего размещения.</p>
@@ -557,11 +558,27 @@ function openSurvey() {
 }
 
 /* При первом заходе в кабинет — приглашение пройти анкету (Дима, 14.09).
-   Показываем один раз на браузер, чтобы не мешать работе. */
+   Крупной модалкой показываем ровно один раз на браузер, чтобы не мешать
+   работе. Дальше приглашение не пропадает совсем, а живёт свёрнутой
+   плашкой в углу: анкета — это 700 бонусов и точность подсказок, и терять
+   её из виду после одного «Позже» не за чем. */
 function maybeSurveyPrompt() {
   let seen = null;
   try { seen = localStorage.getItem("lk_survey"); } catch (e) { return; }
-  if (seen) return;
+  if (seen === "done") return;
+
+  /* Крестик на свёрнутой плашке прячет её до следующего захода в кабинет,
+     поэтому память об этом — на сессию, а не на браузер. */
+  let hidden = null;
+  try { hidden = sessionStorage.getItem("lk_survey_pill"); } catch (e) {}
+  if (hidden) return;
+
+  /* Модалку уже видели — дальше только плашка. Ею же встречаем и того, кто
+     в первый раз зашёл сразу во внутренний раздел по прямой ссылке:
+     перехватывать работу модалкой уместно на входе в кабинет, а не поверх
+     биллинга или конструктора. */
+  if (seen || state.view !== "dashboard") { showSurveyPill(); return; }
+
   try { localStorage.setItem("lk_survey", "shown"); } catch (e) {}
   const el = openModal(`
     <h3>Добро пожаловать в кабинет!</h3>
@@ -569,10 +586,46 @@ function maybeSurveyPrompt() {
     700 бонусов на оплату размещения, а подсказки в конструкторе станут точнее.
     Первый купон вы и так размещаете бесплатно.</p>
     <div class="lk-head__act" style="margin:16px 0 0">
-      <button class="btn btn--ghost" data-modal-close>Позже</button>
+      <button class="btn btn--ghost" data-survey-later>Позже</button>
       <button class="btn btn--solid" data-survey-open>Заполнить анкету</button>
     </div>`, { wide: true });
   qs("[data-survey-open]", el).onclick = openSurvey;
+  /* И «Позже», и крестик модалки сворачивают приглашение, а не прячут его:
+     оба — «не сейчас», а не «никогда». */
+  qs("[data-survey-later]", el).onclick = collapseSurvey;
+  qs(".lk-modal__x", el).onclick = collapseSurvey;
+}
+
+function collapseSurvey() {
+  closeModal();
+  showSurveyPill();
+}
+
+function hideSurveyPill() {
+  const pill = document.getElementById("lkSurveyPill");
+  if (pill) pill.remove();
+}
+
+/* Свёрнутое приглашение: висит во всех разделах кабинета, пока анкету не
+   заполнили. Клик по плашке открывает анкету, крестик убирает её до
+   следующего захода. */
+function showSurveyPill() {
+  if (document.getElementById("lkSurveyPill")) return;
+  const el = document.createElement("div");
+  el.id = "lkSurveyPill";
+  el.className = "lk-pill";
+  el.innerHTML = `
+    <button type="button" class="lk-pill__body" data-pill-open>
+      <b>Анкета о компании</b>
+      <span>+700 бонусов · около 5 минут</span>
+    </button>
+    <button type="button" class="lk-pill__x" data-pill-hide aria-label="Скрыть до следующего захода"></button>`;
+  document.body.appendChild(el);
+  qs("[data-pill-open]", el).onclick = openSurvey;
+  qs("[data-pill-hide]", el).onclick = () => {
+    try { sessionStorage.setItem("lk_survey_pill", "hidden"); } catch (e) {}
+    hideSurveyPill();
+  };
 }
 
 /* Где размещён купон. Городов у купона может быть несколько (city_ids[]),
@@ -1984,7 +2037,9 @@ function render() {
     c.status = "draft";
     render();
   });
-  if (state.role === "client" && state.view === "dashboard") maybeSurveyPrompt();
+  /* Крупная модалка появляется только на дашборде — это вход в кабинет;
+     свёрнутая плашка дальше висит в любом разделе (см. maybeSurveyPrompt). */
+  if (state.role === "client") maybeSurveyPrompt();
 
   /* Внутренние переходы из карточек */
   qsa("[data-go]", host).forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });

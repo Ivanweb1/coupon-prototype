@@ -514,6 +514,47 @@
 .lk-t tr[data-client]:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
 
 /* --------------------------------------------------------------------------
+   Свёрнутое приглашение на анкету
+   --------------------------------------------------------------------------
+   Приглашение показывается модалкой один раз, но «Позже» не прячет его
+   насовсем: анкета — это 700 бонусов и точность подсказок в конструкторе,
+   и после одного нажатия она не должна исчезать из виду. Поэтому «Позже»
+   сворачивает приглашение в плашку у нижнего края — она висит во всех
+   разделах кабинета и не перекрывает работу. Крестик на плашке убирает её
+   до следующего захода: отказаться от анкеты навсегда нельзя, но и мозолить
+   глаза всю сессию она не будет.
+
+   Ниже модалки по слою (z-index 30 против 60): открытая анкета должна
+   перекрывать плашку, из которой её открыли.
+   -------------------------------------------------------------------------- */
+.lk-pill{
+  position:fixed;right:20px;bottom:20px;z-index:30;
+  display:flex;align-items:flex-start;
+  max-width:290px;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);
+  box-shadow:var(--shadow-2);
+}
+.lk-pill__body{
+  display:flex;flex-direction:column;gap:3px;text-align:left;
+  padding:13px 6px 13px 16px;
+}
+.lk-pill__body b{font-size:14px;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+.lk-pill__body span{font-size:12px;color:var(--ink-3)}
+.lk-pill__body:hover b{text-decoration:underline}
+.lk-pill__x{
+  flex:0 0 auto;width:28px;height:28px;margin:7px 7px 0 0;
+  border-radius:50%;display:grid;place-items:center;color:var(--ink-4);
+  transition:background .16s, color .16s;
+}
+.lk-pill__x::before{content:"✕";font-size:11px}
+.lk-pill__x:hover{background:var(--surface);color:var(--ink)}
+/* На телефоне плашка тянется во всю ширину: в углу она там перекрывала бы
+   кнопки таблиц, а места под аккуратный угол всё равно нет. */
+@media (max-width:560px){
+  .lk-pill{left:16px;right:16px;bottom:16px;max-width:none}
+}
+
+/* --------------------------------------------------------------------------
    Модалка кабинета. То же визуальное решение, что у попапа купона на
    публичке (.overlay/.modal__box в ../assets/style.css), но свой узел —
    в ЛК он нужен для коротких действий вроде запроса промокода.
