@@ -655,9 +655,8 @@ VIEWS["client:dashboard"] = () => {
 
     <div class="lk-panel lk-bal">
       <div class="lk-bal__part">
-        <div class="lk-bal__n"><span>Бонусы</span><b>${num(LK_BALANCE.bonuses)}</b></div>
-        <div class="lk-bal__n lk-bal__n--burn"><span>Скоро сгорят</span><b>${num(LK_BONUS_BURN_SOON.amount)}</b>
-          <em>до ${LK_BONUS_BURN_SOON.date}</em></div>
+        <div class="lk-bal__n"><span>Бонусы</span><b>${num(LK_BALANCE.bonuses)}</b>
+          <div class="lk-bal__burn"><b>${num(LK_BONUS_BURN_SOON.amount)}</b> сгорят ${LK_BONUS_BURN_SOON.date}</div></div>
         <button class="btn btn--ghost" data-bonus-ways>Получить бонусы</button>
       </div>
       <div class="lk-bal__part">

@@ -685,8 +685,18 @@
 .lk-bal__n{display:flex;flex-direction:column;gap:2px}
 .lk-bal__n span{font-size:13px;color:var(--ink-3)}
 .lk-bal__n b{font-size:26px;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.lk-bal__n em{font-style:normal;font-size:12px;color:var(--ink-3)}
-.lk-bal__n--burn span,.lk-bal__n--burn b{color:var(--warn)}
+/* Сгорающие бонусы — строкой под основной цифрой, а не отдельной такой
+   же по весу карточкой: это предупреждение при цифре, а не второй
+   показатель. Само число при этом набрано тем же кеглем, что и «Бонусы»
+   выше, — на глаз обе цифры должны читаться на одном уровне. */
+.lk-bal__burn{
+  display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;
+  margin-top:2px;font-size:13px;color:var(--warn);
+}
+.lk-bal__burn b{
+  font-size:26px;font-weight:600;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;color:var(--warn);
+}
 @media (max-width:900px){
   .lk-bal{grid-template-columns:1fr}
   .lk-bal__part + .lk-bal__part{border-left:0;border-top:1px solid var(--line)}
