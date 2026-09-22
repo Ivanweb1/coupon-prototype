@@ -71,15 +71,60 @@ function innDigitsNeeded() {
    Демо-триггер отказа — ИНН из одинаковых цифр (000000000 и т.п.):
    такой ИНН и в реальной проверке не пройдёт, а для показа это простой и
    предсказуемый способ переключиться на второй сценарий. */
+/* Что возвращает база по ИНН. В проде это СБИС или ДаДата; здесь —
+   правдоподобная заглушка, зависящая от типа организации: у ООО есть КПП,
+   у ИП и самозанятого его нет вовсе, и поле остаётся пустым не по ошибке,
+   а потому что такого реквизита у них не существует. */
+function lookupInn(digits) {
+  const ooo = reg.orgType === "ООО";
+  return ooo
+    ? [{
+        name: "ООО «Пример»",
+        kpp: "482601001",
+        legal: "398050, Липецкая обл, г Липецк, ул. Первомайская, д. 12",
+        post: "398050, Липецкая обл, г Липецк, ул. Первомайская, д. 12"
+      }, {
+        name: "ООО «Пример» — обособленное подразделение",
+        kpp: "482643001",
+        legal: "399050, Липецкая обл, г Грязи, ул. Советская, д. 4",
+        post: "399050, Липецкая обл, г Грязи, ул. Советская, д. 4"
+      }]
+    : [{
+        name: reg.orgType === "ИП" ? "ИП Москвичёв Антон Юрьевич" : "Москвичёв Антон Юрьевич",
+        kpp: "",
+        legal: "399050, Липецкая обл, г Грязи",
+        post: "399050, Липецкая обл, г Грязи"
+      }];
+}
+
+/* Подставляем выбранную организацию в реквизиты и раскрываем блок. */
+function applyOrg(org) {
+  qs("[data-reg-req]").hidden = false;
+  qs("[data-reg-name]").value = org.name;
+  qs("[data-reg-kpp]").value = org.kpp;
+  qs("[data-reg-addr-legal]").value = org.legal;
+  qs("[data-reg-addr-post]").value = org.post;
+  /* КПП есть только у юрлица: у ИП и самозанятого поле не пустое, а
+     неприменимое — блокируем, чтобы его не пытались заполнить. */
+  const kpp = qs("[data-reg-kpp]");
+  kpp.disabled = !org.kpp;
+  kpp.placeholder = org.kpp ? "482601001" : "у ИП и самозанятых КПП нет";
+  qs("[data-reg-fio]").focus();
+}
+
+/* Автозаполнение по ИНН и его отказ — ТЗ §4.3.1 п.3 и открытый вопрос
+   REG-01: при ошибке API ввод остаётся ручным, но модерация усиливается.
+   Демо-триггер отказа — ИНН из одинаковых цифр. */
 function checkInn() {
   const input = qs("[data-reg-inn]");
   const hint = qs("[data-reg-inn-hint]");
-  const nameField = qs("[data-reg-name]");
+  const foundBox = qs("[data-reg-found]");
   const digits = input.value.replace(/\D/g, "");
   const need = innDigitsNeeded();
 
   hint.hidden = false;
   hint.classList.remove("is-bad");
+  foundBox.hidden = true;
 
   if (digits.length !== need) {
     hint.textContent = `Для «${reg.orgType}» нужно ${need} цифр ИНН — сейчас введено ${digits.length}.`;
@@ -87,20 +132,38 @@ function checkInn() {
     return;
   }
 
-  const notFound = /^(\d)\1+$/.test(digits);
-  nameField.disabled = false;
-
-  if (notFound) {
+  if (/^(\d)\1+$/.test(digits)) {
+    /* База не ответила: реквизиты всё равно открываем, но пустыми —
+       иначе регистрация упирается в чужой сбой. */
     reg.manual = true;
-    nameField.value = "";
-    nameField.placeholder = "Не нашли — впишите название сами";
-    nameField.focus();
-    hint.textContent = "По этому ИНН ничего не нашли. Впишите название вручную — в этом случае модерация будет усиленной.";
+    applyOrg({ name: "", kpp: "", legal: "", post: "" });
+    qs("[data-reg-name]").focus();
+    hint.textContent = "По этому ИНН ничего не нашли. Заполните реквизиты вручную — в этом случае модерация будет усиленной.";
     hint.classList.add("is-bad");
-  } else {
-    reg.manual = false;
-    nameField.value = "ООО «Пример»";
-    hint.textContent = "Нашли по базе — при желании название можно поправить.";
+    return;
+  }
+
+  reg.manual = false;
+  const list = lookupInn(digits);
+  hint.textContent = list.length > 1
+    ? "Нашли несколько организаций с этим ИНН — выберите свою."
+    : "Нашли по базе. Реквизиты подставили, их можно поправить.";
+
+  qs(".reg__found", foundBox).innerHTML = list.map((o, i) => `
+    <button type="button" class="reg__found-i" data-reg-pick="${i}">
+      <b>${o.name}</b><span>${o.kpp ? "КПП " + o.kpp + " · " : ""}${o.legal}</span>
+    </button>`).join("");
+  qsa("[data-reg-pick]", foundBox).forEach(b => b.onclick = () => {
+    qsa("[data-reg-pick]", foundBox).forEach(x => x.classList.toggle("is-on", x === b));
+    applyOrg(list[Number(b.dataset.regPick)]);
+  });
+  foundBox.hidden = false;
+
+  /* Одна организация — выбирать не из чего, подставляем сразу, но
+     карточку показываем: человек должен видеть, что именно взяли. */
+  if (list.length === 1) {
+    qs("[data-reg-pick]", foundBox).classList.add("is-on");
+    applyOrg(list[0]);
   }
 }
 
@@ -136,6 +199,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ? "10 цифр — как у ООО"
       : "12 цифр — как у ИП и самозанятых";
     qs("[data-reg-inn-hint]").hidden = true;
+    /* Сменили тип — прежняя находка больше не про эту организацию:
+       и число цифр ИНН другое, и КПП то появляется, то исчезает. */
+    qs("[data-reg-found]").hidden = true;
+    qs("[data-reg-req]").hidden = true;
   });
 
   qs("[data-reg-inn-check]").onclick = checkInn;

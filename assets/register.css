@@ -99,6 +99,38 @@
 .reg__done-list{margin:18px 0 22px;padding:0 0 0 18px;display:flex;flex-direction:column;gap:9px}
 .reg__done-list li{font-size:13.5px;line-height:1.55;color:var(--ink-2)}
 
+/* --------------------------------------------------------------------------
+   Найденное по ИНН
+   --------------------------------------------------------------------------
+   Организацию выбирают явно, а не подставляют молча: по одному ИНН бывает
+   и головная компания, и обособленное подразделение. Поэтому не строка
+   текста, а кнопка с названием и реквизитами под ним — чтобы было видно,
+   чем варианты отличаются. */
+.reg__found{display:flex;flex-direction:column;gap:8px}
+.reg__found-i{
+  display:flex;flex-direction:column;gap:3px;text-align:left;
+  padding:12px 14px;border:1px solid var(--line-strong);border-radius:var(--r-sm);
+  background:var(--bg);
+  transition:border-color .16s,background .16s;
+}
+.reg__found-i:hover{border-color:var(--ink-3);background:var(--surface)}
+.reg__found-i.is-on{border-color:var(--ink);background:var(--surface)}
+.reg__found-i b{font-size:14px;font-weight:600;color:var(--ink)}
+.reg__found-i span{font-size:12.5px;line-height:1.45;color:var(--ink-3)}
+
+/* Телефон с кодом страны: код — не поле ввода, а подпись слева, иначе
+   его начинают стирать вместе с номером. */
+.reg__tel{display:flex;align-items:stretch}
+.reg__tel-cc{
+  display:flex;align-items:center;gap:6px;flex:0 0 auto;
+  padding:0 10px;
+  border:1px solid var(--line-strong);border-right:0;
+  border-radius:var(--r-sm) 0 0 var(--r-sm);
+  background:var(--surface);
+  font-size:14px;color:var(--ink-2);white-space:nowrap;
+}
+.reg__tel .reg__i{border-radius:0 var(--r-sm) var(--r-sm) 0;min-width:0}
+
 /* Регистрация после созвона 14.09: география и адреса */
 [data-geo-pane][hidden]{display:none}
 .reg__addrs{display:flex;flex-direction:column;gap:8px}
