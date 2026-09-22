@@ -198,6 +198,10 @@
   font-variant-numeric:tabular-nums;
   box-shadow:0 4px 14px -6px rgba(0,0,0,.45);
 }
+/* Знак сервиса уходит в правый нижний угол — там он и стоит на карточке
+   в ленте. Слева внизу теперь плашка выгоды, и вдвоём они налезали. */
+.lkd .lk-wm-corner{left:auto;right:10px}
+
 /* Подпись-заглушка уходит в центр картинки: снизу теперь стоит плашка
    выгоды, и на прежнем месте они налезали друг на друга. */
 .lkd .lk-prev__hold{
@@ -216,11 +220,31 @@
 }
 .lkd .lk-prev__near.is-empty{color:var(--ink-4)}
 
-.lkd .lk-prev__body{padding:10px 2px 0;display:flex;flex-direction:column;gap:8px}
+/* Столбик метрик справа на фото — по .dz3 .card__stats в design-3-cards.css */
+.lkd .lk-prev__stats{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:11px 5px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.93);
+  box-shadow:0 4px 14px -6px rgba(0,0,0,.4);
+  pointer-events:none;
+}
+.lkd .lk-prev__stat{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  min-width:30px;padding:2px;color:var(--ink-2);line-height:1;
+}
+.lkd .lk-prev__stat i{display:flex}
+.lkd .lk-prev__stat b{
+  font-size:10px;font-weight:600;letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;color:var(--ink-3);
+}
+
+.lkd .lk-prev__body{padding:10px 2px 0;display:flex;flex-direction:column;gap:6px}
+/* Заголовок в ленте — ровно одна строка (dz3.cards-wb .card__title) */
 .lkd .lk-prev__title{
   font-size:13.5px;font-weight:500;line-height:1.32;letter-spacing:-.005em;
   min-height:0;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
 }
 .lkd .lk-prev__meta{
   display:flex;align-items:center;gap:8px;min-width:0;margin:0;
@@ -230,10 +254,12 @@
   font-weight:500;color:var(--ink-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-/* Кнопки — часть картинки, а не управление: превью ничего не делает */
+/* Кнопки — часть картинки, а не управление: превью ничего не делает.
+   Ширина пополам, как в ленте (.dz3 .card__actions .btn{flex:1 1 0}):
+   было 60 на 40 в пользу «Подробнее», Коля попросил поровну — коду
+   маркетплейса нужно место, там бывает 8–12 знаков. */
 .lkd .lk-prev__acts{display:flex;gap:8px;pointer-events:none}
-.lkd .lk-prev__acts .btn{height:34px;padding:0 12px;font-size:13px}
-.lkd .lk-prev__acts .btn--wide{flex:1}
+.lkd .lk-prev__acts .btn{flex:1 1 0;min-width:0;padding:0 10px}
 
 /* Прогресс заполнения — своей плашкой над превью, не внутри него */
 .lkd .lk-prog__box{padding:16px 18px}

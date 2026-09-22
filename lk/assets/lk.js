@@ -38,7 +38,15 @@ const ICON = {
   gift:   nav('<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5.2 12.5V19a1 1 0 0 0 1 1h11.6a1 1 0 0 0 1-1v-6.5"/><path d="M12 8.5V20"/><path d="M12 8.5S10.9 4 8.9 4a2.25 2.25 0 0 0 0 4.5H12Z"/><path d="M12 8.5S13.1 4 15.1 4a2.25 2.25 0 0 1 0 4.5H12Z"/>'),
   wallet: nav('<path d="M19.5 8.5V7a2 2 0 0 0-2-2H5.5a2.5 2.5 0 0 0 0 5h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-12a2.5 2.5 0 0 1-2.5-2.5v-9"/><circle cx="16.5" cy="14.5" r="1.1"/>'),
   user:   nav('<circle cx="12" cy="8" r="3.6"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/>'),
-  exit:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>'
+  exit:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>',
+
+  /* Столбик метрик на карточке в ленте — те же четыре знака, что в
+     assets/app.js. Превью в мастере показывает будущий купон глазами
+     посетителя, значит и столбик на нём должен быть тот же. */
+  eye:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>',
+  used:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.2 5.2L20 7"/></svg>',
+  copy:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
+  share:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg>'
 };
 
 function initIcons(root = document) {
@@ -1202,6 +1210,16 @@ function couponForm(l1, c, locked) {
               isMarket ? (v.market || LK_MARKETS[0]) : (cities[0] || "Город не выбран")}</span>
             <span class="lk-prev__erid">Реклама · erid: ${clean(v.erid) || "2Vt…"}</span>
             <span class="lk-prev__badge" id="pvVal">${v.value || "−30%"}</span>
+            <!-- Столбик метрик — как на карточке в ленте: просмотры,
+                 «воспользовались», копирование кода и «поделиться». У
+                 нового купона счётчики нулевые, и это правда: он ещё не
+                 показывался. Значки не нажимаются, это часть картинки. -->
+            <div class="lk-prev__stats" aria-hidden="true">
+              <span class="lk-prev__stat"><i data-icon="eye"></i><b>${c ? num(c.opened) : 0}</b></span>
+              <span class="lk-prev__stat"><i data-icon="used"></i><b>${c ? num(c.taken) : 0}</b></span>
+              <span class="lk-prev__stat"><i data-icon="copy"></i></span>
+              <span class="lk-prev__stat"><i data-icon="share"></i></span>
+            </div>
             <span class="lk-prev__hold">Изображение — последним шагом</span>
             ${wm}
           </div>
