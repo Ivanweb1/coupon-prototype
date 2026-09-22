@@ -55,6 +55,27 @@ function initIcons(root = document) {
   });
 }
 
+/* Фирменные цвета площадок — те же, что в assets/app.js: на карточке в
+   ленте название маркетплейса стоит плашкой в его собственном цвете, и в
+   превью мастера оно должно выглядеть так же. */
+const LK_MP_COLOR = {
+  "Wildberries":   "#CB11AB",
+  "Ozon":          "#005BFF",
+  "Яндекс Маркет": "#FF5226",
+  "М.Видео":       "#E30613"
+};
+
+/* Плашка в углу карточки. У регионального купона там не город, а время
+   ходьбы до точки — сколько идти конкретному посетителю, поэтому в
+   превью это образец, а не настоящее число. У маркетплейсного расстояния
+   нет вовсе: купон действует в корзине, и вместо минут стоит площадка. */
+const PV_SAMPLE_DIST = "5 мин";
+function pvNearHTML(market) {
+  return market
+    ? `<span class="mp-name" style="--mp:${LK_MP_COLOR[market] || "#1B1B1B"}">${market}</span>`
+    : PV_SAMPLE_DIST;
+}
+
 const num = n => n.toLocaleString("ru-RU");
 const rub = n => n.toLocaleString("ru-RU") + " ₽";
 
@@ -1206,8 +1227,8 @@ function couponForm(l1, c, locked) {
              Кнопки внизу не нажимаются, это часть картинки. -->
         <div class="lk-prev__card">
           <div class="lk-prev__media${mediaCls}" data-pv-media>
-            <span class="lk-prev__near" data-pv-near>${
-              isMarket ? (v.market || LK_MARKETS[0]) : (cities[0] || "Город не выбран")}</span>
+            <span class="lk-prev__near${isMarket ? " lk-prev__near--mp" : ""}" data-pv-near>${
+              pvNearHTML(isMarket ? (v.market || LK_MARKETS[0]) : "")}</span>
             <span class="lk-prev__erid">Реклама · erid: ${clean(v.erid) || "2Vt…"}</span>
             <span class="lk-prev__badge" id="pvVal">${v.value || "−30%"}</span>
             <!-- Столбик метрик — как на карточке в ленте: просмотры,
@@ -1334,12 +1355,13 @@ function initCouponBuilder(host) {
     qsa("[data-addr-row]", form).forEach(r => { r.hidden = cs.indexOf(r.dataset.addrCity) === -1; });
 
     /* Плашка в углу картинки — то же, что на карточке в ленте: у
-       регионального купона город, у маркетплейсного площадка. Срок и
-       адреса в превью не показываем: на настоящей карточке их нет. */
+       регионального купона время ходьбы до точки, у маркетплейсного
+       площадка. Город, срок и адреса в превью не показываем: на настоящей
+       карточке их нет. */
     if (pvNear) {
       const mk = isMarket && f("market") ? f("market").value : "";
-      pvNear.textContent = mk || cs[0] || "Город не выбран";
-      pvNear.classList.toggle("is-empty", !mk && !cs.length);
+      pvNear.innerHTML = pvNearHTML(mk);
+      pvNear.classList.toggle("lk-prev__near--mp", !!mk);
     }
 
     if (!img) return;

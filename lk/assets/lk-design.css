@@ -209,16 +209,43 @@
   padding:0 14px;line-height:1.4;
 }
 
-/* Плашка в углу: город у регионального купона, площадка у маркетплейсного */
+/* Плашка в углу. У регионального купона — время ходьбы до точки, белым
+   чипом (.card__near в style.css). У маркетплейсного расстояния нет:
+   вместо минут название площадки её фирменным цветом, и белый чип под
+   ним убирается — цвет площадки сам отделяет плашку от снимка
+   (.dz3 .card__near--mp в design-3-cards.css). */
 .lkd .lk-prev__near{
   position:absolute;top:10px;left:10px;z-index:2;
   display:inline-flex;align-items:center;max-width:calc(100% - 96px);
   padding:4px 9px;border-radius:var(--r-pill);
-  background:rgba(255,255,255,.88);
+  background:rgba(255,255,255,.86);
   font-size:11px;font-weight:500;color:var(--ink-2);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.lkd .lk-prev__near.is-empty{color:var(--ink-4)}
+.lkd .lk-prev__near--mp{
+  background:none;padding:0;border-radius:0;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.35));
+}
+.lkd .mp-name{
+  display:inline-flex;align-items:center;
+  padding:0 8px;height:20px;border-radius:var(--r-pill);
+  background:var(--mp,#1B1B1B);color:#fff;
+  font-size:10.5px;font-weight:700;letter-spacing:.01em;white-space:nowrap;
+}
+
+/* Метка erid — не плашка, а почти невидимая подпись. Вилл: «я хочу его
+   не видеть, а я его вижу. Смешай серый, зелёный и синий и высветли —
+   должен получиться цвет пыли». Значения из design-3-cards.css: цвет
+   фиксированный, тень оставлена намеренно, иначе на светлом снимке
+   маркировка пропадает совсем, а она обязана оставаться различимой. */
+.lkd .lk-prev__erid{
+  top:8px;right:8px;
+  background:none;padding:0;border-radius:0;max-width:calc(100% - 96px);
+  color:#B9C0BE;opacity:.5;
+  text-shadow:0 1px 2px rgba(0,0,0,.30);
+  font-size:10px;line-height:1.3;letter-spacing:.01em;
+  pointer-events:none;
+}
 
 /* --------------------------------------------------------------------------
    Правая колонка мастера не должна обрезаться
