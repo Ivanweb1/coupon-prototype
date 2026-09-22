@@ -98,12 +98,13 @@
 .dz3 .tag--featured:hover > [data-icon]:not(.chev) svg,
 .dz3 .dd--l1.is-open .tag--featured > [data-icon]:not(.chev) svg{color:var(--brand)}
 
-/* Значок ниши: белый кружок с красным знаком, в выбранном состоянии
-   инвертируется вместе с кнопкой. Цвета задаёт app.js, здесь — обводка,
-   иначе белый кружок теряется на белой кнопке. */
-.dz3 .tag--niche .tag__ic{box-shadow:inset 0 0 0 1px var(--line-strong)}
+/* Значок ниши: полупрозрачный серый кружок с красным знаком, в выбранном
+   состоянии инвертируется вместе с кнопкой. Цвета задаёт app.js. Обводки
+   нет (правка Ивана 22.09.2026) — круг и контур вокруг него давали на
+   кнопке два контура подряд. */
+.dz3 .tag--niche .tag__ic{box-shadow:none}
 .dz3 .tag--niche.is-active .tag__ic{background:rgba(255,255,255,.18);color:#fff;box-shadow:none}
-.dz3.cats-b .tag--niche .tag__ic{box-shadow:0 0 0 1px var(--line-strong), 0 0 0 3px #fff, 0 0 0 5px transparent}
+.dz3.cats-b .tag--niche .tag__ic{box-shadow:none}
 
 /* «Рядом со мной» — единственная кнопка ряда, которая сразу красная:
    это не ниша, а действие. Инверсия у неё зеркальная. */
