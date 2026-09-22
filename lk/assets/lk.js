@@ -1918,11 +1918,15 @@ function openCodeRequestModal() {
     const min = Math.max(1, Math.ceil((wait - Date.now()) / 60000));
     openModal(`
       <h3>Пока нельзя</h3>
-      <p class="lk-note">Антифрод-лимит — не чаще ${LK_CODE_LIMITS.perHour}
+      <!-- Подводка набрана тем же классом, что в остальных модалках, а
+           единственная кнопка сплошная — как «Понятно» в «Заявка принята»
+           и «Отлично» в «Спасибо». Одна и та же кнопка, закрывающая
+           модалку, выглядела в двух местах по-разному. -->
+      <p class="lk-modal__lead">Антифрод-лимит — не чаще ${LK_CODE_LIMITS.perHour}
       нового кода в час. Следующий запрос будет доступен примерно через
       ${min} мин.</p>
       <div class="lk-head__act" style="margin-top:18px">
-        <button class="btn btn--ghost" type="button" data-modal-close>Понятно</button>
+        <button class="btn btn--solid" type="button" data-modal-close>Понятно</button>
       </div>`);
     return;
   }
