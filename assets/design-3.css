@@ -112,6 +112,20 @@
 .dz3 .tag--featured:hover > [data-icon]:not(.chev) svg,
 .dz3 .dd--l1.is-open .tag--featured > [data-icon]:not(.chev) svg{color:var(--brand)}
 
+/* Круги у закреплённых разделов оставались сиреневым и синим — последние
+   цветные пятна в строке категорий, ради которых и затевалась моно-правка
+   21.09.2026. Приводим разделы к виду ниш: круг #F9F9F9, знак красный
+   (правка Ивана 24.09.2026). Цвета вариантов А, Б и В из design.css
+   перекрываем здесь, чтобы index-design-2 остался эталоном «как было». */
+.dz3 .tags-row__main .dd--l1[data-l1="marketplace"] .tag > [data-icon]:not(.chev),
+.dz3 .tags-row__main .dd--l1[data-l1="for-business"] .tag > [data-icon]:not(.chev){
+  background:#F9F9F9;color:var(--brand);
+}
+.dz3 .tags-row__main .dd--l1[data-l1="marketplace"] .tag > [data-icon]:not(.chev) svg,
+.dz3 .tags-row__main .dd--l1[data-l1="for-business"] .tag > [data-icon]:not(.chev) svg{
+  color:var(--brand);
+}
+
 /* Значок ниши: полупрозрачный серый кружок с красным знаком, в выбранном
    состоянии инвертируется вместе с кнопкой. Цвета задаёт app.js. Обводки
    нет (правка Ивана 22.09.2026) — круг и контур вокруг него давали на
