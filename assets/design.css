@@ -660,17 +660,44 @@ body.dz:not(.quick-left) .quick__media{
     var(--brand-50);
 }
 body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;aspect-ratio:auto}
-/* Телефон: фото во всю ширину попапа с пропорцией 4:5, как на странице
-   купона (Иван 25.09) — по бокам больше нет пустых полей. Прокручивается
-   весь попап, а не только текстовая часть под фото. */
+/* Телефон (Иван 25.09): фото во всю ширину съедало экран, а по центру с
+   полями по бокам — пустело. Теперь фото небольшое слева, справа от него
+   раздел, ниша и заголовок; промокод с кнопками и всё остальное — ниже во
+   всю ширину. Колонку текста раскладываем прямо в сетку попапа
+   (display:contents), без второй вёрстки попапа под телефон. */
 @media (max-width:820px){
-  body.dz:not(.quick-left) .quick{overflow-y:auto;overscroll-behavior:contain}
-  body.dz:not(.quick-left) .quick__side{flex:0 0 auto;overflow:visible}
-  body.dz:not(.quick-left) .quick__media{
-    flex:0 0 auto;display:block;height:auto;min-height:0;padding:10px;border-bottom:0;
+  body.dz:not(.quick-left) .quick{
+    display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);
+    grid-template-rows:auto auto 1fr;align-content:start;
+    column-gap:14px;row-gap:12px;
+    padding:14px 16px 18px;overflow-y:auto;overscroll-behavior:contain;
   }
-  body.dz:not(.quick-left) .quick__photo{width:100%;height:auto;max-width:none;aspect-ratio:4/5}
-  body.dz:not(.quick-left) .quick__photo .erid-stamp{left:14px;right:auto}
+  body.dz:not(.quick-left) .quick__media{
+    grid-column:1;grid-row:1 / 4;align-self:start;
+    display:block;height:auto;min-height:0;padding:0;border:0;background:none;
+  }
+  body.dz:not(.quick-left) .quick__photo{
+    width:100%;height:auto;max-width:none;aspect-ratio:4/5;border-radius:16px;
+  }
+  body.dz:not(.quick-left) .quick__side{display:contents}
+  body.dz:not(.quick-left) .quick__eyebrow{grid-column:2;grid-row:1;padding-right:34px;gap:6px}
+  /* В узкой колонке точки-разделители повисали в конце строк — вместо них
+     каждое значение отдельной серой плашкой, они переносятся чисто */
+  body.dz:not(.quick-left) .quick .quick__eyebrow .dot{display:none}
+  body.dz:not(.quick-left) .quick .quick__eyebrow > span:not(:first-child){
+    height:24px;padding:0 9px;border-radius:var(--r-pill);
+    background:var(--surface);color:var(--ink-2);font-size:12px;white-space:nowrap;
+  }
+  body.dz:not(.quick-left) .quick .company__text{flex:1 1 0}
+  body.dz:not(.quick-left) .quick h3{grid-column:2;grid-row:2;font-size:18px;line-height:1.2;margin:0}
+  body.dz:not(.quick-left) .quick__side > :not(.quick__eyebrow):not(h3){grid-column:1 / -1;min-width:0}
+  body.dz:not(.quick-left) .quick__close{top:10px;right:10px;width:32px;height:32px}
+  /* подписи на маленьком фото — мельче */
+  body.dz:not(.quick-left) .quick .quick__photo .quick__value{font-size:18px;left:8px;bottom:8px;white-space:nowrap;padding:5px 10px 6px}
+  body.dz:not(.quick-left) .quick__photo .erid-stamp{font-size:8px;top:6px;left:8px;right:auto;max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+@media (max-width:400px){
+  body.dz:not(.quick-left) .quick .quick__photo .quick__value{font-size:14px;left:6px;bottom:6px;padding:4px 8px 5px}
 }
 
 .dz .quick__side{padding:22px 26px 18px;gap:12px}
@@ -737,6 +764,16 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz .reveal.is-open .reveal__done{display:none}
 .dz .reveal.is-open [data-share]{background:var(--brand);border-color:var(--brand);color:#fff}
 .dz .reveal.is-open [data-share]:hover{background:var(--brand-600);border-color:var(--brand-600)}
+
+/* Попап на телефоне: «Забрать купон» и «Поделиться» — одной строкой,
+   поровну (Иван 25.09). Раньше вторая кнопка переносилась под первую. */
+@media (max-width:820px){
+  .dz .quick .reveal__actions{width:100%;flex-wrap:nowrap}
+  .dz .quick .reveal__actions .btn{flex:1 1 0;min-width:0;padding:0 10px;gap:6px}
+}
+@media (max-width:360px){
+  .dz .quick .reveal__actions .btn{font-size:13px;padding:0 6px}
+}
 
 /* ==========================================================================
    Блок 5. Выбор города
@@ -911,7 +948,7 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
     width:100%;margin-left:0;flex-wrap:wrap;
     padding-top:10px;border-top:1px dashed var(--line);
   }
-  .dz .quick .company__phone{min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .dz .quick .company__phone{flex:none}
 }
 
 /* Правки 17.09.2026 (вариант side и общие для поп-апа) ------------------ */
