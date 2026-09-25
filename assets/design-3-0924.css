@@ -261,3 +261,26 @@
 }
 .dz3 .cpd-lead__more:hover{text-decoration:underline;text-underline-offset:3px}
 .dz3 .cpd-lead__more[hidden]{display:none}
+
+/* «Компания в сети» на узких телефонах (до ~400px): в двух колонках
+   длинные значения вроде «rutube.ru/example» не помещались и вылезали
+   поверх соседней карточки, а не переносились и не обрезались — грид
+   давал карточке ширину, но сам текст внутри неё не сжимался до неё
+   (min-width:auto у флекс-элемента). Обрезаем многоточием: значение
+   короче ссылки — приемлемо, а наползающий текст на соседа — нет. */
+/* <b> обёрткой значения — только для точечной обрезки ниже, само по
+   себе оно не должно ничего утяжелять (родитель уже font-weight:600) */
+.dz3 .cpd-contact__v{font-weight:inherit}
+/* Текстовый столбик карточки — контентной ширины (align-items:flex-start
+   у .cpd-contact, чтобы иконка не растягивалась). Из-за этого ему нечего
+   было обрезать: box был ровно по содержимому. stretch отдаёт ему всю
+   ширину карточки, обрезка ниже начинает работать по делу. */
+.dz3 .cpd-contact > span:last-child{align-self:stretch}
+@media (max-width:400px){
+  .dz3 .cpd-contact,
+  .dz3 .cpd-contact > span:last-child{min-width:0}
+  .dz3 .cpd-contact__v{
+    display:block;min-width:0;max-width:100%;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+}

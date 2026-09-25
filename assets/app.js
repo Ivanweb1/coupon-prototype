@@ -2141,7 +2141,7 @@ function renderCouponDesign() {
         ${contacts.map(x => `
           <a class="soc cpd-contact" href="${x.href}" title="${x.k}">
             ${x.ic}
-            <span><small>${x.k}</small>${x.v}</span>
+            <span><small>${x.k}</small><b class="cpd-contact__v">${x.v}</b></span>
           </a>`).join("")}
       </div>
     </div>`;

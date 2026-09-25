@@ -1169,6 +1169,13 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .cpd .company{flex-wrap:wrap}
   .cpd .socials--icons{margin-left:60px}
   .cpd .map--live{height:200px}
+}
+/* На самых узких телефонах (320–~380px) отступа в 60px под именем
+   компании вместе с четырьмя иконками 40px уже не хватает — строка с
+   иконками начинала вылезать за карточку. Ниже этого порога выравнивание
+   под имя отменяем: строка встаёт от левого края, зато вся видна. */
+@media (max-width:400px){
+  .cpd .socials--icons{margin-left:0}
   .cpd-about__main,.cpd-about__links{padding:18px;border-radius:22px}
 }
 
