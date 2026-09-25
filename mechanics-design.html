@@ -14,13 +14,14 @@
 <link rel="stylesheet" href="assets/design-3-cards.css?v=20260921a">
 <link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
 <link rel="stylesheet" href="assets/design-3-shell.css?v=20260921a">
-<link rel="stylesheet" href="assets/design-3-0924.css?v=20260925a">
+<link rel="stylesheet" href="assets/design-3-0924.css?v=20260925c">
 <link rel="icon" href="assets/brand/logo-red.png">
 <style>
   .mx-lead{max-width:62ch;margin:0 0 28px;color:var(--ink-2);font-size:15px;line-height:1.55}
   .mx-cap{display:block;margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
-  .mx-phone{max-width:360px}
-  .mx-phone .grid{grid-template-columns:1fr}
+  /* Точная сетка ленты на телефоне 390px: поля по 16px, две колонки */
+  .mx-phone{max-width:358px}
+  .mx-phone .grid{grid-template-columns:repeat(2,170px);gap:18px 18px}
   .mx-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
   @media (max-width:1100px){.mx-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
   @media (max-width:700px){.mx-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
@@ -55,8 +56,16 @@
     <div class="grid mx-row" id="mx"></div>
   </section>
 
+  <!-- Иван 25.09: «покажи, как будет, если длинное слово или несколько
+       слов — например „5-я чашка в подарок“» -->
   <section class="section">
-    <span class="mx-cap">Ширина телефона</span>
+    <div class="section__head"><h2>Длинный оффер</h2></div>
+    <p class="mx-lead">Два-три слова переносятся на вторую строку, билетик растёт вверх. Больше трёх строк текст не займёт — оффер длиннее стоит сократить в конструкторе.</p>
+    <div class="grid mx-row" id="mxLong"></div>
+  </section>
+
+  <section class="section">
+    <span class="mx-cap">Ширина телефона — две колонки по 170px, как в ленте</span>
     <div class="mx-phone"><div class="grid" id="mxPhone"></div></div>
   </section>
 </main>
@@ -65,7 +74,7 @@
 <div class="quick" id="quick"></div>
 
 <script src="assets/data.js?v=20260918y"></script>
-<script src="assets/app.js?v=20260925a"></script>
+<script src="assets/app.js?v=20260925c"></script>
 <script>
   /* Без initCommon: он спрашивает город на входе, а доске это не нужно */
   initCardStyle();
@@ -88,7 +97,7 @@
       value: value,
       title: "Кофе и десерт в любой день недели — " + label.toLowerCase(),
       dist: 740,
-      photo: null
+      photo: "assets/coupons/eda-cool.jpg"
     });
     const card = makeCard(c);
     qs(host).appendChild(card);
@@ -96,8 +105,16 @@
     media.style.background = 'url("assets/coupons/eda-cool.jpg") center/cover no-repeat';
     media.classList.add("has-photo");
   };
+  const LONG = [
+    ["Подарок",            "5-я чашка в подарок"],
+    ["Цена за второй",     "Второй кофе за 1 ₽"],
+    ["Бесплатно",          "Первый визит бесплатно"],
+    ["Длинное слово",      "Бесплатная диагностика"],
+    ["Самый длинный",      "Каждая пятая чашка кофе в подарок"]
+  ];
   MECHS.forEach((m, i) => put("#mx", m, i));
-  MECHS.forEach((m, i) => put("#mxPhone", m, i + 5));
+  LONG.forEach((m, i) => put("#mxLong", m, i + 5));
+  MECHS.concat(LONG).forEach((m, i) => put("#mxPhone", m, i + 10));
 </script>
 </body>
 </html>

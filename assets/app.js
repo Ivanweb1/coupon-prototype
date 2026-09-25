@@ -25,6 +25,12 @@ const ICON = {
      он многоцветный, поэтому подключается картинкой и гасится в серый
      фильтром, а не заливкой. */
   instagram: '<img class="soc-ic soc-ic--img" src="assets/brand/soc/instagram.svg" alt="" aria-hidden="true">',
+  /* Дзен и RuTube — для блока «Компания в сети» на странице купона
+     (Иван 25.09: восемь каналов вместо четырёх). Нарисованы тем же
+     шаблоном, что ВК и Telegram: наш серый круг, знак одним путём, цвет
+     бренда проступает под курсором. */
+  dzen: '<svg class="soc-ic" style="--soc-c:#000000" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect class="soc-ic__bg" width="24" height="24"/><path class="soc-ic__g" d="M12 4.6c.2 4 3.4 7.2 7.4 7.4-4 .2-7.2 3.4-7.4 7.4-.2-4-3.4-7.2-7.4-7.4 4-.2 7.2-3.4 7.4-7.4Z"/></svg>',
+  rutube: '<svg class="soc-ic" style="--soc-c:#100943" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect class="soc-ic__bg" width="24" height="24"/><path class="soc-ic__g" fill-rule="evenodd" d="M7.6 7.4h5.5c2 0 3.4 1.3 3.4 3.1 0 1.5-.9 2.6-2.3 2.9l2.5 3.4h-2.5l-2.2-3.2h-2.2v3.2H7.6V7.4Zm2.2 1.9v2.5h3.1c.8 0 1.3-.5 1.3-1.3 0-.7-.5-1.2-1.3-1.2H9.8Z"/><circle cx="17.6" cy="6.6" r="1.6" fill="#ED143B"/></svg>',
   site: '<svg class="soc-ic" style="--soc-c:#DD443C" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><rect class="soc-ic__bg" width="24" height="24"/><g class="soc-ic__s" fill="none" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="6.6"/><path d="M5.6 12h12.8M12 5.4c1.9 1.9 2.8 4.1 2.8 6.6s-.9 4.7-2.8 6.6c-1.9-1.9-2.8-4.1-2.8-6.6s.9-4.7 2.8-6.6Z"/></g></svg>',
   ok: '<svg class="soc-ic" style="--soc-c:#FF7700" width="18" height="18" viewBox="0 0 44 44" aria-hidden="true"><rect class="soc-ic__bg" width="44" height="44"/><path class="soc-ic__g" d="M26.868 19.87a6.85 6.85 0 0 1-2.229 1.492 6.88 6.88 0 0 1-7.5-1.492 6.87 6.87 0 0 1-1.875-3.51 6.84 6.84 0 0 1 .392-3.955 6.9 6.9 0 0 1 2.527-3.08 6.96 6.96 0 0 1 3.82-1.18 6.96 6.96 0 0 1 3.83 1.177 6.9 6.9 0 0 1 2.532 3.086 6.84 6.84 0 0 1 .389 3.962 6.87 6.87 0 0 1-1.886 3.512zm-4.877-7.978a3.15 3.15 0 0 0-2.21.917 3.105 3.105 0 0 0 0 4.397c.586.584 1.38.914 2.21.918a3.15 3.15 0 0 0 2.21-.918 3.1 3.1 0 0 0 .913-2.198c0-.824-.328-1.615-.914-2.199a3.15 3.15 0 0 0-2.209-.917m7.239 10.017 2.014 2.753a.315.315 0 0 1-.05.434 14.2 14.2 0 0 1-5.725 2.79l3.889 7.495a.316.316 0 0 1-.123.43.3.3 0 0 1-.16.041h-4.17a.32.32 0 0 1-.296-.19l-2.605-6.182-2.618 6.181a.32.32 0 0 1-.295.191H14.92c-.244 0-.386-.255-.283-.471l3.902-7.494c-2.054-.484-4.03-1.402-5.724-2.791a.32.32 0 0 1-.064-.434l2.027-2.74a.334.334 0 0 1 .475-.064 10.5 10.5 0 0 0 6.75 2.677c2.503 0 4.84-1.045 6.752-2.677.128-.127.359-.102.475.051"/></svg>',
   search: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>',
@@ -581,12 +587,13 @@ function cardHTML(c, compact) {
      «воспользовались» — числа, копирование и «поделиться» — действия.
      В рекомендациях столбика нет: там карточка — одна кнопка перехода. */
   /* Созвон 24.09.2026: «воспользовались» убрали — метрика неочевидная и
-     пестрит, массовому посетителю хватает просмотров. Кнопку копирования
-     тоже: «Забрать купон» теперь сам кладёт код в буфер, третья кнопка
-     с тем же действием лишняя. */
+     пестрит, массовому посетителю хватает просмотров. Копирование Иван
+     25.09 вернул: это быстрый путь «взял код и пошёл», без раскрытия
+     карточки. */
   const stats = dz3() && !compact ? `
       <div class="card__stats">
         <span class="card__stat" title="Просмотров: ${c.views}">${ICON.eye}<b>${fmtNum(c.views)}</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy title="Скопировать код">${ICON.copy}</button>
         <button type="button" class="card__stat card__stat--act" data-card-share title="Поделиться">${ICON.share}</button>
       </div>` : "";
 
@@ -598,6 +605,7 @@ function cardHTML(c, compact) {
   const codeOverlay = dz3() && !compact ? `
       <div class="card__code" data-card-code hidden aria-hidden="true">
         <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>` : "";
 
@@ -788,6 +796,7 @@ function makeCard(c, compact) {
       copyBtn.innerHTML = ICON.used;
       setTimeout(() => { copyBtn.classList.remove("is-done"); copyBtn.innerHTML = back; }, 1600);
     };
+    if (dz3()) { copyCode(c.code); done(); return; }
     if (navigator.clipboard) navigator.clipboard.writeText(c.code).then(done, done);
     else done();
   };
@@ -813,6 +822,8 @@ function showCardCode(card, c) {
   const box = qs("[data-card-code]", card);
   if (!box) return;
   qs(".card__code-val", box).textContent = c.code;
+  const d = qs(".card__code-date", box);
+  if (d) d.textContent = codeDate(c);
   box.hidden = false;
   box.removeAttribute("aria-hidden");
 }
@@ -1063,11 +1074,17 @@ function untilYear(c) {
   const mon = m ? MONTHS_GEN_RU.indexOf(m[1].toLowerCase()) : -1;
   return mon >= 0 && mon < now.getMonth() ? now.getFullYear() + 1 : now.getFullYear();
 }
-function untilLabel(c) {
-  return `Промокод · действует до <b class="quick__until">${untilEnd(c)}</b>`;
+/* Срок на плашке с кодом поверх снимка (правка Ивана 25.09): купон уносят
+   скриншотом, и на скриншоте должно быть видно, до какого числа он живёт */
+function codeDate(c) { return "действует до " + untilEnd(c) + " " + untilYear(c) + " года"; }
+/* Подтверждение после «Забрать купон» — мелкой строкой под кнопками, а не
+   между ними: кнопки остаются на своих местах (правка Ивана 25.09) */
+function revealNote(c) {
+  return `<div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>${untilEnd(c)} ${untilYear(c)} года</b></div>`;
 }
-function untilDone(c) {
-  return `Код скопирован. Успейте воспользоваться до <b>${untilEnd(c)} ${untilYear(c)}</b>`;
+function untilLabel(c) {
+  /* С годом — правка Ивана 25.09: «до 4 октября 2026 года» */
+  return `Промокод · действует до <b class="quick__until">${untilEnd(c)} ${untilYear(c)} года</b>`;
 }
 
 /* Телефон вместо ИНН в блоке компании: звонят бронировать и уточнять, а
@@ -1080,6 +1097,12 @@ function companyPhone(c) {
 function companyPhoneHTML(c) {
   const ph = companyPhone(c);
   return `<a class="company__phone" href="tel:${ph.replace(/[^+\d]/g, "")}">${ICON.phone}${ph}</a>`;
+}
+/* Телефон и режим работы — одной строкой (правка Ивана 25.09): в две
+   строки блок компании в попапе вырастал выше, чем нужно */
+function companyContactLine(c) {
+  return `<div class="company__line">${companyPhoneHTML(c)}${c.market ? ""
+    : `<i class="dot"></i><span class="company__hours" title="${companyHours(c)}">${companyHours(c)}</span>`}</div>`;
 }
 /* Часы работы точки — Коля: «чтобы не пришёл в 11 и не долбился в дверь» */
 const HOURS = ["Ежедневно 10:00–22:00", "Пн–Пт 9:00–20:00, Сб–Вс 10:00–18:00",
@@ -1129,10 +1152,11 @@ function quickHTML(c) {
           <div class="reveal__code">${c.code}</div>
           <div class="reveal__actions">
             <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
-            <div class="reveal__done">${dz3() ? untilDone(c) : "Код открыт — назовите его на кассе или сделайте скриншот"}</div>
+            ${dz3() ? "" : `<div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>`}
             <button type="button" class="btn btn--ghost btn--lg" data-share>${ICON.share} Поделиться</button>
           </div>
         </div>
+        ${dz3() ? revealNote(c) : ""}
       </div>`;
   /* Плашка с кодом поверх снимка — та же механика, что на карточке ленты
      (правка Ивана 22.09.2026): «Забрать купон» в попапе печатает код по
@@ -1141,6 +1165,7 @@ function quickHTML(c) {
   const codeOverlay = document.body.classList.contains("dz3")
     ? `<div class="card__code quick__code" data-quick-code hidden aria-hidden="true">
         <span class="card__code-val"></span>
+        <span class="card__code-date">${codeDate(c)}</span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>`
     : "";
@@ -1278,7 +1303,7 @@ function quickHTML(c) {
         <div class="company__text">
           <div class="company__name">${c.company}</div>
           ${dz3()
-            ? companyPhoneHTML(c) + (c.market ? "" : `<div class="company__req">${companyHours(c)}</div>`)
+            ? companyContactLine(c)
             : `<div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>`}
         </div>
         ${dz
@@ -1954,6 +1979,7 @@ function renderCouponDesign() {
              уносят вместе с логотипом. -->
         <div class="card__code quick__code" data-quick-code hidden aria-hidden="true">
           <span class="card__code-val"></span>
+          <span class="card__code-date">${codeDate(c)}</span>
           <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
         </div>
       </div>
@@ -1975,18 +2001,17 @@ function renderCouponDesign() {
           <div class="reveal__code">${c.code}</div>
           <div class="reveal__actions">
             <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
-            <div class="reveal__done">${untilDone(c)}</div>
             <button type="button" class="btn btn--ghost btn--lg" data-share>${ICON.share} Поделиться</button>
           </div>
         </div>
+        ${revealNote(c)}
       </div>
 
       <div class="company">
         ${companyLogo(c)}
         <div class="company__text">
           <div class="company__name">${c.company}</div>
-          ${companyPhoneHTML(c)}
-          ${c.market ? "" : `<div class="company__req">${companyHours(c)}</div>`}
+          ${companyContactLine(c)}
         </div>
         <!-- Как в попапе: сайт и четыре соцсети. Instagram убран на
              созвоне 24.09.2026. Какие показывать, компания отметит
@@ -2053,6 +2078,13 @@ function renderCouponDesign() {
     { ic: ICON.site, k: "Сайт", v: "example.ru", href: "#" },
     { ic: ICON.vk, k: "ВКонтакте", v: "vk.com/example", href: "#" },
     { ic: ICON.tg, k: "Telegram", v: "@example", href: "#" },
+    /* Восемь каналов вместо четырёх (Иван 25.09). Instagram и WhatsApp
+       сюда не входят — их убрали на созвоне 24.09. Какие показывать,
+       компания отметит в кабинете; здесь — все, чтобы видеть максимум. */
+    { ic: ICON.ok, k: "Одноклассники", v: "ok.ru/example", href: "#" },
+    { ic: ICON.max, k: "MAX", v: "max.ru/example", href: "#" },
+    { ic: ICON.dzen, k: "Дзен", v: "dzen.ru/example", href: "#" },
+    { ic: ICON.rutube, k: "RuTube", v: "rutube.ru/example", href: "#" },
     { ic: `<span class="cpd-ic">${ICON.phone}</span>`, k: "Телефон", v: companyPhone(c), href: "tel:" + companyPhone(c).replace(/[^+\d]/g, "") }
   ];
 

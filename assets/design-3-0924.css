@@ -18,15 +18,29 @@
    Белая плашка и круг остаются на ?value=plate и ?value=round. */
 .val-ticket .dz3.cards-wb .card__badge{
   left:10px;bottom:10px;
-  max-width:calc(100% - 64px);
+  /* справа остаётся место под фирменный знак в углу снимка */
+  max-width:calc(100% - 46px);
   padding:7px 16px 8px;border-radius:10px;
   background:var(--brand);color:#fff;
   font-size:16px;line-height:1.12;text-align:left;
-  white-space:normal;overflow-wrap:break-word;
+  /* Слова не рвём посреди: «бесплатн-о» на телефоне читалось как ошибка.
+     Перенос — только между словами. */
+  white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none;
 }
 /* Длинный оффер мельче: «Первый визит бесплатно» не должен перекрыть
    полкартинки. Класс ставит app.js по длине текста. */
 .val-ticket .dz3.cards-wb .card__badge.is-long{font-size:14px;padding:7px 15px 8px}
+/* Узкая карточка — телефон (две колонки по ~170px) и шесть в ряд на
+   десктопе. Билетик мельче, чтобы «Бесплатная диагностика» вставала
+   целыми словами, а «Каждая пятая чашка кофе в подарок» — в три строки,
+   а не в пять. */
+@container (max-width: 235px){
+  .val-ticket .dz3.cards-wb .card__badge{
+    left:8px;bottom:8px;max-width:calc(100% - 36px);
+    padding:5px 11px 6px;font-size:14px;
+  }
+  .val-ticket .dz3.cards-wb .card__badge.is-long{font-size:12px;padding:5px 11px 6px;line-height:1.15}
+}
 
 /* Та же форма в попапе — чтобы при раскрытии объект не менялся */
 .val-ticket .dz3 .quick__value{
@@ -97,16 +111,20 @@
 /* Срок — только последний день, цифрой покрупнее: Коля просил её акцентировать */
 .dz3 .quick__until{font-size:1.18em;font-weight:800;color:var(--ink);letter-spacing:-.01em}
 
-/* После «Забрать купон» — строка с полным сроком и годом. Раньше в дизайне
-   она пряталась: код был виден, а пояснять было нечего. Теперь в ней
-   главное — до какого числа успеть. */
-.dz3 .reveal.is-open .reveal__done{
-  display:block;margin:2px 0 0;
-  font-size:13px;line-height:1.4;color:var(--ink-2);
-}
-.dz3 .reveal.is-open .reveal__done b{color:var(--brand);font-weight:700;white-space:nowrap}
+/* После «Забрать купон» блок не перестраивается (правка Ивана 25.09):
+   «Забрать» гаснет, «Поделиться» становится главной, и обе стоят где
+   стояли. Строка «Код скопирован…» — мелко, под кнопками, во всю ширину
+   блока: раньше она вставала между кнопками и сдвигала «Поделиться». */
+.dz3 .reveal__note{display:none;margin-top:10px;font-size:12px;line-height:1.4;color:var(--ink-3)}
+.dz3 .reveal.is-open .reveal__note{display:block}
+.dz3 .reveal__note b{font-weight:600;color:var(--brand);white-space:nowrap}
 
-/* Телефон вместо ИНН — ссылкой: с телефона нажал и позвонил */
+/* Телефон вместо ИНН — ссылкой: с телефона нажал и позвонил. Телефон и
+   режим работы — одной строкой; не влезает режим — обрезается он, а не
+   телефон. */
+.dz3 .company__line{display:flex;align-items:center;gap:6px;min-width:0;white-space:nowrap}
+.dz3 .company__line .dot{flex:none}
+.dz3 .company__hours{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:12.5px;color:var(--ink-3)}
 .dz3 .company__phone{
   display:inline-flex;align-items:center;gap:6px;
   font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;
@@ -145,3 +163,63 @@
     radial-gradient(circle 8px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
 }
 .val-ticket .dz3 .cpd__value.is-long{font-size:clamp(24px,2.4vw,32px)}
+
+/* --------------------------------------------------------------------------
+   Код поверх снимка — белым билетиком (правка Ивана 25.09)
+   --------------------------------------------------------------------------
+   Та же форма, что у плашки с выгодой: вырезы по бокам. Код и знак —
+   одна белая плашка, вырезы стоят на линии отрыва между ними, как у
+   настоящего купона. Код красный, под ним срок с годом: купон уносят
+   скриншотом, и на скриншоте должно быть видно, до какого числа он живёт.
+   Высота нижней части с логотипом задана жёстко (--tk-foot): по ней
+   считается положение вырезов. */
+.dz3 .card__code{--tk-foot:34px;--tk-r:7px}
+.dz3 .card__code-val,
+.dz3 .card__code-date,
+.dz3 .card__code-mark{width:min(100%,240px);box-sizing:border-box}
+.dz3 .card__code-val{
+  border-radius:14px 14px 0 0;color:var(--brand);
+  -webkit-mask:
+    radial-gradient(circle var(--tk-r) at left bottom, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--tk-r) at right bottom, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle var(--tk-r) at left bottom, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--tk-r) at right bottom, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+/* Дата — внутри верхней половины билетика, под кодом. Верхняя половина
+   собрана из двух элементов, поэтому вырезы — у нижнего из них. */
+.dz3 .card__code-date{
+  display:block;margin-top:-1px;padding:0 14px 11px;
+  background:#fff;color:var(--ink-2);
+  font-size:11.5px;font-weight:500;letter-spacing:0;text-align:center;
+  -webkit-mask:
+    radial-gradient(circle var(--tk-r) at left bottom, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--tk-r) at right bottom, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle var(--tk-r) at left bottom, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--tk-r) at right bottom, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+.dz3 .card__code-date:empty{display:none}
+/* Когда дата есть, вырез уходит с кода на неё — у кода маска снимается */
+.dz3 .card__code-val:has(+ .card__code-date:not(:empty)){-webkit-mask:none;mask:none;padding-bottom:4px}
+.dz3 .card__code-mark{
+  height:var(--tk-foot);padding-top:0;padding-bottom:0;
+  border-top:1.5px dashed var(--line-strong);
+  -webkit-mask:
+    radial-gradient(circle var(--tk-r) at left top, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--tk-r) at right top, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle var(--tk-r) at left top, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--tk-r) at right top, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+/* В попапе и на странице купона билетик крупнее */
+.dz3 .quick__code{--tk-foot:40px;--tk-r:9px}
+.dz3 .quick__code .card__code-val,
+.dz3 .quick__code .card__code-date,
+.dz3 .quick__code .card__code-mark{width:min(100%,300px)}
+.dz3 .quick__code .card__code-date{font-size:13px;padding:0 20px 14px}
+.dz3 .quick__code .card__code-mark{padding-top:0;padding-bottom:0}
+
+/* «Компания в сети» на странице купона: значки здесь всегда цветные, а MAX
+   подключён картинкой и гасился в серый фильтром — выбивался из ряда */
+.dz3 .cpd-contact .soc-ic--img{filter:none;opacity:1}
