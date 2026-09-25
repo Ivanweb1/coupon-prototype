@@ -284,3 +284,10 @@
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
 }
+
+/* На телефоне внизу закреплена полоса промокода — уведомление поднимаем
+   над ней, иначе оно закрывает кнопки */
+@media (max-width:820px){
+  body:has(.quick.is-on) .cp-toast,
+  body:has(.cpd) .cp-toast{bottom:190px}
+}
