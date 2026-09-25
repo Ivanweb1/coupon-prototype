@@ -252,6 +252,56 @@ function buildCityModal() {
     document.body.classList.remove("no-scroll");
   };
   qsa("[data-city-open]").forEach(b => b.onclick = () => modal.classList.add("is-on"));
+
+  if (dz3()) cityModalExtras(modal, list, region);
+}
+
+/* Правки созвона 24.09.2026 к выбору города.
+   1. Поиск. На девять городов Липецкой области хватает кнопок, но в других
+      областях городов десятки — пятьдесят кнопок в попап не поставить.
+      Порядок по численности остаётся: он понравился.
+   2. Крестик справа. Без него попап закрывается только «Позже» внизу —
+      непривычно, человек ищет крестик в углу. */
+function cityModalExtras(modal, list, region) {
+  const box = qs(".modal__box", modal);
+  if (!box || qs("[data-city-x]", box)) return;
+
+  const x = document.createElement("button");
+  x.type = "button";
+  x.className = "modal__x";
+  x.setAttribute("data-city-x", "");
+  x.setAttribute("aria-label", "Закрыть");
+  x.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+  x.onclick = () => qs("[data-city-close]", modal).click();
+  box.prepend(x);
+
+  const wrap = document.createElement("label");
+  wrap.className = "city-search";
+  wrap.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>' +
+    '<input type="search" placeholder="Найти город или область" autocomplete="off" aria-label="Найти город или область">';
+  const miss = document.createElement("p");
+  miss.className = "city-miss";
+  miss.hidden = true;
+  (region || list).before(wrap);
+  list.after(miss);
+
+  const input = qs("input", wrap);
+  const norm = t => t.toLowerCase().replace(/ё/g, "е").trim();
+  input.oninput = () => {
+    const q = norm(input.value);
+    let shown = 0;
+    qsa("button", list).forEach(b => {
+      const hit = !q || norm(b.textContent).includes(q);
+      b.hidden = !hit;
+      if (hit) shown++;
+    });
+    const regionHit = !q || norm(REGION.name).includes(q) || norm("вся область").includes(q);
+    if (region) region.hidden = !regionHit;
+    if (regionHit) shown++;
+    miss.hidden = shown > 0;
+    miss.textContent = "«" + input.value.trim() + "» пока нет. Сервис работает в " +
+      REGION.name.replace(/ая область$/, "ой области") + ", остальные регионы — по мере запуска.";
+  };
 }
 
 /* ==========================================================================
@@ -512,7 +562,9 @@ function cardHTML(c, compact) {
      точке на карте. Вместо минут показываем площадку. */
   const corner = c.market
     ? '<span class="card__near card__near--mp">' + mpMark(c.market) + "</span>"
-    : '<span class="card__near">' + fmtDist(c.dist) + "</span>";
+    /* «от вас» — правка созвона 24.09.2026: голое «10 мин» на превью
+       читают как срок действия купона («он 10 минут действует?»). */
+    : '<span class="card__near">' + fmtDist(c.dist) + (dz3() ? " от вас" : "") + "</span>";
 
   /* Город в подписи нужен только в выдаче области: в выдаче города он у
      всех один и превращается в шум. На странице самой ниши по той же
@@ -528,11 +580,13 @@ function cardHTML(c, compact) {
      прятать за ним доказательство живого купона незачем. Просмотры и
      «воспользовались» — числа, копирование и «поделиться» — действия.
      В рекомендациях столбика нет: там карточка — одна кнопка перехода. */
+  /* Созвон 24.09.2026: «воспользовались» убрали — метрика неочевидная и
+     пестрит, массовому посетителю хватает просмотров. Кнопку копирования
+     тоже: «Забрать купон» теперь сам кладёт код в буфер, третья кнопка
+     с тем же действием лишняя. */
   const stats = dz3() && !compact ? `
       <div class="card__stats">
         <span class="card__stat" title="Просмотров: ${c.views}">${ICON.eye}<b>${fmtNum(c.views)}</b></span>
-        <span class="card__stat" title="Воспользовались: ${c.uses}">${ICON.used}<b>${fmtNum(c.uses)}</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy title="Скопировать код">${ICON.copy}</button>
         <button type="button" class="card__stat card__stat--act" data-card-share title="Поделиться">${ICON.share}</button>
       </div>` : "";
 
@@ -555,7 +609,7 @@ function cardHTML(c, compact) {
       ${stats}
       ${codeOverlay}
       ${wb
-        ? `<span class="card__badge">${c.value}</span>`
+        ? `<span class="card__badge${longValue(c)}">${c.value}</span>`
         : `<span class="card__value">${c.value}</span>
       <div class="card__cap"><h3 class="card__title">${c.title}</h3></div>`}
     </div>
@@ -614,7 +668,17 @@ const COUPON_PHOTOS_WILD = ["acid", "beer", "cobalt", "magenta", "neon", "teal"]
 const FONT_MODE = (location.search.match(/[?&]font=(onest|manrope)/) || [, "onest"])[1];
 document.documentElement.classList.add("font-" + FONT_MODE);
 
-const VALUE_SHAPE = (location.search.match(/[?&]value=(ticket|round|plate)/) || [, "plate"])[1];
+/* Созвон 24.09.2026: на design-3 по умолчанию снова билетик — Коля
+   попросил вернуть вырезанную плашку, Вилл согласился после мобильной
+   версии. Белая плашка осталась на ?value=plate. */
+const VALUE_SHAPE = (location.search.match(/[?&]value=(ticket|round|plate)/) ||
+  [, document.body.classList.contains("dz3") ? "ticket" : "plate"])[1];
+
+/* Текстовый оффер («Первый визит бесплатно») на билетике набираем мельче,
+   чтобы он не закрыл полкартинки. Цифровые («−30%», «1+1») — крупно. */
+function longValue(c) {
+  return dz3() && String(c.value).length > 9 ? " is-long" : "";
+}
 document.documentElement.classList.add("val-" + VALUE_SHAPE);
 
 const PICS_WILD = /[?&]pics=wild/.test(location.search);
@@ -758,9 +822,48 @@ function showCardCode(card, c) {
    он и так крупно на снимке, а в кнопке лишь отнимал бы место у действия.
    На прежних страницах плашки на картинке нет, поэтому там код по-прежнему
    встаёт в саму кнопку — иначе его негде показать. */
+/* Короткое уведомление внизу экрана. Созвон 24.09.2026: код копируется
+   сам по нажатию «Забрать купон», и человеку нужно увидеть, что это
+   произошло, — иначе он полезет копировать вручную. */
+function toast(msg) {
+  let t = qs("#cpToast");
+  if (!t) {
+    t = document.createElement("div");
+    t.id = "cpToast";
+    t.className = "cp-toast";
+    t.setAttribute("role", "status");
+    t.setAttribute("aria-live", "polite");
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add("is-on");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove("is-on"), 2200);
+}
+
+/* Код в буфер + уведомление. Буфер может быть недоступен (http, старый
+   браузер) — уведомление показываем всё равно: код уже на экране. */
+function copyCode(code) {
+  const done = () => toast("Код " + code + " скопирован");
+  if (navigator.clipboard) navigator.clipboard.writeText(code).then(done, done);
+  else done();
+}
+
 function revealOnCard(btn, c) {
   const card = btn.closest(".card");
   const onPhoto = !!qs("[data-card-code]", card);
+
+  /* design-3: одно нажатие — и код на снимке, и в буфере */
+  if (dz3()) {
+    if (!btn.classList.contains("is-open")) {
+      btn.classList.add("is-open");
+      btn.title = "Скопировать код ещё раз";
+      showCardCode(card, c);
+      noteInterest(c.cat.id);
+    }
+    copyCode(c.code);
+    return;
+  }
 
   if (!btn.classList.contains("is-open")) {
     btn.classList.add("is-open");
@@ -943,6 +1046,68 @@ function companyLogo(c) {
   return `<div class="company__logo company__logo--mono" style="--lg-bg:${bg};--lg-fg:${fg}" aria-hidden="true">${name.trim()[0].toUpperCase()}</div>`;
 }
 
+/* Правки созвона 24.09.2026 к попапу и странице купона (только design-3).
+   Дата начала посетителю не нужна: купон в ленте всегда уже активен, а
+   важен ему только последний день. После «Забрать купон» — дата с годом,
+   чтобы через год никто не пришёл с тем же кодом доказывать своё. */
+const MONTHS_GEN_RU = ["января", "февраля", "марта", "апреля", "мая", "июня",
+  "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+function untilEnd(c) {
+  /* «с 19 по 3 октября», «с 28 сентября по 12 октября» → «3 октября» */
+  const m = String(c.until).match(/по\s+(\d{1,2})\s+([а-яё]+)/i);
+  return m ? m[1] + " " + m[2] : c.until;
+}
+function untilYear(c) {
+  const m = String(c.until).match(/по\s+\d{1,2}\s+([а-яё]+)/i);
+  const now = new Date();
+  const mon = m ? MONTHS_GEN_RU.indexOf(m[1].toLowerCase()) : -1;
+  return mon >= 0 && mon < now.getMonth() ? now.getFullYear() + 1 : now.getFullYear();
+}
+function untilLabel(c) {
+  return `Промокод · действует до <b class="quick__until">${untilEnd(c)}</b>`;
+}
+function untilDone(c) {
+  return `Код скопирован. Успейте воспользоваться до <b>${untilEnd(c)} ${untilYear(c)}</b>`;
+}
+
+/* Телефон вместо ИНН в блоке компании: звонят бронировать и уточнять, а
+   ИНН посетителю ни о чём не говорит (Вилл: «ИНН — на его место
+   телефон»). Номер и часы — рыба, в продукте придут из профиля компании. */
+function companyPhone(c) {
+  const n = String(1000 + (c.id * 7349) % 9000);
+  return "+7 (4742) " + n.slice(0, 2) + "-" + n.slice(2) + "-" + String(10 + c.id % 89);
+}
+function companyPhoneHTML(c) {
+  const ph = companyPhone(c);
+  return `<a class="company__phone" href="tel:${ph.replace(/[^+\d]/g, "")}">${ICON.phone}${ph}</a>`;
+}
+/* Часы работы точки — Коля: «чтобы не пришёл в 11 и не долбился в дверь» */
+const HOURS = ["Ежедневно 10:00–22:00", "Пн–Пт 9:00–20:00, Сб–Вс 10:00–18:00",
+  "Ежедневно 8:00–23:00", "Пн–Сб 10:00–21:00, Вс — выходной"];
+function companyHours(c) { return HOURS[c.id % HOURS.length]; }
+
+/* Артикул товара на маркетплейсе. Покупатели часто вставляют артикул в
+   поиск площадки вместо перехода по ссылке — удобнее, чем открывать
+   карточку, и не тащит в приложение (правка Вилла). В продукте берём из
+   ссылки на карточку: последний сегмент адреса — это и есть артикул. */
+function marketSku(c) { return String(100000000 + (c.id * 7919 * 131) % 899999999); }
+function marketSkuHTML(c) {
+  return `<div class="market-sku">
+      <span class="market-sku__l">Артикул</span>
+      <b class="market-sku__v">${marketSku(c)}</b>
+      <button type="button" class="soc market-sku__copy" data-sku-copy="${marketSku(c)}">${ICON.copy} Скопировать</button>
+    </div>`;
+}
+function bindSkuCopy(root) {
+  const sku = qs("[data-sku-copy]", root);
+  if (sku) sku.onclick = () => {
+    const v = sku.dataset.skuCopy;
+    const done = () => toast("Артикул " + v + " скопирован");
+    if (navigator.clipboard) navigator.clipboard.writeText(v).then(done, done);
+    else done();
+  };
+}
+
 function quickHTML(c) {
   /* Порядок блоков — сама воронка: промокод забирают раньше, чем
      успевают отвлечься на условия. Условия — позитивная инструкция
@@ -959,12 +1124,12 @@ function quickHTML(c) {
       <div class="reveal" data-reveal>
         <!-- Промокод и срок — снова одной строкой (правка Ивана
              22.09.2026): отдельная строка со сроком разрывала блок. -->
-        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
+        <div class="block-label" style="margin:0">${dz3() ? untilLabel(c) : `Промокод · действует ${c.until}`}</div>
         <div class="reveal__row">
           <div class="reveal__code">${c.code}</div>
           <div class="reveal__actions">
             <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
-            <div class="reveal__done">Код открыт — назовите его на кассе или сделайте скриншот</div>
+            <div class="reveal__done">${dz3() ? untilDone(c) : "Код открыт — назовите его на кассе или сделайте скриншот"}</div>
             <button type="button" class="btn btn--ghost btn--lg" data-share>${ICON.share} Поделиться</button>
           </div>
         </div>
@@ -1006,7 +1171,8 @@ function quickHTML(c) {
                 <span>Код вводится в корзине на площадке</span>
               </div>
               <a class="soc market-where__go" href="#">Открыть карточку товара</a>
-            </div>`
+            </div>
+            ${dz3() ? marketSkuHTML(c) : ""}`
           : `<div class="market-where">
           <b>${c.market}</b>
           <span>Код вводится в корзине на площадке</span>
@@ -1055,7 +1221,7 @@ function quickHTML(c) {
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
       <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
-        <span class="quick__value">${c.value}</span>
+        <span class="quick__value${longValue(c)}">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
         ${codeOverlay}
       </div>
@@ -1090,7 +1256,7 @@ function quickHTML(c) {
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
       <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
-        <span class="quick__value">${c.value}</span>
+        <span class="quick__value${longValue(c)}">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
         ${codeOverlay}
       </div>
@@ -1111,7 +1277,9 @@ function quickHTML(c) {
         ${companyLogo(c)}
         <div class="company__text">
           <div class="company__name">${c.company}</div>
-          <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
+          ${dz3()
+            ? companyPhoneHTML(c) + (c.market ? "" : `<div class="company__req">${companyHours(c)}</div>`)
+            : `<div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>`}
         </div>
         ${dz
           /* В дизайн-версии (решение Ивана 17.09.2026) — промокод сразу под
@@ -1133,7 +1301,11 @@ function quickHTML(c) {
               <a class="soc soc--icon" href="#" title="Компания в Telegram" aria-label="Компания в Telegram">${ICON.tg}</a>
               <a class="soc soc--icon" href="#" title="Компания в Одноклассниках" aria-label="Компания в Одноклассниках">${ICON.ok}</a>
               <a class="soc soc--icon" href="#" title="Компания в MAX" aria-label="Компания в MAX">${ICON.max}</a>
-              <a class="soc soc--icon" href="#" title="Компания в Instagram" aria-label="Компания в Instagram">${ICON.instagram}</a>
+              ${dz3()
+                /* Созвон 24.09.2026: Instagram убираем — Meta признана в РФ
+                   экстремистской, рисковать ради трафика не стоит.
+                   Остаются четыре соцсети и сайт. */
+                ? "" : `<a class="soc soc--icon" href="#" title="Компания в Instagram" aria-label="Компания в Instagram">${ICON.instagram}</a>`}
             </div>`
           : `<div class="socials">
           <a class="soc" href="#" title="Сайт компании">${ICON.link} Сайт</a>
@@ -1267,7 +1439,9 @@ function openQuick(c, cardEl) {
       box.removeAttribute("aria-hidden");
     }
     fitQuickMedia();
+    if (dz3()) copyCode(c.code);
   };
+  bindSkuCopy(quick);
 }
 
 /* Адрес страницы купона — один на купон и без гео: по ТЗ §3.2.11 у карточки
@@ -1753,7 +1927,8 @@ function renderCouponDesign() {
               <a class="soc market-where__go" href="#">
                 <img class="mp-ic" src="assets/brand/mp/${mp}.svg" alt=""> Открыть карточку товара
               </a>
-            </div>`
+            </div>
+            ${marketSkuHTML(c)}`
           : `<div class="market-where">
               <b>${c.market}</b>
               <span>Код вводится в корзине на площадке при оформлении заказа</span>
@@ -1772,7 +1947,7 @@ function renderCouponDesign() {
   qs("#couponRoot").innerHTML = `
     <div class="cpd__media">
       <div class="cpd__photo has-photo" style="background:url('${c.photo}') center/cover no-repeat">
-        <span class="cpd__value">${c.value}</span>
+        <span class="cpd__value${longValue(c)}">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
         <!-- Код поверх снимка с нашим знаком — та же механика, что на
              карточке ленты и в попапе: купон уносят скриншотом, пусть
@@ -1795,11 +1970,12 @@ function renderCouponDesign() {
       <h1 class="cpd__h1">${c.title}</h1>
 
       <div class="reveal reveal--big" data-reveal>
-        <div class="block-label" style="margin:0">Промокод · действует ${c.until}</div>
+        <div class="block-label" style="margin:0">${untilLabel(c)}</div>
         <div class="reveal__row">
           <div class="reveal__code">${c.code}</div>
           <div class="reveal__actions">
             <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn>Забрать купон</button>
+            <div class="reveal__done">${untilDone(c)}</div>
             <button type="button" class="btn btn--ghost btn--lg" data-share>${ICON.share} Поделиться</button>
           </div>
         </div>
@@ -1809,18 +1985,18 @@ function renderCouponDesign() {
         ${companyLogo(c)}
         <div class="company__text">
           <div class="company__name">${c.company}</div>
-          <div class="company__req">ИНН 0000000000 · ${c.market ? c.market : c.address}</div>
+          ${companyPhoneHTML(c)}
+          ${c.market ? "" : `<div class="company__req">${companyHours(c)}</div>`}
         </div>
-        <!-- Шесть ссылок, как в попапе: созвон 21.09.2026, «сайт, ВК,
-             Одноклассники, MAX, Телега, Инста». Какие из них показывать,
-             компания отметит галочками в кабинете. -->
+        <!-- Как в попапе: сайт и четыре соцсети. Instagram убран на
+             созвоне 24.09.2026. Какие показывать, компания отметит
+             галочками в кабинете. -->
         <div class="socials socials--icons">
           <a class="soc soc--icon" href="#" title="Сайт компании" aria-label="Сайт компании">${ICON.site}</a>
           <a class="soc soc--icon" href="#" title="Компания ВКонтакте" aria-label="Компания ВКонтакте">${ICON.vk}</a>
           <a class="soc soc--icon" href="#" title="Компания в Telegram" aria-label="Компания в Telegram">${ICON.tg}</a>
           <a class="soc soc--icon" href="#" title="Компания в Одноклассниках" aria-label="Компания в Одноклассниках">${ICON.ok}</a>
           <a class="soc soc--icon" href="#" title="Компания в MAX" aria-label="Компания в MAX">${ICON.max}</a>
-          <a class="soc soc--icon" href="#" title="Компания в Instagram" aria-label="Компания в Instagram">${ICON.instagram}</a>
         </div>
       </div>
 
@@ -1839,9 +2015,11 @@ function renderCouponDesign() {
       box.removeAttribute("aria-hidden");
     }
     noteInterest(c.cat.id);
+    copyCode(c.code);
   };
   const share = qs("[data-share]", root);
   share.onclick = () => shareCoupon(share, c);
+  bindSkuCopy(root);
 
   /* Как работает: шаги на одной «ленте» с пунктиром между номерами —
      как линия отрыва купона; правила — белой карточкой с галочками */
@@ -1875,7 +2053,7 @@ function renderCouponDesign() {
     { ic: ICON.site, k: "Сайт", v: "example.ru", href: "#" },
     { ic: ICON.vk, k: "ВКонтакте", v: "vk.com/example", href: "#" },
     { ic: ICON.tg, k: "Telegram", v: "@example", href: "#" },
-    { ic: `<span class="cpd-ic">${ICON.phone}</span>`, k: "Телефон", v: "+7 (000) 000-00-00", href: "tel:+70000000000" }
+    { ic: `<span class="cpd-ic">${ICON.phone}</span>`, k: "Телефон", v: companyPhone(c), href: "tel:" + companyPhone(c).replace(/[^+\d]/g, "") }
   ];
 
   qs("#about").innerHTML = `
@@ -1884,7 +2062,7 @@ function renderCouponDesign() {
         ${companyLogo(c)}
         <div>
           <div class="cpd-about__name">${c.company}</div>
-          <div class="company__req">ИНН 0000000000</div>
+          ${companyPhoneHTML(c)}
         </div>
       </div>
       <p class="cpd-about__lead">${c.company} ${c.market

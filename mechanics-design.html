@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Билетик с выгодой — механики скидок</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260918y">
+<link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<link rel="stylesheet" href="assets/design-3.css?v=20260924a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-0924.css?v=20260925a">
+<link rel="icon" href="assets/brand/logo-red.png">
+<style>
+  .mx-lead{max-width:62ch;margin:0 0 28px;color:var(--ink-2);font-size:15px;line-height:1.55}
+  .mx-cap{display:block;margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+  .mx-phone{max-width:360px}
+  .mx-phone .grid{grid-template-columns:1fr}
+  .mx-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+  @media (max-width:1100px){.mx-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media (max-width:700px){.mx-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+  @media (max-width:440px){.mx-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="dz dz3 cards-wb">
+
+<!-- ===================================================================
+     Доска для созвона 24.09.2026. Коля: «отрисуй одну карточку в пяти
+     разных позициях» — по механикам скидок, чтобы понять, выдержит ли
+     вырезанный билетик любой оффер, а не только «−30%».
+     Карточки собраны тем же кодом, что и лента (makeCard), — это не
+     картинка, а живая карточка: кнопки и столбик метрик работают.
+     Список механик — рабочий, пока Павел не пришлёт утверждённый.
+     =================================================================== -->
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="section">
+    <div class="section__head">
+      <h2>Одна карточка — пять механик</h2>
+    </div>
+    <p class="mx-lead">Билетик с вырезами растёт по тексту и переносит длинный оффер на вторую строку. Длинные офферы набираются мельче, чтобы не закрывать снимок. Для сравнения: <a href="?value=plate">белая плашка</a> · <a href="?value=round">круг</a> · <a href="?">билетик</a>.</p>
+    <div class="grid mx-row" id="mx"></div>
+  </section>
+
+  <section class="section">
+    <span class="mx-cap">Ширина телефона</span>
+    <div class="mx-phone"><div class="grid" id="mxPhone"></div></div>
+  </section>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<div class="quick" id="quick"></div>
+
+<script src="assets/data.js?v=20260918y"></script>
+<script src="assets/app.js?v=20260925a"></script>
+<script>
+  /* Без initCommon: он спрашивает город на входе, а доске это не нужно */
+  initCardStyle();
+  initQuickStyle();
+  initIcons();
+  qs("#overlay").onclick = closeQuick;
+
+  /* Механики — из ТЗ и сидов ленты. Заменить на список Павла, когда придёт. */
+  const MECHS = [
+    ["Скидка процентом", "−30%"],
+    ["Скидка суммой",    "−500 ₽"],
+    ["Два по цене одного", "1 + 1"],
+    ["Подарок к покупке", "Десерт в подарок"],
+    ["Бесплатно",         "Первый визит бесплатно"]
+  ];
+  const base = makeCoupon("regional/eda");
+  const put = (host, [label, value], i) => {
+    const c = Object.assign({}, base, {
+      id: base.id * 10 + i,
+      value: value,
+      title: "Кофе и десерт в любой день недели — " + label.toLowerCase(),
+      dist: 740,
+      photo: null
+    });
+    const card = makeCard(c);
+    qs(host).appendChild(card);
+    const media = qs(".card__media", card);
+    media.style.background = 'url("assets/coupons/eda-cool.jpg") center/cover no-repeat';
+    media.classList.add("has-photo");
+  };
+  MECHS.forEach((m, i) => put("#mx", m, i));
+  MECHS.forEach((m, i) => put("#mxPhone", m, i + 5));
+</script>
+</body>
+</html>
