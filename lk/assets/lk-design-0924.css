@@ -1,0 +1,311 @@
+/* ==========================================================================
+   Кабинеты — правки созвонов 24.09.2026. Слой поверх lk-design.css
+   ==========================================================================
+   Разметку этих блоков рисует lk-design.js; прототип кабинета (client.html,
+   partner.html) ни этот файл, ни скрипт не подключает.
+   ========================================================================== */
+
+/* Цифры — табличные везде в кабинете. Коля заметил, что в «3 016» и
+   «12 400» цифры стоят с разным шагом: у единицы в Onest узкая ширина, и
+   столбцы чисел в таблицах «гуляют». С табличными цифрами у всех знаков
+   одинаковая ширина — числа в столбце встают друг под другом. */
+.lkd{font-variant-numeric:tabular-nums}
+
+/* --------------------------------------------------------------------------
+   Кошелёк в шапке: баланс и бонусы — два числа, у бонусов свой значок
+   -------------------------------------------------------------------------- */
+.lkd .lk__wallet{gap:12px}
+.lkd-wal{display:inline-flex;align-items:center;gap:6px;color:var(--ink-2)}
+.lkd-wal b{font-weight:600;color:var(--ink)}
+.lkd-wal svg{flex:none}
+.lkd-wal--bon{padding-left:12px;border-left:1px solid var(--line)}
+.lkd-wal--bon svg{color:var(--brand)}
+/* На телефоне кнопке «Создать купон» и колокольчику не даём сжиматься —
+   раньше они сплющивались, когда шапке не хватало места. До 560px
+   убираем значок кошелька, до 400px — число бонусов, как было в
+   прототипе: там на телефоне тоже оставался только баланс. Бонусы видны
+   на дашборде и в биллинге, куда ведёт кошелёк. */
+@media (max-width:960px){.lkd .lk__cta,.lkd .lk__bell{flex:none}}
+@media (max-width:560px){
+  .lkd .lk__wallet{gap:8px;padding-left:10px;padding-right:10px}
+  .lkd-wal:first-child svg{display:none}
+  .lkd-wal--bon{padding-left:8px}
+}
+@media (max-width:400px){
+  .lkd .lk__wallet{padding-left:8px;padding-right:8px}
+  .lkd-wal:first-child svg{display:block}
+  .lkd-wal--bon{display:none}
+}
+
+/* --------------------------------------------------------------------------
+   Дашборд рекламодателя
+   -------------------------------------------------------------------------- */
+/* Слева опубликованное и требующее внимания друг под другом, справа —
+   рекламное место шириной с карточку в ленте */
+.lkd-dash{
+  display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;
+  align-items:start;margin-bottom:16px;
+}
+.lkd-dash__main{display:flex;flex-direction:column;gap:16px;min-width:0}
+.lkd-dash__main .lk-panel{margin:0}
+@media (max-width:1100px){.lkd-dash{grid-template-columns:minmax(0,1fr) 260px}}
+@media (max-width:900px){
+  .lkd-dash{grid-template-columns:1fr}
+  .lkd-dash > .lkd-ad{max-width:340px}
+}
+
+/* Бонусы и баланс — две карточки, число крупно */
+.lkd-money{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:16px}
+@media (max-width:700px){.lkd-money{grid-template-columns:1fr}}
+.lkd-money__c{
+  display:grid;grid-template-columns:1fr auto;grid-template-areas:"l act" "v act" "burn act";
+  align-items:center;gap:4px 16px;margin:0;padding:20px 22px;
+}
+.lkd-money__l{grid-area:l;font-size:13px;color:var(--ink-3)}
+.lkd-money__v{grid-area:v;display:flex;align-items:center;gap:10px}
+.lkd-money__v b{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.lkd-money__v i{font-style:normal;font-size:14px;color:var(--ink-3);align-self:flex-end;margin-bottom:4px}
+.lkd-money__ic{
+  display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  background:var(--brand-50);color:var(--brand);
+}
+.lkd-money__ic svg{width:18px;height:18px}
+.lkd-money__ic--ink{background:var(--surface);color:var(--ink-2)}
+.lkd-money__burn{
+  grid-area:burn;display:flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--st-wait);
+}
+.lkd-money__burn b{font-weight:600}
+.lkd-money__burn--calm{color:var(--ink-3)}
+.lkd-money__act{grid-area:act}
+@media (max-width:420px){
+  .lkd-money__c{grid-template-columns:1fr;grid-template-areas:"l" "v" "burn" "act"}
+  .lkd-money__act{margin-top:10px}
+}
+
+/* ИИ-консультант «скоро»: серая плашка вместо красной кнопки */
+.lkd-soon b{display:flex;align-items:center;gap:8px}
+.lkd-soon__tag{
+  padding:2px 8px;border-radius:var(--r-pill);
+  background:var(--surface-2);color:var(--ink-2);
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+}
+.lkd-soon__plate{
+  padding:12px 14px;border-radius:12px;
+  background:var(--surface);color:var(--ink-2);
+  font-size:13.5px;line-height:1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Рекламное место — по размерам карточки купона из ленты
+   -------------------------------------------------------------------------- */
+.lkd-ad{display:flex;flex-direction:column;min-width:0}
+.lkd-ad__media{
+  position:relative;display:block;aspect-ratio:4/5;border-radius:18px;overflow:hidden;
+  background:var(--surface) center/cover no-repeat;
+  transition:transform .25s var(--ease);
+}
+.lkd-ad__media:hover{transform:translateY(-2px)}
+.lkd-ad__corner{
+  position:absolute;left:10px;top:10px;
+  padding:5px 10px;border-radius:var(--r-pill);
+  background:var(--ink);color:#fff;font-size:11px;font-weight:600;
+}
+.lkd-ad__erid{position:absolute;right:12px;top:12px;font-size:10px;color:rgba(255,255,255,.7)}
+.lkd-ad__badge{
+  position:absolute;left:10px;bottom:10px;max-width:calc(100% - 20px);
+  padding:7px 16px 8px;border-radius:10px;
+  background:var(--brand);color:#fff;
+  font-size:15px;font-weight:800;letter-spacing:-.02em;line-height:1.12;
+  -webkit-mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+.lkd-ad__body{display:flex;flex-direction:column;gap:6px;padding:12px 2px 0}
+.lkd-ad__title{font-size:15px;font-weight:600;line-height:1.3;color:var(--ink)}
+.lkd-ad__meta{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-3)}
+.lkd-ad__meta b{font-weight:500;color:var(--ink-2)}
+.lkd-ad__acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.lkd-ad__acts .btn{height:40px;padding:0 10px;font-size:13.5px}
+
+/* Баннер того же размера, что и купон */
+.lkd-ad--banner{
+  aspect-ratio:4/5.9;justify-content:flex-end;gap:10px;
+  padding:22px;border-radius:18px;background:var(--ink);color:#fff;
+}
+.lkd-ad--banner .lkd-ad__label{margin-bottom:auto;color:rgba(255,255,255,.55)}
+.lkd-ad__kicker{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-300)}
+.lkd-ad__h{font-size:22px;font-weight:700;line-height:1.2;letter-spacing:-.02em}
+.lkd-ad--banner p{margin:0;font-size:14px;line-height:1.5;color:rgba(255,255,255,.75)}
+.lkd-ad--banner .btn{flex:none;height:44px;margin-top:6px}
+.lkd-ad__label{font-size:11px;color:var(--ink-3)}
+
+/* Предложения внизу разделов партнёра */
+.lkd-offers{margin-top:8px}
+.lkd-offers__head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.lkd-offers__head h2{margin:0;font-size:18px;font-weight:600;letter-spacing:-.02em}
+.lkd-offers__row{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,280px));gap:16px}
+
+/* --------------------------------------------------------------------------
+   Фильтры в шапке раздела и внутри панели
+   -------------------------------------------------------------------------- */
+.lkd-filters{display:flex;gap:8px;flex-wrap:wrap}
+.lkd-filters .lk-s{width:auto;min-width:0;max-width:320px}
+.lk-head__act .lkd-filters{flex-wrap:nowrap}
+@media (max-width:700px){.lk-head__act .lkd-filters{flex-wrap:wrap}}
+.lkd-filters--in{margin:0 0 14px}
+.lkd-dim td{opacity:.45}
+
+/* --------------------------------------------------------------------------
+   График статистики
+   -------------------------------------------------------------------------- */
+.lkd-ch{display:block;width:100%;height:auto}
+.lkd-ch__grid{stroke:var(--line);stroke-width:1}
+.lkd-ch__ax{font-size:11px;fill:var(--ink-3)}
+.lkd-ch__bar{fill:#F0F0F0}
+.lkd-ch__ln{fill:none;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+/* Три линии — чёрный, фирменный и серый: те же роли цвета, что везде
+   в кабинете. Красный — «Купон забрали», главный результат. */
+.lkd-ch__ln--a{stroke:var(--ink)}
+.lkd-ch__ln--b{stroke:var(--brand)}
+.lkd-ch__ln--c{stroke:var(--ink-4);stroke-dasharray:5 4}
+.lkd-legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:12px;font-size:13px;color:var(--ink-2)}
+.lkd-legend__i{display:inline-flex;align-items:center;gap:8px}
+.lkd-legend__i::before{content:"";width:18px;height:3px;border-radius:2px;background:currentColor}
+.lkd-legend__i--a::before{background:var(--ink)}
+.lkd-legend__i--b::before{background:var(--brand)}
+.lkd-legend__i--c::before{background:repeating-linear-gradient(90deg,var(--ink-4) 0 5px,transparent 5px 9px)}
+.lkd-legend__i--bar::before{width:10px;height:12px;background:var(--surface-2);border-radius:2px}
+
+/* --------------------------------------------------------------------------
+   Формы: закреплённые поля, «Редактировать», подсказка «?»
+   -------------------------------------------------------------------------- */
+.lkd-lock__v{position:relative;display:block}
+.lkd-lock__v svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-4);pointer-events:none}
+.lkd-lock__v .lk-i{padding-left:34px}
+.lkd .lk-i:disabled,.lkd .lk-ta:disabled{background:var(--surface);color:var(--ink-2);-webkit-text-fill-color:var(--ink-2)}
+
+.lkd-tip{position:relative;display:inline-grid;place-items:center;vertical-align:-2px;margin-left:4px;color:var(--ink-3);cursor:help}
+.lkd-tip:hover,.lkd-tip:focus{color:var(--ink);outline:0}
+.lkd-tip__b{
+  position:absolute;left:50%;bottom:calc(100% + 8px);z-index:20;transform:translateX(-50%);
+  width:max-content;max-width:240px;padding:8px 11px;border-radius:10px;
+  background:var(--ink);color:#fff;font-size:12.5px;font-weight:400;line-height:1.4;
+  text-transform:none;letter-spacing:0;white-space:normal;
+  opacity:0;pointer-events:none;transition:opacity .15s;
+}
+.lkd-tip:hover .lkd-tip__b,.lkd-tip:focus .lkd-tip__b,
+.lkd-tipbtn:hover .lkd-tip__b,.lkd-tipbtn:focus-within .lkd-tip__b{opacity:1}
+
+.lkd-editbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:18px}
+.lkd-editbar__note{margin-right:auto;font-size:13px;color:var(--ink-3)}
+/* Серая кнопка: возможность, а не призыв */
+.lkd .lkd-btn-grey{background:var(--surface);border:1px solid var(--surface);color:var(--ink-2)}
+.lkd .lkd-btn-grey:hover{background:var(--surface-2);border-color:var(--surface-2);color:var(--ink)}
+
+.lkd-warn{
+  margin-top:16px;padding:12px 14px;border-radius:12px;
+  background:var(--st-wait-bg);color:var(--st-wait);
+  font-size:13px;line-height:1.5;
+}
+
+/* Способ пополнения — чипами, у СБП бонус */
+.lkd-ways{display:flex;gap:8px;flex-wrap:wrap}
+.lkd-way{
+  display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 14px;
+  border:1px solid var(--line-strong);border-radius:12px;background:#fff;
+  font:inherit;font-size:14px;color:var(--ink);cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.lkd-way:hover{border-color:var(--ink-3)}
+.lkd-way.is-on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.lkd-way em{
+  display:inline-flex;align-items:center;gap:4px;
+  font-style:normal;font-size:12px;font-weight:600;color:var(--brand);
+}
+.lkd-way em svg{width:14px;height:14px}
+
+/* Уведомления: «обязательно» у почты, подписка на наши каналы */
+.lkd-must{font-style:normal;font-size:11.5px;color:var(--ink-3);margin-left:4px}
+.lkd-sub{margin-top:16px;padding:20px 22px}
+.lkd-sub__h{display:block;font-size:16px;font-weight:600;line-height:1.35}
+.lkd-sub p{margin:6px 0 14px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.lkd-sub__acts{display:flex;gap:8px;flex-wrap:wrap}
+.lkd-one{max-width:760px;display:flex;flex-direction:column;gap:12px}
+.lkd-one .lk-panel{margin:0}
+
+/* Выгода в превью мастера — билетиком, как в ленте */
+.lkd .lk-prev__badge{
+  background:var(--brand);color:#fff;box-shadow:none;border-radius:10px;
+  -webkit-mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+
+/* --------------------------------------------------------------------------
+   Кабинет партнёра
+   -------------------------------------------------------------------------- */
+/* Две плашки над купонами: готово к выплате и заработано за всё время */
+.lkd-earn{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+@media (max-width:760px){.lkd-earn{grid-template-columns:1fr}}
+.lkd-earn__c{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin:0;padding:20px 22px}
+.lkd-earn__c > b{font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.lkd-earn__c--main > b{color:var(--st-ok)}
+.lkd-earn__c .btn{margin-top:8px}
+
+.lkd-dates span{display:block;white-space:nowrap}
+.lkd-dates span + span{color:var(--ink-3)}
+.lkd-dates span + span::before{content:"— "}
+.lkd-ready{margin-top:4px;font-weight:400}
+.lkd-eye{
+  display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;
+  color:var(--ink-3);transition:background .15s,color .15s;
+}
+.lkd-eye:hover{background:var(--surface);color:var(--ink)}
+.lkd-grp td{background:var(--surface);font-size:12.5px;font-weight:600;color:var(--ink-2)}
+
+/* Поиск клиента по ИНН: под полем — кого нашли */
+.lkd-inn{display:block;min-height:18px;margin-top:6px;font-size:13px;color:var(--ink-3)}
+.lkd-inn.is-ok{color:var(--st-ok);font-weight:500}
+.lkd-inn.is-ok::before{content:"✓ "}
+.lkd-inn.is-bad{color:var(--brand)}
+
+/* «Сформировать счёт и акт»: неактивна до закрытия периода, подсказка */
+.lkd-invoice{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:16px}
+.lkd-tipbtn{position:relative;display:inline-block;outline:0}
+.lkd-tipbtn .lkd-tip__b{left:0;transform:none;max-width:280px}
+.lkd .lkd-tipbtn .btn:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed;opacity:1}
+
+/* --------------------------------------------------------------------------
+   Окно ознакомления с новыми условиями — кабинет закрыт, пока не отмечено
+   -------------------------------------------------------------------------- */
+.lkd-gated{overflow:hidden}
+.lkd-gate{
+  position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:16px;
+  background:rgba(27,27,27,.55);backdrop-filter:blur(4px);
+}
+.lkd-gate__box{
+  width:min(480px,100%);padding:28px;border-radius:24px;background:#fff;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.45);
+  display:flex;flex-direction:column;gap:14px;
+}
+.lkd-gate__k{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--brand)}
+.lkd-gate h3{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.lkd-gate p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.lkd-gate__doc{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+  border:1px solid var(--line);border-radius:14px;color:var(--ink);
+  transition:border-color .15s;
+}
+.lkd-gate__doc:hover{border-color:var(--ink-3)}
+.lkd-gate__doc svg{flex:none;color:var(--brand)}
+.lkd-gate__doc span{display:flex;flex-direction:column;font-size:14px;font-weight:500}
+.lkd-gate__doc small{font-size:12px;font-weight:400;color:var(--ink-3)}
+.lkd-gate .btn{flex:none;height:50px}
+.lkd-gate .btn:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed;opacity:1}

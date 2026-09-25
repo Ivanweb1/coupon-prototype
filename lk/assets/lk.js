@@ -2544,4 +2544,9 @@ document.addEventListener("keydown", e => {
 qs("#lkBurger").onclick = () => document.body.classList.toggle("lk-nav-open");
 qs("#lkScrim").onclick  = () => document.body.classList.remove("lk-nav-open");
 
-render();
+/* Первый рендер — по DOMContentLoaded, а не сразу: дизайн-версия кабинета
+   подключает после этого файла lk-design.js, который подменяет разделы, и
+   к первому рендеру подмены должны уже стоять (render берём по имени в
+   момент вызова, а не ссылкой сейчас). Для прототипа разницы нет:
+   скрипт стоит в конце страницы, и событие приходит сразу после него. */
+document.addEventListener("DOMContentLoaded", () => render());
