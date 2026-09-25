@@ -248,3 +248,18 @@
 }
 /* Сначала сокращается ниша, короткий город остаётся целым */
 .dz3 .quick .quick__eyebrow > span:nth-of-type(2){flex-shrink:6}
+
+/* Столбик метрик — той же толщины, что плашка с минутами (24px), чтобы
+   элементы на фото читались одной системой (Иван 25.09). В 24px полное
+   «3 305» не помещается, поэтому просмотры здесь всегда сокращённые. */
+.dz3 .card__stats{width:24px;padding:8px 0;gap:9px;right:10px;box-sizing:border-box}
+.dz3 .card__stat{min-width:0;width:100%;padding:0;gap:2px}
+.dz3 .card__stat svg{width:13px;height:13px}
+.dz3 .card__stat b{font-size:9px;letter-spacing:-.02em}
+.dz3 .card__stats .card__stat-full{display:none}
+.dz3 .card__stats .card__stat-short{display:inline}
+.dz3 .card__stat--act{border-radius:50%}
+/* Видимый столбик узкий, но зона нажатия у «Скопировать» и «Поделиться»
+   шире — пальцем в 24px не попасть */
+.dz3 .card__stat--act{position:relative}
+.dz3 .card__stat--act::after{content:"";position:absolute;inset:-6px -10px}
