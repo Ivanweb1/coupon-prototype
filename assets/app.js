@@ -1107,8 +1107,9 @@ function companyContactLine(c) {
     : `<i class="dot"></i><span class="company__hours" title="${companyHours(c)}">${companyHours(c)}</span>`}</div>`;
 }
 /* Часы работы точки — Коля: «чтобы не пришёл в 11 и не долбился в дверь» */
-const HOURS = ["Ежедневно 10:00–22:00", "Пн–Пт 9:00–20:00, Сб–Вс 10:00–18:00",
-  "Ежедневно 8:00–23:00", "Пн–Сб 10:00–21:00, Вс — выходной"];
+/* Коротко, чтобы влезало в одну строку с телефоном (Иван 25.09:
+   «Пн–Вс 9–18 ч»). Минуты — только когда они не нулевые. */
+const HOURS = ["Пн–Вс 10–22 ч", "Пн–Пт 9–20 ч", "Пн–Вс 8–23 ч", "Пн–Сб 10–21 ч"];
 function companyHours(c) { return HOURS[c.id % HOURS.length]; }
 
 /* Артикул товара на маркетплейсе. Покупатели часто вставляют артикул в
@@ -2072,9 +2073,9 @@ function renderCouponDesign() {
      Точек может быть несколько — показываем все, ближайшую первой. */
   const CLOCK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>';
   const points = c.market ? [] : [
-    { addr: c.address, hours: "ежедневно 10:00–21:00", dist: c.dist },
+    { addr: c.address, hours: "Пн–Вс 10–21 ч", dist: c.dist },
     { addr: c.address === "пр-т Победы, 45" ? "ул. Первомайская, 12" : "пр-т Победы, 45",
-      hours: "ежедневно 09:00–22:00", dist: c.dist + 1400 }
+      hours: "Пн–Вс 9–22 ч", dist: c.dist + 1400 }
   ];
   const contacts = [
     { ic: ICON.site, k: "Сайт", v: "example.ru", href: "#" },
