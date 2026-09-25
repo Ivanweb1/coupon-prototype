@@ -1820,19 +1820,26 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 /* ==========================================================================
    Панель категорий на телефоне (Иван 25.09)
    ==========================================================================
-   Как на десктопе, но компактнее: «Все категории» — круглой кнопкой со
-   значком, «Маркетплейсы» и «Для бизнеса» — капсулами с подписью и
-   стрелкой вниз, чтобы было видно, что это раскрывающийся список. Число
-   купонов на телефоне не помещается — оно есть в самом списке. Список
-   раскрывается на всю ширину под строкой. Лента ниш ниже листается
-   пальцем, без стрелки. */
+   Как на десктопе: «Все категории» — круглой кнопкой со значком,
+   «Маркетплейсы» и «Для бизнеса» — капсулами со значком, подписью и
+   стрелкой вниз. Не помещается — строка листается вбок и уходит за правый
+   край экрана с затуханием, как лента ниш ниже. Число купонов на телефоне
+   не показываем — оно есть в самом списке.
+   Списки позиционируются от .tags-row, а не от листаемой строки: иначе
+   прокрутка обрезала бы раскрытый список по её границе. */
 @media (max-width:820px){
-  .dz3:not(.cats-c) .tags-row{gap:12px}
+  .dz3:not(.cats-c) .tags-row{gap:12px;position:relative}
   .dz3:not(.cats-c) .tags-row__main{
-    display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1fr);
-    align-items:center;gap:8px;position:relative;
+    display:flex;flex-wrap:nowrap;align-items:center;gap:8px;position:static;
+    overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;
+    margin-right:calc(-1 * var(--pad));padding:2px var(--pad) 2px 0;
   }
-  .dz3:not(.cats-c) .tags-row__main .dd{position:static;min-width:0}
+  .dz3:not(.cats-c) .tags-row__main::-webkit-scrollbar{display:none}
+  .dz3:not(.cats-c) .tags-row__main.has-more{
+    -webkit-mask-image:linear-gradient(to right,#000 calc(100% - 48px),transparent);
+            mask-image:linear-gradient(to right,#000 calc(100% - 48px),transparent);
+  }
+  .dz3:not(.cats-c) .tags-row__main .dd{position:static;flex:none}
   .dz3:not(.cats-c) .tags-row__main .tag:hover{transform:none}
   .dz3:not(.cats-c) .tags-row__main .tag .tag__sub,
   .dz3:not(.cats-c) .tags-row__main .tag .tag__n{display:none}
@@ -1846,30 +1853,17 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .dz3:not(.cats-c) .tags-row__main .tag--all > [data-icon]:not(.chev) svg{width:20px;height:20px}
 
   .dz3:not(.cats-c) .tags-row__main .tag--featured{
-    width:100%;height:46px;padding:0 10px 0 14px;gap:5px;justify-content:space-between;
+    width:auto;height:46px;padding:0 12px 0 6px;gap:7px;
   }
-  /* кружок со значком внутри капсулы на телефоне съедал подпись */
-  .dz3:not(.cats-c) .tags-row__main .tag--featured > [data-icon]:not(.chev){display:none}
+  .dz3:not(.cats-c) .tags-row__main .tag--featured > [data-icon]:not(.chev){width:34px;height:34px}
   .dz3:not(.cats-c) .tags-row__main .tag--featured .tag__label{
-    display:block;flex:1 1 auto;min-width:0;text-align:left;
-    font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    display:block;font-size:13.5px;font-weight:600;white-space:nowrap;
   }
   .dz3:not(.cats-c) .tags-row__main .tag--featured .chev{display:block;flex:none;margin:0}
 
   .dz3:not(.cats-c) .tags-row__main .dd__panel{
-    left:0;right:0;width:auto;top:calc(100% + 8px);
+    left:0;right:0;width:auto;top:58px;
     grid-template-columns:1fr;max-height:60vh;overflow-y:auto;
   }
   .dz3 .tags-more{display:none}
-}
-@media (max-width:380px){
-  .dz3:not(.cats-c) .tags-row__main{gap:6px}
-  .dz3:not(.cats-c) .tags-row__main .tag--featured{padding:0 8px 0 11px;gap:3px}
-  .dz3:not(.cats-c) .tags-row__main .tag--featured .tag__label{font-size:12.5px;letter-spacing:-.01em}
-}
-@media (max-width:340px){
-  .dz3:not(.cats-c) .tags-row__main .tag--all,
-  .dz3:not(.cats-c) .tags-row__main .tag--all > [data-icon]:not(.chev){width:42px;height:42px}
-  .dz3:not(.cats-c) .tags-row__main .tag--featured{height:42px;padding:0 5px 0 9px}
-  .dz3:not(.cats-c) .tags-row__main .tag--featured .tag__label{font-size:11.5px}
 }

@@ -416,7 +416,7 @@ function buildTags(l1) {
      явная стрелка — на догадливость по скроллу полагаться нельзя */
   const row = qs("#tagsRow");
   const sync = () => {
-    row.classList.toggle("has-more", row.scrollWidth - row.clientWidth - row.scrollLeft > 8);
+    row.classList.toggle("has-more", row.scrollWidth - row.clientWidth - row.scrollLeft > 20);
   };
   row.addEventListener("scroll", sync, { passive: true });
   window.addEventListener("resize", sync);
@@ -509,6 +509,16 @@ function buildL1Dropdowns() {
 
     initDD(dd);
   });
+
+  /* На телефоне строка разделов листается вбок, как лента ниш: затухание
+     у правого края — пока за ним есть что листать */
+  const row = qs(".tags-row__main");
+  if (row) {
+    const sync = () => row.classList.toggle("has-more", row.scrollWidth - row.clientWidth - row.scrollLeft > 20);
+    row.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    sync();
+  }
 }
 
 /* ==========================================================================
