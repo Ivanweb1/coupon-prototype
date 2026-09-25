@@ -1145,6 +1145,15 @@ function bindSkuCopy(root) {
   };
 }
 
+/* Плашки на фото попапа — те же, что в углу карточки ленты: минуты до
+   точки (у маркетплейса — площадка) и просмотры */
+function quickBadges(c) {
+  const where = c.market
+    ? '<span class="card__near card__near--mp">' + mpMark(c.market) + "</span>"
+    : '<span class="card__near">' + fmtDist(c.dist) + " от вас</span>";
+  return `<div class="quick__badges">${where}<span class="card__near quick__views" title="Просмотров: ${c.views}">${ICON.eye}${fmtNum(c.views)}</span></div>`;
+}
+
 function quickHTML(c) {
   /* Порядок блоков — сама воронка: промокод забирают раньше, чем
      успевают отвлечься на условия. Условия — позитивная инструкция
@@ -1295,6 +1304,7 @@ function quickHTML(c) {
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
       <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
+        ${dz3() ? quickBadges(c) : ""}
         <span class="quick__value${longValue(c)}">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
         ${codeOverlay}
@@ -1305,8 +1315,11 @@ function quickHTML(c) {
       <div class="quick__eyebrow">
         <span>${c.cat.vertical.name}</span><i class="dot"></i>
         <span>${c.cat.name}</span><i class="dot"></i>
-        ${place}<i class="dot"></i>
-        <span>${ICON.eye} ${c.views}</span>
+        ${dz3()
+          /* Минуты и просмотры — плашками на фото, как в карточке ленты;
+             здесь только раздел, ниша и город — одной строкой */
+          ? `<span>${c.market || c.city.name}</span>`
+          : `${place}<i class="dot"></i><span>${ICON.eye} ${c.views}</span>`}
       </div>
       <h3>${c.title}</h3>
 
