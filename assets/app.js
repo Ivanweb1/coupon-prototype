@@ -2362,7 +2362,8 @@ function initMobileMenu() {
   };
   const open = () => {
     panel.hidden = false;
-    requestAnimationFrame(() => panel.classList.add("is-on"));
+    void panel.offsetWidth;
+    panel.classList.add("is-on");
     openBtn.setAttribute("aria-expanded", "true");
     document.body.classList.add("no-scroll");
   };
