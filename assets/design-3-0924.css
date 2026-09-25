@@ -247,3 +247,17 @@
   .dz3 .cpd-contact > span:last-child{font-size:13px}
   .dz3 .cpd-contact small{font-size:10px;letter-spacing:.06em}
 }
+
+/* Описание компании на странице купона: три строки и «Показать ещё» */
+.dz3 .cpd-lead{margin:16px 0 20px}
+.dz3 .cpd-lead .cpd-about__lead{
+  margin:0;
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;
+}
+.dz3 .cpd-lead.is-open .cpd-about__lead{display:block;-webkit-line-clamp:unset;line-clamp:none;overflow:visible}
+.dz3 .cpd-lead__more{
+  margin-top:6px;padding:0;border:0;background:none;cursor:pointer;
+  font:inherit;font-size:14px;font-weight:600;color:var(--brand);
+}
+.dz3 .cpd-lead__more:hover{text-decoration:underline;text-underline-offset:3px}
+.dz3 .cpd-lead__more[hidden]{display:none}
