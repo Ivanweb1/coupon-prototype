@@ -584,7 +584,7 @@
 .dz.cards-wb .card__meta{font-size:12.5px;color:var(--ink-3)}
 .dz .card__meta b{color:var(--ink-2)}
 
-.dz .card__actions .btn{height:80px}
+.dz .card__actions .btn{height:38px}
 .dz .card__actions .btn--ghost{border-color:var(--line-strong);color:var(--ink-2)}
 .dz .card__actions .btn--ghost:hover{border-color:var(--ink-3);background:var(--surface)}
 .dz .btn--solid{background:var(--brand);color:#fff}

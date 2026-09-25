@@ -202,7 +202,7 @@
 .dz3 .card__actions .btn{flex:1 1 0;min-width:0;padding:0 10px}
 /* На узкой карточке кнопки в столбик: flex-basis 0 сплющивал их до ~22px */
 @container (max-width: 235px){
-  .dz3 .card__actions .btn{flex:0 0 auto;height:44px}
+  .dz3 .card__actions .btn{flex:0 0 auto;height:38px}
 }
 
 /* --------------------------------------------------------------------------
