@@ -328,3 +328,30 @@
   font-size:18px;line-height:1.1;white-space:nowrap;
 }
 .val-ticket .dz3 .quick .quick__photo .quick__value.is-long{font-size:14px;white-space:normal;padding:7px 15px}
+
+/* --------------------------------------------------------------------------
+   Страница купона: фото устроено как в попапе (Иван 25.09)
+   --------------------------------------------------------------------------
+   Слева сверху минуты и просмотры, под ними метка erid, слева снизу
+   выгода — всё высотой 36px и в 12px от края. Справа сверху, где в попапе
+   крестик, — «Поделиться» того же размера. */
+.dz3 .cpd__photo .erid-stamp{
+  left:14px;right:auto;top:56px;max-width:calc(100% - 28px);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.cpd__share{
+  position:absolute;top:12px;right:12px;z-index:2;
+  width:36px;height:36px;padding:0;border:0;border-radius:50%;cursor:pointer;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.92);color:var(--ink);box-shadow:var(--shadow-1);
+  transition:color .18s,transform .18s var(--ease);
+}
+.cpd__share svg{width:17px;height:17px}
+.cpd__share:hover{color:var(--brand);transform:translateY(-1px)}
+.val-ticket .dz3 .cpd .cpd__photo .cpd__value{
+  left:12px;bottom:12px;min-height:36px;box-sizing:border-box;max-width:calc(100% - 60px);
+  display:flex;align-items:center;
+  padding:6px 16px;border-radius:10px;
+  font-size:18px;line-height:1.1;white-space:nowrap;
+}
+.val-ticket .dz3 .cpd .cpd__photo .cpd__value.is-long{font-size:14px;white-space:normal;padding:7px 15px}

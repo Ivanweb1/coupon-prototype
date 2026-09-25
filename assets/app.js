@@ -2016,6 +2016,10 @@ function renderCouponDesign() {
       <div class="cpd__photo has-photo" style="background:url('${c.photo}') center/cover no-repeat">
         <span class="cpd__value${longValue(c)}">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
+        <!-- Как в попапе: минуты и просмотры плашками на фото. Справа, где в
+             попапе крестик, — «Поделиться»: страницу купона чаще пересылают -->
+        ${quickBadges(c)}
+        <button type="button" class="cpd__share" data-photo-share aria-label="Поделиться купоном">${ICON.share}</button>
         <!-- Код поверх снимка с нашим знаком — та же механика, что на
              карточке ленты и в попапе: купон уносят скриншотом, пусть
              уносят вместе с логотипом. -->
@@ -2031,8 +2035,7 @@ function renderCouponDesign() {
       <div class="quick__eyebrow cpd__eyebrow">
         <a href="${catalogUrl(c.cat.l1)}">${c.cat.vertical.name}</a><i class="dot"></i>
         <a href="${catUrl(c.cat)}">${c.cat.name}</a><i class="dot"></i>
-        <span>${c.market ? c.market : c.city.name}</span><i class="dot"></i>
-        <span>${ICON.eye} ${c.views}</span>
+        <span>${c.market ? c.market : c.city.name}</span>
       </div>
 
       <h1 class="cpd__h1">${c.title}</h1>
@@ -2086,6 +2089,17 @@ function renderCouponDesign() {
   };
   const share = qs("[data-share]", root);
   share.onclick = () => shareCoupon(share, c);
+  const photoShare = qs("[data-photo-share]", root);
+  if (photoShare) photoShare.onclick = () => {
+    const url = couponPageUrl(c);
+    if (navigator.share) {
+      navigator.share({ title: c.title, text: c.company, url: url }).catch(() => {});
+      return;
+    }
+    const done = () => toast("Ссылка на купон скопирована");
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, done);
+    else done();
+  };
   bindSkuCopy(root);
 
   /* Как работает: шаги на одной «ленте» с пунктиром между номерами —
