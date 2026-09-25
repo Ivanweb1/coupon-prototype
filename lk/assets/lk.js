@@ -87,6 +87,13 @@ function clientStatus(c) {
 /* ---------- Состояние ---------- */
 const state = {
   role: document.body.dataset.role === "partner" ? "partner" : "client",
+  /* Партнёрство бывает двух уровней (правило от 25.09.2026): регистрация
+     на сайте даёт только контур маркетплейсов, региональный контур
+     открывается сервисом после запроса. По умолчанию кабинет открывается
+     в состоянии «только маркетплейсы» — именно его получает партнёр сразу
+     после регистрации; ?regional=1 показывает кабинет с открытым регионом
+     (служебный переключатель для показа, кнопка — на экране запроса). */
+  regional: P.get("regional") === "1",
   view: P.get("view") || "dashboard",
   id: P.get("id") ? Number(P.get("id")) : null,
   filter: "all",
@@ -118,12 +125,15 @@ const NAV = {
     { id: "profile",         label: "Профиль компании",               icon: "store" },
     { id: "notifications",   label: "Уведомления",                    icon: "bell" }
   ],
+  /* regionalOnly — только у регионального партнёра, marketplaceOnly —
+     только у партнёра по маркетплейсам, пока он регион не запросил. */
   partner: [
     { group: "Привлечение" },
     { id: "dashboard",       label: "Дашборд партнёра",        icon: "grid" },
-    { id: "clients",         label: "Региональные клиенты",    icon: "users" },
+    { id: "clients",         label: "Региональные клиенты",    icon: "users", regionalOnly: true },
     { id: "codes",           label: "Маркетплейс · Мои коды",  icon: "code" },
-    { id: "bonuses",         label: "Бонусы клиентам",         icon: "gift" },
+    { id: "bonuses",         label: "Бонусы клиентам",         icon: "gift",  regionalOnly: true },
+    { id: "regional",        label: "Региональное партнёрство", icon: "users", marketplaceOnly: true },
     { group: "Деньги" },
     { id: "payouts",         label: "Отчёты и выплаты",        icon: "wallet" },
     { id: "profile",         label: "Профиль партнёра",        icon: "user" },
@@ -143,13 +153,25 @@ const TITLES = {
   partner: {
     dashboard: "Дашборд партнёра", clients: "Региональные клиенты",
     codes: "Маркетплейс · Мои коды", bonuses: "Бонусы клиентам",
+    regional: "Региональное партнёрство",
     client: "Клиент", payouts: "Отчёты и выплаты", profile: "Профиль партнёра",
     notifications: "Уведомления"
   }
 };
 
 function href(view, id) {
-  return "?view=" + view + (id ? "&id=" + id : "");
+  return "?view=" + view + (id ? "&id=" + id : "") +
+         (state.regional ? "&regional=1" : "");
+}
+
+/* Меню под уровень партнёрства. Разделы региона не показываем серыми с
+   замком: пока партнёр не запросил роль, их в его кабинете просто нет, а
+   на их месте — один экран с запросом. */
+function navItems() {
+  return NAV[state.role].filter(it => {
+    if (state.role !== "partner") return !it.regionalOnly && !it.marketplaceOnly;
+    return state.regional ? !it.marketplaceOnly : !it.regionalOnly;
+  });
 }
 
 /* Счётчики в навигации — только там, где число реально помогает выбрать
@@ -171,7 +193,7 @@ function navCount(id) {
 
 function renderChrome() {
   /* Меню */
-  qs("#lkNav").innerHTML = NAV[state.role].map(it => {
+  qs("#lkNav").innerHTML = navItems().map(it => {
     if (it.group) return `<div class="lk__nav-group">${it.group}</div>`;
     const n = navCount(it.id);
     const on = it.id === state.view ||
@@ -1572,6 +1594,37 @@ VIEWS["client:coupon"] = () => {
    подтверждается промокодом на каждой публикации. Ставка в обоих одна:
    20% с суммы, которую клиент реально заплатил. */
 VIEWS["partner:dashboard"] = () => {
+  /* Пока регион не открыт, показатели региона показывать нечем: клиентов
+     у такого партнёра нет по определению. Дашборд собирается по кодам. */
+  if (!state.regional) {
+    const live   = LK_CODES.filter(c => c.status === "active");
+    const used   = LK_CODES.reduce((a, c) => a + c.used, 0);
+    const income = LK_CODES.reduce((a, c) => a + c.income, 0);
+    const pend   = LK_PAYOUTS.find(p => p.status === "pending");
+
+    return head("Дашборд партнёра")
+      + kpi([
+          { label: "Активных кодов",  value: live.length, note: "выдаются на селлеров маркетплейсов" },
+          { label: "Покупок по кодам", value: used },
+          { label: "Начислено всего",  value: rub(income), note: LK_RATES.fee + "% с оплат селлеров" },
+          { label: "К выплате",        value: rub(pend.total), note: pend.date }
+        ])
+      + panel("Ваши коды",
+          table([{ t: "Код" }, { t: "Маркетплейс" }, { t: "Покупок", num: true }, { t: "Начислено", num: true }],
+            live.map(c => `<tr>
+              <td><b class="lk-t__title">${c.code}</b><span class="lk-t__sub">${c.comment || "без пометки"}</span></td>
+              <td>${c.market}</td><td class="num">${c.used}</td><td class="num">${rub(c.income)}</td>
+            </tr>`).join("")),
+          { act: `<a class="btn btn--ghost" href="${href("codes")}" data-go="codes">Все коды</a>` })
+      + panel("Свой город", `
+          <div class="lk-note">Региональное партнёрство открывается не регистрацией,
+          а запросом: мы связываемся с партнёром и рассказываем, что нужно дальше.
+          После этого в кабинете появляются региональные клиенты и бонусы для них.</div>
+          <div class="lk-head__act" style="margin-top:14px">
+            <a class="btn btn--solid" href="${href("regional")}" data-go="regional">Стать региональным партнёром</a>
+          </div>`);
+  }
+
   const active   = LK_CLIENTS.filter(c => clientStatus(c) === "active").length;
   const fresh    = LK_CLIENTS.filter(c => clientStatus(c) === "new").length;
   const fee      = LK_CLIENTS.reduce((a, c) => a + c.fee, 0);
@@ -1592,6 +1645,40 @@ VIEWS["partner:dashboard"] = () => {
             <td>${c.since}</td><td class="num">${c.coupons}</td></tr>`).join("")),
         { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все клиенты</a>` });
 };
+
+/* Запрос на региональное партнёрство (правило от 25.09.2026). Роль не
+   выдаётся формой: партнёр отправляет запрос, сервис связывается с ним и
+   даёт инструкции. Поэтому здесь не анкета на пол-экрана, а одно
+   действие и честное описание того, что откроется. Город спрашиваем —
+   без него запрос не разобрать; всё остальное сервис выясняет в разговоре. */
+VIEWS["partner:regional"] = () => head("Региональное партнёрство")
+  + `<div class="lk-pair">
+      ${panel("Запрос на роль", `
+        <div class="lk-note">Региональный партнёр ведёт свой город: приводит местный
+        бизнес на витрину и получает долю с размещений. Самостоятельно эту роль не
+        включить — отправьте запрос, мы свяжемся и расскажем, что нужно дальше.</div>
+        <div class="lk-f" style="margin-top:16px">
+          ${field("Город", input("Липецк"))}
+          ${field("Что уже есть в городе", `<textarea class="lk-ta" placeholder="Клиентская база, паблик, агентство — коротко, чем будете приводить бизнес"></textarea>`)}
+        </div>
+        <div class="lk-head__act" style="margin-top:14px">
+          <button class="btn btn--solid" data-regional-send>Отправить запрос</button>
+          <span class="lk-save-ok" data-regional-ok hidden>Запрос отправлен — свяжемся по будням</span>
+        </div>`)}
+      ${panel("Что откроется после одобрения", `
+        <ul class="lk-ul">
+          <li>Раздел «Региональные клиенты»: бизнес города закрепляется за вами.</li>
+          <li>«Бонусы клиентам» — пул, который вы раздаёте своим клиентам.</li>
+          <li>Отчёты и выплаты начинают считать оба контура: регион и маркетплейсы.</li>
+        </ul>
+        <div class="lk-note" style="margin-top:14px">Партнёрство по маркетплейсам
+        остаётся при вас — коды и начисления по ним никуда не денутся.</div>
+        <div class="lk-head__act" style="margin-top:14px">
+          <a class="btn btn--ghost" href="?view=dashboard&regional=1">Показать кабинет с открытым регионом</a>
+        </div>
+        <div class="lk-note" style="margin-top:8px">Последняя кнопка — служебная,
+        только для показа прототипа: в продукте роль включает сервис.</div>`)}
+    </div>`;
 
 /* Микро-CRM. Клиенты закреплены по городу организации: реферальных ссылок
    на регистрацию в продукте нет, закрепление делает администратор
@@ -1918,7 +2005,16 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
 /* ==========================================================================
    Рендер
    ========================================================================== */
+/* Разделы региона закрыты не только в меню: по прямому адресу партнёр без
+   роли тоже попадает на экран запроса, а не на пустую таблицу клиентов. */
+const REGIONAL_VIEWS = ["clients", "client", "bonuses"];
+
 function render() {
+  if (state.role === "partner" && !state.regional && REGIONAL_VIEWS.includes(state.view)) {
+    state.view = "regional";
+    state.id = null;
+    history.replaceState(null, "", href("regional"));
+  }
   renderChrome();
   const key = state.role + ":" + state.view;
   const view = VIEWS[key];
@@ -1988,6 +2084,14 @@ function render() {
 
   /* Внутренние переходы из карточек */
   qsa("[data-go]", host).forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
+
+  /* Запрос на региональное партнёрство: кнопка уходит, на её месте строка
+     «свяжемся». Роль этим не включается — её открывает сервис. */
+  const regBtn = qs("[data-regional-send]", host);
+  if (regBtn) regBtn.onclick = () => {
+    regBtn.hidden = true;
+    qs("[data-regional-ok]", host).hidden = false;
+  };
 
   /* Запрос нового кода партнёра — открывает модалку (§4.4.3) */
   const codeBtn = qs("[data-request-code]", host);

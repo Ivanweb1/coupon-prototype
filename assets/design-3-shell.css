@@ -115,6 +115,11 @@
   color:var(--ink);
 }
 .pt-hero__sub{margin:14px 0 0;max-width:62ch;font-size:17px;line-height:1.55;color:var(--ink-2)}
+/* Разведение ролей партнёра (25.09.2026): подпись мельче лида, но не
+   выносится в примечание — от неё зависит, останется человек на этой
+   странице или уйдёт в регистрацию. */
+.pt-hero__alt{margin:12px 0 0;max-width:62ch;font-size:14.5px;line-height:1.6;color:var(--ink-3)}
+.pt-hero__alt a{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
 
 .pt-cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:32px;margin-top:38px}
 @media (max-width:900px){.pt-cols{grid-template-columns:1fr}}

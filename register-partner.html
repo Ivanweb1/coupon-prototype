@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Регистрация партнёра — прототип купонного сервиса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260917a">
+<link rel="stylesheet" href="assets/register.css?v=20260925c">
+</head>
+<body>
+
+<!-- ===================================================================
+     Регистрация партнёра — дополнение от 25.09.2026.
+
+     Главное правило страницы: самостоятельная регистрация на сайте
+     открывает только партнёрство по маркетплейсам. Региональным
+     партнёром отсюда стать нельзя — на это есть запрос, по которому с
+     человеком связывается сервис и даёт инструкции. Поэтому городов,
+     карты покрытия и «закрепим за вами территорию» здесь нет: это
+     содержимое страницы partner.html, и оно осталось там.
+
+     Физлиц среди партнёров нет — только ООО, ИП и самозанятые, потому
+     что партнёру платят вознаграждение, а не он сервису.
+     =================================================================== -->
+
+<header class="header">
+  <div class="wrap header__in">
+    <a class="logo" href="index.html">Логотип</a>
+    <span class="header__spacer"></span>
+    <a class="btn btn--ghost" href="lk/partner.html">Уже есть кабинет — войти</a>
+  </div>
+</header>
+
+<main class="wrap reg">
+  <div class="reg__intro">
+    <h1>Приводите клиентов и получайте вознаграждение</h1>
+    <p class="reg__lead">Регистрация здесь открывает партнёрство по маркетплейсам: вы получаете свои промокоды, раздаёте их и видите начисления. Регистрируются ООО, ИП и самозанятые.</p>
+  </div>
+
+  <div class="reg__card">
+    <ol class="reg__steps">
+      <li class="is-on" data-reg-step><span>1</span>Реквизиты</li>
+      <li data-reg-step><span>2</span>Почта</li>
+      <li data-reg-step><span>3</span>Готово</li>
+    </ol>
+
+    <section class="reg__screen is-on" data-reg-screen="form">
+
+      <!-- Физлица нет намеренно: партнёру перечисляют вознаграждение, а
+           без ИП, ООО или самозанятости выплату не оформить. -->
+      <div class="reg__f">
+        <span class="reg__l">Форма регистрации</span>
+        <div class="reg__chips">
+          <button type="button" class="reg__chip is-on" data-org="ООО">ООО</button>
+          <button type="button" class="reg__chip" data-org="ИП">ИП</button>
+          <button type="button" class="reg__chip" data-org="Самозанятый">Самозанятый</button>
+        </div>
+        <p class="reg__note" style="margin-top:2px">Партнёру мы перечисляем вознаграждение, поэтому физлицу регистрация партнёра недоступна.</p>
+      </div>
+
+      <label class="reg__f">
+        <span class="reg__l" data-reg-inn-l>ИНН</span>
+        <div class="reg__inline">
+          <input class="reg__i" data-reg-inn placeholder="10 цифр — как у ООО" inputmode="numeric">
+          <button type="button" class="btn btn--ghost" data-reg-inn-check>Найти по ИНН</button>
+        </div>
+      </label>
+      <p class="reg__hint" data-reg-inn-hint hidden></p>
+
+      <label class="reg__f">
+        <span class="reg__l" data-reg-name-l>Название компании</span>
+        <input class="reg__i" data-reg-name placeholder="Появится после поиска по ИНН — или впишите вручную" disabled>
+      </label>
+
+      <label class="reg__f">
+        <span class="reg__l">Контактное лицо</span>
+        <input class="reg__i" data-reg-person placeholder="Иван Петров">
+      </label>
+
+      <label class="reg__f">
+        <span class="reg__l">Телефон</span>
+        <input class="reg__i" data-reg-phone placeholder="+7 900 000-00-00">
+      </label>
+
+      <label class="reg__f">
+        <span class="reg__l">Email</span>
+        <input class="reg__i" data-reg-email type="email" placeholder="you@company.ru">
+      </label>
+
+      <label class="reg__f">
+        <span class="reg__l">Пароль</span>
+        <input class="reg__i" data-reg-pass type="password" placeholder="Не короче 8 символов">
+      </label>
+      <p class="reg__note">Восстановить доступ можно только через email — SMS не используется.</p>
+
+      <!-- Моё предложение, на созвонах не обсуждали: одно поле, по
+           которому модератор понимает, откуда партнёр приведёт людей.
+           Необязательное, чтобы не удлинять регистрацию. -->
+      <label class="reg__f">
+        <span class="reg__l">Где будете раздавать промокоды</span>
+        <input class="reg__i" data-reg-link placeholder="https:// — сайт, паблик, канал">
+        <span class="reg__note" style="margin:2px 0 0">Необязательно. Со ссылкой заявку проверяем быстрее.</span>
+      </label>
+
+      <div class="reg__f">
+        <span class="reg__l">Куда присылать уведомления о начислениях</span>
+        <div class="reg__checks">
+          <label class="reg__check"><input type="checkbox"><span>Telegram</span></label>
+          <label class="reg__check"><input type="checkbox"><span>Max</span></label>
+        </div>
+        <p class="reg__note" style="margin-top:2px">Почта — всегда, её вы подтвердите на следующем шаге.</p>
+      </div>
+
+      <label class="reg__check reg__consent">
+        <input type="checkbox" data-reg-consent>
+        <span>Соглашаюсь с условиями партнёрской программы и политикой обработки персональных данных</span>
+      </label>
+
+      <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-submit>Зарегистрироваться</button>
+
+      <p class="reg__note" style="margin-top:14px">
+        Размещаете свои купоны, а не приводите клиентов? Это другая роль —
+        <a href="register.html">регистрация рекламодателя</a>.
+      </p>
+    </section>
+
+    <section class="reg__screen" data-reg-screen="email">
+      <p class="reg__lead">Код отправлен на <b data-reg-email-out></b>. Впишите его, чтобы подтвердить почту.</p>
+      <label class="reg__f">
+        <span class="reg__l">Код из письма</span>
+        <input class="reg__i reg__i--code" data-reg-code placeholder="0000" inputmode="numeric" maxlength="4">
+      </label>
+      <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-confirm>Подтвердить</button>
+      <div class="reg__resend">
+        <button type="button" class="btn btn--ghost" data-reg-resend>Отправить код ещё раз</button>
+        <span class="reg__resend-ok" data-reg-resend-ok hidden>Отправили ещё раз</span>
+      </div>
+    </section>
+
+    <section class="reg__screen" data-reg-screen="done">
+      <div class="reg__done-i">✓</div>
+      <h2 class="reg__done-h">Кабинет партнёра открыт</h2>
+      <p class="reg__lead">Вам доступно партнёрство по маркетплейсам: промокоды, начисления и выплаты.</p>
+      <ul class="reg__done-list">
+        <li>В кабинете уже есть ваши промокоды маркетплейсов — их можно раздавать сразу.</li>
+        <li>Начисления считаются по переходам и покупкам по вашему коду.</li>
+        <li>Купоны партнёр не публикует и статистику купонов клиента не видит — это роль рекламодателя.</li>
+        <li data-reg-manual-note hidden>ИНН не нашёлся по базе, поэтому реквизиты проверит модератор — возможно, с вами свяжутся.</li>
+      </ul>
+      <a class="btn btn--solid btn--lg btn--wide" href="lk/partner.html">Перейти в кабинет партнёра</a>
+    </section>
+  </div>
+
+  <!-- Запрос на региональное партнёрство. Самостоятельной регистрации
+       здесь нет намеренно: по правилу от 25.09.2026 сервис связывается
+       с партнёром сам и даёт инструкции. Тот же запрос лежит в кабинете
+       партнёра, чтобы его можно было отправить и после регистрации. -->
+  <section class="reg__ask">
+    <h2 class="reg__ask-h">Хотите стать региональным партнёром?</h2>
+    <p class="reg__ask-p">
+      Региональный партнёр ведёт свой город: приводит местный бизнес на витрину и
+      получает долю с размещений. Зарегистрироваться на эту роль самостоятельно нельзя —
+      отправьте запрос, мы свяжемся и расскажем, что нужно дальше.
+    </p>
+    <div class="reg__ask-row" data-ask-row>
+      <button type="button" class="btn btn--solid" data-ask-send>Отправить запрос</button>
+      <a class="btn btn--ghost" href="partner.html#cities">Посмотреть свободные города</a>
+    </div>
+    <p class="reg__ask-ok" data-ask-ok hidden>Запрос отправлен — свяжемся по будням и дадим инструкции.</p>
+  </section>
+
+</main>
+
+<script src="assets/data.js?v=20260917a"></script>
+<script src="assets/register-partner.js?v=20260925a"></script>
+</body>
+</html>

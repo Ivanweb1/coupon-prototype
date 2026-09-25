@@ -835,3 +835,8 @@
 
 .lk-warn--tight{margin:0}
 .lk-link{text-decoration:underline;color:var(--ink)}
+
+/* Короткий список внутри панели — «что откроется после одобрения» и
+   подобные перечисления. Маркер — точка тем же цветом, что подписи. */
+.lk-ul{margin:0;padding:0 0 0 18px;display:flex;flex-direction:column;gap:8px}
+.lk-ul li{font-size:13.5px;line-height:1.55;color:var(--ink-2)}

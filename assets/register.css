@@ -69,6 +69,9 @@
 .reg__inline{display:flex;gap:8px}
 .reg__inline .reg__i{flex:1 1 auto;min-width:0}
 .reg__inline .btn{flex:0 0 auto}
+/* У кнопок свой display, поэтому атрибут hidden их не убирает: физлицу
+   поиск по ИНН не показываем, база по ФИО его всё равно не найдёт. */
+.reg__inline .btn[hidden]{display:none}
 
 .reg__hint,.reg__note{margin:-8px 0 16px;font-size:12.5px;line-height:1.5;color:var(--ink-3)}
 .reg__hint.is-bad{color:var(--ink)}
@@ -104,3 +107,22 @@
 .reg__addrs{display:flex;flex-direction:column;gap:8px}
 .reg__plus{align-self:flex-start;padding:4px 0;font-size:14px;font-weight:500;color:var(--ink)}
 .reg__plus:hover{text-decoration:underline}
+
+/* --- Запрос на региональное партнёрство (дополнение 25.09.2026) ---------
+   Отдельной карточкой под формой, а не полем внутри неё: это не часть
+   регистрации, а обращение в сервис. */
+.reg__ask{max-width:640px;margin:24px auto 0;padding:24px 26px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.reg__ask-h{margin:0 0 8px;font-size:18px;font-weight:600;letter-spacing:-.02em}
+.reg__ask-p{margin:0 0 16px;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.reg__ask-row{display:flex;gap:10px;flex-wrap:wrap}
+.reg__ask-row[hidden]{display:none}
+.reg__ask-ok{margin:0;font-size:13.5px;line-height:1.55;font-weight:500}
+
+@media (max-width:600px){
+  .reg__ask{padding:20px 18px}
+  .reg__ask-row .btn{flex:1 1 100%}
+}
+
+/* Ссылки в примечаниях под формой (переходы между ролями). Серый текст
+   примечания без подчёркивания за ссылку не читается. */
+.reg__note a{color:var(--ink);font-weight:500;text-decoration:underline;text-underline-offset:2px}

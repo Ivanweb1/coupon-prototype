@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css?v=20260917a">
-<link rel="stylesheet" href="assets/register.css?v=20260917a">
+<link rel="stylesheet" href="assets/register.css?v=20260925c">
 </head>
 <body>
 
@@ -26,7 +26,7 @@
 <main class="wrap reg">
   <div class="reg__intro">
     <h1>Разместите купон бесплатно</h1>
-    <p class="reg__lead">Регистрация — только для бизнеса: ООО, ИП или самозанятые. Покупатели получают код без оплаты, вы платите за размещение на витрине и в соцсетях.</p>
+    <p class="reg__lead">Размещать купоны могут ООО, ИП, самозанятые и физлица. Покупатели получают код без оплаты, вы платите за размещение на витрине и в соцсетях.</p>
   </div>
 
   <div class="reg__card">
@@ -41,17 +41,23 @@
          ТЗ §4.3.2 их дозаполняют при выставлении счёта, не при регистрации. -->
     <section class="reg__screen is-on" data-reg-screen="form">
 
+      <!-- Четыре формы регистрации рекламодателя — дополнение от 25.09.2026.
+           Физлицо размещает купоны на тех же правах: отдельного урезанного
+           тарифа для него не обсуждали, поэтому в прототипе набор полей у
+           него отличается только тем, что у частного человека нет
+           реквизитов компании. -->
       <div class="reg__f">
-        <span class="reg__l">Тип организации</span>
+        <span class="reg__l">Кто размещает купоны</span>
         <div class="reg__chips">
           <button type="button" class="reg__chip is-on" data-org="ООО">ООО</button>
           <button type="button" class="reg__chip" data-org="ИП">ИП</button>
           <button type="button" class="reg__chip" data-org="Самозанятый">Самозанятый</button>
+          <button type="button" class="reg__chip" data-org="Физлицо">Физлицо</button>
         </div>
       </div>
 
       <label class="reg__f">
-        <span class="reg__l">ИНН</span>
+        <span class="reg__l" data-reg-inn-l>ИНН</span>
         <div class="reg__inline">
           <input class="reg__i" data-reg-inn placeholder="10 цифр — как у ООО" inputmode="numeric">
           <button type="button" class="btn btn--ghost" data-reg-inn-check>Найти по ИНН</button>
@@ -60,7 +66,7 @@
       <p class="reg__hint" data-reg-inn-hint hidden></p>
 
       <label class="reg__f">
-        <span class="reg__l">Название компании</span>
+        <span class="reg__l" data-reg-name-l>Название компании</span>
         <input class="reg__i" data-reg-name placeholder="Появится после поиска по ИНН — или впишите вручную" disabled>
       </label>
 
@@ -68,12 +74,12 @@
            документы и шапку купона. Категория, география и адреса сюда
            входят; всё остальное — в анкету в кабинете за бонусы. -->
       <label class="reg__f">
-        <span class="reg__l">Категория бизнеса</span>
+        <span class="reg__l" data-reg-cat-l>Категория бизнеса</span>
         <select class="reg__i reg__i--select" data-reg-cat></select>
       </label>
 
       <div class="reg__f">
-        <span class="reg__l">Где вы обслуживаете клиентов</span>
+        <span class="reg__l" data-reg-geo-l>Где вы обслуживаете клиентов</span>
         <div class="reg__chips">
           <button type="button" class="reg__chip is-on" data-geo="points">В городах, по адресам</button>
           <button type="button" class="reg__chip" data-geo="online">Онлайн</button>
@@ -115,7 +121,7 @@
       <p class="reg__note">Восстановить доступ можно только через email — SMS не используется.</p>
 
       <label class="reg__f">
-        <span class="reg__l">Коротко о компании</span>
+        <span class="reg__l" data-reg-about-l>Коротко о компании</span>
         <textarea class="reg__ta" data-reg-about placeholder="Своя пекарня, доставка по городу, работаем с 2019 года."></textarea>
       </label>
       <p class="reg__note">Это описание попадёт на страницу купона в блок «О компании» — без него ему неоткуда взять текст.</p>
@@ -135,6 +141,11 @@
       </label>
 
       <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-submit>Отправить заявку</button>
+
+      <p class="reg__note" style="margin-top:14px">
+        Хотите не размещать купоны, а приводить клиентов? Это другая роль —
+        <a href="register-partner.html">регистрация партнёра</a>.
+      </p>
     </section>
 
     <!-- Экран 2 — ТЗ §4.3.1 п.2: почта подтверждается кодом до продолжения -->
@@ -169,6 +180,6 @@
 </main>
 
 <script src="assets/data.js?v=20260917a"></script>
-<script src="assets/register.js?v=20260917a"></script>
+<script src="assets/register.js?v=20260925a"></script>
 </body>
 </html>

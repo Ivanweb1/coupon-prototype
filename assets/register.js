@@ -59,11 +59,44 @@ function showStep(name) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* ИНН физлица (ИП, самозанятый) — 12 цифр, юрлица (ООО) — 10: это не
-   декоративная проверка, а то же самое, что делает реальный СБИС до
-   любого поиска по базе. */
+/* ИНН физлица (ИП, самозанятый, частное лицо) — 12 цифр, юрлица (ООО) —
+   10: это не декоративная проверка, а то же самое, что делает реальный
+   СБИС до любого поиска по базе. */
 function innDigitsNeeded() {
   return reg.orgType === "ООО" ? 10 : 12;
+}
+
+/* Форма регистрации меняет не набор шагов, а подписи и то, откуда берётся
+   имя: у ООО, ИП и самозанятого его находит база по ИНН, частный человек
+   вписывает ФИО сам (дополнение от 25.09.2026). */
+function applyOrgType() {
+  const person = reg.orgType === "Физлицо";
+  const inn = qs("[data-reg-inn]");
+  const name = qs("[data-reg-name]");
+  const lookup = qs("[data-reg-inn-check]");
+
+  qs("[data-reg-inn-l]").textContent = person ? "ИНН — 12 цифр" : "ИНН";
+  inn.placeholder = person
+    ? "Нужен для чека — 12 цифр"
+    : (innDigitsNeeded() === 10 ? "10 цифр — как у ООО" : "12 цифр — как у ИП и самозанятых");
+
+  lookup.hidden = person;
+  qs("[data-reg-name-l]").textContent = person ? "ФИО" : "Название компании";
+  qs("[data-reg-cat-l]").textContent = person ? "Категория" : "Категория бизнеса";
+  qs("[data-reg-geo-l]").textContent = person ? "Где вы работаете с клиентами" : "Где вы обслуживаете клиентов";
+  qs("[data-reg-about-l]").textContent = person ? "Коротко о себе" : "Коротко о компании";
+
+  if (person) {
+    name.disabled = false;
+    name.placeholder = "Иван Петров";
+    if (name.value === "ООО «Пример»") name.value = "";
+  } else {
+    name.value = "";
+    name.disabled = true;
+    name.placeholder = "Появится после поиска по ИНН — или впишите вручную";
+  }
+
+  qs("[data-reg-inn-hint]").hidden = true;
 }
 
 /* Автозаполнение по ИНН и его отказ — ТЗ §4.3.1 п.3 и открытый вопрос
@@ -99,7 +132,7 @@ function checkInn() {
     hint.classList.add("is-bad");
   } else {
     reg.manual = false;
-    nameField.value = "ООО «Пример»";
+    nameField.value = reg.orgType === "ООО" ? "ООО «Пример»" : reg.orgType + " Петров И. И.";
     hint.textContent = "Нашли по базе — при желании название можно поправить.";
   }
 }
@@ -132,11 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
     qsa("[data-org]").forEach(x => x.classList.remove("is-on"));
     b.classList.add("is-on");
     reg.orgType = b.dataset.org;
-    qs("[data-reg-inn]").placeholder = innDigitsNeeded() === 10
-      ? "10 цифр — как у ООО"
-      : "12 цифр — как у ИП и самозанятых";
-    qs("[data-reg-inn-hint]").hidden = true;
+    reg.manual = false;
+    applyOrgType();
   });
+  applyOrgType();
 
   qs("[data-reg-inn-check]").onclick = checkInn;
   qs("[data-reg-submit]").onclick = submitForm;
