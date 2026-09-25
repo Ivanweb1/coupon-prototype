@@ -233,7 +233,16 @@ function renderChrome() {
       <span class="lk__nav-i" data-icon="${it.icon}"></span>
       <span>${it.label}</span>${n ? `<span class="lk__n">${n}</span>` : ""}</a>`;
   }).join("");
-  qsa("#lkNav a").forEach(a => a.onclick = e => { e.preventDefault(); go(a.getAttribute("href").split("view=")[1]); });
+  /* Разбор ссылки — через URLSearchParams, а не split("view="). Пока
+     href был только «?view=X», обрезка по строке работала; с правкой
+     25.09 (два уровня партнёрства) href стал «?view=X&regional=1», и
+     тот же split цеплял хвост в state.view вместе с «&regional=1» —
+     ключ в VIEWS не находился, раздел не открывался вообще. */
+  qsa("#lkNav a").forEach(a => a.onclick = e => {
+    e.preventDefault();
+    const q = new URLSearchParams(a.getAttribute("href").split("?")[1] || "");
+    go(q.get("view"));
+  });
 
   /* Название раздела в шапке не дублируем: оно и так стоит заголовком
      страницы прямо под ней и подсвечено в меню слева. Шапка остаётся под

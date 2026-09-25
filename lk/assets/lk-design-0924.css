@@ -132,8 +132,13 @@
 .lkd-ad__acts .btn{height:40px;padding:0 10px;font-size:13.5px}
 
 /* Баннер того же размера, что и купон */
+/* Высота — как у соседнего купона в этой же строке (Иван 25.09): у
+   баннера своего фото нет, а aspect-ratio считал высоту от своей ширины,
+   не от строки сетки, и рядом с карточкой купона он получался ниже.
+   height:100% забирает высоту строки грида — обе карточки в ряду
+   растягиваются на высоту самой высокой (родная стойка grid). */
 .lkd-ad--banner{
-  aspect-ratio:4/5.9;justify-content:flex-end;gap:10px;
+  height:100%;box-sizing:border-box;justify-content:flex-end;gap:10px;
   padding:22px;border-radius:18px;background:var(--ink);color:#fff;
 }
 .lkd-ad--banner .lkd-ad__label{margin-bottom:auto;color:rgba(255,255,255,.55)}

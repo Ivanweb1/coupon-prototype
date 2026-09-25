@@ -546,10 +546,20 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
   const readAll = `<button class="btn btn--ghost" data-read-all${unread ? "" : " disabled"}>Прочитать все</button>`;
 
   if (!IS_CLIENT) {
+    /* Во всю ширину — как остальные разделы партнёра (Иван 25.09):
+       узкая колонка на широком экране смотрелась потерянной, а кнопка
+       «Прочитать все» — оторванной от списка под ней. Сноска — не
+       отдельным блоком, а строкой под списком, как итог в других
+       таблицах кабинета. */
     return head("Уведомления", readAll)
-      + `<div class="lkd-one">${feed}
-        <div class="lk-note">Уведомления о выплатах, документах и клиентах
-        приходят сюда и дублируются на почту partner@example.ru.</div></div>`;
+      + panel("", `<div class="lk-list">${list.map(n => `
+        <div class="lk-list__i${n.unread ? " is-unread" : ""}">
+          <i class="lk-list__d"></i>
+          <div>${n.text}<div class="lk-list__w">${n.when}</div></div>
+        </div>`).join("")}</div>`
+        + `<div class="lk-total lk-total--note"><span>Уведомления о выплатах,
+        документах и клиентах приходят сюда и дублируются на почту
+        partner@example.ru.</span></div>`);
   }
 
   const channels = LK_NOTIFY_CHANNELS.map(ch => {
