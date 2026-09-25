@@ -44,6 +44,12 @@
 .dz3 .dzl__city{
   overflow-wrap:break-word;
   hyphens:manual;
+  /* Ровно, в строку с остальными словами (Иван 25.09): без наклона и без
+     сдвинутой тени-«наклейки», шрифт тот же, что у заголовка; красная
+     плашка остаётся. */
+  transform:none;box-shadow:none;
+  padding:0 .16em .04em;margin:0 .04em;border-radius:.18em;
+  font:inherit;letter-spacing:inherit;line-height:inherit;
 }
 .dz3 .dzl__h1{overflow-wrap:break-word;max-width:20ch}
 
