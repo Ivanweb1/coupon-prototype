@@ -291,3 +291,29 @@
   body:has(.quick.is-on) .cp-toast,
   body:has(.cpd) .cp-toast{bottom:190px}
 }
+
+/* --------------------------------------------------------------------------
+   Плашки на фото крупнее (Иван 25.09)
+   --------------------------------------------------------------------------
+   На карточке после сужения столбика до 24px всё выглядело мелко — три
+   плашки (минуты, столбик метрик, выгода) толще на 4px. В попапе плашки
+   минут и просмотров — той же высоты, что круглый крестик (36px). */
+.dz3 .card__near{height:28px;padding:0 10px;font-size:12px}
+.dz3 .card__stats{width:28px;padding:9px 0;gap:10px}
+.dz3 .card__stat svg{width:15px;height:15px}
+.dz3 .card__stat b{font-size:10px}
+.val-ticket .dz3.cards-wb .card__badge{padding:9px 16px 10px}
+.val-ticket .dz3.cards-wb .card__badge.is-long{padding:9px 15px 10px}
+@container (max-width: 235px){
+  .val-ticket .dz3.cards-wb .card__badge,
+  .val-ticket .dz3.cards-wb .card__badge.is-long{padding:7px 11px 8px}
+}
+
+.dz3 .quick__badges .card__near{height:36px;padding:0 13px;font-size:13px;border-radius:var(--r-pill)}
+.dz3 .quick__badges .quick__views{gap:5px}
+.dz3 .quick__badges .quick__views svg{width:16px;height:16px}
+/* На телефоне крестик лежит на фото — ставим его в один ряд с плашками,
+   с тем же отступом от края снимка (10px рамки + 12px) */
+@media (max-width:820px){
+  body.dz3:not(.quick-left) .quick__close{top:22px;right:22px}
+}

@@ -512,7 +512,7 @@ function buildL1Dropdowns() {
 
   /* На телефоне строка разделов листается вбок, как лента ниш: затухание
      у правого края — пока за ним есть что листать */
-  const row = qs(".tags-row__main");
+  const row = qs(".tags-row__l1");
   if (row) {
     const sync = () => row.classList.toggle("has-more", row.scrollWidth - row.clientWidth - row.scrollLeft > 20);
     row.addEventListener("scroll", sync, { passive: true });
@@ -644,7 +644,12 @@ function cardHTML(c, compact) {
              закольцовывалась на том же шаге. Раз действие другое — и
              надпись другая: «Забрать купон» здесь обещала бы код. */
           ? `<button type="button" class="btn btn--solid btn--wide" data-card-reveal>Смотреть в категории</button>`
-          : `<button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
+          /* «Подробнее» в дизайн-версии убрана (Иван 25.09): попап и так
+             открывается по нажатию на любое место карточки, как на WB и
+             Ozon, а кнопка лишь дублировала это и нагромождала карточку. */
+          : dz3()
+            ? `<button type="button" class="btn btn--solid btn--wide" data-card-reveal>Забрать купон</button>`
+            : `<button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
              <button type="button" class="btn btn--solid" data-card-reveal>Забрать купон</button>`}
       </div>
     </div>`;
