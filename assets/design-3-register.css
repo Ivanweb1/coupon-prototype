@@ -31,7 +31,9 @@
   font-size:12px;font-weight:600;
 }
 .rg-hero h1{
-  margin:16px 0 0;max-width:20ch;
+  /* 20ch ломало «Разместите купон бесплатно» пополам — заголовок в одну
+     строку, на узких экранах его всё равно переносит по ширине колонки. */
+  margin:16px 0 0;max-width:28ch;
   font-family:var(--font-display);font-weight:800;
   font-size:clamp(28px,3.1vw,44px);line-height:1.08;letter-spacing:-.02em;
   color:var(--ink);
