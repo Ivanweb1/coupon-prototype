@@ -72,8 +72,68 @@
       <span data-icon="user"></span>
       <span class="lk-chip__label">Войти в личный кабинет</span>
     </a>
+
+    <button type="button" class="burger" data-menu-open aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<div class="mobile-nav" id="mobileNav" data-mobile-nav hidden>
+  <div class="mobile-nav__backdrop" data-menu-close></div>
+  <div class="mobile-nav__panel">
+    <div class="mobile-nav__head">
+      <span class="dz-logo">
+        <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="22" height="37">
+        <span class="dz-logo__word">Все<br>купоны</span>
+      </span>
+      <button type="button" class="mobile-nav__close" data-menu-close aria-label="Закрыть меню" data-icon="close"></button>
+    </div>
+
+    <button type="button" class="mobile-nav__city" data-city-open>
+      <span data-icon="pin"></span> <span data-geo-short>Липецк</span> — сменить город
+      <span class="chev" data-icon="chev"></span>
+    </button>
+
+    <a class="btn btn--solid mobile-nav__cta" href="register-design.html">
+      <span data-icon="plus"></span>Разместить купон
+    </a>
+    <a class="mobile-nav__lk" href="lk/client.html"><span data-icon="user"></span>Личный кабинет</a>
+
+    <nav class="mobile-nav__cols">
+      <div class="fcol">
+        <h4>Сервис</h4>
+        <ul>
+          <li><a href="#">Как это работает</a></li>
+          <li><a href="#">Вопросы и ответы</a></li>
+          <li><a href="#">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Бизнесу</h4>
+        <ul>
+          <li><a href="register-design.html">Зарегистрироваться</a></li>
+          <li><a href="#">Тарифы</a></li>
+          <li><a href="#">Документы</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Партнёрам</h4>
+        <ul>
+          <li><a href="partner.html">Стать партнёром</a></li>
+          <li><a href="partner.html#cities">Города присутствия</a></li>
+          <li><a href="#">Партнёрская программа</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="mobile-nav__soc" aria-label="Мы в соцсетях города">
+      <a class="soc" href="#" data-city-social="ВКонтакте"><span data-icon="vk"></span>ВКонтакте</a>
+      <a class="soc" href="#" data-city-social="Telegram"><span data-icon="tg"></span>Telegram</a>
+      <a class="soc" href="#" data-city-social="Одноклассники"><span data-icon="ok"></span>Одноклассники</a>
+    </div>
+  </div>
+</div>
 
 
 <main class="wrap">

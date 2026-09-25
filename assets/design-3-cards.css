@@ -92,10 +92,12 @@
 .dz3 .card__stat--act:hover{color:var(--brand);background:var(--surface)}
 .dz3 .card__stat--act.is-done{color:var(--brand)}
 
-/* Узкая карточка (по шесть в ряд): столбик из четырёх занял бы полкартинки
-   — оставляем только числа, действия остаются на кнопках под картинкой. */
+/* Просмотры: полное число по умолчанию, сокращённое (3.3к) — на узкой
+   карточке, чтобы плашка со столбиком метрик не тянулась в ширину. */
+.dz3 .card__stat-short{display:none}
 @container (max-width: 235px){
-  .dz3 .card__stat--act{display:none}
+  .dz3 .card__stat-full{display:none}
+  .dz3 .card__stat-short{display:inline}
 }
 
 /* --------------------------------------------------------------------------
@@ -117,10 +119,7 @@
   /* flex, а не grid: у grid две строки расходятся по высоте контейнера, и
      код с подписью разъезжаются на две отдельные плашки — а нужна одна */
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  /* справа оставляем место под столбик метрик: плашка с кодом не должна
-     его закрывать — просмотры и «воспользовались» по решению созвона
-     видны всегда, в том числе в этот момент */
-  padding:14px 52px 14px 14px;
+  padding:10px;
   background:rgba(20,16,15,.38);
   animation:dz3CodeIn .28s cubic-bezier(.34,1.56,.64,1) both;
 }

@@ -592,7 +592,7 @@ function cardHTML(c, compact) {
      карточки. */
   const stats = dz3() && !compact ? `
       <div class="card__stats">
-        <span class="card__stat" title="Просмотров: ${c.views}">${ICON.eye}<b>${fmtNum(c.views)}</b></span>
+        <span class="card__stat" title="Просмотров: ${c.views}">${ICON.eye}<b class="card__stat-full">${fmtNum(c.views)}</b><b class="card__stat-short">${fmtNumShort(c.views)}</b></span>
         <button type="button" class="card__stat card__stat--act" data-card-copy title="Скопировать код">${ICON.copy}</button>
         <button type="button" class="card__stat card__stat--act" data-card-share title="Поделиться">${ICON.share}</button>
       </div>` : "";
@@ -745,6 +745,17 @@ function dz3() { return document.body.classList.contains("dz3"); }
 /* 4 219 вместо 4219: на плашке в 40 пикселей четыре слитные цифры
    читаются как один ком. */
 function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+
+/* Сокращённо для узкой карточки на телефоне: 3 305 → 3.3к, чтобы плашка
+   с просмотрами не тянула столбик метрик в ширину. */
+function fmtNumShort(n) {
+  if (n < 1000) return String(n);
+  if (n < 1e6) {
+    const v = n < 10000 ? (n / 1000).toFixed(1).replace(/\.0$/, "") : Math.round(n / 1000);
+    return v + "к";
+  }
+  return (n / 1e6).toFixed(1).replace(/\.0$/, "") + "млн";
+}
 
 function makeCard(c, compact) {
   const el = document.createElement("div");
@@ -2265,6 +2276,8 @@ function initSearch() {
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") {
     if (qs("#quick") && qs("#quick").classList.contains("is-on")) closeQuick();
+    const nav = qs("[data-mobile-nav]");
+    if (nav && nav.classList.contains("is-on") && nav._close) nav._close();
   }
 });
 
@@ -2332,6 +2345,35 @@ function initHeaderShadow() {
   syncSearch();
 }
 
+/* Бургер на мобильном: шапка на телефоне сворачивается до одних иконок
+   (город, «Разместить купон», кабинет), а ссылки подвала — «как это
+   работает», тарифы, партнёрская программа — становятся недоступны без
+   скролла в самый низ. Бургер открывает панель с тем же списком ссылок,
+   что и в подвале, плюс сменой города и входом в кабинет. */
+function initMobileMenu() {
+  const panel = qs("[data-mobile-nav]");
+  const openBtn = qs("[data-menu-open]");
+  if (!panel || !openBtn) return;
+  const close = () => {
+    panel.classList.remove("is-on");
+    panel.hidden = true;
+    openBtn.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("no-scroll");
+  };
+  const open = () => {
+    panel.hidden = false;
+    requestAnimationFrame(() => panel.classList.add("is-on"));
+    openBtn.setAttribute("aria-expanded", "true");
+    document.body.classList.add("no-scroll");
+  };
+  openBtn.onclick = open;
+  qsa("[data-menu-close]", panel).forEach(b => b.onclick = close);
+  qsa("a, button", panel).forEach(el => {
+    if (!el.hasAttribute("data-menu-close")) el.addEventListener("click", close);
+  });
+  panel._close = close;
+}
+
 function initCommon() {
   initCardStyle();
   initQuickStyle();
@@ -2344,6 +2386,7 @@ function initCommon() {
   initCityGate();
   renderGeo();
   initSearch();
+  initMobileMenu();
   const ov = qs("#overlay");
   if (ov) ov.onclick = closeQuick;
 }

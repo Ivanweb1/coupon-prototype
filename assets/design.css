@@ -364,7 +364,6 @@
     width:150px;height:252px;opacity:.14;transform:rotate(12deg);
     background:url("brand/logo-white.png") center/contain no-repeat;
   }
-  .dz-logo__word{display:none}
   .dz-logo__mark{height:40px}
   .dz-facts{gap:0 12px}
   .dz-facts dt{font-size:17px;white-space:nowrap}
@@ -894,6 +893,19 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
 .dz .quick .soc--icon:hover{background:none;transform:translateY(-2px)}
 .dz .quick .soc--icon .soc-ic{width:36px;height:36px}
 .dz.quick-side .quick .map--live{height:124px}
+
+/* На телефоне попап сам узкий (calc(100vw - 20px)) — имя компании,
+   телефон и пять значков соцсетей одной нестрогой строкой туда не
+   помещаются: имя обрезалось до пары букв, телефон наезжал на значки.
+   Отдаём значкам отдельную строку снизу, имени с телефоном — всю ширину. */
+@media (max-width:820px){
+  .dz .quick .company:has(.socials--icons){flex-wrap:wrap}
+  .dz .quick .socials--icons{
+    width:100%;margin-left:0;flex-wrap:wrap;
+    padding-top:10px;border-top:1px dashed var(--line);
+  }
+  .dz .quick .company__phone{min-width:0;overflow:hidden;text-overflow:ellipsis}
+}
 
 /* Правки 17.09.2026 (вариант side и общие для поп-апа) ------------------ */
 
@@ -1516,6 +1528,65 @@ body.dz:not(.quick-left) .quick__photo{width:100%;height:100%;max-height:none;as
   .dz-header .header__in{justify-content:flex-end}
   .dz-header .dz-logo{margin-right:auto}
 }
+
+/* ==========================================================================
+   Бургер и мобильное меню
+   ========================================================================== */
+.burger{
+  display:none;flex:0 0 auto;order:99;
+  width:40px;height:40px;padding:0;border:0;background:none;cursor:pointer;
+  flex-direction:column;align-items:center;justify-content:center;gap:5px;
+}
+.burger span{width:20px;height:2px;border-radius:1px;background:var(--ink);transition:transform .2s var(--ease),opacity .2s}
+
+@media (max-width:820px){
+  .burger{display:flex}
+}
+
+.mobile-nav{position:fixed;inset:0;z-index:80}
+.mobile-nav__backdrop{position:absolute;inset:0;background:rgba(20,16,15,.4)}
+.mobile-nav__panel{
+  position:absolute;top:0;right:0;bottom:0;width:min(86vw,360px);
+  background:#fff;box-shadow:-16px 0 40px -20px rgba(0,0,0,.35);
+  overflow-y:auto;display:flex;flex-direction:column;gap:22px;padding:18px 20px 28px;
+  transform:translateX(100%);transition:transform .28s var(--ease);
+}
+.mobile-nav.is-on .mobile-nav__backdrop{animation:mnavFade .2s both}
+.mobile-nav.is-on .mobile-nav__panel{transform:none}
+@keyframes mnavFade{from{opacity:0}to{opacity:1}}
+
+.mobile-nav__head{display:flex;align-items:center;justify-content:space-between}
+.mobile-nav__close{
+  width:36px;height:36px;border:1px solid var(--line-strong);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:none;color:var(--ink-2);
+}
+
+.mobile-nav__city{
+  display:flex;align-items:center;gap:8px;height:46px;padding:0 16px;
+  border:1px solid var(--line-strong);border-radius:var(--r-pill);background:#fff;
+  font-size:14px;color:var(--ink);text-align:left;
+}
+.mobile-nav__city [data-geo-short]{font-weight:600}
+.mobile-nav__city .chev{margin-left:auto;color:var(--ink-3)}
+
+.mobile-nav__cta{height:46px}
+.mobile-nav__lk{
+  display:flex;align-items:center;gap:10px;height:46px;padding:0 4px;
+  color:var(--ink);font-size:14px;font-weight:500;
+}
+.mobile-nav__lk [data-icon]{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--line-strong);
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+
+.mobile-nav__cols{display:flex;flex-direction:column;gap:20px}
+.mobile-nav__cols .fcol h4{font-size:12px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin:0 0 10px}
+.mobile-nav__cols .fcol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.mobile-nav__cols .fcol a{color:var(--ink-2);font-size:14.5px}
+
+.mobile-nav__soc{display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:16px;margin-top:auto}
+.mobile-nav__soc .soc{display:flex;align-items:center;gap:10px;height:38px;color:var(--ink-2);font-size:13.5px}
+.mobile-nav__soc .soc [data-icon]{width:24px;height:24px;flex:0 0 auto}
 
 /* Шапка: город и соцсети города — одна плашка; всё справа одной высоты (44,
    при прокрутке 40); перед группой «Разместить купон · кабинет» отступ больше */

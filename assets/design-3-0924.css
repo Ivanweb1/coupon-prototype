@@ -186,7 +186,7 @@
 .dz3 .card__code{--tk-foot:34px;--tk-r:7px}
 .dz3 .card__code-val,
 .dz3 .card__code-date,
-.dz3 .card__code-mark{width:min(100%,240px);box-sizing:border-box}
+.dz3 .card__code-mark{width:100%;box-sizing:border-box}
 .dz3 .card__code-val{
   border-radius:14px 14px 0 0;color:var(--brand);
   -webkit-mask:
