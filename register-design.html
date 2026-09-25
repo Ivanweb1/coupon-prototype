@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разместить купон — Все купоны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260918y">
+<link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<!-- Та же база, что на главной, странице купона и форме партнёра -->
+<link rel="stylesheet" href="assets/design-3.css?v=20260924a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260922b">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260922b">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260922b">
+<!-- Ч/Б форма как была: разметка и register.js общие с register.html,
+     этот лист только переводит её на дизайн -->
+<link rel="stylesheet" href="assets/register.css?v=20260925e">
+<link rel="stylesheet" href="assets/design-3-register.css?v=20260925e">
+<link rel="icon" href="assets/brand/logo-red.png">
+</head>
+<body class="dz dz3 cards-wb">
+
+<!-- ===================================================================
+     ДИЗАЙН. Регистрация клиента в стиле витрины и формы партнёра.
+     Структура, поля и сценарий — из прототипа register.html (ТЗ v7.0
+     §4.3.1), и оба файла делят register.js: классы .reg__* и атрибуты
+     data-reg-* здесь ровно те же.
+
+     Шапка нарочно простая, как и в прототипе: это конверсионная
+     страница, а не витрина — геоселектор, поиск и соцсети города
+     отвлекали бы от формы. Остаются две ссылки: обратно на витрину и
+     вход для тех, у кого кабинет уже есть.
+     =================================================================== -->
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+    <span class="header__spacer"></span>
+    <a class="btn btn--ghost" href="lk/client.html">Уже есть кабинет — войти</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="rg-hero">
+    <span class="rg-hero__k">Бизнесу</span>
+    <h1>Разместите купон бесплатно</h1>
+    <p class="rg-hero__sub">
+      Размещать купоны могут ООО, ИП, самозанятые и физлица. Покупатели получают
+      код без оплаты, вы платите за размещение на витрине и в соцсетях.
+    </p>
+  </section>
+
+  <div class="rg-cols">
+
+    <div class="reg__card">
+      <ol class="reg__steps">
+        <li class="is-on" data-reg-step><span>1</span>Реквизиты</li>
+        <li data-reg-step><span>2</span>Почта</li>
+        <li data-reg-step><span>3</span>Готово</li>
+      </ol>
+
+      <!-- Экран 1 — ТЗ §4.3.1 п.1: реквизиты, достаточные для закрывающих
+           документов.
+
+           Порядок: сначала ИНН, потом выбор своей компании из найденного,
+           и только потом раскрывается блок реквизитов — уже заполненный.
+           Руками остаётся то, чего в базе нет: ФИО контактного лица,
+           телефоны и почта. -->
+      <section class="reg__screen is-on" data-reg-screen="form">
+
+        <!-- Четыре формы регистрации рекламодателя — дополнение от 25.09.2026.
+             Физлицо размещает купоны на тех же правах: отдельного урезанного
+             тарифа для него не обсуждали, поэтому набор полей у него отличается
+             только тем, что у частного человека нет реквизитов компании. -->
+        <div class="reg__f">
+          <span class="reg__l">Кто размещает купоны</span>
+          <div class="reg__chips">
+            <button type="button" class="reg__chip is-on" data-org="ООО">ООО</button>
+            <button type="button" class="reg__chip" data-org="ИП">ИП</button>
+            <button type="button" class="reg__chip" data-org="Самозанятый">Самозанятый</button>
+            <button type="button" class="reg__chip" data-org="Физлицо">Физлицо</button>
+          </div>
+        </div>
+
+        <label class="reg__f">
+          <span class="reg__l" data-reg-inn-l>ИНН</span>
+          <div class="reg__inline">
+            <input class="reg__i" data-reg-inn placeholder="10 цифр — как у ООО" inputmode="numeric">
+            <button type="button" class="btn btn--ghost" data-reg-inn-check>Найти по ИНН</button>
+          </div>
+        </label>
+        <p class="reg__hint" data-reg-inn-hint hidden></p>
+
+        <!-- Найденное по ИНН. Организацию выбирают явно, а не подставляют
+             молча: по одному ИНН бывает и головная компания, и обособленное
+             подразделение, и человек должен видеть, что именно он берёт. -->
+        <div class="reg__f" data-reg-found hidden>
+          <span class="reg__l">Выберите свою компанию</span>
+          <div class="reg__found"></div>
+        </div>
+
+        <!-- Реквизиты. Появляются заполненными после выбора компании;
+             поправить можно любое поле — база иногда отстаёт от жизни. -->
+        <div data-reg-req hidden>
+          <label class="reg__f">
+            <span class="reg__l" data-reg-name-l>Наименование юридического лица</span>
+            <input class="reg__i" data-reg-name placeholder="ООО «Пример»">
+          </label>
+
+          <div class="reg__row--2" data-org-only>
+            <label class="reg__f">
+              <span class="reg__l">Страна</span>
+              <select class="reg__i reg__i--select" data-reg-country>
+                <option>Россия</option>
+              </select>
+            </label>
+            <label class="reg__f">
+              <span class="reg__l">КПП</span>
+              <input class="reg__i" data-reg-kpp placeholder="780601001" inputmode="numeric">
+            </label>
+          </div>
+
+          <label class="reg__f" data-org-only>
+            <span class="reg__l">Юридический адрес</span>
+            <input class="reg__i" data-reg-addr-legal placeholder="Липецкая обл, г Грязи">
+          </label>
+
+          <label class="reg__f" data-org-only>
+            <span class="reg__l">Почтовый адрес</span>
+            <input class="reg__i" data-reg-addr-post placeholder="398010, Липецкая обл, г Грязи">
+          </label>
+
+          <label class="reg__f" data-org-only>
+            <span class="reg__l">ФИО контактного лица</span>
+            <input class="reg__i" data-reg-fio placeholder="Иванов Иван Иванович">
+          </label>
+
+          <div class="reg__row--2" data-phone-row>
+            <label class="reg__f" data-org-only>
+              <span class="reg__l">Телефон организации</span>
+              <span class="reg__tel">
+                <span class="reg__tel-cc">🇷🇺 +7</span>
+                <input class="reg__i" data-reg-phone-org placeholder="912 345-67-89" inputmode="tel">
+              </span>
+            </label>
+            <label class="reg__f">
+              <span class="reg__l">Мобильный телефон</span>
+              <span class="reg__tel">
+                <span class="reg__tel-cc">🇷🇺 +7</span>
+                <input class="reg__i" data-reg-phone placeholder="912 345-67-89" inputmode="tel">
+              </span>
+            </label>
+          </div>
+
+          <label class="reg__f">
+            <span class="reg__l">Email</span>
+            <input class="reg__i" data-reg-email type="email" placeholder="name@email.com">
+          </label>
+        </div>
+
+        <!-- Созвон 14.09: при регистрации — только то, без чего не собрать
+             документы и шапку купона. Категория, география и адреса сюда
+             входят; всё остальное — в анкету в кабинете за бонусы. -->
+        <label class="reg__f">
+          <span class="reg__l" data-reg-cat-l>Категория бизнеса</span>
+          <select class="reg__i reg__i--select" data-reg-cat></select>
+        </label>
+
+        <div class="reg__f">
+          <span class="reg__l" data-reg-geo-l>Где вы обслуживаете клиентов</span>
+          <div class="reg__chips">
+            <button type="button" class="reg__chip is-on" data-geo="points">В городах, по адресам</button>
+            <button type="button" class="reg__chip" data-geo="online">Онлайн</button>
+            <button type="button" class="reg__chip" data-geo="russia">По всей России</button>
+          </div>
+        </div>
+
+        <div class="reg__f" data-geo-pane="points">
+          <span class="reg__l">Города</span>
+          <div class="reg__chips" data-reg-cities></div>
+        </div>
+
+        <div class="reg__f" data-geo-pane="points">
+          <span class="reg__l">Адреса точек</span>
+          <div class="reg__addrs" data-reg-addrs>
+            <input class="reg__i" placeholder="Липецк, ул. Первомайская, 12">
+          </div>
+          <button type="button" class="reg__plus" data-reg-addr-add>+ Добавить адрес</button>
+          <p class="reg__note" style="margin-top:2px">Адреса сохраним в карточку компании — при создании купона они уже будут в списке.</p>
+        </div>
+
+        <p class="reg__note" data-geo-pane="online" hidden>Купоны онлайн-бизнеса публикуются по областям или на всю Россию — выберете при создании купона.</p>
+        <p class="reg__note" data-geo-pane="russia" hidden>Подходит для маркетплейсов и компаний, которые работают с клиентами из любого региона.</p>
+
+        <label class="reg__f">
+          <span class="reg__l">Пароль</span>
+          <input class="reg__i" data-reg-pass type="password" placeholder="Не короче 8 символов">
+        </label>
+        <p class="reg__note">Восстановить доступ можно только через email — SMS не используется.</p>
+
+        <label class="reg__f">
+          <span class="reg__l" data-reg-about-l>Коротко о компании</span>
+          <textarea class="reg__ta" data-reg-about placeholder="Своя пекарня, доставка по городу, работаем с 2019 года."></textarea>
+        </label>
+        <p class="reg__note">Это описание попадёт на страницу купона в блок «О компании» — без него ему неоткуда взять текст.</p>
+
+        <div class="reg__f">
+          <span class="reg__l">Куда присылать уведомления о статусе</span>
+          <div class="reg__checks">
+            <label class="reg__check"><input type="checkbox"><span>Telegram</span></label>
+            <label class="reg__check"><input type="checkbox"><span>Max</span></label>
+          </div>
+          <p class="reg__note" style="margin-top:2px">Почта — всегда, её вы подтвердите на следующем шаге. SMS не используется.</p>
+        </div>
+
+        <label class="reg__check reg__consent">
+          <input type="checkbox" data-reg-consent>
+          <span>Соглашаюсь с офертой и политикой обработки персональных данных</span>
+        </label>
+
+        <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-submit>Отправить заявку</button>
+      </section>
+
+      <!-- Экран 2 — ТЗ §4.3.1 п.2: почта подтверждается кодом до продолжения -->
+      <section class="reg__screen" data-reg-screen="email">
+        <p class="reg__lead">Код отправлен на <b data-reg-email-out></b>. Впишите его, чтобы подтвердить почту.</p>
+        <label class="reg__f">
+          <span class="reg__l">Код из письма</span>
+          <input class="reg__i reg__i--code" data-reg-code placeholder="0000" inputmode="numeric" maxlength="4">
+        </label>
+        <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-confirm>Подтвердить</button>
+        <div class="reg__resend">
+          <button type="button" class="btn btn--ghost" data-reg-resend>Отправить код ещё раз</button>
+          <span class="reg__resend-ok" data-reg-resend-ok hidden>Отправили ещё раз</span>
+        </div>
+      </section>
+
+      <!-- Экран 3 — ТЗ §4.3.1 пп.4-5: карточка в Б24, модерация, кабинет уже доступен -->
+      <section class="reg__screen" data-reg-screen="done">
+        <div class="reg__done-i">✓</div>
+        <h2 class="reg__done-h">Заявка отправлена</h2>
+        <p class="reg__lead">Карточка компании автоматически создана в Битрикс24 — заявка ушла на модерацию.</p>
+        <ul class="reg__done-list">
+          <li>Первый купон размещаете бесплатно.</li>
+          <li>В кабинете ждёт короткая анкета о компании — за неё начислим 700 бонусов на оплату следующих размещений.</li>
+          <li>Кабинет клиента уже доступен — можно посмотреть тарифы и заполнить профиль.</li>
+          <li>Опубликовать купон получится после решения модератора — обычно это занимает несколько часов.</li>
+          <li data-reg-manual-note hidden>ИНН не нашёлся по базе, поэтому модерация будет усиленной — возможно, с вами свяжутся для уточнения реквизитов.</li>
+        </ul>
+        <a class="btn btn--solid btn--lg btn--wide" href="lk/client.html">Перейти в кабинет</a>
+      </section>
+    </div>
+
+    <!-- Боковая колонка. Ничего нового не обещает: это то же, что форма
+         и так говорит подписями под полями и экраном «готово», собранное
+         в одном месте — чтобы ответ на «а что я за это получу» не ждал
+         конца длинной формы. -->
+    <aside class="rg-side">
+      <div class="rg-side__card">
+        <h2>Что вы получаете</h2>
+        <ul class="rg-list">
+          <li>Первый купон размещаете бесплатно.</li>
+          <li>Публикуем на витрине города и в городских соцсетях.</li>
+          <li>Кабинет открывается сразу: тарифы, профиль и статистика доступны до решения модератора.</li>
+          <li>700 бонусов на следующие размещения — за короткую анкету о компании в кабинете.</li>
+        </ul>
+      </div>
+
+      <div class="rg-side__card">
+        <h2>Что понадобится под рукой</h2>
+        <ul class="rg-list rg-list--plain">
+          <li>ИНН — по нему подтянем реквизиты из базы, руками останутся контакты.</li>
+          <li>Рабочая почта: её подтверждаем кодом, и доступ восстанавливается только через неё.</li>
+          <li>Пара строк о компании — они попадут на страницу купона в блок «О компании».</li>
+        </ul>
+        <p class="rg-side__note">Форма ничего не отправляет: это прототип.</p>
+      </div>
+    </aside>
+
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="dz-foot-legal">
+      <p class="dz-foot-legal__req">
+        ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 ·
+        г. Липецк, ул. Название, 1
+      </p>
+      <p class="dz-foot-legal__pd">
+        Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону,
+        третьим лицам не передаём.
+      </p>
+    </div>
+    <div class="footer__legal">
+      <span>© 2026 Все купоны</span>
+      <a href="#">Политика конфиденциальности</a>
+      <a href="#">Пользовательское соглашение</a>
+      <a href="index-design-3.html">На витрину</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data.js?v=20260917a"></script>
+<script src="assets/register.js?v=20260925e"></script>
+</body>
+</html>

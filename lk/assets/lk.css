@@ -226,7 +226,12 @@
   background:var(--ink-4);
 }
 .lk-st--live::before{background:var(--ink)}
-.lk-st--moderation::before{background:var(--ink-3);box-shadow:0 0 0 3px var(--surface-2)}
+.lk-st--moderation::before,
+.lk-st--wait::before{background:var(--ink-3);box-shadow:0 0 0 3px var(--surface-2)}
+/* Состояния не только у купона: у выплаты и у начисленного бонуса они
+   те же по смыслу — сработало, ждёт, вышло из игры. Общие модификаторы,
+   чтобы не заводить третий словарь статусов на те же три состояния. */
+.lk-st--ok::before{background:var(--ink)}
 .lk-st--draft::before{background:none;border:1.5px solid var(--ink-4)}
 .lk-st--rejected::before{background:none;border:1.5px solid var(--ink);position:relative}
 .lk-st--done::before{background:var(--surface-3)}
@@ -514,6 +519,47 @@
 .lk-t tr[data-client]:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
 
 /* --------------------------------------------------------------------------
+   Свёрнутое приглашение на анкету
+   --------------------------------------------------------------------------
+   Приглашение показывается модалкой один раз, но «Позже» не прячет его
+   насовсем: анкета — это 700 бонусов и точность подсказок в конструкторе,
+   и после одного нажатия она не должна исчезать из виду. Поэтому «Позже»
+   сворачивает приглашение в плашку у нижнего края — она висит во всех
+   разделах кабинета и не перекрывает работу. Крестик на плашке убирает её
+   до следующего захода: отказаться от анкеты навсегда нельзя, но и мозолить
+   глаза всю сессию она не будет.
+
+   Ниже модалки по слою (z-index 30 против 60): открытая анкета должна
+   перекрывать плашку, из которой её открыли.
+   -------------------------------------------------------------------------- */
+.lk-pill{
+  position:fixed;right:20px;bottom:20px;z-index:30;
+  display:flex;align-items:flex-start;
+  max-width:290px;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);
+  box-shadow:var(--shadow-2);
+}
+.lk-pill__body{
+  display:flex;flex-direction:column;gap:3px;text-align:left;
+  padding:13px 6px 13px 16px;
+}
+.lk-pill__body b{font-size:14px;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+.lk-pill__body span{font-size:12px;color:var(--ink-3)}
+.lk-pill__body:hover b{text-decoration:underline}
+.lk-pill__x{
+  flex:0 0 auto;width:28px;height:28px;margin:7px 7px 0 0;
+  border-radius:50%;display:grid;place-items:center;color:var(--ink-4);
+  transition:background .16s, color .16s;
+}
+.lk-pill__x::before{content:"✕";font-size:11px}
+.lk-pill__x:hover{background:var(--surface);color:var(--ink)}
+/* На телефоне плашка тянется во всю ширину: в углу она там перекрывала бы
+   кнопки таблиц, а места под аккуратный угол всё равно нет. */
+@media (max-width:560px){
+  .lk-pill{left:16px;right:16px;bottom:16px;max-width:none}
+}
+
+/* --------------------------------------------------------------------------
    Модалка кабинета. То же визуальное решение, что у попапа купона на
    публичке (.overlay/.modal__box в ../assets/style.css), но свой узел —
    в ЛК он нужен для коротких действий вроде запроса промокода.
@@ -708,11 +754,16 @@
 .lk-help__c p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2);flex:1 1 auto}
 .lk-help__c .btn{align-self:flex-start}
 
-/* Мои купоны: разделы, поиск, действия слева */
-.lk-filters--sec{padding-bottom:14px;border-bottom:1px solid var(--line)}
+/* Мои купоны: разделы, поиск, действия слева.
+   Раздел витрины и порядок сортировки — два списка слева: оба управляют
+   одним и тем же, что и в каком порядке лежит в таблице. Поиск занимает
+   остаток строки — он не настройка списка, а способ выдернуть из него
+   одну строку. Раньше раздел занимал отдельный ярус чипов над статусами,
+   и два ряда плашек подряд весили больше, чем таблица под ними. */
 .lk-tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.lk-tools__q{flex:1 1 260px}
+.lk-tools__sec{flex:0 0 220px}
 .lk-tools__sort{flex:0 0 230px}
+.lk-tools__q{flex:1 1 260px}
 .lk-t__acts{width:1%;white-space:nowrap}
 .lk-acts{display:flex;flex-direction:column;gap:6px;align-items:stretch}
 .lk-acts .btn{height:32px;padding:0 12px;font-size:13px}
@@ -747,14 +798,25 @@
 .lk-modal__lead{margin:0;font-size:14px;line-height:1.55;color:var(--ink-3)}
 
 .lk-pick{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+/* Значок раздела слева, текст колонкой справа — те же три знака, что у
+   закреплённых разделов на витрине */
 .lk-pick__i{
-  display:flex;flex-direction:column;gap:4px;text-align:left;
+  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;
+  gap:14px;text-align:left;
   padding:16px 18px;border:1px solid var(--line-strong);border-radius:var(--r-md);
   transition:border-color .16s,background .16s;
 }
 .lk-pick__i:hover{border-color:var(--ink);background:var(--surface)}
+.lk-pick__ic{
+  flex:0 0 auto;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--surface-2);color:var(--ink-2);
+  transition:background .16s,color .16s;
+}
+.lk-pick__i:hover .lk-pick__ic{background:var(--ink);color:var(--bg)}
+.lk-pick__t{display:flex;flex-direction:column;gap:4px;min-width:0}
 .lk-pick__i b{font-size:15px;font-weight:600}
-.lk-pick__i span{font-size:13px;color:var(--ink-3)}
+.lk-pick__i .lk-pick__t span{font-size:13px;color:var(--ink-3)}
 
 .lk-ways{display:flex;flex-direction:column;margin-top:14px}
 .lk-ways__i{display:flex;align-items:center;gap:14px;padding:12px 0;border-top:1px solid var(--line)}

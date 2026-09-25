@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css?v=20260917a">
-<link rel="stylesheet" href="assets/register.css?v=20260925c">
+<link rel="stylesheet" href="assets/register.css?v=20260925e">
 </head>
 <body>
 
@@ -36,9 +36,19 @@
       <li data-reg-step><span>3</span>Готово</li>
     </ol>
 
-    <!-- Экран 1 — ТЗ §4.3.1 п.1: минимум полей, достаточный для закрывающих
-         документов, а не только ИНН. КПП и юр.адрес сюда не входят — по
-         ТЗ §4.3.2 их дозаполняют при выставлении счёта, не при регистрации. -->
+    <!-- Экран 1 — ТЗ §4.3.1 п.1: реквизиты, достаточные для закрывающих
+         документов.
+
+         Решение Ивана 22.09.2026: КПП, юр. и почтовый адрес вернулись в
+         регистрацию. Раньше их тут не было — по ТЗ §4.3.2 их дозаполняли
+         при выставлении счёта. Но раз всё равно тянем карточку компании
+         из базы по ИНН, эти поля приходят тем же запросом бесплатно, и
+         просить их второй раз, когда клиент уже хочет платить, незачем.
+
+         Порядок: сначала ИНН, потом выбор своей компании из найденного,
+         и только потом раскрывается блок реквизитов — уже заполненный.
+         Руками остаётся то, чего в базе нет: ФИО контактного лица,
+         телефоны и почта. -->
     <section class="reg__screen is-on" data-reg-screen="form">
 
       <!-- Четыре формы регистрации рекламодателя — дополнение от 25.09.2026.
@@ -65,10 +75,76 @@
       </label>
       <p class="reg__hint" data-reg-inn-hint hidden></p>
 
-      <label class="reg__f">
-        <span class="reg__l" data-reg-name-l>Название компании</span>
-        <input class="reg__i" data-reg-name placeholder="Появится после поиска по ИНН — или впишите вручную" disabled>
-      </label>
+      <!-- Найденное по ИНН. Организацию выбирают явно, а не подставляют
+           молча: по одному ИНН бывает и головная компания, и обособленное
+           подразделение, и человек должен видеть, что именно он берёт. -->
+      <div class="reg__f" data-reg-found hidden>
+        <span class="reg__l">Выберите свою компанию</span>
+        <div class="reg__found"></div>
+      </div>
+
+      <!-- Реквизиты. Появляются заполненными после выбора компании;
+           поправить можно любое поле — база иногда отстаёт от жизни. -->
+      <!-- Дополнение 25.09.2026: у частного лица компании за спиной нет, и
+           в базе по его ИНН ничего не лежит. Поэтому блок реквизитов ему
+           открыт сразу, а поля, помеченные org-only, из него убраны:
+           остаются ФИО, мобильный телефон и почта. -->
+      <div data-reg-req hidden>
+        <label class="reg__f">
+          <span class="reg__l" data-reg-name-l>Наименование юридического лица</span>
+          <input class="reg__i" data-reg-name placeholder="ООО «Пример»">
+        </label>
+
+        <div class="reg__row--2" data-org-only>
+          <label class="reg__f">
+            <span class="reg__l">Страна</span>
+            <select class="reg__i reg__i--select" data-reg-country>
+              <option>Россия</option>
+            </select>
+          </label>
+          <label class="reg__f">
+            <span class="reg__l">КПП</span>
+            <input class="reg__i" data-reg-kpp placeholder="780601001" inputmode="numeric">
+          </label>
+        </div>
+
+        <label class="reg__f" data-org-only>
+          <span class="reg__l">Юридический адрес</span>
+          <input class="reg__i" data-reg-addr-legal placeholder="Липецкая обл, г Грязи">
+        </label>
+
+        <label class="reg__f" data-org-only>
+          <span class="reg__l">Почтовый адрес</span>
+          <input class="reg__i" data-reg-addr-post placeholder="398010, Липецкая обл, г Грязи">
+        </label>
+
+        <label class="reg__f" data-org-only>
+          <span class="reg__l">ФИО контактного лица</span>
+          <input class="reg__i" data-reg-fio placeholder="Иванов Иван Иванович">
+        </label>
+
+        <div class="reg__row--2" data-phone-row>
+          <label class="reg__f" data-org-only>
+            <span class="reg__l">Телефон организации</span>
+            <span class="reg__tel">
+              <span class="reg__tel-cc">🇷🇺 +7</span>
+              <input class="reg__i" data-reg-phone-org placeholder="912 345-67-89" inputmode="tel">
+            </span>
+          </label>
+          <label class="reg__f">
+            <span class="reg__l">Мобильный телефон</span>
+            <span class="reg__tel">
+              <span class="reg__tel-cc">🇷🇺 +7</span>
+              <input class="reg__i" data-reg-phone placeholder="912 345-67-89" inputmode="tel">
+            </span>
+          </label>
+        </div>
+
+        <label class="reg__f">
+          <span class="reg__l">Email</span>
+          <input class="reg__i" data-reg-email type="email" placeholder="name@email.com">
+        </label>
+      </div>
 
       <!-- Созвон 14.09: при регистрации — только то, без чего не собрать
            документы и шапку купона. Категория, география и адреса сюда
@@ -104,16 +180,8 @@
       <p class="reg__note" data-geo-pane="online" hidden>Купоны онлайн-бизнеса публикуются по областям или на всю Россию — выберете при создании купона.</p>
       <p class="reg__note" data-geo-pane="russia" hidden>Подходит для маркетплейсов и компаний, которые работают с клиентами из любого региона.</p>
 
-      <label class="reg__f">
-        <span class="reg__l">Телефон</span>
-        <input class="reg__i" data-reg-phone placeholder="+7 900 000-00-00">
-      </label>
-
-      <label class="reg__f">
-        <span class="reg__l">Email</span>
-        <input class="reg__i" data-reg-email type="email" placeholder="you@company.ru">
-      </label>
-
+      <!-- Телефон и почта переехали в блок реквизитов выше: там же, где
+           ФИО контактного лица, а не через полформы от него. -->
       <label class="reg__f">
         <span class="reg__l">Пароль</span>
         <input class="reg__i" data-reg-pass type="password" placeholder="Не короче 8 символов">
@@ -180,6 +248,6 @@
 </main>
 
 <script src="assets/data.js?v=20260917a"></script>
-<script src="assets/register.js?v=20260925a"></script>
+<script src="assets/register.js?v=20260925d"></script>
 </body>
 </html>

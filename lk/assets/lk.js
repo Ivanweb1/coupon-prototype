@@ -38,13 +38,42 @@ const ICON = {
   gift:   nav('<rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5.2 12.5V19a1 1 0 0 0 1 1h11.6a1 1 0 0 0 1-1v-6.5"/><path d="M12 8.5V20"/><path d="M12 8.5S10.9 4 8.9 4a2.25 2.25 0 0 0 0 4.5H12Z"/><path d="M12 8.5S13.1 4 15.1 4a2.25 2.25 0 0 1 0 4.5H12Z"/>'),
   wallet: nav('<path d="M19.5 8.5V7a2 2 0 0 0-2-2H5.5a2.5 2.5 0 0 0 0 5h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-12a2.5 2.5 0 0 1-2.5-2.5v-9"/><circle cx="16.5" cy="14.5" r="1.1"/>'),
   user:   nav('<circle cx="12" cy="8" r="3.6"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/>'),
-  exit:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>'
+  exit:   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3"/><path d="M10 8l-4 4 4 4M6 12h9"/></svg>',
+
+  /* Столбик метрик на карточке в ленте — те же четыре знака, что в
+     assets/app.js. Превью в мастере показывает будущий купон глазами
+     посетителя, значит и столбик на нём должен быть тот же. */
+  eye:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>',
+  used:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.2 5.2L20 7"/></svg>',
+  copy:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
+  share:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg>'
 };
 
 function initIcons(root = document) {
   qsa("[data-icon]", root).forEach(el => {
     if (!el.dataset.done) { el.innerHTML = ICON[el.dataset.icon] || ""; el.dataset.done = "1"; }
   });
+}
+
+/* Фирменные цвета площадок — те же, что в assets/app.js: на карточке в
+   ленте название маркетплейса стоит плашкой в его собственном цвете, и в
+   превью мастера оно должно выглядеть так же. */
+const LK_MP_COLOR = {
+  "Wildberries":   "#CB11AB",
+  "Ozon":          "#005BFF",
+  "Яндекс Маркет": "#FF5226",
+  "М.Видео":       "#E30613"
+};
+
+/* Плашка в углу карточки. У регионального купона там не город, а время
+   ходьбы до точки — сколько идти конкретному посетителю, поэтому в
+   превью это образец, а не настоящее число. У маркетплейсного расстояния
+   нет вовсе: купон действует в корзине, и вместо минут стоит площадка. */
+const PV_SAMPLE_DIST = "5 мин";
+function pvNearHTML(market) {
+  return market
+    ? `<span class="mp-name" style="--mp:${LK_MP_COLOR[market] || "#1B1B1B"}">${market}</span>`
+    : PV_SAMPLE_DIST;
 }
 
 const num = n => n.toLocaleString("ru-RU");
@@ -306,15 +335,41 @@ function head(title, actions) {
     </div></div>`;
 }
 
+/* Четыре показателя клиента — не четыре независимых числа, а одна цепочка:
+   купон показали в ленте, его открыли, забрали код, перешли к компании.
+   Каждый следующий шаг — подмножество предыдущего, но по четырём
+   одинаковым карточкам этого не видно, и 84 890 рядом с 903 читаются как
+   несвязанные величины.
+
+   Варианты показа переключаются адресом, как варианты карточки и попапа
+   на публичке:
+
+     ?kpi=flat  — как сейчас, четыре равные карточки (по умолчанию);
+     ?kpi=steps — между карточками стрелка: видно цепочку, цифр не прибавилось;
+     ?kpi=conv  — в стрелке процент перехода: видно, где теряем.
+
+   Графика нет ни в одном: Виль просил не перегружать разделы с аналитикой,
+   и это остаётся рядом плиток, а не диаграммой. */
+const KPI_MODE = ["steps", "conv"].indexOf(P.get("kpi")) >= 0 ? P.get("kpi") : "flat";
+
 /* note — короткая строка данных под числом: срок, период, остаток.
    Пояснять, что показатель означает, в интерфейсе не нужно. */
-function kpi(items) {
-  return `<div class="lk-kpi">${items.map(i => `
-    <div class="lk-kpi__c">
+function kpi(items, opts) {
+  const funnel = !!(opts && opts.funnel) && KPI_MODE !== "flat";
+  const cells = items.map((i, n) => {
+    /* Доля считается от предыдущего шага, а не от первого: падение слишком
+       крутое, и от первого последние два шага дали бы 2,8% и 1,1% — числа,
+       по которым ничего не решишь. */
+    const prev = n > 0 ? items[n - 1].raw : null;
+    const step = funnel && prev ? Math.round(i.raw / prev * 100) + "%" : "";
+    return `<div class="lk-kpi__c">
+      ${funnel && n > 0 ? `<span class="lk-kpi__step">${KPI_MODE === "conv" ? step : ""}</span>` : ""}
       <div class="lk-kpi__l">${i.label}</div>
       <div class="lk-kpi__v">${i.value}</div>
       ${i.note ? `<div class="lk-kpi__h">${i.note}</div>` : ""}
-    </div>`).join("")}</div>`;
+    </div>`;
+  }).join("");
+  return `<div class="lk-kpi${funnel ? " lk-kpi--funnel" : ""}">${cells}</div>`;
 }
 
 function status(id) {
@@ -328,9 +383,18 @@ function panel(title, body, opts) {
     ${body}</div>`;
 }
 
+/* key — колонка с итоговой метрикой. «Забрали» это то, ради чего сервис
+   и нужен: показы и просмотры объясняют, как до него дошли, а купон,
+   который забрали, — результат. В таблице из четырёх одинаковых столбцов
+   цифр он ничем не выделялся, хотя в статистике список ещё и отсортирован
+   именно по нему. */
 function table(cols, rows) {
+  const th = c => {
+    const cls = [c.num ? "num" : "", c.key ? "lk-t__key" : ""].filter(Boolean).join(" ");
+    return `<th${cls ? ` class="${cls}"` : ""}>${c.t}</th>`;
+  };
   return `<div class="lk-tw"><table class="lk-t">
-    <thead><tr>${cols.map(c => `<th${c.num ? ' class="num"' : ""}>${c.t}</th>`).join("")}</tr></thead>
+    <thead><tr>${cols.map(th).join("")}</tr></thead>
     <tbody>${rows}</tbody></table></div>`;
 }
 
@@ -398,18 +462,31 @@ function closeModal() {
 /* «Создать купон» — один вход во все разделы (созвон 10.09): сначала
    раздел, потом конструктор под него. mech — механика из «Топовых
    механик», с ней конструктор откроется уже заполненным. */
+/* Три раздела витрины — те же, что закреплены плашками на главной, и
+   значки у них те же: точка на карте у регионального, сумка у
+   маркетплейса, портфель у «для бизнеса». Человек уже видел их на
+   витрине, и узнать раздел по знаку он должен раньше, чем дочитает
+   подпись. Без значков три одинаковые рамки различались только текстом,
+   и выбор упирался в чтение. */
 function openCreateModal(mech) {
   const opts = [
-    ["new-regional",    "Региональный купон", "Скидка в заведении или магазине вашего города — по коду с экрана"],
-    ["new-marketplace", "Купон маркетплейса", "Промокод на товар на Wildberries, Ozon и других площадках"],
-    ["new-business",    "Купон для бизнеса",  "Предложение для компаний: услуги, оборудование, подряд"]
+    /* Подписи держим в одну строку: три пункта различаются с одного
+       взгляда, только пока они одинаковой высоты. У регионального было
+       «…по коду с экрана» — 476px против 420 доступных, и пункт разъезжался
+       на две строки, ломая ряд. «С экрана» ушло: механику всё равно
+       объясняет сам конструктор, а город и код — то, чем этот раздел
+       отличается от двух других. */
+    ["new-regional",    "pin",  "Региональный купон", "Скидка в заведении или магазине вашего города — по коду"],
+    ["new-marketplace", "bag",  "Купон маркетплейса", "Промокод на товар на Wildberries, Ozon и других площадках"],
+    ["new-business",    "case", "Купон для бизнеса",  "Предложение для компаний: услуги, оборудование, подряд"]
   ];
   const el = openModal(`
     <h3>Какой купон создаём?</h3>
     <p class="lk-modal__lead">От раздела зависят поля конструктора и то, где купон увидят.</p>
     <div class="lk-pick">${opts.map(o => `
       <button type="button" class="lk-pick__i" data-pick="${o[0]}">
-        <b>${o[1]}</b><span>${o[2]}</span>
+        <span class="lk-pick__ic" data-icon="${o[1]}"></span>
+        <span class="lk-pick__t"><b>${o[2]}</b><span>${o[3]}</span></span>
       </button>`).join("")}</div>`, { wide: true });
   qsa("[data-pick]", el).forEach(b => b.onclick = () => {
     closeModal();
@@ -433,10 +510,15 @@ function openBonusWays() {
       const label = used
         ? (w.monthly ? "Доступно в октябре" : w.once ? "Получено" : "Готово")
         : w.act;
+      /* Кнопки здесь контурные, хотя это и действия: способов шесть, они
+         равноценны, и сплошной заливкой список превращался в столбец
+         красного, где ни одна строка не выделялась. То же решение, что в
+         архиве купонов: красной кнопка становится под курсором — на той
+         строке, которую человек и правда выбрал. */
       return `<div class="lk-ways__i${used && (w.once || w.monthly) ? " is-used" : ""}">
         <div class="lk-ways__t"><b>${w.title}</b><span>${w.note}</span></div>
         <div class="lk-ways__r">+${w.reward}</div>
-        <button class="btn ${used ? "btn--ghost" : "btn--solid"}" data-way="${w.id}"${used && (w.once || w.monthly) ? " disabled" : ""}>${label}</button>
+        <button class="btn btn--ghost" data-way="${w.id}"${used && (w.once || w.monthly) ? " disabled" : ""}>${label}</button>
       </div>`;
     }).join("");
     qsa("[data-way]", el).forEach(b => b.onclick = () => {
@@ -567,6 +649,7 @@ function openSurvey() {
     LK_BALANCE.bonuses += 700;
     renderChrome();
     try { localStorage.setItem("lk_survey", "done"); } catch (e) {}
+    hideSurveyPill();
     qs(".lk-modal__body", el).innerHTML = `
       <h3>Спасибо! Начислили 700 бонусов</h3>
       <p class="lk-modal__lead">Бонусы уже на балансе — ими можно оплатить часть следующего размещения.</p>
@@ -579,11 +662,27 @@ function openSurvey() {
 }
 
 /* При первом заходе в кабинет — приглашение пройти анкету (Дима, 14.09).
-   Показываем один раз на браузер, чтобы не мешать работе. */
+   Крупной модалкой показываем ровно один раз на браузер, чтобы не мешать
+   работе. Дальше приглашение не пропадает совсем, а живёт свёрнутой
+   плашкой в углу: анкета — это 700 бонусов и точность подсказок, и терять
+   её из виду после одного «Позже» не за чем. */
 function maybeSurveyPrompt() {
   let seen = null;
   try { seen = localStorage.getItem("lk_survey"); } catch (e) { return; }
-  if (seen) return;
+  if (seen === "done") return;
+
+  /* Крестик на свёрнутой плашке прячет её до следующего захода в кабинет,
+     поэтому память об этом — на сессию, а не на браузер. */
+  let hidden = null;
+  try { hidden = sessionStorage.getItem("lk_survey_pill"); } catch (e) {}
+  if (hidden) return;
+
+  /* Модалку уже видели — дальше только плашка. Ею же встречаем и того, кто
+     в первый раз зашёл сразу во внутренний раздел по прямой ссылке:
+     перехватывать работу модалкой уместно на входе в кабинет, а не поверх
+     биллинга или конструктора. */
+  if (seen || state.view !== "dashboard") { showSurveyPill(); return; }
+
   try { localStorage.setItem("lk_survey", "shown"); } catch (e) {}
   const el = openModal(`
     <h3>Добро пожаловать в кабинет!</h3>
@@ -591,10 +690,46 @@ function maybeSurveyPrompt() {
     700 бонусов на оплату размещения, а подсказки в конструкторе станут точнее.
     Первый купон вы и так размещаете бесплатно.</p>
     <div class="lk-head__act" style="margin:16px 0 0">
-      <button class="btn btn--ghost" data-modal-close>Позже</button>
+      <button class="btn btn--ghost" data-survey-later>Позже</button>
       <button class="btn btn--solid" data-survey-open>Заполнить анкету</button>
     </div>`, { wide: true });
   qs("[data-survey-open]", el).onclick = openSurvey;
+  /* И «Позже», и крестик модалки сворачивают приглашение, а не прячут его:
+     оба — «не сейчас», а не «никогда». */
+  qs("[data-survey-later]", el).onclick = collapseSurvey;
+  qs(".lk-modal__x", el).onclick = collapseSurvey;
+}
+
+function collapseSurvey() {
+  closeModal();
+  showSurveyPill();
+}
+
+function hideSurveyPill() {
+  const pill = document.getElementById("lkSurveyPill");
+  if (pill) pill.remove();
+}
+
+/* Свёрнутое приглашение: висит во всех разделах кабинета, пока анкету не
+   заполнили. Клик по плашке открывает анкету, крестик убирает её до
+   следующего захода. */
+function showSurveyPill() {
+  if (document.getElementById("lkSurveyPill")) return;
+  const el = document.createElement("div");
+  el.id = "lkSurveyPill";
+  el.className = "lk-pill";
+  el.innerHTML = `
+    <button type="button" class="lk-pill__body" data-pill-open>
+      <b>Анкета о компании</b>
+      <span>+700 бонусов · около 5 минут</span>
+    </button>
+    <button type="button" class="lk-pill__x" data-pill-hide aria-label="Скрыть до следующего захода"></button>`;
+  document.body.appendChild(el);
+  qs("[data-pill-open]", el).onclick = openSurvey;
+  qs("[data-pill-hide]", el).onclick = () => {
+    try { sessionStorage.setItem("lk_survey_pill", "hidden"); } catch (e) {}
+    hideSurveyPill();
+  };
 }
 
 /* Где размещён купон. Городов у купона может быть несколько (city_ids[]),
@@ -652,15 +787,15 @@ VIEWS["client:dashboard"] = () => {
       "Привлекай тех, кто уже ищет, что купить",
       `<a class="btn lk-head__more" href="${href("stats")}" data-go="stats">Подробнее</a>`
     )
-    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
+    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)), raw: sum(m.id) })), { funnel: true })
     + `<div class="lk-pair">
       ${panel("Опубликовано сейчас", live.length
         ? table(
-            [{ t: "Купон" }, { t: "Действует" }, { t: "Забрали", num: true }],
+            [{ t: "Купон" }, { t: "Действует" }, { t: "Забрали", num: true, key: true }],
             live.map(c => `<tr data-coupon="${c.id}" tabindex="0">
               <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${where(c)} · ${c.value}</span></td>
               <td>${c.from} — ${c.to}</td>
-              <td class="num">${num(c.taken)}</td></tr>`).join("")
+              <td class="num lk-t__key">${num(c.taken)}</td></tr>`).join("")
           )
         : empty("Пока ничего не опубликовано", "Созданные купоны появятся здесь после модерации."),
         { act: `<a class="btn btn--ghost" href="${href("coupons")}" data-go="coupons">Подробнее</a>` })}
@@ -763,11 +898,24 @@ VIEWS["client:coupons"] = () => {
   const pageStart = (state.couponPage - 1) * pageSize;
   const pageList = list.slice(pageStart, pageStart + pageSize);
 
-  const secs = [["all", "Все мои купоны"]].concat(Object.keys(LK_VERTICALS).map(k => [k, "Купоны · " + LK_VERTICALS[k].name]));
-  const secRow = `<div class="lk-filters lk-filters--sec">${secs.map(([k, label]) => {
-    const n = k === "all" ? LK_COUPONS.length : LK_COUPONS.filter(c => c.l1 === k).length;
-    return `<button data-sec="${k}"${state.sec === k ? ' class="is-on"' : ""}>${label}<span class="lk__n">${n}</span></button>`;
-  }).join("")}</div>`;
+  /* Фильтров два, но ярус один. Статус — рабочая воронка (черновик →
+     модерация → опубликован → отклонён → архив): его переключают постоянно,
+     и счётчик у каждого состояния сразу показывает, где скопилась работа,
+     поэтому статусы остаются чипами в один ряд.
+
+     Раздел витрины переключают редко — он уехал в выпадающий список к
+     поиску и сортировке. Раньше он занимал второй ярус чипов, и два ряда
+     плашек подряд читались тяжелее, чем сама таблица под ними. Счётчики
+     из чипов перенесены в подписи пунктов, чтобы ничего не потерялось, а
+     «Только …» в названии не даёт прочитать пункт как раздел меню. */
+  const secs = [["all", "Все мои купоны"]]
+    .concat(Object.keys(LK_VERTICALS).map(k => [k, "Только " + LK_VERTICALS[k].name.toLowerCase()]));
+  const secSelect = `<select class="lk-s lk-tools__sec" data-sec-select aria-label="Раздел витрины">
+    ${secs.map(([k, label]) => {
+      const n = k === "all" ? LK_COUPONS.length : LK_COUPONS.filter(c => c.l1 === k).length;
+      return `<option value="${k}"${state.sec === k ? " selected" : ""}>${label} (${n})</option>`;
+    }).join("")}
+  </select>`;
 
   const filters = `<div class="lk-filters">
     <button data-f="all"${state.filter === "all" ? ' class="is-on"' : ""}>Все статусы<span class="lk__n">${bySec.length}</span></button>
@@ -775,12 +923,18 @@ VIEWS["client:coupons"] = () => {
       .map(s => `<button data-f="${s}"${state.filter === s ? ' class="is-on"' : ""}>${STATUS_TAB[s]}<span class="lk__n">${counts[s]}</span></button>`).join("")}
   </div>`;
 
+  /* Слева — два списка, которыми набирают и раскладывают список: раздел и
+     порядок. Оба управляют одним и тем же — что и в каком порядке лежит в
+     таблице, — поэтому стоят рядом, а не по разным краям строки. Поиск
+     занимает весь остаток: он не настройка списка, а способ выдернуть из
+     него одну строку. */
   const tools = `<div class="lk-tools">
-    <input class="lk-i lk-tools__q" type="search" placeholder="Поиск по названию купона" data-q value="${state.q}">
+    ${secSelect}
     <select class="lk-s lk-tools__sort" data-sort>
       ${[["new", "Сначала новые"], ["taken", "Больше всего забрали"], ["shown", "Больше всего показов"]]
         .map(([k, l]) => `<option value="${k}"${state.sort === k ? " selected" : ""}>${l}</option>`).join("")}
     </select>
+    <input class="lk-i lk-tools__q" type="search" placeholder="Поиск по названию купона" data-q value="${state.q}">
   </div>`;
 
   const mech = c => (LK_MECHANICS.find(m => m.id === c.mech) || {}).label || "—";
@@ -793,7 +947,7 @@ VIEWS["client:coupons"] = () => {
     <td>${c.from === "—" ? "<span class='lk-t__sub'>срок не задан</span>" : c.from + " — " + c.to}
         <div class="lk-erid">erid: ${c.erid}</div></td>
     <td class="num">${c.shown ? num(c.shown) : "—"}</td>
-    <td class="num">${c.taken ? num(c.taken) : "—"}</td>
+    <td class="num lk-t__key">${c.taken ? num(c.taken) : "—"}</td>
   </tr>`).join("");
 
   const pagination = list.length > pageSize ? `<nav class="lk-page" aria-label="Страницы списка купонов">
@@ -809,11 +963,14 @@ VIEWS["client:coupons"] = () => {
     </div>
   </nav>` : "";
 
-  return head("Мои купоны",
-      `<button class="btn btn--solid" data-create>Создать купон</button>`)
-    + panel("", secRow + filters + tools + (list.length
+  /* Кнопки «Создать купон» в заголовке раздела нет: точно такая же красная
+     кнопка стоит в шапке кабинета прямо над ней и видна на всех экранах —
+     две одинаковые кнопки в 60 пикселях друг от друга только спорили,
+     какая из них настоящая. */
+  return head("Мои купоны")
+    + panel("", filters + tools + (list.length
         ? table([{ t: "Действие" }, { t: "Купон" }, { t: "Механика" }, { t: "Статус" }, { t: "Срок действия" },
-                 { t: "Показы", num: true }, { t: "Забрали", num: true }], rows) + pagination
+                 { t: "Показы", num: true }, { t: "Забрали", num: true, key: true }], rows) + pagination
         : needle
           ? empty("Ничего не нашли", "Проверьте название или сбросьте поиск.")
           : empty("Здесь пока пусто", state.sec === "all"
@@ -867,7 +1024,7 @@ function couponForm(l1, c, locked) {
   /* У маркетплейса вместо адреса точки — площадка и артикул */
   const market = isMarket
     ? `<div class="lk-f__row">
-        ${field("Маркетплейс", select(LK_MARKETS, null, v.market, locked))}
+        ${field("Маркетплейс", select(LK_MARKETS, "market", v.market, locked))}
         ${field("Артикул товара", input("184 220 933", v.article, locked, "article"))}
        </div>
        ${field("Ссылка на карточку товара", input("https://…", null, locked))}`
@@ -1072,23 +1229,57 @@ function couponForm(l1, c, locked) {
     </div>
 
     <div class="lk-prev">
-      ${panel("Так купон увидят в ленте", `
-        ${locked ? "" : `<div class="lk-prog">
+      <!-- Прогресс заполнения стоит ОТДЕЛЬНО и ВЫШЕ панели с превью.
+           Раньше он лежал внутри неё, под заголовком «Так купон увидят в
+           ленте», и читался как часть будущего купона — будто шкалу
+           увидит и посетитель. Это про форму, а не про купон, поэтому у
+           него своя плашка, а заголовок превью стоит вплотную к карточке,
+           которую называет. -->
+      ${locked ? "" : `<div class="lk-panel lk-prog__box">
+        <div class="lk-prog">
           <div class="lk-prog__t"><span>Купон заполнен</span><b data-prog-n>0%</b></div>
           <div class="lk-prog__bar"><i data-prog-bar></i></div>
-        </div>`}
+        </div>
+      </div>`}
+      ${panel("Так купон увидят в ленте", `
+        <!-- Превью повторяет карточку из ленты, а не пересказывает её своими
+             средствами: те же места у метки erid и плашки выгоды, тот же
+             заголовок под фото, та же строка «компания · ниша» и те же две
+             кнопки внизу. Смысл превью в том, чтобы увидеть будущий купон
+             глазами посетителя, а для этого он должен совпадать с тем, что
+             посетитель и увидит.
+
+             Плашка выгоды переехала из центра картинки в левый нижний угол
+             — в ленте она там. Чипы со сроком и городом убраны: на
+             настоящей карточке их нет, а город виден плашкой в углу.
+             Кнопки внизу не нажимаются, это часть картинки. -->
         <div class="lk-prev__card">
           <div class="lk-prev__media${mediaCls}" data-pv-media>
+            <span class="lk-prev__near${isMarket ? " lk-prev__near--mp" : ""}" data-pv-near>${
+              pvNearHTML(isMarket ? (v.market || LK_MARKETS[0]) : "")}</span>
             <span class="lk-prev__erid">Реклама · erid: ${clean(v.erid) || "2Vt…"}</span>
-            <span class="lk-prev__val" id="pvVal">${v.value || "−30%"}</span>
+            <span class="lk-prev__badge" id="pvVal">${v.value || "−30%"}</span>
+            <!-- Столбик метрик — как на карточке в ленте: просмотры,
+                 «воспользовались», копирование кода и «поделиться». У
+                 нового купона счётчики нулевые, и это правда: он ещё не
+                 показывался. Значки не нажимаются, это часть картинки. -->
+            <div class="lk-prev__stats" aria-hidden="true">
+              <span class="lk-prev__stat"><i data-icon="eye"></i><b>${c ? num(c.opened) : 0}</b></span>
+              <span class="lk-prev__stat"><i data-icon="used"></i><b>${c ? num(c.taken) : 0}</b></span>
+              <span class="lk-prev__stat"><i data-icon="copy"></i></span>
+              <span class="lk-prev__stat"><i data-icon="share"></i></span>
+            </div>
             <span class="lk-prev__hold">Изображение — последним шагом</span>
             ${wm}
           </div>
           <div class="lk-prev__body">
             <div class="lk-prev__title" data-pv-title>${v.title || "Комбо-обед по будням до 16:00"}</div>
-            <div class="lk-prev__tags" data-pv-tags></div>
-            <div class="lk-prev__meta">Кофейня «Пример» · <span id="pvNiche">${v.niche || niches[0]}</span></div>
+            <div class="lk-prev__meta"><b>Кофейня «Пример»</b><i class="dot"></i><span id="pvNiche">${v.niche || niches[0]}</span></div>
             <div class="lk-prev__trust" data-pv-trust${v.secret ? "" : " hidden"}>✓ Проверено тайным покупателем · доверие × ${LK_SECRET.trust}</div>
+            <div class="lk-prev__acts" aria-hidden="true">
+              <span class="btn btn--ghost btn--wide">Подробнее</span>
+              <span class="btn btn--solid">Забрать купон</span>
+            </div>
           </div>
         </div>
         ${locked ? "" : `<div class="lk-note" style="margin-top:12px">Текст
@@ -1160,7 +1351,7 @@ function initCouponBuilder(host) {
   const media   = qs("[data-pv-media]", form);
   const pvVal   = qs("#pvVal", form);
   const pvTitle = qs("[data-pv-title]", form);
-  const pvTags  = qs("[data-pv-tags]", form);
+  const pvNear  = qs("[data-pv-near]", form);
   const isMarket = !!f("article");
 
   const cities = () => qsa("[data-city].is-on", form).map(b => b.dataset.city);
@@ -1191,13 +1382,15 @@ function initCouponBuilder(host) {
     const cs = cities();
     qsa("[data-addr-row]", form).forEach(r => { r.hidden = cs.indexOf(r.dataset.addrCity) === -1; });
 
-    const tags = [];
-    if (val("from") && val("to")) tags.push(val("from") + " — " + val("to"));
-    if (cs.length) tags.push(cs.join(", "));
-    const a = addrs();
-    if (a.length === 1) tags.push(a[0]);
-    if (a.length > 1) tags.push(a.length + " " + plural(a.length, "адрес", "адреса", "адресов"));
-    pvTags.innerHTML = tags.map(t => `<span>${t}</span>`).join("");
+    /* Плашка в углу картинки — то же, что на карточке в ленте: у
+       регионального купона время ходьбы до точки, у маркетплейсного
+       площадка. Город, срок и адреса в превью не показываем: на настоящей
+       карточке их нет. */
+    if (pvNear) {
+      const mk = isMarket && f("market") ? f("market").value : "";
+      pvNear.innerHTML = pvNearHTML(mk);
+      pvNear.classList.toggle("lk-prev__near--mp", !!mk);
+    }
 
     if (!img) return;
 
@@ -1448,20 +1641,30 @@ VIEWS["client:new-business"] = () =>
   head("Создание купона для бизнеса")
   + couponForm("for-business");
 
+/* Архив — итоги отработавших купонов: четыре метрики за весь срок и
+   возможность запустить купон заново.
+
+   «Опубликовать снова» здесь контурная, а не сплошная, хотя в «Моих
+   купонах» действие в строке сплошное. Разница по смыслу: там кнопка
+   появляется только у части строк и двигает купон по воронке — это и
+   правда призыв к действию. Здесь она одинакова у каждой строки, и
+   сплошной заливкой архив превращался в столбец красного, где ни одна
+   строка не срочнее соседней. Красной кнопка становится под курсором —
+   на той строке, которую человек и правда собрался нажать. */
 VIEWS["client:archive"] = () => {
   const done = LK_COUPONS.filter(c => c.status === "done");
   return head("Архив купонов")
     + panel("", done.length
       ? table([{ t: "Купон" }, { t: "Период" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
-               { t: "Забрали", num: true }, { t: "Переходы", num: true }, { t: "" }],
+               { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }, { t: "" }],
           done.map(c => `<tr data-coupon="${c.id}" tabindex="0">
             <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${where(c)} · ${c.value}</span></td>
             <td>${c.from} — ${c.to}</td>
             <td class="num">${num(c.shown)}</td>
             <td class="num">${num(c.opened)}</td>
-            <td class="num">${num(c.taken)}</td>
+            <td class="num lk-t__key">${num(c.taken)}</td>
             <td class="num">${num(c.clicks)}</td>
-            <td class="num"><button class="btn btn--solid" data-act="repeat" data-id="${c.id}">Опубликовать снова</button></td>
+            <td class="num"><button class="btn btn--ghost" data-act="repeat" data-id="${c.id}">Опубликовать снова</button></td>
           </tr>`).join(""))
       : empty("Архив пуст", "Сюда попадают купоны, у которых закончился срок действия."));
 };
@@ -1475,15 +1678,15 @@ VIEWS["client:stats"] = () => {
       <td>${status(c.status)}</td>
       <td class="num">${num(c.shown)}</td>
       <td class="num">${num(c.opened)}</td>
-      <td class="num">${num(c.taken)}</td>
+      <td class="num lk-t__key">${num(c.taken)}</td>
       <td class="num">${num(c.clicks)}</td>
     </tr>`).join("");
 
   return head("Статистика")
-    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)) })))
+    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(sum(m.id)), raw: sum(m.id) })), { funnel: true })
     + panel("По купонам",
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
-               { t: "Забрали", num: true }, { t: "Переходы", num: true }], rows));
+               { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }], rows));
 };
 
 /* Биллинг. Пакетов и тарифов в модели нет: по ТЗ §4.3.2 на балансе лежат
@@ -1545,6 +1748,13 @@ VIEWS["client:profile"] = () =>
         ${field("Telegram", input("https://t.me/…"))}
       </div>`)}
     </div>`
+  /* Поля профиля можно было править, но сохранить — нет: кнопки в разделе
+     просто не было. Она здесь такая же, как в «Уведомлениях», и с тем же
+     подтверждением строкой рядом, без модалок. */
+  + `<div class="lk-head__act" style="margin:-4px 0 16px">
+       <button class="btn btn--solid" data-save>Сохранить</button>
+       <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
+     </div>`
   + panel("Точки продаж", table(
       [{ t: "Адрес" }, { t: "Город" }, { t: "Режим работы" }, { t: "", num: true }],
       `<tr><td>ул. Первомайская, 12</td><td>Липецк</td><td>ежедневно 08:00–22:00</td>
@@ -1581,7 +1791,7 @@ VIEWS["client:coupon"] = () => {
         ? panel("Причина отклонения", `<p class="lk-reason">${c.reject}</p>`)
         : "")
     + (c.shown
-        ? kpi(LK_METRICS.map(m => ({ label: m.label, value: num(c[m.id]) })))
+        ? kpi(LK_METRICS.map(m => ({ label: m.label, value: num(c[m.id]), raw: c[m.id] })), { funnel: true })
         : "")
     + couponForm(c.l1, c, !editable);
 };
@@ -1691,7 +1901,7 @@ VIEWS["partner:clients"] = () => {
     <td>${c.since}</td>
     <td class="num">${c.coupons || "—"}</td>
     <td class="num">${c.paid ? rub(c.paid) : "—"}</td>
-    <td class="num">${c.fee ? rub(c.fee) : "—"}</td>
+    <td class="num lk-t__key">${c.fee ? rub(c.fee) : "—"}</td>
   </tr>`).join("");
 
   return head("Региональные клиенты",
@@ -1699,7 +1909,7 @@ VIEWS["partner:clients"] = () => {
        <button class="btn btn--ghost">Выгрузить в Excel</button>`)
     + panel("", table(
         [{ t: "Клиент" }, { t: "Статус" }, { t: "С нами с" }, { t: "Купонов", num: true },
-         { t: "Оплатил", num: true }, { t: "Ваше начисление", num: true }], rows)
+         { t: "Оплатил", num: true }, { t: "Ваше начисление", num: true, key: true }], rows)
       + `<div class="lk-total"><span>Клиенты закреплены за вами по городу
          организации. Закрепление постоянное, новых добавляет
          администратор.</span></div>`);
@@ -1750,7 +1960,7 @@ VIEWS["partner:codes"] = () => {
     <td>${c.comment || "<span class='lk-t__sub'>кому отдан, не записано</span>"}</td>
     <td>${c.market === "—" ? "<span class='lk-t__sub'>—</span>" : c.market}</td>
     <td class="num">${c.used ? num(c.used) : "—"}</td>
-    <td class="num">${c.income ? rub(c.income) : "—"}</td>
+    <td class="num lk-t__key">${c.income ? rub(c.income) : "—"}</td>
   </tr>`).join("");
 
   const total = LK_CODES.reduce((a, c) => a + c.income, 0);
@@ -1759,7 +1969,7 @@ VIEWS["partner:codes"] = () => {
       `<button class="btn btn--solid" type="button" data-request-code>Запросить новый код</button>`)
     + panel("", table(
         [{ t: "Код" }, { t: "Кому отдан" }, { t: "Площадка" },
-         { t: "Публикаций", num: true }, { t: "Начислено", num: true }], rows)
+         { t: "Публикаций", num: true }, { t: "Начислено", num: true, key: true }], rows)
       + `<div class="lk-total"><b>${rub(total)}</b><span>начислено по кодам за всё время</span></div>`)
     + panel("Как это работает", `
       <ul class="lk-rules">
@@ -1795,11 +2005,15 @@ function openCodeRequestModal() {
     const min = Math.max(1, Math.ceil((wait - Date.now()) / 60000));
     openModal(`
       <h3>Пока нельзя</h3>
-      <p class="lk-note">Антифрод-лимит — не чаще ${LK_CODE_LIMITS.perHour}
+      <!-- Подводка набрана тем же классом, что в остальных модалках, а
+           единственная кнопка сплошная — как «Понятно» в «Заявка принята»
+           и «Отлично» в «Спасибо». Одна и та же кнопка, закрывающая
+           модалку, выглядела в двух местах по-разному. -->
+      <p class="lk-modal__lead">Антифрод-лимит — не чаще ${LK_CODE_LIMITS.perHour}
       нового кода в час. Следующий запрос будет доступен примерно через
       ${min} мин.</p>
       <div class="lk-head__act" style="margin-top:18px">
-        <button class="btn btn--ghost" type="button" data-modal-close>Понятно</button>
+        <button class="btn btn--solid" type="button" data-modal-close>Понятно</button>
       </div>`);
     return;
   }
@@ -1840,6 +2054,12 @@ function openCodeRequestModal() {
 /* Пул «От души брат». Лимит на календарный месяц задаёт администратор,
    раздаёт партнёр вручную, остаток не переносится (ТЗ §4.4.2). Бонусы —
    только региональным клиентам: в маркетплейсах работает промокод. */
+/* Бонус проходит те же три состояния, что купон и выплата: сработал
+   (клиент потратил), ждёт (отправлен, но не потрачен), вышел из игры
+   (сгорел). Карта — чтобы не заводить свой словарь цветов на каждый
+   раздел. */
+const BONUS_STATE = { used: "ok", sent: "wait", expired: "done" };
+
 VIEWS["partner:bonuses"] = () => {
   const left = LK_BONUS_POOL.limit - LK_BONUS_POOL.spent;
   const share = Math.round(LK_BONUS_POOL.spent / LK_BONUS_POOL.limit * 100);
@@ -1877,7 +2097,7 @@ VIEWS["partner:bonuses"] = () => {
           <td>${b.to}</td>
           <td class="num">${num(b.amount)}</td>
           <td>${b.sent}</td>
-          <td>${LK_BONUS_STATUSES[b.status]}</td></tr>`).join("")));
+          <td><span class="lk-st lk-st--${BONUS_STATE[b.status]}">${LK_BONUS_STATUSES[b.status]}</span></td></tr>`).join("")));
 };
 
 /* Отчёты. Период — календарный месяц, деньги уходят через 14 дней после
@@ -1888,8 +2108,10 @@ VIEWS["partner:payouts"] = () => {
   const rows = LK_PAYOUTS.map(p => `<tr>
     <td><b class="lk-t__title">${p.period}</b><span class="lk-t__sub">${p.date}</span></td>
     <td class="num">${rub(p.income)}</td>
-    <td class="num">${rub(p.total)}</td>
-    <td>${p.status === "paid" ? "Выплачено" : "Ожидает выплаты"}</td>
+    <td class="num lk-t__key">${rub(p.total)}</td>
+    <td>${p.status === "paid"
+      ? `<span class="lk-st lk-st--done">Выплачено</span>`
+      : `<span class="lk-st lk-st--wait">Ожидает выплаты</span>`}</td>
     <td class="num"><button class="btn btn--ghost">Скачать</button></td>
   </tr>`).join("");
 
@@ -1897,7 +2119,7 @@ VIEWS["partner:payouts"] = () => {
     <td><b class="lk-t__title">${r.coupon}</b><span class="lk-t__sub">купон ${r.id} · ${r.client}</span></td>
     <td>${r.contour === "market" ? "Маркетплейс · " + r.code : "Регион"}</td>
     <td class="num">${rub(r.paid)}</td>
-    <td class="num">${rub(r.fee)}</td>
+    <td class="num lk-t__key">${rub(r.fee)}</td>
   </tr>`).join("");
 
   const paid = LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
@@ -1920,9 +2142,9 @@ VIEWS["partner:payouts"] = () => {
     </div>`
     + panel("Детализация · " + pend.period, table(
         [{ t: "Купон" }, { t: "Контур" }, { t: "Клиент заплатил", num: true },
-         { t: "Ваши " + LK_RATES.fee + "%", num: true }], detail))
+         { t: "Ваши " + LK_RATES.fee + "%", num: true, key: true }], detail))
     + panel("По периодам", table(
-        [{ t: "Период" }, { t: "Начислено", num: true }, { t: "К выплате", num: true },
+        [{ t: "Период" }, { t: "Начислено", num: true }, { t: "К выплате", num: true, key: true },
          { t: "Статус" }, { t: "", num: true }], rows)
       + `<div class="lk-total"><b>${rub(paid)}</b><span>выплачено за всё время</span></div>`);
 };
@@ -1996,8 +2218,8 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
            на неё приходят чеки и решения модерации. Telegram и Max — на
            выбор, SMS сервис не отправляет.</div>`
         + `<div class="lk-head__act" style="margin-top:14px">
-             <button class="btn btn--solid" data-notify-save>Сохранить</button>
-             <span class="lk-save-ok" data-notify-ok hidden>Изменения сохранены</span>
+             <button class="btn btn--solid" data-save>Сохранить</button>
+             <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
            </div>`)}
     </div>`;
 };
@@ -2030,13 +2252,16 @@ function render() {
     b.onclick = () => { state.filter = b.dataset.f; state.couponPage = 1; render(); };
   });
 
-  /* Мои купоны: раздел, действия по статусу, поиск, сортировка */
-  qsa("[data-sec]", host).forEach(b => b.onclick = () => {
-    state.sec = b.dataset.sec;
+  /* Мои купоны: раздел, действия по статусу, поиск, сортировка.
+     Смена раздела сбрасывает статус: в новом разделе прежнего статуса
+     может не быть вовсе, и список молча оказался бы пустым. */
+  const secSel = qs("[data-sec-select]", host);
+  if (secSel) secSel.onchange = () => {
+    state.sec = secSel.value;
     state.filter = "all";
     state.couponPage = 1;
     render();
-  });
+  };
   qsa("[data-act]", host).forEach(b => b.onclick = e => {
     e.stopPropagation();
     const id = Number(b.dataset.id);
@@ -2080,7 +2305,9 @@ function render() {
     c.status = "draft";
     render();
   });
-  if (state.role === "client" && state.view === "dashboard") maybeSurveyPrompt();
+  /* Крупная модалка появляется только на дашборде — это вход в кабинет;
+     свёрнутая плашка дальше висит в любом разделе (см. maybeSurveyPrompt). */
+  if (state.role === "client") maybeSurveyPrompt();
 
   /* Внутренние переходы из карточек */
   qsa("[data-go]", host).forEach(a => a.onclick = e => { e.preventDefault(); go(a.dataset.go); });
@@ -2291,15 +2518,18 @@ function render() {
   /* «Сохранить» в уведомлениях: как и все формы прототипа, значения
      никуда не пишутся — только подтверждаем нажатие тем же способом, что
      и «Скопировано» на публичке. */
-  const notifySave = qs("[data-notify-save]", host);
-  if (notifySave) {
-    notifySave.onclick = () => {
-      const ok = qs("[data-notify-ok]", host);
+  /* Сохранение формы раздела — профиль, каналы уведомлений. Прототип
+     ничего не сохраняет, поэтому подтверждение короткой строкой рядом с
+     кнопкой: то же решение, что «Скопировано» на публичке. */
+  qsa("[data-save]", host).forEach(btn => {
+    btn.onclick = () => {
+      const ok = qs("[data-save-ok]", btn.parentNode);
+      if (!ok) return;
       ok.hidden = false;
-      clearTimeout(notifySave._hideTimer);
-      notifySave._hideTimer = setTimeout(() => { ok.hidden = true; }, 2400);
+      clearTimeout(btn._hideTimer);
+      btn._hideTimer = setTimeout(() => { ok.hidden = true; }, 2400);
     };
-  }
+  });
 
   initIcons(host);
 }
