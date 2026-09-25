@@ -317,3 +317,14 @@
 @media (max-width:820px){
   body.dz3:not(.quick-left) .quick__close{top:22px;right:22px}
 }
+
+/* Выгода в попапе — той же высоты, что плашки минут и просмотров (36px),
+   и с тем же отступом от края фото (Иван 25.09). Длинный оффер
+   переносится и становится выше — иначе не влезет. */
+.val-ticket .dz3 .quick .quick__photo .quick__value{
+  left:12px;bottom:12px;min-height:36px;box-sizing:border-box;
+  display:flex;align-items:center;
+  padding:6px 16px;border-radius:10px;
+  font-size:18px;line-height:1.1;white-space:nowrap;
+}
+.val-ticket .dz3 .quick .quick__photo .quick__value.is-long{font-size:14px;white-space:normal;padding:7px 15px}
