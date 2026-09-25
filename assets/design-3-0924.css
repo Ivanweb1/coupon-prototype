@@ -233,3 +233,17 @@
 /* «Компания в сети» на странице купона: значки здесь всегда цветные, а MAX
    подключён картинкой и гасился в серый фильтром — выбивался из ряда */
 .dz3 .cpd-contact .soc-ic--img{filter:none;opacity:1}
+
+/* «Компания в сети» — по четыре в строку (Иван 25.09): восемь каналов
+   двумя рядами вместо четырёх. Решает ширина самого блока, а не экрана:
+   на ноутбуке блок узкий, и в четыре колонки «vk.com/example» рвался
+   посреди слова — там остаётся по две. */
+.dz3 .cpd-about__links{container-type:inline-size}
+.dz3 .cpd-contact > span:last-child{word-break:normal;overflow-wrap:normal}
+@container (min-width:560px){
+  .dz3 .cpd-contacts{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .dz3 .cpd-about__links .cpd-contact{padding:14px 12px;gap:12px;border-radius:18px}
+  .dz3 .cpd-contact .soc-ic,.dz3 .cpd-contact .cpd-ic{width:36px;height:36px}
+  .dz3 .cpd-contact > span:last-child{font-size:13px}
+  .dz3 .cpd-contact small{font-size:10px;letter-spacing:.06em}
+}
