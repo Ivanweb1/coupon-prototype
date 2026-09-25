@@ -1083,8 +1083,10 @@ function revealNote(c) {
   return `<div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>${untilEnd(c)} ${untilYear(c)} года</b></div>`;
 }
 function untilLabel(c) {
-  /* С годом — правка Ивана 25.09: «до 4 октября 2026 года» */
-  return `Промокод · действует до <b class="quick__until">${untilEnd(c)} ${untilYear(c)} года</b>`;
+  /* С годом — правка Ивана 25.09: «до 4 октября 2026 года». Подпись
+     блока и срок разведены по краям: в одной строке красный капс рядом
+     с чёрным жирным капсом смотрелся грязно. */
+  return `<span>Промокод</span><span class="quick__until">действует до <b>${untilEnd(c)} ${untilYear(c)} года</b></span>`;
 }
 
 /* Телефон вместо ИНН в блоке компании: звонят бронировать и уточнять, а
@@ -1196,8 +1198,8 @@ function quickHTML(c) {
                 <span>Код вводится в корзине на площадке</span>
               </div>
               <a class="soc market-where__go" href="#">Открыть карточку товара</a>
-            </div>
-            ${dz3() ? marketSkuHTML(c) : ""}`
+              ${dz3() ? marketSkuHTML(c) : ""}
+            </div>`
           : `<div class="market-where">
           <b>${c.market}</b>
           <span>Код вводится в корзине на площадке</span>
@@ -1952,8 +1954,8 @@ function renderCouponDesign() {
               <a class="soc market-where__go" href="#">
                 <img class="mp-ic" src="assets/brand/mp/${mp}.svg" alt=""> Открыть карточку товара
               </a>
-            </div>
-            ${marketSkuHTML(c)}`
+              ${marketSkuHTML(c)}
+            </div>`
           : `<div class="market-where">
               <b>${c.market}</b>
               <span>Код вводится в корзине на площадке при оформлении заказа</span>
