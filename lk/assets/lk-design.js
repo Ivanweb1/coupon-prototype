@@ -1126,7 +1126,7 @@ VIEWS["partner:profile"] = () =>
         <div class="lk-f__row">${editField("preq", "Расчётный счёт", "40802810435000000000")}${editField("preq", "Корр. счёт", "30101810800000000604")}</div>
         ${editField("preq", "Почта для документов", "buh@partnerov.ru")}
       </div>
-      ${editBar("preq", "Счёт может быть любым на ваш ИНН")}`)}
+      ${editBar("preq")}`)}
     </div>`
   + panel("Условия", `
       <ul class="lk-rules">
