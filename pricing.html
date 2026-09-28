@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сколько стоит разместить купон — Все купоны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260918y">
+<link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<link rel="stylesheet" href="assets/design-3.css?v=20260924a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
+<link rel="stylesheet" href="assets/design-3-0924.css?v=20260925g">
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20260928b">
+<link rel="icon" href="assets/brand/logo-red.png">
+</head>
+<body class="dz dz3 cards-wb">
+
+<!-- ===================================================================
+     СКОЛЬКО СТОИТ. Бывшие «Тарифы».
+
+     Правка созвона 24.09.2026, дословно из расшифровки: «„Тарифы“ →
+     страница-калькулятор, верх новой воронки: 2–3 шага (что продаёте →
+     город → соцсети) → примерная стоимость и охват → „Продолжить“ →
+     регистрация. 1–2 экрана. Название про деньги („Тарифы“, „Сколько
+     стоит“), не „Рассчитать купон“. Иван предлагает вариант».
+
+     Взял «Сколько стоит» — оно и про деньги, и живое; «Тарифы» звучит
+     как прайс-лист, а тут воронка. Название — предложение, не решение.
+
+     Почему не квиз по экрану на вопрос: такой конструктор уже
+     отклоняли на созвоне 16.09.2026. Здесь все три шага на одном
+     экране, итог пересчитывается сразу.
+
+     Возражение Вилла с созвона 21.09.2026 («открытый калькулятор — он
+     потыкает и уйдёт») снято самой воронкой: калькулятор показывает
+     вилку, а точная цена и охват — после регистрации.
+
+     ВСЕ ЦИФРЫ — ЗАГЛУШКА. Сумм не называли ни на одном созвоне,
+     коэффициенты в CALC придуманы мной, чтобы показать поведение
+     экрана. Заменить на тарифы Павла целиком.
+     =================================================================== -->
+
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+    <span class="header__spacer"></span>
+    <a class="btn btn--ghost" href="index-design-3.html">На витрину</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="pt-hero pt-hero--wide">
+    <span class="pt-hero__k">Бизнесу</span>
+    <h1>Сколько стоит разместить купон</h1>
+    <p class="pt-hero__sub">
+      Три шага — и увидите вилку по цене и охвату. Первое размещение бесплатное:
+      сначала смотрите, сколько людей забрали купон, и только потом платите.
+    </p>
+  </section>
+
+  <div class="pg-calc">
+    <div class="pg-calc__steps">
+
+      <div class="pt-card">
+        <span class="pg-step__k"><i>1</i>Что продаёте</span>
+        <div class="pg-pick" data-calc-group="what">
+          <label><input type="radio" name="what" value="regional" checked><span>Кафе, услуги, магазин в городе</span></label>
+          <label><input type="radio" name="what" value="marketplace"><span>Товары на маркетплейсе</span></label>
+          <label><input type="radio" name="what" value="b2b"><span>Услуги для бизнеса</span></label>
+        </div>
+        <p class="pg-step__hint" data-calc-hint="what"></p>
+      </div>
+
+      <div class="pt-card" data-calc-city>
+        <span class="pg-step__k"><i>2</i>Где показывать</span>
+        <div class="pg-pick" data-calc-group="city"></div>
+        <p class="pg-step__hint">Купон видят в выбранном городе. Города, которых нет в списке, открывают региональные партнёры.</p>
+      </div>
+
+      <div class="pt-card">
+        <span class="pg-step__k"><i>3</i>Где публиковать, кроме сайта</span>
+        <div class="pg-pick" data-calc-group="soc">
+          <label><input type="checkbox" name="soc" value="vk" checked><span>ВКонтакте</span></label>
+          <label><input type="checkbox" name="soc" value="tg" checked><span>Telegram</span></label>
+          <label><input type="checkbox" name="soc" value="ok"><span>Одноклассники</span></label>
+          <label><input type="checkbox" name="soc" value="max"><span>MAX</span></label>
+        </div>
+        <p class="pg-step__hint">Купон уходит в сообщества сервиса карточкой под ленту — перерисовывать под каждую площадку не нужно.</p>
+      </div>
+
+    </div>
+
+    <!-- Итог. Липнет к экрану: цифра должна оставаться на виду, пока
+         крутят шаги. Кнопка ведёт в регистрацию — это и есть воронка. -->
+    <aside class="pg-result">
+      <h3>Примерно выйдет</h3>
+      <div class="pg-result__sum" data-calc-sum>— ₽</div>
+      <div class="pg-result__rows">
+        <div class="pg-result__row"><span>Охват за месяц</span><b data-calc-reach>—</b></div>
+        <div class="pg-result__row"><span>Срок размещения</span><b data-calc-term>—</b></div>
+        <div class="pg-result__row"><span>Первое размещение</span><b>бесплатно</b></div>
+      </div>
+      <a class="btn btn--solid" href="register-design.html">Продолжить</a>
+      <p class="pg-result__note" data-calc-note></p>
+    </aside>
+  </div>
+
+  <!-- Что именно оплачивается — переехало со страницы «Сервис»: здесь
+       оно к месту, там было справкой ни о чём -->
+  <section class="pg-sec">
+    <span class="pg-sec__k">За что платите</span>
+    <h2>Три разных размещения</h2>
+    <p class="pg-sec__lead">
+      Оплата — за размещение, процент с продаж мы не берём. У раздела для бизнеса
+      цена считается не за купон, а за срок.
+    </p>
+
+    <div class="pg-cards">
+      <div class="pt-card pg-plan">
+        <h2>Региональный купон</h2>
+        <p class="pg-card__lead">Купон заведения в своём городе: витрина, поиск, карточка на всю страницу и публикация в городских сообществах.</p>
+        <ul class="pt-list">
+          <li>Публикация на витрине города и в сообществах ВКонтакте, Telegram, Одноклассники, MAX.</li>
+          <li>Статистика: сколько раз купон показали и сколько раз забрали.</li>
+          <li>Переходы на сайт и в соцсети заведения.</li>
+        </ul>
+        <div class="pg-plan__foot"><span class="pg-plan__free">Первый купон бесплатно</span></div>
+      </div>
+
+      <div class="pt-card pg-plan">
+        <h2>Купон маркетплейса</h2>
+        <p class="pg-card__lead">Промокод на Wildberries, Ozon, Яндекс Маркет или М.Видео — показывается по всей стране, а не в одном городе.</p>
+        <ul class="pt-list">
+          <li>Раздел маркетплейсов на витрине и в пабликах площадок.</li>
+          <li>Категории дробнее городских: одежда делится по полу и возрасту.</li>
+          <li>Тот же конструктор купона, что и у регионального.</li>
+        </ul>
+        <div class="pg-plan__foot"><span class="pg-plan__free">Первый купон бесплатно</span></div>
+      </div>
+
+      <div class="pt-card pg-plan">
+        <h2>Размещение для бизнеса</h2>
+        <p class="pg-card__lead">Раздел B2B: предложения для компаний, а не для покупателей. Здесь платят не за купон, а за срок размещения.</p>
+        <ul class="pt-list">
+          <li>Отдельная ветка витрины — B2B не смешивается с городскими скидками.</li>
+          <li>Размещение действует весь срок, переделывать купон каждый месяц не нужно.</li>
+          <li>Отдельный кабинет на каждый магазин, если юрлицо одно, а точек несколько.</li>
+        </ul>
+        <div class="pg-plan__foot"><span class="pg-plan__free">Первое размещение бесплатно</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pg-sec">
+    <div class="pg-cards">
+      <div class="pt-card pg-plan">
+        <h2>Как размещение проходит</h2>
+        <ul class="pt-list">
+          <li>Регистрация: ООО, ИП, самозанятый или физлицо.</li>
+          <li>Конструктор купона: механика, срок действия, точки, изображение — своё или собранное по описанию.</li>
+          <li>Модерация. У купона пять состояний: черновик, на модерации, опубликован, завершён, отклонён.</li>
+          <li>Публикация на витрине и ретрансляция в городские сообщества.</li>
+          <li>Статистика в кабинете и архив — завершённый купон можно опубликовать снова.</li>
+        </ul>
+        <div class="pg-plan__foot"><a class="btn btn--solid" href="register-design.html">Разместить купон</a></div>
+      </div>
+      <div class="pt-card pg-plan">
+        <h2>Остались вопросы</h2>
+        <p class="pg-card__lead">
+          Про модерацию, статистику и документы — в вопросах и ответах.
+          Нетиповой формат, город под ключ или объём — напишите, соберём предложение под задачу.
+        </p>
+        <div class="pg-plan__foot">
+          <a class="btn btn--ghost" href="faq.html">Вопросы и ответы</a>
+          <a class="btn btn--ghost" href="contacts.html">Контакты</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+
+    <div class="dz-foot">
+      <div class="dz-foot__brand">
+        <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
+        <p class="dz-foot__tag">Все скидки <span data-geo-gen>Липецка</span> в одном месте. Бесплатно и без регистрации: нашли купон, сохранили код, показали на кассе.</p>
+      </div>
+      <div class="fcol">
+        <h4>Сервис</h4>
+        <ul>
+          <li><a href="service.html#how">Как это работает</a></li>
+          <li><a href="faq.html">Вопросы и ответы</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Бизнесу</h4>
+        <ul>
+          <li><a href="register-design.html">Зарегистрироваться</a></li>
+          <li><a href="pricing.html">Сколько стоит</a></li>
+          <li><a href="docs.html">Документы</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Партнёрам</h4>
+        <ul>
+          <li><a href="partner.html">Стать партнёром</a></li>
+          <li><a href="partner.html#cities">Города присутствия</a></li>
+          <li><a href="service.html#partners">Партнёрская программа</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dz-foot-socs">
+      <div class="footer-soc-group">
+        <span class="footer-soc-group__label"><a href="socials.html">Мы в соцсетях <span data-geo-gen>города</span></a></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
+          <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
+          <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
+          <a class="soc" href="#" data-city-social="MAX" title="Мы в MAX"><span data-icon="max"></span> MAX</a>
+        </div>
+      </div>
+      <div class="footer-soc-group dz-foot__mp">
+        <span class="footer-soc-group__label"><a href="socials.html#mp">Сообщества маркетплейсов</a></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" title="Сообщество Wildberries"><img class="soc-ic soc-ic--img" src="assets/brand/mp/wildberries.svg" alt=""> Wildberries</a>
+          <a class="soc" href="#" title="Сообщество Ozon"><img class="soc-ic soc-ic--img" src="assets/brand/mp/ozon.svg" alt=""> Ozon</a>
+          <a class="soc" href="#" title="Сообщество Яндекс Маркет"><img class="soc-ic soc-ic--img" src="assets/brand/mp/yandex-market.svg" alt=""> Яндекс Маркет</a>
+          <a class="soc" href="#" title="Сообщество М.Видео"><img class="soc-ic soc-ic--img" src="assets/brand/mp/mvideo.svg" alt=""> М.Видео</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dz-foot-legal">
+      <p class="dz-foot-legal__req">
+        ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 ·
+        г. Липецк, ул. Название, 1
+      </p>
+      <p class="dz-foot-legal__pd">
+        Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону,
+        третьим лицам не передаём. Пользователю для поиска купонов регистрация не нужна.
+      </p>
+    </div>
+
+    <div class="footer__legal">
+      <span>© 2026 ВСЕКУПОНЫ</span>
+      <a href="docs.html">Политика конфиденциальности</a>
+      <a href="docs.html">Пользовательское соглашение</a>
+      <a href="docs.html">Согласие на обработку данных</a>
+      <a class="dz-foot__author" href="https://lead-space.ru" target="_blank" rel="noopener">Разработано lead-space.ru</a>
+      <button type="button" class="dz-foot__top" data-to-top>Наверх ↑</button>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data.js?v=20260918y"></script>
+<script src="assets/app.js?v=20260925g"></script>
+<script>
+  initIcons();
+  renderGeo();
+  initHeaderShadow();
+  qs("[data-to-top]").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  /* ------------------------------------------------------------------
+     Калькулятор. Все числа — заглушка: ни одной суммы на созвонах не
+     называли. Коэффициенты держим одним объектом, чтобы тарифы Павла
+     вставлялись в одно место, а не по всему файлу.
+     ------------------------------------------------------------------ */
+  const CALC = {
+    /* база и охват по разделу витрины */
+    what: {
+      regional:    { base: 2900,  reach: 12000,  term: "30 дней",       hint: "Купон видят жители выбранного города — на витрине и в городских сообществах." },
+      marketplace: { base: 4900,  reach: 90000,  term: "30 дней",       hint: "Промокод не привязан к городу: показывается по всей стране и уходит в паблики площадок." },
+      b2b:         { base: 12900, reach: 4000,   term: "3 месяца",      hint: "Раздел для бизнеса: платите не за купон, а за срок. На выбор 3, 6 или 12 месяцев." }
+    },
+    /* коэффициент города — по величине: в областном центре аудитория больше */
+    city: { lipetsk: 1, elets: 0.55, gryazi: 0.35 },
+    /* каждая площадка добавляет охват и стоимость публикации */
+    soc: { vk: { price: 700, reach: 5200 }, tg: { price: 500, reach: 3100 },
+           ok: { price: 500, reach: 2600 }, max: { price: 400, reach: 900 } }
+  };
+
+  const money = n => Math.round(n / 100) * 100;
+  const fmt = n => n.toLocaleString("ru-RU");
+
+  /* Города берём из данных прототипа, а не списком в разметке: они же
+     стоят в попапе выбора города и в каталоге */
+  const cityBox = qs('[data-calc-group="city"]');
+  ACTIVE_CITIES.forEach((c, i) => {
+    const l = document.createElement("label");
+    l.innerHTML = '<input type="radio" name="city" value="' + c.slug + '"' +
+                  (i === 0 ? " checked" : "") + '><span>' + c.name + "</span>";
+    cityBox.appendChild(l);
+  });
+
+  function recalc() {
+    const what = qs('[data-calc-group="what"] input:checked').value;
+    const city = qs('[data-calc-group="city"] input:checked').value;
+    const socs = qsa('[data-calc-group="soc"] input:checked').map(i => i.value);
+    const w = CALC.what[what];
+    /* Маркетплейс не привязан к городу — коэффициент города к нему не применяем */
+    const k = what === "marketplace" ? 1 : (CALC.city[city] || 0.4);
+
+    let price = w.base * k;
+    let reach = w.reach * k;
+    socs.forEach(s => { price += CALC.soc[s].price; reach += CALC.soc[s].reach * k; });
+
+    /* Вилка, а не одна цифра: точную цену считает кабинет после
+       регистрации — там известны и город, и категория, и объём */
+    const low = money(price * 0.9), high = money(price * 1.15);
+    qs("[data-calc-sum]").textContent = fmt(low) + "—" + fmt(high) + " ₽";
+    qs("[data-calc-reach]").textContent = "≈ " + fmt(money(reach)) + " показов";
+    qs("[data-calc-term]").textContent = w.term;
+    qs('[data-calc-hint="what"]').textContent = w.hint;
+    /* Город к маркетплейсу отношения не имеет — шаг прячем, чтобы не
+       собирать ответ, который ни на что не влияет */
+    qs("[data-calc-city]").hidden = what === "marketplace";
+    qs("[data-calc-note]").textContent =
+      "Расчёт примерный: точную цену и охват кабинет посчитает после регистрации. " +
+      "Первое размещение бесплатное — платить на этом шаге не нужно.";
+  }
+
+  qsa('.pg-calc input').forEach(i => i.addEventListener("change", recalc));
+  recalc();
+</script>
+</body>
+</html>

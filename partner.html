@@ -13,9 +13,11 @@
 <link rel="stylesheet" href="assets/design-3.css?v=20260924a">
 <link rel="stylesheet" href="assets/design-3-cards.css?v=20260921a">
 <link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
-<link rel="stylesheet" href="assets/design-3-shell.css?v=20260925a">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
 <!-- Правки созвона 24.09.2026 — отдельным слоем -->
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260925g">
+<!-- Слой 28.09: инфостраницы подвала и поиск по городам -->
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20260928b">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -188,6 +190,16 @@
       <h2>Города присутствия</h2>
       <span class="pt-cities__note">Липецкая область · дальше — по мере запуска</span>
     </div>
+
+    <!-- Поиск: сейчас городов десять, в планах ~1115 — глазами в таком
+         списке свой город не найти. Ищем по названию, счётчик под строкой
+         показывает, сколько из найденных свободно: ради этого и приходят. -->
+    <div class="pt-cities__find" data-city-find>
+      <span data-icon="search"></span>
+      <input type="search" placeholder="Найдите свой город" aria-label="Поиск по городам" autocomplete="off">
+      <button type="button" data-city-clear aria-label="Очистить" data-icon="close"></button>
+    </div>
+    <p class="pt-cities__count" data-city-count></p>
     <div class="pt-grid">
       <div class="pt-city pt-city--busy"><span>Липецк</span><span class="pt-city__busy">занят</span></div>
       <div class="pt-city pt-city--busy"><span>Елец</span><span class="pt-city__busy">занят</span></div>
@@ -200,6 +212,10 @@
       <div class="pt-city"><span>Добринка</span><span class="pt-city__free">свободно</span></div>
       <div class="pt-city"><span>Лев Толстой</span><span class="pt-city__free">свободно</span></div>
     </div>
+    <p class="pt-cities__empty" data-city-empty hidden>
+      Такого города в списке нет. Область открывает региональный партнёр —
+      <a href="#">напишите в заявке</a>, какой город вам нужен.
+    </p>
   </section>
 
 </main>
@@ -220,8 +236,8 @@
       <!-- Товарный знак — так, как зарегистрирован: капсом, одним словом
            (созвон 24.09.2026) -->
       <span>© 2026 ВСЕКУПОНЫ</span>
-      <a href="#">Политика конфиденциальности</a>
-      <a href="#">Пользовательское соглашение</a>
+      <a href="docs.html#all">Политика конфиденциальности</a>
+      <a href="docs.html#all">Пользовательское соглашение</a>
       <a href="index-design-3.html">На витрину</a>
       <!-- Подпись студии: отдельным классом, чтобы не путать с правовыми ссылками -->
       <a class="dz-foot__author" href="https://lead-space.ru" target="_blank" rel="noopener">Разработано lead-space.ru</a>
@@ -229,9 +245,49 @@
   </div>
 </footer>
 
+<script src="assets/data.js?v=20260918y"></script>
+<script src="assets/app.js?v=20260925g"></script>
 <script>
 /* Форма ничего не отправляет: это прототип. Показываем, что заявка ушла,
    и на этом всё — что происходит дальше, на созвонах не разбирали. */
+/* Иконки строки поиска рисует общий набор из app.js */
+initIcons();
+
+/* Фильтр по городам. Список статический — фильтруем разметку, а не
+   данные: реальный список придёт с бэкенда вместе с занятостью. */
+(function () {
+  const box = document.querySelector("[data-city-find]");
+  const input = box.querySelector("input");
+  const clear = box.querySelector("[data-city-clear]");
+  const cities = Array.from(document.querySelectorAll(".pt-city"));
+  const count = document.querySelector("[data-city-count]");
+  const empty = document.querySelector("[data-city-empty]");
+
+  const norm = s => s.toLowerCase().replace(/ё/g, "е").trim();
+
+  function apply() {
+    const q = norm(input.value);
+    let shown = 0, free = 0;
+    cities.forEach(function (city) {
+      const name = norm(city.firstElementChild.textContent);
+      const hit = !q || name.indexOf(q) !== -1;
+      city.hidden = !hit;
+      if (!hit) return;
+      shown++;
+      if (city.querySelector(".pt-city__free")) free++;
+    });
+    box.classList.toggle("has-value", !!input.value);
+    empty.hidden = shown !== 0;
+    count.innerHTML = shown
+      ? "Показано городов: " + shown + " · свободно <b>" + free + "</b>"
+      : "";
+  }
+
+  input.addEventListener("input", apply);
+  clear.addEventListener("click", function () { input.value = ""; apply(); input.focus(); });
+  apply();
+})();
+
 document.querySelector("[data-partner-form]").addEventListener("submit", function (e) {
   e.preventDefault();
   const card = e.target.closest(".pt-card");

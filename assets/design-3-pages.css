@@ -13,11 +13,26 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   Полоса разделов страницы
+   Заголовок инфостраницы — в одну строку
+   --------------------------------------------------------------------------
+   У страницы партнёра заголовок узкий (18ch): там он стоит над лидом и
+   формой, и вторая строка ему на пользу. Заголовки справочных страниц
+   короче и читаются как название раздела — их ломать пополам незачем.
+   На телефоне перенос вернётся сам, по ширине экрана. */
+.pt-hero--wide h1{max-width:34ch}
+
+/* --------------------------------------------------------------------------
+   Полоса разделов страницы — табы
    --------------------------------------------------------------------------
    «Сервис» — одна страница на три темы: как работает, тарифы, партнёрская
-   программа (так их и обсуждали — одним пунктом). Полоса держит три якоря
-   на виду, чтобы из подвала попадать сразу в нужный раздел, а не листать. */
+   программа (так их и обсуждали — одним пунктом), «Вопросы и ответы» —
+   на три роли, «Соцсети» — на город и маркетплейсы.
+
+   Полоса переключает разделы, а не пролистывает к ним: якорями человек
+   уезжал вниз и терял из виду, что разделов вообще несколько. Выбранный
+   раздел помечен инверсией — тем же, чем на витрине помечены открытые
+   разделы категорий. Разметка осталась ссылками: без скрипта полоса
+   работает якорями, как раньше. */
 .pg-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
 .pg-tabs a{
   display:inline-flex;align-items:center;height:40px;padding:0 16px;
@@ -26,6 +41,12 @@
   transition:border-color .18s, color .18s, background .18s;
 }
 .pg-tabs a:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.pg-tabs a[aria-selected="true"]{
+  background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600;
+}
+.pg-tabs a:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+/* Открытый раздел получает фокус с клавиатуры — своей рамки ему не надо */
+.pg-sec:focus{outline:0}
 
 /* Секция страницы. Якорь не должен уезжать под липкую шапку */
 .pg-sec{margin-top:52px;scroll-margin-top:84px}
@@ -143,15 +164,138 @@
 .pg-soc{
   display:flex;align-items:center;gap:14px;padding:18px 20px;
   border:1px solid var(--line);border-radius:24px;background:#fff;color:var(--ink);
-  transition:border-color .18s, background .18s, color .18s, transform .18s var(--ease);
+  transition:border-color .18s, box-shadow .18s, transform .18s var(--ease);
 }
-.pg-soc:hover{background:var(--ink);border-color:var(--ink);color:#fff;transform:translateY(-3px)}
+/* В покое значок серый — как везде на сайте, чтобы ряд логотипов не спорил
+   с красным брендом. При наведении карточка не заливается тёмным (так
+   значок гас вместе с ней), а сам значок берёт фирменный цвет соцсети:
+   тот же приём, что у значков в шапке, подвале и на странице купона. */
+.pg-soc:hover{border-color:var(--line-strong);transform:translateY(-3px);box-shadow:var(--shadow-1)}
+.pg-soc:hover .soc-ic__bg{fill:var(--soc-c)}
+.pg-soc:hover .soc-ic__g{fill:#fff}
+.pg-soc:hover .soc-ic__s{stroke:#fff}
+/* Логотипы маркетплейсов многоцветные, через fill их не перекрасить —
+   в покое гасим фильтром, при наведении возвращаем */
+.pg-soc .soc-ic--img,
+.pg-soc__ic img{filter:grayscale(1);opacity:.5;transition:filter .2s,opacity .2s}
+.pg-soc:hover .soc-ic--img,
+.pg-soc:hover .pg-soc__ic img{filter:none;opacity:1}
 .pg-soc__ic{flex:0 0 auto;display:inline-flex}
 .pg-soc__ic .soc-ic{width:34px;height:34px}
-.pg-soc__ic img{width:34px;height:34px;object-fit:contain}
+/* Логотипы площадок — такими же кружками, что и значки соцсетей: в ряду
+   рядом стоят и те и другие, и квадраты выбивались из строя */
+.pg-soc__ic img{width:34px;height:34px;border-radius:50%;object-fit:cover}
 .pg-soc b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
-.pg-soc span{display:block;margin-top:3px;font-size:13px;color:var(--ink-3);transition:color .18s}
-.pg-soc:hover span{color:rgba(255,255,255,.7)}
+.pg-soc span{display:block;margin-top:3px;font-size:13px;color:var(--ink-3)}
+
+/* --------------------------------------------------------------------------
+   Документы
+   --------------------------------------------------------------------------
+   Списком, а не карточками: документ выбирают по названию, и названия
+   должны стоять столбиком, чтобы их можно было пробежать глазами.
+   Формат и дата редакции — справа, там же, где у списка городов стоит
+   «свободно». */
+.pg-docs{margin-top:22px;border-top:1px solid var(--line)}
+.pg-doc{
+  display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;
+  padding:18px 2px;border-bottom:1px solid var(--line);color:var(--ink);
+  transition:color .18s;
+}
+.pg-doc:hover{color:var(--brand)}
+.pg-doc__ic{display:inline-flex;color:var(--ink-4);transition:color .18s}
+.pg-doc:hover .pg-doc__ic{color:var(--brand)}
+.pg-doc b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.pg-doc span{display:block;margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--ink-3)}
+.pg-doc__meta{
+  flex:0 0 auto;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--ink-4);white-space:nowrap;
+}
+@media (max-width:620px){
+  .pg-doc{grid-template-columns:auto minmax(0,1fr);gap:12px}
+  .pg-doc__meta{grid-column:2;margin-top:2px}
+}
+
+/* --------------------------------------------------------------------------
+   Калькулятор стоимости
+   --------------------------------------------------------------------------
+   Верх воронки: что продаёте → город → где публикуем → примерная
+   стоимость и охват → «Продолжить» → регистрация (правка созвона
+   24.09.2026). Не квиз по экрану на вопрос — все шаги на одном экране,
+   итог пересчитывается сразу: квизовый конструктор на созвоне 16.09.2026
+   уже отклоняли. */
+.pg-calc{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:24px;margin-top:26px;align-items:start}
+@media (max-width:900px){.pg-calc{grid-template-columns:1fr}}
+.pg-calc__steps{display:grid;gap:16px}
+.pg-step__k{
+  display:inline-flex;align-items:center;gap:9px;margin:0 0 14px;
+  font-size:13px;font-weight:600;color:var(--ink-2);
+}
+.pg-step__k i{
+  display:flex;align-items:center;justify-content:center;width:24px;height:24px;
+  border-radius:50%;background:var(--ink);color:#fff;
+  font-family:var(--font-display);font-size:12px;font-weight:800;font-style:normal;
+}
+/* Выбор — теми же таблетками, что квалифицирующие вопросы у партнёра */
+.pg-pick{display:flex;flex-wrap:wrap;gap:8px}
+.pg-pick label{
+  display:inline-flex;align-items:center;height:40px;padding:0 14px;
+  border-radius:var(--r-pill);border:1.5px solid var(--line-strong);
+  background:#fff;font-size:14px;color:var(--ink-2);cursor:pointer;
+  transition:border-color .18s, color .18s, background .18s;
+}
+.pg-pick label:hover{border-color:var(--brand);color:var(--brand)}
+.pg-pick input{position:absolute;opacity:0;pointer-events:none}
+.pg-pick label:has(input:checked){background:var(--brand);border-color:var(--brand);color:#fff}
+.pg-step__hint{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--ink-3)}
+
+/* Итог липнет к экрану: цифра должна оставаться на виду, пока крутят шаги */
+.pg-result{position:sticky;top:84px;border:1px solid var(--line);border-radius:24px;padding:24px;background:var(--surface)}
+.pg-result h3{margin:0;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.pg-result__sum{
+  margin:12px 0 0;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(30px,3.4vw,42px);letter-spacing:-.03em;line-height:1;color:var(--ink);
+}
+.pg-result__rows{margin:20px 0 0;padding:18px 0 0;border-top:1px solid var(--line-strong);display:grid;gap:12px}
+.pg-result__row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;font-size:14px;color:var(--ink-2)}
+.pg-result__row b{font-weight:700;color:var(--ink);white-space:nowrap}
+.pg-result .btn{width:100%;justify-content:center;margin-top:20px;height:50px;font-size:15px;font-weight:600}
+.pg-result__note{margin:14px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-3)}
+
+/* --------------------------------------------------------------------------
+   Поиск по городам присутствия
+   --------------------------------------------------------------------------
+   Городов в списке будет не десять, а сотни (в планах ~1115), и глазами
+   в нём свой город уже не найти. Тот же приём, что в попапе выбора
+   города на витрине: строка поиска над списком.
+   Счётчик свободных стоит рядом — ради него на страницу и приходят. */
+.pt-cities__find{
+  display:flex;align-items:center;gap:10px;margin-top:18px;max-width:420px;
+  height:46px;padding:0 16px;border-radius:var(--r-pill);
+  border:1.5px solid var(--line-strong);background:#fff;
+  transition:border-color .18s, box-shadow .18s;
+}
+.pt-cities__find:focus-within{border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-100)}
+.pt-cities__find [data-icon]{display:inline-flex;color:var(--ink-3)}
+.pt-cities__find input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:15px;color:var(--ink)}
+.pt-cities__find input:focus{outline:0}
+.pt-cities__find button{
+  flex:0 0 auto;display:none;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;background:var(--surface-2);color:var(--ink-2);
+}
+.pt-cities__find.has-value button{display:flex}
+/* Отфильтрованные города прячем атрибутом hidden — а у .pt-city свой
+   display:flex, который его перебивает */
+.pt-city[hidden]{display:none}
+.pt-cities__count{margin:12px 0 0;font-size:13.5px;color:var(--ink-3)}
+.pt-cities__count b{color:var(--brand);font-weight:700}
+.pt-cities__empty{margin:20px 0 0;font-size:15px;color:var(--ink-2)}
+.pt-cities__empty a{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+/* Заголовки групп соцсетей в подвале стали ссылками
+   --------------------------------------------------------------------------
+   «Мы в соцсетях» — пункт из записки Ивана, но отдельной строки в списках
+   подвала он не заслуживает: группа с этим названием там уже стоит.
+   Поэтому ссылкой на страницу стал сам заголовок группы. */
 
 /* --------------------------------------------------------------------------
    Заголовки групп соцсетей в подвале стали ссылками
