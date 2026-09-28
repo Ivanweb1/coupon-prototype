@@ -828,7 +828,7 @@ VIEWS["partner:dashboard"] = () => {
        29.09). Порядок прежний: сначала работа, потом деньги. */
     + kpiRow([
         { label: "Клиентов в регионе",        value: LK_CLIENTS.length, note: fresh + " без первого купона" },
-        { label: "Размещено купонов сейчас",  value: now.length, note: "активные на сегодня" },
+        { label: "Размещено купонов",         value: now.length, note: "активные на сегодня" },
         { label: "Активных клиентов",         value: activeClients, note: "разместили купон" },
         { label: "К выплате",                 value: rub(readySum()), note: "за " + LK_PAYOUTS[0].period.toLowerCase() },
         { label: "Начислено всего",           value: rub(feeAll), note: "за все периоды" },
