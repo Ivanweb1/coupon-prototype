@@ -44,10 +44,20 @@
    рекламное место шириной с карточку в ленте */
 .lkd-dash{
   display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;
-  align-items:start;margin-bottom:16px;
+  /* Оба столбца кончаются на одном уровне (правка Ивана 29.09). Раньше
+     они стояли по верхнему краю, и под коротким висела дыра: на дашборде
+     — под карточкой купона, на статистике — под графиком. Теперь тянется
+     тот, кто короче. */
+  align-items:stretch;margin-bottom:16px;
 }
 .lkd-dash__main{display:flex;flex-direction:column;gap:16px;min-width:0}
 .lkd-dash__main .lk-panel{margin:0}
+/* Карточке добирает высоту снимок: background-size:cover подрезает кадр,
+   а не растягивает его. Текст и кнопки остаются своего размера. */
+.lkd-dash > .lkd-ad{height:100%}
+.lkd-dash > .lkd-ad .lkd-ad__media{flex:1 1 auto}
+/* Статистика: панель во всю высоту столбца, график забирает остаток */
+.lkd-dash--chart .lk-panel{display:flex;flex-direction:column;height:100%}
 @media (max-width:1100px){.lkd-dash{grid-template-columns:minmax(0,1fr) 260px}}
 @media (max-width:900px){
   .lkd-dash{grid-template-columns:1fr}
@@ -167,11 +177,24 @@
 /* --------------------------------------------------------------------------
    График статистики
    -------------------------------------------------------------------------- */
-.lkd-ch{display:block;width:100%;height:auto}
+/* Поле графика: высота от панели, svg внутри — абсолютом, чтобы размер
+   поля не зависел от того, что мы в него нарисовали */
+.lkd-ch__box{position:relative;flex:1 1 auto;min-height:230px}
+.lkd-ch{position:absolute;inset:0;display:block;width:100%;height:100%}
 .lkd-ch__grid{stroke:var(--line);stroke-width:1}
-.lkd-ch__ax{font-size:11px;fill:var(--ink-3)}
-.lkd-ch__bar{fill:#F0F0F0}
-.lkd-ch__ln{fill:none;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.lkd-ch__ax{font-size:11.5px;fill:var(--ink-3)}
+/* Правая шкала — шкала столбиков: цифры того же веса, но приглушены,
+   чтобы не спорить с левой */
+.lkd-ch__ax--bar{fill:var(--ink-4)}
+.lkd-ch__bar{fill:#F2F2F2}
+.lkd-ch__area{fill:var(--brand);opacity:.07}
+.lkd-ch__hit{fill:transparent}
+.lkd-ch__hit:hover{fill:rgba(17,17,17,.035)}
+/* Толщина по важности: «Забрали» — ради чего сервис и нужен, поэтому
+   линия толще и с заливкой; просмотры и переходы её объясняют. */
+.lkd-ch__ln{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.lkd-ch__ln--b{stroke-width:3}
+.lkd-ch__ln--c{stroke-width:1.8}
 /* Три линии — чёрный, фирменный и серый: те же роли цвета, что везде
    в кабинете. Красный — «Купон забрали», главный результат. */
 .lkd-ch__ln--a{stroke:var(--ink)}

@@ -125,6 +125,19 @@ if (!IS_CLIENT) {
   });
 }
 
+/* Ширины столбцов в таблице. lk.js отдаёт вёрстку браузеру, и тот режет
+   столбцы по содержимому: в «Истории начислений» сумма и дата сбивались в
+   середину, а справа перед кнопкой оставалась пустая полоса (правка Ивана
+   29.09). Столбец получает ширину, если в описании есть w; без w таблица
+   собирается как раньше. */
+const baseTable = window.table;
+window.table = function (cols, rows) {
+  const html = baseTable(cols, rows);
+  if (!cols.some(c => c.w)) return html;
+  const group = `<colgroup>${cols.map(c => `<col${c.w ? ` style="width:${c.w}"` : ""}>`).join("")}</colgroup>`;
+  return html.replace('<table class="lk-t">', '<table class="lk-t">' + group);
+};
+
 /* Счётчик у «Купонов клиентов» — число купонов, а не клиентов */
 const baseNavCount = window.navCount;
 window.navCount = id => !IS_CLIENT && id === "clients" ? levelFees().length : baseNavCount(id);
@@ -354,37 +367,98 @@ function statSeries(coupons, days) {
   return out;
 }
 
-function statChart(series) {
-  const W = 760, H = 260, L = 44, R = 48, T = 16, B = 30;
+/* Сглаженная линия — монотонная кубика (Фрич–Карлсон). Кривая проходит
+   через все дневные точки и не выскакивает за них между ними: ломаная из
+   острых углов читалась как шум, хотя показывает то же самое. */
+function smoothPath(pts) {
+  const n = pts.length;
+  if (n < 2) return n ? `M${pts[0][0]} ${pts[0][1]}` : "";
+  const dx = [], m = [], t = [];
+  for (let i = 0; i < n - 1; i++) {
+    dx[i] = pts[i + 1][0] - pts[i][0] || 1;
+    m[i] = (pts[i + 1][1] - pts[i][1]) / dx[i];
+  }
+  t[0] = m[0];
+  for (let i = 1; i < n - 1; i++) {
+    if (m[i - 1] * m[i] <= 0) t[i] = 0;
+    else {
+      const w1 = 2 * dx[i] + dx[i - 1], w2 = dx[i] + 2 * dx[i - 1];
+      t[i] = (w1 + w2) / (w1 / m[i - 1] + w2 / m[i]);
+    }
+  }
+  t[n - 1] = m[n - 2];
+  const f = v => v.toFixed(1);
+  let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
+  for (let i = 0; i < n - 1; i++) {
+    const h = dx[i] / 3;
+    d += ` C${f(pts[i][0] + h)} ${f(pts[i][1] + t[i] * h)} ` +
+         `${f(pts[i + 1][0] - h)} ${f(pts[i + 1][1] - t[i + 1] * h)} ` +
+         `${f(pts[i + 1][0])} ${f(pts[i + 1][1])}`;
+  }
+  return d;
+}
+
+/* График по дням. Правки Ивана 29.09:
+   · линии сглажены, у ключевой («Купон забрали») появилась заливка — из
+     трёх одинаковых линий было не видно, на какую смотреть;
+   · сетка и подписи приглушены, столбики показов ушли на задний план:
+     шкал две, и цифры справа не должны спорить с левыми;
+   · над каждым днём — прозрачное поле с подсказкой, где все четыре числа
+     сразу: раньше всплывали только показы со столбика;
+   · размер приходит в пикселях (см. отрисовку в render): панель тянется
+     до низа рекламного места, и график занимает всё, что ему осталось. */
+function statChart(series, W, H) {
+  W = W || 760; H = H || 260;
+  const L = 46, R = 50, T = 18, B = 34;
   const iw = W - L - R, ih = H - T - B;
   const n = series.length;
+  if (n < 1 || iw < 40 || ih < 40) return "";
   const maxL = Math.max(1, ...series.map(r => Math.max(r.opened, r.taken, r.clicks)));
   const maxS = Math.max(1, ...series.map(r => r.shown));
   const x = i => L + (n === 1 ? iw / 2 : i * iw / (n - 1));
   const yL = v => T + ih - v / maxL * ih;
-  const bw = Math.max(3, iw / n * .56);
+  /* Столбики уже и с воздухом — это фон под линиями, а не второй
+     главный объект на поле */
+  const bw = Math.max(3, iw / n * .42);
   const ticks = [0, .5, 1];
-  const labelEvery = n > 14 ? 5 : 1;
-  const bars = series.map((r, i) =>
-    `<rect class="lkd-ch__bar" x="${(x(i) - bw / 2).toFixed(1)}" y="${(T + ih - r.shown / maxS * ih).toFixed(1)}" width="${bw.toFixed(1)}" height="${(r.shown / maxS * ih).toFixed(1)}" rx="2"><title>Показы: ${num(r.shown)}</title></rect>`).join("");
-  const lines = STAT_LINES.map(l => {
-    const pts = series.map((r, i) => x(i).toFixed(1) + "," + yL(r[l.id]).toFixed(1)).join(" ");
-    return `<polyline class="lkd-ch__ln lkd-ch__ln--${l.cls}" points="${pts}"/>`;
+  const labelEvery = n > 14 ? 5 : n > 7 ? 2 : 1;
+
+  const grid = ticks.map(t => `<line class="lkd-ch__grid" x1="${L}" x2="${W - R}" y1="${(T + ih - t * ih).toFixed(1)}" y2="${(T + ih - t * ih).toFixed(1)}"/>
+    <text class="lkd-ch__ax" x="${L - 10}" y="${(T + ih - t * ih + 4).toFixed(1)}" text-anchor="end">${num(Math.round(maxL * t))}</text>
+    <text class="lkd-ch__ax lkd-ch__ax--bar" x="${W - R + 10}" y="${(T + ih - t * ih + 4).toFixed(1)}">${num(Math.round(maxS * t))}</text>`).join("");
+
+  const bars = series.map((r, i) => {
+    const h = r.shown / maxS * ih;
+    return `<rect class="lkd-ch__bar" x="${(x(i) - bw / 2).toFixed(1)}" y="${(T + ih - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2"/>`;
   }).join("");
-  const grid = ticks.map(t => `<line class="lkd-ch__grid" x1="${L}" x2="${W - R}" y1="${T + ih - t * ih}" y2="${T + ih - t * ih}"/>
-    <text class="lkd-ch__ax" x="${L - 8}" y="${T + ih - t * ih + 4}" text-anchor="end">${num(Math.round(maxL * t))}</text>
-    <text class="lkd-ch__ax lkd-ch__ax--r" x="${W - R + 8}" y="${T + ih - t * ih + 4}">${num(Math.round(maxS * t))}</text>`).join("");
+
+  const paths = {};
+  STAT_LINES.forEach(l => { paths[l.id] = smoothPath(series.map((r, i) => [x(i), yL(r[l.id])])); });
+
+  /* Заливка под ключевой линией. Тем же путём, что и сама линия, —
+     низом по нулевой отметке. */
+  const area = `<path class="lkd-ch__area" d="${paths.taken} L${x(n - 1).toFixed(1)} ${(T + ih).toFixed(1)} L${x(0).toFixed(1)} ${(T + ih).toFixed(1)} Z"/>`;
+  const lines = STAT_LINES.map(l =>
+    `<path class="lkd-ch__ln lkd-ch__ln--${l.cls}" d="${paths[l.id]}"/>`).join("");
+
   const days = series.map((r, i) => i % labelEvery === 0 || i === n - 1
-    ? `<text class="lkd-ch__ax" x="${x(i)}" y="${H - 8}" text-anchor="middle">${i + 1}</text>` : "").join("");
+    ? `<text class="lkd-ch__ax" x="${x(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">${i + 1}</text>` : "").join("");
+
+  /* Поле дня во всю высоту: подсказка ловится где угодно по вертикали,
+     а не только на столбике или ровно на линии. */
+  const hw = iw / Math.max(1, n - 1);
+  const hits = series.map((r, i) => `<rect class="lkd-ch__hit" x="${Math.max(L, x(i) - hw / 2).toFixed(1)}" y="${T}" width="${Math.min(hw, W - R - Math.max(L, x(i) - hw / 2)).toFixed(1)}" height="${ih.toFixed(1)}">
+      <title>День ${i + 1} · Показы ${num(r.shown)} · Просмотры ${num(r.opened)} · Забрали ${num(r.taken)} · Переходы ${num(r.clicks)}</title></rect>`).join("");
+
   return `<svg class="lkd-ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="График показателей по дням">
-    ${grid}${bars}${lines}${days}</svg>`;
+    ${grid}${bars}${area}${lines}${days}${hits}</svg>`;
 }
 
 VIEWS["client:stats"] = () => {
   const withData = LK_COUPONS.filter(c => c.shown > 0);
   const picked = D.coupon === "all" ? withData : withData.filter(c => String(c.id) === D.coupon);
   const days = D.period === "7" ? 7 : D.period === "prev" ? 31 : 30;
-  const series = statSeries(picked, days);
+  const series = D.series = statSeries(picked, days);
   const tot = k => series.reduce((a, r) => a + r[k], 0);
 
   const rows = withData.slice()
@@ -417,8 +491,9 @@ VIEWS["client:stats"] = () => {
     + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(tot(m.id)), raw: tot(m.id) })), { funnel: true })
     /* Рекламное место — справа от графика, как на дашборде: это второй
        по посещаемости раздел, и сетка у них одна */
-    + `<div class="lkd-dash"><div class="lkd-dash__main">
-        ${panel(D.coupon === "all" ? "Все купоны по дням" : (picked[0] || {}).title || "Купон", statChart(series) + legend)}
+    + `<div class="lkd-dash lkd-dash--chart"><div class="lkd-dash__main">
+        ${panel(D.coupon === "all" ? "Все купоны по дням" : (picked[0] || {}).title || "Купон",
+          `<div class="lkd-ch__box" data-chart></div>` + legend)}
       </div>${adSlot("stats")}</div>`
     + panel("По купонам",
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
@@ -846,12 +921,11 @@ VIEWS["partner:bonuses"] = () => {
               вместо них работает реферальный код.</li>
           <li>Клиент тратит бонусы на размещение купонов. Обменять их на
               деньги нельзя. Срок жизни бонусов — 365 дней.</li>
-          <li>Одному клиенту — не больше 20% месячного лимита два месяца
-              подряд. Это условие оферты.</li>
         </ul>`)}
     </div>`
     + panel("История начислений", table(
-        [{ t: "Кому" }, { t: "Сколько", num: true }, { t: "Дата начисления" }, { t: "", num: true }],
+        [{ t: "Кому", w: "34%" }, { t: "Сколько", num: true, w: "18%" },
+         { t: "Дата начисления", w: "24%" }, { t: "", num: true, w: "24%" }],
         LK_BONUSES.map(b => `<tr>
           <td><b class="lk-t__title">${b.to}</b><span class="lk-t__sub">ИНН ${innOf(b.to)}</span></td>
           <td class="num">${num(b.amount)}</td>
@@ -1134,6 +1208,21 @@ window.render = function () {
     const ic = qs("[data-icon]", s);
     if (ic && (ic.dataset.icon === "used" || ic.dataset.icon === "copy")) s.remove();
   });
+
+  /* График рисуем по реальному размеру поля, а не растягиваем готовую
+     картинку: панель тянется до низа рекламного места, график занимает
+     всё, что ему осталось, а подписи и толщина линий остаются в своих
+     пикселях. Перерисовываем на изменение размера поля — окно, сворачивание
+     меню, смена периода. */
+  const box = qs("[data-chart]", host);
+  if (box) {
+    const draw = () => {
+      const w = Math.round(box.clientWidth), h = Math.round(box.clientHeight);
+      if (w > 40 && h > 40) box.innerHTML = statChart(D.series, w, h);
+    };
+    draw();
+    if (window.ResizeObserver) new ResizeObserver(draw).observe(box);
+  }
 
   /* Статистика */
   const per = qs("[data-stat-period]", host);
