@@ -827,9 +827,9 @@ VIEWS["partner:dashboard"] = () => {
        втором ряду три плитки растягивались на всю ширину (правка Ивана
        29.09). Порядок прежний: сначала работа, потом деньги. */
     + kpiRow([
-        { label: "Клиентов в регионе",        value: LK_CLIENTS.length, note: fresh + " ещё без первого купона" },
+        { label: "Клиентов в регионе",        value: LK_CLIENTS.length, note: fresh + " без первого купона" },
         { label: "Размещено купонов сейчас",  value: now.length, note: "активные на сегодня" },
-        { label: "Активных клиентов",         value: activeClients, note: "с размещённым купоном" },
+        { label: "Активных клиентов",         value: activeClients, note: "разместили купон" },
         { label: "К выплате",                 value: rub(readySum()), note: "за " + LK_PAYOUTS[0].period.toLowerCase() },
         { label: "Начислено всего",           value: rub(feeAll), note: "за все периоды" },
         { label: "Купонов на клиента",        value: perClient, note: "в среднем" },
