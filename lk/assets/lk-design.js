@@ -45,6 +45,7 @@ const D = {
   ledger: "all",       /* биллинг: месяц в истории */
   editing: {},         /* какие формы открыты на редактирование */
   client: "all",       /* партнёр: фильтр купонов по клиенту */
+  payType: "all",      /* партнёр: фильтр детализации выплаты по типу купона */
   prefill: null        /* партнёр: «Повторить» начисление */
 };
 
@@ -652,7 +653,9 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
        отдельным блоком, а строкой под списком, как итог в других
        таблицах кабинета. */
     return head("Уведомления", readAll)
-      + panel("", `<div class="lk-list">${list.map(n => `
+      /* В две колонки (правка Ивана 29.09): строка во всю ширину раздела
+         оставляла справа пустое поле — текст уведомления короткий. */
+      + panel("", `<div class="lk-list lk-list--2">${list.map(n => `
         <div class="lk-list__i${n.unread ? " is-unread" : ""}">
           <i class="lk-list__d"></i>
           <div>${n.text}<div class="lk-list__w">${n.when}</div></div>
@@ -1028,24 +1031,23 @@ const INVOICE = { "Август 2026": "П-0826-014", "Июль 2026": "П-0726-
 VIEWS["partner:payouts"] = () => {
   const pend = LK_PAYOUTS.find(p => p.status === "pending");
   const cur = periodFees();
-  /* Группы детализации — по типу купона, теми же словами, что в столбце
-     «Тип» в других разделах (правка Ивана 29.09). Раньше групп было две,
-     «Регион» и «Маркетплейс», и в «Регион» молча падали купоны «Для
-     бизнеса»: группа значила «всё, что не маркетплейс». */
-  const GROUPS = [["regional", "Региональные"], ["for-business", "Для бизнеса"],
-                  ["marketplace", "Маркетплейс"]];
+  /* Тип купона — фильтром над таблицей, а не строками-группами (правка
+     Ивана 29.09). Группы разбивали короткий список на куски по одной
+     строке, а фильтр — тот же приём, что в «Купонах клиентов», и тип
+     каждой строки виден в своём столбце. Итог под таблицей считается по
+     выбранному типу. */
+  const detail = D.payType === "all" ? cur : cur.filter(f => f.type === D.payType);
   const sumOf = (xs, k) => xs.reduce((a, f) => a + f[k], 0);
   const paid = LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
 
-  const detail = (title, xs) => xs.length ? `<tr class="lkd-grp"><td colspan="4">${title}</td>
-      <td class="num lk-t__key">${rub(sumOf(xs.filter(f => f.ready), "fee"))}</td></tr>`
-    + xs.map(f => `<tr>
+  const detailRows = detail.map(f => `<tr>
       <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">ID ${f.id} · ${clientById(f.client).name}</span></td>
+      <td>${TYPE[f.type]}</td>
       <td>${f.to}</td>
       <td class="num">${rub(f.rub)}</td>
       <td class="num">${f.bon ? num(f.bon) : "—"}</td>
       <td class="num lk-t__key">${f.ready ? rub(f.fee) : `<span class="lk-t__sub">после ${f.to}</span>`}</td>
-    </tr>`).join("") : "";
+    </tr>`).join("");
 
   const rows = LK_PAYOUTS.map(p => `<tr>
     <td><b class="lk-t__title">${p.period}</b><span class="lk-t__sub">${p.date}</span></td>
@@ -1085,10 +1087,19 @@ VIEWS["partner:payouts"] = () => {
         <a class="btn lkd-btn-grey" href="${href("profile")}" data-go="profile">Изменить в профиле</a>
       </div>`)}
     </div>`
-    + panel("Детализация · " + pend.period, table(
-        [{ t: "Купон" }, { t: "Окончание" }, { t: "Оплачено, ₽", num: true }, { t: "Бонусами", num: true },
-         { t: "Ваше начисление", num: true, key: true }],
-        GROUPS.map(([t, label]) => detail(label, cur.filter(f => f.type === t))).join("")))
+    + panel("Детализация · " + pend.period,
+        `<div class="lkd-filters lkd-filters--in">
+          <select class="lk-s" data-pay-type aria-label="Тип купона">
+            <option value="all">Все типы</option>
+            ${Object.keys(TYPE).map(t => `<option value="${t}"${D.payType === t ? " selected" : ""}>${TYPE[t]}</option>`).join("")}
+          </select>
+        </div>`
+        + (detail.length
+          ? table([{ t: "Купон" }, { t: "Тип" }, { t: "Окончание" }, { t: "Оплачено, ₽", num: true },
+                   { t: "Бонусами", num: true }, { t: "Ваше начисление", num: true, key: true }], detailRows)
+            + `<div class="lk-total"><b>${rub(sumOf(detail.filter(f => f.ready), "fee"))}</b>
+               <span>готово к выплате${D.payType === "all" ? " в этом периоде" : " · " + TYPE[D.payType].toLowerCase()}</span></div>`
+          : empty("Купонов этого типа в периоде нет", "Выберите другой тип или «Все типы».")))
     + panel("По периодам", table(
         [{ t: "Период" }, { t: "Сумма", num: true, key: true }, { t: "Счёт" }, { t: "Статус" }, { t: "", num: true }], rows)
       + `<div class="lk-total"><b>${rub(paid)}</b><span>выплачено за всё время</span></div>`)
@@ -1270,6 +1281,10 @@ window.render = function () {
   /* Партнёр: фильтр купонов по клиенту */
   const fc = qs("[data-fee-client]", host);
   if (fc) fc.onchange = () => { D.client = fc.value; render(); };
+
+  /* Партнёр: фильтр детализации выплаты по типу купона */
+  const pt = qs("[data-pay-type]", host);
+  if (pt) pt.onchange = () => { D.payType = pt.value; render(); };
 
   /* Бонусы: поиск клиента по ИНН и «Повторить» */
   const inn = qs("[data-inn]", host);
