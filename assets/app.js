@@ -707,12 +707,26 @@ const PICS_WILD = /[?&]pics=wild/.test(location.search);
 const COUPON_PHOTOS = PICS_WILD ? COUPON_PHOTOS_WILD : COUPON_PHOTOS_WARM;
 if (PICS_WILD) document.documentElement.classList.add("pics-wild");
 
+/* Первая карточка ленты — настоящий креатив селлера с маркетплейса
+   (Иван 29.09). Остальные картинки в ленте — фотофоны: на них видно, как
+   карточка держит любой снимок. На первой видно другое — как рядом с
+   ними стоит готовый рекламный макет, с которым селлер и придёт. */
+const FIRST_PHOTO = "assets/coupons/wuch-socks.png";
+
 function applyPhoto(card) {
   if (!document.body.classList.contains("dz")) return;
   const host = card.parentElement;
   if (!host) return;
   const kids = Array.from(host.children);
   const i = kids.indexOf(card);
+  if (host.id === "feed" && i === 0) {
+    const c0 = card._coupon;
+    c0.photo = FIRST_PHOTO;
+    const m0 = qs(".card__media", card);
+    m0.style.background = 'url("' + FIRST_PHOTO + '") center/cover no-repeat';
+    m0.classList.add("has-photo");
+    return;
+  }
   const tpl = getComputedStyle(host).gridTemplateColumns;
   const cols = !tpl || tpl === "none" ? 1 : tpl.split(" ").length;
   const photoAt = j => j >= 0 && kids[j]._coupon ? kids[j]._coupon.photo : null;

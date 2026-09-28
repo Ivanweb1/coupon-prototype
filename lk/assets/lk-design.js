@@ -426,9 +426,11 @@ function statChart(series, W, H) {
   const ticks = [0, .5, 1];
   const labelEvery = n > 14 ? 5 : n > 7 ? 2 : 1;
 
+  /* Слева — показы, справа — линии (правка Ивана 29.09). Показы это
+     первый шаг воронки и самое большое число, с него и читают график. */
   const grid = ticks.map(t => `<line class="lkd-ch__grid" x1="${L}" x2="${W - R}" y1="${(T + ih - t * ih).toFixed(1)}" y2="${(T + ih - t * ih).toFixed(1)}"/>
-    <text class="lkd-ch__ax" x="${L - 10}" y="${(T + ih - t * ih + 4).toFixed(1)}" text-anchor="end">${num(Math.round(maxL * t))}</text>
-    <text class="lkd-ch__ax lkd-ch__ax--bar" x="${W - R + 10}" y="${(T + ih - t * ih + 4).toFixed(1)}">${num(Math.round(maxS * t))}</text>`).join("");
+    <text class="lkd-ch__ax lkd-ch__ax--bar" x="${L - 10}" y="${(T + ih - t * ih + 4).toFixed(1)}" text-anchor="end">${num(Math.round(maxS * t))}</text>
+    <text class="lkd-ch__ax" x="${W - R + 10}" y="${(T + ih - t * ih + 4).toFixed(1)}">${num(Math.round(maxL * t))}</text>`).join("");
 
   const bars = series.map((r, i) => {
     const h = r.shown / maxS * ih;
@@ -451,8 +453,8 @@ function statChart(series, W, H) {
      считают столбики, снизу — что отложено по горизонтали. Легенда под
      графиком называет линии, а эти подписи говорят, в чём измеряется
      каждая шкала. */
-  const caps = `<text class="lkd-ch__cap" x="${L}" y="16">Просмотры, забрали, переходы</text>
-    <text class="lkd-ch__cap lkd-ch__cap--bar" x="${W - R}" y="16" text-anchor="end">Показы</text>
+  const caps = `<text class="lkd-ch__cap lkd-ch__cap--bar" x="${L}" y="16">Показы</text>
+    <text class="lkd-ch__cap" x="${W - R}" y="16" text-anchor="end">Просмотры, забрали, переходы</text>
     <text class="lkd-ch__cap" x="${(L + iw / 2).toFixed(1)}" y="${(H - 6).toFixed(1)}" text-anchor="middle">День месяца</text>`;
 
   /* Поле дня во всю высоту: подсказка ловится где угодно по вертикали,
