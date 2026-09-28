@@ -410,9 +410,11 @@ function smoothPath(pts) {
      до низа рекламного места, и график занимает всё, что ему осталось. */
 function statChart(series, W, H) {
   W = W || 760; H = H || 260;
-  /* Сверху и снизу оставлено место под подписи шкал: что считает левая
-     шкала, что правая и что отложено по низу (правка Ивана 29.09). */
-  const L = 46, R = 50, T = 34, B = 48;
+  /* Шкала одна, слева — показы (правка Ивана 29.09). Правую шкалу с
+     делениями линий убрали: точные числа по каждому дню и так показывает
+     подсказка при наведении. Справа осталось поле только под подпись
+     последнего дня. */
+  const L = 46, R = 16, T = 34, B = 48;
   const iw = W - L - R, ih = H - T - B;
   const n = series.length;
   if (n < 1 || iw < 40 || ih < 40) return "";
@@ -426,11 +428,10 @@ function statChart(series, W, H) {
   const ticks = [0, .5, 1];
   const labelEvery = n > 14 ? 5 : n > 7 ? 2 : 1;
 
-  /* Слева — показы, справа — линии (правка Ивана 29.09). Показы это
-     первый шаг воронки и самое большое число, с него и читают график. */
+  /* Одна шкала слева — показы: первый шаг воронки и самое большое число,
+     с него график и читают (правка Ивана 29.09). */
   const grid = ticks.map(t => `<line class="lkd-ch__grid" x1="${L}" x2="${W - R}" y1="${(T + ih - t * ih).toFixed(1)}" y2="${(T + ih - t * ih).toFixed(1)}"/>
-    <text class="lkd-ch__ax lkd-ch__ax--bar" x="${L - 10}" y="${(T + ih - t * ih + 4).toFixed(1)}" text-anchor="end">${num(Math.round(maxS * t))}</text>
-    <text class="lkd-ch__ax" x="${W - R + 10}" y="${(T + ih - t * ih + 4).toFixed(1)}">${num(Math.round(maxL * t))}</text>`).join("");
+    <text class="lkd-ch__ax lkd-ch__ax--bar" x="${L - 10}" y="${(T + ih - t * ih + 4).toFixed(1)}" text-anchor="end">${num(Math.round(maxS * t))}</text>`).join("");
 
   const bars = series.map((r, i) => {
     const h = r.shown / maxS * ih;
@@ -454,7 +455,6 @@ function statChart(series, W, H) {
      графиком называет линии, а эти подписи говорят, в чём измеряется
      каждая шкала. */
   const caps = `<text class="lkd-ch__cap lkd-ch__cap--bar" x="${L}" y="16">Показы</text>
-    <text class="lkd-ch__cap" x="${W - R}" y="16" text-anchor="end">Просмотры, забрали, переходы</text>
     <text class="lkd-ch__cap" x="${(L + iw / 2).toFixed(1)}" y="${(H - 6).toFixed(1)}" text-anchor="middle">День месяца</text>`;
 
   /* Поле дня во всю высоту: подсказка ловится где угодно по вертикали,
