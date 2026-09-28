@@ -607,6 +607,7 @@ VIEWS["client:profile"] = () =>
         </div>
       </div>
       ${editBar("co")}`)}
+      <div>
       ${panel("Компания в сети", `<div class="lk-f">
         ${editField("net", "Сайт", LK_COMPANY.site, "https://…")}
         ${editField("net", "ВКонтакте", LK_COMPANY.vk, "https://vk.com/…")}
@@ -615,6 +616,11 @@ VIEWS["client:profile"] = () =>
         ${editField("net", "MAX", "", "https://max.ru/…")}
       </div>
       ${editBar("net")}`)}
+      ${/* Каналы уведомлений переехали сюда из «Уведомлений» (правка Ивана
+           29.09): это контакты компании, и живут они рядом с остальными
+           контактами, а не в ленте событий. */ ""}
+      ${notifyWherePanel()}
+      </div>
     </div>`
   + panel("Точки продаж", table(
       [{ t: "Адрес" }, { t: "Город" }, { t: "Режим работы" }, { t: "", num: true }],
@@ -636,37 +642,24 @@ VIEWS["client:profile"] = () =>
    — сюда и дублем на почту, а маркетинг и новости мы и так дадим ему
    лично, по телефону: «подпишитесь на группу». */
 const SUB_BONUS = 150;
-VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
-  const list = LK_NOTIFICATIONS[state.role];
-  const unread = list.filter(n => n.unread).length;
-  const feed = panel("", `<div class="lk-list">${list.map(n => `
-        <div class="lk-list__i${n.unread ? " is-unread" : ""}">
-          <i class="lk-list__d"></i>
-          <div>${n.text}<div class="lk-list__w">${n.when}</div></div>
-        </div>`).join("")}</div>`);
-  const readAll = `<button class="btn btn--ghost" data-read-all${unread ? "" : " disabled"}>Прочитать все</button>`;
 
-  if (!IS_CLIENT) {
-    /* Во всю ширину — как остальные разделы партнёра (Иван 25.09):
-       узкая колонка на широком экране смотрелась потерянной, а кнопка
-       «Прочитать все» — оторванной от списка под ней. Сноска — не
-       отдельным блоком, а строкой под списком, как итог в других
-       таблицах кабинета. */
-    return head("Уведомления", readAll)
-      /* В две колонки (правка Ивана 29.09): строка во всю ширину раздела
-         оставляла справа пустое поле — текст уведомления короткий. */
-      + panel("", `<div class="lk-list lk-list--2">${list.map(n => `
-        <div class="lk-list__i${n.unread ? " is-unread" : ""}">
-          <i class="lk-list__d"></i>
-          <div>${n.text}<div class="lk-list__w">${n.when}</div></div>
-        </div>`).join("")}</div>`
-        + `<div class="lk-total lk-total--note"><span>Уведомления о выплатах,
-        документах и клиентах приходят сюда и дублируются на почту
-        partner@example.ru.</span></div>`);
-  }
+/* Блок «Куда присылать» — один на оба кабинета. Отличаются подставленные
+   значения (у партнёра своя почта и ник) и строка про то, что приходит
+   на почту: у рекламодателя чеки и модерация, у партнёра счета и акты.
 
+   Где он стоит (правки Ивана 29.09):
+   · у рекламодателя — в «Профиле компании», рядом с остальными контактами
+     компании, а из «Уведомлений» убран;
+   · у партнёра — в «Уведомлениях», под списком (на 24.09 его убирали
+     совсем). Ширина ограничена, иначе строка канала растягивается через
+     весь раздел. */
+function notifyWherePanel() {
+  const nick = IS_CLIENT ? "@primer_coffee" : "@partnerov";
+  const chValue = ch => !IS_CLIENT && ch.id === "email" ? "partner@example.ru"
+    : !IS_CLIENT && ch.id === "tg" ? nick : ch.value;
   const channels = LK_NOTIFY_CHANNELS.map(ch => {
-    const linked = ch.value !== "не подключён";
+    const val = chValue(ch);
+    const linked = val !== "не подключён";
     const must = ch.id === "email";
     return `
     <div class="lk-chrow" data-notify-row="${ch.id}">
@@ -675,36 +668,54 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
         <span>${ch.label}${must ? ` <i class="lkd-must">обязательно</i>` : ""}</span>
       </label>
       ${linked
-        ? `<span class="lk-chrow__v">${ch.value}</span>`
+        ? `<span class="lk-chrow__v">${val}</span>`
         : `<input class="lk-i lk-chrow__inp" data-notify-handle="${ch.id}"
-             placeholder="Ник в ${ch.label}, например @primer_coffee">`}
+             placeholder="Ник в ${ch.label}, например ${nick}">`}
     </div>`;
   }).join("");
+  return panel("Куда присылать уведомления", channels
+    + `<div class="lk-note" style="margin-top:14px">Почта нужна всегда: на
+       неё приходят ${IS_CLIENT ? "чеки и решения модерации" : "счета, акты и решения по выплатам"}.
+       Telegram и Max — на выбор, SMS сервис не отправляет.</div>`
+    + `<div class="lk-head__act" style="margin-top:14px">
+         <button class="btn btn--solid" data-save>Сохранить</button>
+         <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
+       </div>`);
+}
+
+VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
+  const list = LK_NOTIFICATIONS[state.role];
+  const unread = list.filter(n => n.unread).length;
+  const readAll = `<button class="btn btn--ghost" data-read-all${unread ? "" : " disabled"}>Прочитать все</button>`;
+  /* Список в две колонки в обоих кабинетах (правка Ивана 29.09): текст
+     уведомления короткий, и строка во всю ширину раздела оставляла
+     справа пустое поле. */
+  const feed = panel("", `<div class="lk-list lk-list--2">${list.map(n => `
+        <div class="lk-list__i${n.unread ? " is-unread" : ""}">
+          <i class="lk-list__d"></i>
+          <div>${n.text}<div class="lk-list__w">${n.when}</div></div>
+        </div>`).join("")}</div>`
+    + (IS_CLIENT ? "" : `<div class="lk-total lk-total--note"><span>Уведомления
+        о выплатах, документах и клиентах приходят сюда и дублируются на
+        выбранные каналы.</span></div>`));
 
   return head("Уведомления", readAll)
-    + `<div class="lk-pair">
-      ${feed}
-      <div>
-      ${panel("Куда присылать", channels
-        + `<div class="lk-note" style="margin-top:14px">Почта нужна всегда:
-           на неё приходят чеки и решения модерации. Telegram и Max — на
-           выбор, SMS сервис не отправляет.</div>`
-        + `<div class="lk-head__act" style="margin-top:14px">
-             <button class="btn btn--solid" data-save>Сохранить</button>
-             <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
-           </div>`)}
-      <div class="lk-panel lkd-sub">
-        <b class="lkd-sub__h">Хотите первыми узнавать о новых механиках и бонусах?</b>
-        <p>Подпишитесь на наш канал — присылаем новости сервиса, подборки
-        удачных купонов и акции для рекламодателей. За подписку —
-        <b>${SUB_BONUS} бонусов</b>.</p>
-        <div class="lkd-sub__acts">
-          <a class="btn btn--ghost" href="#" target="_blank" rel="noopener">Telegram</a>
-          <a class="btn btn--ghost" href="#" target="_blank" rel="noopener">Max</a>
-        </div>
-      </div>
-      </div>
-    </div>`;
+    + feed
+    + (IS_CLIENT
+      /* Подписка на наши каналы за бонусы — нативная реклама сервиса
+         (созвон 24.09, вечер). Осталась в «Уведомлениях»: это не настройка,
+         а предложение, и в профиле компании ему не место. */
+      ? `<div class="lkd-one"><div class="lk-panel lkd-sub">
+          <b class="lkd-sub__h">Хотите первыми узнавать о новых механиках и бонусах?</b>
+          <p>Подпишитесь на наш канал — присылаем новости сервиса, подборки
+          удачных купонов и акции для рекламодателей. За подписку —
+          <b>${SUB_BONUS} бонусов</b>.</p>
+          <div class="lkd-sub__acts">
+            <a class="btn btn--ghost" href="#" target="_blank" rel="noopener">Telegram</a>
+            <a class="btn btn--ghost" href="#" target="_blank" rel="noopener">Max</a>
+          </div>
+        </div></div>`
+      : `<div class="lkd-one">${notifyWherePanel()}</div>`);
 };
 
 /* Превью купона в мастере — та же карточка, что в ленте, поэтому и правки
