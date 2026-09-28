@@ -410,7 +410,9 @@ function smoothPath(pts) {
      до низа рекламного места, и график занимает всё, что ему осталось. */
 function statChart(series, W, H) {
   W = W || 760; H = H || 260;
-  const L = 46, R = 50, T = 18, B = 34;
+  /* Сверху и снизу оставлено место под подписи шкал: что считает левая
+     шкала, что правая и что отложено по низу (правка Ивана 29.09). */
+  const L = 46, R = 50, T = 34, B = 48;
   const iw = W - L - R, ih = H - T - B;
   const n = series.length;
   if (n < 1 || iw < 40 || ih < 40) return "";
@@ -443,7 +445,15 @@ function statChart(series, W, H) {
     `<path class="lkd-ch__ln lkd-ch__ln--${l.cls}" d="${paths[l.id]}"/>`).join("");
 
   const days = series.map((r, i) => i % labelEvery === 0 || i === n - 1
-    ? `<text class="lkd-ch__ax" x="${x(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">${i + 1}</text>` : "").join("");
+    ? `<text class="lkd-ch__ax" x="${x(i).toFixed(1)}" y="${(T + ih + 20).toFixed(1)}" text-anchor="middle">${i + 1}</text>` : "").join("");
+
+  /* Подписи шкал у самих шкал: слева — что считают линии, справа — что
+     считают столбики, снизу — что отложено по горизонтали. Легенда под
+     графиком называет линии, а эти подписи говорят, в чём измеряется
+     каждая шкала. */
+  const caps = `<text class="lkd-ch__cap" x="${L}" y="16">Просмотры, забрали, переходы</text>
+    <text class="lkd-ch__cap lkd-ch__cap--bar" x="${W - R}" y="16" text-anchor="end">Показы</text>
+    <text class="lkd-ch__cap" x="${(L + iw / 2).toFixed(1)}" y="${(H - 6).toFixed(1)}" text-anchor="middle">День месяца</text>`;
 
   /* Поле дня во всю высоту: подсказка ловится где угодно по вертикали,
      а не только на столбике или ровно на линии. */
@@ -452,7 +462,7 @@ function statChart(series, W, H) {
       <title>День ${i + 1} · Показы ${num(r.shown)} · Просмотры ${num(r.opened)} · Забрали ${num(r.taken)} · Переходы ${num(r.clicks)}</title></rect>`).join("");
 
   return `<svg class="lkd-ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="График показателей по дням">
-    ${grid}${bars}${area}${lines}${days}${hits}</svg>`;
+    ${grid}${bars}${area}${lines}${days}${caps}${hits}</svg>`;
 }
 
 VIEWS["client:stats"] = () => {
@@ -484,7 +494,9 @@ VIEWS["client:stats"] = () => {
   </div>`;
 
   const legend = `<div class="lkd-legend">
-    <span class="lkd-legend__i lkd-legend__i--bar">Показы · шкала справа</span>
+    ${/* «шкала справа» из легенды ушло: об этом теперь говорит подпись у
+         самой шкалы (правка Ивана 29.09) */ ""}
+    <span class="lkd-legend__i lkd-legend__i--bar">Показы</span>
     ${STAT_LINES.map(l => `<span class="lkd-legend__i lkd-legend__i--${l.cls}">${l.label}</span>`).join("")}
   </div>`;
 

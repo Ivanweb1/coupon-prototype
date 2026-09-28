@@ -235,6 +235,9 @@
 /* Правая шкала — шкала столбиков: цифры того же веса, но приглушены,
    чтобы не спорить с левой */
 .lkd-ch__ax--bar{fill:var(--ink-4)}
+/* Подписи шкал — что считает левая, что правая, что отложено по низу */
+.lkd-ch__cap{font-size:11px;fill:var(--ink-3);font-weight:500}
+.lkd-ch__cap--bar{fill:var(--ink-4)}
 .lkd-ch__bar{fill:#F2F2F2}
 .lkd-ch__area{fill:var(--brand);opacity:.07}
 .lkd-ch__hit{fill:transparent}
@@ -304,6 +307,17 @@
   font-style:normal;font-size:12px;font-weight:600;color:var(--brand);
 }
 .lkd-way em svg{width:14px;height:14px}
+
+/* Столбцы профиля кончаются вровень (правка Ивана 29.09). Блоки уже
+   разложены так, чтобы столбцы сходились, но точного совпадения из
+   разной длины блоков не выходит: остаток добирает последний блок
+   короткого столбца, а содержимое внутри него встаёт по центру — воздух
+   расходится поровну сверху и снизу, а не висит полосой под столбцом. */
+.lkd .lk-pair > div{display:flex;flex-direction:column;gap:16px}
+.lkd .lk-pair > div > .lk-panel{margin:0}
+.lkd .lk-pair > div > .lk-panel:last-child{
+  flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;
+}
 
 /* Список уведомлений в две колонки (кабинет партнёра). Первая строка —
    это первые две карточки, у обеих верхней границы нет. */
