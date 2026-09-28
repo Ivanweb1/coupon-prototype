@@ -27,7 +27,12 @@ const IS_CLIENT = state.role === "client";
    толщина 1.7 — в меню они стоят в одном ряду с остальными. */
 ICON.doc   = nav('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/>');
 ICON.book  = nav('<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/>');
-ICON.coins = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="m12 7.6 1.3 2.7 3 .4-2.2 2.1.5 3-2.6-1.4-2.6 1.4.5-3-2.2-2.1 3-.4Z"/></svg>';
+/* Бонусы — фирменный билетик с буквой «Б» (правка Ивана 29.09): та же
+   форма, что у плашки выгоды на публичке — скруглённый прямоугольник с
+   полукруглыми вырезами по бокам. Буква набрана текстом: на 16px её
+   контур штрихом заплывает. Значок стоит везде, где раньше была
+   звёздочка, — кошелёк в шапке, блок бонусов, механики начисления. */
+ICON.coins = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M5 6.3H19a2 2 0 0 1 2 2V10a2 2 0 0 0 0 4v1.7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V14a2 2 0 0 0 0-4V8.3a2 2 0 0 1 2-2Z"/><text x="12" y="12" text-anchor="middle" dominant-baseline="central" fill="currentColor" stroke="none" font-family="Onest, system-ui, sans-serif" font-size="9" font-weight="700">Б</text></svg>';
 ICON.clock = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>';
 ICON.q     = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>';
 ICON.lock  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
@@ -87,6 +92,19 @@ if (IS_CLIENT) {
   if (i >= 0) NAV.client.splice(i, 1);
 }
 
+/* Создание купона — тремя вкладками в меню (правка Ивана 29.09). На
+   созвоне 10.09 три пункта из меню убрали в пользу одной кнопки с
+   выбором раздела; кнопка и попап остаются, но разделы снова видно
+   слева — путь в конструктор перестаёт быть в один клик через попап.
+   Подписи и значки — те же, что в попапе выбора (openCreateModal). */
+if (IS_CLIENT) {
+  const at = NAV.client.findIndex(it => it.id === "coupons");
+  NAV.client.splice(at + 1, 0,
+    { id: "new-regional",    label: "Региональный купон", icon: "pin"  },
+    { id: "new-marketplace", label: "Купон маркетплейса", icon: "bag"  },
+    { id: "new-business",    label: "Купон для бизнеса",  icon: "case" });
+}
+
 /* Кабинет партнёра (созвон 24.09, вечер):
    · основа учёта — купон, а не клиент: «Региональные клиенты» стали
      списком купонов клиентов региона;
@@ -124,6 +142,13 @@ window.renderChrome = function () {
   document.title = document.title.replace("Кабинет клиента", "Кабинет рекламодателя");
 
   if (IS_CLIENT) {
+    /* У конструктора теперь своя вкладка, а lk.js подсвечивает на ней
+       «Мои купоны» — гасим, иначе в меню горят два пункта сразу. */
+    if (/^new-/.test(state.view)) {
+      qsa("#lkNav a").forEach(a => a.classList.toggle("is-on",
+        new URLSearchParams(a.getAttribute("href").split("?")[1] || "").get("view") === state.view));
+    }
+
     /* Кошелёк в шапке. «12 400 · +3 500 бонусов» читалось как «прибавь»:
        Коля не понял, входят бонусы в баланс или идут сверху. Теперь два
        отдельных числа, у бонусов свой значок, без плюса. */
