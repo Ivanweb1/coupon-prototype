@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
 <link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260925g">
-<link rel="stylesheet" href="assets/design-3-pages.css?v=20260928b">
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20260928d">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -82,8 +82,18 @@
 
       <div class="pt-card" data-calc-city>
         <span class="pg-step__k"><i>2</i>Где показывать</span>
-        <div class="pg-pick" data-calc-group="city"></div>
-        <p class="pg-step__hint">Купон видят в выбранном городе. Города, которых нет в списке, открывают региональные партнёры.</p>
+        <!-- Не таблетками в строку: городов в планах ~1115, в строку они не
+             лягут. Ищем по названию, как в попапе выбора города на витрине.
+             Незапущенные города показываем пунктиром и с пометкой «скоро» —
+             иначе человек ищет свой город, не находит и уходит, не поняв,
+             почему его нет. -->
+        <div class="pt-cities__find pg-city-find" data-calc-find>
+          <span data-icon="search"></span>
+          <input type="search" placeholder="Начните вводить город" aria-label="Поиск по городам" autocomplete="off">
+          <button type="button" data-calc-clear aria-label="Очистить" data-icon="close"></button>
+        </div>
+        <div class="pg-pick pg-pick--scroll" data-calc-group="city"></div>
+        <p class="pg-step__hint" data-calc-city-note></p>
       </div>
 
       <div class="pt-card">
@@ -297,14 +307,44 @@
   const fmt = n => n.toLocaleString("ru-RU");
 
   /* Города берём из данных прототипа, а не списком в разметке: они же
-     стоят в попапе выбора города и в каталоге */
+     стоят в попапе выбора города и в каталоге. Показываем все, включая
+     незапущенные, — их видно, но выбрать нельзя. */
   const cityBox = qs('[data-calc-group="city"]');
-  ACTIVE_CITIES.forEach((c, i) => {
+  const cityFind = qs("[data-calc-find]");
+  const cityInput = qs("input", cityFind);
+  const cityNote = qs("[data-calc-city-note]");
+
+  CITIES.forEach((c, i) => {
     const l = document.createElement("label");
+    l.dataset.city = c.slug;
     l.innerHTML = '<input type="radio" name="city" value="' + c.slug + '"' +
-                  (i === 0 ? " checked" : "") + '><span>' + c.name + "</span>";
+                  (c.active ? "" : " disabled") +
+                  (i === 0 ? " checked" : "") + '><span>' + c.name + "</span>" +
+                  (c.active ? "" : '<span class="pg-pick__soon">скоро</span>');
     cityBox.appendChild(l);
   });
+
+  const norm = s => s.toLowerCase().replace(/ё/g, "е").trim();
+
+  function filterCities() {
+    const q = norm(cityInput.value);
+    let shown = 0;
+    qsa("label", cityBox).forEach(l => {
+      const hit = !q || norm(qs("span", l).textContent).indexOf(q) !== -1;
+      l.hidden = !hit;
+      if (hit) shown++;
+    });
+    cityFind.classList.toggle("has-value", !!cityInput.value);
+    cityNote.textContent = shown
+      ? "Купон видят в выбранном городе. Городов с пометкой «скоро» пока нет на витрине — их открывают региональные партнёры."
+      : "Такого города в списке нет. Область открывает региональный партнёр — напишите нам, какой город вам нужен.";
+  }
+
+  cityInput.addEventListener("input", filterCities);
+  qs("[data-calc-clear]").addEventListener("click", () => {
+    cityInput.value = ""; filterCities(); cityInput.focus();
+  });
+  filterCities();
 
   function recalc() {
     const what = qs('[data-calc-group="what"] input:checked').value;
@@ -333,7 +373,8 @@
       "Первое размещение бесплатное — платить на этом шаге не нужно.";
   }
 
-  qsa('.pg-calc input').forEach(i => i.addEventListener("change", recalc));
+  qsa('.pg-calc input[type="radio"], .pg-calc input[type="checkbox"]')
+    .forEach(i => i.addEventListener("change", recalc));
   recalc();
 </script>
 </body>
