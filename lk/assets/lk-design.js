@@ -1354,6 +1354,349 @@ window.render = function () {
   initIcons(host);
 };
 
+/* ==========================================================================
+   Конструктор купона — правки созвона 28.09.2026
+   ==========================================================================
+   Разметку конструктора собирает couponForm() в lk.js, поведение —
+   initCouponBuilder(). Здесь мы их не переписываем: правим уже собранную
+   форму по узлам и вешаем свои обработчики поверх базовых. Ч/Б прототип
+   (client.html) этот файл не подключает и остаётся прежним.
+   Полный список правок — notes/pravki-2026-09-28.md.
+   ========================================================================== */
+
+/* Сроки размещения — от 1 до 28 дней, 30 дней у нас нет (Вилл 28.09).
+   Коэффициенты в прежней пропорции: тариф всё равно ещё считают. */
+LK_DURATIONS.length = 0;
+LK_DURATIONS.push(
+  { days: 1,  label: "1 день",  k: 0.4 },
+  { days: 3,  label: "3 дня",   k: 1 },
+  { days: 7,  label: "7 дней",  k: 2.1 },
+  { days: 14, label: "14 дней", k: 3.8 },
+  { days: 21, label: "21 день", k: 5.2 },
+  { days: 28, label: "28 дней", k: 6.2 });
+window.LK_RECOMMENDED_DAYS = 28;
+
+/* Тайный покупатель приходит в течение 1–3 дней после публикации (28.09) */
+LK_SECRET.days = "1–3 дней";
+
+/* У подарка на купоне стоит слово, а не «0 ₽»: ноль рублей и «подарок» —
+   разные вещи, Вилл про это говорил и на публичке (28.09). */
+(LK_MECHANICS.find(m => m.id === "gift") || {}).sample = "Подарок";
+
+/* Попытки генерации: показываем лимит, но фактически не ограничиваем —
+   «вообще нужно, но не ограничивать их фактически, чтобы они думали, что
+   ограничено» (Вилл 28.09). Счётчик в lk.js считает от LK_GEN_LIMIT, а мы
+   переписываем его текст под показанный лимит. */
+const GEN_SHOWN = 10;
+window.LK_GEN_LIMIT = 9999;
+
+/* Величина скидки зависит от механики (28.09): у подарка и «два по цене
+   одного» величины нет вовсе, у скидки суммой — своя подсказка про рубли. */
+const MECH_VALUE = {
+  percent:   { label: "Величина скидки", ph: "−25%" },
+  amount:    { label: "Сумма скидки", ph: "−500 ₽", hint: "Напишите, сколько рублей скидки — эта сумма встанет на купон." },
+  twoforone: { hide: true, hint: "Величину указывать не нужно: на купоне встанет «2 = 1»." },
+  gift:      { hide: true, hint: "Величину указывать не нужно: на купоне встанет «Подарок»." },
+  friend:    { label: "Скидка другу", ph: "−15%" }
+};
+
+const USE_MAX = 180;
+
+const todayISO = () => {
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+};
+
+/* «3 сентября 2026» → 2026-09-03 для input[type=date] */
+function isoFromRu(s) {
+  const m = /^(\d{1,2})\s+(\S+)(?:\s+(\d{4}))?/.exec((s || "").trim());
+  if (!m) return "";
+  const mon = RU_MONTHS.findIndex(p => m[2].toLowerCase().startsWith(p));
+  if (mon < 0) return "";
+  const y = m[3] ? +m[3] : new Date().getFullYear();
+  return y + "-" + String(mon + 1).padStart(2, "0") + "-" + String(+m[1]).padStart(2, "0");
+}
+
+/* Поле и панель ищем по подписи: привязываться к порядку нельзя — он ещё
+   поменяется, а подписи держатся от созвона к созвону. */
+const fieldByLabel = (form, text) => qsa(".lk-l", form).find(l => {
+  const t = qs(".lk-l__t", l);
+  return t && t.textContent.trim().indexOf(text) === 0;
+});
+const panelByTitle = (form, text) => qsa(".lk-panel", form).find(p => {
+  const h = qs("h2", p);
+  return h && h.textContent.trim() === text;
+});
+
+/* -------------------------------------------------------------------------
+   Разметка: правим то, что собрал couponForm
+   ------------------------------------------------------------------------- */
+function patchWizard(form) {
+  const isMarket = !!qs('[data-f="article"]', form);
+
+  /* Даты — календарём, он открывается на сегодняшней дате, а не на 2003 году */
+  ["from", "to"].forEach(n => {
+    const el = qs('[data-f="' + n + '"]', form);
+    if (!el) return;
+    el.value = isoFromRu(el.value);
+    el.type = "date";
+    el.min = todayISO();
+  });
+
+  /* «Как воспользоваться»: текст по умолчанию, ограничение по знакам и
+     пометка, что он попадёт в описание купона */
+  const use = fieldByLabel(form, "Как воспользоваться");
+  if (use) {
+    const ta = qs("textarea", use);
+    ta.value = isMarket
+      ? "При покупке или добавлении в корзину введите промокод в специальное поле на маркетплейсе."
+      : "Покажите код администратору при оплате.";
+    ta.maxLength = USE_MAX;
+    ta.setAttribute("data-use-text", "1");
+    use.insertAdjacentHTML("afterend", '<div class="lk-note lkd-usenote">Текст попадёт в описание купона — его увидят посетители. Осталось <b data-use-left>' + USE_MAX + '</b> знаков.</div>');
+  }
+
+  /* Города и адреса — двумя блоками: где разместить купон и где его
+     применяют. Одним блоком читалось тяжело и путало. */
+  const cityPanel = panelByTitle(form, "Города и адреса");
+  if (cityPanel) {
+    qs("h2", cityPanel).textContent = "Города размещения";
+    const chips = qs(".lk-chips", cityPanel);
+    if (chips) {
+      chips.insertAdjacentHTML("beforebegin", '<label class="lk-l lkd-citysearch"><span class="lk-l__t">Где разместить</span><input class="lk-i" type="search" placeholder="Начните вводить город" data-city-search></label>');
+      chips.insertAdjacentHTML("afterend", '<div class="lkd-citysum" data-city-sum></div>');
+    }
+    const addr = qs(".lk-addr", cityPanel);
+    if (addr) {
+      const head = qs(".lk-l__t", addr);
+      if (head) head.remove();   /* было подписью внутри, стало заголовком панели */
+      const p = document.createElement("div");
+      p.className = "lk-panel";
+      p.innerHTML = '<div class="lk-panel__head"><h2>Адреса применения купона</h2></div>';
+      p.appendChild(addr);
+      cityPanel.after(p);
+      /* Вариант «без адреса»: услуги по всему городу, офиса нет */
+      const list = qs("[data-addr-list]", p);
+      if (list) list.insertAdjacentHTML("afterbegin", '<label class="lk-ch lkd-noaddr" data-addr-row data-addr-city=""><input type="checkbox" data-addr-cb data-noaddr value="Без адреса"><span>Адреса нет — услуги оказываю по всему городу</span></label>');
+    }
+  }
+
+  /* ERID — вопросик с пояснением: маркировку присваиваем мы */
+  const erid = fieldByLabel(form, "ERID");
+  if (erid) {
+    const tip = "По закону купон — это реклама, её нужно маркировать. Маркировку (erid) присвоим мы сами при публикации: от вас ничего не требуется, и ваша реклама будет законной.";
+    qs(".lk-l__t", erid).insertAdjacentHTML("beforeend",
+      ' <span class="lkd-tip" tabindex="0" aria-label="' + tip + '">' + ICON.q + '<span class="lkd-tip__b" role="tooltip">' + tip + '</span></span>');
+  }
+
+  const comp = panelByTitle(form, "Компания в купоне");
+  if (comp) {
+    const note = qs(".lk-note", comp);
+    if (note) note.textContent = "Сайт, соцсети и контакты подставили из профиля компании — для этого купона их можно поправить.";
+  }
+
+  /* Каналы публикации. Текст временный: продающий вариант пишет Коля. */
+  const chan = panelByTitle(form, "Каналы публикации");
+  if (chan) {
+    const note = qs(".lk-note", chan);
+    if (note) note.textContent = isMarket
+      ? "Купон уйдёт в наши группы по маркетплейсам — это вся Россия сразу. Макеты соберём сами, от вас ничего не требуется."
+      : "Купон уйдёт в наши группы выбранных городов — там его увидят люди, которые уже ищут, где купить. Макеты соберём сами: один под сайт, один для ВКонтакте и Одноклассников, один для Telegram и Max.";
+  }
+
+  /* Тайный покупатель: новый текст и рекламное оформление — это раздел
+     дополнительной монетизации, он не должен выглядеть как каталог */
+  const secret = qs(".lk-secret", form);
+  if (secret) {
+    secret.classList.add("lkd-secret");
+    const list = qs(".lk-secret__list", secret);
+    if (list) list.innerHTML = (isMarket
+      ? ["К вам на страницу товара зайдёт живой человек и применит промокод, как обычный покупатель",
+         "Покупать товар он не будет — только проверит, что промокод работает",
+         "Проверка пройдёт в течение 1–3 дней после публикации",
+         "После проверки на купоне появится бейдж «Проверено тайным покупателем»"]
+      : ["К вам придёт живой человек и воспользуется купоном, как обычный гость",
+         "Проверка пройдёт в течение 1–3 дней после публикации",
+         "После проверки на купоне появится бейдж «Проверено тайным покупателем»"]
+    ).map(t => "<li>" + t + "</li>").join("");
+  }
+
+  /* Изображение: слово «промпт» понимают не все */
+  const prompt = fieldByLabel(form, "Промпт");
+  if (prompt) qs(".lk-l__t", prompt).textContent = "Опишите, как должно выглядеть изображение";
+  const genPane = qs('[data-img-pane="gen"]', form);
+  if (genPane) {
+    const note = qs(".lk-note", genPane);
+    if (note) note.textContent = "Описание собрали из ниши, предложения и городов — поправьте его, если нужно. На один купон " + GEN_SHOWN + " попыток, каждая занимает несколько секунд. Понравившийся вариант выберите кликом.";
+  }
+
+  /* Монеты меняем на рубли (28.09) */
+  const pay = qs("#lkPay", form);
+  if (pay) {
+    const ends = qs(".lk-pay__ends span", pay);
+    if (ends) ends.textContent = "Рублями";
+    const hint = qs("[data-pay-hint]", pay);
+    if (hint) hint.textContent = "Бонусами пока не платите — доступно " + num(LK_BALANCE.bonuses) + ". Перетащите ползунок вправо, чтобы часть суммы списалась ими.";
+    const note = pay.parentElement && qs(".lk-note", pay.parentElement);
+    if (note) note.textContent = "Хотя бы один рубль в каждой публикации уходит реальными деньгами — бонусами закрыть размещение целиком нельзя. Списанные бонусы не возвращаются.";
+  }
+
+  /* Прогресс и цена — закреплённой строкой под превью: в длинной форме
+     цена уходила за экран, а она влияет на решение (28.09) */
+  const prev = qs(".lk-prev", form);
+  if (prev && qs("[data-prog-n]", form)) {
+    prev.insertAdjacentHTML("beforeend", '<div class="lkd-wizbar" data-wiz-bar>' +
+      '<div class="lkd-wizbar__l"><span>Купон заполнен</span><b data-bar-pct>0%</b>' +
+      '<div class="lkd-wizbar__bar"><i data-bar-fill></i></div></div>' +
+      '<div class="lkd-wizbar__r"><span>Итого</span><b data-bar-total>—</b></div></div>');
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Поведение: свои обработчики поверх базовых
+   ------------------------------------------------------------------------- */
+function wizardExtras(form) {
+  const f = n => qs('[data-f="' + n + '"]', form);
+
+  /* Величина — по механике */
+  const valInput = f("value");
+  const mechSel = f("mech");
+  if (valInput && mechSel) {
+    const valField = valInput.closest(".lk-l");
+    const row = valField.closest(".lk-f__row") || valField;
+    const hint = document.createElement("div");
+    hint.className = "lk-note lkd-mechhint";
+    row.after(hint);
+    const paint = () => {
+      const m = LK_MECHANICS.find(x => x.label === mechSel.value) || LK_MECHANICS[0];
+      const cfg = MECH_VALUE[m.id] || {};
+      hint.textContent = cfg.hint || "";
+      hint.hidden = !cfg.hint;
+      valField.hidden = !!cfg.hide;
+      row.classList.toggle("lkd-onecol", !!cfg.hide);
+      if (cfg.hide) {
+        /* Поле спрятано, но величина купону нужна — ставим образец механики,
+           иначе прогресс заполнения встанет на месте */
+        if (valInput.value !== m.sample) {
+          valInput.value = m.sample;
+          valInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      } else {
+        qs(".lk-l__t", valField).textContent = cfg.label || "Величина";
+        valInput.placeholder = cfg.ph || m.sample;
+      }
+    };
+    mechSel.addEventListener("change", paint);
+    paint();
+  }
+
+  /* Поиск по городам и итог «купон будет размещён в …» */
+  const search = qs("[data-city-search]", form);
+  const chips = qsa("[data-city]", form);
+  if (search) search.addEventListener("input", () => {
+    const q = search.value.trim().toLowerCase();
+    chips.forEach(b => { b.hidden = !!q && b.dataset.city.toLowerCase().indexOf(q) === -1; });
+  });
+
+  const sum = qs("[data-city-sum]", form);
+  const noAddr = qs("[data-noaddr]", form);
+  const noAddrRow = noAddr && noAddr.closest("[data-addr-row]");
+  const paintCities = () => {
+    const on = qsa("[data-city].is-on", form).map(b => b.dataset.city);
+    if (sum) sum.innerHTML = on.length
+      ? "Ваш купон будет размещён в: <b>" + on.join(", ") + "</b>"
+      : "<i>Выберите хотя бы один город</i>";
+    /* lk.js прячет адреса невыбранных городов; вариант «без адреса» к
+       городу не привязан, поэтому держим на нём первый выбранный */
+    if (noAddrRow) noAddrRow.dataset.addrCity = on[0] || "";
+  };
+  if (sum) {
+    form.addEventListener("click", e => {
+      if (!e.target.closest("[data-city]")) return;
+      setTimeout(() => { paintCities(); form.dispatchEvent(new Event("input", { bubbles: true })); });
+    });
+    paintCities();
+  }
+
+  if (noAddr) noAddr.addEventListener("change", () => {
+    if (noAddr.checked) qsa("[data-addr-cb]", form).forEach(i => {
+      if (i === noAddr) return;
+      i.checked = false;
+      i.closest(".lk-ch").classList.remove("is-on");
+    });
+    qsa("[data-addr-row]", form).forEach(r => {
+      if (r !== noAddrRow) r.classList.toggle("lkd-off", noAddr.checked);
+    });
+    form.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+
+  /* Счётчик знаков в «как воспользоваться» */
+  const ta = qs("[data-use-text]", form);
+  const left = qs("[data-use-left]", form);
+  if (ta && left) {
+    const paint = () => { left.textContent = USE_MAX - ta.value.length; };
+    ta.addEventListener("input", paint);
+    paint();
+  }
+
+  /* Закреплённая строка: прогресс и итог берём из тех же узлов, что
+     считает lk.js, — второго расчёта в прототипе быть не должно */
+  const pct = qs("[data-prog-n]", form);
+  const bar = qs("[data-prog-bar]", form);
+  const total = qs('[data-calc="total"]', form);
+  const bPct = qs("[data-bar-pct]", form);
+  if (bPct && pct) {
+    const bFill = qs("[data-bar-fill]", form);
+    const bTot = qs("[data-bar-total]", form);
+    const paint = () => {
+      bPct.textContent = pct.textContent;
+      bFill.style.width = bar.style.width;
+      if (total) bTot.textContent = total.textContent;
+    };
+    const mo = new MutationObserver(paint);
+    mo.observe(pct, { childList: true, characterData: true, subtree: true });
+    mo.observe(bar, { attributes: true, attributeFilter: ["style"] });
+    if (total) mo.observe(total, { childList: true, characterData: true, subtree: true });
+    paint();
+  }
+
+  /* Счётчик генераций под показанный лимит */
+  const genLeft = qs("[data-img-left]", form);
+  if (genLeft) {
+    const fix = () => {
+      const m = /(\d+)\s+из\s+(\d+)/.exec(genLeft.textContent);
+      if (!m || +m[2] === GEN_SHOWN) return;
+      const used = +m[2] - +m[1];
+      genLeft.textContent = "Осталось " + Math.max(0, GEN_SHOWN - used) + " из " + GEN_SHOWN;
+    };
+    new MutationObserver(fix).observe(genLeft, { childList: true, characterData: true, subtree: true });
+    fix();   /* первый текст lk.js поставил до того, как мы подписались */
+  }
+
+  /* Что происходит после отправки на модерацию (28.09) */
+  const acts = qs(".lk-head__act", form);
+  if (acts) {
+    const mail = (LK_NOTIFY_CHANNELS.find(c => c.id === "email") || {}).value || "почту из профиля";
+    const btns = qsa(".btn", acts);
+    const close = '<div class="lk-head__act" style="margin:12px 0 0"><button class="btn btn--solid" data-modal-close>Понятно</button></div>';
+    if (btns[0]) btns[0].onclick = () => openModal('<h3>Черновик сохранён</h3>' +
+      '<p class="lk-modal__lead">Купон лежит в «Моих купонах» со статусом «Черновик» — вернитесь к нему в любой момент.</p>' + close);
+    if (btns[1]) btns[1].onclick = () => openModal('<h3>Купон отправлен на модерацию</h3>' +
+      '<p class="lk-modal__lead">Если мы не найдём нарушений, купон будет опубликован в течение 2 часов. Если найдём — вернём на доработку с комментарием, что поправить.</p>' +
+      '<p class="lk-modal__lead">Следите за статусом в «Моих купонах»: уведомление придёт в колокольчик и на почту ' + mail + '.</p>' + close);
+  }
+}
+
+const baseInitCB = window.initCouponBuilder;
+window.initCouponBuilder = function (host) {
+  const form = qs(".lk-form", host);
+  /* Сначала правим разметку, потом lk.js навешивает на неё обработчики,
+     и только потом добавляем свои — иначе базовые ссылки на узлы уедут. */
+  if (form && qs("[data-img]", form)) patchWizard(form);
+  baseInitCB(host);
+  if (form && qs("[data-img]", form)) wizardExtras(form);
+};
+
 /* Первый рендер lk.js делает по DOMContentLoaded — к этому моменту все
    подмены выше уже на месте. Окно ознакомления — после него. */
 document.addEventListener("DOMContentLoaded", showGate);

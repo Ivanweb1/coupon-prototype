@@ -335,6 +335,56 @@
   .lk-list--2 .lk-list__i:nth-child(2){border-top:1px solid var(--line)}
 }
 
+/* --------------------------------------------------------------------------
+   Конструктор купона — правки созвона 28.09.2026
+   -------------------------------------------------------------------------- */
+/* Поиск по городам и итог «купон будет размещён в …» */
+.lkd-citysearch{margin-bottom:12px}
+.lkd-citysum{
+  margin-top:12px;padding:10px 12px;border-radius:var(--r-md);
+  background:var(--surface);font-size:13.5px;color:var(--ink-2);
+}
+.lkd-citysum b{font-weight:600;color:var(--ink)}
+.lkd-citysum i{font-style:normal;color:var(--ink-3)}
+/* «Адреса нет» и спрятанные под ним адреса */
+.lkd-noaddr{border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:4px}
+.lkd-off{display:none}
+/* Ряд, в котором осталось одно поле: величину у подарка прячем */
+.lkd-onecol{grid-template-columns:minmax(0,1fr)}
+.lkd-mechhint{margin-top:-4px}
+.lkd-usenote b{font-weight:600;color:var(--ink-2)}
+
+/* Тайный покупатель — рекламный блок, а не каталожный: это раздел
+   дополнительной монетизации, он должен выделяться на общей серости. */
+.lkd .lk-secret{background:var(--ink);border-color:var(--ink);color:#fff}
+.lkd .lk-secret__k{color:var(--brand-300)}
+.lkd .lk-secret__h{color:#fff}
+.lkd .lk-secret__badge{background:var(--brand);color:#fff}
+.lkd .lk-secret__list{color:rgba(255,255,255,.78)}
+.lkd .lk-secret .lk-note{color:rgba(255,255,255,.55)}
+.lkd .lk-secret__foot{border-top-color:rgba(255,255,255,.18)}
+.lkd .lk-secret__foot b{color:#fff}
+.lkd .lk-secret .lk-ch span{color:#fff}
+.lkd .lk-secret .lk-ch input{border-color:rgba(255,255,255,.45)}
+.lkd .lk-secret .lk-ch.is-on input{background:var(--brand);border-color:var(--brand)}
+
+/* Прогресс и цена — закреплённой строкой под превью */
+.lkd-wizbar{
+  position:sticky;bottom:0;z-index:5;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-top:12px;padding:12px 16px;
+  background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);
+  box-shadow:0 -6px 18px -12px rgba(0,0,0,.35);
+}
+.lkd-wizbar__l{display:grid;grid-template-columns:auto auto;gap:2px 8px;align-items:center;min-width:0}
+.lkd-wizbar__l span,.lkd-wizbar__r span{font-size:12.5px;color:var(--ink-3)}
+.lkd-wizbar__l b{font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.lkd-wizbar__bar{grid-column:1 / -1;height:4px;border-radius:2px;background:var(--surface-2);overflow:hidden}
+.lkd-wizbar__bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .2s var(--ease)}
+.lkd-wizbar__r{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.lkd-wizbar__r b{font-size:18px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+@media (max-width:560px){.lkd-wizbar{flex-direction:column;align-items:stretch;gap:8px}}
+
 /* Уведомления: «обязательно» у почты, подписка на наши каналы */
 .lkd-must{font-style:normal;font-size:11.5px;color:var(--ink-3);margin-left:4px}
 .lkd-sub{margin-top:16px;padding:20px 22px}
