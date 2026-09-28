@@ -266,6 +266,26 @@
 .pg-pick__soon{margin-left:7px;font-size:12px;font-weight:600;color:var(--ink-4)}
 .pg-city-find{margin-top:0}
 
+/* Строка над списком: «все города» разом и счётчик выбранных.
+   Размещать можно сразу в нескольких городах — в кабинете они так и
+   свёрнуты, «Липецк +2». */
+.pg-city-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px}
+.pg-chip-all{
+  display:inline-flex;align-items:center;height:40px;padding:0 14px;
+  border-radius:var(--r-pill);border:1.5px solid var(--ink);
+  background:#fff;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;
+  transition:background .18s, color .18s;
+}
+.pg-chip-all:hover{background:var(--surface-2)}
+.pg-chip-all input{position:absolute;opacity:0;pointer-events:none}
+.pg-chip-all:has(input:checked){background:var(--ink);color:#fff}
+.pg-city-bar__count{font-size:13.5px;color:var(--ink-3)}
+.pg-city-bar__count b{color:var(--ink);font-weight:600}
+.pg-city-bar__reset{
+  font-size:13.5px;color:var(--ink-3);text-decoration:underline;text-underline-offset:2px;
+}
+.pg-city-bar__reset:hover{color:var(--brand)}
+
 /* Итог липнет к экрану: цифра должна оставаться на виду, пока крутят шаги */
 .pg-result{position:sticky;top:84px;border:1px solid var(--line);border-radius:24px;padding:24px;background:var(--surface)}
 .pg-result h3{margin:0;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
