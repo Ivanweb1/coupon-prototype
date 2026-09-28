@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Мы в соцсетях — Все купоны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260918y">
+<link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<link rel="stylesheet" href="assets/design-3.css?v=20260924a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260925a">
+<link rel="stylesheet" href="assets/design-3-0924.css?v=20260925g">
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20260928a">
+<link rel="icon" href="assets/brand/logo-red.png">
+</head>
+<body class="dz dz3 cards-wb">
+
+<!-- ===================================================================
+     МЫ В СОЦСЕТЯХ. Пункт из записки Ивана. В подвале группа с таким
+     названием уже стояла, но вела в никуда — теперь её заголовок
+     открывает эту страницу.
+
+     Разведение на два блока — из созвона 09.09.2026: паблики
+     маркетплейсов общие на всю Россию, городские сообщества свои у
+     каждого города. Смысл страницы — не «подпишитесь», а показать, что
+     купон живёт не только на сайте: он ретранслируется в ВК, ОК,
+     Telegram и MAX (пропорция карточки 4:5 под ленты выбрана как раз
+     под это).
+
+     Ссылки на сами сообщества — заглушки href="#": аккаунтов на момент
+     прототипа нет. Кнопка смены города ведёт на витрину: попап выбора
+     города живёт там, дублировать его на справочной странице незачем.
+     =================================================================== -->
+
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+    <span class="header__spacer"></span>
+    <a class="btn btn--ghost" href="index-design-3.html">На витрину</a>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="pt-hero">
+    <span class="pt-hero__k">Мы в соцсетях</span>
+    <h1>Купоны приходят в ленту сами</h1>
+    <p class="pt-hero__sub">
+      Каждый купон выходит не только на витрине, но и в сообществах сервиса.
+      Городские ведём по каждому городу отдельно, паблики маркетплейсов — общие на всю страну.
+    </p>
+    <nav class="pg-tabs" aria-label="Разделы страницы">
+      <a href="#city">Сообщества города</a>
+      <a href="#mp">Маркетплейсы</a>
+    </nav>
+  </section>
+
+  <!-- ================= Сообщества города ================= -->
+  <section class="pg-sec" id="city">
+    <span class="pg-sec__k">Ваш город</span>
+    <h2>Сообщества <span data-geo-gen>Липецка</span></h2>
+    <p class="pg-sec__lead">
+      Здесь выходят купоны заведений вашего города. Купон в ленте — та же карточка,
+      что на сайте: её можно сохранить скриншотом и сразу идти со скидкой.
+    </p>
+
+    <div class="pg-socs">
+      <a class="pg-soc" href="#" data-city-social="ВКонтакте">
+        <span class="pg-soc__ic" data-icon="vk"></span>
+        <span><b>ВКонтакте</b><span>Сообщество города</span></span>
+      </a>
+      <a class="pg-soc" href="#" data-city-social="Telegram">
+        <span class="pg-soc__ic" data-icon="tg"></span>
+        <span><b>Telegram</b><span>Канал с купонами</span></span>
+      </a>
+      <a class="pg-soc" href="#" data-city-social="Одноклассники">
+        <span class="pg-soc__ic" data-icon="ok"></span>
+        <span><b>Одноклассники</b><span>Группа города</span></span>
+      </a>
+      <a class="pg-soc" href="#" data-city-social="MAX">
+        <span class="pg-soc__ic" data-icon="max"></span>
+        <span><b>MAX</b><span>Канал с купонами</span></span>
+      </a>
+    </div>
+
+    <div class="pg-cards">
+      <div class="pt-card pg-plan">
+        <h2>Не ваш город?</h2>
+        <p class="pg-card__lead">
+          Сообщества у каждого города свои. Смените город на витрине — здесь подставятся
+          сообщества нового города.
+        </p>
+        <div class="pg-plan__foot"><a class="btn btn--ghost" href="index-design-3.html">Сменить город</a></div>
+      </div>
+      <div class="pt-card pg-plan">
+        <h2>В вашем городе сервиса ещё нет?</h2>
+        <p class="pg-card__lead">
+          Города открывают региональные партнёры. Посмотрите, свободен ли ваш —
+          и заберите его за собой.
+        </p>
+        <div class="pg-plan__foot"><a class="btn btn--ghost" href="partner.html#cities">Города присутствия</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Маркетплейсы ================= -->
+  <section class="pg-sec" id="mp">
+    <span class="pg-sec__k">По всей России</span>
+    <h2>Сообщества маркетплейсов</h2>
+    <p class="pg-sec__lead">
+      Промокоды площадок не привязаны к городу, поэтому паблики у них общие.
+      Подписка на них не мешает городским: это разные ленты.
+    </p>
+
+    <div class="pg-socs">
+      <a class="pg-soc" href="#">
+        <span class="pg-soc__ic"><img src="assets/brand/mp/wildberries.svg" alt=""></span>
+        <span><b>Wildberries</b><span>Промокоды площадки</span></span>
+      </a>
+      <a class="pg-soc" href="#">
+        <span class="pg-soc__ic"><img src="assets/brand/mp/ozon.svg" alt=""></span>
+        <span><b>Ozon</b><span>Промокоды площадки</span></span>
+      </a>
+      <a class="pg-soc" href="#">
+        <span class="pg-soc__ic"><img src="assets/brand/mp/yandex-market.svg" alt=""></span>
+        <span><b>Яндекс Маркет</b><span>Промокоды площадки</span></span>
+      </a>
+      <a class="pg-soc" href="#">
+        <span class="pg-soc__ic"><img src="assets/brand/mp/mvideo.svg" alt=""></span>
+        <span><b>М.Видео</b><span>Промокоды площадки</span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= Бизнесу ================= -->
+  <section class="pg-sec">
+    <span class="pg-sec__k">Бизнесу</span>
+    <h2>Ваш купон выходит там же</h2>
+    <div class="pg-cards">
+      <div class="pt-card">
+        <h2>Что получает размещение</h2>
+        <ul class="pt-list">
+          <li>Публикацию на витрине города и в городских сообществах сервиса.</li>
+          <li>Карточку под ленты соцсетей — её не нужно перерисовывать под каждую площадку.</li>
+          <li>Счётчик: сколько раз купон показали и сколько раз забрали.</li>
+        </ul>
+      </div>
+      <div class="pt-card pg-plan">
+        <h2>Разместить купон</h2>
+        <p class="pg-card__lead">
+          Первое размещение бесплатное. Регистрация для ООО, ИП, самозанятого и физлица.
+        </p>
+        <div class="pg-plan__foot"><a class="btn btn--solid" href="register-design.html">Зарегистрироваться</a></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+
+    <div class="dz-foot">
+      <div class="dz-foot__brand">
+        <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
+        <p class="dz-foot__tag">Все скидки <span data-geo-gen>Липецка</span> в одном месте. Бесплатно и без регистрации: нашли купон, сохранили код, показали на кассе.</p>
+      </div>
+      <div class="fcol">
+        <h4>Сервис</h4>
+        <ul>
+          <li><a href="service.html#how">Как это работает</a></li>
+          <li><a href="faq.html">Вопросы и ответы</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Бизнесу</h4>
+        <ul>
+          <li><a href="register-design.html">Зарегистрироваться</a></li>
+          <li><a href="service.html#pricing">Тарифы</a></li>
+          <li><a href="#">Документы</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Партнёрам</h4>
+        <ul>
+          <li><a href="partner.html">Стать партнёром</a></li>
+          <li><a href="partner.html#cities">Города присутствия</a></li>
+          <li><a href="service.html#partners">Партнёрская программа</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dz-foot-socs">
+      <div class="footer-soc-group">
+        <span class="footer-soc-group__label"><a href="socials.html">Мы в соцсетях <span data-geo-gen>города</span></a></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
+          <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
+          <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
+          <a class="soc" href="#" data-city-social="MAX" title="Мы в MAX"><span data-icon="max"></span> MAX</a>
+        </div>
+      </div>
+      <div class="footer-soc-group dz-foot__mp">
+        <span class="footer-soc-group__label"><a href="socials.html#mp">Сообщества маркетплейсов</a></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" title="Сообщество Wildberries"><img class="soc-ic soc-ic--img" src="assets/brand/mp/wildberries.svg" alt=""> Wildberries</a>
+          <a class="soc" href="#" title="Сообщество Ozon"><img class="soc-ic soc-ic--img" src="assets/brand/mp/ozon.svg" alt=""> Ozon</a>
+          <a class="soc" href="#" title="Сообщество Яндекс Маркет"><img class="soc-ic soc-ic--img" src="assets/brand/mp/yandex-market.svg" alt=""> Яндекс Маркет</a>
+          <a class="soc" href="#" title="Сообщество М.Видео"><img class="soc-ic soc-ic--img" src="assets/brand/mp/mvideo.svg" alt=""> М.Видео</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dz-foot-legal">
+      <p class="dz-foot-legal__req">
+        ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 ·
+        г. Липецк, ул. Название, 1
+      </p>
+      <p class="dz-foot-legal__pd">
+        Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону,
+        третьим лицам не передаём. Пользователю для поиска купонов регистрация не нужна.
+      </p>
+    </div>
+
+    <div class="footer__legal">
+      <span>© 2026 ВСЕКУПОНЫ</span>
+      <a href="#">Политика конфиденциальности</a>
+      <a href="#">Пользовательское соглашение</a>
+      <a href="#">Согласие на обработку данных</a>
+      <a class="dz-foot__author" href="https://lead-space.ru" target="_blank" rel="noopener">Разработано lead-space.ru</a>
+      <button type="button" class="dz-foot__top" data-to-top>Наверх ↑</button>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/data.js?v=20260918y"></script>
+<script src="assets/app.js?v=20260925g"></script>
+<script>
+  initIcons();
+  renderGeo();
+  initHeaderShadow();
+  qs("[data-to-top]").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+</script>
+</body>
+</html>

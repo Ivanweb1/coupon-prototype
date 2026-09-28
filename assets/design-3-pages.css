@@ -1,0 +1,168 @@
+/* ==========================================================================
+   Инфостраницы публички: Сервис, Вопросы и ответы, Контакты, Мы в соцсетях
+   ==========================================================================
+   Страницы из подвала, которые до сих пор висели на href="#". Отдельным
+   слоем — как и все правки после design-3: index-design-2 остаётся
+   эталоном «как было», а разницу можно показать двумя ссылками.
+
+   Вёрстка намеренно собрана из того, что уже есть на «Стать партнёром»
+   (.pt-hero, .pt-card, .pt-list, .pt-grid) — новые правила добавлены
+   только там, где готового блока не было. Правила design-3: без
+   градиентов, без розового, выделение инверсией, один шрифт Онест,
+   заголовки весом 800, красная кнопка в блоке одна.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Полоса разделов страницы
+   --------------------------------------------------------------------------
+   «Сервис» — одна страница на три темы: как работает, тарифы, партнёрская
+   программа (так их и обсуждали — одним пунктом). Полоса держит три якоря
+   на виду, чтобы из подвала попадать сразу в нужный раздел, а не листать. */
+.pg-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.pg-tabs a{
+  display:inline-flex;align-items:center;height:40px;padding:0 16px;
+  border-radius:var(--r-pill);border:1.5px solid var(--line-strong);
+  background:#fff;font-size:14px;font-weight:500;color:var(--ink-2);
+  transition:border-color .18s, color .18s, background .18s;
+}
+.pg-tabs a:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* Секция страницы. Якорь не должен уезжать под липкую шапку */
+.pg-sec{margin-top:52px;scroll-margin-top:84px}
+.pg-sec__k{
+  display:block;margin:0 0 10px;font-size:12px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);
+}
+.pg-sec h2{
+  margin:0;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(22px,2.2vw,30px);letter-spacing:-.02em;color:var(--ink);
+}
+.pg-sec__lead{margin:12px 0 0;max-width:68ch;font-size:15.5px;line-height:1.6;color:var(--ink-2)}
+.pg-cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:22px}
+.pg-card__lead{margin:12px 0 0;font-size:14.5px;line-height:1.55;color:var(--ink-2)}
+
+/* --------------------------------------------------------------------------
+   Шаги «как это работает»
+   --------------------------------------------------------------------------
+   Три шага посетителя — те же, что на первом экране главной: нашёл, снял
+   скриншот, заплатил со скидкой. Цепочка бизнеса длиннее, поэтому номера
+   набраны одинаково, а ширину колонок держит auto-fit. */
+.pg-steps{margin:22px 0 0;padding:0;list-style:none;counter-reset:pgstep;
+  display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.pg-steps li{
+  position:relative;padding:22px 22px 20px;
+  border:1px solid var(--line);border-radius:24px;background:#fff;
+}
+.pg-steps li::before{
+  counter-increment:pgstep;content:counter(pgstep);
+  display:flex;align-items:center;justify-content:center;
+  width:34px;height:34px;margin-bottom:14px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  font-family:var(--font-display);font-size:15px;font-weight:800;
+}
+.pg-steps b{display:block;font-size:16px;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.pg-steps span{display:block;margin-top:7px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+
+/* --------------------------------------------------------------------------
+   Тарифы
+   --------------------------------------------------------------------------
+   Цифр нет намеренно: на созвонах обсуждали только «первый купон
+   бесплатно» и сроки размещения для бизнеса (3/6/12 месяцев), сумм не
+   называли. Цена набрана прочерком — место под неё есть, но пустое. */
+.pg-plan{display:flex;flex-direction:column}
+.pg-plan__price{
+  margin:16px 0 0;font-family:var(--font-display);font-weight:800;
+  font-size:30px;letter-spacing:-.03em;line-height:1;color:var(--ink);
+}
+.pg-plan__price small{display:block;margin-top:7px;font-family:inherit;font-size:13px;font-weight:500;letter-spacing:0;color:var(--ink-3)}
+.pg-plan .pt-list{margin-top:18px}
+.pg-plan__foot{margin-top:auto;padding-top:20px}
+/* Первое размещение бесплатно — единственное, что по тарифам решено */
+.pg-plan__free{
+  display:inline-flex;align-items:center;height:26px;padding:0 11px;
+  border-radius:var(--r-pill);background:var(--brand);color:#fff;
+  font-size:12px;font-weight:600;
+}
+
+/* --------------------------------------------------------------------------
+   Вопросы и ответы
+   --------------------------------------------------------------------------
+   Аккордеон на <details>: без скриптов, работает с клавиатуры и ищется
+   поиском по странице. Раскрытый вопрос помечается поворотом плюса, а не
+   подложкой — подложек в design-3 не используем. */
+.pg-faq{margin-top:22px;border-top:1px solid var(--line)}
+.pg-faq details{border-bottom:1px solid var(--line)}
+.pg-faq summary{
+  display:flex;align-items:center;gap:16px;padding:18px 2px;cursor:pointer;
+  font-size:16px;font-weight:600;letter-spacing:-.01em;color:var(--ink);
+  list-style:none;transition:color .18s;
+}
+.pg-faq summary::-webkit-details-marker{display:none}
+.pg-faq summary:hover{color:var(--brand)}
+.pg-faq summary::after{
+  content:"";flex:0 0 auto;margin-left:auto;width:20px;height:20px;
+  background:currentColor;transition:transform .2s var(--ease);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center/18px no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center/18px no-repeat;
+}
+.pg-faq details[open] summary::after{transform:rotate(45deg)}
+.pg-faq p{margin:0 0 20px;padding-right:36px;max-width:78ch;font-size:15px;line-height:1.6;color:var(--ink-2)}
+.pg-faq p a{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+/* --------------------------------------------------------------------------
+   Контакты
+   --------------------------------------------------------------------------
+   Почта открытая, а не форма — принцип Коли с созвона 21.09.2026: по
+   нетиповым запросам пишут живому человеку. Форма на публичке одна —
+   заявка партнёра, и она на своей странице. */
+.pg-contact{display:flex;flex-direction:column}
+.pg-contact__mail{
+  display:inline-flex;align-items:center;gap:9px;margin-top:auto;padding-top:18px;
+  font-size:16px;font-weight:600;color:var(--ink);
+  text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-strong);
+  transition:color .18s, text-decoration-color .18s;
+}
+.pg-contact__mail:hover{color:var(--brand);text-decoration-color:var(--brand)}
+.pg-contact__mail [data-icon]{display:inline-flex;color:var(--ink-3)}
+.pg-contact__mail:hover [data-icon]{color:var(--brand)}
+
+/* Реквизиты на белой странице: тот же текст, что в подвале, но подвал
+   тёмный — здесь нужна своя раскладка */
+.pg-req{margin-top:46px;padding:22px 24px;border:1px solid var(--line);border-radius:24px;background:var(--surface)}
+.pg-req p{margin:0;font-size:13.5px;line-height:1.6;color:var(--ink-2)}
+.pg-req p + p{margin-top:8px;color:var(--ink-3)}
+.pg-req__req{font-variant-numeric:tabular-nums}
+
+/* --------------------------------------------------------------------------
+   Мы в соцсетях
+   --------------------------------------------------------------------------
+   Городские сообщества и паблики маркетплейсов разведены: паблики
+   маркетплейсов общие на всю Россию (созвон 09.09.2026), городские — свои
+   у каждого города. */
+.pg-socs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:22px}
+.pg-soc{
+  display:flex;align-items:center;gap:14px;padding:18px 20px;
+  border:1px solid var(--line);border-radius:24px;background:#fff;color:var(--ink);
+  transition:border-color .18s, background .18s, color .18s, transform .18s var(--ease);
+}
+.pg-soc:hover{background:var(--ink);border-color:var(--ink);color:#fff;transform:translateY(-3px)}
+.pg-soc__ic{flex:0 0 auto;display:inline-flex}
+.pg-soc__ic .soc-ic{width:34px;height:34px}
+.pg-soc__ic img{width:34px;height:34px;object-fit:contain}
+.pg-soc b{display:block;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.pg-soc span{display:block;margin-top:3px;font-size:13px;color:var(--ink-3);transition:color .18s}
+.pg-soc:hover span{color:rgba(255,255,255,.7)}
+
+/* --------------------------------------------------------------------------
+   Заголовки групп соцсетей в подвале стали ссылками
+   --------------------------------------------------------------------------
+   «Мы в соцсетях» — пункт из записки Ивана, но отдельной строки в списках
+   подвала он не заслуживает: группа с этим названием там уже стоит.
+   Поэтому ссылкой на страницу стал сам заголовок группы. */
+.dz .footer-soc-group__label a{color:inherit;transition:color .18s}
+.dz .footer-soc-group__label a:hover{color:#fff;text-decoration:underline;text-underline-offset:3px}
+
+@media (max-width:680px){
+  .pg-sec{margin-top:40px}
+  .pg-req{margin-top:34px;padding:20px}
+}
