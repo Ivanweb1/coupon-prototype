@@ -770,6 +770,28 @@ const feeReady = f => f.paid
 const eyeLink = f => `<a class="lkd-eye" href="../coupon-design.html?id=${f.id}" target="_blank" rel="noopener"
     title="Посмотреть купон" aria-label="Посмотреть купон «${f.title}»">${ICON.eye18}</a>`;
 
+/* Строка купона клиента — одна и та же в «Купонах клиентов» и на дашборде:
+   «Последние купоны» — это те же пять верхних строк того же списка, и поля
+   у них должны быть те же (правка Ивана 29.09). */
+const FEE_COLS = [
+  { t: "Купон" }, { t: "Тип" }, { t: "Статус" }, { t: "Начало — окончание" },
+  { t: "Оплачено, ₽", num: true }, { t: "Бонусами", num: true },
+  { t: "Ваше начисление", num: true, key: true }, { t: "" }
+];
+const feeRow = f => {
+  const cl = clientById(f.client);
+  return `<tr>
+    <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">ID ${f.id} · ${cl.name}<br>ИНН ${INN[cl.id]}</span></td>
+    <td>${TYPE[f.type]}</td>
+    <td>${feeStatus(f)}</td>
+    <td class="lkd-dates"><span>${f.from}</span><span>${f.to}</span></td>
+    <td class="num">${rub(f.rub)}</td>
+    <td class="num">${f.bon ? num(f.bon) : "—"}</td>
+    <td class="num lk-t__key">${rub(f.fee)}<div class="lkd-ready">${feeReady(f)}</div></td>
+    <td class="num">${eyeLink(f)}</td>
+  </tr>`;
+};
+
 /* Дашборд партнёра — «рука на пульсе». Что поменялось:
    · между «клиентами в регионе» и «активными» — сколько купонов размещено
      прямо сейчас. Клиентов со временем станет 150, купонов 35 — и эта
@@ -780,6 +802,10 @@ const eyeLink = f => `<a class="lkd-eye" href="../coupon-design.html?id=${f.id}"
    · «Последние клиенты» были таблицей без смысла. Теперь это живая лента
      последних пяти купонов, связанная с начислениями, с глазиком;
    · внизу — предложения для бизнеса: партнёр тоже предприниматель. */
+/* Компактная полоса показателей — те же плитки, что и в kpi(), но мельче
+   и без растягивания: помещаются в один ряд. */
+const kpiRow = items => kpi(items).replace('class="lk-kpi"', 'class="lk-kpi lkd-kpi-row"');
+
 const baseMpDashboard = VIEWS["partner:dashboard"];
 VIEWS["partner:dashboard"] = () => {
   /* Без региональной роли — дашборд по кодам из lk.js: показывать
@@ -796,25 +822,20 @@ VIEWS["partner:dashboard"] = () => {
   const last = FEES.slice().sort((a, b) => b.id - a.id).slice(0, 5);
 
   return head("Дашборд партнёра")
-    + kpi([
+    /* Семь показателей одной компактной полосой, а не двумя рядами
+       крупных карточек: дашборд начинался с двух экранов цифр, а во
+       втором ряду три плитки растягивались на всю ширину (правка Ивана
+       29.09). Порядок прежний: сначала работа, потом деньги. */
+    + kpiRow([
         { label: "Клиентов в регионе",        value: LK_CLIENTS.length, note: fresh + " ещё без первого купона" },
         { label: "Размещено купонов сейчас",  value: now.length, note: "активные на сегодня" },
         { label: "Активных клиентов",         value: activeClients, note: "с размещённым купоном" },
-        { label: "К выплате",                 value: rub(readySum()), note: "за " + LK_PAYOUTS[0].period.toLowerCase() }
+        { label: "К выплате",                 value: rub(readySum()), note: "за " + LK_PAYOUTS[0].period.toLowerCase() },
+        { label: "Начислено всего",           value: rub(feeAll), note: "за все периоды" },
+        { label: "Купонов на клиента",        value: perClient, note: "в среднем" },
+        { label: "Начисление с клиента",      value: rub(feePerClient), note: "в среднем" }
       ])
-    + kpi([
-        { label: "Начислено всего",       value: rub(feeAll), note: "за все периоды" },
-        { label: "Купонов на клиента",    value: perClient },
-        { label: "Начисление с клиента",  value: rub(feePerClient), note: "в среднем" }
-      ])
-    + panel("Последние купоны", table(
-        [{ t: "Купон" }, { t: "Тип" }, { t: "Размещение" }, { t: "Ваше начисление", num: true, key: true }, { t: "" }],
-        last.map(f => `<tr>
-          <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">${clientById(f.client).name} · ID ${f.id}</span></td>
-          <td>${TYPE[f.type]}</td>
-          <td>${f.from} — ${f.to}</td>
-          <td class="num lk-t__key">${rub(f.fee)}</td>
-          <td class="num">${eyeLink(f)}</td></tr>`).join("")),
+    + panel("Последние купоны", table(FEE_COLS, last.map(feeRow).join("")),
         { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все купоны</a>` })
     + offersRow();
 };
@@ -841,19 +862,7 @@ function offersRow() {
 VIEWS["partner:clients"] = () => {
   const clients = LK_CLIENTS.filter(c => FEES.some(f => f.client === c.id));
   const list = D.client === "all" ? FEES : FEES.filter(f => String(f.client) === D.client);
-  const rows = list.map(f => {
-    const cl = clientById(f.client);
-    return `<tr>
-      <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">ID ${f.id} · ${cl.name}<br>ИНН ${INN[cl.id]}</span></td>
-      <td>${TYPE[f.type]}</td>
-      <td>${feeStatus(f)}</td>
-      <td class="lkd-dates"><span>${f.from}</span><span>${f.to}</span></td>
-      <td class="num">${rub(f.rub)}</td>
-      <td class="num">${f.bon ? num(f.bon) : "—"}</td>
-      <td class="num lk-t__key">${rub(f.fee)}<div class="lkd-ready">${feeReady(f)}</div></td>
-      <td class="num">${eyeLink(f)}</td>
-    </tr>`;
-  }).join("");
+  const rows = list.map(feeRow).join("");
 
   return head("Купоны клиентов",
       `<button class="btn btn--ghost">Выгрузить в CSV</button>
@@ -878,10 +887,7 @@ VIEWS["partner:clients"] = () => {
           ${clients.map(c => `<option value="${c.id}"${D.client === String(c.id) ? " selected" : ""}>${c.name}</option>`).join("")}
         </select>
       </div>`
-      + table(
-        [{ t: "Купон" }, { t: "Тип" }, { t: "Статус" }, { t: "Начало — окончание" },
-         { t: "Оплачено, ₽", num: true }, { t: "Бонусами", num: true },
-         { t: "Ваше начисление", num: true, key: true }, { t: "" }], rows)
+      + table(FEE_COLS, rows)
       + `<div class="lk-total"><span>Клиенты закреплены за вами по территории
          ответственности. Закрепление постоянное. В выплату идут купоны,
          завершившиеся в отчётном периоде — календарном месяце.</span></div>`)
