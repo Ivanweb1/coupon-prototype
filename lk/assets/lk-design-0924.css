@@ -52,16 +52,19 @@
 }
 .lkd-dash__main{display:flex;flex-direction:column;gap:16px;min-width:0}
 .lkd-dash__main .lk-panel{margin:0}
-/* Карточке добирает высоту снимок: background-size:cover подрезает кадр,
-   а не растягивает его. Текст и кнопки остаются своего размера. */
-.lkd-dash > .lkd-ad{height:100%}
-.lkd-dash > .lkd-ad .lkd-ad__media{flex:1 1 auto}
+/* Снимок карточки не тянем: 4:5 — фиксированная пропорция купона, и
+   рекламное место показывает ровно ту карточку, что в ленте (Иван 29.09).
+   Высоту столбца карточка отрабатывает иначе: остаётся у верхнего края и
+   едет вместе с прокруткой, как превью в мастере, — место под ней не
+   пустует, пока читаешь длинный левый столбец. */
+.lkd-dash > .lkd-ad{align-self:start;position:sticky;top:calc(var(--header-h) + 20px)}
 /* Статистика: панель во всю высоту столбца, график забирает остаток */
 .lkd-dash--chart .lk-panel{display:flex;flex-direction:column;height:100%}
 @media (max-width:1100px){.lkd-dash{grid-template-columns:minmax(0,1fr) 260px}}
 @media (max-width:900px){
   .lkd-dash{grid-template-columns:1fr}
-  .lkd-dash > .lkd-ad{max-width:340px}
+  /* В одну колонку карточка идёт своей очередью, липнуть ей не к чему */
+  .lkd-dash > .lkd-ad{max-width:340px;position:static}
 }
 
 /* Бонусы и баланс — две карточки, число крупно */

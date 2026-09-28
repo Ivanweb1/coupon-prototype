@@ -924,11 +924,15 @@ VIEWS["partner:bonuses"] = () => {
         </ul>`)}
     </div>`
     + panel("История начислений", table(
-        [{ t: "Кому", w: "34%" }, { t: "Сколько", num: true, w: "18%" },
+        /* Столбцы равными долями, сумма и дата — по левому краю своих
+           столбцов. Пока сумма стояла по правому краю, а дата сразу за
+           ней по левому, оба значения сбивались в середину строки и
+           справа оставалась пустая полоса до кнопки (правка Ивана 29.09). */
+        [{ t: "Кому", w: "28%" }, { t: "Сколько", w: "24%" },
          { t: "Дата начисления", w: "24%" }, { t: "", num: true, w: "24%" }],
         LK_BONUSES.map(b => `<tr>
           <td><b class="lk-t__title">${b.to}</b><span class="lk-t__sub">ИНН ${innOf(b.to)}</span></td>
-          <td class="num">${num(b.amount)}</td>
+          <td>${num(b.amount)}</td>
           <td>${b.sent}</td>
           <td class="num"><button class="btn btn--ghost" data-repeat-bonus="${innOf(b.to)}|${b.amount}">Повторить</button></td></tr>`).join("")));
 };
