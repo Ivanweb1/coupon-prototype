@@ -1028,8 +1028,12 @@ const INVOICE = { "Август 2026": "П-0826-014", "Июль 2026": "П-0726-
 VIEWS["partner:payouts"] = () => {
   const pend = LK_PAYOUTS.find(p => p.status === "pending");
   const cur = periodFees();
-  const region = cur.filter(f => f.type !== "marketplace");
-  const market = cur.filter(f => f.type === "marketplace");
+  /* Группы детализации — по типу купона, теми же словами, что в столбце
+     «Тип» в других разделах (правка Ивана 29.09). Раньше групп было две,
+     «Регион» и «Маркетплейс», и в «Регион» молча падали купоны «Для
+     бизнеса»: группа значила «всё, что не маркетплейс». */
+  const GROUPS = [["regional", "Региональные"], ["for-business", "Для бизнеса"],
+                  ["marketplace", "Маркетплейс"]];
   const sumOf = (xs, k) => xs.reduce((a, f) => a + f[k], 0);
   const paid = LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
 
@@ -1084,7 +1088,7 @@ VIEWS["partner:payouts"] = () => {
     + panel("Детализация · " + pend.period, table(
         [{ t: "Купон" }, { t: "Окончание" }, { t: "Оплачено, ₽", num: true }, { t: "Бонусами", num: true },
          { t: "Ваше начисление", num: true, key: true }],
-        detail("Регион", region) + detail("Маркетплейс", market)))
+        GROUPS.map(([t, label]) => detail(label, cur.filter(f => f.type === t))).join("")))
     + panel("По периодам", table(
         [{ t: "Период" }, { t: "Сумма", num: true, key: true }, { t: "Счёт" }, { t: "Статус" }, { t: "", num: true }], rows)
       + `<div class="lk-total"><b>${rub(paid)}</b><span>выплачено за всё время</span></div>`)
