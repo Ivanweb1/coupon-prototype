@@ -299,9 +299,12 @@
    плашки (минуты, столбик метрик, выгода) толще на 4px. В попапе плашки
    минут и просмотров — той же высоты, что круглый крестик (36px). */
 .dz3 .card__near{height:28px;padding:0 10px;font-size:12px}
-.dz3 .card__stats{width:28px;padding:9px 0;gap:10px}
-.dz3 .card__stat svg{width:15px;height:15px}
-.dz3 .card__stat b{font-size:10px}
+/* Столбик метрик сужали только для телефона — на десктопе он прежний */
+@media (max-width:820px){
+  .dz3 .card__stats{width:28px;padding:9px 0;gap:10px}
+  .dz3 .card__stat svg{width:15px;height:15px}
+  .dz3 .card__stat b{font-size:10px}
+}
 .val-ticket .dz3.cards-wb .card__badge{padding:9px 16px 10px}
 .val-ticket .dz3.cards-wb .card__badge.is-long{padding:9px 15px 10px}
 @container (max-width: 235px){

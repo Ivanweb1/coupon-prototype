@@ -644,12 +644,11 @@ function cardHTML(c, compact) {
              закольцовывалась на том же шаге. Раз действие другое — и
              надпись другая: «Забрать купон» здесь обещала бы код. */
           ? `<button type="button" class="btn btn--solid btn--wide" data-card-reveal>Смотреть в категории</button>`
-          /* «Подробнее» в дизайн-версии убрана (Иван 25.09): попап и так
-             открывается по нажатию на любое место карточки, как на WB и
-             Ozon, а кнопка лишь дублировала это и нагромождала карточку. */
-          : dz3()
-            ? `<button type="button" class="btn btn--solid btn--wide" data-card-reveal>Забрать купон</button>`
-            : `<button type="button" class="btn btn--ghost btn--wide" data-card-more>Подробнее</button>
+          /* «Подробнее» в дизайн-версии прячется только на телефоне (Иван
+             25.09 и 28.09): там попап и так открывается по нажатию на
+             карточку, а две кнопки в узкой карточке нагромождают её. На
+             десктопе кнопка остаётся — класс card__more снимается в CSS. */
+          : `<button type="button" class="btn btn--ghost btn--wide card__more" data-card-more>Подробнее</button>
              <button type="button" class="btn btn--solid" data-card-reveal>Забрать купон</button>`}
       </div>
     </div>`;
