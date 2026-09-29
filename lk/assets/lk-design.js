@@ -1905,6 +1905,35 @@ function wizardExtras(form) {
     paint();
   }
 
+  /* Бейдж «Проверено» на превью купона: появляется, когда отмечен тайный
+     покупатель, — над плашкой выгоды, с наклоном, как будет на публичке */
+  const secretCb = qs('[data-f="secret"]', form);
+  const pvMedia = qs("[data-pv-media]", form);
+  if (secretCb && pvMedia) {
+    pvMedia.insertAdjacentHTML("beforeend", '<span class="lkd-verified" data-pv-verified hidden><i aria-hidden="true">✓</i> Проверено</span>');
+    const badge = qs("[data-pv-verified]", pvMedia);
+    const paint = () => { badge.hidden = !secretCb.checked; };
+    secretCb.addEventListener("change", paint);
+    paint();
+  }
+
+  /* Строка прогресса и цены приколота к низу окна под колонкой превью:
+     положение берём у колонки и обновляем при прокрутке и смене размера */
+  const wbar = qs("[data-wiz-bar]", form);
+  const wprev = qs(".lk-prev", form);
+  if (wbar && wprev) {
+    const place = () => {
+      if (window.innerWidth <= 1000) { wbar.style.left = wbar.style.width = ""; return; }
+      const r = wprev.getBoundingClientRect();
+      wbar.style.left = Math.round(r.left) + "px";
+      wbar.style.width = Math.round(r.width - 6) + "px";
+    };
+    window.addEventListener("resize", place);
+    window.addEventListener("scroll", place, { passive: true });
+    place();
+    setTimeout(place, 300);
+  }
+
   /* Счётчик генераций под показанный лимит */
   const genLeft = qs("[data-img-left]", form);
   if (genLeft) {

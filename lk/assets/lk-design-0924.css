@@ -387,8 +387,18 @@
 .lkd .lk-prog__box{display:none}
 
 /* Прогресс и цена — закреплённой строкой под превью */
+/* Строка с прогрессом и ценой приколота к нижнему краю окна и стоит под
+   колонкой превью: слева и ширину ей выставляет lk-design.js. Сверху страницы
+   sticky не спасал: колонка начиналась ниже экрана, и цена оставалась за ним. */
+@media (min-width:1001px){
+  .lkd .lk-prev{padding-bottom:84px}
+}
+@media (max-width:1000px){
+  .lkd-wizbar{left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+  .lkd .lk-form{padding-bottom:84px}
+}
 .lkd-wizbar{
-  position:sticky;bottom:0;z-index:5;
+  position:fixed;bottom:16px;z-index:40;box-sizing:border-box;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
   margin-top:12px;padding:12px 16px;
   background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);
@@ -514,3 +524,18 @@
 .lkd-confirm.is-warn::after{content:"Поставьте галочку, чтобы отправить";margin-left:8px;font-size:12.5px}
 .lkd-off{display:none!important}
 @media (max-width:560px){.lkd-promo__row{flex-direction:column}}
+
+/* Бейдж «Проверено» на превью: над плашкой выгоды, с наклоном */
+.lkd-verified{
+  position:absolute;left:12px;bottom:62px;z-index:3;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px 5px 8px;border-radius:999px;
+  background:#fff;color:var(--brand-600);
+  font-size:12.5px;font-weight:700;letter-spacing:.01em;
+  transform:rotate(-4deg);
+  box-shadow:0 6px 14px -6px rgba(0,0,0,.45);
+}
+.lkd-verified i{
+  display:grid;place-items:center;width:16px;height:16px;border-radius:50%;
+  background:var(--brand);color:#fff;font-style:normal;font-size:10px;line-height:1;
+}

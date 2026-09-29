@@ -888,13 +888,27 @@ function toast(msg) {
   t.textContent = msg;
   t.classList.add("is-on");
   clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.classList.remove("is-on"), 2200);
+  t._timer = setTimeout(() => t.classList.remove("is-on"), 3600);
 }
 
 /* Код в буфер + уведомление. Буфер может быть недоступен (http, старый
    браузер) — уведомление показываем всё равно: код уже на экране. */
-function copyCode(code) {
-  const done = () => toast("Код " + code + " скопирован");
+function copyCode(code, btn) {
+  /* Уведомление внизу экрана не замечали (созвон 28.09): подтверждаем на
+     самой кнопке — галочкой «Скопировано» — и держим дольше */
+  const done = () => {
+    toast("Код " + code + " скопирован");
+    if (!btn) return;
+    if (!btn._back) btn._back = btn.innerHTML;
+    btn.classList.add("is-copied");
+    btn.innerHTML = '<span class="copied__ic" aria-hidden="true">✓</span> Скопировано';
+    clearTimeout(btn._copiedTimer);
+    btn._copiedTimer = setTimeout(() => {
+      btn.classList.remove("is-copied");
+      btn.innerHTML = btn._back;
+      btn._back = null;
+    }, 3000);
+  };
   if (navigator.clipboard) navigator.clipboard.writeText(code).then(done, done);
   else done();
 }
@@ -911,7 +925,7 @@ function revealOnCard(btn, c) {
       showCardCode(card, c);
       noteInterest(c.cat.id);
     }
-    copyCode(c.code);
+    copyCode(c.code, btn);
     return;
   }
 
@@ -1519,7 +1533,7 @@ function openQuick(c, cardEl) {
       box.removeAttribute("aria-hidden");
     }
     fitQuickMedia();
-    if (dz3()) copyCode(c.code);
+    if (dz3()) copyCode(c.code, qs("[data-reveal-btn]", quick));
   };
   bindSkuCopy(quick);
 }
@@ -2098,7 +2112,7 @@ function renderCouponDesign() {
       box.removeAttribute("aria-hidden");
     }
     noteInterest(c.cat.id);
-    copyCode(c.code);
+    copyCode(c.code, e.currentTarget);
   };
   const share = qs("[data-share]", root);
   share.onclick = () => shareCoupon(share, c);
