@@ -498,3 +498,19 @@
 .lkd-gate__doc small{font-size:12px;font-weight:400;color:var(--ink-3)}
 .lkd-gate .btn{flex:none;height:50px}
 .lkd-gate .btn:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed;opacity:1}
+
+/* Купон маркетплейса и B2B (28.09) */
+.lkd-promo__row{display:flex;gap:10px}
+.lkd-promo__row .lk-i{flex:1 1 auto;min-width:0;text-transform:uppercase}
+.lkd-promo__btn{flex:none;font-weight:600}
+.lkd-promo__msg{min-height:20px;font-size:13.5px;color:var(--ink-3)}
+.lkd-promo__msg.is-ok{color:#1f7a45;font-weight:600}
+.lkd-promo__msg.is-bad{color:var(--brand-600)}
+.lkd-flash{animation:lkdFlash 1s ease-out}
+@keyframes lkdFlash{0%{color:var(--brand);transform:scale(1.18)}100%{color:inherit;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.lkd-flash{animation:none}}
+.lkd-confirm{margin:0 0 12px}
+.lkd-confirm.is-warn{animation:lkShake .35s;color:var(--brand-600)}
+.lkd-confirm.is-warn::after{content:"Поставьте галочку, чтобы отправить";margin-left:8px;font-size:12.5px}
+.lkd-off{display:none!important}
+@media (max-width:560px){.lkd-promo__row{flex-direction:column}}

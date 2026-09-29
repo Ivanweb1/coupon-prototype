@@ -1373,8 +1373,13 @@ function initCouponBuilder(host) {
     ["Величина скидки", val("value")],
     ["Срок действия — обе даты", val("from") && val("to")],
     ["Промокод", val("code")],
-    isMarket ? ["Артикул товара", val("article")] : ["Хотя бы один адрес", addrs().length]
-  ];
+    /* Дизайн-слой (lk-design.js) выставляет window.LKD_MODE: у маркетплейса
+       обязательна ещё и ссылка на карточку, у B2B вместо адресов — регион.
+       В Ч/Б прототипе переменной нет, и всё остаётся как было. */
+    isMarket ? ["Артикул товара", val("article")]
+      : window.LKD_MODE === "for-business" ? ["Регион размещения", cities().length]
+      : ["Хотя бы один адрес", addrs().length]
+  ].concat(window.LKD_MODE === "marketplace" ? [["Ссылка на карточку товара", val("link")]] : []);
 
   const img = qs("[data-img]", form);
   const st = { src: null, variant: 0, variants: [], chosen: -1, left: LK_GEN_LIMIT, busy: false, touched: false };
@@ -1405,7 +1410,7 @@ function initCouponBuilder(host) {
 
     const list = need();
     const missing = list.filter(x => !x[1]).map(x => x[0]);
-    const pct = Math.round((list.length - missing.length + (st.src ? 1 : 0)) / (list.length + 1) * 100);
+    const pct = Math.round((list.length - missing.length + (st.src || window.LKD_MODE === "marketplace" ? 1 : 0)) / (list.length + 1) * 100);
     qs("[data-prog-n]", form).textContent = pct + "%";
     qs("[data-prog-bar]", form).style.width = pct + "%";
 

@@ -1455,9 +1455,15 @@ function patchWizard(form) {
     ta.value = isMarket
       ? "При покупке или добавлении в корзину введите промокод в специальное поле на маркетплейсе."
       : "Покажите код администратору при оплате.";
-    ta.maxLength = USE_MAX;
-    ta.setAttribute("data-use-text", "1");
-    use.insertAdjacentHTML("afterend", '<div class="lk-note lkd-usenote">Текст попадёт в описание купона — его увидят посетители. Осталось <b data-use-left>' + USE_MAX + '</b> знаков.</div>');
+    if (isMarket) {
+      /* У маркетплейса текст один для всех: промокод вводят в корзине */
+      ta.readOnly = true;
+      use.insertAdjacentHTML("afterend", '<div class="lk-note lkd-usenote">Текст одинаковый для всех купонов маркетплейса, менять его не нужно.</div>');
+    } else {
+      ta.maxLength = USE_MAX;
+      ta.setAttribute("data-use-text", "1");
+      use.insertAdjacentHTML("afterend", '<div class="lk-note lkd-usenote">Текст попадёт в описание купона — его увидят посетители. Осталось <b data-use-left>' + USE_MAX + '</b> знаков.</div>');
+    }
   }
 
   /* Города и адреса — двумя блоками: где разместить купон и где его
@@ -1556,6 +1562,168 @@ function patchWizard(form) {
       '<div class="lkd-wizbar__bar"><i data-bar-fill></i></div></div>' +
       '<div class="lkd-wizbar__r"><span>Итого</span><b data-bar-total>—</b></div></div>');
   }
+
+  if (window.LKD_MODE === "marketplace") patchMarketplace(form);
+  if (window.LKD_MODE === "for-business") patchBusiness(form);
+}
+
+/* -------------------------------------------------------------------------
+   Купон маркетплейса (28.09): один товар, одна механика, вся Россия
+   ------------------------------------------------------------------------- */
+const MP_PRICE = 10000;          /* размещение на всю Россию, город в цене не участвует */
+const MP_SECRET_PRICE = 1000;    /* проверить промокод — дело двух секунд */
+const PARTNER_DISCOUNT = 0.2;
+const PARTNER_CODES = { ok: ["PRTLIP01", "PRTELT02"], revoked: ["PRTOLD09"] };
+const MP_GROUPS = ["Wildberries", "Ozon", "Яндекс Маркет"];
+
+function patchMarketplace(form) {
+  /* Ссылка на карточку и артефакт — оба обязательны: под одним артикулом
+     на WB и Ozon бывают разные товары, проверяем по двум признакам */
+  const link = fieldByLabel(form, "Ссылка на карточку товара");
+  if (link) {
+    const inp = qs("input", link);
+    inp.setAttribute("data-f", "link");
+    qs(".lk-l__t", link).textContent = "Ссылка на карточку товара (обязательно)";
+    link.insertAdjacentHTML("afterend", '<div class="lk-note">Проверяем товар дважды — по ссылке и по артикулу: на Wildberries и Ozon под одним артикулом бывают разные товары. Картинку возьмём из карточки товара и обрежем под формат купона, генерировать её не нужно.</div>');
+  }
+  const art = fieldByLabel(form, "Артикул товара");
+  if (art) qs(".lk-l__t", art).textContent = "Артикул товара (обязательно)";
+
+  /* Заголовок: без вариантов от нейросети, подсказка прямо в поле */
+  const ai = qs("[data-ai-titles]", form);
+  if (ai) ai.remove();
+  const title = qs('[data-f="title"]', form);
+  if (title) title.placeholder = "Скидка на ваш товар по промокоду";
+
+  /* Механика одна — скидка в процентах. Кнопки «Выбрать» нет. */
+  const mech = qs('[data-f="mech"]', form);
+  if (mech) {
+    mech.innerHTML = "<option>Скидка в процентах</option>";
+    mech.disabled = true;
+  }
+  const tip = qs("[data-tip-mech]", form);
+  if (tip) tip.replaceWith(Object.assign(document.createElement("div"), {
+    className: "lk-note lkd-mechhint",
+    textContent: "На маркетплейсе работает одна механика — скидка в процентах. Чем глубже скидка, тем больше трафик."
+  }));
+
+  /* Города размещения убираем совсем: публикация идёт в федеральные группы
+     по площадкам, город в расчёте не участвует */
+  const cityPanel = panelByTitle(form, "Города размещения");
+  if (cityPanel) cityPanel.remove();
+  const chan = panelByTitle(form, "Каналы публикации");
+  if (chan) {
+    const box = qs("[data-channels]", chan);
+    if (box) box.innerHTML = MP_GROUPS.map(n =>
+      '<label class="lk-ch is-on is-fixed"><input type="checkbox" checked disabled><span>Группа ' + n + '</span><i>входит всегда</i></label>').join("");
+    const msg = qs("[data-reach-msg]", chan);
+    if (msg) msg.remove();
+    const note = qs(".lk-note", chan);
+    if (note) note.textContent = "Купон уйдёт в наши федеральные группы по площадкам: Wildberries, Ozon и Яндекс Маркет. Размещение — на всю Россию, город в цене не участвует. Макеты соберём сами.";
+  }
+
+  /* Сайт — магазин, соцсети пусть заполняет */
+  const site = fieldByLabel(form, "Сайт");
+  if (site) {
+    qs(".lk-l__t", site).textContent = "Сайт магазина";
+    qs("input", site).placeholder = "Впишите ссылку на ваш магазин";
+  }
+
+  /* Тайный покупатель: цена за проверку, а не за город */
+  const secretNote = qs(".lkd-secret > .lk-note", form);
+  if (secretNote) secretNote.textContent = rub(MP_SECRET_PRICE) + " за проверку: промокод проверить дело двух секунд.";
+
+  /* Изображение не генерируем — блок уходит, на его месте промокод партнёра */
+  const imgP = qs("[data-img]", form) && qs("[data-img]", form).closest(".lk-panel");
+  const oldPartner = panelByTitle(form, "Промокод партнёра");
+  if (oldPartner) oldPartner.remove();
+  const promo = document.createElement("div");
+  promo.className = "lk-panel lkd-promo";
+  promo.innerHTML = '<div class="lk-panel__head"><h2>Промокод партнёра</h2></div>' +
+    '<div class="lk-f">' +
+    '<div class="lk-note">Найдите партнёра, у которого есть промокод, либо введите код, который вам известен. Он даёт ' + Math.round(PARTNER_DISCOUNT * 100) + '% скидки на размещение неограниченное количество раз.</div>' +
+    '<div class="lkd-promo__row"><input class="lk-i" id="lkdPartnerCode" data-partner-code maxlength="8" autocomplete="off" placeholder="Код партнёра, 8 символов"><button type="button" class="btn btn--solid lkd-promo__btn" data-promo-apply>Применить</button></div>' +
+    '<div class="lkd-promo__msg" data-promo-msg role="status" aria-live="polite"></div>' +
+    '</div>';
+  if (imgP) { imgP.before(promo); imgP.hidden = true; imgP.classList.add("lkd-off"); }
+
+  const hold = qs(".lk-prev__hold", form);
+  if (hold) hold.textContent = "Картинку возьмём из карточки товара";
+
+  const lbl = qs(".lkd-wizbar__r span", form);
+  const calcRows = qsa(".lk-calc__row span", form);
+  if (calcRows[0]) calcRows[0].textContent = "Размещение на всю Россию";
+  if (calcRows[1]) calcRows[1].textContent = "Федеральные группы";
+
+  /* Подтверждение перед отправкой */
+  const acts = qs(".lk-head__act", form);
+  if (acts) acts.insertAdjacentHTML("beforebegin",
+    '<label class="lk-ch lkd-confirm" data-confirm-box><input type="checkbox" id="lkdConfirm" data-confirm><span>Подтверждаю, что условия акции и ссылки указаны верно</span></label>');
+}
+
+/* -------------------------------------------------------------------------
+   Купон для бизнеса (28.09): регионы вместо городов, без адресов
+   ------------------------------------------------------------------------- */
+const LK_REGIONS = [
+  { name: "Липецкая область",   k: 1 },
+  { name: "Тамбовская область", k: 0.8 },
+  { name: "Воронежская область", k: 1.3 },
+  { name: "Орловская область",  k: 0.7 },
+  { name: "Курская область",    k: 0.7 },
+  { name: "Москва и область",   k: 2.5 },
+  { name: "Вся Россия",         k: 5 }
+];
+const ALL_RUSSIA = "Вся Россия";
+
+function patchBusiness(form) {
+  /* Заголовок без вариантов от нейросети: для B2B они не подходят */
+  const ai = qs("[data-ai-titles]", form);
+  if (ai) ai.remove();
+
+  /* Регионы вместо городов: укрупняем до области, плюс «Вся Россия».
+     Кнопки остаются data-city — на них завязан расчёт и итог. */
+  const panel = panelByTitle(form, "Города размещения");
+  if (panel) {
+    qs("h2", panel).textContent = "Регионы размещения";
+    const chips = qs(".lk-chips", panel);
+    if (chips) chips.innerHTML = LK_REGIONS.map((r, i) =>
+      '<button type="button" class="lk-chipbtn' + (i === 0 ? " is-on" : "") + '" data-city="' + r.name + '">' + r.name + '</button>').join("");
+    const s = qs("[data-city-search]", panel);
+    if (s) {
+      s.placeholder = "Начните вводить область";
+      qs(".lk-l__t", s.closest("label")).textContent = "Где разместить";
+    }
+    const note = qs(".lk-note", panel);
+    if (note) note.textContent = "Бизнесу ехать из соседнего района не проблема, поэтому размещаем по областям, а в соцсетях показываем в разделе области. Город остаётся только фильтром на сайте.";
+  }
+
+  /* Адреса и точки не нужны: адрес компании подтянется из профиля */
+  const addr = panelByTitle(form, "Адреса применения купона");
+  if (addr) addr.remove();
+
+  /* Компания: email и телефон подтянутся сами, свои можно добавить */
+  const comp = panelByTitle(form, "Компания в купоне");
+  if (comp) {
+    const note = qs(".lk-note", comp);
+    if (note) note.textContent = "Адрес, сайт, соцсети, почту и телефон подставили из профиля компании. Если нужно, добавьте свои контакты: например, другой телефон и почту на конкретного сотрудника.";
+    const f = qs(".lk-f", comp);
+    const row = document.createElement("div");
+    row.className = "lk-f__row";
+    row.innerHTML = '<label class="lk-l"><span class="lk-l__t">Дополнительный телефон</span><input class="lk-i" id="lkdExtraPhone" type="tel" placeholder="+7 900 000-00-00"></label>' +
+      '<label class="lk-l"><span class="lk-l__t">Дополнительная почта</span><input class="lk-i" id="lkdExtraMail" type="email" placeholder="sales@company.ru"></label>';
+    if (f && note) note.before(row); else if (f) f.appendChild(row);
+  }
+
+  const chan = panelByTitle(form, "Каналы публикации");
+  if (chan) {
+    const note = qs(".lk-note", chan);
+    if (note) note.textContent = "Купон уйдёт в наши группы выбранных областей. Макеты соберём сами: один под сайт, один для ВКонтакте и Одноклассников, один для Telegram и Max.";
+  }
+
+  const rows = qsa(".lk-calc__row span", form);
+  if (rows[0]) rows[0].textContent = "Ниша, регионы и срок";
+  const secretNote = qs(".lkd-secret > .lk-note", form);
+  if (secretNote) secretNote.textContent = rub(LK_SECRET.price) + " за каждый регион размещения.";
 }
 
 /* -------------------------------------------------------------------------
@@ -1605,6 +1773,31 @@ function wizardExtras(form) {
     paint();
   }
 
+  /* Пересчёт цены: базовый recalc вешается на смену срока, дёргаем её */
+  const reprice = () => {
+    const d = f("days");
+    if (d) d.dispatchEvent(new Event("change", { bubbles: true }));
+  };
+
+  /* B2B: «Вся Россия» исключает области — отметить страну и часть областей
+     сразу нельзя. Хотя бы один регион остаётся выбранным. */
+  if (window.LKD_MODE === "for-business") {
+    const all = qs('[data-city="' + ALL_RUSSIA + '"]', form);
+    /* Кнопки переключает lk.js уже после нас, поэтому смотрим на итог клика
+       и правим его следом */
+    form.addEventListener("click", e => {
+      const b = e.target.closest("[data-city]");
+      if (!b || !all) return;
+      setTimeout(() => {
+        if (!b.classList.contains("is-on")) return;
+        if (b === all) qsa("[data-city]", form).forEach(x => { if (x !== all) x.classList.remove("is-on"); });
+        else all.classList.remove("is-on");
+        reprice();
+        form.dispatchEvent(new Event("input", { bubbles: true }));
+      }, 0);
+    });
+  }
+
   /* Поиск по городам и итог «купон будет размещён в …» */
   const search = qs("[data-city-search]", form);
   const chips = qsa("[data-city]", form);
@@ -1644,6 +1837,43 @@ function wizardExtras(form) {
     });
     form.dispatchEvent(new Event("input", { bubbles: true }));
   });
+
+  /* Промокод партнёра (маркетплейс): «Применить», цена пересчитывается
+     на глазах, отозванный код объясняет, что делать дальше */
+  const promoBtn = qs("[data-promo-apply]", form);
+  if (promoBtn) {
+    const pin = qs("[data-partner-code]", form);
+    const msg = qs("[data-promo-msg]", form);
+    const total = qs('[data-calc="total"]', form);
+    const say = (on, text, cls) => {
+      partnerOn = on;
+      msg.textContent = text;
+      msg.className = "lkd-promo__msg " + cls;
+      reprice();
+      if (total && on) {
+        total.classList.remove("lkd-flash");
+        void total.offsetWidth;
+        total.classList.add("lkd-flash");
+      }
+    };
+    msg.textContent = "Для примера в прототипе: PRTLIP01 действует, PRTOLD09 отозван.";
+    msg.className = "lkd-promo__msg is-hint";
+    promoBtn.onclick = () => {
+      const code = pin.value.trim().toUpperCase();
+      if (!code) return say(false, "Введите код партнёра.", "is-bad");
+      if (PARTNER_CODES.revoked.indexOf(code) !== -1) return say(false, "Промокод больше не актуален, найдите новый.", "is-bad");
+      if (PARTNER_CODES.ok.indexOf(code) !== -1) return say(true, "Код применён: скидка " + Math.round(PARTNER_DISCOUNT * 100) + "% на размещение.", "is-ok");
+      say(false, "Такого кода нет. Проверьте, что он введён без ошибок.", "is-bad");
+    };
+    pin.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); promoBtn.click(); } });
+    pin.addEventListener("input", () => {
+      if (!partnerOn) return;
+      partnerOn = false;
+      msg.textContent = "";
+      msg.className = "lkd-promo__msg";
+      reprice();
+    });
+  }
 
   /* Счётчик знаков в «как воспользоваться» */
   const ta = qs("[data-use-text]", form);
@@ -1696,11 +1926,65 @@ function wizardExtras(form) {
     const close = '<div class="lk-head__act" style="margin:12px 0 0"><button class="btn btn--solid" data-modal-close>Понятно</button></div>';
     if (btns[0]) btns[0].onclick = () => openModal('<h3>Черновик сохранён</h3>' +
       '<p class="lk-modal__lead">Купон лежит в «Моих купонах» со статусом «Черновик» — вернитесь к нему в любой момент.</p>' + close);
-    if (btns[1]) btns[1].onclick = () => openModal('<h3>Купон отправлен на модерацию</h3>' +
+    if (btns[1]) btns[1].onclick = () => {
+      const cf = qs("[data-confirm]", form);
+      if (cf && !cf.checked) {
+        const box = qs("[data-confirm-box]", form);
+        box.classList.remove("is-warn");
+        void box.offsetWidth;
+        box.classList.add("is-warn");
+        box.scrollIntoView({ block: "center", behavior: "smooth" });
+        return;
+      }
+      openModal('<h3>Купон отправлен на модерацию</h3>' +
       '<p class="lk-modal__lead">Если мы не найдём нарушений, купон будет опубликован в течение 2 часов. Если найдём — вернём на доработку с комментарием, что поправить.</p>' +
       '<p class="lk-modal__lead">Следите за статусом в «Моих купонах»: уведомление придёт в колокольчик и на почту ' + mail + '.</p>' + close);
+    };
   }
 }
+
+/* Режим конструктора: какой из трёх разделов сейчас открыт. lk.js читает
+   window.LKD_MODE, чтобы знать, что обязательно (ссылка, регион), а цена
+   считается ниже по своим правилам. */
+const SECRET_BASE = LK_SECRET.price;
+let partnerOn = false;
+
+const baseCouponForm = couponForm;
+window.couponForm = function (l1, c, locked) {
+  window.LKD_MODE = l1;
+  partnerOn = false;
+  LK_SECRET.price = l1 === "marketplace" ? MP_SECRET_PRICE : SECRET_BASE;
+  return baseCouponForm(l1, c, locked);
+};
+
+/* Цена. Маркетплейс: вся Россия одной суммой, город и соцсети в неё не
+   входят, тайный покупатель — отдельно. B2B: те же множители, но по
+   регионам. Партнёрский код даёт скидку на размещение. */
+const baseCalcFee = calcFee;
+window.calcFee = function (nicheName, names, days, chans, secret) {
+  const mode = window.LKD_MODE;
+  if (mode === "marketplace") {
+    const base = Math.round(MP_PRICE * (partnerOn ? 1 - PARTNER_DISCOUNT : 1));
+    const check = secret ? LK_SECRET.price : 0;
+    return { base: base, extra: 0, secret: check, total: base + check };
+  }
+  if (mode === "for-business") {
+    const niche = LK_NICHES["for-business"].find(n => n.name === nicheName) || LK_NICHES["for-business"][0];
+    const dur = LK_DURATIONS.find(d => d.days === days) || LK_DURATIONS[1];
+    const geo = (names || []).reduce((a, n) => {
+      const r = LK_REGIONS.find(x => x.name === n);
+      return a + (r ? r.k : 0);
+    }, 0);
+    const base = Math.round(niche.base * dur.k * geo);
+    const extra = Math.round(base * (chans || []).reduce((a, id) => {
+      const ch = LK_CHANNELS.find(x => x.id === id);
+      return a + (ch ? ch.k : 0);
+    }, 0));
+    const check = secret ? LK_SECRET.price * (names || []).length : 0;
+    return { base: base, extra: extra, secret: check, total: base + extra + check };
+  }
+  return baseCalcFee(nicheName, names, days, chans, secret);
+};
 
 const baseInitCB = window.initCouponBuilder;
 window.initCouponBuilder = function (host) {
