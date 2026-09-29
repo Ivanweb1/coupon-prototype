@@ -602,3 +602,5 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   .lkd-adpair .lkd-ad__acts .btn--ghost{display:none}
   .lkd-adpair .lkd-ad__acts .btn{height:36px;font-size:13px}
 }
+/* hidden должен побеждать display:inline-flex — бейдж только при галочке */
+.lkd-verified[hidden]{display:none}
