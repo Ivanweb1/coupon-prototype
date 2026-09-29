@@ -1384,6 +1384,9 @@ LK_DURATIONS.push(
   { days: 28, label: "28 дней", k: 6.2 });
 window.LK_RECOMMENDED_DAYS = 28;
 
+/* Выход из кабинета ведёт на страницу входа, а не на витрину */
+window.LKD_LOGOUT = "../login-design.html" + (document.body.dataset.role === "partner" ? "?role=partner" : "");
+
 /* Совет ИИ про срок: тридцати дней больше нет, потолок — 28 (28.09) */
 const aiTerm = AI_ANSWERS.find(a => a[0].test("срок"));
 if (aiTerm) aiTerm[1] = "Советуем 28 дней: за первую неделю купон только набирает показы в ленте и соцсетях. Короткий срок обычно заканчивается раньше, чем о купоне узнают.";

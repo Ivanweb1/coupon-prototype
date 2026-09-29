@@ -310,7 +310,7 @@ function renderChrome() {
         <span class="lk__me-role">${acc.sub}</span>
       </span>
     </a>
-    <a class="lk__me-exit" href="../index.html" title="Выйти" aria-label="Выйти">
+    <a class="lk__me-exit" href="${window.LKD_LOGOUT || "../index.html"}" title="Выйти" aria-label="Выйти">
       <span data-icon="exit"></span>
     </a>`;
 

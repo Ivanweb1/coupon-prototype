@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вход в кабинет — Все купоны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20260918y">
+<link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<!-- Та же база, что на главной, странице купона и форме партнёра -->
+<link rel="stylesheet" href="assets/design-3.css?v=20260924a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260922b">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260922b">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
+<!-- Ч/Б форма как была: разметка и register.js общие с register.html,
+     этот лист только переводит её на дизайн -->
+<link rel="stylesheet" href="assets/register.css?v=20260925e">
+<link rel="stylesheet" href="assets/design-3-register.css?v=20260925f">
+<!-- Правки созвона 24.09.2026 — отдельным слоем -->
+<link rel="stylesheet" href="assets/design-3-0924.css?v=20260925g">
+<link rel="icon" href="assets/brand/logo-red.png">
+</head>
+<body class="dz dz3 cards-wb">
+
+<!-- ===================================================================
+     ДИЗАЙН. Вход в кабинет — один для рекламодателя и партнёра.
+     Роль выбирается переключателем над формой (или ?role=partner по
+     ссылке «Уже есть кабинет» с регистрации партнёра): от неё зависит,
+     в какой кабинет попадёт человек и куда ведёт «Зарегистрироваться».
+
+     Вход — по почте и паролю. SMS в сервисе нет, поэтому пароль
+     восстанавливается только через почту: код из письма → новый пароль.
+     Это же правило написано под полем пароля в обеих регистрациях.
+     Форма ничего не проверяет по-настоящему: это прототип.
+     =================================================================== -->
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+    <span class="header__spacer"></span>
+    <a class="btn btn--ghost" href="register-design.html" data-lg-reg-top><span class="lg-top__long">Нет кабинета — зарегистрироваться</span><span class="lg-top__short">Регистрация</span></a>
+  </div>
+</header>
+
+<main class="wrap lg">
+
+  <div class="reg__card lg__card">
+
+    <!-- Вход -->
+    <section class="reg__screen is-on" data-lg-screen="login">
+      <h1 class="lg__h">Вход в кабинет</h1>
+      <div class="lg__roles" role="tablist" aria-label="Кабинет">
+        <button type="button" class="reg__chip is-on" role="tab" aria-selected="true" data-lg-role="client">Рекламодатель</button>
+        <button type="button" class="reg__chip" role="tab" aria-selected="false" data-lg-role="partner">Партнёр</button>
+      </div>
+      <p class="reg__note lg__role-note" data-lg-role-note>Размещаете купоны своей компании</p>
+
+      <form data-lg-form novalidate>
+        <label class="reg__f">
+          <span class="reg__l">Email</span>
+          <input class="reg__i" id="lgEmail" data-lg-email type="email" autocomplete="username" placeholder="you@company.ru">
+        </label>
+        <label class="reg__f">
+          <span class="reg__l lg__pass-l">Пароль
+            <button type="button" class="lg__link" data-lg-go="forgot">Забыли пароль?</button>
+          </span>
+          <span class="lg__pass">
+            <input class="reg__i" id="lgPass" data-lg-pass type="password" autocomplete="current-password" placeholder="Не короче 8 символов">
+            <button type="button" class="lg__eye" data-lg-eye aria-label="Показать пароль">Показать</button>
+          </span>
+        </label>
+        <p class="lg__err" data-lg-err role="alert" hidden></p>
+        <button type="submit" class="btn btn--solid btn--lg btn--wide">Войти</button>
+      </form>
+
+      <p class="lg__alt">Нет кабинета? <a href="register-design.html" data-lg-reg>Зарегистрироваться как рекламодатель</a></p>
+      <p class="rg-side__note">В прототипе подходит любая почта и пароль от 8 символов.</p>
+    </section>
+
+    <!-- Восстановление: почта -->
+    <section class="reg__screen" data-lg-screen="forgot">
+      <button type="button" class="lg__back" data-lg-go="login">← Ко входу</button>
+      <h1 class="lg__h">Восстановление пароля</h1>
+      <p class="reg__lead">Пришлём код на почту, с которой вы регистрировались. SMS в сервисе нет — доступ восстанавливается только через почту.</p>
+      <label class="reg__f">
+        <span class="reg__l">Email</span>
+        <input class="reg__i" id="lgForgotEmail" data-lg-forgot-email type="email" placeholder="you@company.ru">
+      </label>
+      <p class="lg__err" data-lg-forgot-err role="alert" hidden></p>
+      <button type="button" class="btn btn--solid btn--lg btn--wide" data-lg-send>Прислать код</button>
+    </section>
+
+    <!-- Восстановление: код и новый пароль -->
+    <section class="reg__screen" data-lg-screen="reset">
+      <button type="button" class="lg__back" data-lg-go="forgot">← Другая почта</button>
+      <h1 class="lg__h">Новый пароль</h1>
+      <p class="reg__lead">Код отправлен на <b data-lg-sent-to></b>.</p>
+      <label class="reg__f">
+        <span class="reg__l">Код из письма</span>
+        <input class="reg__i reg__i--code" id="lgCode" data-lg-code placeholder="0000" inputmode="numeric" maxlength="4">
+      </label>
+      <label class="reg__f">
+        <span class="reg__l">Новый пароль</span>
+        <input class="reg__i" id="lgNewPass" data-lg-new type="password" autocomplete="new-password" placeholder="Не короче 8 символов">
+      </label>
+      <p class="lg__err" data-lg-reset-err role="alert" hidden></p>
+      <button type="button" class="btn btn--solid btn--lg btn--wide" data-lg-save>Сохранить и войти</button>
+      <div class="reg__resend">
+        <button type="button" class="btn btn--ghost" data-lg-resend>Отправить код ещё раз</button>
+        <span class="reg__resend-ok" data-lg-resend-ok hidden>Отправили ещё раз</span>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="dz-foot-legal">
+      <p class="dz-foot-legal__req">
+        ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 ·
+        г. Липецк, ул. Название, 1
+      </p>
+      <p class="dz-foot-legal__pd">
+        Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону,
+        третьим лицам не передаём.
+      </p>
+    </div>
+    <div class="footer__legal">
+      <!-- Товарный знак — так, как зарегистрирован: капсом, одним словом
+           (созвон 24.09.2026) -->
+      <span>© 2026 ВСЕКУПОНЫ</span>
+      <a href="docs.html#all">Политика конфиденциальности</a>
+      <a href="docs.html#all">Пользовательское соглашение</a>
+      <a href="index-design-3.html">На витрину</a>
+      <!-- Подпись студии: отдельным классом, чтобы не путать с правовыми ссылками -->
+      <a class="dz-foot__author" href="https://lead-space.ru" target="_blank" rel="noopener">Разработано lead-space.ru</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const qs = (s, r) => (r || document).querySelector(s);
+  const qsa = (s, r) => Array.from((r || document).querySelectorAll(s));
+  const ROLES = {
+    client:  { lk: "lk/client-design.html",  reg: "register-design.html",
+               regText: "Зарегистрироваться как рекламодатель", note: "Размещаете купоны своей компании" },
+    partner: { lk: "lk/partner-design.html", reg: "register-partner-design.html",
+               regText: "Стать партнёром", note: "Раздаёте промокоды и получаете вознаграждение" }
+  };
+  let role = new URLSearchParams(location.search).get("role") === "partner" ? "partner" : "client";
+  const mailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+  function setRole(r) {
+    role = r;
+    qsa("[data-lg-role]").forEach(b => {
+      const on = b.dataset.lgRole === r;
+      b.classList.toggle("is-on", on);
+      b.setAttribute("aria-selected", on);
+    });
+    const R = ROLES[r];
+    qs("[data-lg-role-note]").textContent = R.note;
+    const reg = qs("[data-lg-reg]");
+    reg.href = R.reg; reg.textContent = R.regText;
+    qs("[data-lg-reg-top]").href = R.reg;
+  }
+  function go(name) {
+    qsa("[data-lg-screen]").forEach(s => s.classList.toggle("is-on", s.dataset.lgScreen === name));
+    const first = qs('[data-lg-screen="' + name + '"] input');
+    if (first) first.focus();
+  }
+  function err(sel, text) {
+    const el = qs(sel);
+    el.textContent = text || "";
+    el.hidden = !text;
+  }
+
+  qsa("[data-lg-role]").forEach(b => b.onclick = () => setRole(b.dataset.lgRole));
+  qsa("[data-lg-go]").forEach(b => b.onclick = () => {
+    if (b.dataset.lgGo === "forgot") qs("[data-lg-forgot-email]").value = qs("[data-lg-email]").value;
+    go(b.dataset.lgGo);
+  });
+
+  const pass = qs("[data-lg-pass]");
+  const eye = qs("[data-lg-eye]");
+  eye.onclick = () => {
+    const show = pass.type === "password";
+    pass.type = show ? "text" : "password";
+    eye.textContent = show ? "Скрыть" : "Показать";
+    eye.setAttribute("aria-label", show ? "Скрыть пароль" : "Показать пароль");
+  };
+
+  qs("[data-lg-form]").addEventListener("submit", e => {
+    e.preventDefault();
+    const mail = qs("[data-lg-email]").value;
+    if (!mailOk(mail)) return err("[data-lg-err]", "Впишите почту, с которой регистрировались.");
+    if (pass.value.length < 8) return err("[data-lg-err]", "Пароль не короче 8 символов. Не помните — нажмите «Забыли пароль?».");
+    err("[data-lg-err]");
+    location.href = ROLES[role].lk;
+  });
+
+  qs("[data-lg-send]").onclick = () => {
+    const mail = qs("[data-lg-forgot-email]").value;
+    if (!mailOk(mail)) return err("[data-lg-forgot-err]", "Впишите почту, с которой регистрировались.");
+    err("[data-lg-forgot-err]");
+    qs("[data-lg-sent-to]").textContent = mail.trim();
+    go("reset");
+  };
+  qs("[data-lg-resend]").onclick = () => {
+    const ok = qs("[data-lg-resend-ok]");
+    ok.hidden = false;
+    setTimeout(() => { ok.hidden = true; }, 2500);
+  };
+  qs("[data-lg-save]").onclick = () => {
+    if (!/^\d{4}$/.test(qs("[data-lg-code]").value)) return err("[data-lg-reset-err]", "Код из письма — 4 цифры.");
+    if (qs("[data-lg-new]").value.length < 8) return err("[data-lg-reset-err]", "Новый пароль не короче 8 символов.");
+    err("[data-lg-reset-err]");
+    location.href = ROLES[role].lk;
+  };
+
+  setRole(role);
+})();
+</script>
+</body>
+</html>
