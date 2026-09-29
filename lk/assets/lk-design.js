@@ -167,7 +167,7 @@ window.renderChrome = function () {
        Коля не понял, входят бонусы в баланс или идут сверху. Теперь два
        отдельных числа, у бонусов свой значок, без плюса. */
     const w = qs("#lkWallet");
-    if (w) w.innerHTML = `<span class="lkd-wal" title="Баланс, монеты">${ICON.wallet}<b>${num(LK_BALANCE.coins)}</b></span>
+    if (w) w.innerHTML = `<span class="lkd-wal" title="Баланс, рубли">${ICON.wallet}<b>${num(LK_BALANCE.coins)}</b></span>
       <span class="lkd-wal lkd-wal--bon" title="Бонусы">${ICON.coins}<b>${num(LK_BALANCE.bonuses)}</b></span>`;
   } else {
     const cta = qs("#lkCta");
@@ -279,8 +279,8 @@ VIEWS["client:dashboard"] = () => {
       </div>
       <div class="lk-panel lkd-money__c">
         <span class="lkd-money__l">Баланс</span>
-        <div class="lkd-money__v"><span class="lkd-money__ic lkd-money__ic--ink">${ICON.wallet}</span><b>${num(LK_BALANCE.coins)}</b><i>монет</i></div>
-        <div class="lkd-money__burn lkd-money__burn--calm"><span>1 монета = 1 рубль, монеты не сгорают</span></div>
+        <div class="lkd-money__v"><span class="lkd-money__ic lkd-money__ic--ink">${ICON.wallet}</span><b>${num(LK_BALANCE.coins)}</b><i>₽</i></div>
+        <div class="lkd-money__burn lkd-money__burn--calm"><span>Рубли на балансе не сгорают</span></div>
         <div class="lkd-money__act">
           <a class="btn btn--solid" href="${href("billing")}" data-go="billing">Пополнить</a>
         </div>
@@ -547,7 +547,7 @@ VIEWS["client:billing"] = () => {
 
   return head("Биллинг")
     + kpi([
-        { label: "Монеты", value: num(LK_BALANCE.coins),   note: "1 монета = 1 рубль, не сгорают" },
+        { label: "Рубли", value: num(LK_BALANCE.coins),   note: "не сгорают" },
         { label: "Бонусы", value: num(LK_BALANCE.bonuses), note: "Сгорают " + LK_BALANCE.bonusBurn }
       ])
     + `<div class="lk-pair">
@@ -564,8 +564,7 @@ VIEWS["client:billing"] = () => {
       <div class="lk-head__act" style="margin-top:16px">
         <button class="btn btn--solid">Пополнить</button>
       </div>
-      <div class="lk-note" style="margin-top:12px">Одна монета — один рубль.
-      Закрывающие документы приходят в момент пополнения, а не после каждой
+      <div class="lk-note" style="margin-top:12px">Закрывающие документы приходят в момент пополнения, а не после каждой
       публикации.${way === "sbp" ? ` За пополнение через СБП начислим ${SBP_BONUS} бонусов.` : ""}</div>`)}
       ${panel("Реквизиты для счетов", `<div class="lk-f">
         ${lockedField("Плательщик", "ООО «Пример»", "Название меняется только через поддержку")}
@@ -590,10 +589,10 @@ VIEWS["client:billing"] = () => {
           </select>
         </div>`
         + (list.length
-          ? table([{ t: "Дата" }, { t: "Операция" }, { t: "Монеты", num: true }, { t: "Бонусы", num: true }], rows)
+          ? table([{ t: "Дата" }, { t: "Операция" }, { t: "Рубли", num: true }, { t: "Бонусы", num: true }], rows)
           : empty("Операций нет", "За этот месяц движений по балансу не было."))
         + `<div class="lk-total"><span>Бонусы тратятся на размещение наравне
-           с монетами, но хотя бы одна монета в каждой публикации уходит
+           с рублями, но хотя бы один рубль в каждой публикации уходит
            реальными деньгами. Чеки и счета приходят на почту.</span></div>`);
 };
 
@@ -1380,6 +1379,9 @@ window.LK_RECOMMENDED_DAYS = 28;
 const aiTerm = AI_ANSWERS.find(a => a[0].test("срок"));
 if (aiTerm) aiTerm[1] = "Советуем 28 дней: за первую неделю купон только набирает показы в ленте и соцсетях. Короткий срок обычно заканчивается раньше, чем о купоне узнают.";
 
+/* Монеты заменили рублями (28.09): в истории операций тоже «10 000 ₽» */
+LK_LEDGER.forEach(r => { r.what = r.what.replace(/Зачислено ([\d\s ]+) монет/, "Пополнение на $1 ₽"); });
+
 /* Тайный покупатель приходит в течение 1–3 дней после публикации (28.09) */
 LK_SECRET.days = "1–3 дней";
 
@@ -1796,6 +1798,14 @@ function wizardExtras(form) {
         form.dispatchEvent(new Event("input", { bubbles: true }));
       }, 0);
     });
+  }
+
+  /* Плашка выгоды на купоне вмещает около 10 знаков: «бесплатно» (9 букв)
+     помещается, а «0 рублей» — не то же самое (28.09) */
+  if (valInput && !valInput.disabled) valInput.maxLength = 10;
+  if (valInput) {
+    const vf = valInput.closest(".lk-l");
+    if (vf && !qs(".lkd-vallen", vf)) vf.insertAdjacentHTML("beforeend", '<span class="lk-note lkd-vallen">До 10 знаков: «бесплатно» помещается.</span>');
   }
 
   /* Поиск по городам и итог «купон будет размещён в …» */

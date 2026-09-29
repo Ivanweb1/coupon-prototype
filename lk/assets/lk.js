@@ -2472,17 +2472,17 @@ function render() {
       const hint = qs("[data-pay-hint]", pay);
       if (hint) {
         if (cap <= 0) {
-          hint.textContent = "Бонусов на балансе нет — размещение целиком монетами.";
+          hint.textContent = "Бонусов на балансе нет — размещение целиком " + (window.LKD_MODE ? "рублями." : "монетами.");
         } else if (bonuses === 0) {
           hint.textContent = "Бонусами пока не платите — доступно " + num(cap) +
             ". Перетащите ползунок вправо, чтобы часть суммы списалась ими.";
         } else if (want > cap) {
           hint.textContent = "Бонусами покрыт максимум — " + num(bonuses) +
             " из " + num(LK_BALANCE.bonuses) + " на балансе. Остальные " +
-            rub(coins) + " — монетами.";
+            rub(coins) + " — " + (window.LKD_MODE ? "рублями." : "монетами.");
         } else {
           hint.textContent = "Бонусами покрыто " + num(bonuses) +
-            ", монетами — " + rub(coins) + ".";
+            ", " + (window.LKD_MODE ? "рублями" : "монетами") + " — " + rub(coins) + ".";
         }
       }
 

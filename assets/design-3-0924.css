@@ -363,21 +363,28 @@
 .val-ticket .dz3 .cpd .cpd__photo .cpd__value.is-long{font-size:14px;white-space:normal;padding:7px 15px}
 
 /* Бейдж «Проверено тайным покупателем»: над плашкой выгоды, с наклоном.
-   Нижний отступ выставляет app.js по высоте плашки. */
+   Той же формы, что плашка выгоды — билетик с вырезами по бокам, чтобы
+   читался парой к ней, а не отдельной кнопкой. С зелёной галочкой:
+   белый билетик: на тёмном снимке тёмный сливался; красная плашка выгоды остаётся главной. Нижний отступ ставит app.js. */
 .verified-flag{
-  position:absolute;left:12px;bottom:56px;z-index:3;
-  display:inline-flex;align-items:center;gap:5px;
-  padding:4px 10px 4px 6px;border-radius:999px;
-  background:#fff;color:var(--brand-600);
-  font-size:12px;font-weight:700;line-height:1.2;white-space:nowrap;
-  transform:rotate(-4deg);transform-origin:left bottom;
-  box-shadow:0 6px 14px -6px rgba(0,0,0,.45);
+  position:absolute;left:10px;bottom:56px;z-index:3;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px 6px 10px;border-radius:10px;
+  background:#fff;color:var(--ink);
+  font-size:13px;font-weight:700;line-height:1.15;white-space:nowrap;
+  transform:rotate(-3deg);transform-origin:left bottom;
+  -webkit-mask:
+    radial-gradient(circle 6px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 6px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle 6px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 6px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
   pointer-events:none;
 }
 .verified-flag i{
-  display:grid;place-items:center;width:15px;height:15px;border-radius:50%;
-  background:var(--brand);color:#fff;font-style:normal;font-size:9.5px;line-height:1;
+  display:grid;place-items:center;width:16px;height:16px;border-radius:50%;
+  background:#1f9d55;color:#fff;font-style:normal;font-size:10px;line-height:1;
 }
 @container (max-width: 235px){
-  .verified-flag{left:8px;font-size:11px;padding:3px 8px 3px 5px}
+  .verified-flag{left:8px;font-size:12px;padding:5px 11px 5px 8px}
 }
