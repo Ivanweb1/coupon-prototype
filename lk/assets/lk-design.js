@@ -173,7 +173,44 @@ window.renderChrome = function () {
     const cta = qs("#lkCta");
     if (cta) cta.lastElementChild.textContent = "Выдать реферальный код";
   }
+
+  sideFoot();
 };
+
+/* Низ бургер-меню на телефоне (Иван 30.09): в шапке на узком экране
+   от кошелька и профиля остаются одни значки, поэтому в меню дублируем
+   полностью — баланс и бонусы, главную кнопку, профиль и выход. На
+   десктопе этот блок скрыт: там всё это и так стоит в шапке. */
+function sideFoot() {
+  const side = qs("#lkSide");
+  if (!side) return;
+  const old = qs(".lkd-sidefoot", side);
+  if (old) old.remove();
+  const acc = IS_CLIENT
+    ? { ava: LK_COMPANY.ava, name: LK_COMPANY.name, sub: "ИНН " + LK_COMPANY.inn }
+    : { ava: "ИП", name: "Иван Партнёров", sub: "Партнёр · Липецк" };
+  const el = document.createElement("div");
+  el.className = "lkd-sidefoot";
+  el.innerHTML = (IS_CLIENT ? `
+      <a class="lkd-sidefoot__money" href="${href("billing")}" data-side-go="billing">
+        <span class="lkd-sidefoot__row"><span class="lkd-sidefoot__ic">${ICON.wallet}</span><span>Баланс</span><b>${rub(LK_BALANCE.coins)}</b></span>
+        <span class="lkd-sidefoot__row"><span class="lkd-sidefoot__ic lkd-sidefoot__ic--bon">${ICON.coins}</span><span>Бонусы</span><b>${num(LK_BALANCE.bonuses)}</b></span>
+      </a>
+      <button type="button" class="btn btn--solid btn--wide" data-side-create>Создать купон</button>`
+    : `<button type="button" class="btn btn--solid btn--wide" data-side-go="codes">Выдать реферальный код</button>`) + `
+    <div class="lkd-sidefoot__me">
+      <a class="lkd-sidefoot__prof" href="${href("profile")}" data-side-go="profile">
+        <span class="lk__me-ava">${acc.ava}</span>
+        <span class="lkd-sidefoot__who"><b>${acc.name}</b><span>${acc.sub}</span></span>
+      </a>
+      <a class="lkd-sidefoot__exit" href="${window.LKD_LOGOUT || "../index.html"}">${ICON.exit || ""}<span>Выйти</span></a>
+    </div>`;
+  side.appendChild(el);
+  const close = () => document.body.classList.remove("lk-nav-open");
+  qsa("[data-side-go]", el).forEach(a => a.onclick = e => { e.preventDefault(); close(); go(a.dataset.sideGo); });
+  const create = qs("[data-side-create]", el);
+  if (create) create.onclick = () => { close(); openCreateModal(); };
+}
 
 /* ==========================================================================
    КАБИНЕТ РЕКЛАМОДАТЕЛЯ
@@ -519,9 +556,9 @@ VIEWS["client:stats"] = () => {
         ${panel(D.coupon === "all" ? "Все купоны по дням" : (picked[0] || {}).title || "Купон",
           `<div class="lkd-ch__box" data-chart></div>` + legend)}
       </div>${adSlot("stats")}</div>`
-    + panel("По купонам",
+    + panel("По купонам", `<div class="lkd-bycoupon">` +
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
-               { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }], rows));
+               { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }], rows) + `</div>`);
 };
 
 /* --------------------------------------------------------------------------
@@ -1932,10 +1969,25 @@ function wizardExtras(form) {
   const secretCb = qs('[data-f="secret"]', form);
   const pvMedia = qs("[data-pv-media]", form);
   if (secretCb && pvMedia) {
-    pvMedia.insertAdjacentHTML("beforeend", '<span class="lkd-verified" data-pv-verified hidden><i aria-hidden="true">✓</i> Проверено</span>');
+    pvMedia.insertAdjacentHTML("beforeend", '<span class="lkd-verified" data-pv-verified hidden><i aria-hidden="true">✓</i><span class="lkd-verified__t">Проверено</span></span>');
     const badge = qs("[data-pv-verified]", pvMedia);
-    const paint = () => { badge.hidden = !secretCb.checked; };
+    const val = qs("#pvVal", pvMedia);
+    /* Как на публичке: справа от плашки выгоды, той же высоты; не
+       помещается — одна галочка */
+    const paint = () => {
+      badge.hidden = !secretCb.checked;
+      if (badge.hidden || !val) return;
+      const h = val.offsetHeight;
+      badge.classList.remove("is-compact");
+      badge.style.height = h + "px";
+      badge.style.bottom = (pvMedia.clientHeight - val.offsetTop - h) + "px";
+      badge.style.left = (val.offsetLeft + val.offsetWidth + 6) + "px";
+      if (val.offsetLeft + val.offsetWidth + 6 + badge.offsetWidth > pvMedia.clientWidth - 12) badge.classList.add("is-compact");
+    };
     secretCb.addEventListener("change", paint);
+    form.addEventListener("input", () => requestAnimationFrame(paint));
+    form.addEventListener("change", () => requestAnimationFrame(paint));
+    window.addEventListener("resize", paint);
     paint();
   }
 
@@ -2036,6 +2088,24 @@ window.calcFee = function (nicheName, names, days, chans, secret) {
   }
   return baseCalcFee(nicheName, names, days, chans, secret);
 };
+
+/* Таблицы на телефоне складываются в карточки (Иван 30.09): каждой ячейке
+   ставим подпись из шапки таблицы — CSS показывает её над значением.
+   Считаем после каждой перерисовки раздела. */
+function labelCells(root) {
+  qsa(".lk-t", root).forEach(t => {
+    const heads = qsa("thead th", t).map(th => th.textContent.trim());
+    qsa("tbody tr", t).forEach(tr => qsa(":scope > td", tr).forEach((td, i) => {
+      if (heads[i] && !td.dataset.label) td.dataset.label = heads[i];
+    }));
+  });
+}
+document.addEventListener("DOMContentLoaded", () => {
+  const view = qs("#lkView");
+  if (!view) return;
+  new MutationObserver(() => labelCells(view)).observe(view, { childList: true, subtree: true });
+  labelCells(view);
+});
 
 const baseInitCB = window.initCouponBuilder;
 window.initCouponBuilder = function (host) {

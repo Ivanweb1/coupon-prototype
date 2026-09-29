@@ -362,29 +362,31 @@
 }
 .val-ticket .dz3 .cpd .cpd__photo .cpd__value.is-long{font-size:14px;white-space:normal;padding:7px 15px}
 
-/* Бейдж «Проверено тайным покупателем»: над плашкой выгоды, с наклоном.
-   Той же формы, что плашка выгоды — билетик с вырезами по бокам, чтобы
-   читался парой к ней, а не отдельной кнопкой. С зелёной галочкой:
-   белый билетик: на тёмном снимке тёмный сливался; красная плашка выгоды остаётся главной. Нижний отступ ставит app.js. */
+/* Бейдж «Проверено тайным покупателем»: справа от плашки выгоды, на той
+   же линии и той же высоты (Иван 30.09). Форма та же — билетик с вырезами,
+   белый с зелёной галочкой: красная плашка выгоды остаётся главной.
+   Место, высоту и узкий вариант (одна галочка) ставит app.js. */
 .verified-flag{
-  position:absolute;left:10px;bottom:56px;z-index:3;
+  position:absolute;left:10px;bottom:10px;z-index:3;box-sizing:border-box;
   display:inline-flex;align-items:center;gap:6px;
-  padding:6px 14px 6px 10px;border-radius:10px;
+  padding:0 14px 0 11px;border-radius:10px;
   background:#fff;color:var(--ink);
-  font-size:13px;font-weight:700;line-height:1.15;white-space:nowrap;
-  transform:rotate(-3deg);transform-origin:left bottom;
+  font-size:14px;font-weight:700;line-height:1;white-space:nowrap;
   -webkit-mask:
-    radial-gradient(circle 6px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
-    radial-gradient(circle 6px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
           mask:
-    radial-gradient(circle 6px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
-    radial-gradient(circle 6px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
   pointer-events:none;
 }
 .verified-flag i{
-  display:grid;place-items:center;width:16px;height:16px;border-radius:50%;
-  background:#1f9d55;color:#fff;font-style:normal;font-size:10px;line-height:1;
+  display:grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;
+  background:#1f9d55;color:#fff;font-style:normal;font-size:11px;line-height:1;
 }
+.verified-flag.is-compact{padding:0 11px;gap:0}
+.verified-flag.is-compact .verified-flag__t{display:none}
 @container (max-width: 235px){
-  .verified-flag{left:8px;font-size:12px;padding:5px 11px 5px 8px}
+  .verified-flag{font-size:12px;padding:0 10px 0 8px}
+  .verified-flag i{width:15px;height:15px;font-size:9.5px}
 }

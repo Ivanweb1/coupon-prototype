@@ -698,18 +698,27 @@ const VALUE_SHAPE = (location.search.match(/[?&]value=(ticket|round|plate)/) ||
 
 /* Текстовый оффер («Первый визит бесплатно») на билетике набираем мельче,
    чтобы он не закрыл полкартинки. Цифровые («−30%», «1+1») — крупно. */
-/* Бейдж «Проверено» (тайный покупатель): над плашкой выгоды, с наклоном.
-   Плашка бывает в одну, две и три строки, поэтому высоту под неё
+/* Бейдж «Проверено» (тайный покупатель): справа от плашки выгоды, той же
+   высоты. Плашка бывает в одну, две и три строки, поэтому место и высоту
    подставляет placeVerified() ниже, а не CSS. */
 function verifiedFlag(c) {
-  return c.verified ? '<span class="verified-flag" title="Проверено тайным покупателем"><i aria-hidden="true">✓</i> Проверено</span>' : "";
+  return c.verified ? '<span class="verified-flag" title="Проверено тайным покупателем"><i aria-hidden="true">✓</i><span class="verified-flag__t">Проверено</span></span>' : "";
 }
 function placeVerified() {
+  /* Рядом со скидкой, на той же линии и той же высоты (Иван 30.09). Если
+     места справа нет — узкая карточка, длинная выгода, — остаётся одна
+     галочка того же размера. */
   document.querySelectorAll(".verified-flag").forEach(f => {
     const badge = f.parentElement.querySelector(".card__badge, .quick__value");
     if (!badge) return;
-    const gap = f.closest(".quick__photo") ? 12 : 10;
-    f.style.bottom = (badge.offsetHeight + gap + 6) + "px";
+    const box = f.parentElement;
+    const h = badge.offsetHeight;
+    f.classList.remove("is-compact");
+    f.style.height = h + "px";
+    f.style.bottom = (box.clientHeight - badge.offsetTop - h) + "px";
+    f.style.left = (badge.offsetLeft + badge.offsetWidth + 6) + "px";
+    /* справа в углу стоит фирменный знак — ему нужно ~36px */
+    if (badge.offsetLeft + badge.offsetWidth + 6 + f.offsetWidth > box.clientWidth - 36) f.classList.add("is-compact");
   });
 }
 (function watchVerified() {

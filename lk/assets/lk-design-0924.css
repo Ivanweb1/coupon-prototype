@@ -322,7 +322,11 @@
    карточка держала свои 20px сверху и 108px снизу — и отступы читались
    кривыми. Теперь у всех карточек поля одинаковые, а разной высоты
    столбцы сходятся за счёт промежутка. */
-.lkd .lk-pair > div:not(.lk-panel) > .lkd-sub:last-child{margin-top:auto}
+/* 30.09: прижатие к низу оставляло дыру над карточкой подписки. Столбец
+   теперь своей высоты, блоки идут подряд с одним шагом 16px, а пара
+   отделена от следующей панели тем же шагом. */
+.lkd .lk-pair > div:not(.lk-panel){align-self:start}
+.lkd .lk-pair{margin-bottom:16px}
 
 /* Список уведомлений в две колонки (кабинет партнёра). Первая строка —
    это первые две карточки, у обеих верхней границы нет. */
@@ -409,7 +413,16 @@
 .lkd-wizbar__bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .2s var(--ease)}
 .lkd-wizbar__r{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
 .lkd-wizbar__r b{font-size:18px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:normal}
-@media (max-width:560px){.lkd-wizbar{flex-direction:column;align-items:stretch;gap:8px}}
+/* На телефоне — одна строка, как на десктопе: слева прогресс (подпись,
+   проценты и полоска под ними), справа итог. Столбиком строка занимала
+   пол-экрана и цифры стояли вразнобой. */
+@media (max-width:560px){
+  .lkd-wizbar{gap:14px;padding:10px 14px}
+  .lkd-wizbar__l{flex:1 1 auto;grid-template-columns:1fr auto}
+  .lkd-wizbar__r{flex:none;flex-direction:column;align-items:flex-end;gap:0}
+  .lkd-wizbar__r span{font-size:12px}
+  .lkd-wizbar__r b{font-size:17px;line-height:1.2}
+}
 
 /* Уведомления: «обязательно» у почты, подписка на наши каналы */
 .lkd-must{font-style:normal;font-size:11.5px;color:var(--ink-3);margin-left:4px}
@@ -523,58 +536,91 @@
 .lkd-off{display:none!important}
 @media (max-width:560px){.lkd-promo__row{flex-direction:column}}
 
-/* Бейдж «Проверено» на превью: над плашкой выгоды, с наклоном */
+/* Бейдж «Проверено» на превью — как на публичке: справа от плашки выгоды,
+   той же высоты, билетиком. Место и высоту ставит lk-design.js. */
 .lkd-verified{
-  position:absolute;left:12px;bottom:62px;z-index:3;
-  display:inline-flex;align-items:center;gap:5px;
-  padding:5px 11px 5px 8px;border-radius:999px;
-  background:#fff;color:var(--brand-600);
-  font-size:12.5px;font-weight:700;letter-spacing:.01em;
-  transform:rotate(-4deg);
-  box-shadow:0 6px 14px -6px rgba(0,0,0,.45);
+  position:absolute;left:12px;bottom:12px;z-index:3;box-sizing:border-box;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:0 14px 0 11px;border-radius:10px;
+  background:#fff;color:var(--ink);
+  font-size:14px;font-weight:700;line-height:1;white-space:nowrap;
+  -webkit-mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle 5px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 5px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
 }
 .lkd-verified i{
-  display:grid;place-items:center;width:16px;height:16px;border-radius:50%;
-  background:var(--brand);color:#fff;font-style:normal;font-size:10px;line-height:1;
+  display:grid;place-items:center;flex:none;width:18px;height:18px;border-radius:50%;
+  background:#1f9d55;color:#fff;font-style:normal;font-size:11px;line-height:1;
 }
+.lkd-verified.is-compact{padding:0 11px;gap:0}
+.lkd-verified.is-compact .lkd-verified__t{display:none}
 
 /* Плашка «Анкета о компании» не должна закрывать строку с ценой: в
    конструкторе она встаёт над ней */
 body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 @media (max-width:1000px){
-  body:has(.lkd-wizbar) .lk-pill{bottom:104px}
+  body:has(.lkd-wizbar) .lk-pill{bottom:84px}
 }
 
-/* «Мои купоны» на телефоне: вместо таблицы с боковой прокруткой (название
-   сжималось в узкий столбец после колонки действий) — карточка на купон:
-   название сверху, цифры парами, кнопки внизу. */
+/* «Мои купоны» на телефоне — карточка на купон (Иван 30.09: «неаккуратно»).
+   Сетка из двух колонок с именованными областями: название во всю
+   ширину, под ним статус и выгода одной строкой, потом срок, потом
+   показы и «забрали» парой, кнопки внизу. Подписи у всех значений одного
+   вида, значения одного размера — чтобы строки читались ровно. */
 @media (max-width:700px){
-  .lkd .lk-t:has(tr[data-coupon]) thead{display:none}
-  .lkd .lk-t:has(tr[data-coupon]),
-  .lkd .lk-t:has(tr[data-coupon]) tbody{display:block;width:100%;min-width:0}
-  .lkd .lk-t tr[data-coupon]{
-    display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;
-    padding:16px 0;border-top:1px solid var(--line);
+  .lkd .lk-t:has(td.lk-t__acts) thead{display:none}
+  .lkd .lk-t:has(td.lk-t__acts),
+  .lkd .lk-t:has(td.lk-t__acts) tbody{display:block;width:100%;min-width:0}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts){
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-areas:"t t" "st st" "m d" "sh tk" "a a";
+    gap:12px 16px;padding:18px 0;border-top:1px solid var(--line);
   }
-  .lkd .lk-t tr[data-coupon] > td{display:block;padding:0;border:0;min-width:0;text-align:left}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(2){grid-column:1 / -1;order:1}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(4){order:2}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(3){order:3}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(5){grid-column:1 / -1;order:4}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(6){order:5}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(7){order:6}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(1){grid-column:1 / -1;order:7;width:auto;white-space:normal;display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(1) > *{flex:1 1 140px;width:auto;height:auto;border-radius:var(--r-pill)}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(3)::before,
-  .lkd .lk-t tr[data-coupon] > td:nth-child(5)::before,
-  .lkd .lk-t tr[data-coupon] > td:nth-child(6)::before,
-  .lkd .lk-t tr[data-coupon] > td:nth-child(7)::before{
-    display:block;margin-bottom:2px;font-size:12px;font-weight:400;color:var(--ink-3);
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts):first-child{border-top:0;padding-top:4px}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td{display:block;padding:0;border:0;min-width:0;text-align:left;font-size:14px;line-height:1.35}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(2){grid-area:t}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(2) .lk-t__title{display:block;font-size:15.5px;font-weight:600;line-height:1.3}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(2) .lk-t__sub{display:block;margin-top:3px;font-size:12.5px}
+  /* Статус — строкой под названием; дальше пары «подпись — значение»:
+     механика и срок, показы и «забрали» */
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(4){grid-area:st;margin-top:-4px}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(4) .lk-t__sub{margin-top:4px;font-size:12px}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(3){grid-area:m}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(3){font-size:13.5px}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(3) .lk-t__sub{display:block;margin:5px 0 0}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(3) .lk-chip{padding:1px 8px;font-size:12px;vertical-align:1px}
+  /* Срок, показы, «забрали»: подпись сверху, значение под ней */
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(5){grid-area:d;font-size:13.5px}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(6){grid-area:sh}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(7){grid-area:tk}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(5) .lk-erid{display:none}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(3)::before,
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(5)::before,
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(6)::before,
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(7)::before{
+    display:block;margin-bottom:3px;font-size:12px;font-weight:400;color:var(--ink-3);
   }
-  .lkd .lk-t tr[data-coupon] > td:nth-child(3)::before{content:"Механика"}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(5)::before{content:"Срок"}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(6)::before{content:"Показы"}
-  .lkd .lk-t tr[data-coupon] > td:nth-child(7)::before{content:"Забрали"}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(3)::before{content:"Механика"}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(5)::before{content:"Срок"}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(6)::before{content:"Показы"}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(7)::before{content:"Забрали"}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(6),
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(7){font-weight:600;color:var(--ink)}
+  /* Кнопки — во всю ширину; если действий нет («—»), строки нет */
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(1){grid-area:a;width:auto;white-space:normal;display:flex;flex-wrap:wrap;gap:8px}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(1):not(:has(a,button)){display:none}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(1) .lk-acts{flex:1 1 auto;flex-direction:row;flex-wrap:wrap;gap:8px}
+  .lkd .lk-t tr[data-coupon]:has(> td.lk-t__acts) > td:nth-child(1) .lk-acts .btn{flex:1 1 140px;height:40px;font-size:14px}
+  /* Фильтры статусов — одной строкой с прокруткой, как лента категорий на витрине */
+  /* Раздел, сортировка и поиск — во всю ширину, друг под другом */
+  .lkd .lk-tools{display:grid;grid-template-columns:1fr;gap:8px}
+  .lkd .lk-tools > *{width:100%;max-width:none}
+  .lkd .lk-filters{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 14px;padding:0 16px 2px;scrollbar-width:none}
+  .lkd .lk-filters::-webkit-scrollbar{display:none}
+  .lkd .lk-filters button{flex:none;white-space:nowrap}
 }
 
 /* Рекламное место: на десктопе одна карточка, на телефоне и планшете —
@@ -604,3 +650,103 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 }
 /* hidden должен побеждать display:inline-flex — бейдж только при галочке */
 .lkd-verified[hidden]{display:none}
+
+/* Низ бургер-меню на телефоне: баланс, главная кнопка, профиль, выход */
+.lkd-sidefoot{display:none}
+@media (max-width:900px){
+  /* Меню — колонка фиксированной высоты: без flex:none пункты и кнопки
+     сжимались по высоте, а не прокручивались */
+  .lk__side > *{flex-shrink:0}
+  .lkd-sidefoot{
+    display:flex;flex-direction:column;gap:12px;flex:none;
+    margin-top:auto;padding-top:16px;border-top:1px solid var(--line);
+  }
+  .lkd-sidefoot__money{
+    display:flex;flex-direction:column;gap:8px;padding:12px 14px;
+    border-radius:var(--r-md);background:var(--surface);color:var(--ink-2);font-size:14px;
+  }
+  .lkd-sidefoot__row{display:flex;align-items:center;gap:10px}
+  .lkd-sidefoot__row b{margin-left:auto;font-weight:700;color:var(--ink)}
+  .lkd-sidefoot__ic{display:grid;place-items:center;width:22px;color:var(--ink-2)}
+  .lkd-sidefoot__ic--bon{color:var(--brand)}
+  .lkd-sidefoot .btn{flex:none;height:44px;width:100%}
+  .lkd-sidefoot__me{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+  .lkd-sidefoot__prof{display:flex;align-items:center;gap:10px;flex:1 1 auto;min-width:0;color:var(--ink)}
+  .lkd-sidefoot__who{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+  .lkd-sidefoot__who b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lkd-sidefoot__who span{font-size:12px;color:var(--ink-3)}
+  .lkd-sidefoot__exit{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;
+    height:40px;padding:0 14px;border-radius:var(--r-pill);
+    border:1px solid var(--line);font-size:13px;color:var(--ink-2);
+  }
+  .lkd-sidefoot__exit:hover{color:var(--ink);border-color:var(--ink-3)}
+}
+
+/* Статистика на телефоне: плитки цифр по две в ряд, фильтры во всю
+   ширину, таблица «По купонам» — карточками вместо прокрутки вбок */
+@media (max-width:700px){
+  .lkd .lk-kpi{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .lkd .lk-kpi .lk-kpi__v{font-size:24px}
+  .lk-head__act .lkd-filters{display:grid;grid-template-columns:1fr;width:100%}
+  .lk-head__act .lkd-filters .lk-s{max-width:none;width:100%}
+  .lkd-bycoupon .lk-tw{margin:0;padding:0;overflow:visible}
+  .lkd-bycoupon .lk-t{display:block;min-width:0}
+  .lkd-bycoupon thead{display:none}
+  .lkd-bycoupon tbody{display:block}
+  .lkd-bycoupon tr{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-areas:"t t" "st st" "a b" "c d";
+    gap:10px 16px;padding:16px 0;border-top:1px solid var(--line);
+  }
+  .lkd-bycoupon tr:first-child{border-top:0;padding-top:4px}
+  .lkd-bycoupon td{display:block;padding:0;border:0;min-width:0;text-align:left;font-size:14px}
+  .lkd-bycoupon td:nth-child(1){grid-area:t}
+  .lkd-bycoupon td:nth-child(1) .lk-t__title,.lkd-bycoupon td:nth-child(1) b{font-size:15px;font-weight:600}
+  .lkd-bycoupon td:nth-child(2){grid-area:st;margin-top:-4px}
+  .lkd-bycoupon td:nth-child(3){grid-area:a}
+  .lkd-bycoupon td:nth-child(4){grid-area:b}
+  .lkd-bycoupon td:nth-child(5){grid-area:c}
+  .lkd-bycoupon td:nth-child(6){grid-area:d}
+  .lkd-bycoupon td:nth-child(n+3){font-weight:600;color:var(--ink)}
+  .lkd-bycoupon td:nth-child(n+3)::before{display:block;margin-bottom:3px;font-size:12px;font-weight:400;color:var(--ink-3)}
+  .lkd-bycoupon td:nth-child(3)::before{content:"Показы"}
+  .lkd-bycoupon td:nth-child(4)::before{content:"Просмотры"}
+  .lkd-bycoupon td:nth-child(5)::before{content:"Забрали"}
+  .lkd-bycoupon td:nth-child(6)::before{content:"Переходы"}
+}
+@media (max-width:700px){
+  .lkd .lkd-bycoupon td.num,.lkd .lkd-bycoupon td.num::before{text-align:left}
+  .lkd .lk-head:has(.lkd-filters) .lk-head__act{width:100%;margin-left:0}
+}
+
+/* Остальные таблицы кабинета на телефоне — карточками: первая колонка —
+   заголовок строки, остальные парами «подпись — значение» (подписи из
+   data-label, их ставит lk-design.js), кнопки — во всю ширину. «Мои
+   купоны» и «По купонам» разложены своими правилами выше. */
+@media (max-width:700px){
+  .lkd .lk-tw:has(.lk-t:not(:has(td.lk-t__acts))):not(.lkd-bycoupon *){margin:0;padding:0;overflow:visible}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)){display:block;min-width:0}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) thead{display:none}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) tbody{display:block}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) tr{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px;
+    padding:14px 0;border-top:1px solid var(--line);
+  }
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) tr:first-child{border-top:0;padding-top:4px}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) td{
+    display:block;padding:0;border:0;min-width:0;width:auto;text-align:left;font-size:14px;line-height:1.35;white-space:normal;
+  }
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) td:first-child{grid-column:1 / -1;font-weight:600}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) td:first-child .lk-t__sub{font-weight:400}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) td:not(:first-child)[data-label]::before{
+    content:attr(data-label);display:block;margin-bottom:3px;
+    font-size:12px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink-3);
+  }
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) td:has(.btn){grid-column:1 / -1}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) td:has(.btn)::before{display:none}
+  .lkd :not(.lkd-bycoupon) > .lk-tw .lk-t:not(:has(td.lk-t__acts)) td .btn{width:100%}
+  /* Кнопка «Подробнее» под заголовком дашборда — слева, под текстом */
+  .lkd .lk-head{flex-wrap:wrap}
+  .lkd .lk-head__act{margin-left:0}
+}
