@@ -750,3 +750,28 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   .lkd .lk-head{flex-wrap:wrap}
   .lkd .lk-head__act{margin-left:0}
 }
+
+/* Предложения в кабинете партнёра на телефоне — две карточки в ряд, как
+   лента на публичке: купон и баннер в том же компактном виде (Иван 30.09) */
+@media (max-width:560px){
+  .lkd-offers__row{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .lkd-offers__row .lkd-ad__media{border-radius:14px}
+  .lkd-offers__row .lkd-ad__corner{left:8px;top:8px;padding:4px 8px;font-size:10px}
+  .lkd-offers__row .lkd-ad__erid{display:none}
+  .lkd-offers__row .lkd-ad__badge{left:8px;bottom:8px;padding:5px 11px 6px;font-size:13px}
+  .lkd-offers__row .lkd-ad__body{gap:4px;padding-top:8px}
+  .lkd-offers__row .lkd-ad__title{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .lkd-offers__row .lkd-ad__meta{font-size:0;white-space:nowrap;overflow:hidden}
+  .lkd-offers__row .lkd-ad__meta b{font-size:11.5px;overflow:hidden;text-overflow:ellipsis}
+  .lkd-offers__row .lkd-ad__meta .dot{display:none}
+  .lkd-offers__row .lkd-ad__acts{grid-template-columns:1fr}
+  .lkd-offers__row .lkd-ad__acts .btn--ghost{display:none}
+  .lkd-offers__row .lkd-ad__acts .btn{height:36px;font-size:13px}
+  /* Баннер той же высоты, что и купон рядом: текст мельче, лишнее срезаем */
+  .lkd-offers__row .lkd-ad--banner{padding:14px;gap:6px;border-radius:14px}
+  .lkd-offers__row .lkd-ad--banner .lkd-ad__label{font-size:9.5px}
+  .lkd-offers__row .lkd-ad--banner .lkd-ad__kicker{font-size:10px}
+  .lkd-offers__row .lkd-ad--banner .lkd-ad__h{font-size:16px;line-height:1.15}
+  .lkd-offers__row .lkd-ad--banner p{font-size:12px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .lkd-offers__row .lkd-ad--banner .btn{height:36px;font-size:13px;margin-top:4px}
+}
