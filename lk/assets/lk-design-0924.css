@@ -356,17 +356,31 @@
 
 /* Тайный покупатель — рекламный блок, а не каталожный: это раздел
    дополнительной монетизации, он должен выделяться на общей серости. */
-.lkd .lk-secret{background:var(--ink);border-color:var(--ink);color:#fff}
-.lkd .lk-secret__k{color:var(--brand-300)}
+.lkd .lk-secret{position:relative;overflow:hidden;background:var(--brand);border-color:var(--brand);color:#fff}
+.lkd .lk-secret > *:not(.lkd-secret__balloon){position:relative;z-index:1}
+.lkd-secret__balloon{
+  position:absolute;right:-14px;bottom:-44px;height:150px;width:auto;
+  opacity:.9;transform:rotate(8deg);pointer-events:none;
+  animation:lkdFloat 7s ease-in-out infinite;
+}
+@keyframes lkdFloat{0%,100%{transform:translateY(0) rotate(8deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+@media (prefers-reduced-motion:reduce){.lkd-secret__balloon{animation:none}}
+.lkd .lk-secret__list,.lkd .lk-secret__foot,.lkd .lk-secret > .lk-note{padding-right:96px}
+@media (max-width:640px){
+  .lkd-secret__balloon{height:110px;opacity:.4}
+  .lkd .lk-secret__list,.lkd .lk-secret__foot,.lkd .lk-secret > .lk-note{padding-right:0}
+}
+.lkd .lk-secret__k{color:rgba(255,255,255,.8)}
 .lkd .lk-secret__h{color:#fff}
-.lkd .lk-secret__badge{background:var(--brand);color:#fff}
-.lkd .lk-secret__list{color:rgba(255,255,255,.78)}
-.lkd .lk-secret .lk-note{color:rgba(255,255,255,.55)}
-.lkd .lk-secret__foot{border-top-color:rgba(255,255,255,.18)}
+.lkd .lk-secret__badge{background:#fff;color:var(--brand-600)}
+.lkd .lk-secret__list{color:rgba(255,255,255,.92)}
+.lkd .lk-secret .lk-note{color:rgba(255,255,255,.8)}
+.lkd .lk-secret__foot{border-top-color:rgba(255,255,255,.3)}
 .lkd .lk-secret__foot b{color:#fff}
 .lkd .lk-secret .lk-ch span{color:#fff}
-.lkd .lk-secret .lk-ch input{border-color:rgba(255,255,255,.45)}
-.lkd .lk-secret .lk-ch.is-on input{background:var(--brand);border-color:var(--brand)}
+.lkd .lk-secret .lk-ch input{accent-color:#fff}
+.lkd .lk-secret .lk-ch:hover{background:rgba(255,255,255,.14)}
+.lkd .lk-secret .lk-ch.is-on{color:#fff}
 
 /* Прогресс и цена — закреплённой строкой под превью */
 .lkd-wizbar{

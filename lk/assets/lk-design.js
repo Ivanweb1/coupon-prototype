@@ -1376,6 +1376,10 @@ LK_DURATIONS.push(
   { days: 28, label: "28 дней", k: 6.2 });
 window.LK_RECOMMENDED_DAYS = 28;
 
+/* Совет ИИ про срок: тридцати дней больше нет, потолок — 28 (28.09) */
+const aiTerm = AI_ANSWERS.find(a => a[0].test("срок"));
+if (aiTerm) aiTerm[1] = "Советуем 28 дней: за первую неделю купон только набирает показы в ленте и соцсетях. Короткий срок обычно заканчивается раньше, чем о купоне узнают.";
+
 /* Тайный покупатель приходит в течение 1–3 дней после публикации (28.09) */
 LK_SECRET.days = "1–3 дней";
 
@@ -1509,6 +1513,8 @@ function patchWizard(form) {
   const secret = qs(".lk-secret", form);
   if (secret) {
     secret.classList.add("lkd-secret");
+    /* Шар из логотипа — тот же, что у красного рекламного блока на главной */
+    secret.insertAdjacentHTML("afterbegin", '<img class="lkd-secret__balloon" src="../assets/brand/logo-white.png" alt="" width="357" height="600" aria-hidden="true">');
     const list = qs(".lk-secret__list", secret);
     if (list) list.innerHTML = (isMarket
       ? ["К вам на страницу товара зайдёт живой человек и применит промокод, как обычный покупатель",
