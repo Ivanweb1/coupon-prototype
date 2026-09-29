@@ -1578,17 +1578,26 @@ function wizardExtras(form) {
       const cfg = MECH_VALUE[m.id] || {};
       hint.textContent = cfg.hint || "";
       hint.hidden = !cfg.hint;
-      valField.hidden = !!cfg.hide;
-      row.classList.toggle("lkd-onecol", !!cfg.hide);
+      /* Поле остаётся на месте: рядом с механикой, в одну строку, как у
+         остальных пар. У подарка и «2 = 1» оно просто закрыто, а образец
+         на нём подсказывает, что встанет на купоне. */
+      valInput.disabled = !!cfg.hide;
+      valField.classList.toggle("lkd-locked", !!cfg.hide);
+      qs(".lk-l__t", valField).textContent = cfg.hide ? "Величина скидки" : (cfg.label || "Величина");
       if (cfg.hide) {
-        /* Поле спрятано, но величина купону нужна — ставим образец механики,
-           иначе прогресс заполнения встанет на месте */
+        valInput.dataset.auto = "1";
         if (valInput.value !== m.sample) {
           valInput.value = m.sample;
           valInput.dispatchEvent(new Event("input", { bubbles: true }));
         }
       } else {
-        qs(".lk-l__t", valField).textContent = cfg.label || "Величина";
+        /* Вернулись к механике с величиной: образец от прошлой механики
+           («Подарок», «2 = 1») с поля убираем */
+        if (valInput.dataset.auto) {
+          delete valInput.dataset.auto;
+          valInput.value = "";
+          valInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
         valInput.placeholder = cfg.ph || m.sample;
       }
     };

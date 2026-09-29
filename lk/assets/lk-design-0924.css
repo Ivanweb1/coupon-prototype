@@ -349,8 +349,8 @@
 /* «Адреса нет» и спрятанные под ним адреса */
 .lkd-noaddr{border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:4px}
 .lkd-off{display:none}
-/* Ряд, в котором осталось одно поле: величину у подарка прячем */
-.lkd-onecol{grid-template-columns:minmax(0,1fr)}
+/* Величина у подарка и «2 = 1» закрыта, но стоит в той же строке */
+.lkd-locked .lk-i{background:var(--surface);color:var(--ink-3);cursor:default}
 .lkd-mechhint{margin-top:-4px}
 .lkd-usenote b{font-weight:600;color:var(--ink-2)}
 
