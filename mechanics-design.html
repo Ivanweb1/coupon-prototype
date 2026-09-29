@@ -21,7 +21,7 @@
   .mx-cap{display:block;margin:0 0 10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
   /* Точная сетка ленты на телефоне 390px: поля по 16px, две колонки */
   .mx-phone{max-width:358px}
-  .mx-phone .grid{grid-template-columns:repeat(2,170px);gap:18px 18px}
+  .mx-phone .grid{grid-template-columns:repeat(2,minmax(0,170px));gap:18px 18px}
   .mx-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
   @media (max-width:1100px){.mx-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
   @media (max-width:700px){.mx-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}

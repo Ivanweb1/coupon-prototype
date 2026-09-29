@@ -68,14 +68,14 @@
    Высоту столбца карточка отрабатывает иначе: остаётся у верхнего края и
    едет вместе с прокруткой, как превью в мастере, — место под ней не
    пустует, пока читаешь длинный левый столбец. */
-.lkd-dash > .lkd-ad{align-self:start;position:sticky;top:calc(var(--header-h) + 20px)}
+.lkd-dash > .lkd-ad,.lkd-dash > .lkd-adpair{align-self:start;position:sticky;top:calc(var(--header-h) + 20px)}
 /* Статистика: панель во всю высоту столбца, график забирает остаток */
 .lkd-dash--chart .lk-panel{display:flex;flex-direction:column;height:100%}
 @media (max-width:1100px){.lkd-dash{grid-template-columns:minmax(0,1fr) 260px}}
 @media (max-width:900px){
   .lkd-dash{grid-template-columns:1fr}
   /* В одну колонку карточка идёт своей очередью, липнуть ей не к чему */
-  .lkd-dash > .lkd-ad{max-width:340px;position:static}
+  .lkd-dash > .lkd-ad,.lkd-dash > .lkd-adpair{position:static}
 }
 
 /* Компактная полоса показателей (дашборд партнёра): семь плиток в один
@@ -575,4 +575,30 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   .lkd .lk-t tr[data-coupon] > td:nth-child(5)::before{content:"Срок"}
   .lkd .lk-t tr[data-coupon] > td:nth-child(6)::before{content:"Показы"}
   .lkd .lk-t tr[data-coupon] > td:nth-child(7)::before{content:"Забрали"}
+}
+
+/* Рекламное место: на десктопе одна карточка, на телефоне и планшете —
+   две в ряд, как лента на публичке (Иван 30.09) */
+.lkd-adpair{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;min-width:0}
+.lkd-ad--m2{display:none}
+@media (max-width:900px){
+  .lkd-adpair{grid-template-columns:repeat(2,minmax(0,1fr));max-width:560px}
+  .lkd-ad--m2{display:flex}
+}
+@media (max-width:560px){
+  .lkd-adpair{gap:10px}
+  .lkd-adpair .lkd-ad__media{border-radius:14px}
+  .lkd-adpair .lkd-ad__corner{left:8px;top:8px;padding:4px 8px;font-size:10px}
+  .lkd-adpair .lkd-ad__erid{display:none}
+  .lkd-adpair .lkd-ad__badge{left:8px;bottom:8px;padding:5px 11px 6px;font-size:13px}
+  .lkd-adpair .lkd-ad__body{gap:4px;padding-top:8px}
+  .lkd-adpair .lkd-ad__title{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  /* В узкой карточке остаётся только компания — раздел не влезает */
+  .lkd-adpair .lkd-ad__meta{font-size:0;white-space:nowrap;overflow:hidden}
+  .lkd-adpair .lkd-ad__meta b{font-size:11.5px;overflow:hidden;text-overflow:ellipsis}
+  .lkd-adpair .lkd-ad__meta .dot{display:none}
+  /* «Подробнее» на телефоне прячем, как в ленте публички */
+  .lkd-adpair .lkd-ad__acts{grid-template-columns:1fr}
+  .lkd-adpair .lkd-ad__acts .btn--ghost{display:none}
+  .lkd-adpair .lkd-ad__acts .btn{height:36px;font-size:13px}
 }

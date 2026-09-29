@@ -191,6 +191,13 @@ const AD_COUPON = {
   company: "Агентство «Пример»", value: "1 месяц за 0 ₽", photo: "../assets/coupons/biz-warm.jpg",
   erid: "2Vt1NKB2B", views: 1240
 };
+/* Второй рекламный купон — только на телефоне, чтобы рекламное место
+   стояло двумя карточками в ряд, как лента на публичке (Иван 30.09) */
+const AD_COUPON_2 = {
+  kicker: "Для бизнеса", title: "Фотосъёмка товаров для карточек: 10 кадров в подарок",
+  company: "Студия «Кадр»", value: "−20%", photo: "../assets/coupons/obuchenie-purple.jpg",
+  erid: "2Vt1NKF0T", views: 860
+};
 const AD_BANNER = {
   kicker: "Партнёр сервиса", title: "Эквайринг от 1,2% для тех, кто размещает купоны",
   text: "Откройте расчётный счёт в Банке «Пример» — первые три месяца обслуживания бесплатно.",
@@ -205,8 +212,7 @@ function adSlot(where) {
       <p>${AD_BANNER.text}</p>
       <a class="btn btn--solid btn--wide" href="#" target="_blank" rel="noopener">${AD_BANNER.cta}</a>
     </aside>`;
-  const c = AD_COUPON;
-  return `<aside class="lkd-ad" data-ad="${where}">
+  const card = (c, extra) => `<aside class="lkd-ad${extra || ""}" data-ad="${where}">
       <a class="lkd-ad__media" href="../coupon-design.html" target="_blank" rel="noopener"
          style="background-image:url('${c.photo}')" aria-label="${c.title} — открыть в новой вкладке">
         <span class="lkd-ad__corner">${c.kicker}</span>
@@ -222,6 +228,9 @@ function adSlot(where) {
         </div>
       </div>
     </aside>`;
+  /* У партнёра рекламное место стоит в ряду офферов — там пара не нужна */
+  if (where === "partner") return card(AD_COUPON);
+  return `<div class="lkd-adpair">${card(AD_COUPON)}${card(AD_COUPON_2, " lkd-ad--m2")}</div>`;
 }
 
 /* Дашборд. Что поменялось против эскиза 14.09:
