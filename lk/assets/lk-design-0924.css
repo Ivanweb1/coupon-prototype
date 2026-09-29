@@ -382,6 +382,10 @@
 .lkd .lk-secret .lk-ch:hover{background:rgba(255,255,255,.14)}
 .lkd .lk-secret .lk-ch.is-on{color:#fff}
 
+/* Верхняя плашка прогресса убрана: то же самое стоит строкой под превью.
+   Узлы остаются в разметке — lk.js считает по ним, строка их повторяет. */
+.lkd .lk-prog__box{display:none}
+
 /* Прогресс и цена — закреплённой строкой под превью */
 .lkd-wizbar{
   position:sticky;bottom:0;z-index:5;
