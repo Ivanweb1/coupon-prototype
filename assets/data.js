@@ -368,6 +368,8 @@ window.makeCoupon = function (catId, city) {
     company: swapBrand(seed[2]),
     code: makeCode(),
     erid: makeErid(id),
+    /* Проверен тайным покупателем: в демо каждый третий */
+    verified: id % 3 === 0,
     /* У купона маркетплейса вместо точки на карте — площадка: он действует
        в корзине, а не по адресу. */
     market: cat.l1 === "marketplace"

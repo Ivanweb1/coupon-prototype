@@ -627,7 +627,7 @@ function cardHTML(c, compact) {
       ${stats}
       ${codeOverlay}
       ${wb
-        ? `<span class="card__badge${longValue(c)}">${c.value}</span>`
+        ? `${verifiedFlag(c)}<span class="card__badge${longValue(c)}">${c.value}</span>`
         : `<span class="card__value">${c.value}</span>
       <div class="card__cap"><h3 class="card__title">${c.title}</h3></div>`}
     </div>
@@ -698,6 +698,27 @@ const VALUE_SHAPE = (location.search.match(/[?&]value=(ticket|round|plate)/) ||
 
 /* Текстовый оффер («Первый визит бесплатно») на билетике набираем мельче,
    чтобы он не закрыл полкартинки. Цифровые («−30%», «1+1») — крупно. */
+/* Бейдж «Проверено» (тайный покупатель): над плашкой выгоды, с наклоном.
+   Плашка бывает в одну, две и три строки, поэтому высоту под неё
+   подставляет placeVerified() ниже, а не CSS. */
+function verifiedFlag(c) {
+  return c.verified ? '<span class="verified-flag" title="Проверено тайным покупателем"><i aria-hidden="true">✓</i> Проверено</span>' : "";
+}
+function placeVerified() {
+  document.querySelectorAll(".verified-flag").forEach(f => {
+    const badge = f.parentElement.querySelector(".card__badge, .quick__value");
+    if (!badge) return;
+    const gap = f.closest(".quick__photo") ? 12 : 10;
+    f.style.bottom = (badge.offsetHeight + gap + 6) + "px";
+  });
+}
+(function watchVerified() {
+  let raf = 0;
+  const run = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(placeVerified); };
+  window.addEventListener("resize", run);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  new MutationObserver(run).observe(document.documentElement, { childList: true, subtree: true });
+})();
 function longValue(c) {
   return dz3() && String(c.value).length > 9 ? " is-long" : "";
 }
@@ -1311,7 +1332,7 @@ function quickHTML(c) {
     <button class="quick__close" data-quick-close>${ICON.close}</button>
     <div class="quick__media">
       <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
-        <span class="quick__value${longValue(c)}">${c.value}</span>
+        ${verifiedFlag(c)}<span class="quick__value${longValue(c)}">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
         ${codeOverlay}
       </div>
@@ -1347,7 +1368,7 @@ function quickHTML(c) {
     <div class="quick__media">
       <div class="quick__photo${c.photo ? " has-photo" : ""}"${c.photo ? ` style="background:url('${c.photo}') center/cover no-repeat"` : ""}>
         ${dz3() ? quickBadges(c) : ""}
-        <span class="quick__value${longValue(c)}">${c.value}</span>
+        ${verifiedFlag(c)}<span class="quick__value${longValue(c)}">${c.value}</span>
         <span class="erid-stamp">Реклама · erid: ${c.erid}</span>
         ${codeOverlay}
       </div>
