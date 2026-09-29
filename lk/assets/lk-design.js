@@ -29,10 +29,10 @@ ICON.doc   = nav('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2
 ICON.book  = nav('<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/>');
 /* Бонусы — фирменный билетик с буквой «Б» (правка Ивана 29.09): та же
    форма, что у плашки выгоды на публичке — скруглённый прямоугольник с
-   полукруглыми вырезами по бокам. Буква набрана текстом: на 16px её
-   контур штрихом заплывает. Значок стоит везде, где раньше была
+   полукруглыми вырезами по бокам. Буква нарисована контуром по центру
+   билетика: текстом она садилась ниже и правее (базовая линия шрифта). Значок стоит везде, где раньше была
    звёздочка, — кошелёк в шапке, блок бонусов, механики начисления. */
-ICON.coins = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M5 6.3H19a2 2 0 0 1 2 2V10a2 2 0 0 0 0 4v1.7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V14a2 2 0 0 0 0-4V8.3a2 2 0 0 1 2-2Z"/><text x="12" y="12" text-anchor="middle" dominant-baseline="central" fill="currentColor" stroke="none" font-family="Onest, system-ui, sans-serif" font-size="10.5" font-weight="700">Б</text></svg>';
+ICON.coins = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"><path d="M5 6.3H19a2 2 0 0 1 2 2V10a2 2 0 0 0 0 4v1.7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V14a2 2 0 0 0 0-4V8.3a2 2 0 0 1 2-2Z"/><path d="M14.2 8.9H10.2V15.1H12.7a1.6 1.6 0 0 0 0-3.2H10.2"/></svg>';
 ICON.clock = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>';
 ICON.q     = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6"/><circle cx="12" cy="17.2" r=".6" fill="currentColor"/></svg>';
 ICON.lock  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
