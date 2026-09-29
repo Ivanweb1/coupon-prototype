@@ -325,3 +325,5 @@
    справа, в карточку той же формы, что соседняя справка */
 .rg-ask{max-width:none;margin:0}
 .rg-ask .reg__ask-p{font-size:14px}
+/* Активная роль — чёрным: красный на странице остаётся только у «Войти» */
+.dz3 .lg__roles .reg__chip.is-on{background:var(--ink);border-color:var(--ink);color:#fff}
