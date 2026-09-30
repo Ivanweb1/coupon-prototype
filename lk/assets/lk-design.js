@@ -384,7 +384,6 @@ VIEWS["client:archive"] = () => {
    --------------------------------------------------------------------------
    Фильтры — период и купон; по умолчанию все купоны за 30 дней. График
    по дням (24.09) заменён воронкой по созвону 30.09. */
-const STAT_PAGE = 10;
 D.statPage = 1;
 const STAT_PERIODS = [["7", "7 дней"], ["30", "30 дней"], ["month", "Сентябрь"], ["prev", "Август"]];
 
@@ -459,9 +458,7 @@ VIEWS["client:stats"] = () => {
 
   /* Таблица «По купонам» — по 10 строк на странице (Коля, 30.09) */
   const sorted = withData.slice().sort((a, b) => b.taken - a.taken);
-  const pages = Math.max(1, Math.ceil(sorted.length / STAT_PAGE));
-  if (D.statPage > pages) D.statPage = pages;
-  const rows = sorted.slice((D.statPage - 1) * STAT_PAGE, D.statPage * STAT_PAGE)
+  const rows = pageSlice("stat", sorted)
     .map(c => `<tr data-coupon="${c.id}" tabindex="0"${D.coupon !== "all" && String(c.id) !== D.coupon ? ' class="lkd-dim"' : ""}>
       <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${where(c)}</span></td>
       <td>${status(c.status)}</td>
@@ -495,7 +492,7 @@ VIEWS["client:stats"] = () => {
     + panel("По купонам", `<div class="lkd-bycoupon">` +
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
                { t: "Забрали", num: true, key: true }, { t: "Переходы к вам", num: true }], rows)
-        + pager(sorted.length, D.statPage, STAT_PAGE, "data-stat-page") + `</div>`
+        + listPager("stat", sorted.length) + `</div>`
         /* «Переходы — какие, куда?» (Коля, 30.09): говорим прямо */
         + `<div class="lk-note lkd-fn__note">Переходы к вам — клики с купона на ваш сайт и в соцсети.</div>`);
 };
@@ -529,7 +526,6 @@ LK_LEDGER.push(
   { date: "15 мая",   what: "Бонус за регистрацию", kind: "bonus-service", coins: 0, bonuses: 500 }
 );
 LK_LEDGER.forEach(r => { if (!/\d{4}$/.test(r.date)) r.date += " 2026"; });
-const LEDGER_PAGE = 10;
 D.ledgerFrom = D.ledgerTo = "";
 D.ledgerPage = 1;
 
@@ -552,31 +548,57 @@ function ledgerCSV(list) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/* Страницы: «‹ 1 2 ›» и счётчик строк. Та же разметка пойдёт в другие
-   таблицы, где нужна пагинация. */
-function pager(total, page, size, attr, always) {
-  const pages = Math.max(1, Math.ceil(total / size));
-  if (pages < 2 && !always) return "";
-  if (!total) return "";
-  const from = (page - 1) * size + 1, to = Math.min(total, page * size);
-  const btn = (p, label, off, on) => `<button type="button" class="lkd-pg__b${on ? " is-on" : ""}"
-    ${attr}="${p}"${off ? " disabled" : ""}${on ? ' aria-current="page"' : ""}>${label}</button>`;
-  return `<div class="lkd-pg">
-    <span class="lkd-pg__n">${from}–${to} из ${total}</span>
-    <div class="lkd-pg__bs">
-      ${btn(page - 1, "‹", page === 1)}
-      ${Array.from({ length: pages }, (_, i) => btn(i + 1, i + 1, false, i + 1 === page)).join("")}
-      ${btn(page + 1, "›", page === pages)}
-    </div>
-  </div>`;
+/* Пагинация — одна на все таблицы обоих кабинетов (Иван 30.09): слева
+   «Показывать по 10 / 20 / 50», справа «1–10 из 13» и «‹ 1 2 ›». Видна
+   всегда, даже когда страница одна, — место и вид у неё везде одинаковые.
+   key — какая таблица: у каждой свои страница и размер. */
+D.pgSize = { coupons: 10, stat: 10, ledger: 10, fee: 10, codes: 10 };
+const PG = {
+  coupons: { get: () => state.couponPage || 1, set: v => { state.couponPage = v; } },
+  stat:    { get: () => D.statPage,   set: v => { D.statPage = v; } },
+  ledger:  { get: () => D.ledgerPage, set: v => { D.ledgerPage = v; } },
+  fee:     { get: () => D.fpage,      set: v => { D.fpage = v; } },
+  codes:   { get: () => D.codePage,   set: v => { D.codePage = v; } }
+};
+/* Страница, поджатая к числу страниц, и строки этой страницы */
+function pageSlice(key, list) {
+  const size = D.pgSize[key];
+  const pages = Math.max(1, Math.ceil(list.length / size));
+  if (PG[key].get() > pages) PG[key].set(pages);
+  if (PG[key].get() < 1) PG[key].set(1);
+  const page = PG[key].get();
+  return list.slice((page - 1) * size, page * size);
 }
+function listPager(key, total) {
+  if (!total) return "";
+  const size = D.pgSize[key];
+  const page = PG[key].get();
+  const pages = Math.max(1, Math.ceil(total / size));
+  const from = (page - 1) * size + 1, to = Math.min(total, page * size);
+  const btn = (p, label, off, on, aria) => `<button type="button" class="lkd-pg__b${on ? " is-on" : ""}"
+    data-pg-go="${p}"${off ? " disabled" : ""}${on ? ' aria-current="page"' : ""}${aria ? ` aria-label="${aria}"` : ""}>${label}</button>`;
+  return `<nav class="lkd-pg" data-pg="${key}" aria-label="Страницы таблицы">
+    <label class="lkd-pg__size">Показывать по
+      <select class="lk-s" data-pg-size aria-label="Строк на странице">
+        ${[10, 20, 50].map(n => `<option value="${n}"${n === size ? " selected" : ""}>${n}</option>`).join("")}
+      </select></label>
+    <div class="lkd-pg__right">
+      <span class="lkd-pg__n">${from}–${to} из ${total}</span>
+      <div class="lkd-pg__bs">
+        ${btn(page - 1, "‹", page === 1, false, "Предыдущая страница")}
+        ${Array.from({ length: pages }, (_, i) => btn(i + 1, i + 1, false, i + 1 === page)).join("")}
+        ${btn(page + 1, "›", page === pages, false, "Следующая страница")}
+      </div>
+    </div>
+  </nav>`;
+}
+window.LKD_PAGE_SIZE = key => D.pgSize[key];
+window.LKD_PAGER = (key, total) => listPager(key, total);
 
 VIEWS["client:billing"] = () => {
   const sign = n => (n > 0 ? "+" : "") + num(n);
   const all = ledgerList();
-  const pages = Math.max(1, Math.ceil(all.length / LEDGER_PAGE));
-  if (D.ledgerPage > pages) D.ledgerPage = pages;
-  const list = all.slice((D.ledgerPage - 1) * LEDGER_PAGE, D.ledgerPage * LEDGER_PAGE);
+  const list = pageSlice("ledger", all);
   const rows = list.map(b => `<tr>
     <td>${b.date}</td>
     <td><b class="lk-t__title">${LK_LEDGER_KINDS[b.kind]}</b><span class="lk-t__sub">${b.what}</span></td>
@@ -633,7 +655,7 @@ VIEWS["client:billing"] = () => {
         </div>`
         + (list.length
           ? table([{ t: "Дата" }, { t: "Операция" }, { t: "Рубли", num: true }, { t: "Бонусы", num: true }], rows)
-            + pager(all.length, D.ledgerPage, LEDGER_PAGE, "data-ledger-page")
+            + listPager("ledger", all.length)
           : empty("Операций нет", "За эти даты движений по балансу не было."))
         + `<div class="lk-total"><span>Бонусы тратятся на размещение наравне
            с рублями, но хотя бы один рубль в каждой публикации уходит
@@ -1040,26 +1062,13 @@ function offersRow() {
   </div>`;
 }
 
-/* Страницы как в Битриксе: «Показывать по 10 / 20 / 50» и номера */
-function pagerSized(total, page, size, attr, sizeAttr) {
-  const sizes = [10, 20, 50];
-  return `<div class="lkd-pg lkd-pg--sized">
-    <label class="lkd-pg__size">Показывать по
-      <select class="lk-s" ${sizeAttr} aria-label="Строк на странице">
-        ${sizes.map(n => `<option value="${n}"${n === size ? " selected" : ""}>${n}</option>`).join("")}
-      </select></label>
-    ${/* Номера страниц видны всегда, даже когда страница одна (Иван 30.09) */
-      pager(total, page, size, attr, true) || `<span class="lkd-pg__n">Ничего не нашлось</span>`}
-  </div>`;
-}
-
 /* Купоны клиентов (созвон 30.09): фильтр и сортировка «везде» — крупный
    партнёр с менеджерами иначе запутается. Клиент — поиском по названию
    или ИНН, тип и статус — списками, период — по дате размещения. Суммы
    сортируются кликом по заголовку столбца. Итог под таблицей — по
    текущему фильтру, по всем страницам. */
 D.fq = ""; D.ftype = "all"; D.fstatus = "all"; D.ffrom = ""; D.fto = "";
-D.fsort = null; D.fdir = -1; D.fpage = 1; D.fsize = 10;
+D.fsort = null; D.fdir = -1; D.fpage = 1;
 
 const feeFiltered = () => {
   const q = D.fq.trim().toLowerCase();
@@ -1084,9 +1093,7 @@ const sortCols = cols => cols.map(c => c.sort ? Object.assign({}, c, {
 
 VIEWS["partner:clients"] = () => {
   const all = feeFiltered();
-  const pages = Math.max(1, Math.ceil(all.length / D.fsize));
-  if (D.fpage > pages) D.fpage = pages;
-  const list = all.slice((D.fpage - 1) * D.fsize, D.fpage * D.fsize);
+  const list = pageSlice("fee", all);
   const sum = k => all.reduce((a, f) => a + (f[k] || 0), 0);
   const opt = (v, label, cur) => `<option value="${v}"${cur === v ? " selected" : ""}>${label}</option>`;
   const statuses = ["draft", "moderation", "live", "done"];
@@ -1131,7 +1138,7 @@ VIEWS["partner:clients"] = () => {
       + (all.length
         ? table(sortCols(FEE_COLS), list.map(feeRow).join("") + totalRow)
         : empty("Ничего не нашлось", "Поменяйте фильтры: клиент, тип, статус или даты."))
-      + pagerSized(all.length, D.fpage, D.fsize, "data-fee-page", "data-fee-size")
+      + listPager("fee", all.length)
       + `<div class="lk-total"><span>Клиенты закреплены за вами по территории
          ответственности. Закрепление постоянное. В выплату идут купоны,
          завершившиеся в отчётном периоде — календарном месяце.</span></div>`);
@@ -1191,12 +1198,9 @@ VIEWS["partner:bonuses"] = () => {
    · «Публикаций» → «Применили»: код применяют, а не публикуют;
    · страницы по 10: у кого-то кодов будут сотни. */
 const MP4 = ["Яндекс Маркет", "Ozon", "Wildberries", "М.Видео"];
-const CODE_PAGE = 10;
 D.codePage = 1;
 VIEWS["partner:codes"] = () => {
-  const pages = Math.max(1, Math.ceil(LK_CODES.length / CODE_PAGE));
-  if (D.codePage > pages) D.codePage = pages;
-  const rows = LK_CODES.slice((D.codePage - 1) * CODE_PAGE, D.codePage * CODE_PAGE).map(c => `<tr>
+  const rows = pageSlice("codes", LK_CODES).map(c => `<tr>
     <td><b class="lk-t__title">${c.status === "queued" ? "В очереди…" : c.code}</b>
         ${c.base ? `<span class="lk-t__sub">базовый</span>`
           : c.status === "queued" ? `<span class="lk-t__sub">будет готов через ~${LK_CODE_LIMITS.delayMin} мин</span>` : ""}</td>
@@ -1213,7 +1217,7 @@ VIEWS["partner:codes"] = () => {
     + panel("", table(
         [{ t: "Промокод" }, { t: "Комментарий" }, { t: "Площадка" },
          { t: "Применили", num: true }, { t: "Начислено", num: true, key: true }], rows)
-      + pager(LK_CODES.length, D.codePage, CODE_PAGE, "data-code-page")
+      + listPager("codes", LK_CODES.length)
       + `<div class="lk-total"><b>${rub(total)}</b><span>начислено по промокодам за всё время</span></div>`)
     + panel("Как это работает", `
       <ul class="lk-rules">
@@ -1314,29 +1318,21 @@ VIEWS["partner:payouts"] = () => {
 
   return head("Отчёты и выплаты", `<button class="btn btn--ghost">Выгрузить в Excel</button>`)
     + `<div class="lk-pair lkd-row">
-      ${/* Справа от суммы — из чего она сложилась (Иван 30.09: без пустого
-           места справа, но логично): сколько купонов завершилось, сколько
-           за них заплатили, какая вышла ставка, когда и в каком статусе
-           выплата */ ""}
+      ${/* Та же информация, разложенная в две колонки (Иван 30.09): слева
+           сумма и тренд, справа дата выплаты и пояснение — без пустого
+           поля ни справа, ни снизу */ ""}
       ${panel("К выплате", `<div class="lkd-payout-wrap"><div class="lkd-payout">
         <span class="lkd-money__l">${pend.period}</span>
         <b class="lkd-payout__v">${rub(readySum())}</b>
         ${trend()}
       </div>
-      <dl class="lkd-payout__how">${(() => {
-        const done = periodFees().filter(f => f.ready);
-        const paidBy = done.reduce((a, f) => a + f.rub, 0);
-        const rate = paidBy ? Math.round(readySum() / paidBy * 100) : 0;
-        return `<div><dt>Купонов завершилось</dt><dd>${done.length}</dd></div>
-          <div><dt>Клиенты оплатили рублями</dt><dd>${rub(paidBy)}</dd></div>
-          <div><dt>Ваше вознаграждение</dt><dd>${rate}%</dd></div>
-          <div><dt>Выплата</dt><dd>${pend.date.replace("к выплате ", "")}</dd></div>`;
-      })()}</dl></div>
-      <div class="lk-total"><span>В расчёт идут купоны, завершившиеся в
-      отчётном периоде. Сверку и выплату делаем сами через 14 дней после
-      закрытия периода — формировать и подписывать ничего не нужно.</span></div>`)}
-      ${/* По три поля в строку (Иван 30.09): реквизиты в две строки, и
-           панель «К выплате» слева не стоит с пустым низом */ ""}
+      <div class="lkd-payout__side">
+        <span class="lkd-money__l">Выплата</span>
+        <b class="lkd-payout__date">${pend.date.replace("к выплате ", "")}</b>
+        <p>В расчёт идут купоны, завершившиеся в отчётном периоде. Сверку и
+        выплату делаем сами через 14 дней после закрытия периода —
+        формировать и подписывать ничего не нужно.</p>
+      </div></div>`)}
       ${panel("Реквизиты для выплат", `<div class="lk-f">
         <div class="lkd-grid6">${field("Получатель", input("", "ИП Партнёров И.", true))}${field("ИНН", input("", "482600000000", true))}${field("ОГРНИП", input("", "321482700000012", true))}${field("Банк", input("", "ПАО Сбербанк", true))}${field("БИК", input("", "044206604", true))}${field("Расчётный счёт", input("", "40802810435000000000", true))}</div>
       </div>
@@ -1669,7 +1665,6 @@ window.render = function () {
   /* Статистика */
   const per = qs("[data-stat-period]", host);
   if (per) per.onchange = () => { D.period = per.value; render(); };
-  qsa("[data-stat-page]", host).forEach(b => b.onclick = () => { D.statPage = +b.dataset.statPage; render(); });
   const cp = qs("[data-stat-coupon]", host);
   if (cp) cp.onchange = () => { D.coupon = cp.value; render(); };
 
@@ -1679,7 +1674,6 @@ window.render = function () {
   if (lt) lt.onchange = () => { D.ledgerTo = lt.value; D.ledgerPage = 1; render(); };
   const lr = qs("[data-ledger-reset]", host);
   if (lr) lr.onclick = () => { D.ledgerFrom = D.ledgerTo = ""; D.ledgerPage = 1; render(); };
-  qsa("[data-ledger-page]", host).forEach(b => b.onclick = () => { D.ledgerPage = +b.dataset.ledgerPage; render(); });
   const lx = qs("[data-ledger-export]", host);
   if (lx) lx.onclick = () => ledgerCSV(ledgerList());
   qsa("[data-way]", host).forEach(b => b.onclick = () => { D.way = b.dataset.way; render(); });
@@ -1761,9 +1755,6 @@ window.render = function () {
     D.fsort = k;
     render();
   });
-  qsa("[data-fee-page]", host).forEach(b => b.onclick = () => { D.fpage = +b.dataset.feePage; render(); });
-  const fs = qs("[data-fee-size]", host);
-  if (fs) fs.onchange = () => { D.fsize = +fs.value; D.fpage = 1; render(); };
 
   /* База знаний: статья, раздел, поиск, скачивание материала */
   qsa("[data-kb]", host).forEach(btn => btn.onclick = () => {
@@ -1795,8 +1786,20 @@ window.render = function () {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 
-  /* Промокоды: страницы */
-  qsa("[data-code-page]", host).forEach(b => b.onclick = () => { D.codePage = +b.dataset.codePage; render(); });
+  /* Пагинация — одна на все таблицы: номер страницы и «Показывать по» */
+  qsa("[data-pg]", host).forEach(nav => {
+    const key = nav.dataset.pg;
+    qsa("[data-pg-go]", nav).forEach(b => b.onclick = () => {
+      if (b.disabled) return;
+      PG[key].set(+b.dataset.pgGo);
+      render();
+      const again = qs('[data-pg="' + key + '"]', qs("#lkView"));
+      const top = again && again.closest(".lk-panel");
+      if (top && top.getBoundingClientRect().top < 0) top.scrollIntoView({ block: "start", behavior: "smooth" });
+    });
+    const sel = qs("[data-pg-size]", nav);
+    if (sel) sel.onchange = () => { D.pgSize[key] = +sel.value; PG[key].set(1); render(); };
+  });
 
   /* Выплаты: месяц детализации стрелками */
   qsa("[data-pay-month]", host).forEach(b => b.onclick = () => { D.payMonth = +b.dataset.payMonth; render(); });
