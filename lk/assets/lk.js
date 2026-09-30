@@ -901,7 +901,10 @@ VIEWS["client:coupons"] = () => {
   };
   list = list.slice().sort(sorters[state.sort] || sorters.new);
 
-  const pageSize = 5;
+  /* Дизайн-слой (lk-design.js) может задать свой размер страницы и свою
+     разметку пагинации — единую для всех таблиц кабинета. В Ч/Б прототипе
+     хуков нет, и всё остаётся как было. */
+  const pageSize = window.LKD_PAGE_SIZE ? window.LKD_PAGE_SIZE("coupons") : 5;
   const pageCount = Math.max(1, Math.ceil(list.length / pageSize));
   state.couponPage = Math.min(Math.max(1, state.couponPage || 1), pageCount);
   const pageStart = (state.couponPage - 1) * pageSize;
@@ -959,7 +962,8 @@ VIEWS["client:coupons"] = () => {
     <td class="num lk-t__key">${c.taken ? num(c.taken) : "—"}</td>
   </tr>`).join("");
 
-  const pagination = list.length > pageSize ? `<nav class="lk-page" aria-label="Страницы списка купонов">
+  const pagination = window.LKD_PAGER ? window.LKD_PAGER("coupons", list.length, state.couponPage)
+  : list.length > pageSize ? `<nav class="lk-page" aria-label="Страницы списка купонов">
     <span class="lk-page__meta">${pageStart + 1}–${Math.min(pageStart + pageSize, list.length)} из ${list.length}</span>
     <div class="lk-page__nav">
       <button type="button" class="lk-page__btn lk-page__arrow" data-page="${state.couponPage - 1}"
