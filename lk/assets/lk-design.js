@@ -43,8 +43,6 @@ const D = {
   period: "30",        /* статистика: период */
   coupon: "all",       /* статистика: купон */
   editing: {},         /* какие формы открыты на редактирование */
-  client: "all",       /* партнёр: фильтр купонов по клиенту */
-  payType: "all",      /* партнёр: фильтр детализации выплаты по типу купона */
   prefill: null        /* партнёр: «Повторить» начисление */
 };
 
@@ -114,13 +112,16 @@ if (IS_CLIENT) {
 if (!IS_CLIENT) {
   const it = id => NAV.partner.find(x => x.id === id);
   it("clients").label = "Купоны клиентов";
-  it("codes").label = "Маркетплейс · Коды";
+  /* «Коды» звучало непонятно — «Промокоды» (созвон 30.09); профиль —
+     «Ваш профиль»: это его кабинет, а не карточка партнёра со стороны */
+  it("codes").label = "Маркетплейс · Промокоды";
+  it("profile").label = "Ваш профиль";
   const at = NAV.partner.findIndex(x => x.id === "profile");
   NAV.partner.splice(at + 1, 0,
     { id: "docs", label: "Документы",   icon: "doc" },
     { id: "kb",   label: "База знаний", icon: "book" });
   Object.assign(TITLES.partner, {
-    clients: "Купоны клиентов", codes: "Реферальные коды маркетплейсов",
+    clients: "Купоны клиентов", codes: "Промокоды маркетплейсов", profile: "Ваш профиль",
     docs: "Документы", kb: "База знаний"
   });
 }
@@ -170,7 +171,7 @@ window.renderChrome = function () {
       <span class="lkd-wal lkd-wal--bon" title="Бонусы">${ICON.coins}<b>${num(LK_BALANCE.bonuses)}</b></span>`;
   } else {
     const cta = qs("#lkCta");
-    if (cta) cta.lastElementChild.textContent = "Выдать реферальный код";
+    if (cta) cta.lastElementChild.textContent = "Запросить промокод";
   }
 
   sideFoot();
@@ -196,7 +197,7 @@ function sideFoot() {
         <span class="lkd-sidefoot__row"><span class="lkd-sidefoot__ic lkd-sidefoot__ic--bon">${ICON.coins}</span><span>Бонусы</span><b>${num(LK_BALANCE.bonuses)}</b></span>
       </a>
       <button type="button" class="btn btn--solid btn--wide" data-side-create>Создать купон</button>`
-    : `<button type="button" class="btn btn--solid btn--wide" data-side-go="codes">Выдать реферальный код</button>`) + `
+    : `<button type="button" class="btn btn--solid btn--wide" data-side-go="codes">Запросить промокод</button>`) + `
     <div class="lkd-sidefoot__me">
       <a class="lkd-sidefoot__prof" href="${href("profile")}" data-side-go="profile">
         <span class="lk__me-ava">${acc.ava}</span>
@@ -624,7 +625,7 @@ VIEWS["client:billing"] = () => {
       ${editBar("req")}`)}
     </div>`
     + panel("История операций",
-        `<div class="lkd-filters lkd-filters--in lkd-dates">
+        `<div class="lkd-filters lkd-filters--in lkd-datefilter">
           <label class="lkd-dates__f"><span>с</span><input class="lk-i" type="date" data-ledger-from value="${D.ledgerFrom}" aria-label="С даты"></label>
           <label class="lkd-dates__f"><span>по</span><input class="lk-i" type="date" data-ledger-to value="${D.ledgerTo}" aria-label="По дату"></label>
           ${D.ledgerFrom || D.ledgerTo ? `<button type="button" class="btn btn--ghost" data-ledger-reset>Сбросить</button>` : ""}
@@ -788,11 +789,11 @@ function notifyWherePanel() {
     + channels
     + `<div class="lk-note" style="margin-top:14px">Почта нужна всегда: на
        неё приходят ${IS_CLIENT ? "чеки и решения модерации" : "счета, акты и решения по выплатам"}.
-       Telegram и Max — через нашего бота, SMS сервис не отправляет.</div>`
-    + `<div class="lk-head__act" style="margin-top:14px">
-         <button class="btn btn--solid" data-save>Сохранить</button>
-         <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
-       </div>`);
+       Telegram и Max — через нашего бота, SMS сервис не отправляет.
+       <span class="lk-save-ok" data-notify-ok hidden>Сохранено</span></div>`);
+  /* «Сохранить» убрана (Иван 30.09): каналы подключает бот, а галочка
+     только включает и выключает канал — это сохраняется сразу, подтверждаем
+     короткой строкой в конце пояснения. */
 }
 
 VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
@@ -868,6 +869,10 @@ const innOf = name => {
    начислением. Тип — раздел витрины. ready — купон завершился в этом
    отчётном периоде и попадает в выплату. */
 const FEES = [
+  { id: 1044, title: "Скидка 20% на первую стрижку", client: 2, type: "regional", status: "draft",
+    from: "—", to: "—", rub: 0, bon: 0, fee: 0, ready: false },
+  { id: 1043, title: "Мойка кузова по будням", client: 4, type: "regional", status: "moderation",
+    from: "—", to: "—", rub: 3100, bon: 0, fee: 620, ready: false },
   { id: 1041, title: "Комбо-обед по будням до 16:00", client: 1, type: "regional", status: "done",
     from: "3 сентября", to: "24 сентября", rub: 2400, bon: 600, fee: 480, ready: true },
   { id: 1039, title: "Каждая пятая чашка кофе в подарок", client: 1, type: "regional", status: "live",
@@ -883,15 +888,36 @@ const FEES = [
   { id: 1019, title: "Бизнес-ланч в августе", client: 1, type: "regional", status: "done",
     from: "1 августа", to: "31 августа", rub: 2600, bon: 0, fee: 520, ready: false, paid: true }
 ];
+/* Черновик и модерация (созвон 30.09): партнёр видит купоны клиента ещё
+   до оплаты — «чтобы дожимать». Начисления по ним пока нет. */
 const TYPE = { regional: "Региональный", marketplace: "Маркетплейс", "for-business": "Для бизнеса" };
 const clientById = id => LK_CLIENTS.find(c => c.id === id) || {};
 /* Партнёр без региональной роли (правило 25.09: регистрация даёт только
    маркетплейсы, регион открывает сервис по запросу) видит только
    маркетплейсные купоны — региональных клиентов у него нет. */
 const levelFees = () => state.regional ? FEES : FEES.filter(f => f.type === "marketplace");
-const periodFees = () => levelFees().filter(f => !f.paid);
+const periodFees = () => levelFees().filter(f => !f.paid && (f.status === "live" || f.status === "done"));
 const readySum = () => periodFees().filter(f => f.ready).reduce((a, f) => a + f.fee, 0);
 const earnedAll = () => LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0) + readySum();
+
+/* Сравнение с прошлым месяцем и тренд (созвон 30.09): «в деньгах
+   оценивать сложно, в процентах проще», и мотивирует и рост, и падение.
+   Ряд — выплаты по месяцам, последний — текущий период. Полоска тренда
+   зелёная, если последний месяц не хуже предыдущего, иначе красная. */
+function trend() {
+  const series = LK_PAYOUTS.filter(p => p.status === "paid").map(p => p.total).reverse().concat(readySum());
+  const cur = series[series.length - 1], prev = series[series.length - 2] || 0;
+  const pct = prev ? Math.round((cur - prev) / prev * 100) : 0;
+  const up = cur >= prev;
+  const W = 96, H = 30, max = Math.max(...series, 1), min = Math.min(...series);
+  const pts = series.map((v, i) => [i / (series.length - 1) * W, H - 3 - (v - min) / Math.max(1, max - min) * (H - 6)]);
+  const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  const prevName = (LK_PAYOUTS.find(p => p.status === "paid") || {}).period || "";
+  return `<span class="lkd-trend ${up ? "is-up" : "is-down"}">
+    <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><path d="${d}"/><circle cx="${pts[pts.length - 1][0].toFixed(1)}" cy="${pts[pts.length - 1][1].toFixed(1)}" r="3"/></svg>
+    <b>${up ? "+" : "−"}${Math.abs(pct)}%</b><span>к ${prevName.split(" ")[0].toLowerCase().replace(/ь$/, "ю").replace(/й$/, "ю").replace(/т$/, "ту")}</span>
+  </span>`;
+}
 
 /* Статус купона — те же слова и цвета, что у рекламодателя: одна база
    статусов на оба кабинета */
@@ -900,17 +926,23 @@ const feeReady = f => f.paid
   ? `<span class="lk-st lk-st--done">Выплачено</span>`
   : f.ready
     ? `<span class="lk-st lk-st--ok">Готово к выплате</span>`
-    : `<span class="lk-st lk-st--wait">Ждёт завершения</span>`;
-const eyeLink = f => `<a class="lkd-eye" href="../coupon-design.html?id=${f.id}" target="_blank" rel="noopener"
-    title="Посмотреть купон" aria-label="Посмотреть купон «${f.title}»">${ICON.eye18}</a>`;
+    : f.status === "draft" || f.status === "moderation"
+      ? `<span class="lk-st lk-st--wait">После оплаты</span>`
+      : `<span class="lk-st lk-st--wait">Ждёт завершения</span>`;
+/* «Глазик» ведёт на купон на сайте. У завершённого купона страницы уже
+   нет — глазик зачёркнут и не нажимается (созвон 30.09), у черновика и
+   модерации купона на сайте ещё нет. */
+const eyeLink = f => f.status === "live"
+  ? `<a class="lkd-eye" href="../coupon-design.html?id=${f.id}" target="_blank" rel="noopener"
+      title="Посмотреть купон на сайте" aria-label="Посмотреть купон «${f.title}»">${ICON.eye18}</a>`
+  : `<span class="lkd-eye is-off" title="${f.status === "done" ? "Купон завершён — на сайте его больше нет" : "Купона на сайте ещё нет"}">${ICON.eyeOff}</span>`;
+ICON.eyeOff = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/><path d="M4 20 20 4"/></svg>';
 
-/* Строка купона клиента — одна и та же в «Купонах клиентов» и на дашборде:
-   «Последние купоны» — это те же пять верхних строк того же списка, и поля
-   у них должны быть те же (правка Ивана 29.09). */
+/* Строка купона клиента в «Купонах клиентов» — полная таблица */
 const FEE_COLS = [
   { t: "Купон" }, { t: "Тип" }, { t: "Статус" }, { t: "Начало — окончание" },
-  { t: "Оплачено, ₽", num: true }, { t: "Бонусами", num: true },
-  { t: "Ваше начисление", num: true, key: true }, { t: "" }
+  { t: "Оплачено, ₽", num: true, sort: "rub" }, { t: "Бонусами", num: true, sort: "bon" },
+  { t: "Ваше начисление", num: true, key: true, sort: "fee" }, { t: "" }
 ];
 const feeRow = f => {
   const cl = clientById(f.client);
@@ -918,26 +950,39 @@ const feeRow = f => {
     <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">ID ${f.id} · ${cl.name}<br>ИНН ${INN[cl.id]}</span></td>
     <td>${TYPE[f.type]}</td>
     <td>${feeStatus(f)}</td>
-    <td class="lkd-dates"><span>${f.from}</span><span>${f.to}</span></td>
-    <td class="num">${rub(f.rub)}</td>
+    <td class="lkd-dates">${f.from === "—" ? "<span class='lk-t__sub'>после публикации</span>" : `<span>${f.from}</span><span>${f.to}</span>`}</td>
+    <td class="num">${f.rub ? rub(f.rub) : "—"}</td>
     <td class="num">${f.bon ? num(f.bon) : "—"}</td>
-    <td class="num lk-t__key">${rub(f.fee)}<div class="lkd-ready">${feeReady(f)}</div></td>
+    <td class="num lk-t__key">${f.fee ? rub(f.fee) : "—"}<div class="lkd-ready">${feeReady(f)}</div></td>
     <td class="num">${eyeLink(f)}</td>
   </tr>`;
 };
 
-/* Дашборд партнёра — «рука на пульсе». Что поменялось:
-   · между «клиентами в регионе» и «активными» — сколько купонов размещено
-     прямо сейчас. Клиентов со временем станет 150, купонов 35 — и эта
-     разница как раз показывает партнёру, с кем поработать;
-   · «Активных клиентов» — тех, у кого есть размещённый купон;
-   · из профиля сюда переехали «купонов на клиента» и «начисление с
-     клиента» — это статистика, а не данные профиля;
-   · «Последние клиенты» были таблицей без смысла. Теперь это живая лента
-     последних пяти купонов, связанная с начислениями, с глазиком;
-   · внизу — предложения для бизнеса: партнёр тоже предприниматель. */
-/* Компактная полоса показателей — те же плитки, что и в kpi(), но мельче
-   и без растягивания: помещаются в один ряд. */
+/* На дашборде — короткая версия той же строки (созвон 30.09): «Тип»,
+   «Оплачено» и «Бонусами» свёрнуты — они есть в полной таблице по
+   «Все купоны», а справа освобождается место под рекламу. */
+const FEE_COLS_SHORT = [
+  { t: "Купон" }, { t: "Статус" }, { t: "Начало — окончание" },
+  { t: "Ваше начисление", num: true, key: true }, { t: "" }
+];
+const feeRowShort = f => {
+  const cl = clientById(f.client);
+  return `<tr>
+    <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">${cl.name}</span></td>
+    <td>${feeStatus(f)}</td>
+    <td class="lkd-dates">${f.from === "—" ? "<span class='lk-t__sub'>после публикации</span>" : `<span>${f.from}</span><span>${f.to}</span>`}</td>
+    <td class="num lk-t__key">${f.fee ? rub(f.fee) : "—"}<div class="lkd-ready">${feeReady(f)}</div></td>
+    <td class="num">${eyeLink(f)}</td>
+  </tr>`;
+};
+
+/* Дашборд партнёра — «рука на пульсе».
+   · Шесть показателей: «Купонов на клиента» убрали (созвон 30.09) —
+     седьмая плитка переносилась на ноутбуке, а число мало что говорило;
+   · «Последние купоны» — пять последних событий: черновик, модерация,
+     публикация, завершение. Порядок — по последнему действию клиента:
+     партнёр сразу видит, кому позвонить;
+   · реклама — справа от таблицы, внизу её больше нет. */
 const kpiRow = items => kpi(items).replace('class="lk-kpi"', 'class="lk-kpi lkd-kpi-row"');
 
 const baseMpDashboard = VIEWS["partner:dashboard"];
@@ -951,27 +996,22 @@ VIEWS["partner:dashboard"] = () => {
   const fresh = LK_CLIENTS.filter(c => clientStatus(c) === "new").length;
   const feeAll = FEES.reduce((a, f) => a + f.fee, 0) + LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
   const withCoupons = LK_CLIENTS.filter(c => c.coupons > 0);
-  const perClient = (withCoupons.reduce((a, c) => a + c.coupons, 0) / withCoupons.length).toFixed(1);
   const feePerClient = Math.round(withCoupons.reduce((a, c) => a + c.fee, 0) / withCoupons.length);
   const last = FEES.slice().sort((a, b) => b.id - a.id).slice(0, 5);
 
   return head("Дашборд партнёра")
-    /* Семь показателей одной компактной полосой, а не двумя рядами
-       крупных карточек: дашборд начинался с двух экранов цифр, а во
-       втором ряду три плитки растягивались на всю ширину (правка Ивана
-       29.09). Порядок прежний: сначала работа, потом деньги. */
     + kpiRow([
         { label: "Клиентов в регионе",        value: LK_CLIENTS.length, note: fresh + " без первого купона" },
         { label: "Размещено купонов",         value: now.length, note: "активные на сегодня" },
         { label: "Активных клиентов",         value: activeClients, note: "разместили купон" },
         { label: "К выплате",                 value: rub(readySum()), note: "за " + LK_PAYOUTS[0].period.toLowerCase() },
         { label: "Начислено всего",           value: rub(feeAll), note: "за все периоды" },
-        { label: "Купонов на клиента",        value: perClient, note: "в среднем" },
         { label: "Начисление с клиента",      value: rub(feePerClient), note: "в среднем" }
       ])
-    + panel("Последние купоны", table(FEE_COLS, last.map(feeRow).join("")),
-        { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все купоны</a>` })
-    + offersRow();
+    + `<div class="lkd-dash"><div class="lkd-dash__main">
+        ${panel("Последние купоны", table(FEE_COLS_SHORT, last.map(feeRowShort).join("")),
+          { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все купоны</a>` })}
+      </div>${adSlot("partner")}</div>`;
 };
 
 /* Полоса предложений для бизнеса внизу разделов партнёра */
@@ -992,43 +1032,104 @@ function offersRow() {
   </div>`;
 }
 
-/* Купоны клиентов — бывшие «Региональные клиенты» */
+/* Страницы как в Битриксе: «Показывать по 10 / 20 / 50» и номера */
+function pagerSized(total, page, size, attr, sizeAttr) {
+  const sizes = [10, 20, 50];
+  return `<div class="lkd-pg lkd-pg--sized">
+    <label class="lkd-pg__size">Показывать по
+      <select class="lk-s" ${sizeAttr} aria-label="Строк на странице">
+        ${sizes.map(n => `<option value="${n}"${n === size ? " selected" : ""}>${n}</option>`).join("")}
+      </select></label>
+    ${pager(total, page, size, attr) || `<span class="lkd-pg__n">${total ? "1–" + total + " из " + total : "Ничего не нашлось"}</span>`}
+  </div>`;
+}
+
+/* Купоны клиентов (созвон 30.09): фильтр и сортировка «везде» — крупный
+   партнёр с менеджерами иначе запутается. Клиент — поиском по названию
+   или ИНН, тип и статус — списками, период — по дате размещения. Суммы
+   сортируются кликом по заголовку столбца. Итог под таблицей — по
+   текущему фильтру, по всем страницам. */
+D.fq = ""; D.ftype = "all"; D.fstatus = "all"; D.ffrom = ""; D.fto = "";
+D.fsort = null; D.fdir = -1; D.fpage = 1; D.fsize = 10;
+
+const feeFiltered = () => {
+  const q = D.fq.trim().toLowerCase();
+  let list = levelFees().filter(f => {
+    const cl = clientById(f.client);
+    if (q && (cl.name || "").toLowerCase().indexOf(q) === -1 && (INN[cl.id] || "").indexOf(q) === -1) return false;
+    if (D.ftype !== "all" && f.type !== D.ftype) return false;
+    if (D.fstatus !== "all" && f.status !== D.fstatus) return false;
+    const d = isoFromRu(f.from === "—" ? "" : f.from + " 2026");
+    if (D.ffrom && (!d || d < D.ffrom)) return false;
+    if (D.fto && (!d || d > D.fto)) return false;
+    return true;
+  });
+  if (D.fsort) list = list.slice().sort((x, y) => (x[D.fsort] - y[D.fsort]) * D.fdir);
+  return list;
+};
+
+/* Заголовок столбца с сортировкой: стрелка показывает текущее направление */
+const sortCols = cols => cols.map(c => c.sort ? Object.assign({}, c, {
+  t: `<button type="button" class="lkd-sort${D.fsort === c.sort ? " is-on" : ""}" data-fee-sort="${c.sort}">${c.t}<i>${D.fsort === c.sort ? (D.fdir < 0 ? "↓" : "↑") : "↕"}</i></button>`
+}) : c);
+
 VIEWS["partner:clients"] = () => {
-  const clients = LK_CLIENTS.filter(c => FEES.some(f => f.client === c.id));
-  const list = D.client === "all" ? FEES : FEES.filter(f => String(f.client) === D.client);
-  const rows = list.map(feeRow).join("");
+  const all = feeFiltered();
+  const pages = Math.max(1, Math.ceil(all.length / D.fsize));
+  if (D.fpage > pages) D.fpage = pages;
+  const list = all.slice((D.fpage - 1) * D.fsize, D.fpage * D.fsize);
+  const sum = k => all.reduce((a, f) => a + (f[k] || 0), 0);
+  const opt = (v, label, cur) => `<option value="${v}"${cur === v ? " selected" : ""}>${label}</option>`;
+  const statuses = ["draft", "moderation", "live", "done"];
+
+  const totalRow = all.length ? `<tr class="lkd-sumrow">
+      <td><b>Итого по фильтру</b><span class="lk-t__sub">${all.length} ${plural(all.length, "купон", "купона", "купонов")}</span></td>
+      <td></td><td></td><td></td>
+      <td class="num">${rub(sum("rub"))}</td>
+      <td class="num">${num(sum("bon"))}</td>
+      <td class="num lk-t__key">${rub(sum("fee"))}</td>
+      <td></td></tr>` : "";
 
   return head("Купоны клиентов",
       `<button class="btn btn--ghost">Выгрузить в CSV</button>
        <button class="btn btn--ghost">Выгрузить в Excel</button>`)
     + `<div class="lkd-earn">
       <div class="lk-panel lkd-earn__c lkd-earn__c--main">
-        <span class="lkd-money__l">Готово к выплате в этом месяце</span>
+        <span class="lkd-money__l">Готово к выплате в отчётном периоде</span>
         <b>${rub(readySum())}</b>
-        <span class="lk-note">По купонам, которые уже завершились. Счёт
-        формируется в «Отчётах и выплатах» после закрытия периода.</span>
+        <span class="lk-note">Счёт формируется в «Отчётах и выплатах» после
+        закрытия периода по купонам, которые уже завершились.</span>
         <a class="btn btn--ghost" href="${href("payouts")}" data-go="payouts">К выплатам</a>
       </div>
       <div class="lk-panel lkd-earn__c">
         <span class="lkd-money__l">Заработано за всё время</span>
         <b>${rub(earnedAll())}</b>
         <span class="lk-note">Вместе с текущим периодом</span>
+        ${trend()}
       </div>
     </div>`
-    + panel("", `<div class="lkd-filters lkd-filters--in">
-        <select class="lk-s" data-fee-client aria-label="Клиент">
-          <option value="all">Все клиенты</option>
-          ${clients.map(c => `<option value="${c.id}"${D.client === String(c.id) ? " selected" : ""}>${c.name}</option>`).join("")}
+    + panel("", `<div class="lkd-filters lkd-filters--in lkd-ffilters">
+        <input class="lk-i" type="search" data-fee-q value="${D.fq}" placeholder="Клиент или ИНН" aria-label="Клиент или ИНН">
+        <select class="lk-s" data-fee-type aria-label="Тип купона">
+          ${opt("all", "Все типы", D.ftype)}${Object.keys(TYPE).map(t => opt(t, TYPE[t], D.ftype)).join("")}
         </select>
+        <select class="lk-s" data-fee-status aria-label="Статус">
+          ${opt("all", "Все статусы", D.fstatus)}${statuses.map(st => opt(st, LK_STATUSES[st].label, D.fstatus)).join("")}
+        </select>
+        <label class="lkd-dates__f"><span>с</span><input class="lk-i" type="date" data-fee-from value="${D.ffrom}" aria-label="Размещён с"></label>
+        <label class="lkd-dates__f"><span>по</span><input class="lk-i" type="date" data-fee-to value="${D.fto}" aria-label="Размещён по"></label>
       </div>`
-      + table(FEE_COLS, rows)
+      + (all.length
+        ? table(sortCols(FEE_COLS), list.map(feeRow).join("") + totalRow)
+        : empty("Ничего не нашлось", "Поменяйте фильтры: клиент, тип, статус или даты."))
+      + pagerSized(all.length, D.fpage, D.fsize, "data-fee-page", "data-fee-size")
       + `<div class="lk-total"><span>Клиенты закреплены за вами по территории
          ответственности. Закрепление постоянное. В выплату идут купоны,
-         завершившиеся в отчётном периоде — календарном месяце.</span></div>`)
-    + offersRow();
+         завершившиеся в отчётном периоде — календарном месяце.</span></div>`);
 };
 
-/* Бонусы клиентам */
+/* Бонусы клиентам: у дат истории — год (созвон 30.09) */
+LK_BONUSES.forEach(b => { if (!/\d{4}$/.test(b.sent)) b.sent += " 2026"; });
 VIEWS["partner:bonuses"] = () => {
   const left = LK_BONUS_POOL.limit - LK_BONUS_POOL.spent;
   const share = Math.round(LK_BONUS_POOL.spent / LK_BONUS_POOL.limit * 100);
@@ -1065,9 +1166,7 @@ VIEWS["partner:bonuses"] = () => {
     </div>`
     + panel("История начислений", table(
         /* Столбцы равными долями, сумма и дата — по левому краю своих
-           столбцов. Пока сумма стояла по правому краю, а дата сразу за
-           ней по левому, оба значения сбивались в середину строки и
-           справа оставалась пустая полоса до кнопки (правка Ивана 29.09). */
+           столбцов (правка Ивана 29.09). */
         [{ t: "Кому", w: "28%" }, { t: "Сколько", w: "24%" },
          { t: "Дата начисления", w: "24%" }, { t: "", num: true, w: "24%" }],
         LK_BONUSES.map(b => `<tr>
@@ -1077,56 +1176,61 @@ VIEWS["partner:bonuses"] = () => {
           <td class="num"><button class="btn btn--ghost" data-repeat-bonus="${innOf(b.to)}|${b.amount}">Повторить</button></td></tr>`).join("")));
 };
 
-/* Реферальные коды маркетплейсов */
-const CODE_TO = { PRTLIP02: 6, PRTLIP03: 3 };
+/* Промокоды маркетплейсов (созвон 30.09):
+   · «Кому выдан» убран: мы это никак не фиксируем, партнёр пишет себе
+     комментарий — его достаточно;
+   · «Публикаций» → «Применили»: код применяют, а не публикуют;
+   · страницы по 10: у кого-то кодов будут сотни. */
 const MP4 = ["Яндекс Маркет", "Ozon", "Wildberries", "М.Видео"];
+const CODE_PAGE = 10;
+D.codePage = 1;
 VIEWS["partner:codes"] = () => {
-  const rows = LK_CODES.map(c => {
-    const to = CODE_TO[c.code] ? clientById(CODE_TO[c.code]) : null;
-    return `<tr>
+  const pages = Math.max(1, Math.ceil(LK_CODES.length / CODE_PAGE));
+  if (D.codePage > pages) D.codePage = pages;
+  const rows = LK_CODES.slice((D.codePage - 1) * CODE_PAGE, D.codePage * CODE_PAGE).map(c => `<tr>
     <td><b class="lk-t__title">${c.status === "queued" ? "В очереди…" : c.code}</b>
         ${c.base ? `<span class="lk-t__sub">базовый</span>`
           : c.status === "queued" ? `<span class="lk-t__sub">будет готов через ~${LK_CODE_LIMITS.delayMin} мин</span>` : ""}</td>
-    <td>${to ? `${to.name}<div class="lk-t__sub">ИНН ${INN[to.id]}</div>` : c.inn ? `ИНН ${c.inn}` : "<span class='lk-t__sub'>—</span>"}</td>
     <td>${c.comment || "<span class='lk-t__sub'>—</span>"}</td>
     <td>${c.market === "—" ? "<span class='lk-t__sub'>любая</span>" : c.market}</td>
     <td class="num">${c.used ? num(c.used) : "—"}</td>
     <td class="num lk-t__key">${c.income ? rub(c.income) : "—"}</td>
-  </tr>`;
-  }).join("");
+  </tr>`).join("");
 
   const total = LK_CODES.reduce((a, c) => a + c.income, 0);
 
-  return head("Реферальные коды маркетплейсов",
-      `<button class="btn btn--solid" type="button" data-request-code>Запросить новый код</button>`)
+  return head("Промокоды маркетплейсов",
+      `<button class="btn btn--solid" type="button" data-request-code>Запросить новый промокод</button>`)
     + panel("", table(
-        [{ t: "Код" }, { t: "Кому выдан" }, { t: "Комментарий" }, { t: "Площадка" },
-         { t: "Публикаций", num: true }, { t: "Начислено", num: true, key: true }], rows)
-      + `<div class="lk-total"><b>${rub(total)}</b><span>начислено по кодам за всё время</span></div>`)
+        [{ t: "Промокод" }, { t: "Комментарий" }, { t: "Площадка" },
+         { t: "Применили", num: true }, { t: "Начислено", num: true, key: true }], rows)
+      + pager(LK_CODES.length, D.codePage, CODE_PAGE, "data-code-page")
+      + `<div class="lk-total"><b>${rub(total)}</b><span>начислено по промокодам за всё время</span></div>`)
     + panel("Как это работает", `
       <ul class="lk-rules">
-        <li>Селлер вводит ваш реферальный код при создании купона в разделе
+        <li>Селлер вводит ваш промокод при создании купона в разделе
             «Маркетплейсы». Размещение для него дешевле на ${LK_RATES.discount}%,
             вам идёт вознаграждение с того, что он заплатил.</li>
-        <li>Без кода — розничная цена и ноль вам. Код указывается заново на
-            каждой публикации: селлер может принести разные коды в разные месяцы.</li>
-        <li>Площадки — ${MP4.join(", ")}. Отдельный код под площадку
+        <li>Без промокода — розничная цена и ноль вам. Промокод указывается
+            заново на каждой публикации: селлер может принести разные промокоды
+            в разные месяцы.</li>
+        <li>Площадки — ${MP4.join(", ")}. Отдельный промокод под площадку
             поможет понять, кто из ваших людей где работает.</li>
-        <li>Новый код выдаётся с задержкой около ${LK_CODE_LIMITS.delayMin} минут,
+        <li>Новый промокод выдаётся с задержкой около ${LK_CODE_LIMITS.delayMin} минут,
             не чаще ${LK_CODE_LIMITS.perHour} в час.</li>
       </ul>`);
 };
 
-/* Запрос кода: кому — по ИНН, площадка — из четырёх */
+/* Запрос промокода: комментарий для себя и площадка. ИНН убран (30.09):
+   кому выдан код, мы не фиксируем. */
 const baseCodeModal = window.openCodeRequestModal;
 window.openCodeRequestModal = function () {
   if (nextCodeAllowedAt()) { baseCodeModal(); return; }
   openModal(`
-    <h3>Запросить реферальный код</h3>
-    <p class="lk-modal__lead">Код появляется не сразу — на выдачу уходит около
+    <h3>Запросить промокод</h3>
+    <p class="lk-modal__lead">Промокод появляется не сразу — на выдачу уходит около
     ${LK_CODE_LIMITS.delayMin} минут, это антифрод-задержка.</p>
     <div class="lk-f">
-      ${field("Кому выдаёте — ИНН", `<input class="lk-i" data-code-inn inputmode="numeric" maxlength="12" placeholder="Можно оставить пустым">`)}
       ${field("Комментарий для себя", `<input class="lk-i" data-code-comment placeholder="Например, «для чата селлеров Ozon»">`)}
       ${field("Площадка", select(["Любая"].concat(MP4)))}
     </div>
@@ -1140,73 +1244,76 @@ window.openCodeRequestModal = function () {
     const mk = qs(".lk-s", box).value;
     LK_CODES.unshift({
       code, base: false, comment: qs("[data-code-comment]", box).value.trim(),
-      inn: qs("[data-code-inn]", box).value.trim(),
       market: mk === "Любая" ? "—" : mk, used: 0, income: 0, status: "queued"
     });
     state.codeRequestAt = Date.now();
+    D.codePage = 1;
     closeModal();
     render();
   };
 };
 
-/* Отчёты и выплаты
-   · Кнопка «Сформировать счёт и акт» — одна на отчётный период, живёт
-     здесь. Неактивна, пока период не закрыт; подсказка при наведении.
-     Счёт собираем на нашей стороне из реквизитов партнёра и наших:
-     договор возмездного оказания услуг, и счета от всех партнёров должны
-     выглядеть одинаково, с нашей нумерацией.
-   · В таблице периодов — номер счёта и два статуса: ожидает выплаты,
-     выплачено. По периоду скачивается акт.
-   · Реквизиты — только посмотреть: правятся в профиле. */
-const INVOICE = { "Август 2026": "П-0826-014", "Июль 2026": "П-0726-011", "Июнь 2026": "П-0626-006" };
+/* Отчёты и выплаты (созвон 30.09):
+   · «Сформировать счёт и акт» убрана: механику поменяли — сверку
+     отправляем и выплачиваем сами, со стороны партнёра ничего формировать
+     не нужно;
+   · сумма «К выплате» — крупно, с тем же сравнением с прошлым периодом,
+     что в «Купонах клиентов»;
+   · детализация: ИНН клиента — тот же ключ, что в «Купонах клиентов»,
+     чтобы сверять, прыгая между разделами; «Окончание» → «Дата
+     публикации»; фильтр типов убран, вместо него — выбор месяца стрелками;
+   · по периодам: без столбца «Счёт», «Скачать отчёт» вместо акта;
+   · реклама отсюда убрана. */
+D.payMonth = 0;
 VIEWS["partner:payouts"] = () => {
   const pend = LK_PAYOUTS.find(p => p.status === "pending");
-  const cur = periodFees();
-  /* Тип купона — фильтром над таблицей, а не строками-группами (правка
-     Ивана 29.09). Группы разбивали короткий список на куски по одной
-     строке, а фильтр — тот же приём, что в «Купонах клиентов», и тип
-     каждой строки виден в своём столбце. Итог под таблицей считается по
-     выбранному типу. */
-  const detail = D.payType === "all" ? cur : cur.filter(f => f.type === D.payType);
-  const sumOf = (xs, k) => xs.reduce((a, f) => a + f[k], 0);
+  const month = LK_PAYOUTS[D.payMonth] || LK_PAYOUTS[0];
+  /* Детализация есть у текущего периода и у августа (купон 1019 выплачен);
+     за более ранние месяцы в прототипе строк нет */
+  const detail = month.status === "pending" ? periodFees()
+    : levelFees().filter(f => f.paid && month.period.indexOf("Август") === 0);
   const paid = LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0);
 
-  const detailRows = detail.map(f => `<tr>
-      <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">ID ${f.id} · ${clientById(f.client).name}</span></td>
+  const detailRows = detail.map(f => {
+    const cl = clientById(f.client);
+    return `<tr>
+      <td><b class="lk-t__title">${f.title}</b><span class="lk-t__sub">ID ${f.id} · ${cl.name}</span></td>
+      <td>${INN[cl.id] || "—"}</td>
       <td>${TYPE[f.type]}</td>
-      <td>${f.to}</td>
+      <td>${f.from}</td>
       <td class="num">${rub(f.rub)}</td>
       <td class="num">${f.bon ? num(f.bon) : "—"}</td>
-      <td class="num lk-t__key">${f.ready ? rub(f.fee) : `<span class="lk-t__sub">после ${f.to}</span>`}</td>
-    </tr>`).join("");
+      <td class="num lk-t__key">${f.ready || f.paid ? rub(f.fee) : `<span class="lk-t__sub">после ${f.to}</span>`}</td>
+    </tr>`;
+  }).join("");
+  const readyIn = detail.filter(f => f.ready || f.paid).reduce((a, f) => a + f.fee, 0);
 
   const rows = LK_PAYOUTS.map(p => `<tr>
     <td><b class="lk-t__title">${p.period}</b><span class="lk-t__sub">${p.date}</span></td>
     <td class="num lk-t__key">${rub(p.status === "pending" ? readySum() : p.total)}</td>
-    <td>${INVOICE[p.period] ? "№ " + INVOICE[p.period] : "<span class='lk-t__sub'>после закрытия периода</span>"}</td>
     <td>${p.status === "paid"
       ? `<span class="lk-st lk-st--done">Выплачено</span>`
       : `<span class="lk-st lk-st--wait">Ожидает выплаты</span>`}</td>
-    <td class="num">${p.status === "paid" ? `<button class="btn btn--ghost">Скачать акт</button>` : ""}</td>
+    <td class="num">${p.status === "paid" ? `<button class="btn btn--ghost">Скачать отчёт</button>` : ""}</td>
   </tr>`).join("");
 
+  const monthNav = `<div class="lkd-month">
+    <button type="button" class="lkd-month__b" data-pay-month="${D.payMonth + 1}"${D.payMonth >= LK_PAYOUTS.length - 1 ? " disabled" : ""} aria-label="Предыдущий месяц">‹</button>
+    <b>${month.period}</b>
+    <button type="button" class="lkd-month__b" data-pay-month="${D.payMonth - 1}"${D.payMonth <= 0 ? " disabled" : ""} aria-label="Следующий месяц">›</button>
+  </div>`;
+
   return head("Отчёты и выплаты", `<button class="btn btn--ghost">Выгрузить в Excel</button>`)
-    + `<div class="lk-pair">
-      ${panel("К выплате", `
-        <div class="lk-kpi__l">${pend.period}</div>
-        <div class="lk-kpi__v">${rub(readySum())}</div>
-        <div class="lk-kpi__h">${pend.date}</div>
-        <div class="lkd-invoice">
-          <span class="lkd-tipbtn" tabindex="0">
-            <button class="btn btn--solid" type="button" disabled>Сформировать счёт и акт</button>
-            <span class="lkd-tip__b" role="tooltip">Счёт можно сформировать после закрытия отчётного периода — с 1 октября. Отчётный период по договору — календарный месяц.</span>
-          </span>
-          <span class="lk-note">Счёт и акт собираются из ваших и наших
-          реквизитов — подписывать и отправлять вручную ничего не нужно.</span>
-        </div>
-        <div class="lk-total"><span>В расчёт идут купоны, завершившиеся в
-        отчётном периоде. Выплата — через 14 дней после закрытия
-        периода.</span></div>`)}
+    + `<div class="lk-pair lkd-row">
+      ${panel("К выплате", `<div class="lkd-payout">
+        <span class="lkd-money__l">${pend.period}</span>
+        <b class="lkd-payout__v">${rub(readySum())}</b>
+        ${trend()}
+        <span class="lkd-payout__d">${pend.date}</span>
+      </div>
+      <div class="lk-total"><span>В расчёт идут купоны, завершившиеся в
+      отчётном периоде. Сверку и выплату делаем сами через 14 дней после
+      закрытия периода — формировать и подписывать ничего не нужно.</span></div>`)}
       ${panel("Реквизиты для выплат", `<div class="lk-f">
         ${field("Получатель", input("", "ИП Партнёров И.", true))}
         <div class="lk-f__row">${field("ИНН", input("", "482600000000", true))}${field("ОГРНИП", input("", "321482700000012", true))}</div>
@@ -1218,63 +1325,65 @@ VIEWS["partner:payouts"] = () => {
         <a class="btn lkd-btn-grey" href="${href("profile")}" data-go="profile">Изменить в профиле</a>
       </div>`)}
     </div>`
-    + panel("Детализация · " + pend.period,
-        `<div class="lkd-filters lkd-filters--in">
-          <select class="lk-s" data-pay-type aria-label="Тип купона">
-            <option value="all">Все типы</option>
-            ${Object.keys(TYPE).map(t => `<option value="${t}"${D.payType === t ? " selected" : ""}>${TYPE[t]}</option>`).join("")}
-          </select>
-        </div>`
-        + (detail.length
-          ? table([{ t: "Купон" }, { t: "Тип" }, { t: "Окончание" }, { t: "Оплачено, ₽", num: true },
+    + panel("Детализация", (detail.length
+          ? table([{ t: "Купон" }, { t: "ИНН клиента" }, { t: "Тип" }, { t: "Дата публикации" }, { t: "Оплачено, ₽", num: true },
                    { t: "Бонусами", num: true }, { t: "Ваше начисление", num: true, key: true }], detailRows)
-            + `<div class="lk-total"><b>${rub(sumOf(detail.filter(f => f.ready), "fee"))}</b>
-               <span>готово к выплате${D.payType === "all" ? " в этом периоде" : " · " + TYPE[D.payType].toLowerCase()}</span></div>`
-          : empty("Купонов этого типа в периоде нет", "Выберите другой тип или «Все типы».")))
+            + `<div class="lk-total"><b>${rub(readyIn)}</b>
+               <span>${month.status === "pending" ? "готово к выплате в этом периоде" : "выплачено за " + month.period.toLowerCase()}</span></div>`
+          : empty("Детализации за этот месяц нет", "В прототипе строки есть только за сентябрь и август.")),
+        { act: monthNav })
     + panel("По периодам", table(
-        [{ t: "Период" }, { t: "Сумма", num: true, key: true }, { t: "Счёт" }, { t: "Статус" }, { t: "", num: true }], rows)
-      + `<div class="lk-total"><b>${rub(paid)}</b><span>выплачено за всё время</span></div>`)
-    + offersRow();
+        [{ t: "Период" }, { t: "Сумма", num: true, key: true }, { t: "Статус" }, { t: "", num: true }], rows)
+      + `<div class="lk-total"><b>${rub(paid)}</b><span>выплачено за всё время</span></div>`);
 };
 
-/* Профиль партнёра
-   · Метрик сверху больше нет: две переехали на дашборд, «клиентов в
-     месяц» и «доживает до оплаты» убраны — первая со временем обнулится,
-     вторая недостоверна.
-   · Добавлены сфера деятельности и сайт — из регистрации.
-   · Реквизиты правятся здесь: ИНН и ОГРНИП закреплены, банк и счёт —
-     через «Редактировать». Платить на другой счёт партнёр вправе:
-     в договоре главное ИНН и ОГРН, а не номер счёта.
-   · Условия переписаны по договору. */
+/* Ваш профиль (созвон 30.09)
+   · «Профиль партнёра» → «Ваш профиль»: это его кабинет;
+   · территория ответственности — просто строкой, без поля: партнёр её не
+     меняет, она здесь, «чтобы помнил»;
+   · «Добавить контактное лицо» — между территорией и основным телефоном:
+     у крупного партнёра будет прямой телефон менеджера. Имя, телефон и
+     почта обязательны;
+   · сетка рядами, как у рекламодателя: уведомления и партнёрские каналы
+     новостей рядом, условия — во всю ширину. */
+D.contacts = [{ name: "Василий, менеджер", phone: "+7 900 111-22-33", mail: "vasily@partnerov.ru" }];
+D.contactNew = false;
+
+function contactsBlock() {
+  const list = D.contacts.map((c, i) => `<div class="lkd-contact">
+      <div><b>${c.name}</b><span>${c.phone} · ${c.mail}</span></div>
+      <button type="button" class="lkd-contact__x" data-contact-del="${i}" aria-label="Удалить контакт">×</button>
+    </div>`).join("");
+  const form = D.contactNew ? `<div class="lkd-contact-new" data-contact-form>
+      <div class="lk-f__row lkd-contact-new__row">
+        ${field("Имя и должность", `<input class="lk-i" data-c="name" placeholder="Анна, менеджер">`)}
+        ${field("Телефон", `<input class="lk-i" data-c="phone" type="tel" placeholder="+7 900 000-00-00">`)}
+        ${field("Почта", `<input class="lk-i" data-c="mail" type="email" placeholder="anna@company.ru">`)}
+      </div>
+      <div class="lkd-contact-new__acts">
+        <span class="lkd-contact-new__err" data-contact-err hidden>Заполните имя, телефон и почту</span>
+        <button type="button" class="btn btn--ghost" data-contact-cancel>Отмена</button>
+        <button type="button" class="btn btn--solid" data-contact-save>Добавить</button>
+      </div>
+    </div>` : `<button type="button" class="lkd-geo__all lkd-contact-add" data-contact-add>+ Добавить контактное лицо</button>`;
+  return `<div class="lk-l"><span class="lk-l__t">Контактные лица</span>${list}${form}</div>`;
+}
+
 VIEWS["partner:profile"] = () =>
-  head("Профиль партнёра")
-  + `<div class="lk-pair">
-      <div>
+  head("Ваш профиль")
+  + `<div class="lk-pair lkd-row">
       ${panel("Партнёр", `<div class="lk-f">
         ${editField("pp", "Имя или организация", "ИП Партнёров И.")}
         ${editField("pp", "Сфера деятельности", "Рекламное агентство полного цикла")}
         ${editField("pp", "Сайт", "https://partnerov.ru")}
-        <div class="lk-f__row">${editField("pp", "Телефон", "+7 900 000-00-00")}${editField("pp", "Почта", "partner@example.ru")}</div>
         ${state.regional
-          ? field("Территория ответственности", input("", "Липецкая область: " + LK_CITIES.map(c => c.name).join(", "), true))
+          ? `<div class="lk-l"><span class="lk-l__t">Территория ответственности</span>
+              <span class="lkd-static">Липецкая область: ${LK_CITIES.map(c => c.name).join(", ")}</span></div>`
           : ""}
+        ${contactsBlock()}
+        <div class="lk-f__row">${editField("pp", "Основной телефон", "+7 900 000-00-00")}${editField("pp", "Почта", "partner@example.ru")}</div>
       </div>
       ${editBar("pp")}`)}
-      ${/* Слева — кто вы и на каких условиях работаете, справа — куда
-           слать деньги и письма (правка Ивана 29.09). «Условия» пришли
-           сюда из полной ширины, каналы уведомлений — из «Уведомлений»;
-           так столбцы ещё и сходятся по высоте. */ ""}
-      ${panel("Условия", `
-        <ul class="lk-rules">
-          <li>Вознаграждение — от 20 до 30% суммы, которую клиент заплатил
-              за размещение. Точный процент — в вашем договоре и
-              ежемесячном приложении KPI.</li>
-          <li>Скидка селлеру по вашему реферальному коду — ${LK_RATES.discount}%.</li>
-          <li>Выплата раз в месяц, через 14 дней после закрытия периода.</li>
-        </ul>
-        <div class="lkd-editbar"><a class="btn lkd-btn-grey" href="${href("docs")}" data-go="docs">Договор и приложения</a></div>`)}
-      </div>
-      <div>
       ${panel("Реквизиты для выплат", `<div class="lk-f">
         <div class="lk-f__row">
           ${lockedField("ИНН", "482600000000", "Изменился ИНН — напишите в поддержку")}
@@ -1285,33 +1394,48 @@ VIEWS["partner:profile"] = () =>
         ${editField("preq", "Почта для документов", "buh@partnerov.ru")}
       </div>
       ${editBar("preq")}`)}
+    </div>
+    <div class="lk-pair lkd-row">
       ${notifyWherePanel()}
-      </div>
-    </div>`;
+      ${panel("Партнёрские новости", `<div class="lkd-sub">
+        <p>Новости для партнёров — в наших партнёрских каналах: изменения
+        условий и KPI, новые материалы для работы с клиентами, разборы
+        удачных сделок. Уведомления о ваших клиентах и выплатах присылает
+        бот — это не он.</p>
+        <div class="lkd-sub__acts">
+          <a class="btn btn--ghost lkd-sub-btn" href="#" target="_blank" rel="noopener">Канал в Telegram</a>
+          <a class="btn btn--ghost lkd-sub-btn" href="#" target="_blank" rel="noopener">Канал в Max</a>
+        </div>
+      </div>`)}
+    </div>`
+  + panel("Условия", `
+      <ul class="lk-rules">
+        <li>Вознаграждение — от 20 до 30% суммы, которую клиент заплатил
+            за размещение. Точный процент — в вашем договоре и
+            ежемесячном приложении KPI.</li>
+        <li>Скидка селлеру по вашему промокоду — ${LK_RATES.discount}%.</li>
+        <li>Выплата раз в месяц, через 14 дней после закрытия периода.</li>
+      </ul>
+      <div class="lkd-editbar"><a class="btn lkd-btn-grey" href="${href("docs")}" data-go="docs">Договор и приложения</a></div>`);
 
 /* Документы: подписанный договор, ежемесячные приложения KPI и акты.
-   Приложение KPI действует в одностороннем порядке — его не подписывают,
-   а отмечают «ознакомлен» (см. блокировку ниже). */
+   Столбец статуса убран, «Дата» → «Дата подписания» (созвон 30.09): здесь
+   лежит только подписанное — черновики уходят на почту. Приложение KPI
+   действует без подписи: дата — когда вступило в силу. */
 const DOCS = [
-  { name: "Приложение KPI · октябрь 2026", kind: "KPI", date: "25 сентября", state: "new" },
-  { name: "Акт № П-0826-014 за август 2026", kind: "Акт", date: "1 сентября", state: "signed" },
-  { name: "Приложение KPI · сентябрь 2026", kind: "KPI", date: "26 августа", state: "read" },
-  { name: "Акт № П-0726-011 за июль 2026", kind: "Акт", date: "1 августа", state: "signed" },
-  { name: "Договор возмездного оказания услуг № П-014", kind: "Договор", date: "12 июня", state: "signed" }
+  { name: "Приложение KPI · октябрь 2026", kind: "KPI", date: "25 сентября 2026" },
+  { name: "Акт № П-0826-014 за август 2026", kind: "Акт", date: "1 сентября 2026" },
+  { name: "Приложение KPI · сентябрь 2026", kind: "KPI", date: "26 августа 2026" },
+  { name: "Акт № П-0726-011 за июль 2026", kind: "Акт", date: "1 августа 2026" },
+  { name: "Договор возмездного оказания услуг № П-014", kind: "Договор", date: "12 июня 2026" }
 ];
-const DOC_STATE = {
-  new:    `<span class="lk-st lk-st--wait">Новый</span>`,
-  read:   `<span class="lk-st lk-st--done">Ознакомлен</span>`,
-  signed: `<span class="lk-st lk-st--ok">Подписан</span>`
-};
 VIEWS["partner:docs"] = () =>
   head("Документы")
   + panel("", table(
-      [{ t: "Документ" }, { t: "Тип" }, { t: "Дата" }, { t: "Статус" }, { t: "", num: true }],
+      [{ t: "Документ" }, { t: "Тип" }, { t: "Дата подписания" }, { t: "", num: true }],
       DOCS.map(d => `<tr>
         <td><b class="lk-t__title">${d.name}</b></td>
         <td>${d.kind}</td><td>${d.date}</td>
-        <td>${gateAccepted() && d.state === "new" ? DOC_STATE.read : DOC_STATE[d.state]}</td>
         <td class="num"><button class="btn btn--ghost">Скачать</button></td></tr>`).join(""))
     + `<div class="lk-total"><span>Приложение KPI обновляется каждый месяц
        и действует без подписи — достаточно отметки «ознакомлен». Акты
@@ -1416,6 +1540,17 @@ window.render = function () {
     }, 1800);
   });
 
+  /* Галочка канала уведомлений сохраняется сразу */
+  qsa("[data-notify-ch]", host).forEach(cb => cb.addEventListener("change", () => {
+    const ch = LK_NOTIFY_CHANNELS.find(c => c.id === cb.dataset.notifyCh);
+    if (ch) ch.on = cb.checked;
+    const ok = qs("[data-notify-ok]", host);
+    if (!ok) return;
+    ok.hidden = false;
+    clearTimeout(ok._t);
+    ok._t = setTimeout(() => { ok.hidden = true; }, 2000);
+  }));
+
   /* Логотип и фирменные цвета */
   const logo = qs("[data-brand-logo]", host);
   if (logo) logo.onchange = () => {
@@ -1439,13 +1574,50 @@ window.render = function () {
     render();
   };
 
-  /* Партнёр: фильтр купонов по клиенту */
-  const fc = qs("[data-fee-client]", host);
-  if (fc) fc.onchange = () => { D.client = fc.value; render(); };
+  /* Партнёр: фильтры, сортировка и страницы «Купонов клиентов» */
+  const fq = qs("[data-fee-q]", host);
+  if (fq) fq.oninput = () => {
+    D.fq = fq.value; D.fpage = 1;
+    const pos = fq.selectionStart;
+    render();
+    const again = qs("[data-fee-q]", qs("#lkView"));
+    if (again) { again.focus(); again.setSelectionRange(pos, pos); }
+  };
+  [["data-fee-type", "ftype"], ["data-fee-status", "fstatus"], ["data-fee-from", "ffrom"], ["data-fee-to", "fto"]].forEach(([attr, key]) => {
+    const el = qs("[" + attr + "]", host);
+    if (el) el.onchange = () => { D[key] = el.value; D.fpage = 1; render(); };
+  });
+  qsa("[data-fee-sort]", host).forEach(b => b.onclick = () => {
+    const k = b.dataset.feeSort;
+    D.fdir = D.fsort === k ? -D.fdir : -1;
+    D.fsort = k;
+    render();
+  });
+  qsa("[data-fee-page]", host).forEach(b => b.onclick = () => { D.fpage = +b.dataset.feePage; render(); });
+  const fs = qs("[data-fee-size]", host);
+  if (fs) fs.onchange = () => { D.fsize = +fs.value; D.fpage = 1; render(); };
 
-  /* Партнёр: фильтр детализации выплаты по типу купона */
-  const pt = qs("[data-pay-type]", host);
-  if (pt) pt.onchange = () => { D.payType = pt.value; render(); };
+  /* Промокоды: страницы */
+  qsa("[data-code-page]", host).forEach(b => b.onclick = () => { D.codePage = +b.dataset.codePage; render(); });
+
+  /* Выплаты: месяц детализации стрелками */
+  qsa("[data-pay-month]", host).forEach(b => b.onclick = () => { D.payMonth = +b.dataset.payMonth; render(); });
+
+  /* Профиль партнёра: контактные лица */
+  const cAdd = qs("[data-contact-add]", host);
+  if (cAdd) cAdd.onclick = () => { D.contactNew = true; render(); const f = qs('[data-c="name"]', qs("#lkView")); if (f) f.focus(); };
+  const cCancel = qs("[data-contact-cancel]", host);
+  if (cCancel) cCancel.onclick = () => { D.contactNew = false; render(); };
+  const cSave = qs("[data-contact-save]", host);
+  if (cSave) cSave.onclick = () => {
+    const v = k => qs('[data-c="' + k + '"]', host).value.trim();
+    const c = { name: v("name"), phone: v("phone"), mail: v("mail") };
+    if (!c.name || !c.phone || !c.mail) { qs("[data-contact-err]", host).hidden = false; return; }
+    D.contacts.push(c);
+    D.contactNew = false;
+    render();
+  };
+  qsa("[data-contact-del]", host).forEach(b => b.onclick = () => { D.contacts.splice(+b.dataset.contactDel, 1); render(); });
 
   /* Бонусы: поиск клиента по ИНН и «Повторить» */
   const inn = qs("[data-inn]", host);
