@@ -2575,7 +2575,7 @@ function wizardExtras(form) {
   }
   const pvMedia = qs("[data-pv-media]", form);
   if (secretCb && pvMedia) {
-    pvMedia.insertAdjacentHTML("beforeend", '<span class="lkd-verified" data-pv-verified hidden><i aria-hidden="true">✓</i><span class="lkd-verified__t">Проверено</span></span>');
+    pvMedia.insertAdjacentHTML("beforeend", '<span class="lkd-verified" data-pv-verified hidden><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"/></svg></i><span class="lkd-verified__t">Проверено</span></span>');
     const badge = qs("[data-pv-verified]", pvMedia);
     const val = qs("#pvVal", pvMedia);
     /* Как на публичке: справа от плашки выгоды, той же высоты; не

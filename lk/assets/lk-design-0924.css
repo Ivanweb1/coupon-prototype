@@ -1014,3 +1014,4 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   /* «Создать купон» у рекламодателя есть в нижнем меню — в шапке не дублируем */
   .lkd[data-role="client"] .lk__cta{display:none}
 }
+.lkd-verified i svg{display:block}

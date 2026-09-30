@@ -702,7 +702,7 @@ const VALUE_SHAPE = (location.search.match(/[?&]value=(ticket|round|plate)/) ||
    высоты. Плашка бывает в одну, две и три строки, поэтому место и высоту
    подставляет placeVerified() ниже, а не CSS. */
 function verifiedFlag(c) {
-  return c.verified ? '<span class="verified-flag" title="Проверено тайным покупателем"><i aria-hidden="true">✓</i><span class="verified-flag__t">Проверено</span></span>' : "";
+  return c.verified ? '<span class="verified-flag" title="Проверено тайным покупателем"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"/></svg></i><span class="verified-flag__t">Проверено</span></span>' : "";
 }
 function placeVerified() {
   /* Рядом со скидкой, на той же линии и той же высоты (Иван 30.09). Если
@@ -714,7 +714,7 @@ function placeVerified() {
     const box = f.parentElement;
     const h = badge.offsetHeight;
     f.classList.remove("is-compact");
-    f.style.top = f.style.right = f.style.width = badge.style.width = "";
+    f.style.top = f.style.right = "";
     f.style.height = h + "px";
     f.style.bottom = (box.clientHeight - badge.offsetTop - h) + "px";
     f.style.left = (badge.offsetLeft + badge.offsetWidth + 6) + "px";
@@ -726,13 +726,9 @@ function placeVerified() {
          поэтому бейдж со словом встаёт прямо над плашкой выгоды, по её
          левому краю: остаётся при скидке и не висит посреди фото. */
       f.classList.add("is-side");
-      f.style.height = f.style.top = f.style.right = "";
-      /* Обе плашки одной ширины — среднее из их собственных (Иван 30.09).
-         Если цена в среднее не влезает, берём ширину цены. */
-      const wf = f.offsetWidth, wb = badge.offsetWidth;
-      /* не шире, чем позволяет фото: справа в углу фирменный знак (36px) */
-      const w = Math.min(Math.max(Math.round((wf + wb) / 2), badge.scrollWidth, f.scrollWidth), box.clientWidth - 36 - badge.offsetLeft + 10);
-      f.style.width = badge.style.width = w + "px";
+      f.style.top = f.style.right = "";
+      /* Одной высоты со скидкой, ширина у каждой своя (Иван 30.09) */
+      f.style.height = h + "px";
       f.style.left = badge.offsetLeft + "px";
       f.style.bottom = (box.clientHeight - badge.offsetTop + 6) + "px";
     }
