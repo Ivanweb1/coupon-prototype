@@ -714,7 +714,7 @@ function placeVerified() {
     const box = f.parentElement;
     const h = badge.offsetHeight;
     f.classList.remove("is-compact");
-    f.style.top = f.style.right = "";
+    f.style.top = f.style.right = f.style.width = badge.style.width = "";
     f.style.height = h + "px";
     f.style.bottom = (box.clientHeight - badge.offsetTop - h) + "px";
     f.style.left = (badge.offsetLeft + badge.offsetWidth + 6) + "px";
@@ -727,6 +727,12 @@ function placeVerified() {
          левому краю: остаётся при скидке и не висит посреди фото. */
       f.classList.add("is-side");
       f.style.height = f.style.top = f.style.right = "";
+      /* Обе плашки одной ширины — среднее из их собственных (Иван 30.09).
+         Если цена в среднее не влезает, берём ширину цены. */
+      const wf = f.offsetWidth, wb = badge.offsetWidth;
+      /* не шире, чем позволяет фото: справа в углу фирменный знак (36px) */
+      const w = Math.min(Math.max(Math.round((wf + wb) / 2), badge.scrollWidth, f.scrollWidth), box.clientWidth - 36 - badge.offsetLeft + 10);
+      f.style.width = badge.style.width = w + "px";
       f.style.left = badge.offsetLeft + "px";
       f.style.bottom = (box.clientHeight - badge.offsetTop + 6) + "px";
     }
