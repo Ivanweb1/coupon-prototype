@@ -704,7 +704,7 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   .lkd-bycoupon td:nth-child(3)::before{content:"Показы"}
   .lkd-bycoupon td:nth-child(4)::before{content:"Просмотры"}
   .lkd-bycoupon td:nth-child(5)::before{content:"Забрали"}
-  .lkd-bycoupon td:nth-child(6)::before{content:"Переходы"}
+  .lkd-bycoupon td:nth-child(6)::before{content:"Переходы к вам"}
 }
 @media (max-width:700px){
   .lkd .lkd-bycoupon td.num,.lkd .lkd-bycoupon td.num::before{text-align:left}
