@@ -714,11 +714,31 @@ function placeVerified() {
     const box = f.parentElement;
     const h = badge.offsetHeight;
     f.classList.remove("is-compact");
+    f.style.top = f.style.right = "";
     f.style.height = h + "px";
     f.style.bottom = (box.clientHeight - badge.offsetTop - h) + "px";
     f.style.left = (badge.offsetLeft + badge.offsetWidth + 6) + "px";
     /* справа в углу стоит фирменный знак — ему нужно ~36px */
-    if (badge.offsetLeft + badge.offsetWidth + 6 + f.offsetWidth > box.clientWidth - 36) f.classList.add("is-compact");
+    f.classList.remove("is-side");
+    if (badge.offsetLeft + badge.offsetWidth + 6 + f.offsetWidth > box.clientWidth - 36) {
+      /* Места рядом со скидкой нет (телефон, две карточки в ряд). Одна
+         галочка непонятна — «это может значить что угодно» (Вилл 30.09),
+         поэтому бейдж со словом переезжает к столбику с просмотрами, слева от него:
+         маленькими буквами, но с текстом. Где столбика нет — прежняя
+         галочка. */
+      const stats = box.querySelector(".card__stats");
+      /* Столбик центрирован трансформацией — offsetTop её не видит,
+         поэтому считаем по фактическому положению на экране */
+      const br = box.getBoundingClientRect(), sr = stats ? stats.getBoundingClientRect() : null;
+      /* Слева от столбика, вровень с его верхом — рядом с просмотрами.
+         Под столбиком и над ним на телефоне места нет: фото низкое. */
+      if (stats) {
+        f.classList.add("is-side");
+        f.style.height = f.style.left = f.style.bottom = "";
+        f.style.top = Math.round(sr.top - br.top + 4) + "px";
+        f.style.right = Math.round(br.right - sr.left + 6) + "px";
+      } else f.classList.add("is-compact");
+    }
   });
 }
 (function watchVerified() {
