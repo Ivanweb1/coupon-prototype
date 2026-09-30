@@ -400,3 +400,9 @@
   box-shadow:0 2px 8px rgba(0,0,0,.12);
 }
 .verified-flag.is-side i{width:14px;height:14px;font-size:8.5px}
+
+/* Плашка маркетплейса в углу — в одном стиле с «мин от вас» (Иван 30.09):
+   те же 10px от верха и края, та же высота 28px и шрифт 12px. Раньше
+   цветная плашка сидела внутри обёртки со своими отступами и была мельче. */
+.dz3 .card__near.card__near--mp{top:10px;left:10px;height:28px;padding:0;border-radius:var(--r-pill);overflow:hidden}
+.dz3 .card__near--mp .mp-name{height:28px;padding:0 10px;font-size:12px;font-weight:600;letter-spacing:0}
