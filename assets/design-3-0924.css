@@ -391,18 +391,27 @@
   .verified-flag i{width:15px;height:15px;font-size:9.5px}
 }
 
-/* «Проверено» под столбиком с просмотрами — когда рядом со скидкой места
-   нет (телефон). Маленькая плашка со словом вместо одинокой галочки:
-   значок без слова никто не поймёт (Вилл 30.09). */
-.verified-flag.is-side{
-  left:auto;bottom:auto;height:22px;padding:0 8px 0 4px;gap:4px;border-radius:999px;
-  font-size:10.5px;font-weight:700;-webkit-mask:none;mask:none;
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
-}
-.verified-flag.is-side i{width:14px;height:14px;font-size:8.5px}
+/* «Проверено» над плашкой выгоды — когда рядом со скидкой места нет
+   (телефон). Та же форма купона с вырезами, что на десктопе, и та же
+   ширина, что у скидки: ширину ставит app.js (Иван 30.09). */
+.verified-flag.is-side{left:auto;bottom:auto;height:28px;padding:0 10px;gap:5px;justify-content:center;font-size:12px}
+.verified-flag.is-side i{width:15px;height:15px;font-size:9.5px}
+.dz3 .card__badge[style*="width"]{box-sizing:border-box;justify-content:center;text-align:center}
 
 /* Плашка маркетплейса в углу — в одном стиле с «мин от вас» (Иван 30.09):
    те же 10px от верха и края, та же высота 28px и шрифт 12px. Раньше
    цветная плашка сидела внутри обёртки со своими отступами и была мельче. */
 .dz3 .card__near.card__near--mp{top:10px;left:10px;height:28px;padding:0;border-radius:var(--r-pill);overflow:hidden}
 .dz3 .card__near--mp .mp-name{height:28px;padding:0 10px;font-size:12px;font-weight:600;letter-spacing:0}
+@container (max-width: 150px){
+  .verified-flag.is-side{padding:0 7px;gap:4px;font-size:11px}
+  .verified-flag.is-side i{width:13px;height:13px;font-size:8.5px}
+}
+/* Цена той же ширины, что «Проверено», — текст по центру плашки */
+.val-ticket .dz3.cards-wb .card__badge[style*="width"],.dz3 .card__badge[style*="width"]{text-align:center}
+/* Самые узкие карточки: без кружка — слово важнее значка, и вырезы
+   купона его не задевают */
+@container (max-width: 150px){
+  .verified-flag.is-side i{display:none}
+  .verified-flag.is-side{padding:0 9px}
+}
