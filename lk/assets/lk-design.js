@@ -383,6 +383,8 @@ VIEWS["client:archive"] = () => {
    --------------------------------------------------------------------------
    Фильтры — период и купон; по умолчанию все купоны за 30 дней. График
    по дням (24.09) заменён воронкой по созвону 30.09. */
+const STAT_PAGE = 10;
+D.statPage = 1;
 const STAT_PERIODS = [["7", "7 дней"], ["30", "30 дней"], ["month", "Сентябрь"], ["prev", "Август"]];
 
 /* Дневной ряд — рыба, но устойчивая: одна и та же для купона и периода,
@@ -454,8 +456,11 @@ VIEWS["client:stats"] = () => {
   const series = statSeries(picked, days);
   const tot = k => series.reduce((a, r) => a + r[k], 0);
 
-  const rows = withData.slice()
-    .sort((a, b) => b.taken - a.taken)
+  /* Таблица «По купонам» — по 10 строк на странице (Коля, 30.09) */
+  const sorted = withData.slice().sort((a, b) => b.taken - a.taken);
+  const pages = Math.max(1, Math.ceil(sorted.length / STAT_PAGE));
+  if (D.statPage > pages) D.statPage = pages;
+  const rows = sorted.slice((D.statPage - 1) * STAT_PAGE, D.statPage * STAT_PAGE)
     .map(c => `<tr data-coupon="${c.id}" tabindex="0"${D.coupon !== "all" && String(c.id) !== D.coupon ? ' class="lkd-dim"' : ""}>
       <td><b class="lk-t__title">${c.title}</b><span class="lk-t__sub">${where(c)}</span></td>
       <td>${status(c.status)}</td>
@@ -488,7 +493,10 @@ VIEWS["client:stats"] = () => {
       </div>${adSlot("stats")}</div>`
     + panel("По купонам", `<div class="lkd-bycoupon">` +
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
-               { t: "Забрали", num: true, key: true }, { t: "Переходы", num: true }], rows) + `</div>`);
+               { t: "Забрали", num: true, key: true }, { t: "Переходы к вам", num: true }], rows)
+        + pager(sorted.length, D.statPage, STAT_PAGE, "data-stat-page") + `</div>`
+        /* «Переходы — какие, куда?» (Коля, 30.09): говорим прямо */
+        + `<div class="lk-note lkd-fn__note">Переходы к вам — клики с купона на ваш сайт и в соцсети.</div>`);
 };
 
 /* --------------------------------------------------------------------------
@@ -1369,6 +1377,7 @@ window.render = function () {
   /* Статистика */
   const per = qs("[data-stat-period]", host);
   if (per) per.onchange = () => { D.period = per.value; render(); };
+  qsa("[data-stat-page]", host).forEach(b => b.onclick = () => { D.statPage = +b.dataset.statPage; render(); });
   const cp = qs("[data-stat-coupon]", host);
   if (cp) cp.onchange = () => { D.coupon = cp.value; render(); };
 
@@ -2279,24 +2288,6 @@ window.calcFee = function (nicheName, names, days, chans, secret) {
   }
   return baseCalcFee(nicheName, names, days, chans, secret);
 };
-
-/* Таблицы на телефоне складываются в карточки (Иван 30.09): каждой ячейке
-   ставим подпись из шапки таблицы — CSS показывает её над значением.
-   Считаем после каждой перерисовки раздела. */
-function labelCells(root) {
-  qsa(".lk-t", root).forEach(t => {
-    const heads = qsa("thead th", t).map(th => th.textContent.trim());
-    qsa("tbody tr", t).forEach(tr => qsa(":scope > td", tr).forEach((td, i) => {
-      if (heads[i] && !td.dataset.label) td.dataset.label = heads[i];
-    }));
-  });
-}
-document.addEventListener("DOMContentLoaded", () => {
-  const view = qs("#lkView");
-  if (!view) return;
-  new MutationObserver(() => labelCells(view)).observe(view, { childList: true, subtree: true });
-  labelCells(view);
-});
 
 const baseInitCB = window.initCouponBuilder;
 window.initCouponBuilder = function (host) {
