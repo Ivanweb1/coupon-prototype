@@ -18,7 +18,7 @@
 <!-- Ч/Б форма как была: разметка и register.js общие с register.html,
      этот лист только переводит её на дизайн -->
 <link rel="stylesheet" href="assets/register.css?v=20260925e">
-<link rel="stylesheet" href="assets/design-3-register.css?v=20260930a">
+<link rel="stylesheet" href="assets/design-3-register.css?v=20260930b">
 <!-- Правки созвона 24.09.2026 — отдельным слоем -->
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930a">
 <link rel="icon" href="assets/brand/logo-red.png">
@@ -106,6 +106,11 @@
       <label class="reg__f">
         <span class="reg__l">Новый пароль</span>
         <input class="reg__i" id="lgNewPass" data-lg-new type="password" autocomplete="new-password" placeholder="Не короче 8 символов">
+      </label>
+      <!-- Новый пароль — дважды, как при регистрации (созвон 30.09) -->
+      <label class="reg__f">
+        <span class="reg__l">Повторите новый пароль</span>
+        <input class="reg__i" id="lgNewPass2" data-lg-new2 type="password" autocomplete="new-password" placeholder="Ещё раз">
       </label>
       <p class="lg__err" data-lg-reset-err role="alert" hidden></p>
       <button type="button" class="btn btn--solid btn--lg btn--wide" data-lg-save>Сохранить и войти</button>
@@ -220,6 +225,7 @@
   qs("[data-lg-save]").onclick = () => {
     if (!/^\d{4}$/.test(qs("[data-lg-code]").value)) return err("[data-lg-reset-err]", "Код из письма — 4 цифры.");
     if (qs("[data-lg-new]").value.length < 8) return err("[data-lg-reset-err]", "Новый пароль не короче 8 символов.");
+    if (qs("[data-lg-new]").value !== qs("[data-lg-new2]").value) return err("[data-lg-reset-err]", "Пароли не совпадают — введите ещё раз.");
     err("[data-lg-reset-err]");
     location.href = ROLES[role].lk;
   };
