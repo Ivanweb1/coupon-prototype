@@ -788,11 +788,11 @@ function notifyWherePanel() {
     + channels
     + `<div class="lk-note" style="margin-top:14px">Почта нужна всегда: на
        неё приходят ${IS_CLIENT ? "чеки и решения модерации" : "счета, акты и решения по выплатам"}.
-       Telegram и Max — через нашего бота, SMS сервис не отправляет.</div>`
-    + `<div class="lk-head__act" style="margin-top:14px">
-         <button class="btn btn--solid" data-save>Сохранить</button>
-         <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
-       </div>`);
+       Telegram и Max — через нашего бота, SMS сервис не отправляет.
+       <span class="lk-save-ok" data-notify-ok hidden>Сохранено</span></div>`);
+  /* «Сохранить» убрана (Иван 30.09): каналы подключает бот, а галочка
+     только включает и выключает канал — это сохраняется сразу, подтверждаем
+     короткой строкой в конце пояснения. */
 }
 
 VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
@@ -1415,6 +1415,17 @@ window.render = function () {
       render();
     }, 1800);
   });
+
+  /* Галочка канала уведомлений сохраняется сразу */
+  qsa("[data-notify-ch]", host).forEach(cb => cb.addEventListener("change", () => {
+    const ch = LK_NOTIFY_CHANNELS.find(c => c.id === cb.dataset.notifyCh);
+    if (ch) ch.on = cb.checked;
+    const ok = qs("[data-notify-ok]", host);
+    if (!ok) return;
+    ok.hidden = false;
+    clearTimeout(ok._t);
+    ok._t = setTimeout(() => { ok.hidden = true; }, 2000);
+  }));
 
   /* Логотип и фирменные цвета */
   const logo = qs("[data-brand-logo]", host);
