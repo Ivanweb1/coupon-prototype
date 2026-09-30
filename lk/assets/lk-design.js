@@ -2289,24 +2289,6 @@ window.calcFee = function (nicheName, names, days, chans, secret) {
   return baseCalcFee(nicheName, names, days, chans, secret);
 };
 
-/* Таблицы на телефоне складываются в карточки (Иван 30.09): каждой ячейке
-   ставим подпись из шапки таблицы — CSS показывает её над значением.
-   Считаем после каждой перерисовки раздела. */
-function labelCells(root) {
-  qsa(".lk-t", root).forEach(t => {
-    const heads = qsa("thead th", t).map(th => th.textContent.trim());
-    qsa("tbody tr", t).forEach(tr => qsa(":scope > td", tr).forEach((td, i) => {
-      if (heads[i] && !td.dataset.label) td.dataset.label = heads[i];
-    }));
-  });
-}
-document.addEventListener("DOMContentLoaded", () => {
-  const view = qs("#lkView");
-  if (!view) return;
-  new MutationObserver(() => labelCells(view)).observe(view, { childList: true, subtree: true });
-  labelCells(view);
-});
-
 const baseInitCB = window.initCouponBuilder;
 window.initCouponBuilder = function (host) {
   const form = qs(".lk-form", host);
