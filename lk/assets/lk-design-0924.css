@@ -872,3 +872,7 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   .lkd-geo__head span{grid-column:1}
   .lkd-geo__head svg{grid-column:2;grid-row:1 / span 2;align-self:center}
 }
+
+/* Разделы кабинета — во всю ширину окна (Иван 30.09): на широком мониторе
+   справа оставалось пустое поле в треть экрана */
+.lkd .lk__view{max-width:none}
