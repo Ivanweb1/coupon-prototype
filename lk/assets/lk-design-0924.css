@@ -814,7 +814,6 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd-sw input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;border:0;padding:0}
 .lkd-sw i{width:28px;height:28px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
 .lkd-sw span{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.lkd-brand + .lkd-brand__cols + .lk-note{margin-top:12px}
 
 /* «Добавить проверку» — белая кнопка на красном блоке (созвон 30.09):
    «должна быть охуительно понятной кнопкой, должна выбиваться». Чекбокс
@@ -876,3 +875,26 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 /* Разделы кабинета — во всю ширину окна (Иван 30.09): на широком мониторе
    справа оставалось пустое поле в треть экрана */
 .lkd .lk__view{max-width:none}
+
+/* Профиль рядами (Иван 30.09): панели в ряду одной высоты, кнопки внизу
+   панели стоят по одной линии */
+.lkd .lkd-row{align-items:stretch}
+.lkd .lkd-row > .lk-panel{margin:0;display:flex;flex-direction:column}
+.lkd .lkd-row > .lk-panel > :last-child{margin-top:auto}
+.lkd .lkd-row .lkd-editbar{padding-top:16px}
+/* Новости сервиса — обычная панель, бонус плашкой над текстом */
+.lkd .lkd-sub{margin:0;padding:0;display:flex;flex-direction:column;flex:1 1 auto}
+.lkd .lkd-sub p{margin:12px 0 16px}
+.lkd .lkd-sub .lkd-sub__acts{margin-top:auto}
+.lkd-sub__bonus{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:6px 12px 6px 10px;
+  border-radius:var(--r-pill);background:var(--brand-50);color:var(--brand-600);font-size:14px;font-weight:600}
+.lkd-sub__bonus svg{width:18px;height:18px}
+/* Логотип и цвета во всю ширину: логотип слева, цвета справа */
+.lkd-brandgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.lkd-brandgrid .lkd-brand__cols{margin-top:0}
+.lkd-brandgrid .lk-note{margin-top:10px}
+@media (max-width:900px){.lkd-brandgrid{grid-template-columns:1fr;gap:18px}}
+.lkd-sub__list{margin:0 0 14px;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--ink)}
+.lkd-sub__list li{display:flex;gap:10px;align-items:baseline}
+.lkd-sub__list li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--brand);transform:translateY(-2px)}
+.lkd .lkd-sub p.lkd-sub__aside{margin:0 0 16px;font-size:13px;color:var(--ink-3)}
