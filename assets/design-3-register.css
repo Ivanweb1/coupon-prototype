@@ -327,3 +327,8 @@
 .rg-ask .reg__ask-p{font-size:14px}
 /* Активная роль — чёрным: красный на странице остаётся только у «Войти» */
 .dz3 .lg__roles .reg__chip.is-on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* Два согласия подряд (решение 30.09) — одним блоком, с малым зазором */
+.dz3 .reg__consent:has(+ .reg__consent){margin-bottom:8px}
+.dz3 .reg__consent + .reg__consent{margin-top:0}
+.dz3 .reg__consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}

@@ -390,3 +390,13 @@
   .verified-flag{font-size:12px;padding:0 10px 0 8px}
   .verified-flag i{width:15px;height:15px;font-size:9.5px}
 }
+
+/* «Проверено» под столбиком с просмотрами — когда рядом со скидкой места
+   нет (телефон). Маленькая плашка со словом вместо одинокой галочки:
+   значок без слова никто не поймёт (Вилл 30.09). */
+.verified-flag.is-side{
+  left:auto;bottom:auto;height:22px;padding:0 8px 0 4px;gap:4px;border-radius:999px;
+  font-size:10.5px;font-weight:700;-webkit-mask:none;mask:none;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+.verified-flag.is-side i{width:14px;height:14px;font-size:8.5px}

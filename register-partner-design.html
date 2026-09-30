@@ -18,9 +18,9 @@
 <!-- Ч/Б форма как была: разметка и register.js общие с register.html,
      этот лист только переводит её на дизайн -->
 <link rel="stylesheet" href="assets/register.css?v=20260925e">
-<link rel="stylesheet" href="assets/design-3-register.css?v=20260925f">
+<link rel="stylesheet" href="assets/design-3-register.css?v=20260930a">
 <!-- Правки созвона 24.09.2026 — отдельным слоем -->
-<link rel="stylesheet" href="assets/design-3-0924.css?v=20260925g">
+<link rel="stylesheet" href="assets/design-3-0924.css?v=20260930a">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -133,9 +133,14 @@
           <p class="reg__note" style="margin-top:2px">Почта — всегда, её вы подтвердите на следующем шаге.</p>
         </div>
 
+        <!-- Два согласия отдельными галочками (решение 30.09) -->
         <label class="reg__check reg__consent">
           <input type="checkbox" data-reg-consent>
-          <span>Соглашаюсь с условиями партнёрской программы и политикой обработки персональных данных</span>
+          <span>Принимаю условия <a href="docs.html#all" target="_blank" rel="noopener">партнёрской программы</a></span>
+        </label>
+        <label class="reg__check reg__consent">
+          <input type="checkbox" data-reg-consent>
+          <span>Даю согласие на <a href="docs.html#all" target="_blank" rel="noopener">обработку персональных данных</a></span>
         </label>
 
         <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-submit>Зарегистрироваться</button>
@@ -232,6 +237,6 @@
 </footer>
 
 <script src="assets/data.js?v=20260917a"></script>
-<script src="assets/register-partner.js?v=20260925a"></script>
+<script src="assets/register-partner.js?v=20260930a"></script>
 </body>
 </html>

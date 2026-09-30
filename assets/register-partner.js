@@ -78,14 +78,15 @@ function checkInn() {
 }
 
 function submitForm() {
-  const consent = qs("[data-reg-consent]");
-  const consentLbl = qs(".reg__consent");
-  if (!consent.checked) {
-    consentLbl.classList.add("is-bad");
-    consent.focus();
+  /* Согласий может быть несколько — оферта и обработка персональных
+     данных отдельными галочками (решение 30.09). Проверяем каждое. */
+  const boxes = Array.from(document.querySelectorAll("[data-reg-consent]"));
+  boxes.forEach(cb => cb.closest(".reg__consent").classList.toggle("is-bad", !cb.checked));
+  const miss = boxes.find(cb => !cb.checked);
+  if (miss) {
+    miss.focus();
     return;
   }
-  consentLbl.classList.remove("is-bad");
   const email = qs("[data-reg-email]").value.trim();
   qs("[data-reg-email-out]").textContent = email || "почту, которую вы указали";
   showStep("email");

@@ -974,3 +974,43 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd .lkd-row > .lk-panel > .lkd-payout-wrap{margin-top:0}
 .lkd-payout-wrap{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
 .lkd-trend > span{white-space:nowrap}
+
+/* --------------------------------------------------------------------------
+   Нижнее меню на телефоне (решение 30.09)
+   -------------------------------------------------------------------------- */
+.lkd-tabbar{display:none}
+@media (max-width:900px){
+  .lkd-tabbar{
+    position:fixed;left:0;right:0;bottom:0;z-index:45;
+    display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));
+    background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+  }
+  .lkd-tabbar__i{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px;border:0;background:none;
+    font:inherit;font-size:11px;font-weight:500;color:var(--ink-3);text-decoration:none;cursor:pointer;min-width:0}
+  .lkd-tabbar__i > span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lkd-tabbar__ic{display:grid;place-items:center;width:40px;height:28px;border-radius:999px;transition:background .15s}
+  .lkd-tabbar__ic svg{width:20px;height:20px}
+  .lkd-tabbar__i.is-on{color:var(--ink)}
+  .lkd-tabbar__i.is-on .lkd-tabbar__ic{background:var(--brand-50);color:var(--brand)}
+  /* «Создать» — красная круглая кнопка по центру */
+  .lkd-tabbar__i--main .lkd-tabbar__ic{background:var(--brand);color:#fff}
+  .lkd-tabbar__i--main.is-on .lkd-tabbar__ic{background:var(--brand-600);color:#fff}
+  /* Бургер в шапке больше не нужен: полное меню — под «Ещё» */
+  .lkd .lk__burger{display:none}
+  /* Низ страницы и плавающие элементы — над панелью */
+  .lkd .lk__view{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+  .lkd .lk-pill,body:has(.lkd-wizbar) .lk-pill{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  body:has(.lkd-wizbar) .lk-pill{bottom:calc(140px + env(safe-area-inset-bottom,0px))}
+  .lkd-wizbar{bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+  /* Выезжающее меню — поверх панели, панель остаётся видна справа */
+  .lkd .lk__side{padding-bottom:72px}
+}
+.lkd-toplogo{display:none}
+@media (max-width:900px){
+  .lkd-toplogo{display:grid;place-items:center;width:36px;height:36px;margin-right:4px}
+  .lkd-toplogo img{height:30px;width:auto}
+  /* «Создать купон» у рекламодателя есть в нижнем меню — в шапке не дублируем */
+  .lkd[data-role="client"] .lk__cta{display:none}
+}
