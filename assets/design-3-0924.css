@@ -415,3 +415,14 @@
 }
 /* Галочка — рисунком, а не символом «✓»: символ сидел в кружке не по центру */
 .verified-flag i svg{display:block}
+
+/* Все плашки на фото узкой карточки (телефон) — 28px в высоту, как «мин
+   от вас» и плашка маркетплейса (Иван 30.09). Скидка в одну строку —
+   ровно 28px; длинный оффер в несколько строк растёт по тексту, иначе его
+   обрежет. «Проверено» берёт высоту скидки сам (app.js). */
+@container (max-width: 235px){
+  .val-ticket .dz3.cards-wb .card__badge:not(.is-long){
+    height:28px;padding-top:0;padding-bottom:0;
+    display:inline-flex;align-items:center;line-height:1;font-size:14px;
+  }
+}
