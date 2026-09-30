@@ -42,7 +42,6 @@ ICON.eye18 = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke
 const D = {
   period: "30",        /* статистика: период */
   coupon: "all",       /* статистика: купон */
-  ledger: "all",       /* биллинг: месяц в истории */
   editing: {},         /* какие формы открыты на редактирование */
   client: "all",       /* партнёр: фильтр купонов по клиенту */
   payType: "all",      /* партнёр: фильтр детализации выплаты по типу купона */
@@ -380,18 +379,10 @@ VIEWS["client:archive"] = () => {
 };
 
 /* --------------------------------------------------------------------------
-   Статистика: график и фильтры
+   Статистика: воронка и фильтры
    --------------------------------------------------------------------------
-   Коля: «нарисуй графику сверху — по всем купонам или по конкретному:
-   внизу дни, три линии на одном графике». Фильтры — период и купон; по
-   умолчанию все купоны за 30 дней. Показы на порядок больше остальных,
-   поэтому они не линией, а светлыми столбиками со своей шкалой справа —
-   иначе остальные три линии легли бы на ноль. */
-const STAT_LINES = [
-  { id: "opened", label: "Просмотры",     cls: "a" },
-  { id: "taken",  label: "Купон забрали", cls: "b" },
-  { id: "clicks", label: "Переходы к вам", cls: "c" }
-];
+   Фильтры — период и купон; по умолчанию все купоны за 30 дней. График
+   по дням (24.09) заменён воронкой по созвону 30.09. */
 const STAT_PERIODS = [["7", "7 дней"], ["30", "30 дней"], ["month", "Сентябрь"], ["prev", "Август"]];
 
 /* Дневной ряд — рыба, но устойчивая: одна и та же для купона и периода,
@@ -414,110 +405,50 @@ function statSeries(coupons, days) {
   return out;
 }
 
-/* Сглаженная линия — монотонная кубика (Фрич–Карлсон). Кривая проходит
-   через все дневные точки и не выскакивает за них между ними: ломаная из
-   острых углов читалась как шум, хотя показывает то же самое. */
-function smoothPath(pts) {
-  const n = pts.length;
-  if (n < 2) return n ? `M${pts[0][0]} ${pts[0][1]}` : "";
-  const dx = [], m = [], t = [];
-  for (let i = 0; i < n - 1; i++) {
-    dx[i] = pts[i + 1][0] - pts[i][0] || 1;
-    m[i] = (pts[i + 1][1] - pts[i][1]) / dx[i];
-  }
-  t[0] = m[0];
-  for (let i = 1; i < n - 1; i++) {
-    if (m[i - 1] * m[i] <= 0) t[i] = 0;
-    else {
-      const w1 = 2 * dx[i] + dx[i - 1], w2 = dx[i] + 2 * dx[i - 1];
-      t[i] = (w1 + w2) / (w1 / m[i - 1] + w2 / m[i]);
-    }
-  }
-  t[n - 1] = m[n - 2];
-  const f = v => v.toFixed(1);
-  let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
-  for (let i = 0; i < n - 1; i++) {
-    const h = dx[i] / 3;
-    d += ` C${f(pts[i][0] + h)} ${f(pts[i][1] + t[i] * h)} ` +
-         `${f(pts[i + 1][0] - h)} ${f(pts[i + 1][1] - t[i + 1] * h)} ` +
-         `${f(pts[i + 1][0])} ${f(pts[i + 1][1])}`;
-  }
-  return d;
-}
+/* Воронка вместо графика (созвон 30.09): «вот тебе идеальная архитектура
+   воронки» — как в кабинете продавца Wildberries. Четыре шага в ряд:
+   число, подпись, столбик и светлый клин к следующему шагу, под ним —
+   доля от предыдущего шага. Графика по дням нет: на телефоне он был
+   нечитаем, а статистику смотрят с телефона.
+   Высота столбика — по корню из доли от первого шага: показы на два
+   порядка больше переходов, и в линейной шкале последние шаги легли бы
+   в ноль. */
+const FUNNEL_COLORS = ["#8E6CEF", "#E0569B", "#4F6BED", "#5BB8F0"];
 
-/* График по дням. Правки Ивана 29.09:
-   · линии сглажены, у ключевой («Купон забрали») появилась заливка — из
-     трёх одинаковых линий было не видно, на какую смотреть;
-   · сетка и подписи приглушены, столбики показов ушли на задний план:
-     шкал две, и цифры справа не должны спорить с левыми;
-   · над каждым днём — прозрачное поле с подсказкой, где все четыре числа
-     сразу: раньше всплывали только показы со столбика;
-   · размер приходит в пикселях (см. отрисовку в render): панель тянется
-     до низа рекламного места, и график занимает всё, что ему осталось. */
-function statChart(series, W, H) {
-  W = W || 760; H = H || 260;
-  /* Шкала одна, слева — показы (правка Ивана 29.09). Правую шкалу с
-     делениями линий убрали: точные числа по каждому дню и так показывает
-     подсказка при наведении. Справа осталось поле только под подпись
-     последнего дня. */
-  const L = 46, R = 16, T = 34, B = 48;
-  const iw = W - L - R, ih = H - T - B;
-  const n = series.length;
-  if (n < 1 || iw < 40 || ih < 40) return "";
-  const maxL = Math.max(1, ...series.map(r => Math.max(r.opened, r.taken, r.clicks)));
-  const maxS = Math.max(1, ...series.map(r => r.shown));
-  const x = i => L + (n === 1 ? iw / 2 : i * iw / (n - 1));
-  const yL = v => T + ih - v / maxL * ih;
-  /* Столбики уже и с воздухом — это фон под линиями, а не второй
-     главный объект на поле */
-  const bw = Math.max(3, iw / n * .42);
-  const ticks = [0, .5, 1];
-  const labelEvery = n > 14 ? 5 : n > 7 ? 2 : 1;
-
-  /* Одна шкала слева — показы: первый шаг воронки и самое большое число,
-     с него график и читают (правка Ивана 29.09). */
-  const grid = ticks.map(t => `<line class="lkd-ch__grid" x1="${L}" x2="${W - R}" y1="${(T + ih - t * ih).toFixed(1)}" y2="${(T + ih - t * ih).toFixed(1)}"/>
-    <text class="lkd-ch__ax lkd-ch__ax--bar" x="${L - 10}" y="${(T + ih - t * ih + 4).toFixed(1)}" text-anchor="end">${num(Math.round(maxS * t))}</text>`).join("");
-
-  const bars = series.map((r, i) => {
-    const h = r.shown / maxS * ih;
-    return `<rect class="lkd-ch__bar" x="${(x(i) - bw / 2).toFixed(1)}" y="${(T + ih - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="2"/>`;
+function funnel(steps) {
+  const max = Math.max(1, steps[0].raw);
+  const n = steps.length;
+  const hs = steps.map(s => Math.max(3, Math.sqrt(s.raw / max) * 100));
+  /* Столбик занимает левую половину колонки, клин тянется от его правого
+     края до начала следующего столбика. SVG растягивается по ширине
+     (preserveAspectRatio="none"), поэтому координаты — в процентах. */
+  const W = 100 * n, bw = 50;
+  const bars = hs.map((h, i) => `<rect x="${i * 100}" y="${100 - h}" width="${bw}" height="${h}" fill="${FUNNEL_COLORS[i]}"/>`).join("");
+  const wedges = hs.slice(0, -1).map((h, i) => {
+    const x1 = i * 100 + bw, x2 = (i + 1) * 100, h2 = hs[i + 1];
+    return `<polygon points="${x1},${100 - h} ${x2},${100 - h2} ${x2},100 ${x1},100" fill="${FUNNEL_COLORS[i]}" opacity=".16"/>`;
   }).join("");
-
-  const paths = {};
-  STAT_LINES.forEach(l => { paths[l.id] = smoothPath(series.map((r, i) => [x(i), yL(r[l.id])])); });
-
-  /* Заливка под ключевой линией. Тем же путём, что и сама линия, —
-     низом по нулевой отметке. */
-  const area = `<path class="lkd-ch__area" d="${paths.taken} L${x(n - 1).toFixed(1)} ${(T + ih).toFixed(1)} L${x(0).toFixed(1)} ${(T + ih).toFixed(1)} Z"/>`;
-  const lines = STAT_LINES.map(l =>
-    `<path class="lkd-ch__ln lkd-ch__ln--${l.cls}" d="${paths[l.id]}"/>`).join("");
-
-  const days = series.map((r, i) => i % labelEvery === 0 || i === n - 1
-    ? `<text class="lkd-ch__ax" x="${x(i).toFixed(1)}" y="${(T + ih + 20).toFixed(1)}" text-anchor="middle">${i + 1}</text>` : "").join("");
-
-  /* Подписи шкал у самих шкал: слева — что считают линии, справа — что
-     считают столбики, снизу — что отложено по горизонтали. Легенда под
-     графиком называет линии, а эти подписи говорят, в чём измеряется
-     каждая шкала. */
-  const caps = `<text class="lkd-ch__cap lkd-ch__cap--bar" x="${L}" y="16">Показы</text>
-    <text class="lkd-ch__cap" x="${(L + iw / 2).toFixed(1)}" y="${(H - 6).toFixed(1)}" text-anchor="middle">День месяца</text>`;
-
-  /* Поле дня во всю высоту: подсказка ловится где угодно по вертикали,
-     а не только на столбике или ровно на линии. */
-  const hw = iw / Math.max(1, n - 1);
-  const hits = series.map((r, i) => `<rect class="lkd-ch__hit" x="${Math.max(L, x(i) - hw / 2).toFixed(1)}" y="${T}" width="${Math.min(hw, W - R - Math.max(L, x(i) - hw / 2)).toFixed(1)}" height="${ih.toFixed(1)}">
-      <title>День ${i + 1} · Показы ${num(r.shown)} · Просмотры ${num(r.opened)} · Забрали ${num(r.taken)} · Переходы ${num(r.clicks)}</title></rect>`).join("");
-
-  return `<svg class="lkd-ch" viewBox="0 0 ${W} ${H}" role="img" aria-label="График показателей по дням">
-    ${grid}${bars}${area}${lines}${days}${caps}${hits}</svg>`;
+  /* У последнего шага клина нет — тянем бледную полосу до края, как в
+     примере: без неё столбик обрывается посреди колонки */
+  const tail = `<rect x="${(n - 1) * 100 + bw}" y="${100 - hs[n - 1]}" width="${100 - bw}" height="${hs[n - 1]}" fill="${FUNNEL_COLORS[n - 1]}" opacity=".16"/>`;
+  return `<div class="lkd-fn" style="--n:${n}">
+    <div class="lkd-fn__cols">${steps.map((s, i) => `<div class="lkd-fn__c">
+      <b class="lkd-fn__v">${num(s.raw)}</b>
+      <span class="lkd-fn__l">${s.label}</span>
+    </div>`).join("")}</div>
+    <div class="lkd-fn__plot">
+      <svg viewBox="0 0 ${W} 100" preserveAspectRatio="none" aria-hidden="true">${wedges}${tail}${bars}</svg>
+    </div>
+    <div class="lkd-fn__cols lkd-fn__cols--p">${steps.map((s, i) => `<span class="lkd-fn__p"
+      title="${i ? "Доля от шага «" + steps[i - 1].label + "»" : "Первый шаг воронки"}">${i ? String(Math.round(s.raw / Math.max(1, steps[i - 1].raw) * 1000) / 10).replace(".", ",") : 100}%</span>`).join("")}</div>
+  </div>`;
 }
 
 VIEWS["client:stats"] = () => {
   const withData = LK_COUPONS.filter(c => c.shown > 0);
   const picked = D.coupon === "all" ? withData : withData.filter(c => String(c.id) === D.coupon);
   const days = D.period === "7" ? 7 : D.period === "prev" ? 31 : 30;
-  const series = D.series = statSeries(picked, days);
+  const series = statSeries(picked, days);
   const tot = k => series.reduce((a, r) => a + r[k], 0);
 
   const rows = withData.slice()
@@ -541,20 +472,16 @@ VIEWS["client:stats"] = () => {
     </select>
   </div>`;
 
-  const legend = `<div class="lkd-legend">
-    ${/* «шкала справа» из легенды ушло: об этом теперь говорит подпись у
-         самой шкалы (правка Ивана 29.09) */ ""}
-    <span class="lkd-legend__i lkd-legend__i--bar">Показы</span>
-    ${STAT_LINES.map(l => `<span class="lkd-legend__i lkd-legend__i--${l.cls}">${l.label}</span>`).join("")}
-  </div>`;
-
+  /* Плитки с числами ушли: те же четыре числа теперь стоят над столбиками
+     воронки, дублировать их отдельным рядом незачем */
+  const periodName = (STAT_PERIODS.find(p => p[0] === D.period) || [])[1] || "";
   return head("Статистика", filters)
-    + kpi(LK_METRICS.map(m => ({ label: m.label, value: num(tot(m.id)), raw: tot(m.id) })), { funnel: true })
-    /* Рекламное место — справа от графика, как на дашборде: это второй
+    /* Рекламное место — справа от воронки, как на дашборде: это второй
        по посещаемости раздел, и сетка у них одна */
     + `<div class="lkd-dash lkd-dash--chart"><div class="lkd-dash__main">
-        ${panel(D.coupon === "all" ? "Все купоны по дням" : (picked[0] || {}).title || "Купон",
-          `<div class="lkd-ch__box" data-chart></div>` + legend)}
+        ${panel(D.coupon === "all" ? "Воронка по всем купонам" : (picked[0] || {}).title || "Купон",
+          funnel(LK_METRICS.map(m => ({ label: m.label, raw: tot(m.id) })))
+          + `<div class="lk-note lkd-fn__note">${periodName}. Процент под столбиком — доля от предыдущего шага.</div>`)}
       </div>${adSlot("stats")}</div>`
     + panel("По купонам", `<div class="lkd-bycoupon">` +
         table([{ t: "Купон" }, { t: "Статус" }, { t: "Показы", num: true }, { t: "Просмотры", num: true },
@@ -573,14 +500,70 @@ VIEWS["client:stats"] = () => {
    · Реквизиты: ИНН и ОГРН закреплены, банк и счёт меняются — счетов у
      компании бывает несколько. И предупреждение: платить с той же
      компании, от которой размещаетесь, иначе вернём.
-   · В истории — фильтр по месяцу, столбец «Документ» убран: хранить и
+   · В истории — фильтр по датам, столбец «Документ» убран: хранить и
      связывать документы с операциями пока слишком дорого, а кнопка
      «Запросить» завалит бухгалтерию запросами. */
 const SBP_BONUS = 200;
+
+/* История операций (созвон 30.09): у дат год, фильтр «с — по» вместо
+   месяца, по 10 строк на странице и выгрузка в Excel. Строк в прототипе
+   было семь — добираем рыбой за лето, чтобы вторая страница была видна. */
+LK_LEDGER.push(
+  { date: "24 июня",  what: "Купон «Лимонады со скидкой 20%», 14 дней, Липецк", kind: "spend", coins: -1800, bonuses: -400 },
+  { date: "20 июня",  what: "Анкета о компании", kind: "bonus-service", coins: 0, bonuses: 700 },
+  { date: "12 июня",  what: "Пополнение на 5 000 ₽", kind: "topup-card", coins: 5000, bonuses: 0 },
+  { date: "2 июня",   what: "Купон «Завтраки до 12:00», 21 день, Липецк и Грязи", kind: "spend", coins: -2900, bonuses: 0 },
+  { date: "28 мая",   what: "Пополнение на 3 000 ₽", kind: "topup-sbp", coins: 3000, bonuses: 0 },
+  { date: "15 мая",   what: "Бонус за регистрацию", kind: "bonus-service", coins: 0, bonuses: 500 }
+);
+LK_LEDGER.forEach(r => { if (!/\d{4}$/.test(r.date)) r.date += " 2026"; });
+const LEDGER_PAGE = 10;
+D.ledgerFrom = D.ledgerTo = "";
+D.ledgerPage = 1;
+
+const ledgerList = () => LK_LEDGER.filter(b => {
+  const d = isoFromRu(b.date);
+  return (!D.ledgerFrom || d >= D.ledgerFrom) && (!D.ledgerTo || d <= D.ledgerTo);
+});
+
+/* Выгрузка — CSV с разделителем «;» и BOM: Excel открывает его двойным
+   кликом и не ломает кириллицу. В продукте — настоящий .xlsx. */
+function ledgerCSV(list) {
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const lines = [["Дата", "Операция", "Описание", "Рубли", "Бонусы"].map(q).join(";")]
+    .concat(list.map(b => [b.date, LK_LEDGER_KINDS[b.kind], b.what, b.coins, b.bonuses].map(q).join(";")));
+  const url = URL.createObjectURL(new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: "operacii-vse-kupony.csv" });
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* Страницы: «‹ 1 2 ›» и счётчик строк. Та же разметка пойдёт в другие
+   таблицы, где нужна пагинация. */
+function pager(total, page, size, attr) {
+  const pages = Math.max(1, Math.ceil(total / size));
+  if (pages < 2) return "";
+  const from = (page - 1) * size + 1, to = Math.min(total, page * size);
+  const btn = (p, label, off, on) => `<button type="button" class="lkd-pg__b${on ? " is-on" : ""}"
+    ${attr}="${p}"${off ? " disabled" : ""}${on ? ' aria-current="page"' : ""}>${label}</button>`;
+  return `<div class="lkd-pg">
+    <span class="lkd-pg__n">${from}–${to} из ${total}</span>
+    <div class="lkd-pg__bs">
+      ${btn(page - 1, "‹", page === 1)}
+      ${Array.from({ length: pages }, (_, i) => btn(i + 1, i + 1, false, i + 1 === page)).join("")}
+      ${btn(page + 1, "›", page === pages)}
+    </div>
+  </div>`;
+}
+
 VIEWS["client:billing"] = () => {
   const sign = n => (n > 0 ? "+" : "") + num(n);
-  const months = ["сентябр", "август", "июл"];
-  const list = D.ledger === "all" ? LK_LEDGER : LK_LEDGER.filter(b => b.date.indexOf(D.ledger) !== -1);
+  const all = ledgerList();
+  const pages = Math.max(1, Math.ceil(all.length / LEDGER_PAGE));
+  if (D.ledgerPage > pages) D.ledgerPage = pages;
+  const list = all.slice((D.ledgerPage - 1) * LEDGER_PAGE, D.ledgerPage * LEDGER_PAGE);
   const rows = list.map(b => `<tr>
     <td>${b.date}</td>
     <td><b class="lk-t__title">${LK_LEDGER_KINDS[b.kind]}</b><span class="lk-t__sub">${b.what}</span></td>
@@ -620,26 +603,29 @@ VIEWS["client:billing"] = () => {
         </div>
         <div class="lk-f__row">${editField("req", "КПП", "482601001")}${editField("req", "БИК", "044206604")}</div>
         ${editField("req", "Банк", "ПАО Сбербанк, Липецкое отделение")}
-        ${editField("req", "Расчётный счёт", "40702810435000000000")}
+        <div class="lk-f__row">
+          ${editField("req", "Расчётный счёт", "40702810435000000000")}
+          ${/* Корр. счёт нужен для счёта на оплату (созвон 30.09) */ editField("req", "Корр. счёт", "30101810800000000604")}
+        </div>
       </div>
       <div class="lkd-warn">Оплачивайте счёт с расчётного счёта той же компании,
       от имени которой размещаете купоны. Платёж от другой компании вернём.</div>
       ${editBar("req")}`)}
     </div>`
     + panel("История операций",
-        `<div class="lkd-filters lkd-filters--in">
-          <select class="lk-s" data-ledger aria-label="Период">
-            <option value="all"${D.ledger === "all" ? " selected" : ""}>За всё время</option>
-            ${[["сентябр", "Сентябрь"], ["август", "Август"], ["июл", "Июль"]].map(([k, l]) =>
-              `<option value="${k}"${D.ledger === k ? " selected" : ""}>${l}</option>`).join("")}
-          </select>
+        `<div class="lkd-filters lkd-filters--in lkd-dates">
+          <label class="lkd-dates__f"><span>с</span><input class="lk-i" type="date" data-ledger-from value="${D.ledgerFrom}" aria-label="С даты"></label>
+          <label class="lkd-dates__f"><span>по</span><input class="lk-i" type="date" data-ledger-to value="${D.ledgerTo}" aria-label="По дату"></label>
+          ${D.ledgerFrom || D.ledgerTo ? `<button type="button" class="btn btn--ghost" data-ledger-reset>Сбросить</button>` : ""}
         </div>`
         + (list.length
           ? table([{ t: "Дата" }, { t: "Операция" }, { t: "Рубли", num: true }, { t: "Бонусы", num: true }], rows)
-          : empty("Операций нет", "За этот месяц движений по балансу не было."))
+            + pager(all.length, D.ledgerPage, LEDGER_PAGE, "data-ledger-page")
+          : empty("Операций нет", "За эти даты движений по балансу не было."))
         + `<div class="lk-total"><span>Бонусы тратятся на размещение наравне
            с рублями, но хотя бы один рубль в каждой публикации уходит
-           реальными деньгами. Чеки и счета приходят на почту.</span></div>`);
+           реальными деньгами. Чеки и счета приходят на почту.</span></div>`,
+        { act: `<button type="button" class="btn btn--ghost" data-ledger-export${all.length ? "" : " disabled"}>Скачать в Excel</button>` });
 };
 
 /* --------------------------------------------------------------------------
@@ -664,7 +650,10 @@ VIEWS["client:profile"] = () =>
       ${panel("Компания", `<div class="lk-f">
         ${editField("co", "Название", "Кофейня «Пример»")}
         ${field("Краткое описание", `<textarea class="lk-ta" data-edit-f="co"${D.editing.co ? "" : " disabled"}>Своя обжарка, запись день в день, работаем с 2014 года.</textarea>`)}
-        ${editField("co", "Телефон", "+7 900 000-00-00")}
+        <div class="lk-f__row">
+          ${editField("co", "Телефон", "+7 900 000-00-00")}
+          ${/* Почты в профиле не было (созвон 30.09) */ editField("co", "E-mail", "hello@primer.ru", "mail@company.ru")}
+        </div>
         <div class="lk-f__row">
           ${lockedField("ИНН", LK_COMPANY.inn, "Изменился ИНН — напишите в поддержку")}
           ${lockedField("ОГРН", "1154827000000", "Изменился ОГРН — напишите в поддержку")}
@@ -682,6 +671,7 @@ VIEWS["client:profile"] = () =>
         ${editField("net", "MAX", "", "https://max.ru/…")}
       </div>
       ${editBar("net")}`)}
+      ${brandPanel()}
       ${subPanel()}
       </div>
     </div>`
@@ -692,6 +682,38 @@ VIEWS["client:profile"] = () =>
        <tr><td>пр-т Победы, 45</td><td>Липецк</td><td>ежедневно 09:00–21:00</td>
         <td class="num"><button class="btn btn--ghost">Изменить</button></td></tr>`),
       { act: `<button class="btn btn--ghost">Добавить точку</button>` });
+
+/* Логотип и фирменные цвета (созвон 30.09). Логотип — аватар компании в
+   кабинете и на купоне, цвета — подсказка генерации картинок: «укажите
+   три цвета, которые каждый раз будут использоваться». Логотип просим в
+   PNG на прозрачном фоне — иначе на картинке вокруг него встанет белая
+   плашка. В прототипе файл читается в браузере и никуда не уходит. */
+D.brand = { logo: "", colors: ["#E23B2E", "#2B1D14", "#F4E6D4"] };
+
+function brandPanel() {
+  const b = D.brand;
+  return panel("Логотип и фирменные цвета", `<div class="lkd-brand">
+    <label class="lkd-brand__logo${b.logo ? " has-img" : ""}">
+      <input type="file" accept="image/png,image/svg+xml,image/jpeg" data-brand-logo hidden>
+      ${b.logo ? `<img src="${b.logo}" alt="Логотип компании">` : `<span>${LK_COMPANY.ava}</span>`}
+      <em>${b.logo ? "Заменить" : "Загрузить"}</em>
+    </label>
+    <div class="lkd-brand__txt">
+      <b>Логотип</b>
+      <span>PNG на прозрачном фоне, от 512 × 512. Встанет аватаром компании в кабинете и на купонах.</span>
+    </div>
+  </div>
+  <div class="lk-l lkd-brand__cols">
+    <span class="lk-l__t">Фирменные цвета</span>
+    <div class="lkd-swatches">
+      ${b.colors.map((c, i) => `<label class="lkd-sw" style="--c:${c}">
+        <input type="color" value="${c}" data-brand-color="${i}" aria-label="Цвет ${i + 1}">
+        <i></i><span>${c.toUpperCase()}</span>
+      </label>`).join("")}
+    </div>
+  </div>
+  <div class="lk-note">Три цвета, которые генератор будет использовать в каждой картинке купона — так купоны узнаются в ленте.</div>`);
+}
 
 /* --------------------------------------------------------------------------
    Уведомления
@@ -727,19 +749,28 @@ function notifyWherePanel() {
     return `
     <div class="lk-chrow" data-notify-row="${ch.id}">
       <label class="lk-ch${ch.on ? " is-on" : ""}">
-        <input type="checkbox" data-notify-ch="${ch.id}"${ch.on ? " checked" : ""}${must ? " disabled" : ""}>
+        <input type="checkbox" data-notify-ch="${ch.id}"${ch.on ? " checked" : ""}${must || !linked ? " disabled" : ""}>
         <span>${ch.label}${must ? ` <i class="lkd-must">обязательно</i>` : ""}</span>
       </label>
       ${linked
         ? `<span class="lk-chrow__v">${val}</span>`
-        : `<input class="lk-i lk-chrow__inp" data-notify-handle="${ch.id}"
-             placeholder="Ник в ${ch.label}, например ${nick}">`}
+        /* Ник вписать мало: написать человеку бот может, только если тот
+           сам его запустил (созвон 30.09). Поэтому кнопка открывает бота,
+           человек жмёт «Старт», бот возвращает сюда его ник и ставит
+           галочку. В прототипе бот «отвечает» через пару секунд. */
+        : ch.pending
+          ? `<span class="lk-chrow__v lkd-sub-wait">Ждём подтверждения в боте…</span>`
+          : `<button type="button" class="btn btn--solid lkd-sub-btn" data-notify-sub="${ch.id}">Подписаться в ${ch.label}</button>`}
     </div>`;
   }).join("");
-  return panel("Куда присылать уведомления", channels
+  const unlinked = LK_NOTIFY_CHANNELS.some(ch => chValue(ch) === "не подключён");
+  return panel("Куда присылать уведомления",
+    (unlinked ? `<div class="lkd-sub-lead">Чтобы вовремя узнавать о модерации, оплатах и
+       бонусах, подпишитесь на наш бот — это одна кнопка. Бот сам пришлёт сюда ваш ник.</div>` : "")
+    + channels
     + `<div class="lk-note" style="margin-top:14px">Почта нужна всегда: на
        неё приходят ${IS_CLIENT ? "чеки и решения модерации" : "счета, акты и решения по выплатам"}.
-       Telegram и Max — на выбор, SMS сервис не отправляет.</div>`
+       Telegram и Max — через нашего бота, SMS сервис не отправляет.</div>`
     + `<div class="lk-head__act" style="margin-top:14px">
          <button class="btn btn--solid" data-save>Сохранить</button>
          <span class="lk-save-ok" data-save-ok hidden>Изменения сохранены</span>
@@ -1320,21 +1351,6 @@ window.render = function () {
     if (ic && (ic.dataset.icon === "used" || ic.dataset.icon === "copy")) s.remove();
   });
 
-  /* График рисуем по реальному размеру поля, а не растягиваем готовую
-     картинку: панель тянется до низа рекламного места, график занимает
-     всё, что ему осталось, а подписи и толщина линий остаются в своих
-     пикселях. Перерисовываем на изменение размера поля — окно, сворачивание
-     меню, смена периода. */
-  const box = qs("[data-chart]", host);
-  if (box) {
-    const draw = () => {
-      const w = Math.round(box.clientWidth), h = Math.round(box.clientHeight);
-      if (w > 40 && h > 40) box.innerHTML = statChart(D.series, w, h);
-    };
-    draw();
-    if (window.ResizeObserver) new ResizeObserver(draw).observe(box);
-  }
-
   /* Статистика */
   const per = qs("[data-stat-period]", host);
   if (per) per.onchange = () => { D.period = per.value; render(); };
@@ -1342,8 +1358,14 @@ window.render = function () {
   if (cp) cp.onchange = () => { D.coupon = cp.value; render(); };
 
   /* Биллинг */
-  const led = qs("[data-ledger]", host);
-  if (led) led.onchange = () => { D.ledger = led.value; render(); };
+  const lf = qs("[data-ledger-from]", host), lt = qs("[data-ledger-to]", host);
+  if (lf) lf.onchange = () => { D.ledgerFrom = lf.value; D.ledgerPage = 1; render(); };
+  if (lt) lt.onchange = () => { D.ledgerTo = lt.value; D.ledgerPage = 1; render(); };
+  const lr = qs("[data-ledger-reset]", host);
+  if (lr) lr.onclick = () => { D.ledgerFrom = D.ledgerTo = ""; D.ledgerPage = 1; render(); };
+  qsa("[data-ledger-page]", host).forEach(b => b.onclick = () => { D.ledgerPage = +b.dataset.ledgerPage; render(); });
+  const lx = qs("[data-ledger-export]", host);
+  if (lx) lx.onclick = () => ledgerCSV(ledgerList());
   qsa("[data-way]", host).forEach(b => b.onclick = () => { D.way = b.dataset.way; render(); });
 
   /* «Редактировать» → поля открыты → «Сохранить» / «Отмена» */
@@ -1355,6 +1377,35 @@ window.render = function () {
     render();
     const ok = qs(`[data-edit-ok="${f}"]`, qs("#lkView"));
     if (ok) { ok.hidden = false; setTimeout(() => { ok.hidden = true; }, 2400); }
+  });
+
+  /* Подписка на бота: «открыли» бота → через пару секунд он вернул ник */
+  qsa("[data-notify-sub]", host).forEach(b => b.onclick = () => {
+    const ch = LK_NOTIFY_CHANNELS.find(c => c.id === b.dataset.notifySub);
+    ch.pending = true;
+    render();
+    setTimeout(() => {
+      ch.pending = false;
+      ch.value = IS_CLIENT ? "@primer_coffee" : "@partnerov";
+      ch.on = true;
+      render();
+    }, 1800);
+  });
+
+  /* Логотип и фирменные цвета */
+  const logo = qs("[data-brand-logo]", host);
+  if (logo) logo.onchange = () => {
+    const file = logo.files && logo.files[0];
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = () => { D.brand.logo = r.result; render(); };
+    r.readAsDataURL(file);
+  };
+  qsa("[data-brand-color]", host).forEach(inp => inp.oninput = () => {
+    D.brand.colors[+inp.dataset.brandColor] = inp.value;
+    const sw = inp.closest(".lkd-sw");
+    sw.style.setProperty("--c", inp.value);
+    qs("span", sw).textContent = inp.value.toUpperCase();
   });
 
   /* Уведомления: «Прочитать все» */
@@ -1455,7 +1506,9 @@ const MECH_VALUE = {
   friend:    { label: "Скидка другу", ph: "−15%" }
 };
 
-const USE_MAX = 180;
+/* «Как воспользоваться» попадает в описание купона: 200 знаков мало,
+   чтобы описать акцию, — 1000 (созвон 30.09) */
+const USE_MAX = 1000;
 
 const todayISO = () => {
   const d = new Date();
@@ -1505,7 +1558,7 @@ function patchWizard(form) {
     const ta = qs("textarea", use);
     ta.value = isMarket
       ? "При покупке или добавлении в корзину введите промокод в специальное поле на маркетплейсе."
-      : "Покажите код администратору при оплате.";
+      : "Покажите код при оплате.";
     if (isMarket) {
       /* У маркетплейса текст один для всех: промокод вводят в корзине */
       ta.readOnly = true;
@@ -1538,7 +1591,7 @@ function patchWizard(form) {
       cityPanel.after(p);
       /* Вариант «без адреса»: услуги по всему городу, офиса нет */
       const list = qs("[data-addr-list]", p);
-      if (list) list.insertAdjacentHTML("afterbegin", '<label class="lk-ch lkd-noaddr" data-addr-row data-addr-city=""><input type="checkbox" data-addr-cb data-noaddr value="Без адреса"><span>Адреса нет — услуги оказываю по всему городу</span></label>');
+      if (list) list.insertAdjacentHTML("afterbegin", '<label class="lk-ch lkd-noaddr" data-addr-row data-addr-city=""><input type="checkbox" data-addr-cb data-noaddr value="Без адреса"><span>Адреса нет — услуги оказываются по всему городу или онлайн</span></label>');
     }
   }
 
@@ -1572,6 +1625,18 @@ function patchWizard(form) {
     secret.classList.add("lkd-secret");
     /* Шар из логотипа — тот же, что у красного рекламного блока на главной */
     secret.insertAdjacentHTML("afterbegin", '<img class="lkd-secret__balloon" src="../assets/brand/logo-white.png" alt="" width="357" height="600" aria-hidden="true">');
+    /* «Добавить проверку» — кнопкой, а не галочкой (созвон 30.09): галочка
+       на красном терялась, а белая плашка «✓ Проверено» в углу читалась
+       так, будто проверка уже включена. Плашку убираем, чекбокс остаётся
+       внутри кнопки — на нём держится расчёт цены. */
+    const badge = qs(".lk-secret__badge", secret);
+    if (badge) badge.remove();
+    const cb = qs('[data-f="secret"]', secret);
+    const lbl = cb && cb.closest(".lk-ch");
+    if (lbl) {
+      lbl.classList.add("lkd-secret-add");
+      qs("span", lbl).innerHTML = '<b data-secret-t>Добавить проверку</b>';
+    }
     const list = qs(".lk-secret__list", secret);
     if (list) list.innerHTML = (isMarket
       ? ["К вам на страницу товара зайдёт живой человек и применит промокод, как обычный покупатель",
@@ -1616,6 +1681,74 @@ function patchWizard(form) {
 
   if (window.LKD_MODE === "marketplace") patchMarketplace(form);
   if (window.LKD_MODE === "for-business") patchBusiness(form);
+  if (window.LKD_MODE === "regional" && cityPanel) stageCities(cityPanel);
+}
+
+/* -------------------------------------------------------------------------
+   Города размещения — ступенями, от крупного к мелкому (созвон 30.09)
+   -------------------------------------------------------------------------
+   «Я хочу разместиться в Ульяновской области, я не знаю, какие там города».
+   Сначала область, по клику — её города плиткой; «Все города области» и
+   «Во всех регионах присутствия» — одним нажатием, без ввода. Поиск по
+   городу остаётся для тех, кто знает, что ищет. Для MVP работает только
+   Липецкая область: остальные раскрываются, но города в них «скоро» —
+   так видно, как механика заработает, когда регионы подключат. */
+const GEO_SOON = [
+  { name: "Тамбовская область",  cities: ["Тамбов", "Мичуринск", "Котовск", "Моршанск", "Рассказово"] },
+  { name: "Воронежская область", cities: ["Воронеж", "Россошь", "Борисоглебск", "Лиски"] },
+  { name: "Орловская область",   cities: ["Орёл", "Ливны", "Мценск"] },
+  { name: "Курская область",     cities: ["Курск", "Железногорск", "Курчатов"] }
+];
+const plural = (n, one, few, many) =>
+  n % 10 === 1 && n % 100 !== 11 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? few : many;
+
+function stageCities(cityPanel) {
+  const chips = qs(".lk-chips", cityPanel);
+  if (!chips) return;
+  const caret = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  const head = (name, n, soon) => '<button type="button" class="lkd-geo__head" data-geo-toggle aria-expanded="' + !soon + '">' +
+    '<b>' + name + '</b><span>' + n + " " + plural(n, "город", "города", "городов") + (soon ? " · скоро" : "") + '</span>' + caret + '</button>';
+
+  const geo = document.createElement("div");
+  geo.className = "lkd-geo";
+  geo.innerHTML =
+    '<div class="lkd-geo__reg is-open" data-geo-reg>' + head("Липецкая область", LK_CITIES.length, false) +
+      '<div class="lkd-geo__body" data-geo-body></div></div>' +
+    GEO_SOON.map(r => '<div class="lkd-geo__reg is-soon" data-geo-reg>' + head(r.name, r.cities.length, true) +
+      '<div class="lkd-geo__body"><div class="lk-chips">' +
+      r.cities.map(c => '<span class="lk-chipbtn lkd-geo__soon" data-geo-city="' + c + '">' + c + '</span>').join("") +
+      '</div><div class="lk-note">Область подключим после Липецкой — сообщим в уведомлениях.</div></div></div>').join("") +
+    '<button type="button" class="btn btn--ghost lkd-geo__every" data-geo-every>Во всех регионах присутствия</button>';
+
+  chips.before(geo);
+  const body = qs("[data-geo-body]", geo);
+  body.appendChild(chips);
+  body.insertAdjacentHTML("beforeend", '<button type="button" class="lkd-geo__all" data-geo-all>Все города области</button>');
+
+  /* Плашка «Купон появится в каталоге каждого города…» писала про
+     «города других областей по мере запуска» — теперь это видно в списке */
+  const note = qsa(".lk-note", cityPanel).find(n => !n.closest(".lkd-geo"));
+  if (note) note.textContent = "Купон появится в каталоге каждого выбранного города и уйдёт в его соцсети. Каждый город добавляет к цене размещения.";
+}
+
+/* Поведение ступенчатого выбора — после того, как lk.js повесил клики на
+   плитки городов: жмём по ним же, чтобы расчёт и правило «хотя бы один
+   город» работали как при ручном выборе. */
+function geoExtras(form) {
+  const geo = qs(".lkd-geo", form);
+  if (!geo) return;
+  const clickAll = scope => qsa("[data-city]", scope).forEach(b => { if (!b.classList.contains("is-on")) b.click(); });
+  geo.addEventListener("click", e => {
+    const t = e.target.closest("[data-geo-toggle]");
+    if (t) {
+      const reg = t.closest("[data-geo-reg]");
+      reg.classList.toggle("is-open");
+      t.setAttribute("aria-expanded", reg.classList.contains("is-open"));
+      return;
+    }
+    if (e.target.closest("[data-geo-all]")) clickAll(e.target.closest("[data-geo-reg]"));
+    if (e.target.closest("[data-geo-every]")) clickAll(geo);
+  });
 }
 
 /* -------------------------------------------------------------------------
@@ -1625,7 +1758,6 @@ const MP_PRICE = 10000;          /* размещение на всю Росси�
 const MP_SECRET_PRICE = 1000;    /* проверить промокод — дело двух секунд */
 const PARTNER_DISCOUNT = 0.2;
 const PARTNER_CODES = { ok: ["PRTLIP01", "PRTELT02"], revoked: ["PRTOLD09"] };
-const MP_GROUPS = ["Wildberries", "Ozon", "Яндекс Маркет"];
 
 function patchMarketplace(form) {
   /* Ссылка на карточку и артефакт — оба обязательны: под одним артикулом
@@ -1662,15 +1794,23 @@ function patchMarketplace(form) {
      по площадкам, город в расчёте не участвует */
   const cityPanel = panelByTitle(form, "Города размещения");
   if (cityPanel) cityPanel.remove();
+  /* Каналы (созвон 30.09): площадка выбрана сверху, купон не может идти
+     на две сразу, поэтому каналы строятся под неё. В каждой соцсети у нас
+     две федеральные группы — общая «Маркетплейсы» и группа площадки, —
+     и они идут одним лотом: плашек четыре, как у остальных купонов, и
+     понижающая механика цены остаётся одной на все разделы. */
   const chan = panelByTitle(form, "Каналы публикации");
   if (chan) {
     const box = qs("[data-channels]", chan);
-    if (box) box.innerHTML = MP_GROUPS.map(n =>
-      '<label class="lk-ch is-on is-fixed"><input type="checkbox" checked disabled><span>Группа ' + n + '</span><i>входит всегда</i></label>').join("");
+    const market = (qs('[data-f="market"]', form) || {}).value || LK_MARKETS[0];
+    if (box) box.innerHTML = LK_CHANNELS.map(ch => ch.fixed
+      ? '<label class="lk-ch is-on is-fixed"><input type="checkbox" checked disabled><span>' + ch.label + '</span><i>входит всегда</i></label>'
+      : '<label class="lk-ch is-on lkd-mpch"><input type="checkbox" data-ch="' + ch.id + '" checked>' +
+        '<span>' + ch.label + '<small data-mp-pair>Маркетплейсы + ' + market + '</small></span><i data-reach="' + ch.id + '"></i></label>').join("");
     const msg = qs("[data-reach-msg]", chan);
     if (msg) msg.remove();
     const note = qs(".lk-note", chan);
-    if (note) note.textContent = "Купон уйдёт в наши федеральные группы по площадкам: Wildberries, Ozon и Яндекс Маркет. Размещение — на всю Россию, город в цене не участвует. Макеты соберём сами.";
+    if (note) note.textContent = "В каждой соцсети купон уйдёт сразу в две наши федеральные группы: общую по маркетплейсам и группу выбранной площадки. Размещение — на всю Россию, город в цене не участвует. Макеты соберём сами.";
   }
 
   /* Сайт — магазин, соцсети пусть заполняет */
@@ -1824,6 +1964,12 @@ function wizardExtras(form) {
     paint();
   }
 
+  /* Маркетплейс: сменили площадку — группы в каналах следом */
+  const mkSel = f("market");
+  if (mkSel && qs("[data-mp-pair]", form)) mkSel.addEventListener("change", () => {
+    qsa("[data-mp-pair]", form).forEach(s => { s.textContent = "Маркетплейсы + " + mkSel.value; });
+  });
+
   /* Пересчёт цены: базовый recalc вешается на смену срока, дёргаем её */
   const reprice = () => {
     const d = f("days");
@@ -1863,21 +2009,41 @@ function wizardExtras(form) {
   if (search) search.addEventListener("input", () => {
     const q = search.value.trim().toLowerCase();
     chips.forEach(b => { b.hidden = !!q && b.dataset.city.toLowerCase().indexOf(q) === -1; });
+    /* Ступенчатый выбор: города «скоро» ищутся тоже, а область, где
+       нашёлся город, раскрывается сама */
+    qsa("[data-geo-city]", form).forEach(b => { b.hidden = !!q && b.dataset.geoCity.toLowerCase().indexOf(q) === -1; });
+    if (q) qsa("[data-geo-reg]", form).forEach(r => {
+      const hit = qsa("[data-city],[data-geo-city]", r).some(b => !b.hidden);
+      r.classList.toggle("is-open", hit);
+      r.hidden = !hit;
+    });
+    else qsa("[data-geo-reg]", form).forEach(r => { r.hidden = false; });
   });
+  geoExtras(form);
 
   const sum = qs("[data-city-sum]", form);
   const noAddr = qs("[data-noaddr]", form);
   const noAddrRow = noAddr && noAddr.closest("[data-addr-row]");
   const paintCities = () => {
     const on = qsa("[data-city].is-on", form).map(b => b.dataset.city);
-    if (sum) sum.innerHTML = on.length
-      ? "Ваш купон будет размещён в: <b>" + on.join(", ") + "</b>"
-      : "<i>Выберите хотя бы один город</i>";
+    /* У каждого выбранного города — крестик (созвон 30.09): «не хватает
+       интуитивного, чтобы закрыть, что этот город не нужен». Последний
+       город не снимается — купону нужен хотя бы один. */
+    if (sum) sum.innerHTML = !on.length ? "<i>Выберите хотя бы один город</i>"
+      : qs(".lkd-geo", form)
+        ? '<span>Ваш купон будет размещён в:</span> ' + on.map(c => '<span class="lkd-picked">' + c +
+            (on.length > 1 ? '<button type="button" data-city-x="' + c + '" aria-label="Убрать ' + c + '">×</button>' : "") + '</span>').join("")
+        : "Ваш купон будет размещён в: <b>" + on.join(", ") + "</b>";
     /* lk.js прячет адреса невыбранных городов; вариант «без адреса» к
        городу не привязан, поэтому держим на нём первый выбранный */
     if (noAddrRow) noAddrRow.dataset.addrCity = on[0] || "";
   };
   if (sum) {
+    sum.addEventListener("click", e => {
+      const x = e.target.closest("[data-city-x]");
+      const chip = x && qsa("[data-city]", form).find(b => b.dataset.city === x.dataset.cityX);
+      if (chip) chip.click();
+    });
     form.addEventListener("click", e => {
       if (!e.target.closest("[data-city]")) return;
       setTimeout(() => { paintCities(); form.dispatchEvent(new Event("input", { bubbles: true })); });
@@ -1967,6 +2133,16 @@ function wizardExtras(form) {
   /* Бейдж «Проверено» на превью купона: появляется, когда отмечен тайный
      покупатель, — над плашкой выгоды, с наклоном, как будет на публичке */
   const secretCb = qs('[data-f="secret"]', form);
+  const secretBtn = secretCb && secretCb.closest(".lkd-secret-add");
+  if (secretBtn) {
+    const t = qs("[data-secret-t]", secretBtn);
+    const paintBtn = () => {
+      secretBtn.classList.toggle("is-added", secretCb.checked);
+      t.textContent = secretCb.checked ? "Проверка добавлена" : "Добавить проверку";
+    };
+    secretCb.addEventListener("change", paintBtn);
+    paintBtn();
+  }
   const pvMedia = qs("[data-pv-media]", form);
   if (secretCb && pvMedia) {
     pvMedia.insertAdjacentHTML("beforeend", '<span class="lkd-verified" data-pv-verified hidden><i aria-hidden="true">✓</i><span class="lkd-verified__t">Проверено</span></span>');
