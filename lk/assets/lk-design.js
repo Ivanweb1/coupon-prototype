@@ -1314,12 +1314,24 @@ VIEWS["partner:payouts"] = () => {
 
   return head("Отчёты и выплаты", `<button class="btn btn--ghost">Выгрузить в Excel</button>`)
     + `<div class="lk-pair lkd-row">
-      ${panel("К выплате", `<div class="lkd-payout">
+      ${/* Справа от суммы — из чего она сложилась (Иван 30.09: без пустого
+           места справа, но логично): сколько купонов завершилось, сколько
+           за них заплатили, какая вышла ставка, когда и в каком статусе
+           выплата */ ""}
+      ${panel("К выплате", `<div class="lkd-payout-wrap"><div class="lkd-payout">
         <span class="lkd-money__l">${pend.period}</span>
         <b class="lkd-payout__v">${rub(readySum())}</b>
         ${trend()}
-        <span class="lkd-payout__d">${pend.date}</span>
       </div>
+      <dl class="lkd-payout__how">${(() => {
+        const done = periodFees().filter(f => f.ready);
+        const paidBy = done.reduce((a, f) => a + f.rub, 0);
+        const rate = paidBy ? Math.round(readySum() / paidBy * 100) : 0;
+        return `<div><dt>Купонов завершилось</dt><dd>${done.length}</dd></div>
+          <div><dt>Клиенты оплатили рублями</dt><dd>${rub(paidBy)}</dd></div>
+          <div><dt>Ваше вознаграждение</dt><dd>${rate}%</dd></div>
+          <div><dt>Выплата</dt><dd>${pend.date.replace("к выплате ", "")}</dd></div>`;
+      })()}</dl></div>
       <div class="lk-total"><span>В расчёт идут купоны, завершившиеся в
       отчётном периоде. Сверку и выплату делаем сами через 14 дней после
       закрытия периода — формировать и подписывать ничего не нужно.</span></div>`)}
@@ -1449,10 +1461,158 @@ VIEWS["partner:docs"] = () =>
        и действует без подписи — достаточно отметки «ознакомлен». Акты
        подписаны факсимиле.</span></div>`);
 
-VIEWS["partner:kb"] = () =>
-  head("База знаний")
-  + panel("", empty("Скоро здесь будет база знаний",
-      "Как искать клиентов, как объяснять механику купонов, ответы на частые вопросы партнёров. Наполняем."));
+/* ==========================================================================
+   База знаний — в обоих кабинетах (созвон 30.09)
+   ==========================================================================
+   «Как в Notion»: слева поиск и дерево разделов со статьями, справа статья.
+   Материалы — презентации, шаблоны, скрипты — прикреплены прямо в тексте
+   и скачиваются из него (Вилл: отдельный архив файлов не нужен). Базы две:
+   у партнёров своя, у рекламодателей — своя, того же устройства. Тексты
+   — рыба: наполнять будет отдел взаимодействия с партнёрами. Позже рядом
+   появится ИИ-помощник по базе — в MVP его нет. */
+const KB_FILE = (name, kind, size) => `<a class="lkd-file" href="#" data-kb-file="${name}.${kind.toLowerCase()}">
+  <span class="lkd-file__i">${kind}</span><span class="lkd-file__t"><b>${name}</b><small>${kind} · ${size}</small></span>
+  <span class="lkd-file__d" aria-hidden="true">↓</span></a>`;
+
+const KB = {
+  partner: [
+    { id: "p0", title: "00. Старт партнёра", items: [
+      { id: "p-howto", title: "Как пользоваться базой знаний", updated: "вчера, 16:42", views: 12, body: `
+        <p>База знаний — всё, что нужно для работы с клиентами: как их искать, как объяснять купоны, как устроены выплаты. Слева — разделы, сверху — поиск по всем статьям.</p>
+        <p>Материалы — презентации, шаблоны писем, скрипты звонков — прикреплены прямо к статьям. Нажмите на файл, чтобы скачать.</p>
+        <h2>С чего начать</h2>
+        <ol><li><b>Чек-лист первых дней</b> — что сделать в первую неделю.</li>
+        <li><b>Как объяснить купон за минуту</b> — короткий скрипт для первого звонка.</li>
+        <li><b>Выплаты и документы</b> — когда и как приходят деньги.</li></ol>` },
+      { id: "p-checklist", title: "Чек-лист первых дней", updated: "28 сентября 2026", views: 34, body: `
+        <p>Первая неделя — на то, чтобы разобраться в сервисе и провести первые встречи. Отмечайте пункты по порядку.</p>
+        <h2>День 1–2</h2>
+        <ul><li>Пройдите регистрацию клиента сами — посмотрите сервис глазами рекламодателя.</li>
+        <li>Прочитайте приложение KPI на текущий месяц.</li>
+        <li>Подпишитесь на партнёрский канал в Telegram или Max.</li></ul>
+        <h2>День 3–5</h2>
+        <ul><li>Составьте список из 30 компаний вашей территории.</li>
+        <li>Проведите первые пять звонков по скрипту.</li></ul>
+        ${KB_FILE("Список первых шагов", "PDF", "240 КБ")}` }
+    ] },
+    { id: "p1", title: "01. Поиск клиентов", items: [
+      { id: "p-where", title: "Где искать клиентов", updated: "25 сентября 2026", views: 51, body: `
+        <p>Лучше всего купоны работают у бизнеса с живым потоком гостей: кафе, салоны, автосервисы, фитнес. Начните с улиц, где вы бываете сами.</p>
+        <h2>Источники</h2>
+        <ol><li><b>Карты и справочники</b> — компании рядом, у которых мало отзывов.</li>
+        <li><b>Соцсети города</b> — кто уже даёт рекламу, тот готов платить за трафик.</li>
+        <li><b>Ваши клиенты</b> — попросите рекомендацию у тех, кому купон уже принёс гостей.</li></ol>
+        ${KB_FILE("База компаний Липецка — шаблон", "XLSX", "86 КБ")}` },
+      { id: "p-script", title: "Как объяснить купон за минуту", updated: "вчера, 11:05", views: 78, body: `
+        <p>Короткий скрипт для первого звонка. Задача — не продать, а договориться о встрече.</p>
+        <h2>Скрипт</h2>
+        <ol><li><b>Кто вы:</b> «Я партнёр сервиса „Все купоны“ в Липецке».</li>
+        <li><b>Что это:</b> «Мы публикуем скидки компаний в каталоге и городских группах — люди забирают купон и приходят к вам».</li>
+        <li><b>Почему сейчас:</b> «Первый купон размещаем бесплатно».</li>
+        <li><b>Встреча:</b> «Покажу за 15 минут, как это выглядит. Когда удобно?»</li></ol>
+        ${KB_FILE("Скрипт первого звонка", "DOCX", "54 КБ")}
+        ${KB_FILE("Презентация для клиента", "PDF", "3,4 МБ")}` }
+    ] },
+    { id: "p2", title: "02. Механики купонов", items: [
+      { id: "p-mech", title: "Пять механик скидки", updated: "20 сентября 2026", views: 23 },
+      { id: "p-secret", title: "Тайный покупатель: как продавать", updated: "20 сентября 2026", views: 9 }
+    ] },
+    { id: "p3", title: "03. Выплаты и документы", items: [
+      { id: "p-pay", title: "Когда приходят выплаты", updated: "30 сентября 2026", views: 40 },
+      { id: "p-kpi", title: "Приложение KPI: как читать", updated: "25 сентября 2026", views: 17 }
+    ] },
+    { id: "p4", title: "04. Материалы", items: [
+      { id: "p-brand", title: "Логотипы и презентации", updated: "18 сентября 2026", views: 66 }
+    ] }
+  ],
+  client: [
+    { id: "c0", title: "00. Первые шаги", items: [
+      { id: "c-howto", title: "Как пользоваться базой знаний", updated: "вчера, 16:42", views: 8, body: `
+        <p>Здесь собраны ответы на частые вопросы: как создать купон, какую механику выбрать, как читать статистику и платить. Слева — разделы, сверху — поиск.</p>
+        <p>Шаблоны и примеры прикреплены прямо к статьям — нажмите на файл, чтобы скачать.</p>` },
+      { id: "c-first", title: "Первый купон за 10 минут", updated: "29 сентября 2026", views: 112, body: `
+        <p>Первый купон размещаем бесплатно. Вот как собрать его быстро.</p>
+        <h2>По шагам</h2>
+        <ol><li><b>Раздел и ниша</b> — где купон появится в каталоге.</li>
+        <li><b>Предложение</b> — заголовок и механика: скидка, подарок, «два по цене одного».</li>
+        <li><b>Срок и промокод</b> — промокод можно сгенерировать.</li>
+        <li><b>Города и адреса</b> — где купон увидят и где им воспользоваться.</li>
+        <li><b>Изображение</b> — загрузите своё или сгенерируйте.</li></ol>
+        ${KB_FILE("Чек-лист удачного купона", "PDF", "310 КБ")}` }
+    ] },
+    { id: "c1", title: "01. Механики и предложения", items: [
+      { id: "c-mech", title: "Какую механику выбрать", updated: "22 сентября 2026", views: 64 },
+      { id: "c-title", title: "Как написать заголовок", updated: "22 сентября 2026", views: 41 }
+    ] },
+    { id: "c2", title: "02. Статистика", items: [
+      { id: "c-funnel", title: "Как читать воронку", updated: "30 сентября 2026", views: 27 }
+    ] },
+    { id: "c3", title: "03. Оплата и бонусы", items: [
+      { id: "c-bonus", title: "Рубли и бонусы: что чем оплачивается", updated: "24 сентября 2026", views: 38 },
+      { id: "c-docs", title: "Закрывающие документы", updated: "24 сентября 2026", views: 15 }
+    ] }
+  ]
+};
+/* Статьи без текста в прототипе — одна и та же рыба, чтобы раздел не
+   выглядел пустым при клике */
+const KB_FISH = `<p>Статья готовится: текст напишет отдел взаимодействия с партнёрами. Здесь будут пошаговые инструкции, примеры и материалы для скачивания.</p>
+  <h2>Что будет в статье</h2><ul><li>Короткое объяснение, зачем это нужно.</li><li>Инструкция по шагам.</li><li>Примеры и частые ошибки.</li></ul>
+  ${KB_FILE("Материалы к статье", "PDF", "1,2 МБ")}`;
+
+D.kb = { client: "c-howto", partner: "p-howto" };
+D.kbOpen = {};
+D.kbQ = "";
+
+const kbAll = () => KB[state.role].flatMap(sec => sec.items.map(it => Object.assign({ sec: sec }, it)));
+const kbText = it => (it.title + " " + (it.body || "")).replace(/<[^>]+>/g, " ").toLowerCase();
+
+function kbView() {
+  const role = state.role;
+  const all = kbAll();
+  const cur = all.find(it => it.id === D.kb[role]) || all[0];
+  const q = D.kbQ.trim().toLowerCase();
+  const hits = q ? all.filter(it => kbText(it).indexOf(q) !== -1) : null;
+  const item = it => `<button type="button" class="lkd-kb__it${it.id === cur.id ? " is-on" : ""}" data-kb="${it.id}">${it.title}</button>`;
+
+  const tree = hits
+    ? (hits.length
+        ? `<div class="lkd-kb__found">Нашлось: ${hits.length}</div>` + hits.map(it => `<button type="button" class="lkd-kb__it lkd-kb__it--hit${it.id === cur.id ? " is-on" : ""}" data-kb="${it.id}">${it.title}<small>${it.sec.title}</small></button>`).join("")
+        : `<div class="lkd-kb__found">Ничего не нашлось</div>`)
+    : KB[role].map(sec => {
+        const open = D.kbOpen[sec.id] !== undefined ? D.kbOpen[sec.id] : sec.items.some(it => it.id === cur.id) || sec === KB[role][0];
+        return `<div class="lkd-kb__sec${open ? " is-open" : ""}">
+          <button type="button" class="lkd-kb__h" data-kb-sec="${sec.id}" aria-expanded="${open}">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+            <span>${sec.title}</span></button>
+          <div class="lkd-kb__items">${sec.items.map(item).join("")}</div>
+        </div>`;
+      }).join("");
+
+  return head("База знаний")
+    + `<div class="lk-panel lkd-kb">
+      <aside class="lkd-kb__side">
+        <label class="lkd-kb__search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="search" data-kb-q value="${D.kbQ}" placeholder="Поиск по базе" aria-label="Поиск по базе знаний">
+        </label>
+        <nav class="lkd-kb__tree" aria-label="Статьи">${tree}</nav>
+      </aside>
+      <article class="lkd-kb__art">
+        <span class="lkd-kb__crumb">${cur.sec.title}</span>
+        <h2 class="lkd-kb__title">${cur.title}</h2>
+        <div class="lkd-kb__meta">Изменён ${cur.updated} · ${ICON.eye18}<span>${cur.views}</span></div>
+        <div class="lkd-kb__body">${cur.body || KB_FISH}</div>
+      </article>
+    </div>`;
+}
+VIEWS["partner:kb"] = VIEWS["client:kb"] = kbView;
+
+/* Рекламодателю — такой же пункт меню, над «Уведомлениями» */
+if (IS_CLIENT) {
+  const at = NAV.client.findIndex(x => x.id === "notifications");
+  NAV.client.splice(at, 0, { id: "kb", label: "База знаний", icon: "book" });
+  TITLES.client.kb = "База знаний";
+}
 
 /* Ознакомление с новыми условиями блокирует кабинет. Пока партнёр не
    отметил, что прочитал новое приложение KPI, ничего сделать в кабинете
@@ -1604,6 +1764,36 @@ window.render = function () {
   qsa("[data-fee-page]", host).forEach(b => b.onclick = () => { D.fpage = +b.dataset.feePage; render(); });
   const fs = qs("[data-fee-size]", host);
   if (fs) fs.onchange = () => { D.fsize = +fs.value; D.fpage = 1; render(); };
+
+  /* База знаний: статья, раздел, поиск, скачивание материала */
+  qsa("[data-kb]", host).forEach(btn => btn.onclick = () => {
+    D.kb[state.role] = btn.dataset.kb;
+    render();
+    const art = qs(".lkd-kb__art", qs("#lkView"));
+    if (art && window.innerWidth <= 900) art.scrollIntoView({ block: "start", behavior: "smooth" });
+  });
+  qsa("[data-kb-sec]", host).forEach(btn => btn.onclick = () => {
+    const sec = btn.closest(".lkd-kb__sec");
+    D.kbOpen[btn.dataset.kbSec] = !sec.classList.contains("is-open");
+    sec.classList.toggle("is-open");
+    btn.setAttribute("aria-expanded", sec.classList.contains("is-open"));
+  });
+  const kq = qs("[data-kb-q]", host);
+  if (kq) kq.oninput = () => {
+    D.kbQ = kq.value;
+    const pos = kq.selectionStart;
+    render();
+    const again = qs("[data-kb-q]", qs("#lkView"));
+    if (again) { again.focus(); again.setSelectionRange(pos, pos); }
+  };
+  qsa("[data-kb-file]", host).forEach(a => a.onclick = e => {
+    e.preventDefault();
+    /* В прототипе файла нет — отдаём текстовую заглушку с тем же именем */
+    const url = URL.createObjectURL(new Blob(["Материал базы знаний — заглушка прототипа."], { type: "text/plain;charset=utf-8" }));
+    const link = Object.assign(document.createElement("a"), { href: url, download: a.dataset.kbFile + ".txt" });
+    document.body.appendChild(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
 
   /* Промокоды: страницы */
   qsa("[data-code-page]", host).forEach(b => b.onclick = () => { D.codePage = +b.dataset.codePage; render(); });
