@@ -644,12 +644,13 @@ VIEWS["client:billing"] = () => {
      первые три и бросят. */
 VIEWS["client:profile"] = () =>
   head("Профиль компании")
-  /* Два столбца по смыслу, а не по длине (правка Ивана 29.09):
-     слева — сама компания и то, куда ей писать, справа — где компанию
-     найти в сети и наш канал. Так столбцы ещё и сходятся по высоте:
-     раньше слева стоял один блок, справа три, и слева пустовал экран. */
-  + `<div class="lk-pair">
-      <div>
+  /* Сетка по смыслу, рядами (правка Ивана 30.09):
+     · компания и где её найти в сети;
+     · где компания читает нас: бот для уведомлений и канал новостей за
+       бонусы — оба про «подпишитесь», поэтому рядом, одной высоты;
+     · логотип и цвета — во всю ширину, в одну строку;
+     · точки продаж. */
+  + `<div class="lk-pair lkd-row">
       ${panel("Компания", `<div class="lk-f">
         ${editField("co", "Название", "Кофейня «Пример»")}
         ${field("Краткое описание", `<textarea class="lk-ta" data-edit-f="co"${D.editing.co ? "" : " disabled"}>Своя обжарка, запись день в день, работаем с 2014 года.</textarea>`)}
@@ -663,21 +664,24 @@ VIEWS["client:profile"] = () =>
         </div>
       </div>
       ${editBar("co")}`)}
-      ${notifyWherePanel()}
-      </div>
-      <div>
       ${panel("Компания в сети", `<div class="lk-f">
-        ${editField("net", "Сайт", LK_COMPANY.site, "https://…")}
-        ${editField("net", "ВКонтакте", LK_COMPANY.vk, "https://vk.com/…")}
-        ${editField("net", "Telegram", LK_COMPANY.tg, "https://t.me/…")}
-        ${editField("net", "Одноклассники", "", "https://ok.ru/…")}
+        <div class="lk-f__row">
+          ${editField("net", "Сайт", LK_COMPANY.site, "https://…")}
+          ${editField("net", "ВКонтакте", LK_COMPANY.vk, "https://vk.com/…")}
+        </div>
+        <div class="lk-f__row">
+          ${editField("net", "Telegram", LK_COMPANY.tg, "https://t.me/…")}
+          ${editField("net", "Одноклассники", "", "https://ok.ru/…")}
+        </div>
         ${editField("net", "MAX", "", "https://max.ru/…")}
       </div>
       ${editBar("net")}`)}
-      ${brandPanel()}
+    </div>
+    <div class="lk-pair lkd-row">
+      ${notifyWherePanel()}
       ${subPanel()}
-      </div>
     </div>`
+  + brandPanel()
   + panel("Точки продаж", table(
       [{ t: "Адрес" }, { t: "Город" }, { t: "Режим работы" }, { t: "", num: true }],
       `<tr><td>ул. Первомайская, 12</td><td>Липецк</td><td>ежедневно 08:00–22:00</td>
@@ -695,7 +699,7 @@ D.brand = { logo: "", colors: ["#E23B2E", "#2B1D14", "#F4E6D4"] };
 
 function brandPanel() {
   const b = D.brand;
-  return panel("Логотип и фирменные цвета", `<div class="lkd-brand">
+  return panel("Логотип и фирменные цвета", `<div class="lkd-brandgrid"><div class="lkd-brand">
     <label class="lkd-brand__logo${b.logo ? " has-img" : ""}">
       <input type="file" accept="image/png,image/svg+xml,image/jpeg" data-brand-logo hidden>
       ${b.logo ? `<img src="${b.logo}" alt="Логотип компании">` : `<span>${LK_COMPANY.ava}</span>`}
@@ -714,8 +718,8 @@ function brandPanel() {
         <i></i><span>${c.toUpperCase()}</span>
       </label>`).join("")}
     </div>
-  </div>
-  <div class="lk-note">Три цвета, которые генератор будет использовать в каждой картинке купона — так купоны узнаются в ленте.</div>`);
+    <div class="lk-note">Три цвета, которые генератор будет использовать в каждой картинке купона — так купоны узнаются в ленте.</div>
+  </div></div>`);
 }
 
 /* --------------------------------------------------------------------------
@@ -731,6 +735,11 @@ function brandPanel() {
    лично, по телефону: «подпишитесь на группу». */
 const SUB_BONUS = 150;
 
+/* Telegram тоже подключается только через бота (Иван 30.09): в прототипе
+   он был «уже подключён» с ником — теперь, как и Max, с кнопкой
+   «Подписаться» */
+LK_NOTIFY_CHANNELS.forEach(ch => { if (ch.id !== "email") { ch.value = "не подключён"; ch.on = false; } });
+
 /* Блок «Куда присылать» — один на оба кабинета. Отличаются подставленные
    значения (у партнёра своя почта и ник) и строка про то, что приходит
    на почту: у рекламодателя чеки и модерация, у партнёра счета и акты.
@@ -742,9 +751,7 @@ const SUB_BONUS = 150;
      совсем). Ширина ограничена, иначе строка канала растягивается через
      весь раздел. */
 function notifyWherePanel() {
-  const nick = IS_CLIENT ? "@primer_coffee" : "@partnerov";
-  const chValue = ch => !IS_CLIENT && ch.id === "email" ? "partner@example.ru"
-    : !IS_CLIENT && ch.id === "tg" ? nick : ch.value;
+  const chValue = ch => !IS_CLIENT && ch.id === "email" ? "partner@example.ru" : ch.value;
   const channels = LK_NOTIFY_CHANNELS.map(ch => {
     const val = chValue(ch);
     const linked = val !== "не подключён";
@@ -803,19 +810,24 @@ VIEWS["client:notifications"] = VIEWS["partner:notifications"] = () => {
 };
 
 /* Подписка на наши каналы за бонусы — нативная реклама сервиса (созвон
-   24.09, вечер). Стоит в профиле компании, под каналами уведомлений
-   (правка Ивана 29.09): оба блока про то, где компания нас читает. */
+   24.09, вечер). Стоит в профиле компании рядом с каналами уведомлений,
+   одной высоты с ними (правка Ивана 30.09): оба блока — «подпишитесь». */
 function subPanel() {
-  return `<div class="lk-panel lkd-sub">
-    <b class="lkd-sub__h">Хотите первыми узнавать о новых механиках и бонусах?</b>
-    <p>Подпишитесь на наш канал — присылаем новости сервиса, подборки
-    удачных купонов и акции для рекламодателей. За подписку —
-    <b>${SUB_BONUS} бонусов</b>.</p>
+  return panel("Новости сервиса", `<div class="lkd-sub">
+    <div class="lkd-sub__bonus">${ICON.coins}<span>+${SUB_BONUS} бонусов за подписку</span></div>
+    <p>Подпишитесь на наш канал — бонусы начислим сразу после подписки.
+    Что там будет:</p>
+    <ul class="lkd-sub__list">
+      <li>Новые механики и сезонные подборки</li>
+      <li>Разборы удачных купонов в вашей нише</li>
+      <li>Акции и бонусы для рекламодателей</li>
+    </ul>
+    <p class="lkd-sub__aside">Это не уведомления о ваших купонах — их присылает бот.</p>
     <div class="lkd-sub__acts">
-      <a class="btn btn--ghost" href="#" target="_blank" rel="noopener">Telegram</a>
-      <a class="btn btn--ghost" href="#" target="_blank" rel="noopener">Max</a>
+      <a class="btn btn--ghost lkd-sub-btn" href="#" target="_blank" rel="noopener">Канал в Telegram</a>
+      <a class="btn btn--ghost lkd-sub-btn" href="#" target="_blank" rel="noopener">Канал в Max</a>
     </div>
-  </div>`;
+  </div>`);
 }
 
 /* Превью купона в мастере — та же карточка, что в ленте, поэтому и правки
