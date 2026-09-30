@@ -175,7 +175,40 @@ window.renderChrome = function () {
   }
 
   sideFoot();
+  tabBar();
 };
+
+/* Нижнее меню на телефоне (решение 30.09, предложение Коли): главные
+   разделы — панелью у нижнего края, под большим пальцем, как в
+   приложениях маркетплейсов. Пять мест: четыре частых раздела и «Ещё»,
+   которое открывает полное меню. У рекламодателя в центре — «Создать
+   купон». На десктопе панель скрыта. */
+function tabBar() {
+  const old = qs(".lkd-tabbar");
+  if (old) old.remove();
+  const tabs = IS_CLIENT
+    ? [["dashboard", "Дашборд", "grid"], ["coupons", "Купоны", "tag"], ["+create", "Создать", "plus"], ["stats", "Статистика", "chart"]]
+    : [["dashboard", "Дашборд", "grid"], ["clients", "Клиенты", "users"], ["codes", "Промокоды", "code"], ["payouts", "Выплаты", "wallet"]];
+  const cur = /^new-/.test(state.view) ? "+create" : state.view === "coupon" ? "coupons" : state.view;
+  const inMenu = !tabs.some(t => t[0] === cur);
+  const bar = document.createElement("nav");
+  bar.className = "lkd-tabbar";
+  bar.setAttribute("aria-label", "Основные разделы");
+  bar.innerHTML = tabs.map(([id, label, icon]) => id === "+create"
+    ? `<button type="button" class="lkd-tabbar__i lkd-tabbar__i--main${cur === id ? " is-on" : ""}" data-tab-create><span class="lkd-tabbar__ic">${ICON.plus}</span><span>${label}</span></button>`
+    : `<a class="lkd-tabbar__i${cur === id ? " is-on" : ""}" href="${href(id)}" data-tab="${id}"${cur === id ? ' aria-current="page"' : ""}><span class="lkd-tabbar__ic">${ICON[icon]}</span><span>${label}</span></a>`
+  ).join("") + `<button type="button" class="lkd-tabbar__i${inMenu ? " is-on" : ""}" data-tab-more><span class="lkd-tabbar__ic">${ICON.burger}</span><span>Ещё</span></button>`;
+  document.body.appendChild(bar);
+  qsa("[data-tab]", bar).forEach(a => a.onclick = e => { e.preventDefault(); document.body.classList.remove("lk-nav-open"); go(a.dataset.tab); });
+  const create = qs("[data-tab-create]", bar);
+  if (create) create.onclick = () => { document.body.classList.remove("lk-nav-open"); openCreateModal(); };
+  qs("[data-tab-more]", bar).onclick = () => document.body.classList.toggle("lk-nav-open");
+
+  /* Бургера в шапке на телефоне больше нет — на его месте логотип */
+  const top = qs(".lk__top");
+  if (top && !qs(".lkd-toplogo", top)) top.insertAdjacentHTML("afterbegin",
+    `<a class="lkd-toplogo" href="../index-design-3.html" aria-label="Все купоны — на главную"><img src="../assets/brand/logo-red.png" alt="" width="18" height="30"></a>`);
+}
 
 /* Низ бургер-меню на телефоне (Иван 30.09): в шапке на узком экране
    от кошелька и профиля остаются одни значки, поэтому в меню дублируем
