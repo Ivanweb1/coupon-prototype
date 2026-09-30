@@ -1014,7 +1014,9 @@ VIEWS["partner:dashboard"] = () => {
         { label: "Начислено всего",           value: rub(feeAll), note: "за все периоды" },
         { label: "Начисление с клиента",      value: rub(feePerClient), note: "в среднем" }
       ])
-    + `<div class="lkd-dash"><div class="lkd-dash__main">
+    /* Панель тянется до низа рекламной карточки — блоки кончаются на одной
+       линии (Иван 30.09), как в статистике */
+    + `<div class="lkd-dash lkd-dash--chart"><div class="lkd-dash__main">
         ${panel("Последние купоны", table(FEE_COLS_SHORT, last.map(feeRowShort).join("")),
           { act: `<a class="btn btn--ghost" href="${href("clients")}" data-go="clients">Все купоны</a>` })}
       </div>${adSlot("partner")}</div>`;
