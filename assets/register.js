@@ -39,7 +39,10 @@ function initGeo() {
     qsa("[data-geo]").forEach(x => x.classList.toggle("is-on", x === b));
     qsa("[data-geo-pane]").forEach(p => { p.hidden = p.dataset.geoPane !== b.dataset.geo; });
   });
-  qs("[data-reg-addr-add]").onclick = () => {
+  /* Адресов точек в дизайн-версии больше нет (созвон 30.09: заполняются
+     в кабинете), поэтому кнопки может не быть */
+  const addrAdd = qs("[data-reg-addr-add]");
+  if (addrAdd) addrAdd.onclick = () => {
     const inp = document.createElement("input");
     inp.className = "reg__i";
     inp.placeholder = "Ещё один адрес";
@@ -63,8 +66,20 @@ function showStep(name) {
    10: это не декоративная проверка, а то же самое, что делает реальный
    СБИС до любого поиска по базе. */
 function innDigitsNeeded() {
+  if (reg.orgType === "Другая") return isFarm() ? 12 : 10;
   return reg.orgType === "ООО" ? 10 : 12;
 }
+
+/* «Другая форма» (созвон 30.09): кроме ООО, ИП, самозанятых и физлиц есть
+   АО, кооперативы, НКО и прочие — форму выбирают из подсказок или вписывают
+   сами. Все они юрлица с 10-значным ИНН и КПП, кроме КФХ: у главы
+   крестьянского хозяйства ИНН личный, как у ИП. */
+const orgForm = () => {
+  const el = qs("[data-reg-orgform]");
+  return el ? el.value.trim() : "";
+};
+const isFarm = () => /кфх|крестьян|фермер/i.test(orgForm());
+const isLegal = () => innDigitsNeeded() === 10;
 
 /* Форма регистрации меняет не набор шагов, а подписи и то, откуда берётся
    имя: у ООО, ИП и самозанятого его находит база по ИНН, частный человек
@@ -76,7 +91,9 @@ function applyOrgType() {
   qs("[data-reg-inn-l]").textContent = person ? "ИНН — 12 цифр" : "ИНН";
   inn.placeholder = person
     ? "Нужен для чека — 12 цифр"
-    : (innDigitsNeeded() === 10 ? "10 цифр — как у ООО" : "12 цифр — как у ИП и самозанятых");
+    : (innDigitsNeeded() === 10 ? "10 цифр — как у юрлица" : "12 цифр — как у ИП и самозанятых");
+  const formBox = qs("[data-reg-orgform-box]");
+  if (formBox) formBox.hidden = reg.orgType !== "Другая";
 
   /* По ИНН частного человека база ничего не вернёт, поэтому поиска у него
      нет, а блок с полями открыт сразу — заполняет он их сам. */
@@ -108,8 +125,16 @@ function applyOrgType() {
    у ИП и самозанятого его нет вовсе, и поле остаётся пустым не по ошибке,
    а потому что такого реквизита у них не существует. */
 function lookupInn(digits) {
-  const ooo = reg.orgType === "ООО";
-  return ooo
+  const ooo = isLegal();
+  const form = reg.orgType === "Другая" ? (orgForm() || "АО") : "ООО";
+  return ooo && form !== "ООО"
+    ? [{
+        name: form + " «Пример»",
+        kpp: "482601001",
+        legal: "398050, Липецкая обл, г Липецк, ул. Первомайская, д. 12",
+        post: "398050, Липецкая обл, г Липецк, ул. Первомайская, д. 12"
+      }]
+    : ooo
     ? [{
         name: "ООО «Пример»",
         kpp: "482601001",
@@ -122,7 +147,8 @@ function lookupInn(digits) {
         post: "399050, Липецкая обл, г Грязи, ул. Советская, д. 4"
       }]
     : [{
-        name: reg.orgType === "ИП" ? "ИП Москвичёв Антон Юрьевич" : "Москвичёв Антон Юрьевич",
+        name: reg.orgType === "ИП" ? "ИП Москвичёв Антон Юрьевич"
+          : reg.orgType === "Другая" ? "Глава КФХ Москвичёв Антон Юрьевич" : "Москвичёв Антон Юрьевич",
         kpp: "",
         legal: "399050, Липецкая обл, г Грязи",
         post: "399050, Липецкая обл, г Грязи"
@@ -199,6 +225,18 @@ function checkInn() {
   }
 }
 
+/* Пароль дважды (созвон 30.09). В Ч/Б форме второго поля нет — там
+   проверка не срабатывает. */
+function passwordsOk() {
+  const p1 = qs("[data-reg-pass]"), p2 = qs("[data-reg-pass2]"), err = qs("[data-reg-pass-err]");
+  if (!p2) return true;
+  const msg = p1.value.length < 8 ? "Пароль — не короче 8 символов."
+    : p1.value !== p2.value ? "Пароли не совпадают — введите ещё раз." : "";
+  if (err) { err.textContent = msg; err.hidden = !msg; }
+  if (msg) (p1.value.length < 8 ? p1 : p2).focus();
+  return !msg;
+}
+
 function submitForm() {
   /* Согласий может быть несколько — оферта и обработка персональных
      данных отдельными галочками (решение 30.09). Проверяем каждое. */
@@ -209,6 +247,7 @@ function submitForm() {
     miss.focus();
     return;
   }
+  if (!passwordsOk()) return;
   const email = qs("[data-reg-email]").value.trim();
   qs("[data-reg-email-out]").textContent = email || "почту, которую вы указали";
   showStep("email");
@@ -236,6 +275,12 @@ document.addEventListener("DOMContentLoaded", () => {
     applyOrgType();
   });
   applyOrgType();
+  const orgFormEl = qs("[data-reg-orgform]");
+  if (orgFormEl) orgFormEl.addEventListener("input", () => {
+    qs("[data-reg-found]").hidden = true;
+    qs("[data-reg-req]").hidden = true;
+    applyOrgType();
+  });
 
   qs("[data-reg-inn-check]").onclick = checkInn;
   qs("[data-reg-submit]").onclick = submitForm;

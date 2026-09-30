@@ -332,3 +332,24 @@
 .dz3 .reg__consent:has(+ .reg__consent){margin-bottom:8px}
 .dz3 .reg__consent + .reg__consent{margin-top:0}
 .dz3 .reg__consent a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+
+/* Скрытые поля формы (label с hidden) — действительно скрыты */
+.dz3 .reg__f[hidden]{display:none}
+
+/* Шапка регистрации как на главной (созвон 30.09): подпись, почта, соцсети */
+.rg-head-mail{font-size:14px;font-weight:500;color:var(--ink-2);text-decoration:none;white-space:nowrap}
+.rg-head-mail:hover{color:var(--brand)}
+.dz-header .rg-head-soc{display:flex;align-items:center;gap:2px;margin:0 8px 0 12px}
+@media (max-width:1100px){.rg-head-mail{display:none}}
+@media (max-width:760px){.dz-header .rg-head-soc,.dz-header .dz-logo__tag{display:none}}
+
+/* Две роли партнёра — вкладки над формой (созвон 30.09) */
+.rg-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 22px}
+.rg-tab{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:14px 16px;border:1.5px solid var(--line);
+  border-radius:14px;background:var(--bg);font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.rg-tab b{font-size:15px;font-weight:700;color:var(--ink)}
+.rg-tab span{font-size:13px;color:var(--ink-3)}
+.rg-tab:hover{border-color:var(--line-strong)}
+.rg-tab.is-on{border-color:var(--brand);background:var(--brand-50)}
+@media (max-width:520px){.rg-tabs{grid-template-columns:1fr}}
+.dz3 .reg__chip[hidden]{display:none}

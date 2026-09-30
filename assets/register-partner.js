@@ -87,13 +87,79 @@ function submitForm() {
     miss.focus();
     return;
   }
+  /* Пароль дважды (созвон 30.09); в Ч/Б форме второго поля нет */
+  const p1 = qs("[data-reg-pass]"), p2 = qs("[data-reg-pass2]"), perr = qs("[data-reg-pass-err]");
+  if (p2) {
+    const msg = p1.value.length < 8 ? "Пароль — не короче 8 символов."
+      : p1.value !== p2.value ? "Пароли не совпадают — введите ещё раз." : "";
+    if (perr) { perr.textContent = msg; perr.hidden = !msg; }
+    if (msg) { (p1.value.length < 8 ? p1 : p2).focus(); return; }
+  }
   const email = qs("[data-reg-email]").value.trim();
   qs("[data-reg-email-out]").textContent = email || "почту, которую вы указали";
   showStep("email");
 }
 
+/* Две вкладки сверху — дизайн-версия, созвон 30.09. Региональный партнёр
+   работает только как ООО или ИП: самозанятому с организациями не
+   рассчитаться, поэтому эта форма у него пропадает. Заявка регионального
+   уходит на проверку, маркетплейсы открываются сразу. В Ч/Б форме вкладок
+   нет — функция ничего не делает. */
+const PTAB = {
+  market: {
+    sub: "Регистрация открывает партнёрство по маркетплейсам: вы получаете свои промокоды, раздаёте их и видите начисления. Регистрируются ООО, ИП и самозанятые.",
+    note: "Партнёру мы перечисляем вознаграждение, поэтому физлицу регистрация партнёра недоступна.",
+    sphere: "mp", submit: "Зарегистрироваться",
+    doneH: "Кабинет партнёра открыт",
+    doneP: "Вам доступно партнёрство по маркетплейсам: промокоды, начисления и выплаты.",
+    linkL: "Где будете раздавать промокоды",
+    list: ["Свои промокоды маркетплейсов — раздавать можно сразу после регистрации.",
+           "Начисления по переходам и покупкам по вашему коду — в кабинете, по дням.",
+           "Выплаты на расчётный счёт ООО, ИП или самозанятого."]
+  },
+  regional: {
+    sub: "Региональный партнёр ведёт свой город: приводит местный бизнес на витрину и получает долю с размещений. Регистрируются ООО и ИП, заявку проверяем вручную.",
+    note: "Региональный партнёр работает с организациями, поэтому регистрируются только ООО и ИП.",
+    sphere: "Рекламное агентство полного цикла", submit: "Отправить заявку",
+    doneH: "Заявка отправлена",
+    doneP: "Кабинет уже открыт: пока идёт проверка, в нём доступно партнёрство по маркетплейсам. Когда откроем ваш город, пришлём письмо и инструкции.",
+    linkL: "Сайт или соцсети вашей компании",
+    list: ["Клиенты вашего города закрепляются за вами — постоянно.",
+           "Доля с каждого размещения ваших клиентов, выплата раз в месяц.",
+           "Бонусы, которыми можно поощрять клиентов, и материалы для встреч."]
+  }
+};
+function setPartnerTab(id) {
+  const t = PTAB[id];
+  if (!t || !qs("[data-ptab]")) return;
+  qsa("[data-ptab]").forEach(b => {
+    const on = b.dataset.ptab === id;
+    b.classList.toggle("is-on", on);
+    b.setAttribute("aria-selected", on);
+  });
+  const text = (sel, v) => { const el = qs(sel); if (el) el.textContent = v; };
+  text("[data-ptab-sub]", t.sub);
+  text("[data-ptab-note]", t.note);
+  text("[data-ptab-submit]", t.submit);
+  text("[data-ptab-done-h]", t.doneH);
+  text("[data-ptab-done-p]", t.doneP);
+  text("[data-ptab-link-l]", t.linkL);
+  const list = qs("[data-ptab-list]");
+  if (list) list.innerHTML = t.list.map(x => "<li>" + x + "</li>").join("");
+  const sphere = qs("[data-reg-sphere]");
+  if (sphere) sphere.value = t.sphere;
+  /* Самозанятый — только у маркетплейсов; выбран был он — переключаем на ООО */
+  qsa("[data-ptab-only]").forEach(el => { el.hidden = el.dataset.ptabOnly !== id; });
+  const cur = qs("[data-org].is-on");
+  if (cur && cur.hidden) qs('[data-org="ООО"]').click();
+  const ask = qs("[data-ptab-ask]");
+  if (ask) ask.hidden = id === "regional";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   applyOrgType();
+  qsa("[data-ptab]").forEach(b => b.onclick = () => setPartnerTab(b.dataset.ptab));
+  setPartnerTab(new URLSearchParams(location.search).get("tab") === "regional" ? "regional" : "market");
 
   qsa("[data-org]").forEach(b => b.onclick = () => {
     qsa("[data-org]").forEach(x => x.classList.remove("is-on"));
