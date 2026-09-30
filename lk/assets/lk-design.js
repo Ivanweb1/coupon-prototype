@@ -554,9 +554,10 @@ function ledgerCSV(list) {
 
 /* Страницы: «‹ 1 2 ›» и счётчик строк. Та же разметка пойдёт в другие
    таблицы, где нужна пагинация. */
-function pager(total, page, size, attr) {
+function pager(total, page, size, attr, always) {
   const pages = Math.max(1, Math.ceil(total / size));
-  if (pages < 2) return "";
+  if (pages < 2 && !always) return "";
+  if (!total) return "";
   const from = (page - 1) * size + 1, to = Math.min(total, page * size);
   const btn = (p, label, off, on) => `<button type="button" class="lkd-pg__b${on ? " is-on" : ""}"
     ${attr}="${p}"${off ? " disabled" : ""}${on ? ' aria-current="page"' : ""}>${label}</button>`;
@@ -901,21 +902,26 @@ const readySum = () => periodFees().filter(f => f.ready).reduce((a, f) => a + f.
 const earnedAll = () => LK_PAYOUTS.filter(p => p.status === "paid").reduce((a, p) => a + p.total, 0) + readySum();
 
 /* Сравнение с прошлым месяцем и тренд (созвон 30.09): «в деньгах
-   оценивать сложно, в процентах проще», и мотивирует и рост, и падение.
-   Ряд — выплаты по месяцам, последний — текущий период. Полоска тренда
-   зелёная, если последний месяц не хуже предыдущего, иначе красная. */
+   оценивать сложно, в процентах проще». Сравниваем два последних
+   закрытых месяца, а не текущий незакрытый с прошлым полным: иначе в
+   начале каждого месяца партнёр видел бы «−70%» на ровном месте (правка
+   Ивана 30.09 — показывать рост). Полоска — выплаты по закрытым месяцам. */
+const RU_DAT = { "Январь": "январю", "Февраль": "февралю", "Март": "марту", "Апрель": "апрелю", "Май": "маю", "Июнь": "июню",
+  "Июль": "июлю", "Август": "августу", "Сентябрь": "сентябрю", "Октябрь": "октябрю", "Ноябрь": "ноябрю", "Декабрь": "декабрю" };
 function trend() {
-  const series = LK_PAYOUTS.filter(p => p.status === "paid").map(p => p.total).reverse().concat(readySum());
-  const cur = series[series.length - 1], prev = series[series.length - 2] || 0;
-  const pct = prev ? Math.round((cur - prev) / prev * 100) : 0;
+  const closed = LK_PAYOUTS.filter(p => p.status === "paid");
+  const series = closed.map(p => p.total).reverse();
+  if (series.length < 2) return "";
+  const cur = series[series.length - 1], prev = series[series.length - 2];
+  const pct = Math.round((cur - prev) / prev * 100);
   const up = cur >= prev;
-  const W = 96, H = 30, max = Math.max(...series, 1), min = Math.min(...series);
+  const W = 96, H = 30, max = Math.max(...series), min = Math.min(...series);
   const pts = series.map((v, i) => [i / (series.length - 1) * W, H - 3 - (v - min) / Math.max(1, max - min) * (H - 6)]);
   const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
-  const prevName = (LK_PAYOUTS.find(p => p.status === "paid") || {}).period || "";
-  return `<span class="lkd-trend ${up ? "is-up" : "is-down"}">
+  const [curM, prevM] = [closed[0].period.split(" ")[0], closed[1].period.split(" ")[0]];
+  return `<span class="lkd-trend ${up ? "is-up" : "is-down"}" title="${closed[0].period}: ${rub(cur)} · ${closed[1].period}: ${rub(prev)}">
     <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true"><path d="${d}"/><circle cx="${pts[pts.length - 1][0].toFixed(1)}" cy="${pts[pts.length - 1][1].toFixed(1)}" r="3"/></svg>
-    <b>${up ? "+" : "−"}${Math.abs(pct)}%</b><span>к ${prevName.split(" ")[0].toLowerCase().replace(/ь$/, "ю").replace(/й$/, "ю").replace(/т$/, "ту")}</span>
+    <b>${up ? "+" : "−"}${Math.abs(pct)}%</b><span>${curM.toLowerCase()} к ${RU_DAT[prevM] || prevM.toLowerCase()}</span>
   </span>`;
 }
 
@@ -1040,7 +1046,8 @@ function pagerSized(total, page, size, attr, sizeAttr) {
       <select class="lk-s" ${sizeAttr} aria-label="Строк на странице">
         ${sizes.map(n => `<option value="${n}"${n === size ? " selected" : ""}>${n}</option>`).join("")}
       </select></label>
-    ${pager(total, page, size, attr) || `<span class="lkd-pg__n">${total ? "1–" + total + " из " + total : "Ничего не нашлось"}</span>`}
+    ${/* Номера страниц видны всегда, даже когда страница одна (Иван 30.09) */
+      pager(total, page, size, attr, true) || `<span class="lkd-pg__n">Ничего не нашлось</span>`}
   </div>`;
 }
 

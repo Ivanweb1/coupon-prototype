@@ -878,3 +878,7 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd-contact-new__acts{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:12px;flex-wrap:wrap}
 .lkd-contact-new__err{margin-right:auto;font-size:13px;color:var(--brand-600)}
 .lkd-contact-new__err[hidden]{display:none}
+
+/* Стрелка выпадающего списка — по центру по высоте при любой высоте поля
+   (в «Показывать по» поле ниже обычного, и стрелка съезжала вниз) */
+.lkd .lk-s{background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%}
