@@ -893,3 +893,12 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 /* Подсказка «клиент найден» под ИНН не держит место, пока пустая: иначе
    между «Кому» и «Сколько бонусов» стоял лишний отступ (Иван 30.09) */
 .lkd-inn:empty{display:none}
+
+/* Реквизиты в «Отчётах и выплатах» одной сеткой: три поля в строку на
+   широком экране, два — на ноутбуке, одно — на телефоне */
+.lkd-grid6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 12px}
+@media (max-width:1700px){.lkd-grid6{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1200px){.lkd-grid6{grid-template-columns:1fr}}
+/* Ниже 900px панели встают друг под другом и снова широкие */
+@media (max-width:900px){.lkd-grid6{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.lkd-grid6{grid-template-columns:1fr}}
