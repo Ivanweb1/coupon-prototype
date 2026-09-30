@@ -950,18 +950,14 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   .lkd-kb__title{font-size:24px}
 }
 
-/* «К выплате»: сумма слева, расшифровка справа */
+/* «К выплате»: сумма и тренд слева, дата выплаты и пояснение справа */
 .lkd-payout-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
-.lkd-payout__how{margin:0;display:flex;flex-direction:column;border-left:1px solid var(--line);padding-left:24px}
-.lkd-payout__how > div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
-.lkd-payout__how > div:first-child{padding-top:2px}
-.lkd-payout__how > div:last-child{border-bottom:0}
-.lkd-payout__how dt{font-size:13.5px;color:var(--ink-3)}
-.lkd-payout__how dd{margin:0;font-size:14.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-.lkd-payout__how dd .lk-st{font-weight:500}
-@media (max-width:1500px) and (min-width:901px),(max-width:560px){
-  .lkd-payout-wrap{grid-template-columns:1fr;gap:16px}
-  .lkd-payout__how{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:6px}
+.lkd-payout__side{display:flex;flex-direction:column;gap:6px;border-left:1px solid var(--line);padding-left:24px}
+.lkd-payout__date{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.15;color:var(--ink)}
+.lkd-payout__side p{margin:6px 0 0;font-size:13.5px;line-height:1.5;color:var(--ink-3)}
+@media (max-width:1700px) and (min-width:901px),(max-width:560px){
+  .lkd .lkd-payout-wrap{grid-template-columns:1fr;gap:16px}
+  .lkd-payout__side{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:14px}
 }
 
 /* Пагинация — единая на все таблицы обоих кабинетов (Иван 30.09):
@@ -974,3 +970,7 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 @media (max-width:560px){
   .lkd-pg__right{margin-left:0;width:100%;justify-content:space-between}
 }
+/* Содержимое «К выплате» — сверху панели, а не прижато к низу правилом ряда */
+.lkd .lkd-row > .lk-panel > .lkd-payout-wrap{margin-top:0}
+.lkd-payout-wrap{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+.lkd-trend > span{white-space:nowrap}

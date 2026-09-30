@@ -1318,29 +1318,21 @@ VIEWS["partner:payouts"] = () => {
 
   return head("Отчёты и выплаты", `<button class="btn btn--ghost">Выгрузить в Excel</button>`)
     + `<div class="lk-pair lkd-row">
-      ${/* Справа от суммы — из чего она сложилась (Иван 30.09: без пустого
-           места справа, но логично): сколько купонов завершилось, сколько
-           за них заплатили, какая вышла ставка, когда и в каком статусе
-           выплата */ ""}
+      ${/* Та же информация, разложенная в две колонки (Иван 30.09): слева
+           сумма и тренд, справа дата выплаты и пояснение — без пустого
+           поля ни справа, ни снизу */ ""}
       ${panel("К выплате", `<div class="lkd-payout-wrap"><div class="lkd-payout">
         <span class="lkd-money__l">${pend.period}</span>
         <b class="lkd-payout__v">${rub(readySum())}</b>
         ${trend()}
       </div>
-      <dl class="lkd-payout__how">${(() => {
-        const done = periodFees().filter(f => f.ready);
-        const paidBy = done.reduce((a, f) => a + f.rub, 0);
-        const rate = paidBy ? Math.round(readySum() / paidBy * 100) : 0;
-        return `<div><dt>Купонов завершилось</dt><dd>${done.length}</dd></div>
-          <div><dt>Клиенты оплатили рублями</dt><dd>${rub(paidBy)}</dd></div>
-          <div><dt>Ваше вознаграждение</dt><dd>${rate}%</dd></div>
-          <div><dt>Выплата</dt><dd>${pend.date.replace("к выплате ", "")}</dd></div>`;
-      })()}</dl></div>
-      <div class="lk-total"><span>В расчёт идут купоны, завершившиеся в
-      отчётном периоде. Сверку и выплату делаем сами через 14 дней после
-      закрытия периода — формировать и подписывать ничего не нужно.</span></div>`)}
-      ${/* По три поля в строку (Иван 30.09): реквизиты в две строки, и
-           панель «К выплате» слева не стоит с пустым низом */ ""}
+      <div class="lkd-payout__side">
+        <span class="lkd-money__l">Выплата</span>
+        <b class="lkd-payout__date">${pend.date.replace("к выплате ", "")}</b>
+        <p>В расчёт идут купоны, завершившиеся в отчётном периоде. Сверку и
+        выплату делаем сами через 14 дней после закрытия периода —
+        формировать и подписывать ничего не нужно.</p>
+      </div></div>`)}
       ${panel("Реквизиты для выплат", `<div class="lk-f">
         <div class="lkd-grid6">${field("Получатель", input("", "ИП Партнёров И.", true))}${field("ИНН", input("", "482600000000", true))}${field("ОГРНИП", input("", "321482700000012", true))}${field("Банк", input("", "ПАО Сбербанк", true))}${field("БИК", input("", "044206604", true))}${field("Расчётный счёт", input("", "40802810435000000000", true))}</div>
       </div>
