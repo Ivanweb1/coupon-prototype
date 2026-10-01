@@ -162,19 +162,23 @@ const STATES = [
     { name: "Главная (красная)", page: PUB, sel: ".dz-header .header-cta", states: ["default", "hover", "focus", "active"] },
     { name: "Белая на красном", page: PUB, sel: ".dz-biz .dz-btn-white", states: ["default", "hover", "focus", "active"], bg: "#DD443C" },
     { name: "Второстепенная", page: PUB, sel: "#feed .card .btn--ghost", states: ["default", "hover", "focus", "active"] },
-    { name: "Забрать купон", page: PUB, sel: "#feed .card .btn--solid", states: ["default", "hover", "focus", "active"] },
+    { name: "Забрать купон", page: PUB, sel: "#feed .card .btn--solid", states: ["default", "hover", "active"] },
     { name: "Город", page: PUB, sel: ".dz-header .city-btn", states: ["default", "hover", "focus"] },
     { name: "Кабинет", page: PUB, sel: ".dz-header .lk-chip", states: ["default", "hover", "focus"] },
     { name: "Соцсеть", page: PUB, sel: ".dz-header .head-socials .soc", states: ["default", "hover"] },
   ] },
   { title: "Карточка и категории", items: [
     { name: "Карточка", page: PUB, sel: "#feed .card:has(.verified-flag)", states: ["default", "hover"], fit: true /* в ленте карточка резиновая — без ширины схлопнется */ },
-    { name: "Действие в столбике", page: PUB, sel: "#feed .card .card__stat--act", states: ["default", "hover", "focus"], bg: "#8d8b87" },
-    { name: "Плашка раздела", page: PUB, sel: ".dz-tags .tags-row__l1 > *", states: ["default", "hover", "on"] },
+    { name: "Действие в столбике", page: PUB, sel: "#feed .card .card__stats", states: ["default", "hover"], bg: "#8d8b87",
+      /* столбик целиком — кнопка без своей белой подложки не читается; состояние на «Скопировать» */
+      inner: "card__stat card__stat--act" },
+    { name: "Плашка раздела", page: PUB, sel: ".dz-tags .tags-row__l1 > *", states: ["default", "hover", "on"],
+      /* наведение висит на кнопке .tag внутри выпадашки, «выбрано» — это открытая выпадашка */
+      inner: "tag", onCls: "is-open" },
     { name: "Поиск", page: PUB, sel: ".dzl__search", states: ["default", "focus-within"] },
   ] },
   { title: "Формы · регистрация и вход", items: [
-    { name: "Поле", page: "register-design.html", sel: "[data-reg-email]", states: ["default", "hover", "focus", "filled", "disabled"] },
+    { name: "Поле", page: "register-design.html", sel: "[data-reg-email]", states: ["default", "focus", "filled", "disabled"] },
     { name: "Выбор формы", page: "register-design.html", sel: ".reg__chip[data-org='ИП']", states: ["default", "hover", "on"] },
     { name: "Согласие", page: "register-design.html", sel: ".reg__consent", states: ["default", "checked", "error"] },
     { name: "Вкладка роли партнёра", page: "register-partner-design.html", sel: ".rg-tab[data-ptab='regional']", states: ["default", "hover", "on"] },
@@ -190,7 +194,7 @@ const STATES = [
   ] },
   { title: "Кабинет · поля и выбор", items: [
     { name: "Поле", page: CL + "?view=profile", sel: "[data-edit-f='co']", states: ["default", "focus", "disabled"], edit: "co" },
-    { name: "Список", page: CL + "?view=stats", sel: "[data-stat-period]", states: ["default", "hover", "focus"] },
+    { name: "Список", page: CL + "?view=stats", sel: "[data-stat-period]", states: ["default", "focus"] },
     { name: "Галочка канала", page: CL + "?view=new-regional", sel: "[data-channels] .lk-ch:has([data-ch])", states: ["default", "hover", "unchecked"] },
     { name: "Плитка города", page: CL + "?view=new-regional", sel: ".lkd-geo [data-city]:not(.is-on)", states: ["default", "hover", "on", "disabled"] },
     { name: "Способ оплаты", page: CL + "?view=billing", sel: ".lkd-way:not(.is-on)", states: ["default", "hover", "on"] },
@@ -352,12 +356,21 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
 /* фиксированные части страниц — внутри своего образца */
 .kit-box .lk__side::after{position:absolute;left:auto;right:0;top:0;bottom:0;height:auto}
 .kit-box .lk__side[style*="display:contents"]::after{display:none}
+/* украшения родителей (водяной знак фото и т.п.) в образец не попадают */
+.kit-box [style*="display:contents"]::before,.kit-box [style*="display:contents"]::after{display:none}
 .kit-box--frame{overflow:hidden;transform:translateZ(0)}
 .kit-box--grey{background:#F5F5F4}
+/* баннер «Для бизнеса» на главной наезжает на блок выше (translateY). Отдельным образцом — без сдвига,
+   в подвале сдвиг как на сайте, а над образцом место под выступ */
+.kit-box .dz-biz[style*="margin"]{transform:none}
+.kit-spec:has(.kit-box .footer[style*="margin"]) > .kit-box{margin-top:${mobile ? 40 : 56}px}
 .kit-b{display:block;min-height:0;background:none}
 .kit-states{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px;padding:0 ${mobile ? 16 : 0}px}
 .kit-state{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
 .kit-state > span{font-size:12px;color:#8d8b87}
+/* в состояниях — только сам элемент: список выпадашки и привязка к фото карточки не нужны */
+.kit-state .dd__panel{display:none!important}
+.kit-state .card__stats{position:relative;inset:auto;transform:none}
 .kit-state > .kit-box{padding:16px;border-radius:6px}
 .kit-sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
 .kit-sw__i{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
@@ -403,15 +416,16 @@ const LABEL = { default: "По умолчанию", hover: "Наведение",
   on: "Выбрано", disabled: "Недоступно", filled: "Заполнено", checked: "Отмечено", unchecked: "Не отмечено", error: "Ошибка",
   off: "Неактивно", added: "Добавлено" };
 
-function stateVariant(s, st) {
+function stateVariant(s, st, it = {}) {
   let html = s.html;
-  const addClass = cls => html.replace(/^<([a-z0-9-]+)([^>]*)>/i, (m, tag, attrs) =>
+  const addInner = cls => html.replace(new RegExp(`class="(${it.inner}(?:\\s[^"]*)?)"`), (m, v) => `class="${v} ${cls}"`);
+  const addClass = cls => (it.inner && cls !== (it.onCls || "is-on")) ? addInner(cls) : html.replace(/^<([a-z0-9-]+)([^>]*)>/i, (m, tag, attrs) =>
     /\sclass="/.test(attrs) ? `<${tag}${attrs.replace(/\sclass="([^"]*)"/, (mm, v) => ` class="${v} ${cls}"`)}>` : `<${tag}${attrs} class="${cls}">`);
   if (st === "hover") html = addClass("is-hover");
   if (st === "focus") html = addClass("is-focus");
   if (st === "focus-within") html = addClass("is-focus-within");
   if (st === "active") html = addClass("is-active is-hover");
-  if (st === "on") html = addClass("is-on");
+  if (st === "on") html = addClass(it.onCls || "is-on");
   if (st === "disabled") html = /^<(button|input|select|textarea)/i.test(html) ? html.replace(/^<([a-z]+)/i, "<$1 disabled") : html.replace(/<(button|input|select)(?=[\s>])/gi, "<$1 disabled");
   if (st === "filled") html = html.replace(/^<input/i, '<input value="hello@primer.ru"');
   if (st === "checked") html = html.replace(/<input(?![^>]*\bchecked)/i, "<input checked");
@@ -423,7 +437,7 @@ function stateVariant(s, st) {
 }
 function statesHTML(it, s) {
   return `<div class="kit-spec"><div class="kit-l">${it.name}</div><div class="kit-states">${it.states.map(st =>
-    `<div class="kit-state"><span>${LABEL[st] || st}</span><div class="kit-box${it.bg ? "" : " kit-box--grey"}" style="box-sizing:content-box${it.fit ? `;width:${s.w}px` : ""}${it.bg ? `;background:${it.bg}` : ""}">${wrap(s, stateVariant(s, st))}</div></div>`).join("")}</div></div>`;
+    `<div class="kit-state"><span>${LABEL[st] || st}</span><div class="kit-box${it.bg ? "" : " kit-box--grey"}" style="box-sizing:content-box${it.fit ? `;width:${s.w}px` : ""}${it.bg ? `;background:${it.bg}` : ""}">${wrap(s, stateVariant(s, st, it))}</div></div>`).join("")}</div></div>`;
 }
 
 /* --------------------------------------------------------------------------

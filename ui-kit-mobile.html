@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/ui-kit.css?v=mup9cj7r">
+<link rel="stylesheet" href="assets/ui-kit.css?v=mupao2w9">
 <link rel="icon" href="assets/brand/logo-red.png">
 <style>
 /* Оформление самого кита: серый фон, подписи, рамки образцов */
@@ -29,12 +29,21 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
 /* фиксированные части страниц — внутри своего образца */
 .kit-box .lk__side::after{position:absolute;left:auto;right:0;top:0;bottom:0;height:auto}
 .kit-box .lk__side[style*="display:contents"]::after{display:none}
+/* украшения родителей (водяной знак фото и т.п.) в образец не попадают */
+.kit-box [style*="display:contents"]::before,.kit-box [style*="display:contents"]::after{display:none}
 .kit-box--frame{overflow:hidden;transform:translateZ(0)}
 .kit-box--grey{background:#F5F5F4}
+/* баннер «Для бизнеса» на главной наезжает на блок выше (translateY). Отдельным образцом — без сдвига,
+   в подвале сдвиг как на сайте, а над образцом место под выступ */
+.kit-box .dz-biz[style*="margin"]{transform:none}
+.kit-spec:has(.kit-box .footer[style*="margin"]) > .kit-box{margin-top:40px}
 .kit-b{display:block;min-height:0;background:none}
 .kit-states{display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px;padding:0 16px}
 .kit-state{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
 .kit-state > span{font-size:12px;color:#8d8b87}
+/* в состояниях — только сам элемент: список выпадашки и привязка к фото карточки не нужны */
+.kit-state .dd__panel{display:none!important}
+.kit-state .card__stats{position:relative;inset:auto;transform:none}
 .kit-state > .kit-box{padding:16px;border-radius:6px}
 .kit-sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
 .kit-sw__i{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
@@ -207,14 +216,14 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
 
   </div>
 </section></div></div></div></div></section><section class="kit-sec"><h2>Витрина · карточки купонов</h2><div class="kit-row"><div class="kit-spec"><div class="kit-l">Карточка<small>170×316</small></div>
-    <div class="kit-box" style="width:170px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="display:contents"><div class="card card-in" data-id="1" role="button" tabindex="0" aria-label="Химчистка мягкой мебели — Клининг «Рыба», −25%" style="animation-delay: 0ms; margin: 0px;">
+    <div class="kit-box" style="width:170px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="display:contents"><div class="card card-in" data-id="1" role="button" tabindex="0" aria-label="Скидка на работы при заказе от 100 000 ₽ — Бригада «Пример», −10%" style="animation-delay: 0ms; margin: 0px;">
     <div class="card__media has-photo" style="background: url(&quot;assets/coupons/wuch-socks.png&quot;) center center / cover no-repeat;">
-      <span class="card__near">11 мин от вас</span>
+      <span class="card__near">12 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
       <span class="erid-stamp">Реклама · erid: 2Vt1NJILR</span>
       
       <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 3381"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">3 381</b><b class="card__stat-short">3.4к</b></span>
+        <span class="card__stat" title="Просмотров: 251"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">251</b><b class="card__stat-short">251</b></span>
         <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
         <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
       </div>
@@ -224,26 +233,26 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <span class="card__code-date"></span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>
-      <span class="card__badge">−25%</span>
+      <span class="card__badge">−10%</span>
     </div>
     <div class="card__body">
-      <h3 class="card__title">Химчистка мягкой мебели</h3>
+      <h3 class="card__title">Скидка на работы при заказе от 100 000 ₽</h3>
       <div class="card__meta">
-        <b>Клининг «Рыба»</b><i class="dot"></i><span>Услуги</span>
+        <b>Бригада «Пример»</b><i class="dot"></i><span>Ремонт и стройка</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
              <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
       </div>
     </div></div></div></section></main></div></div></div><div class="kit-spec"><div class="kit-l">Карточка · проверено<small>170×316</small></div>
-    <div class="kit-box" style="width:170px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="display:contents"><div class="card card-in" data-id="3" role="button" tabindex="0" aria-label="Скидка на комплект зимних шин — Шинный центр «Рыба», −15%" style="animation-delay: 80ms; margin: 0px;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/meditsina-white.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">12 мин от вас</span>
+    <div class="kit-box" style="width:170px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="display:contents"><div class="card card-in" data-id="3" role="button" tabindex="0" aria-label="Окрашивание любой сложности — Салон «Название», −25%" style="animation-delay: 80ms; margin: 0px;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/krasota-green.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">6 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
       <span class="erid-stamp">Реклама · erid: 2Vt1NJUTP</span>
       
       <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 454"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">454</b><b class="card__stat-short">454</b></span>
+        <span class="card__stat" title="Просмотров: 1444"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">1 444</b><b class="card__stat-short">1.4к</b></span>
         <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
         <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
       </div>
@@ -253,26 +262,26 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <span class="card__code-date"></span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>
-      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−15%</span>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−25%</span>
     </div>
     <div class="card__body">
-      <h3 class="card__title">Скидка на комплект зимних шин</h3>
+      <h3 class="card__title">Окрашивание любой сложности</h3>
       <div class="card__meta">
-        <b>Шинный центр «Рыба»</b><i class="dot"></i><span>Автотовары</span>
+        <b>Салон «Название»</b><i class="dot"></i><span>Красота</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
              <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
       </div>
     </div></div></div></section></main></div></div></div><div class="kit-spec"><div class="kit-l">Карточка · маркетплейс<small>170×316</small></div>
-    <div class="kit-box" style="width:170px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="display:contents"><div class="card card-in" data-id="2" role="button" tabindex="0" aria-label="Промокод на первый заказ в магазине — Продавец «Рыба», −500 ₽" style="animation-delay: 40ms; margin: 0px;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/sport-teal.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near card__near--mp"><span class="mp-name" style="--mp:#E30613">М.Видео</span></span>
+    <div class="kit-box" style="width:170px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="display:contents"><div class="card card-in" data-id="6" role="button" tabindex="0" aria-label="Набор для ухода за волосами — Продавец «Пример», −600 ₽" style="animation-delay: 200ms; margin: 0px;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/pitomtsy-brown.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near card__near--mp"><span class="mp-name" style="--mp:#005BFF">Ozon</span></span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NJOPQ</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NKD5M</span>
       
       <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 3788"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">3 788</b><b class="card__stat-short">3.8к</b></span>
+        <span class="card__stat" title="Просмотров: 1345"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">1 345</b><b class="card__stat-short">1.3к</b></span>
         <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
         <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
       </div>
@@ -282,26 +291,222 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <span class="card__code-date"></span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>
-      <span class="card__badge">−500 ₽</span>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−600 ₽</span>
     </div>
     <div class="card__body">
-      <h3 class="card__title">Промокод на первый заказ в магазине</h3>
+      <h3 class="card__title">Набор для ухода за волосами</h3>
       <div class="card__meta">
-        <b>Продавец «Рыба»</b><i class="dot"></i><span>Одежда и обувь</span>
+        <b>Продавец «Пример»</b><i class="dot"></i><span>Красота</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
              <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
       </div>
     </div></div></div></section></main></div></div></div><div class="kit-spec"><div class="kit-l">Лента<small>358×1353</small></div>
-    <div class="kit-box" style="width:358px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="margin: 0px;"><div class="card card-in" data-id="1" role="button" tabindex="0" aria-label="Скидка на счёт с понедельника по четверг — Ресторан «Пример», −20%" style="animation-delay: 0ms;">
+    <div class="kit-box" style="width:358px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="display:contents"><section class="section" style="display:contents"><div class="grid" id="feed" style="margin: 0px;"><div class="card card-in" data-id="1" role="button" tabindex="0" aria-label="Пробный урок с преподавателем — Школа «Бренд», 0 ₽" style="animation-delay: 0ms;">
     <div class="card__media has-photo" style="background: url(&quot;assets/coupons/wuch-socks.png&quot;) center center / cover no-repeat;">
-      <span class="card__near">17 мин от вас</span>
+      <span class="card__near">10 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
       <span class="erid-stamp">Реклама · erid: 2Vt1NJILR</span>
       
       <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 2861"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 861</b><b class="card__stat-short">2.9к</b></span>
+        <span class="card__stat" title="Просмотров: 152"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">152</b><b class="card__stat-short">152</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="card__badge">0 ₽</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Пробный урок с преподавателем</h3>
+      <div class="card__meta">
+        <b>Школа «Бренд»</b><i class="dot"></i><span>Обучение</span>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="2" role="button" tabindex="0" aria-label="Каждая пятая чашка кофе в подарок — Кофейня «Компания», 5 = 4" style="animation-delay: 40ms;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/dom-beige.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">11 мин от вас</span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NJOPQ</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 2790"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 790</b><b class="card__stat-short">2.8к</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="card__badge">5 = 4</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Каждая пятая чашка кофе в подарок</h3>
+      <div class="card__meta">
+        <b>Кофейня «Компания»</b><i class="dot"></i><span>Кафе и рестораны</span>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="3" role="button" tabindex="0" aria-label="Промокод на первый заказ в магазине — Продавец «Название», −500 ₽" style="animation-delay: 80ms;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/biz-warm.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near card__near--mp"><span class="mp-name" style="--mp:#005BFF">Ozon</span></span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NJUTP</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 3194"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">3 194</b><b class="card__stat-short">3.2к</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−500 ₽</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Промокод на первый заказ в магазине</h3>
+      <div class="card__meta">
+        <b>Продавец «Название»</b><i class="dot"></i><span>Одежда и обувь</span>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="4" role="button" tabindex="0" aria-label="Распродажа прошлой коллекции — Бутик «Название», −45%" style="animation-delay: 120ms;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/razvlecheniya-blue.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">16 мин от вас</span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NK0XO</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 2571"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 571</b><b class="card__stat-short">2.6к</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="card__badge">−45%</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Распродажа прошлой коллекции</h3>
+      <div class="card__meta">
+        <b>Бутик «Название»</b><i class="dot"></i><span>Одежда и обувь</span>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="5" role="button" tabindex="0" aria-label="Персональная тренировка — Студия «Рыба», −50%" style="animation-delay: 160ms;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/detyam-yellow.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">7 мин от вас</span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NK71N</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 3509"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">3 509</b><b class="card__stat-short">3.5к</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="card__badge">−50%</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Персональная тренировка</h3>
+      <div class="card__meta">
+        <b>Студия «Рыба»</b><i class="dot"></i><span>Фитнес и спорт</span>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="6" role="button" tabindex="0" aria-label="Химчистка салона по будням — Детейлинг «Пример», −20%" style="animation-delay: 200ms;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/obuchenie-purple.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">18 мин от вас</span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NKD5M</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 2943"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 943</b><b class="card__stat-short">2.9к</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−20%</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Химчистка салона по будням</h3>
+      <div class="card__meta">
+        <b>Детейлинг «Пример»</b><i class="dot"></i><span>Автомойки</span>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="7" role="button" tabindex="0" aria-label="Вводный модуль курса — Школа «Компания», 0 ₽" style="animation-delay: 240ms;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/obuchenie-purple.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">3 мин от вас</span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NKJ9L</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 2606"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 606</b><b class="card__stat-short">2.6к</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="card__badge">0 ₽</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Вводный модуль курса</h3>
+      <div class="card__meta">
+        <b>Школа «Компания»</b><i class="dot"></i><span>Обучение</span>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="8" role="button" tabindex="0" aria-label="Скидка на счёт с понедельника по четверг — Ресторан «Бренд», −20%" style="animation-delay: 280ms;">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/eda-cool.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">4 мин от вас</span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NKPDK</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 4099"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">4 099</b><b class="card__stat-short">4.1к</b></span>
         <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
         <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
       </div>
@@ -316,203 +521,7 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="card__body">
       <h3 class="card__title">Скидка на счёт с понедельника по четверг</h3>
       <div class="card__meta">
-        <b>Ресторан «Пример»</b><i class="dot"></i><span>Кафе и рестораны</span>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="2" role="button" tabindex="0" aria-label="Промокод на первый заказ в магазине — Продавец «Название», −500 ₽" style="animation-delay: 40ms;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/meditsina-white.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near card__near--mp"><span class="mp-name" style="--mp:#CB11AB">Wildberries</span></span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NJOPQ</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 621"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">621</b><b class="card__stat-short">621</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="card__badge">−500 ₽</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Промокод на первый заказ в магазине</h3>
-      <div class="card__meta">
-        <b>Продавец «Название»</b><i class="dot"></i><span>Одежда и обувь</span>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="3" role="button" tabindex="0" aria-label="Первое занятие в детской студии — Студия «Бренд», 0 ₽" style="animation-delay: 80ms;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/dom-beige.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">3 мин от вас</span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NJUTP</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 2300"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 300</b><b class="card__stat-short">2.3к</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">0 ₽</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Первое занятие в детской студии</h3>
-      <div class="card__meta">
-        <b>Студия «Бренд»</b><i class="dot"></i><span>Детям</span>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="4" role="button" tabindex="0" aria-label="Годовой абонемент со скидкой — Клуб «Пример», −35%" style="animation-delay: 120ms;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/biz-warm.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">10 мин от вас</span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NK0XO</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 2290"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 290</b><b class="card__stat-short">2.3к</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="card__badge">−35%</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Годовой абонемент со скидкой</h3>
-      <div class="card__meta">
-        <b>Клуб «Пример»</b><i class="dot"></i><span>Фитнес и спорт</span>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="5" role="button" tabindex="0" aria-label="Квест для компании от 4 человек — Квесты «Компания», −2 000 ₽" style="animation-delay: 160ms;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/odezhda-dark.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">5 мин от вас</span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NK71N</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 1978"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">1 978</b><b class="card__stat-short">2к</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="card__badge">−2 000 ₽</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Квест для компании от 4 человек</h3>
-      <div class="card__meta">
-        <b>Квесты «Компания»</b><i class="dot"></i><span>Развлечения</span>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="6" role="button" tabindex="0" aria-label="Скидка на всю коллекцию сезона — Магазин «Компания», −15%" style="animation-delay: 200ms;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/krasota-green.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near card__near--mp"><span class="mp-name" style="--mp:#005BFF">Ozon</span></span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NKD5M</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 634"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">634</b><b class="card__stat-short">634</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−15%</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Скидка на всю коллекцию сезона</h3>
-      <div class="card__meta">
-        <b>Магазин «Компания»</b><i class="dot"></i><span>Одежда и обувь</span>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="7" role="button" tabindex="0" aria-label="Первый месяц ведения соцсетей — Агентство «Пример», −50%" style="animation-delay: 240ms;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/dom-beige.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">11 мин от вас</span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NKJ9L</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 2076"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">2 076</b><b class="card__stat-short">2.1к</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="card__badge">−50%</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Первый месяц ведения соцсетей</h3>
-      <div class="card__meta">
-        <b>Агентство «Пример»</b><i class="dot"></i><span>Реклама и маркетинг</span>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="8" role="button" tabindex="0" aria-label="Парная и хаммам в будни — Банный комплекс «Компания», −25%" style="animation-delay: 280ms;">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/detyam-yellow.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">8 мин от вас</span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NKPDK</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 885"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">885</b><b class="card__stat-short">885</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="card__badge">−25%</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Парная и хаммам в будни</h3>
-      <div class="card__meta">
-        <b>Банный комплекс «Компания»</b><i class="dot"></i><span>СПА и массаж</span>
+        <b>Ресторан «Бренд»</b><i class="dot"></i><span>Кафе и рестораны</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
@@ -522,13 +531,13 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="kit-box kit-box--frame" style="width:390px;height:844px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a no-scroll"><div class="quick is-on" id="quick" style="">
     <button class="quick__close" data-quick-close=""><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
     <div class="quick__media">
-      <div class="quick__photo has-photo" style="background:url('assets/coupons/dom-beige.jpg') center/cover no-repeat">
-        <div class="quick__badges"><span class="card__near">17 мин от вас</span><span class="card__near quick__views" title="Просмотров: 2667"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>2 667</span></div>
-        <span class="verified-flag" title="Проверено тайным покупателем" style="height: 36px; bottom: 12px; left: 107px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="quick__value">−35%</span>
+      <div class="quick__photo has-photo" style="background:url('assets/coupons/pitomtsy-brown.jpg') center/cover no-repeat">
+        <div class="quick__badges"><span class="card__near">16 мин от вас</span><span class="card__near quick__views" title="Просмотров: 3680"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>3 680</span></div>
+        <span class="verified-flag" title="Проверено тайным покупателем" style="height: 36px; bottom: 12px; left: 139px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="quick__value">Подарок</span>
         <span class="erid-stamp">Реклама · erid: 2Vt1NJUTP</span>
         <div class="card__code quick__code" data-quick-code="" hidden="" aria-hidden="true">
         <span class="card__code-val"></span>
-        <span class="card__code-date">действует до 17 октября 2026 года</span>
+        <span class="card__code-date">действует до 21 октября 2026 года</span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>
       </div>
@@ -537,31 +546,31 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="quick__side">
       <div class="quick__eyebrow">
         <span>Региональные</span><i class="dot"></i>
-        <span>Фитнес и спорт</span><i class="dot"></i>
+        <span>Кафе и рестораны</span><i class="dot"></i>
         <span>Липецк</span>
       </div>
-      <h3>Годовой абонемент со скидкой</h3>
+      <h3>Десерт в подарок к любому напитку</h3>
 
       
       <div class="reveal" data-reveal="">
         <!-- Промокод и срок — снова одной строкой (правка Ивана
              22.09.2026): отдельная строка со сроком разрывала блок. -->
-        <div class="block-label" style="margin:0"><span>Промокод</span><span class="quick__until">действует до <b>17 октября 2026 года</b></span></div>
+        <div class="block-label" style="margin:0"><span>Промокод</span><span class="quick__until">действует до <b>21 октября 2026 года</b></span></div>
         <div class="reveal__row">
-          <div class="reveal__code">OPEN410</div>
+          <div class="reveal__code">CITY844</div>
           <div class="reveal__actions">
             <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn="">Забрать купон</button>
             
             <button type="button" class="btn btn--ghost btn--lg" data-share=""><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg> Поделиться</button>
           </div>
         </div>
-        <div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>17 октября 2026 года</b></div>
+        <div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>21 октября 2026 года</b></div>
       </div>
 
       <div class="company">
-        <div class="company__logo company__logo--mono" style="--lg-bg:#F3EAEA;--lg-fg:#7A3E45" aria-hidden="true">П</div>
+        <div class="company__logo company__logo--mono" style="--lg-bg:#EEEAF6;--lg-fg:#5B4A8A" aria-hidden="true">Б</div>
         <div class="company__text">
-          <div class="company__name">Клуб «Пример»</div>
+          <div class="company__name">Пекарня «Бренд»</div>
           <div class="company__line"><a class="company__phone" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 10.8a15.7 15.7 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.4c1 .3 2 .5 3.1.5a1.5 1.5 0 0 1 1.5 1.5V20a1.5 1.5 0 0 1-1.5 1.5C10.7 21.5 3 13.8 3 4.5A1.5 1.5 0 0 1 4.5 3h3.1A1.5 1.5 0 0 1 9.1 4.5c0 1.1.2 2.1.5 3.1a1.5 1.5 0 0 1-.4 1.5Z"></path></svg>+7 (4742) 50-47-13</a><i class="dot"></i><span class="company__hours" title="Пн–Сб 10–21 ч">Пн–Сб 10–21 ч</span></div>
         </div>
         <div class="socials socials--icons">
@@ -596,8 +605,8 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
       <div>
         <div class="block-label">Где действует</div>
         <div class="map map--live">
-              <iframe src="https://yandex.ru/map-widget/v1/?ll=39.599200%2C52.608800&amp;z=16&amp;pt=39.599200%2C52.608800%2Cpm2rdl&amp;l=map" title="Карта: Липецк, ул. Первомайская, 12" loading="lazy" allowfullscreen=""></iframe>
-              <span class="map__addr"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"></path></svg> Липецк, ул. Первомайская, 12</span>
+              <iframe src="https://yandex.ru/map-widget/v1/?ll=39.599200%2C52.608800&amp;z=16&amp;pt=39.599200%2C52.608800%2Cpm2rdl&amp;l=map" title="Карта: Липецк, ул. Советская, 8" loading="lazy" allowfullscreen=""></iframe>
+              <span class="map__addr"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"></path></svg> Липецк, ул. Советская, 8</span>
             </div>
       </div>
 
@@ -608,13 +617,13 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="kit-box kit-box--frame" style="width:390px;height:844px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a no-scroll"><div class="quick is-on" id="quick" style="">
     <button class="quick__close" data-quick-close=""><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
     <div class="quick__media">
-      <div class="quick__photo has-photo" style="background:url('assets/coupons/detyam-yellow.jpg') center/cover no-repeat">
-        <div class="quick__badges"><span class="card__near card__near--mp"><span class="mp-name" style="--mp:#005BFF">Ozon</span></span><span class="card__near quick__views" title="Просмотров: 1806"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>1 806</span></div>
+      <div class="quick__photo has-photo" style="background:url('assets/coupons/krasota-green.jpg') center/cover no-repeat">
+        <div class="quick__badges"><span class="card__near card__near--mp"><span class="mp-name" style="--mp:#FF5226">Яндекс Маркет</span></span><span class="card__near quick__views" title="Просмотров: 3927"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>3 927</span></div>
         <span class="quick__value">−500 ₽</span>
         <span class="erid-stamp">Реклама · erid: 2Vt1NJOPQ</span>
         <div class="card__code quick__code" data-quick-code="" hidden="" aria-hidden="true">
         <span class="card__code-val"></span>
-        <span class="card__code-date">действует до 21 октября 2026 года</span>
+        <span class="card__code-date">действует до 28 октября 2026 года</span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>
       </div>
@@ -624,7 +633,7 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
       <div class="quick__eyebrow">
         <span>Маркетплейсы</span><i class="dot"></i>
         <span>Одежда и обувь</span><i class="dot"></i>
-        <span>Ozon</span>
+        <span>Яндекс Маркет</span>
       </div>
       <h3>Промокод на первый заказ в магазине</h3>
 
@@ -632,22 +641,22 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
       <div class="reveal" data-reveal="">
         <!-- Промокод и срок — снова одной строкой (правка Ивана
              22.09.2026): отдельная строка со сроком разрывала блок. -->
-        <div class="block-label" style="margin:0"><span>Промокод</span><span class="quick__until">действует до <b>21 октября 2026 года</b></span></div>
+        <div class="block-label" style="margin:0"><span>Промокод</span><span class="quick__until">действует до <b>28 октября 2026 года</b></span></div>
         <div class="reveal__row">
-          <div class="reveal__code">SALE655</div>
+          <div class="reveal__code">OPEN678</div>
           <div class="reveal__actions">
             <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn="">Забрать купон</button>
             
             <button type="button" class="btn btn--ghost btn--lg" data-share=""><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg> Поделиться</button>
           </div>
         </div>
-        <div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>21 октября 2026 года</b></div>
+        <div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>28 октября 2026 года</b></div>
       </div>
 
       <div class="company">
-        <div class="company__logo company__logo--mono" style="--lg-bg:#EEEAF6;--lg-fg:#5B4A8A" aria-hidden="true">К</div>
+        <div class="company__logo company__logo--mono" style="--lg-bg:#F4EDE3;--lg-fg:#8A5A2B" aria-hidden="true">П</div>
         <div class="company__text">
-          <div class="company__name">Продавец «Компания»</div>
+          <div class="company__name">Продавец «Пример»</div>
           <div class="company__line"><a class="company__phone" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 10.8a15.7 15.7 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.4c1 .3 2 .5 3.1.5a1.5 1.5 0 0 1 1.5 1.5V20a1.5 1.5 0 0 1-1.5 1.5C10.7 21.5 3 13.8 3 4.5A1.5 1.5 0 0 1 4.5 3h3.1A1.5 1.5 0 0 1 9.1 4.5c0 1.1.2 2.1.5 3.1a1.5 1.5 0 0 1-.4 1.5Z"></path></svg>+7 (4742) 66-98-12</a></div>
         </div>
         <div class="socials socials--icons">
@@ -683,7 +692,7 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <div class="block-label">Где действует</div>
         <div class="market-where market-where--logo">
               <div class="market-where__text">
-                <span class="mp-name" style="--mp:#005BFF">Ozon</span>
+                <span class="mp-name" style="--mp:#FF5226">Яндекс Маркет</span>
                 <span>Код вводится в корзине на площадке</span>
               </div>
               <a class="soc market-where__go" href="#">Открыть карточку товара</a>
@@ -892,28 +901,28 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
       <button type="button" class="dz-foot__top" data-to-top="">Наверх ↑</button>
     </div>
   </div>
-</footer></div></div></div></div></section><section class="kit-sec"><h2>Страница купона</h2><div class="kit-row"><div class="kit-spec"><div class="kit-l">Страница купона<small>390×4915</small></div>
+</footer></div></div></div></div></section><section class="kit-sec"><h2>Страница купона</h2><div class="kit-row"><div class="kit-spec"><div class="kit-l">Страница купона<small>390×4928</small></div>
     <div class="kit-box" style="width:390px"><div class="kit-b dz dz3 cards-wb cards-soft quick-side cats-a"><main class="wrap" style="margin: 0px;">
 
   <!-- Путь: гео → раздел → ниша → купон. Адрес у купона один и без гео
        (ТЗ v7.0 §3.2.11), иначе поиск получает дубли одной страницы. -->
-  <div class="crumbs" id="crumbs"><a href="#">Главная</a> · <a href="#">Липецк</a> · <a href="#">Региональные</a> · <a href="#">Красота</a> · <span class="mute">Окрашивание любой сложности</span></div>
+  <div class="crumbs" id="crumbs"><a href="#">Главная</a> · <a href="#">Липецк</a> · <a href="#">Региональные</a> · <a href="#">Красота</a> · <span class="mute">Маникюр с покрытием: два по цене одного</span></div>
 
   <div class="cpd" id="couponRoot">
     <div class="cpd__media">
-      <div class="cpd__photo has-photo" style="background:url('assets/coupons/biz-warm.jpg') center/cover no-repeat">
-        <span class="cpd__value">−25%</span>
+      <div class="cpd__photo has-photo" style="background:url('assets/coupons/pitomtsy-brown.jpg') center/cover no-repeat">
+        <span class="cpd__value">2 = 1</span>
         <span class="erid-stamp">Реклама · erid: 2Vt1NJILR</span>
         <!-- Как в попапе: минуты и просмотры плашками на фото. Справа, где в
              попапе крестик, — «Поделиться»: страницу купона чаще пересылают -->
-        <div class="quick__badges"><span class="card__near">16 мин от вас</span><span class="card__near quick__views" title="Просмотров: 3848"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>3 848</span></div>
+        <div class="quick__badges"><span class="card__near">15 мин от вас</span><span class="card__near quick__views" title="Просмотров: 1198"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg>1 198</span></div>
         <button type="button" class="cpd__share" data-photo-share="" aria-label="Поделиться купоном"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
         <!-- Код поверх снимка с нашим знаком — та же механика, что на
              карточке ленты и в попапе: купон уносят скриншотом, пусть
              уносят вместе с логотипом. -->
         <div class="card__code quick__code" data-quick-code="" hidden="" aria-hidden="true">
           <span class="card__code-val"></span>
-          <span class="card__code-date">действует до 21 октября 2026 года</span>
+          <span class="card__code-date">действует до 27 октября 2026 года</span>
           <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
         </div>
       </div>
@@ -926,24 +935,24 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <span>Липецк</span>
       </div>
 
-      <h1 class="cpd__h1">Окрашивание любой сложности</h1>
+      <h1 class="cpd__h1">Маникюр с покрытием: два по цене одного</h1>
 
       <div class="reveal reveal--big" data-reveal="">
-        <div class="block-label" style="margin:0"><span>Промокод</span><span class="quick__until">действует до <b>21 октября 2026 года</b></span></div>
+        <div class="block-label" style="margin:0"><span>Промокод</span><span class="quick__until">действует до <b>27 октября 2026 года</b></span></div>
         <div class="reveal__row">
-          <div class="reveal__code">CITY400</div>
+          <div class="reveal__code">OPEN244</div>
           <div class="reveal__actions">
             <button class="btn btn--solid btn--lg reveal__cta" data-reveal-btn="">Забрать купон</button>
             <button type="button" class="btn btn--ghost btn--lg" data-share=""><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg> Поделиться</button>
           </div>
         </div>
-        <div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>21 октября 2026 года</b></div>
+        <div class="reveal__note">Код скопирован. Успейте воспользоваться до <b>27 октября 2026 года</b></div>
       </div>
 
       <div class="company">
-        <div class="company__logo company__logo--mono" style="--lg-bg:#F3EAEA;--lg-fg:#7A3E45" aria-hidden="true">П</div>
+        <div class="company__logo company__logo--mono" style="--lg-bg:#E9F2EA;--lg-fg:#3F6B47" aria-hidden="true">Р</div>
         <div class="company__text">
-          <div class="company__name">Салон «Пример»</div>
+          <div class="company__name">Ногтевая студия «Рыба»</div>
           <div class="company__line"><a class="company__phone" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 10.8a15.7 15.7 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.4c1 .3 2 .5 3.1.5a1.5 1.5 0 0 1 1.5 1.5V20a1.5 1.5 0 0 1-1.5 1.5C10.7 21.5 3 13.8 3 4.5A1.5 1.5 0 0 1 4.5 3h3.1A1.5 1.5 0 0 1 9.1 4.5c0 1.1.2 2.1.5 3.1a1.5 1.5 0 0 1-.4 1.5Z"></path></svg>+7 (4742) 83-49-11</a><i class="dot"></i><span class="company__hours" title="Пн–Пт 9–20 ч">Пн–Пт 9–20 ч</span></div>
         </div>
         <!-- Как в попапе: сайт и четыре соцсети. Instagram убран на
@@ -959,10 +968,10 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
       </div>
 
       <div class="cpd__where">
-        <div class="block-label">Где действует <span class="block-label__aside">· 16 мин от вас</span></div>
+        <div class="block-label">Где действует <span class="block-label__aside">· 15 мин от вас</span></div>
         <div class="map map--live">
-          <iframe src="https://yandex.ru/map-widget/v1/?ll=39.599200%2C52.608800&amp;z=16&amp;pt=39.599200%2C52.608800%2Cpm2rdl&amp;l=map" title="Карта: Липецк, пл. Центральная, 1" loading="lazy" allowfullscreen=""></iframe>
-          <span class="map__addr"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"></path></svg> Липецк, пл. Центральная, 1</span>
+          <iframe src="https://yandex.ru/map-widget/v1/?ll=39.599200%2C52.608800&amp;z=16&amp;pt=39.599200%2C52.608800%2Cpm2rdl&amp;l=map" title="Карта: Липецк, ул. Первомайская, 12" loading="lazy" allowfullscreen=""></iframe>
+          <span class="map__addr"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"></path></svg> Липецк, ул. Первомайская, 12</span>
         </div>
       </div>
     </div></div>
@@ -999,9 +1008,9 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="cpd-about" id="about">
     <div class="cpd-about__main">
       <div class="cpd-about__head">
-        <div class="company__logo company__logo--mono" style="--lg-bg:#F3EAEA;--lg-fg:#7A3E45" aria-hidden="true">П</div>
+        <div class="company__logo company__logo--mono" style="--lg-bg:#E9F2EA;--lg-fg:#3F6B47" aria-hidden="true">Р</div>
         <div>
-          <div class="cpd-about__name">Салон «Пример»</div>
+          <div class="cpd-about__name">Ногтевая студия «Рыба»</div>
           <a class="company__phone" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 10.8a15.7 15.7 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.4c1 .3 2 .5 3.1.5a1.5 1.5 0 0 1 1.5 1.5V20a1.5 1.5 0 0 1-1.5 1.5C10.7 21.5 3 13.8 3 4.5A1.5 1.5 0 0 1 4.5 3h3.1A1.5 1.5 0 0 1 9.1 4.5c0 1.1.2 2.1.5 3.1a1.5 1.5 0 0 1-.4 1.5Z"></path></svg>+7 (4742) 83-49-11</a>
         </div>
       </div>
@@ -1010,7 +1019,7 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
            без сворачивания абзац в десять строк сталкивал точки продаж
            вниз. Кнопка появляется, только если текст правда не влез. -->
       <div class="cpd-lead" data-lead="">
-        <p class="cpd-about__lead">Салон «Пример» работает в городе с 2014 года. Своя команда, собственное оборудование, запись день в день. Мастера регулярно проходят обучение, работаем только на профессиональных материалах. Для гостей — парковка у входа, детский уголок и кофе, пока ждёте. Если что-то не понравилось, переделаем бесплатно в течение недели.</p>
+        <p class="cpd-about__lead">Ногтевая студия «Рыба» работает в городе с 2014 года. Своя команда, собственное оборудование, запись день в день. Мастера регулярно проходят обучение, работаем только на профессиональных материалах. Для гостей — парковка у входа, детский уголок и кофе, пока ждёте. Если что-то не понравилось, переделаем бесплатно в течение недели.</p>
         <button type="button" class="cpd-lead__more" data-lead-more="">Показать ещё</button>
       </div>
 
@@ -1019,10 +1028,10 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
             <div class="cpd-point">
               <span class="cpd-point__pin"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"></path></svg></span>
               <div>
-                <b>Липецк, пл. Центральная, 1</b>
+                <b>Липецк, ул. Первомайская, 12</b>
                 <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg> Пн–Вс 10–21 ч</span>
               </div>
-              <em class="is-near">16 мин</em>
+              <em class="is-near">15 мин</em>
             </div>
             <div class="cpd-point">
               <span class="cpd-point__pin"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z"></path></svg></span>
@@ -1030,7 +1039,7 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
                 <b>Липецк, пр-т Победы, 45</b>
                 <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg> Пн–Вс 9–22 ч</span>
               </div>
-              <em>19 мин</em>
+              <em>18 мин</em>
             </div></div>
     </div>
 
@@ -1076,16 +1085,16 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
 
   <section class="section">
     <div class="section__head">
-      <h2>Другие купоны · <span id="companyFeedLabel">Салон «Пример»</span></h2>
+      <h2>Другие купоны · <span id="companyFeedLabel">Ногтевая студия «Рыба»</span></h2>
     </div>
-    <div class="grid" id="companyFeed"><div class="card card-in" data-id="2" role="button" tabindex="0" aria-label="Маникюр с покрытием: два по цене одного — Салон «Пример», 2 = 1">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/dom-beige.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">10 мин от вас</span>
+    <div class="grid" id="companyFeed"><div class="card card-in" data-id="5" role="button" tabindex="0" aria-label="Бровист: коррекция и окрашивание — Ногтевая студия «Рыба», −400 ₽">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/pitomtsy-brown.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">17 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NJOPQ</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NK71N</span>
       
       <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 874"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">874</b><b class="card__stat-short">874</b></span>
+        <span class="card__stat" title="Просмотров: 3666"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">3 666</b><b class="card__stat-short">3.7к</b></span>
         <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
         <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
       </div>
@@ -1095,53 +1104,25 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <span class="card__code-date"></span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>
-      <span class="card__badge">2 = 1</span>
-    </div>
-    <div class="card__body">
-      <h3 class="card__title">Маникюр с покрытием: два по цене одного</h3>
-      <div class="card__meta">
-        <b>Салон «Пример»</b>
-      </div>
-      <div class="card__actions">
-        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
-             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
-      </div>
-    </div></div><div class="card card-in" data-id="3" role="button" tabindex="0" aria-label="Бровист: коррекция и окрашивание — Салон «Пример», −400 ₽">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/eda-cool.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">16 мин от вас</span>
-      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NJUTP</span>
-      
-      <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 979"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">979</b><b class="card__stat-short">979</b></span>
-        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
-        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
-      </div>
-      
-      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
-        <span class="card__code-val"></span>
-        <span class="card__code-date"></span>
-        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
-      </div>
-      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−400 ₽</span>
+      <span class="card__badge">−400 ₽</span>
     </div>
     <div class="card__body">
       <h3 class="card__title">Бровист: коррекция и окрашивание</h3>
       <div class="card__meta">
-        <b>Салон «Пример»</b>
+        <b>Ногтевая студия «Рыба»</b>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
              <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
       </div>
-    </div></div><div class="card card-in" data-id="4" role="button" tabindex="0" aria-label="Стрижка и укладка со скидкой на первый визит — Салон «Пример», −30%">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/razvlecheniya-blue.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">8 мин от вас</span>
+    </div></div><div class="card card-in" data-id="9" role="button" tabindex="0" aria-label="Окрашивание любой сложности — Ногтевая студия «Рыба», −25%">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/obuchenie-purple.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">19 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NK0XO</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NKVHJ</span>
       
       <div class="card__stats">
-        <span class="card__stat" title="Просмотров: 3425"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">3 425</b><b class="card__stat-short">3.4к</b></span>
+        <span class="card__stat" title="Просмотров: 1451"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">1 451</b><b class="card__stat-short">1.5к</b></span>
         <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
         <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
       </div>
@@ -1151,12 +1132,40 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <span class="card__code-date"></span>
         <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
       </div>
-      <span class="card__badge">−30%</span>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−25%</span>
+    </div>
+    <div class="card__body">
+      <h3 class="card__title">Окрашивание любой сложности</h3>
+      <div class="card__meta">
+        <b>Ногтевая студия «Рыба»</b>
+      </div>
+      <div class="card__actions">
+        <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
+             <button type="button" class="btn btn--solid" data-card-reveal="">Забрать купон</button>
+      </div>
+    </div></div><div class="card card-in" data-id="12" role="button" tabindex="0" aria-label="Стрижка и укладка со скидкой на первый визит — Ногтевая студия «Рыба», −30%">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/detyam-yellow.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">16 мин от вас</span>
+      <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NLDTG</span>
+      
+      <div class="card__stats">
+        <span class="card__stat" title="Просмотров: 576"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.6"></circle></svg><b class="card__stat-full">576</b><b class="card__stat-short">576</b></span>
+        <button type="button" class="card__stat card__stat--act" data-card-copy="" title="Скопировать код"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path></svg></button>
+        <button type="button" class="card__stat card__stat--act" data-card-share="" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></button>
+      </div>
+      
+      <div class="card__code" data-card-code="" hidden="" aria-hidden="true">
+        <span class="card__code-val"></span>
+        <span class="card__code-date"></span>
+        <span class="card__code-mark"><img src="assets/brand/logo-red.png" alt="">Все купоны</span>
+      </div>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 28px; bottom: 42px; left: 8px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−30%</span>
     </div>
     <div class="card__body">
       <h3 class="card__title">Стрижка и укладка со скидкой на первый визит</h3>
       <div class="card__meta">
-        <b>Салон «Пример»</b>
+        <b>Ногтевая студия «Рыба»</b>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--ghost btn--wide card__more" data-card-more="">Подробнее</button>
@@ -1173,11 +1182,11 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
         <p class="recos__sub">Смежные категории — не прямые конкуренты этого купона: <span id="railLabel">Косметология · Медицина · Фитнес и спорт</span></p>
       </div>
       <div class="rail-wrap can-next" data-nav="1">
-        <div class="rail" id="rail"><div class="card card-in" data-id="20" role="button" tabindex="0" aria-label="Первая процедура аппаратной косметологии — Центр «Рыба», −50%">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/eda-cool.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">9 мин от вас</span>
+        <div class="rail" id="rail"><div class="card card-in" data-id="28" role="button" tabindex="0" aria-label="Первая процедура аппаратной косметологии — Центр «Пример», −50%">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/sport-teal.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">15 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NMQP8</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NO3L0</span>
       
       
       <span class="card__badge">−50%</span>
@@ -1185,19 +1194,19 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="card__body">
       <h3 class="card__title">Первая процедура аппаратной косметологии</h3>
       <div class="card__meta">
-        <b>Центр «Рыба»</b><i class="dot"></i><span>Косметология</span>
+        <b>Центр «Пример»</b><i class="dot"></i><span>Косметология</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="21" role="button" tabindex="0" aria-label="Приём профильного специалиста — Клиника «Пример», −1 000 ₽">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/razvlecheniya-blue.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">5 мин от вас</span>
+    </div></div><div class="card card-in" data-id="29" role="button" tabindex="0" aria-label="Приём профильного специалиста — Клиника «Пример», −1 000 ₽">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/obuchenie-purple.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">8 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NMWT7</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NO9OZ</span>
       
       
-      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 37px; bottom: 53px; left: 10px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−1 000 ₽</span>
+      <span class="card__badge">−1 000 ₽</span>
     </div>
     <div class="card__body">
       <h3 class="card__title">Приём профильного специалиста</h3>
@@ -1207,28 +1216,28 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="22" role="button" tabindex="0" aria-label="Пробная неделя в клубе — Фитнес «Название», 0 ₽">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/biz-warm.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">18 мин от вас</span>
+    </div></div><div class="card card-in" data-id="30" role="button" tabindex="0" aria-label="Персональная тренировка — Студия «Бренд», −50%">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/razvlecheniya-blue.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">16 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NN2X6</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NOFSY</span>
       
       
-      <span class="card__badge">0 ₽</span>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 37px; bottom: 53px; left: 10px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−50%</span>
     </div>
     <div class="card__body">
-      <h3 class="card__title">Пробная неделя в клубе</h3>
+      <h3 class="card__title">Персональная тренировка</h3>
       <div class="card__meta">
-        <b>Фитнес «Название»</b><i class="dot"></i><span>Фитнес и спорт</span>
+        <b>Студия «Бренд»</b><i class="dot"></i><span>Фитнес и спорт</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="23" role="button" tabindex="0" aria-label="Первая процедура аппаратной косметологии — Центр «Компания», −50%">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/krasota-green.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">4 мин от вас</span>
+    </div></div><div class="card card-in" data-id="31" role="button" tabindex="0" aria-label="Первая процедура аппаратной косметологии — Центр «Бренд», −50%">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/pitomtsy-brown.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">7 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NN915</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NOLWX</span>
       
       
       <span class="card__badge">−50%</span>
@@ -1236,33 +1245,33 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="card__body">
       <h3 class="card__title">Первая процедура аппаратной косметологии</h3>
       <div class="card__meta">
-        <b>Центр «Компания»</b><i class="dot"></i><span>Косметология</span>
+        <b>Центр «Бренд»</b><i class="dot"></i><span>Косметология</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="25" role="button" tabindex="0" aria-label="Гигиена полости рта — Стоматология «Рыба», −30%">
+    </div></div><div class="card card-in" data-id="33" role="button" tabindex="0" aria-label="Комплексное обследование: приём и анализы — Медцентр «Бренд», −40%">
     <div class="card__media has-photo" style="background: url(&quot;assets/coupons/dom-beige.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">2 мин от вас</span>
+      <span class="card__near">3 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NNL93</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NOY4V</span>
       
       
-      <span class="card__badge">−30%</span>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 37px; bottom: 53px; left: 10px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−40%</span>
     </div>
     <div class="card__body">
-      <h3 class="card__title">Гигиена полости рта</h3>
+      <h3 class="card__title">Комплексное обследование: приём и анализы</h3>
       <div class="card__meta">
-        <b>Стоматология «Рыба»</b><i class="dot"></i><span>Медицина</span>
+        <b>Медцентр «Бренд»</b><i class="dot"></i><span>Медицина</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="26" role="button" tabindex="0" aria-label="Персональная тренировка — Студия «Название», −50%">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/detyam-yellow.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">11 мин от вас</span>
+    </div></div><div class="card card-in" data-id="34" role="button" tabindex="0" aria-label="Персональная тренировка — Студия «Рыба», −50%">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/odezhda-dark.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">2 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NNRD2</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NP48U</span>
       
       
       <span class="card__badge">−50%</span>
@@ -1270,16 +1279,16 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="card__body">
       <h3 class="card__title">Персональная тренировка</h3>
       <div class="card__meta">
-        <b>Студия «Название»</b><i class="dot"></i><span>Фитнес и спорт</span>
+        <b>Студия «Рыба»</b><i class="dot"></i><span>Фитнес и спорт</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="29" role="button" tabindex="0" aria-label="Курс из пяти процедур по цене четырёх — Студия «Пример», 5 = 4">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/meditsina-white.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">18 мин от вас</span>
+    </div></div><div class="card card-in" data-id="35" role="button" tabindex="0" aria-label="Курс из пяти процедур по цене четырёх — Студия «Рыба», 5 = 4">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/razvlecheniya-blue.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">6 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NO9OZ</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NPACT</span>
       
       
       <span class="card__badge">5 = 4</span>
@@ -1287,33 +1296,33 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
     <div class="card__body">
       <h3 class="card__title">Курс из пяти процедур по цене четырёх</h3>
       <div class="card__meta">
-        <b>Студия «Пример»</b><i class="dot"></i><span>Косметология</span>
+        <b>Студия «Рыба»</b><i class="dot"></i><span>Косметология</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="30" role="button" tabindex="0" aria-label="Гигиена полости рта — Стоматология «Пример», −30%">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/pitomtsy-brown.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">7 мин от вас</span>
+    </div></div><div class="card card-in" data-id="36" role="button" tabindex="0" aria-label="Приём профильного специалиста — Клиника «Рыба», −1 000 ₽">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/krasota-green.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">11 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NOFSY</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NPGGS</span>
       
       
-      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 37px; bottom: 53px; left: 10px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−30%</span>
+      <span class="verified-flag is-side" title="Проверено тайным покупателем" style="height: 37px; bottom: 53px; left: 10px;"><i aria-hidden="true"><svg viewBox="0 0 12 12" width="60%" height="60%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.2 5 8.6 9.5 3.6"></path></svg></i><span class="verified-flag__t">Проверено</span></span><span class="card__badge">−1 000 ₽</span>
     </div>
     <div class="card__body">
-      <h3 class="card__title">Гигиена полости рта</h3>
+      <h3 class="card__title">Приём профильного специалиста</h3>
       <div class="card__meta">
-        <b>Стоматология «Пример»</b><i class="dot"></i><span>Медицина</span>
+        <b>Клиника «Рыба»</b><i class="dot"></i><span>Медицина</span>
       </div>
       <div class="card__actions">
         <button type="button" class="btn btn--solid btn--wide" data-card-reveal="">Смотреть в категории</button>
       </div>
-    </div></div><div class="card card-in" data-id="31" role="button" tabindex="0" aria-label="Пробная неделя в клубе — Фитнес «Пример», 0 ₽">
-    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/eda-cool.jpg&quot;) center center / cover no-repeat;">
-      <span class="card__near">17 мин от вас</span>
+    </div></div><div class="card card-in" data-id="37" role="button" tabindex="0" aria-label="Пробная неделя в клубе — Фитнес «Пример», 0 ₽">
+    <div class="card__media has-photo" style="background: url(&quot;assets/coupons/avto-steel.jpg&quot;) center center / cover no-repeat;">
+      <span class="card__near">3 мин от вас</span>
       <span class="card__share" title="Поделиться"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"></path></svg></span>
-      <span class="erid-stamp">Реклама · erid: 2Vt1NOLWX</span>
+      <span class="erid-stamp">Реклама · erid: 2Vt1NPMKR</span>
       
       
       <span class="card__badge">0 ₽</span>
@@ -1332,7 +1341,7 @@ body.kit{margin:0;background:#E4E4E1;color:#151514;font-family:"Onest",ui-sans-s
   </section>
 
   <div class="seo">
-    <h2 id="seoTitle">Красота · региональные в городе Липецк: купон «Окрашивание любой сложности»</h2>
+    <h2 id="seoTitle">Красота · региональные в городе Липецк: купон «Маникюр с покрытием: два по цене одного»</h2>
     <p id="seoLead">Скидка действует в городе Липецк по промокоду. Чтобы получить её, не нужно ничего оплачивать и регистрироваться: откройте код, сделайте скриншот и предъявите его на месте.</p>
     <p id="seoTail">Другие предложения ниши «Красота» в разделе «Региональные» смотрите в каталоге — список обновляется каждый день.</p>
   </div>
