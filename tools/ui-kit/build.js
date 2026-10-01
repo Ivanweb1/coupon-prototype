@@ -168,7 +168,7 @@ const STATES = [
     { name: "Соцсеть", page: PUB, sel: ".dz-header .head-socials .soc", states: ["default", "hover"] },
   ] },
   { title: "Карточка и категории", items: [
-    { name: "Карточка", page: PUB, sel: "#feed .card:has(.verified-flag)", states: ["default", "hover"] },
+    { name: "Карточка", page: PUB, sel: "#feed .card:has(.verified-flag)", states: ["default", "hover"], fit: true /* в ленте карточка резиновая — без ширины схлопнется */ },
     { name: "Действие в столбике", page: PUB, sel: "#feed .card .card__stat--act", states: ["default", "hover", "focus"], bg: "#8d8b87" },
     { name: "Плашка раздела", page: PUB, sel: ".dz-tags .tags-row__l1 > *", states: ["default", "hover", "on"] },
     { name: "Поиск", page: PUB, sel: ".dzl__search", states: ["default", "focus-within"] },
@@ -322,7 +322,7 @@ async function stateCSS(p) {
    -------------------------------------------------------------------------- */
 function head(title, mobile, extra) {
   return `<!doctype html>
-<html lang="ru" class="val-ticket">
+<html lang="ru" class="val-ticket font-onest">
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
@@ -423,7 +423,7 @@ function stateVariant(s, st) {
 }
 function statesHTML(it, s) {
   return `<div class="kit-spec"><div class="kit-l">${it.name}</div><div class="kit-states">${it.states.map(st =>
-    `<div class="kit-state"><span>${LABEL[st] || st}</span><div class="kit-box${it.bg ? "" : " kit-box--grey"}"${it.bg ? ` style="background:${it.bg}"` : ""}>${wrap(s, stateVariant(s, st))}</div></div>`).join("")}</div></div>`;
+    `<div class="kit-state"><span>${LABEL[st] || st}</span><div class="kit-box${it.bg ? "" : " kit-box--grey"}" style="box-sizing:content-box${it.fit ? `;width:${s.w}px` : ""}${it.bg ? `;background:${it.bg}` : ""}">${wrap(s, stateVariant(s, st))}</div></div>`).join("")}</div></div>`;
 }
 
 /* --------------------------------------------------------------------------
