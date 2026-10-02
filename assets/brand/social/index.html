@@ -76,14 +76,9 @@ body.is-light .art--ava{background:#fff}
 .cpn--1 .cpn__ph{background-image:url(../../coupons/kofe-warm.jpg);background-position:50% 35%}
 .cpn--2 .cpn__ph{background-image:url(../../coupons/manikyur-rose.jpg);background-position:50% 25%}
 
-/* Фон обложек: одно мягкое фирменное пятно справа. Белый остаётся
-   основным — «лёгкость и простота» из брифа, цвет работает акцентом. */
-.glow{
-  position:absolute;border-radius:50%;
-  background:radial-gradient(circle at 50% 50%, var(--brand-50) 0%, rgba(254,243,242,.55) 46%, rgba(255,255,255,0) 72%);
-}
-.art--vk .glow{right:-220px;top:-160px;width:1180px;height:1180px}
-.art--ok .glow{right:-260px;top:-300px;width:1100px;height:1100px}
+/* Фона у обложек нет: чистый белый. Мягкое фирменное пятно было, но от
+   градиента на витрине отказались, и держать его в соцсетях значило бы
+   разводить два разных фона у одного продукта. */
 
 /* --------------------------------------------------------------------------
    ВК, 1920×768
@@ -308,7 +303,6 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
    Композиция вертикальная и по центру: в отличие от обложки, здесь нет
    места на две колонки. */
 .art--vkm{width:1080px;height:1920px;position:relative;overflow:hidden;background:#fff}
-.art--vkm .glow{right:-300px;top:-340px;width:1200px;height:1200px}
 .vkm{
   position:absolute;left:0;right:0;top:170px;
   display:flex;flex-direction:column;align-items:center;text-align:center;
@@ -398,7 +392,6 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
       <span class="board__size">1920×768</span>
     </div>
     <div class="art art--vk" id="vk-cover">
-      <div class="glow"></div>
 
       <div class="lockup">
         <div class="mark"><img src="../logo-red.png" alt=""></div>
@@ -443,7 +436,6 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
       <span class="board__size">1944×600</span>
     </div>
     <div class="art art--ok" id="ok-cover">
-      <div class="glow"></div>
 
       <div class="lockup">
         <div class="mark"><img src="../logo-red.png" alt=""></div>
@@ -633,7 +625,6 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
       <span class="board__size">1080×1920</span>
     </div>
     <div class="art art--vkm" id="vk-mobile">
-      <div class="glow"></div>
       <div class="vkm">
         <div class="mark"><img src="../logo-red.png" alt=""></div>
         <div class="say">

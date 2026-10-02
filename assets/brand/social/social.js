@@ -48,4 +48,25 @@
 
   var variant = q.get('variant');
   if (variant) body.classList.add('is-' + variant.replace(/[^a-z0-9-]/gi, ''));
+
+  // Подгонка артбордов под окно — только для просмотра.
+  // Обложка ВК шире 1900 px и в окно не влезает, из-за чего кажется, что и
+  // выгрузить её нельзя. Это не так: плагин рендерит страницу сам, в своей
+  // ширине, и размер окна ему безразличен. Но смотреть на макет через
+  // горизонтальную прокрутку невозможно, поэтому на странице артборды
+  // ужимаются до ширины окна.
+  // В ?bare=1 подгонки нет: там артборды нужны в натуральную величину —
+  // и плагину, и скрипту рендера, который снимает их по id.
+  if (q.get('bare')) return;
+
+  function fit() {
+    var room = document.documentElement.clientWidth - 120;
+    document.querySelectorAll('.art').forEach(function (el) {
+      el.style.zoom = '';
+      var w = el.getBoundingClientRect().width;
+      if (w > room) el.style.zoom = room / w;
+    });
+  }
+  fit();
+  window.addEventListener('resize', fit);
 })();
