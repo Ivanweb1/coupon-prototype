@@ -8,7 +8,8 @@
      ?guides=1        — показать безопасные зоны площадки;
      ?bare=1          — убрать обвязку страницы, оставить голые артборды;
      ?variant=light   — вариант макета, если он у формата есть (аватар);
-     ?v=2             — второй вариант оформления по всем форматам сразу.
+     ?v=2 / ?v=3      — второй и третий варианты оформления, по всем
+                        форматам сразу.
 
    Подгонки кегля здесь нет намеренно. Заголовок повторяет витрину:
    мера 20ch и перенос по словам, как в .dzl__h1 — длинный город уходит
@@ -47,7 +48,8 @@
   if (q.get('guides')) body.classList.add('is-guides');
   if (q.get('bare')) body.classList.add('is-bare');
 
-  if (q.get('v') === '2') body.classList.add('is-v2');
+  var v = q.get('v');
+  if (v === '2' || v === '3') body.classList.add('is-v' + v);
 
   var variant = q.get('variant');
   if (variant) body.classList.add('is-' + variant.replace(/[^a-z0-9-]/gi, ''));

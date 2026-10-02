@@ -444,6 +444,111 @@ body.is-v2 .post__body{
   background:#fff;border-radius:30px;
 }
 body.is-v2 .post__foot{margin-top:28px}
+
+/* ==========================================================================
+   Вариант 3 (?v=3) — перфорация
+   ==========================================================================
+   Третий заход отличается от первых двух не цветом, а устройством кадра.
+   Первый — всё на белом, второй — всё на фирменном, оба собраны обычной
+   раскладкой. Третий делит кадр надвое линией отрыва: полукруглые вырезы
+   по краям и пунктир между ними. Это тот же «билетик», что на карточке
+   купона, только увеличенный до размера холста, — приём из нашего языка,
+   а не новый.
+
+   Карточек-купонов в этом варианте нет: роль «вот так выглядит купон»
+   берёт на себя сама форма кадра, и дублировать её мелкими карточками
+   значит сказать одно и то же дважды.
+
+   Выгрузка в Figma: вырезы здесь обычные круги цвета фона, а не маска, —
+   переносятся как есть. Пунктир приедет штриховой обводкой.
+   ========================================================================== */
+.plate, .perf{display:none}
+
+body.is-v3 .plate{
+  display:block;position:absolute;right:0;top:0;bottom:0;width:38%;
+  background:var(--brand);
+}
+body.is-v3 .plate__mark{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-6deg);
+  width:260px;height:437px;
+}
+body.is-v3 .plate__mark img{display:block;width:100%;height:100%;object-fit:contain}
+
+/* Линия отрыва. Вырезы — круги цвета фона, наполовину уходящие за край
+   холста: так они читаются пробитыми насквозь, а не наклеенными. */
+body.is-v3 .perf{display:block;position:absolute;right:38%;top:0;bottom:0;width:0;
+  border-left:3px dashed var(--brand-300);z-index:2}
+body.is-v3 .perf i{
+  position:absolute;left:-29px;width:58px;height:58px;border-radius:50%;
+  background:#fff;
+}
+body.is-v3 .perf i:first-child{top:-29px}
+body.is-v3 .perf i:last-child{bottom:-29px}
+
+/* Знак в левой части убран: он уже стоит на плите, и два шара в одном
+   кадре — это одно и то же сказанное дважды. Освободившееся место отдано
+   тексту. Ширина блока ограничена линией отрыва: без ограничения строка
+   шагов заезжала на плиту. */
+body.is-v3 .art--vk .lockup{left:150px;gap:0}
+body.is-v3 .art--vk .mark--cover{display:none}
+body.is-v3 .art--vk .say{font-size:27px;max-width:940px}
+body.is-v3 .art--vk .feed{display:none}
+
+body.is-v3 .art--ok .lockup{left:150px;gap:0}
+body.is-v3 .art--ok .mark--cover{display:none}
+body.is-v3 .art--ok .say{font-size:20px;max-width:620px}
+body.is-v3 .art--ok .feed{display:none}
+body.is-v3 .art--ok .plate__mark{width:150px;height:252px}
+
+/* В вертикальном формате плита ложится снизу, а не сбоку. */
+body.is-v3 .art--vkm .plate{left:0;right:0;top:auto;bottom:0;width:auto;height:30%}
+body.is-v3 .art--vkm .plate__mark{width:200px;height:336px}
+body.is-v3 .art--vkm .perf{left:0;right:0;top:auto;bottom:30%;width:auto;height:0;
+  border-left:0;border-top:3px dashed var(--brand-300)}
+body.is-v3 .art--vkm .perf i{left:auto;top:-29px;bottom:auto}
+body.is-v3 .art--vkm .perf i:first-child{left:-29px}
+body.is-v3 .art--vkm .perf i:last-child{right:-29px}
+body.is-v3 .art--vkm .vkm{top:120px}
+body.is-v3 .art--vkm .mark{display:none}
+
+/* Аватар: круг поделён той же линией — знак сверху, город снизу. */
+body.is-v3 .art--ava{background:#fff;justify-content:flex-start;padding-top:150px}
+body.is-v3 .art--ava .ava__white{display:none}
+body.is-v3 .art--ava .ava__red{display:block}
+body.is-v3 .art--ava .mark{width:250px;height:420px;margin-bottom:0}
+/* Линия отрыва внутри круглой обрезки: шире 62% её концы уходят за круг и
+   обрываются не на пустом месте, а посреди видимой области. */
+body.is-v3 .ava__rule{
+  width:62%;height:0;margin:46px 0 0;border-radius:0;
+  background:none;border-top:4px dashed var(--brand-300);
+}
+body.is-v3 .ava__city{margin-top:40px;color:var(--brand)}
+body.is-v3 .ava__net{margin-top:14px;color:var(--ink-3)}
+
+/* Кнопка меню: красный корешок слева, поле со значком и подписью справа. */
+body.is-v3 .art--menu{background:#fff;color:var(--ink);padding-left:86px}
+body.is-v3 .art--menu::after{
+  display:block;content:"";position:absolute;left:0;top:0;bottom:0;right:auto;
+  width:60px;background:var(--brand);opacity:1;
+}
+body.is-v3 .art--menu::before{
+  content:"";position:absolute;left:60px;top:0;bottom:0;z-index:1;
+  border-left:2px dashed var(--brand-300);
+}
+body.is-v3 .menu__ic{color:var(--brand);opacity:1}
+body.is-v3 .menu__c{color:var(--ink-3)}
+
+/* Пост: линия отрыва между снимком и сведениями. */
+body.is-v3 .perf--h{
+  display:block;position:absolute;left:0;right:0;width:auto;height:0;z-index:3;
+  border-left:0;border-top:3px dashed var(--brand-300);
+}
+body.is-v3 .art--post45 .perf--h{top:860px}
+body.is-v3 .art--post11 .perf--h{top:620px}
+body.is-v3 .perf--h i{left:auto;top:-29px}
+body.is-v3 .perf--h i:first-child{left:-29px}
+body.is-v3 .perf--h i:last-child{right:-29px}
+body.is-v3 .post__body{padding-top:62px}
 </style>
 </head>
 <body>
@@ -466,6 +571,11 @@ body.is-v2 .post__foot{margin-top:28px}
       <span class="board__size">1920×768</span>
     </div>
     <div class="art art--vk" id="vk-cover">
+      <div class="plate">
+        <div class="plate__mark"><img src="../logo-white.png" alt=""></div>
+      </div>
+      <div class="perf"><i></i><i></i></div>
+
 
       <div class="lockup">
         <div class="mark mark--cover"><img class="mark__r" src="../logo-red.png" alt=""><img class="mark__w" src="../logo-white.png" alt=""></div>
@@ -510,6 +620,11 @@ body.is-v2 .post__foot{margin-top:28px}
       <span class="board__size">1944×600</span>
     </div>
     <div class="art art--ok" id="ok-cover">
+      <div class="plate">
+        <div class="plate__mark"><img src="../logo-white.png" alt=""></div>
+      </div>
+      <div class="perf"><i></i><i></i></div>
+
 
       <div class="lockup">
         <div class="mark mark--cover"><img class="mark__r" src="../logo-red.png" alt=""><img class="mark__w" src="../logo-white.png" alt=""></div>
@@ -642,6 +757,7 @@ body.is-v2 .post__foot{margin-top:28px}
           <span class="ticket post__value">&minus;50%</span>
         </div>
       </div>
+      <div class="perf perf--h"><i></i><i></i></div>
       <div class="post__body">
         <div class="post__title">Кофе и круассан<br>за полцены</div>
         <div class="post__meta"><b>Кофейня в центре</b> · Кафе и рестораны</div>
@@ -673,6 +789,7 @@ body.is-v2 .post__foot{margin-top:28px}
           <span class="ticket post__value">&minus;50%</span>
         </div>
       </div>
+      <div class="perf perf--h"><i></i><i></i></div>
       <div class="post__body">
         <div class="post__title">Кофе и круассан<br>за полцены</div>
         <div class="post__meta"><b>Кофейня в центре</b> · Кафе и рестораны</div>
@@ -699,6 +816,11 @@ body.is-v2 .post__foot{margin-top:28px}
       <span class="board__size">1080×1920</span>
     </div>
     <div class="art art--vkm" id="vk-mobile">
+      <div class="plate">
+        <div class="plate__mark"><img src="../logo-white.png" alt=""></div>
+      </div>
+      <div class="perf"><i></i><i></i></div>
+
       <div class="vkm">
         <div class="mark mark--cover"><img class="mark__r" src="../logo-red.png" alt=""><img class="mark__w" src="../logo-white.png" alt=""></div>
         <div class="say">
