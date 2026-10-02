@@ -70,11 +70,12 @@ body:not(.is-bare) .art{box-shadow:0 10px 40px rgba(27,27,27,.13)}
 .art--ava{width:1000px;height:1000px;background:var(--brand)}
 body.is-light .art--ava{background:#fff}
 
-/* Снимки в карточках — из библиотеки ленты (assets/coupons/). Кадрируются
-   по верхней части: в обоих снимках предметы стоят вверху, а низ оставлен
-   пустым под плашку выгоды, и центральный кроп срезал бы сюжет. */
-.cpn--1 .cpn__ph{background-image:url(../../coupons/kofe-warm.jpg);background-position:50% 35%}
-.cpn--2 .cpn__ph{background-image:url(../../coupons/manikyur-rose.jpg);background-position:50% 25%}
+/* Снимки в карточках — из библиотеки ленты (assets/coupons/).
+   Положение не на глаз: границы сюжета замерены по кадру (кофе 44…879 из
+   1350, маникюр 1…608), и сдвиг выбран так, чтобы сюжет целиком попадал в
+   окно снимка. Для кофе допустимо 0…11%, для маникюра 0…30%. */
+.cpn--1 .cpn__ph{background-image:url(../../coupons/kofe-warm.jpg);background-position:50% 6%}
+.cpn--2 .cpn__ph{background-image:url(../../coupons/manikyur-rose.jpg);background-position:50% 8%}
 
 /* Фона у обложек нет: чистый белый. Мягкое фирменное пятно было, но от
    градиента на витрине отказались, и держать его в соцсетях значило бы
@@ -225,8 +226,14 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
 .post__photo{
   position:relative;flex:0 0 auto;
   background-image:url(../../coupons/kofe-warm.jpg);
-  background-size:cover;background-position:50% 38%;
+  background-size:cover;
 }
+/* В 4:5 окно снимка 860 px — сюжет (44…879) влезает целиком при сдвиге
+   4…9%. В квадрате окно всего 620 px, сюжет в него не помещается, поэтому
+   там он просто центрируется: 21% ставит середину чашки с круассанами в
+   середину окна. */
+.art--post45 .post__photo{background-position:50% 6%}
+.art--post11 .post__photo{background-position:50% 21%}
 .art--post45 .post__photo{height:860px}
 .art--post11 .post__photo{height:620px}
 
@@ -370,6 +377,73 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
 .menu__ic{margin-bottom:auto}
 .menu-row{display:flex;flex-wrap:wrap;gap:20px}
 .menu-row .board__cap{width:100%}
+
+/* ==========================================================================
+   Вариант 2 (?v=2)
+   ==========================================================================
+   Второй заход по каждому формату — не «ещё одна идея», а другой ответ на
+   тот же вопрос, чтобы было из чего выбирать:
+
+     обложки   — фирменная заливка вместо белого фона. Белый вариант тише и
+                 ближе к витрине, красный заметнее в ленте и сразу помечает
+                 сообщество цветом;
+     аватар    — светлый: красный знак на белом и город красной плашкой с
+                 наклоном, как в заголовке витрины. Узнаётся как сайт, но в
+                 списке диалогов на белом фоне тише красного;
+     меню      — ровный тихий ряд: все кнопки белые с обводкой, цветом
+                 выделен только значок. Разделы и ниши перестают делиться
+                 на главные и второстепенные;
+     пост      — снимок во всю площадь, сведения белой карточкой поверх.
+                 Фото работает сильнее, текста помещается меньше.
+   ========================================================================== */
+.mark__w{display:none}
+body.is-v2 .mark--cover .mark__r{display:none}
+body.is-v2 .mark--cover .mark__w{display:block}
+
+/* --- Обложки: фирменная заливка --- */
+body.is-v2 .art--vk,
+body.is-v2 .art--ok,
+body.is-v2 .art--vkm{background:var(--brand)}
+body.is-v2 .say__eyebrow{color:rgba(255,255,255,.88)}
+body.is-v2 .say__h1{color:#fff}
+/* Плашка города выворачивается: на красном фоне красная плашка исчезает. */
+body.is-v2 .say__city{background:#fff;color:var(--brand)}
+body.is-v2 .say__steps{color:rgba(255,255,255,.92)}
+body.is-v2 .say__steps b{background:rgba(255,255,255,.2);color:#fff}
+body.is-v2 .say__steps li + li::before{border-color:rgba(255,255,255,.55)}
+body.is-v2 .site{color:rgba(255,255,255,.72)}
+/* Карточки на красном держатся сами — тень под ними не читается, снимаем. */
+body.is-v2 .cpn{box-shadow:0 20px 50px rgba(120,20,16,.22);border-color:transparent}
+
+/* --- Аватар: светлый --- */
+body.is-v2 .art--ava{background:#fff}
+body.is-v2 .art--ava .ava__white{display:none}
+body.is-v2 .art--ava .ava__red{display:block}
+/* Город плашкой, как в заголовке витрины, — наклон тот же −2°. */
+body.is-v2 .ava__city{
+  color:#fff;background:var(--brand);
+  padding:0 .16em .05em;border-radius:.16em;transform:rotate(-2deg);
+}
+body.is-v2 .ava__rule{background:rgba(221,68,60,.35)}
+body.is-v2 .ava__net{color:var(--ink-3)}
+
+/* --- Меню: ровный ряд --- */
+body.is-v2 .art--menu{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line-strong)}
+body.is-v2 .art--menu::after{display:none}
+body.is-v2 .menu__ic{color:var(--brand);opacity:1}
+body.is-v2 .menu__c{color:var(--ink-3)}
+
+/* --- Пост: снимок во всю площадь --- */
+body.is-v2 .art--post{justify-content:flex-end}
+body.is-v2 .post__photo{position:absolute;inset:0;height:auto}
+/* Плашки уходят наверх: внизу их перекрыла бы карточка со сведениями. */
+body.is-v2 .post__flags{top:92px;bottom:auto}
+body.is-v2 .post__body{
+  position:relative;z-index:1;flex:0 0 auto;
+  margin:0 28px 28px;padding:36px 40px 38px;
+  background:#fff;border-radius:30px;
+}
+body.is-v2 .post__foot{margin-top:28px}
 </style>
 </head>
 <body>
@@ -394,7 +468,7 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
     <div class="art art--vk" id="vk-cover">
 
       <div class="lockup">
-        <div class="mark"><img src="../logo-red.png" alt=""></div>
+        <div class="mark mark--cover"><img class="mark__r" src="../logo-red.png" alt=""><img class="mark__w" src="../logo-white.png" alt=""></div>
         <div class="say">
           <span class="say__eyebrow">Бесплатно · без регистрации</span>
           <h1 class="say__h1">Все скидки <span class="say__city" data-city>Липецка</span> в&nbsp;одном месте</h1>
@@ -438,7 +512,7 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
     <div class="art art--ok" id="ok-cover">
 
       <div class="lockup">
-        <div class="mark"><img src="../logo-red.png" alt=""></div>
+        <div class="mark mark--cover"><img class="mark__r" src="../logo-red.png" alt=""><img class="mark__w" src="../logo-white.png" alt=""></div>
         <div class="say">
           <span class="say__eyebrow">Бесплатно · без регистрации</span>
           <h1 class="say__h1">Все скидки <span class="say__city" data-city>Липецка</span> в&nbsp;одном месте</h1>
@@ -626,7 +700,7 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
     </div>
     <div class="art art--vkm" id="vk-mobile">
       <div class="vkm">
-        <div class="mark"><img src="../logo-red.png" alt=""></div>
+        <div class="mark mark--cover"><img class="mark__r" src="../logo-red.png" alt=""><img class="mark__w" src="../logo-white.png" alt=""></div>
         <div class="say">
           <span class="say__eyebrow">Бесплатно · без регистрации</span>
           <!-- Перенос проставлен руками: иначе строка рвётся после «Все

@@ -74,6 +74,8 @@ def main():
                     help="город в родительном падеже — заголовок обложек")
     ap.add_argument("--city-nom", default="", dest="city_nom",
                     help="город в именительном падеже — подпись на аватарах")
+    ap.add_argument("--v2", action="store_true",
+                    help="второй вариант оформления (?v=2)")
     ap.add_argument("--guides", action="store_true",
                     help="наложить безопасные зоны площадок поверх макетов")
     args = ap.parse_args()
@@ -85,10 +87,12 @@ def main():
         params.append("city=" + quote(args.city))
     if args.city_nom:
         params.append("cityNom=" + quote(args.city_nom))
+    if args.v2:
+        params.append("v=2")
     if args.guides:
         params.append("guides=1")
     url = PAGE.as_uri() + "?" + "&".join(params)
-    suffix = "-guides" if args.guides else ""
+    suffix = ("-v2" if args.v2 else "") + ("-guides" if args.guides else "")
 
     print("Рендер в", OUT.relative_to(ROOT))
     with sync_playwright() as p:
@@ -127,7 +131,7 @@ def main():
                 from PIL import Image
                 side = DOWNSCALE[name]
                 with Image.open(target) as im:
-                    small = OUT / f"{name}-{side}x{side}.png"
+                    small = OUT / f"{name}-{side}x{side}{suffix}.png"
                     im.resize((side, side), Image.LANCZOS).save(small)
                     print(f"  {small.relative_to(ROOT)}")
 
