@@ -36,19 +36,38 @@ OUT = PAGE.parent / "out"
 BOARDS = {
     "vk-cover": (1920, 768, "vk-cover"),
     "ok-cover": (1944, 600, "ok-cover"),
-    "avatar": (1000, 1000, "avatar"),
+    "avatar-vk": (1000, 1000, "avatar-vk"),
+    "avatar-ok": (1000, 1000, "avatar-ok"),
+    "avatar-tg": (1000, 1000, "avatar-tg"),
+    "avatar-max": (1000, 1000, "avatar-max"),
+    "vk-mobile": (1080, 1920, "vk-mobile"),
+    "menu-eda": (376, 256, "menu-eda"),
+    "menu-krasota": (376, 256, "menu-krasota"),
+    "menu-avto": (376, 256, "menu-avto"),
+    "menu-sport": (376, 256, "menu-sport"),
+    "menu-razvlecheniya": (376, 256, "menu-razvlecheniya"),
+    "menu-detyam": (376, 256, "menu-detyam"),
+    "post-45": (1080, 1350, "post-45"),
+    "post-11": (1080, 1080, "post-11"),
 }
 
-# Уменьшенные копии аватара под площадки: имя PNG -> {суффикс: сторона}
+# Рабочая копия под размер площадки: имя PNG -> сторона в пикселях.
+# Крупный исходник остаётся рядом — он нужен для Figma и на случай, если
+# площадка поменяет требования.
 DOWNSCALE = {
-    "avatar": {"vk-ok": 400, "tg": 800, "max": 512},
+    "avatar-vk": 400,
+    "avatar-ok": 400,
+    "avatar-tg": 800,
+    "avatar-max": 512,
 }
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--city", default="",
-                    help="город в родительном падеже, как он встаёт в заголовок")
+                    help="город в родительном падеже — заголовок обложек")
+    ap.add_argument("--city-nom", default="", dest="city_nom",
+                    help="город в именительном падеже — подпись на аватарах")
     ap.add_argument("--guides", action="store_true",
                     help="наложить безопасные зоны площадок поверх макетов")
     args = ap.parse_args()
@@ -58,6 +77,8 @@ def main():
     params = ["bare=1"]
     if args.city:
         params.append("city=" + quote(args.city))
+    if args.city_nom:
+        params.append("cityNom=" + quote(args.city_nom))
     if args.guides:
         params.append("guides=1")
     url = PAGE.as_uri() + "?" + "&".join(params)
@@ -98,11 +119,11 @@ def main():
             # все размеры гарантированно одной и той же картинки.
             if not args.guides and name in DOWNSCALE:
                 from PIL import Image
+                side = DOWNSCALE[name]
                 with Image.open(target) as im:
-                    for tag, side in DOWNSCALE[name].items():
-                        small = OUT / f"{name}-{side}x{side}-{tag}.png"
-                        im.resize((side, side), Image.LANCZOS).save(small)
-                        print(f"  {small.relative_to(ROOT)}")
+                    small = OUT / f"{name}-{side}x{side}.png"
+                    im.resize((side, side), Image.LANCZOS).save(small)
+                    print(f"  {small.relative_to(ROOT)}")
 
         browser.close()
 

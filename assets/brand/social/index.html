@@ -143,27 +143,36 @@ body.is-light .art--ava{background:#fff}
 .art--ok .g--safe{left:482px;top:180px;width:980px;height:240px}
 
 /* --------------------------------------------------------------------------
-   Аватар, 1000×1000
+   Аватар, 1000×1000 — по одному на площадку
    --------------------------------------------------------------------------
-   Один файл на все четыре площадки: ВК и ОК ставят 400×400, Telegram
-   800×800, MAX 512×512. Рендерим крупно и уменьшаем — запас по
-   разрешению дешевле четырёх исходников.
+   Артборд один и тот же, меняются только две подписи: город и площадка.
+   Четыре копии, потому что уменьшаются они по-разному — ВК и ОК ставят
+   400×400, Telegram 800×800, MAX 512×512.
 
-   Везде аватар режется в круг, поэтому знак вписан в окружность с
-   запасом: углы квадрата не несут ничего, кроме заливки.
+   Везде аватар режется в круг, поэтому всё содержимое собрано колонкой по
+   центру: углы квадрата не несут ничего, кроме заливки.
 
-   Фон фирменный красный, знак белый. На витрине логотип наоборот —
-   красный на белом, но в ленте и в списке диалогов белый аватар
-   сливается с интерфейсом. Светлый вариант — ?variant=light.
+   Фон фирменный красный, знак и подписи белые. На витрине логотип
+   наоборот — красный на белом, но в ленте и в списке диалогов белый
+   аватар сливается с интерфейсом. Светлый вариант — ?variant=light.
 
-   Знак поставлен не по рамке картинки, а по центру тяжести самого знака:
-   в файле логотипа шар занимает верхние две трети, нижнюю треть — тонкая
-   верёвочка, и при центровке рамки шар уезжает вверх и влево. Центр масс
-   непрозрачных пикселей logo-white.png — 46.9% по ширине и 38.25% по
-   высоте (померено Pillow); эти же доли стоят в transform-origin, поэтому
-   наклон −6° вращает знак вокруг центра тяжести и не сдвигает его. */
+   Иерархия сверху вниз: знак (что за сервис) → город (чей это аккаунт) →
+   площадка (мелко, под чертой). Город набран прописными в именительном
+   падеже, а не родительном как на обложке: на обложке он часть фразы
+   «Все скидки Липецка», здесь — самостоятельная подпись. */
+.art--ava{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
 .art--ava .mark{
-  position:absolute;left:321px;top:245px;width:381px;height:640px;
+  /* Знак крупнее подписей намеренно: на 50 px в списке диалогов от
+     аватара остаётся только он — город в такой миниатюре уже не читается,
+     а шарик узнаётся силуэтом. */
+  width:228px;height:384px;margin-bottom:38px;
+  /* Центр тяжести знака — 46.9% по ширине (померено Pillow по непрозрачным
+     пикселям logo-white.png): в файле шар занимает верхние две трети, а
+     нижнюю — тонкая верёвочка, и по рамке знак вставал левее центра.
+     Сдвиг компенсирует разницу, наклон −6° вращает вокруг той же точки. */
+  margin-left:-14px;
   transform:rotate(-6deg);transform-origin:46.9% 38.25%;
 }
 .art--ava .ava__white{display:block}
@@ -171,10 +180,174 @@ body.is-light .art--ava{background:#fff}
 body.is-light .art--ava .ava__white{display:none}
 body.is-light .art--ava .ava__red{display:block}
 
+.ava__city{
+  font-size:118px;font-weight:800;line-height:1;letter-spacing:.01em;
+  text-transform:uppercase;color:#fff;white-space:nowrap;
+}
+/* Черта отделяет город от площадки: без неё две строки читаются как одно
+   название вроде «Липецк ВКонтакте». */
+.ava__rule{width:112px;height:3px;border-radius:2px;background:rgba(255,255,255,.45);margin:30px 0 22px}
+.ava__net{
+  font-size:36px;font-weight:600;letter-spacing:.17em;
+  text-transform:uppercase;color:rgba(255,255,255,.85);white-space:nowrap;
+}
+body.is-light .ava__city{color:var(--brand)}
+body.is-light .ava__rule{background:rgba(221,68,60,.4)}
+body.is-light .ava__net{color:rgba(221,68,60,.8)}
+
 .art--ava .g--circle{left:0;top:0;width:1000px;height:1000px;border-radius:50%;border:3px dashed rgba(255,255,255,.85)}
 .art--ava .g--circle-in{left:70px;top:70px;width:860px;height:860px;border-radius:50%;border:3px dashed rgba(255,255,255,.5)}
 body.is-light .art--ava .g--circle{border-color:rgba(27,27,27,.5)}
 body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
+
+/* --------------------------------------------------------------------------
+   Пост с купоном — 1080×1350 (ВК, Telegram, MAX) и 1080×1080 (ОК)
+   --------------------------------------------------------------------------
+   Это то, что соберёт кабинет, когда продавец отметит соцсети при создании
+   купона. Отрисовок две, а не четыре: 4:5 одинаково проходит в ВК,
+   Telegram и MAX, а лента Одноклассников заточена под квадрат и вертикаль
+   там обрежется.
+
+   Набор полей — ровно тот, что уже есть у купона в data.js (title, value,
+   company, cat, city, address, dist, until, erid, verified), поэтому
+   кабинету нечего досочинять: он подставляет то, что продавец и так ввёл.
+
+   Кода в посте нет намеренно. Код открывается на сайте по «Забрать купон»,
+   и переход туда — ключевая метрика (решение созвона 07.09). Пост
+   показывает выгоду и ведёт за кодом, иначе сайт выпадает из цепочки.
+
+   Метка «Реклама · erid» обязательна на каждом посте: по тому же созвону
+   ERID идёт на каждом объявлении отдельно. Поэтому она часть шаблона, а
+   не то, что дописывают руками.
+
+   Строение повторяет карточку ленты: снимок, плашка «Проверено» над
+   плашкой выгоды с наклоном (правка 28.09), ниже — оффер, компания,
+   город и срок периодом дат. */
+.art--post{background:#fff;display:flex;flex-direction:column}
+.art--post45{width:1080px;height:1350px}
+.art--post11{width:1080px;height:1080px}
+
+.post__photo{
+  position:relative;flex:0 0 auto;
+  background-image:url(../../coupons/kofe-warm.jpg);
+  background-size:cover;background-position:50% 38%;
+}
+.art--post45 .post__photo{height:860px}
+.art--post11 .post__photo{height:620px}
+
+.post__erid{
+  position:absolute;top:26px;right:30px;
+  font-size:21px;font-weight:500;letter-spacing:.01em;
+  color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.45);
+}
+.post__flags{position:absolute;left:36px;bottom:34px;display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+/* Белая плашка с галочкой — та же форма купона с вырезами, что у выгоды. */
+.post__verified{
+  display:inline-flex;align-items:center;gap:12px;
+  height:56px;padding:0 24px 0 17px;border-radius:12px;
+  background:#fff;color:var(--ink);
+  font-size:26px;font-weight:700;line-height:1;white-space:nowrap;
+  transform:rotate(-2deg);
+  -webkit-mask:
+    radial-gradient(circle 9px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 9px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle 9px at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 9px at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+.post__verified i{
+  display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:50%;
+  background:#1f9d55;color:#fff;font-style:normal;font-size:19px;line-height:1;
+}
+.post__value{font-size:56px}
+
+.post__body{flex:1;display:flex;flex-direction:column;padding:44px 56px 46px}
+.post__title{font-size:62px;font-weight:800;line-height:1.06;letter-spacing:-.025em;color:var(--ink)}
+.art--post11 .post__title{font-size:54px}
+.post__meta{margin-top:22px;font-size:32px;font-weight:500;line-height:1.3;color:var(--ink-2)}
+.post__meta b{font-weight:700;color:var(--ink)}
+.post__when{
+  margin-top:16px;display:flex;align-items:center;gap:16px;
+  font-size:28px;font-weight:500;color:var(--ink-3);
+}
+.post__when span{width:7px;height:7px;border-radius:50%;background:var(--ink-4);flex:none}
+
+/* Подвал прижат к низу: тексты сверху разной длины, а подпись должна
+   стоять на одной линии во всех постах. */
+.post__foot{
+  margin-top:auto;padding-top:30px;border-top:2px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.post__brand{display:flex;align-items:center;gap:14px}
+.post__brand img{display:block;height:66px;width:auto}
+/* Начертание подписи — как у .dz-logo__word на витрине: прописные, 700. */
+.post__brand b{font-size:25px;font-weight:700;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
+.post__cta{
+  display:grid;place-items:center;height:68px;padding:0 30px;border-radius:14px;
+  background:var(--brand);color:#fff;font-size:28px;font-weight:700;white-space:nowrap;
+}
+
+/* Затемнение вверху снимка: метка «Реклама · erid» обязана читаться на
+   любом фото, а снимки у каждого купона свои — на светлом кадре белый
+   текст с одной тенью проваливается. */
+.post__photo::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:170px;
+  background:linear-gradient(rgba(0,0,0,.30), rgba(0,0,0,0));
+}
+
+/* --------------------------------------------------------------------------
+   Живая обложка ВК — 1080×1920
+   --------------------------------------------------------------------------
+   То, что видит человек с телефона вместо широкой обложки. Нижние ~400 px
+   перекрывает блок с названием сообщества и кнопками, поэтому всё
+   смысловое прижато к верхним двум третям, а не центрировано по холсту.
+   Композиция вертикальная и по центру: в отличие от обложки, здесь нет
+   места на две колонки. */
+.art--vkm{width:1080px;height:1920px;position:relative;overflow:hidden;background:#fff}
+.art--vkm .glow{right:-300px;top:-340px;width:1200px;height:1200px}
+.vkm{
+  position:absolute;left:0;right:0;top:170px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:0 70px;
+}
+.vkm .mark{width:330px;height:555px;margin-bottom:58px}
+/* 31px — предел, при котором «Все скидки Липецка» держится одной строкой
+   в 940 px между полями. На 33 строка рвалась после «Все скидки», и плашка
+   города вставала отдельным этажом посреди фразы. */
+.vkm .say{font-size:31px;display:flex;flex-direction:column;align-items:center}
+/* Мера подобрана так, чтобы «Все скидки <город>» вставало одной строкой, а
+   «в одном месте» уходило на вторую: при 14ch строка рвалась после «Все
+   скидки», и плашка города оказывалась посреди фразы. Длинному городу
+   достанется третья строка — в вертикальном формате места хватает. */
+.vkm .say__h1{max-width:none;margin-bottom:.85em}
+/* Шаги столбиком: в строку три пункта на 1080 px не встают, а дробить их
+   на две строки хуже, чем выстроить лесенкой. «Птички» между пунктами в
+   столбце не нужны — порядок держат номера. */
+.vkm .say__steps{flex-direction:column;align-items:flex-start;gap:.75em}
+.vkm .say__steps li + li::before{display:none}
+.vkm .site{margin-top:1.5em}
+/* Зона, которую перекрывает блок сообщества */
+.art--vkm .g--crop-b{left:0;bottom:0;width:1080px;height:400px}
+.art--vkm .g--safe{left:0;top:0;width:1080px;height:1520px}
+
+/* --------------------------------------------------------------------------
+   Кнопки меню сообщества ВК — 376×256
+   --------------------------------------------------------------------------
+   Шесть самых крупных региональных ниш — названия и счётчики взяты из
+   CATEGORIES в assets/data.js, не придуманы. Заливка фирменная: белая
+   кнопка на белой странице ВК пропала бы.
+   Набор букв, а не пиктограмм: на витрине категории тоже набраны словом
+   (.tag), и рисовать ради меню отдельную иконочную систему значит завести
+   второй визуальный язык там, где хватает первого. */
+.art--menu{
+  width:376px;height:256px;background:var(--brand);color:#fff;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:28px 26px 24px;
+}
+.menu__n{font-size:40px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.menu__c{font-size:22px;font-weight:600;color:rgba(255,255,255,.72)}
+.menu-row{display:flex;flex-wrap:wrap;gap:20px}
+.menu-row .board__cap{width:100%}
 </style>
 </head>
 <body>
@@ -279,25 +452,222 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
     </div>
   </section>
 
-  <!-- ===================== Аватар ===================== -->
+  <!-- ===================== Аватар =====================
+       Четыре копии одного артборда: отличаются подписью площадки внизу и
+       стороной, до которой уменьшается готовый PNG. Подпись площадки
+       читается до ~150 px показа; ниже от аватара остаётся только знак. -->
   <section class="board">
     <div class="board__cap">
-      <span class="board__name">Аватар — ВК, ОК, Telegram, MAX</span>
-      <span class="board__size">1000×1000 → 400 / 512 / 800</span>
+      <span class="board__name">Аватар — ВКонтакте</span>
+      <span class="board__size">1000×1000 → 400×400</span>
     </div>
-    <div class="art art--ava" id="avatar">
+    <div class="art art--ava" id="avatar-vk">
       <div class="mark">
         <img class="ava__white" src="../logo-white.png" alt="">
         <img class="ava__red" src="../logo-red.png" alt="">
       </div>
+      <div class="ava__city" data-city-nom>Липецк</div>
+      <div class="ava__rule"></div>
+      <div class="ava__net">ВКонтакте</div>
       <div class="g g--circle"></div>
       <div class="g g--circle-in"></div>
     </div>
     <div class="board__note">
-      Везде режется в круг. ВК и ОК ставят 400×400, Telegram 800×800, MAX 512×512 —
-      уменьшенные копии складывает скрипт рендера. Светлый вариант: <code>?variant=light</code>.
+      Режется в круг — углы заливка. Город меняется адресом:
+      <code>?cityNom=Воронеж</code> (именительный падеж, в отличие от обложек).
+      Светлый вариант: <code>?variant=light</code>.
     </div>
   </section>
+
+  <section class="board">
+    <div class="board__cap">
+      <span class="board__name">Аватар — Одноклассники</span>
+      <span class="board__size">1000×1000 → 400×400</span>
+    </div>
+    <div class="art art--ava" id="avatar-ok">
+      <div class="mark">
+        <img class="ava__white" src="../logo-white.png" alt="">
+        <img class="ava__red" src="../logo-red.png" alt="">
+      </div>
+      <div class="ava__city" data-city-nom>Липецк</div>
+      <div class="ava__rule"></div>
+      <div class="ava__net">Одноклассники</div>
+      <div class="g g--circle"></div>
+      <div class="g g--circle-in"></div>
+    </div>
+  </section>
+  <section class="board">
+    <div class="board__cap">
+      <span class="board__name">Аватар — Telegram</span>
+      <span class="board__size">1000×1000 → 800×800</span>
+    </div>
+    <div class="art art--ava" id="avatar-tg">
+      <div class="mark">
+        <img class="ava__white" src="../logo-white.png" alt="">
+        <img class="ava__red" src="../logo-red.png" alt="">
+      </div>
+      <div class="ava__city" data-city-nom>Липецк</div>
+      <div class="ava__rule"></div>
+      <div class="ava__net">Telegram</div>
+      <div class="g g--circle"></div>
+      <div class="g g--circle-in"></div>
+    </div>
+  </section>
+  <section class="board">
+    <div class="board__cap">
+      <span class="board__name">Аватар — MAX</span>
+      <span class="board__size">1000×1000 → 512×512</span>
+    </div>
+    <div class="art art--ava" id="avatar-max">
+      <div class="mark">
+        <img class="ava__white" src="../logo-white.png" alt="">
+        <img class="ava__red" src="../logo-red.png" alt="">
+      </div>
+      <div class="ava__city" data-city-nom>Липецк</div>
+      <div class="ava__rule"></div>
+      <div class="ava__net">MAX</div>
+      <div class="g g--circle"></div>
+      <div class="g g--circle-in"></div>
+    </div>
+  </section>
+
+
+  <!-- ===================== Пост с купоном =====================
+       Шаблон выкладки: его собирает кабинет, когда продавец отмечает
+       соцсети при создании купона. Два формата на четыре площадки. -->
+  <section class="board">
+    <div class="board__cap">
+      <span class="board__name">Пост с купоном — ВКонтакте, Telegram, MAX</span>
+      <span class="board__size">1080×1350</span>
+    </div>
+    <div class="art art--post art--post45" id="post-45">
+      <div class="post__photo">
+        <span class="post__erid">Реклама · erid: 2Vfnxw8Hd4k</span>
+        <div class="post__flags">
+          <span class="post__verified"><i>&#10003;</i>Проверено</span>
+          <span class="ticket post__value">&minus;50%</span>
+        </div>
+      </div>
+      <div class="post__body">
+        <div class="post__title">Кофе и круассан<br>за полцены</div>
+        <div class="post__meta"><b>Кофейня в центре</b> · Кафе и рестораны</div>
+        <div class="post__when">Липецк<span></span>7 минут пешком<span></span>с 1 по 31 октября</div>
+        <div class="post__foot">
+          <div class="post__brand">
+            <img src="../logo-red.png" alt="">
+            <b>Все<br>купоны</b>
+          </div>
+          <div class="post__cta">Забрать на vsekupony.ru</div>
+        </div>
+      </div>
+    </div>
+    <div class="board__note">
+      Пропорция 4:5 проходит во всех трёх лентах без переделки.
+    </div>
+  </section>
+
+  <section class="board">
+    <div class="board__cap">
+      <span class="board__name">Пост с купоном — Одноклассники</span>
+      <span class="board__size">1080×1080</span>
+    </div>
+    <div class="art art--post art--post11" id="post-11">
+      <div class="post__photo">
+        <span class="post__erid">Реклама · erid: 2Vfnxw8Hd4k</span>
+        <div class="post__flags">
+          <span class="post__verified"><i>&#10003;</i>Проверено</span>
+          <span class="ticket post__value">&minus;50%</span>
+        </div>
+      </div>
+      <div class="post__body">
+        <div class="post__title">Кофе и круассан<br>за полцены</div>
+        <div class="post__meta"><b>Кофейня в центре</b> · Кафе и рестораны</div>
+        <div class="post__when">Липецк<span></span>7 минут пешком<span></span>с 1 по 31 октября</div>
+        <div class="post__foot">
+          <div class="post__brand">
+            <img src="../logo-red.png" alt="">
+            <b>Все<br>купоны</b>
+          </div>
+          <div class="post__cta">Забрать на vsekupony.ru</div>
+        </div>
+      </div>
+    </div>
+    <div class="board__note">
+      Отдельная отрисовка: лента ОК заточена под квадрат, вертикаль 4:5 там обрежется.
+    </div>
+  </section>
+
+
+  <!-- ===================== Живая обложка ВК ===================== -->
+  <section class="board">
+    <div class="board__cap">
+      <span class="board__name">ВКонтакте — живая (мобильная) обложка</span>
+      <span class="board__size">1080×1920</span>
+    </div>
+    <div class="art art--vkm" id="vk-mobile">
+      <div class="glow"></div>
+      <div class="vkm">
+        <div class="mark"><img src="../logo-red.png" alt=""></div>
+        <div class="say">
+          <span class="say__eyebrow">Бесплатно · без регистрации</span>
+          <!-- Перенос проставлен руками: иначе строка рвётся после «Все
+               скидки» и плашка города оказывается посреди фразы. Длинный
+               город переносится внутри первой строки сам. -->
+          <h1 class="say__h1">Все скидки <span class="say__city" data-city>Липецка</span><br>в&nbsp;одном месте</h1>
+          <ol class="say__steps">
+            <li><b>1</b>Находите купон</li>
+            <li><b>2</b>Делаете скриншот</li>
+            <li><b>3</b>Платите со скидкой</li>
+          </ol>
+          <div class="site">vsekupony.ru</div>
+        </div>
+      </div>
+      <div class="g g--crop g--crop-b"></div>
+      <div class="g g--safe" data-label="верхние 1520 px — всё смысловое здесь"></div>
+    </div>
+    <div class="board__note">
+      Нижние ~400&nbsp;px перекрывает блок с названием сообщества и кнопками,
+      поэтому содержимое прижато к верху, а не центрировано по холсту.
+    </div>
+  </section>
+
+  <!-- ===================== Кнопки меню ВК ===================== -->
+  <section class="board menu-row">
+    <div class="board__cap">
+      <span class="board__name">ВКонтакте — кнопки меню сообщества</span>
+      <span class="board__size">376×256, по одной на категорию</span>
+    </div>
+      <div class="art art--menu" id="menu-eda">
+        <div class="menu__n">Кафе и&nbsp;рестораны</div>
+        <div class="menu__c">204 купонов</div>
+      </div>
+      <div class="art art--menu" id="menu-krasota">
+        <div class="menu__n">Красота</div>
+        <div class="menu__c">128 купонов</div>
+      </div>
+      <div class="art art--menu" id="menu-avto">
+        <div class="menu__n">Авто</div>
+        <div class="menu__c">87 купонов</div>
+      </div>
+      <div class="art art--menu" id="menu-sport">
+        <div class="menu__n">Фитнес и&nbsp;спорт</div>
+        <div class="menu__c">72 купонов</div>
+      </div>
+      <div class="art art--menu" id="menu-razvlecheniya">
+        <div class="menu__n">Развлечения</div>
+        <div class="menu__c">115 купонов</div>
+      </div>
+      <div class="art art--menu" id="menu-detyam">
+        <div class="menu__n">Детям</div>
+        <div class="menu__c">69 купонов</div>
+      </div>
+    <div class="board__note" style="width:100%">
+      Названия и счётчики — из CATEGORIES в <code>assets/data.js</code>, шесть самых
+      крупных региональных ниш. Подпись кнопки в ВК — до 20 знаков.
+    </div>
+  </section>
+
+</div>
 
 </div>
 <script src="social.js"></script>
