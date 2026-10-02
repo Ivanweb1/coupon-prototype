@@ -282,10 +282,14 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
 .post__brand img{display:block;height:66px;width:auto}
 /* Начертание подписи — как у .dz-logo__word на витрине: прописные, 700. */
 .post__brand b{font-size:25px;font-weight:700;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
-.post__cta{
-  display:grid;place-items:center;height:68px;padding:0 30px;border-radius:14px;
-  background:var(--brand);color:#fff;font-size:28px;font-weight:700;white-space:nowrap;
+.post__go{
+  /* Не кнопка. В ленте это картинка, нажать её нельзя, и красная плашка со
+     скруглением обещает действие, которого не будет — палец тянется зря.
+     Поэтому адрес набран как подпись: без заливки, без рамки, без радиуса. */
+  text-align:right;line-height:1.15;
 }
+.post__go span{display:block;font-size:24px;font-weight:500;color:var(--ink-3)}
+.post__go b{display:block;font-size:32px;font-weight:700;color:var(--brand);letter-spacing:-.01em}
 
 /* Затемнение вверху снимка: метка «Реклама · erid» обязана читаться на
    любом фото, а снимки у каждого купона свои — на светлом кадре белый
@@ -341,11 +345,31 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
    второй визуальный язык там, где хватает первого. */
 .art--menu{
   width:376px;height:256px;background:var(--brand);color:#fff;
-  display:flex;flex-direction:column;justify-content:space-between;
-  padding:28px 26px 24px;
+  padding:26px 26px 24px;
 }
-.menu__n{font-size:40px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
-.menu__c{font-size:22px;font-weight:600;color:rgba(255,255,255,.72)}
+/* Фон кнопки — снимок своей ниши из библиотеки ленты, поверх фирменная
+   заливка: без неё шесть разноцветных фотографий рассыпаются, с ней строка
+   читается одним блоком, а снимок остаётся фактурой. Значки — те же пути,
+   что в строке категорий витрины (CAT_PATH в assets/app.js), отдельной
+   иконочной системы не заводим. */
+.art--menu{position:relative;overflow:hidden;background:var(--brand)}
+.menu__ph{
+  position:absolute;inset:0;background-size:cover;background-position:50% 50%;
+  /* Снимки обесцвечиваем до заливки: иначе собственный цвет кадра
+     просвечивает сквозь красный и строка расходится по тону — синее фото
+     «Развлечений» уводило плитку в фиолетовый, жёлтое «Детям» высветляло. */
+  filter:grayscale(1) contrast(1.08);
+}
+/* Заливка — отдельным слоем, а не внутри .menu__ph: filter действует и на
+   потомков, и красный, лежавший там псевдоэлементом, обесцвечивался вместе
+   со снимком — вся строка уходила в серый. */
+.art--menu::after{content:"";position:absolute;inset:0;background:var(--brand);opacity:.86;z-index:0}
+.menu__in{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:space-between}
+.menu__ic{color:#fff;opacity:.92}
+.menu__ic svg{display:block}
+
+.menu__n{font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.menu__c{margin-top:6px;font-size:21px;font-weight:600;color:rgba(255,255,255,.75)}
 .menu-row{display:flex;flex-wrap:wrap;gap:20px}
 .menu-row .board__cap{width:100%}
 </style>
@@ -557,7 +581,10 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
             <img src="../logo-red.png" alt="">
             <b>Все<br>купоны</b>
           </div>
-          <div class="post__cta">Забрать на vsekupony.ru</div>
+          <div class="post__go">
+            <span>Код и условия</span>
+            <b>vsekupony.ru</b>
+          </div>
         </div>
       </div>
     </div>
@@ -588,7 +615,10 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
             <img src="../logo-red.png" alt="">
             <b>Все<br>купоны</b>
           </div>
-          <div class="post__cta">Забрать на vsekupony.ru</div>
+          <div class="post__go">
+            <span>Код и условия</span>
+            <b>vsekupony.ru</b>
+          </div>
         </div>
       </div>
     </div>
@@ -638,28 +668,64 @@ body.is-light .art--ava .g--circle-in{border-color:rgba(27,27,27,.3)}
       <span class="board__size">376×256, по одной на категорию</span>
     </div>
       <div class="art art--menu" id="menu-eda">
-        <div class="menu__n">Кафе и&nbsp;рестораны</div>
-        <div class="menu__c">204 купонов</div>
+        <div class="menu__ph" style="background-image:url(../../coupons/eda-cool.jpg)"></div>
+        <div class="menu__in">
+          <div class="menu__ic"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H15.6"/><path d="M8.5 3.5v3M12 3.5v3"/></svg></div>
+          <div>
+            <div class="menu__n">Кафе и&nbsp;рестораны</div>
+            <div class="menu__c">204 купонов</div>
+          </div>
+        </div>
       </div>
       <div class="art art--menu" id="menu-krasota">
-        <div class="menu__n">Красота</div>
-        <div class="menu__c">128 купонов</div>
+        <div class="menu__ph" style="background-image:url(../../coupons/krasota-green.jpg)"></div>
+        <div class="menu__in">
+          <div class="menu__ic"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 21h7v-9h-7z"/><path d="M9.5 12V7.5L14.5 4v8"/></svg></div>
+          <div>
+            <div class="menu__n">Красота</div>
+            <div class="menu__c">128 купонов</div>
+          </div>
+        </div>
       </div>
       <div class="art art--menu" id="menu-avto">
-        <div class="menu__n">Авто</div>
-        <div class="menu__c">87 купонов</div>
+        <div class="menu__ph" style="background-image:url(../../coupons/avto-steel.jpg)"></div>
+        <div class="menu__in">
+          <div class="menu__ic"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5v-4.5l2.2-5h11.6l2.2 5v4.5z"/><path d="M5 16.5v2.5h3v-2.5M16 16.5v2.5h3v-2.5"/><path d="M7.5 12.5h.01M16.5 12.5h.01"/></svg></div>
+          <div>
+            <div class="menu__n">Авто</div>
+            <div class="menu__c">87 купонов</div>
+          </div>
+        </div>
       </div>
       <div class="art art--menu" id="menu-sport">
-        <div class="menu__n">Фитнес и&nbsp;спорт</div>
-        <div class="menu__c">72 купонов</div>
+        <div class="menu__ph" style="background-image:url(../../coupons/sport-teal.jpg)"></div>
+        <div class="menu__in">
+          <div class="menu__ic"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7.5v9M4 9.5v5M17 7.5v9M20 9.5v5M7 12h10"/></svg></div>
+          <div>
+            <div class="menu__n">Фитнес и&nbsp;спорт</div>
+            <div class="menu__c">72 купонов</div>
+          </div>
+        </div>
       </div>
       <div class="art art--menu" id="menu-razvlecheniya">
-        <div class="menu__n">Развлечения</div>
-        <div class="menu__c">115 купонов</div>
+        <div class="menu__ph" style="background-image:url(../../coupons/razvlecheniya-blue.jpg)"></div>
+        <div class="menu__in">
+          <div class="menu__ic"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/><path d="M14 6.5v11" stroke-dasharray="1.5 2"/></svg></div>
+          <div>
+            <div class="menu__n">Развлечения</div>
+            <div class="menu__c">115 купонов</div>
+          </div>
+        </div>
       </div>
       <div class="art art--menu" id="menu-detyam">
-        <div class="menu__n">Детям</div>
-        <div class="menu__c">69 купонов</div>
+        <div class="menu__ph" style="background-image:url(../../coupons/detyam-yellow.jpg)"></div>
+        <div class="menu__in">
+          <div class="menu__ic"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.5" r="6"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><path d="M10 14.5h.01M14 14.5h.01M10.5 17h3"/></svg></div>
+          <div>
+            <div class="menu__n">Детям</div>
+            <div class="menu__c">69 купонов</div>
+          </div>
+        </div>
       </div>
     <div class="board__note" style="width:100%">
       Названия и счётчики — из CATEGORIES в <code>assets/data.js</code>, шесть самых
