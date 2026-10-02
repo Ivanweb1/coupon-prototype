@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Все купоны — общий слой макетов для соцсетей
+   ==========================================================================
+   Один файл на все форматы (обложка ВК, обложка ОК, аватар). Здесь лежит
+   то, что обязано совпадать от площадки к площадке: палитра, шрифт, знак,
+   первый экран витрины и карточка купона. Геометрия у каждого формата
+   своя и живёт в его собственном html — холсты и безопасные зоны у ВК и
+   ОК разные настолько, что общая раскладка была бы вредной.
+
+   Ничего нового здесь не придумано: все элементы сняты с первого экрана
+   index-design-3.html и переведены в em, чтобы один набор правил собирался
+   и на обложке 1920×768, и на обложке 1944×600.
+     · надзаголовок      — .dzl__eyebrow (design-3.css: красный текст без
+                           плашки, плашку убрали в третьем заходе);
+     · заголовок с городом — .dzl__h1 + .dzl__city (design-3-shell.css:
+                           наклон −2°, радиус .18em, без тени-«наклейки»);
+     · шаги              — .dzl__steps (design.css: кружок с номером,
+                           «птичка» между пунктами);
+     · плашка выгоды     — .card__badge (design-3-0924.css: «билетик»);
+     · карточка 4:5      — пропорция ленты и ретрансляции в соцсети.
+   Палитра и шрифт — из UI-кита (assets/ui-kit.css, блок .lkd).
+
+   Продублировано, а не подключено: макет должен рендериться сам по себе,
+   не таща за собой слои витрины, у которых своя сетка и свои медиазапросы.
+
+   Рендер в PNG — tools/render-social.py.
+   ========================================================================== */
+
+:root{
+  --brand:#DD443C;
+  --brand-600:#C8362F;
+  --brand-700:#A92A24;
+  --brand-300:#F08F88;
+  --brand-100:#FBE3E1;
+  --brand-50:#FEF3F2;
+  --ink:#1B1B1B;
+  --ink-2:#565656;
+  --ink-3:#767676;
+  --ink-4:#949494;
+  --line:#E8E8E8;
+  --surface:#F6F6F6;
+  --surface-2:#ECECEC;
+  --font-display:"Onest", ui-sans-serif, system-ui, sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow:hidden;background:#fff}
+body{font-family:var(--font-display);-webkit-font-smoothing:antialiased}
+
+/* --------------------------------------------------------------------------
+   Знак
+   --------------------------------------------------------------------------
+   Наклон −6° — тот же, что у логотипа в шапке витрины при наведении
+   (.dz-logo:hover .dz-logo__mark). Точка вращения внизу: шарик качается
+   на верёвочке, а не крутится вокруг середины. */
+.mark{flex:0 0 auto;transform:rotate(-6deg);transform-origin:50% 90%}
+.mark img{display:block;width:100%;height:100%;object-fit:contain}
+
+/* --------------------------------------------------------------------------
+   Первый экран витрины: надзаголовок, заголовок, шаги
+   --------------------------------------------------------------------------
+   Размеры в em от кегля блока: каждый формат задаёт свой font-size на
+   .say, остальное считается от него. */
+.say{font-size:16px}
+
+/* .dzl__eyebrow в версии design-3: без плашки, просто красная строка. */
+.say__eyebrow{
+  display:block;
+  font-size:.75em;font-weight:600;letter-spacing:.01em;color:var(--brand);
+  margin-bottom:.6em;
+}
+
+.say__h1{
+  font-size:2.875em;font-weight:800;line-height:1.08;letter-spacing:-.02em;
+  color:var(--ink);
+  /* Та же мера, что на витрине: заголовок переносится по словам, а не
+     тянется в одну длинную строку. */
+  max-width:20ch;overflow-wrap:break-word;
+  margin-bottom:.5em;
+}
+/* Плашка города. Иван вернул наклон 28.09: «чуть с наклоном». Тень-
+   «наклейку» не возвращаем — её убирали отдельно. */
+.say__city{
+  display:inline-block;
+  padding:0 .16em .04em;margin:0 .04em;border-radius:.18em;
+  background:var(--brand);color:#fff;
+  transform:rotate(-2deg);
+  font:inherit;letter-spacing:inherit;line-height:inherit;
+}
+
+/* .dzl__steps — три шага с кружком-номером и «птичкой» между пунктами. */
+.say__steps{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.4em 1.6em;
+  list-style:none;
+  font-size:.875em;font-weight:500;color:var(--ink-2);
+}
+.say__steps li{display:flex;align-items:center;gap:.57em;position:relative}
+.say__steps li + li::before{
+  content:"";position:absolute;left:-1em;top:50%;
+  width:.5em;height:.5em;
+  border-top:.107em solid var(--ink-4);border-right:.107em solid var(--ink-4);
+  transform:translateY(-50%) rotate(45deg);
+}
+.say__steps b{
+  width:1.57em;height:1.57em;border-radius:50%;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:var(--brand-50);color:var(--brand);
+  font-size:.785em;font-weight:700;
+}
+
+.site{font-size:.875em;font-weight:600;color:var(--ink-4);letter-spacing:.01em}
+
+/* --------------------------------------------------------------------------
+   Плашка выгоды — «билетик»
+   --------------------------------------------------------------------------
+   Форма один в один с карточкой купона на витрине (design-3-0924.css):
+   красная заливка, радиус 10, полукруглые вырезы по бокам. Размеры в em,
+   поэтому плашка одинаково собирается в любом кегле.
+
+   Вырезы сделаны CSS-маской. При выгрузке в Figma маска не переносится —
+   плашка придёт обычным скруглённым прямоугольником, и вырезы там надо
+   добить вычитанием двух эллипсов. */
+.ticket{
+  display:inline-block;
+  padding:.24em .58em .29em;border-radius:10px;
+  background:var(--brand);color:#fff;
+  font-weight:800;line-height:1.1;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  -webkit-mask:
+    radial-gradient(circle .24em at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle .24em at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle .24em at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle .24em at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+
+/* --------------------------------------------------------------------------
+   Карточка купона
+   --------------------------------------------------------------------------
+   Правый край обложек — тот же приём, что в первом экране витрины
+   (.dzl__art: шар из логотипа и два купона рядом). Пропорция 4:5 — та же,
+   что в ленте и в ретрансляции купона в соцсеть. Размер задаётся одной
+   переменной --cw, остальное считается от неё.
+
+   Снимки — из общей библиотеки карточек assets/coupons/, той же, что
+   питает ленту витрины: обложка и сайт показывают одни и те же кадры.
+   Подпись под снимком — категория, а не название заведения: обложка висит
+   на публичном сообществе, и выдуманное «Кофейня такая-то» читалось бы
+   как настоящий оффер, которого нет. */
+.cpn{
+  position:absolute;width:var(--cw,268px);aspect-ratio:4/5;
+  border-radius:calc(var(--cw,268px) * .067);
+  background:#fff;border:1px solid var(--line);overflow:hidden;
+  box-shadow:0 18px 44px rgba(27,27,27,.10), 0 2px 6px rgba(27,27,27,.05);
+}
+.cpn__ph{
+  position:relative;height:64.5%;
+  background:linear-gradient(160deg, #F2F2F2 0%, #E6E6E6 100%);
+  background-size:cover;background-position:50% 50%;
+}
+/* Специфичность по .cpn обязательна: .cpn__badge и .ticket весят
+   одинаково, и кегль плашки в заголовке перебивал кегль на карточке. */
+.cpn .cpn__badge{
+  position:absolute;left:4.5%;bottom:5.5%;z-index:2;
+  font-size:calc(var(--cw,268px) * .071);
+  white-space:nowrap;
+}
+.cpn__txt{padding:calc(var(--cw,268px) * .052) calc(var(--cw,268px) * .052) 0}
+.cpn__name{
+  font-size:calc(var(--cw,268px) * .063);font-weight:700;line-height:1.22;
+  letter-spacing:-.01em;color:var(--ink);
+}
+.cpn__m{
+  margin-top:calc(var(--cw,268px) * .052);
+  font-size:calc(var(--cw,268px) * .052);font-weight:600;color:var(--ink-4);
+}
+
+/* --------------------------------------------------------------------------
+   Направляющие (?guides=1) — только для проверки, в рендер не идут
+   -------------------------------------------------------------------------- */
+.g{display:none}
+body.is-guides .g{display:block;position:absolute;z-index:99}
+.g--safe{border:2px dashed var(--brand);background:rgba(221,68,60,.05)}
+.g--safe::after{
+  content:attr(data-label);position:absolute;left:0;top:-30px;
+  font-size:16px;font-weight:700;color:var(--brand);white-space:nowrap;
+}
+.g--crop{background:rgba(27,27,27,.10)}
+.g--menu{background:rgba(221,68,60,.16);border-bottom:1px dashed var(--brand)}
