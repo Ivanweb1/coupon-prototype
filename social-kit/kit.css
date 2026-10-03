@@ -243,18 +243,17 @@ body{
 .post__card{position:absolute;inset:40px;border-radius:40px;background:#fff;overflow:hidden;display:flex}
 .post__ph{position:relative;flex:none;background:var(--surface) center / cover no-repeat}
 .post__ph::before{
-  content:"";position:absolute;left:0;right:0;top:0;height:140px;
-  background:linear-gradient(rgba(0,0,0,.38), rgba(0,0,0,0));
+  content:"";position:absolute;left:0;right:0;top:0;height:200px;
+  background:linear-gradient(rgba(0,0,0,.42), rgba(0,0,0,0));
 }
 .post__erid{
   position:absolute;left:30px;top:28px;
   font-size:21px;font-weight:500;color:rgba(255,255,255,.92);letter-spacing:.01em;
 }
-.post__mark{
-  position:absolute;right:28px;top:24px;width:96px;height:96px;border-radius:50%;
-  display:grid;place-items:center;background:#fff;
-}
-.post__mark .logo{height:72px;transform:rotate(6deg)}
+/* Логотип без подложки (правка 03.10): белый знак прямо на снимке.
+   Читается за счёт затемнения сверху и мягкой тени под самим знаком. */
+.post__mark{position:absolute;right:34px;top:26px}
+.post__mark .logo{height:110px;transform:rotate(6deg);filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
 .post__ph .tk{position:absolute;left:40px;bottom:40px;font-size:96px;--n:20px}
 .post__ph .tk.is-long{font-size:72px;--n:15px}
 
@@ -295,9 +294,9 @@ body{
 .post11{width:1080px;height:1080px}
 .post11 .post__ph{width:430px}
 .post11 .post__ph .tk{left:32px;bottom:36px;font-size:80px;--n:17px}
-.post11 .post__mark{width:84px;height:84px;right:auto;left:30px;top:auto;bottom:150px}
-.post11 .post__mark .logo{height:62px}
-.post11 .post__erid{left:28px;right:20px;font-size:19px}
+.post11 .post__mark{right:26px;top:24px}
+.post11 .post__mark .logo{height:92px}
+.post11 .post__erid{left:28px;right:110px;font-size:19px}
 .post11 .perf{top:14px;bottom:14px;left:444px;width:52px}
 .post11 .perf::before{top:44px;bottom:44px;left:25px;border-left-width:3px}
 .post11 .perf i:first-child{top:0}

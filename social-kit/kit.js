@@ -65,7 +65,7 @@ document.querySelectorAll("[data-post]").forEach(el => {
     <div class="post__card">
       <div class="post__ph" style="background-image:url('${PH + c.photo}')">
         <div class="post__erid">Реклама · ${c.company} · erid: ${c.erid}</div>
-        <div class="post__mark"><img class="logo" src="../assets/brand/logo-red.png" alt=""></div>
+        <div class="post__mark"><img class="logo" src="../assets/brand/logo-white.png" alt=""></div>
         <span class="tk${long}">${c.value}</span>
       </div>
       <div class="post__body">
