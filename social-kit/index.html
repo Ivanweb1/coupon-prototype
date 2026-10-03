@@ -19,7 +19,7 @@
     <h1>Упаковка соцсетей</h1>
     <p>ВКонтакте, Одноклассники, Telegram и MAX в стилистике витрины. Каждый макет свёрстан в натуральном размере площадки;
       ниже показан уменьшенным под окно. Готовые PNG лежат в <a href="out/">out/</a>, пересобираются командой
-      <code>python social-kit/render.py</code>. Другой город: <a href="?city=Ельца">?city=Ельца</a>.</p>
+      <code>python social-kit/render.py</code>. Другой город: <a href="?city=Ельца&amp;town=Елец">?city=Ельца&amp;town=Елец</a> (city — в заголовках, родительный падеж; town — на аватарах).</p>
   </header>
 
   <!-- ================================================================ ВК -->
@@ -59,6 +59,8 @@
       <figure class="slot"><figcaption><b>Аватар</b> 400×400</figcaption>
         <div class="fit fit--round"><div class="art ava" id="avatar-vk" data-out="vk/vk-avatar-400x400" style="width:400px;height:400px">
           <img class="logo" src="../assets/brand/logo-white.png" alt="">
+          <div class="ava__city" data-town>Липецк</div>
+          <div class="ava__net">ВКонтакте</div>
         </div></div>
       </figure>
     </div>
@@ -95,6 +97,8 @@
       <figure class="slot"><figcaption><b>Аватар</b> 400×400</figcaption>
         <div class="fit fit--round"><div class="art ava" id="avatar-ok" data-out="ok/ok-avatar-400x400" style="width:400px;height:400px">
           <img class="logo" src="../assets/brand/logo-white.png" alt="">
+          <div class="ava__city" data-town>Липецк</div>
+          <div class="ava__net">Одноклассники</div>
         </div></div>
       </figure>
       <figure class="slot"><figcaption><b>Пост с купоном</b> 1080×1080</figcaption>
@@ -110,6 +114,8 @@
       <figure class="slot"><figcaption><b>Аватар канала</b> 800×800</figcaption>
         <div class="fit fit--round"><div class="art ava" id="avatar-tg" data-out="tg/tg-avatar-800x800" style="width:800px;height:800px">
           <img class="logo" src="../assets/brand/logo-white.png" alt="">
+          <div class="ava__city" data-town>Липецк</div>
+          <div class="ava__net">Telegram</div>
         </div></div>
       </figure>
       <figure class="slot"><figcaption><b>Пост с купоном</b> 1080×1350</figcaption>
@@ -125,6 +131,8 @@
       <figure class="slot"><figcaption><b>Аватар канала</b> 512×512</figcaption>
         <div class="fit fit--round"><div class="art ava" id="avatar-max" data-out="max/max-avatar-512x512" style="width:512px;height:512px">
           <img class="logo" src="../assets/brand/logo-white.png" alt="">
+          <div class="ava__city" data-town>Липецк</div>
+          <div class="ava__net">MAX</div>
         </div></div>
       </figure>
       <figure class="slot"><figcaption><b>Пост с купоном</b> 1080×1350</figcaption>

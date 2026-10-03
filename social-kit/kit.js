@@ -43,6 +43,10 @@ const PH = "../assets/coupons/";
 /* Город в заголовках: ?city=Ельца (родительный падеж — «Все скидки Ельца») */
 const city = new URLSearchParams(location.search).get("city");
 if (city) document.querySelectorAll("[data-city]").forEach(el => { el.textContent = city; });
+/* Город на аватарах — в именительном: ?town=Елец */
+const town = new URLSearchParams(location.search).get("town");
+if (town) document.querySelectorAll("[data-town]").forEach(el => { el.textContent = town; });
+document.querySelectorAll(".ava__city").forEach(el => { el.classList.toggle("is-long", el.textContent.length > 8); });
 
 /* Карточки на обложках */
 document.querySelectorAll("[data-card]").forEach(el => {
@@ -69,7 +73,7 @@ document.querySelectorAll("[data-post]").forEach(el => {
         <h2 class="post__t">${c.title}</h2>
         <div class="post__c">${c.company}</div>
         <ul class="post__meta">
-          <li>${icon("pin")}${city ? city.replace(/а$/, "") : "Липецк"}, ${c.address}</li>
+          <li>${icon("pin")}${town || "Липецк"}, ${c.address}</li>
           <li>${icon("cal")}${c.until}</li>
         </ul>
         <div class="post__foot"><span>Код купона — на сайте</span><b>vsekupony.ru</b></div>

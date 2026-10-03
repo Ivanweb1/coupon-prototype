@@ -9,7 +9,7 @@ data-out: out/vk/vk-cover-1920x768.png и т. д.
 
 Запуск:
     python social-kit/render.py               # город по умолчанию
-    python social-kit/render.py --city Ельца  # другой город в заголовках
+    python social-kit/render.py --city Ельца --town Елец  # другой город
 
 Нужны playwright и chromium (в облачной среде — /opt/pw-browsers/chromium).
 """
@@ -28,12 +28,15 @@ OUT = ROOT / "out"
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--city")
+    ap.add_argument("--city", help="город в заголовках, родительный падеж: Ельца")
+    ap.add_argument("--town", help="город на аватарах и в постах, именительный: Елец")
     args = ap.parse_args()
 
     url = PAGE.as_uri() + "?bare=1"
     if args.city:
         url += "&city=" + quote(args.city)
+    if args.town:
+        url += "&town=" + quote(args.town)
 
     launch = {}
     if os.path.exists("/opt/pw-browsers/chromium"):
