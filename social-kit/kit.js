@@ -113,3 +113,31 @@ function fit() {
 }
 fit();
 addEventListener("resize", () => { document.querySelectorAll(".art").forEach(a => { a.style.zoom = 1; }); fit(); });
+
+/* Где стоит адрес сайта на обложках — варианты на выбор (?site=a|b|c).
+   Без параметра — отдельной строкой под шагами.
+   a — в надзаголовке, первым словом;
+   b — подписью под карточками купонов;
+   c — подписью под логотипом, как фирменный блок «знак + адрес». */
+const siteV = new URLSearchParams(location.search).get("site");
+if (siteV) {
+  const DOMAIN = '<span class="dom">vsekupony.ru</span>';
+  document.querySelectorAll(".vk-cover, .vk-mob, .ok-cover").forEach(art => {
+    art.querySelector(".site")?.remove();
+    if (siteV === "a") {
+      const e = art.querySelector(".eyebrow");
+      e.innerHTML = DOMAIN + ' · бесплатно, без регистрации';
+    } else if (siteV === "b") {
+      const cap = document.createElement("div");
+      cap.className = "cards-cap";
+      cap.innerHTML = 'Все купоны — на ' + DOMAIN;
+      (art.querySelector(".art-r") || art).appendChild(cap);
+    } else if (siteV === "c") {
+      const cap = document.createElement("div");
+      cap.className = "logo-cap";
+      cap.innerHTML = DOMAIN;
+      art.appendChild(cap);
+      art.classList.add("has-logo-cap");
+    }
+  });
+}

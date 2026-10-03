@@ -320,3 +320,18 @@ body{
 .post11 .post__foot .logo{height:86px}
 /* Длинное имя города («Лев Толстой») — мельче, чтобы не выйти за круг */
 .ava__city.is-long{font-size:9cqw}
+
+/* Варианты адреса сайта (?site=a|b|c), см. kit.js */
+.dom{color:var(--brand);font-weight:800}
+.cards-cap{position:absolute;font-weight:500;color:var(--ink-2);white-space:nowrap}
+.vk-cover .cards-cap{left:-10px;top:600px;font-size:26px}
+.ok-cover .cards-cap{left:1500px;top:520px;font-size:24px}
+.vk-mob .cards-cap{left:0;right:0;top:1720px;text-align:center;font-size:36px}
+.logo-cap{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.vk-cover.has-logo-cap .logo{top:400px}
+.vk-cover .logo-cap{left:349px;top:620px;font-size:32px}
+.ok-cover.has-logo-cap .logo{top:276px}
+.ok-cover .logo-cap{left:293px;top:492px;font-size:30px}
+.vk-mob.has-logo-cap .logo{top:150px}
+.vk-mob.has-logo-cap .txt{top:590px}
+.vk-mob .logo-cap{left:540px;top:485px;font-size:40px}
