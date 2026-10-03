@@ -257,7 +257,7 @@ body{
 /* Логотип всегда красный и без подложки, поэтому живёт на белом поле
    в подвале поста, а не на снимке: на розовом и красном кадре он бы
    пропал. */
-.post__foot .logo{height:132px;margin-block:-16px;flex:none}
+.post__foot .logo{height:92px;flex:none}
 .post__foot-t{display:flex;flex-direction:column;gap:2px}
 .post__ph .tk{position:absolute;left:40px;bottom:40px;font-size:96px;--n:20px}
 .post__ph .tk.is-long{font-size:72px;--n:15px}
@@ -307,6 +307,6 @@ body{
 .post11 .post__body{padding:52px 52px 0}
 .post11 .post__t{font-size:64px}
 .post11 .post__meta{flex-direction:column;gap:14px}
-.post11 .post__foot .logo{height:116px}
+.post11 .post__foot .logo{height:86px}
 /* Длинное имя города («Лев Толстой») — мельче, чтобы не выйти за круг */
 .ava__city.is-long{font-size:9cqw}
