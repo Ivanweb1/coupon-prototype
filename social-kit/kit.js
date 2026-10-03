@@ -112,6 +112,27 @@ document.getElementById("menu").innerHTML = MENU.map(([id, ic, t, lead]) => `
     <div class="menu__t">${t}</div>
   </div></div>`).join("");
 
+/* Форма билетика — контур с вырезами по бокам. Считается в долях
+   высоты: вырез и скругление по 0.2 кегля, а высота плашки ~1.41 кегля,
+   то есть 14 % высоты. viewBox повторяет пропорцию плашки, поэтому
+   контур не растягивается. */
+function ticketPath(w, h) {
+  const r = h * .142, n = h * .142, c = h / 2;
+  return `M${r},0H${w - r}A${r},${r} 0 0 1 ${w},${r}V${c - n}A${n},${n} 0 0 0 ${w},${c + n}` +
+         `V${h - r}A${r},${r} 0 0 1 ${w - r},${h}H${r}A${r},${r} 0 0 1 0,${h - r}` +
+         `V${c + n}A${n},${n} 0 0 0 0,${c - n}V${r}A${r},${r} 0 0 1 ${r},0Z`;
+}
+function shapeTickets() {
+  document.querySelectorAll(".tk").forEach(tk => {
+    tk.querySelector(".tk__bg")?.remove();
+    const b = tk.getBoundingClientRect();
+    if (!b.height) return;
+    const h = 100, w = Math.round(100 * b.width / b.height * 10) / 10;
+    tk.insertAdjacentHTML("afterbegin",
+      `<svg class="tk__bg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path d="${ticketPath(w, h)}"/></svg>`);
+  });
+}
+
 /* Просмотр: артборды ужимаются под окно. В ?bare=1 — натуральная величина. */
 function fit() {
   if (document.documentElement.classList.contains("bare")) return;
@@ -175,3 +196,6 @@ if (siteV) {
     }
   });
 }
+
+/* Билетики строятся после шрифтов: от них зависит ширина плашки */
+document.fonts.ready.then(shapeTickets);
