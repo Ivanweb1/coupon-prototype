@@ -67,6 +67,8 @@ body{
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin:22px 0 0}
 .grid--wide{grid-template-columns:1fr}
+.grid--pair{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:760px){.grid--pair{grid-template-columns:1fr}}
 
 .item{display:flex;flex-direction:column;min-width:0}
 .item__ph{
@@ -108,8 +110,8 @@ body{
   </header>
 
   <ul class="nav" aria-label="Соцсети">
-    <li><a href="#vk">ВКонтакте <small>11</small></a></li>
-    <li><a href="#ok">Одноклассники <small>3</small></a></li>
+    <li><a href="#vk">ВКонтакте <small>12</small></a></li>
+    <li><a href="#ok">Одноклассники <small>4</small></a></li>
     <li><a href="#tg">Telegram <small>2</small></a></li>
     <li><a href="#max">MAX <small>2</small></a></li>
   </ul>
@@ -118,13 +120,21 @@ body{
   <section class="net" id="vk">
     <div class="net__head"><h2>ВКонтакте</h2><span>обложка, живая обложка, аватар, 6 кнопок меню, пост</span></div>
 
-    <div class="grid grid--wide">
+    <div class="grid grid--pair">
       <article class="item">
         <div class="item__ph"><img src="out/vk/vk-cover-1920x768.png" alt="Обложка сообщества ВКонтакте"></div>
         <div class="item__body">
           <div class="item__t"><b>Обложка сообщества</b><span class="size">1920×768</span></div>
           <p class="item__where">Управление → Настройки → Обложка сообщества. Верхние ~85 px закрывает меню, на телефоне по ~200 px срезается с боков; всё важное в середине.</p>
           <p class="item__file"><a href="out/vk/vk-cover-1920x768.png">vk-cover-1920x768.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph"><img src="out/vk/vk-cover-nolink-1920x768.png" alt="Обложка сообщества ВКонтакте без адреса сайта"></div>
+        <div class="item__body">
+          <div class="item__t"><b>Обложка без адреса</b><span class="size">1920×768</span></div>
+          <p class="item__where">Та же обложка без полосы с vsekupony.ru: если адрес уже стоит в описании сообщества или кнопке.</p>
+          <p class="item__file"><a href="out/vk/vk-cover-nolink-1920x768.png">vk-cover-nolink-1920x768.png</a></p>
         </div>
       </article>
     </div>
@@ -188,13 +198,21 @@ body{
   <section class="net" id="ok">
     <div class="net__head"><h2>Одноклассники</h2><span>обложка, аватар, пост</span></div>
 
-    <div class="grid grid--wide">
+    <div class="grid grid--pair">
       <article class="item">
         <div class="item__ph"><img src="out/ok/ok-cover-1944x600.png" alt="Обложка группы в Одноклассниках"></div>
         <div class="item__body">
           <div class="item__t"><b>Обложка группы</b><span class="size">1944×600</span></div>
           <p class="item__where">В группе: «Установить обложку». На телефоне остаётся центральная полоса ~800 px, заголовок стоит в ней.</p>
           <p class="item__file"><a href="out/ok/ok-cover-1944x600.png">ok-cover-1944x600.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph"><img src="out/ok/ok-cover-nolink-1944x600.png" alt="Обложка группы в Одноклассниках без адреса сайта"></div>
+        <div class="item__body">
+          <div class="item__t"><b>Обложка без адреса</b><span class="size">1944×600</span></div>
+          <p class="item__where">Та же обложка без полосы с vsekupony.ru: если адрес уже стоит в описании сообщества или кнопке.</p>
+          <p class="item__file"><a href="out/ok/ok-cover-nolink-1944x600.png">ok-cover-nolink-1944x600.png</a></p>
         </div>
       </article>
     </div>

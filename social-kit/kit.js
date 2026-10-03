@@ -57,6 +57,21 @@ document.querySelectorAll("[data-card]").forEach(el => {
     <div class="card__c">${c.company}</div>`;
 });
 
+/* Обложки ВК и ОК — ещё и без адреса сайта: копия рядом, файл с
+   суффиксом -nolink. Основной вариант — с красной полосой (03.10). */
+["vk-cover", "ok-cover"].forEach(id => {
+  const src = document.getElementById(id);
+  const fig = src.closest(".slot");
+  const copy = fig.cloneNode(true);
+  const art = copy.querySelector(".art");
+  art.id = id + "-nolink";
+  art.dataset.out = src.dataset.out.replace(/(-\d+x\d+)$/, "-nolink$1");
+  art.querySelector(".strip").remove();
+  art.classList.remove("has-strip");
+  copy.querySelector("figcaption").insertAdjacentHTML("beforeend", " · без адреса сайта");
+  fig.after(copy);
+});
+
 /* Пост с купоном — один шаблон на оба формата */
 document.querySelectorAll("[data-post]").forEach(el => {
   const c = COUPONS[el.dataset.post];
