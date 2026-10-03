@@ -104,6 +104,12 @@ body{
   font-size:.82em;font-weight:800;
 }
 
+/* Адрес сайта на обложках: красный, жирный, со значком в кружке, как
+   у шагов. Не кнопка — обложку не нажать. */
+.site{display:inline-flex;align-items:center;gap:.4em;color:var(--brand);font-weight:800;letter-spacing:-.01em}
+.site__ic{width:1.5em;height:1.5em;border-radius:50%;display:grid;place-items:center;background:var(--surface);flex:none}
+.site__ic svg{width:.95em;height:.95em}
+
 /* Билетик выгоды: красная плашка с полукруглыми вырезами по бокам.
    Вырезы — маской, поэтому под ними виден снимок. Радиус выреза --n
    задаётся в px там, где задан кегль: em в маске Chromium считает от
@@ -156,6 +162,7 @@ body{
 .vk-cover .eyebrow{font-size:28px}
 .vk-cover .h1{margin-top:18px;font-size:88px}
 .vk-cover .steps{margin-top:34px;font-size:24px}
+.vk-cover .site{margin-top:26px;font-size:34px}
 .vk-cover .art-r{position:absolute;left:1400px;top:0;width:330px;height:768px}
 .vk-cover .card--1{--w:215px;--r:-7deg;left:0;top:200px}
 .vk-cover .card--2{--w:215px;--r:7deg;left:100px;top:290px}
@@ -166,14 +173,15 @@ body{
    Сверху ~200 px — статус-бар и кнопки, снизу ~420 px перекрывает блок
    с названием сообщества и кнопками. Смысл — между ними. */
 .vk-mob{width:1080px;height:1920px}
-.vk-mob .logo{position:absolute;left:50%;top:190px;height:360px;transform:translateX(-50%)}
-.vk-mob .txt{position:absolute;left:0;right:0;top:600px;text-align:center}
+.vk-mob .logo{position:absolute;left:50%;top:190px;height:320px;transform:translateX(-50%)}
+.vk-mob .txt{position:absolute;left:0;right:0;top:550px;text-align:center}
 .vk-mob .eyebrow{font-size:34px}
 .vk-mob .h1{margin-top:22px;font-size:100px}
-.vk-mob .steps{justify-content:center;margin-top:44px;font-size:32px}
-.vk-mob .card--1{--w:320px;--r:-9deg;left:120px;top:1180px}
-.vk-mob .card--2{--w:320px;--r:0deg;left:380px;top:1140px;z-index:2}
-.vk-mob .card--3{--w:320px;--r:9deg;left:640px;top:1180px}
+.vk-mob .steps{justify-content:center;margin-top:40px;font-size:32px}
+.vk-mob .site{margin-top:30px;font-size:42px}
+.vk-mob .card--1{--w:320px;--r:-9deg;left:120px;top:1230px}
+.vk-mob .card--2{--w:320px;--r:0deg;left:380px;top:1190px;z-index:2}
+.vk-mob .card--3{--w:320px;--r:9deg;left:640px;top:1230px}
 /* Низ под блоком сообщества — серая подложка, чтобы карточки не
    упирались в белые кнопки ВК */
 .vk-mob .floor{display:none}
@@ -189,7 +197,8 @@ body{
 .ok-cover .txt{position:absolute;left:590px;top:50%;transform:translateY(-50%);text-align:left}
 .ok-cover .eyebrow{font-size:28px}
 .ok-cover .h1{margin-top:18px;font-size:76px}
-.ok-cover .steps{margin-top:36px;font-size:25px}
+.ok-cover .steps{margin-top:30px;font-size:25px}
+.ok-cover .site{margin-top:22px;font-size:32px}
 /* Логотип на 15 % меньше и по центру высоты, как и текст (правка 03.10) */
 .ok-cover .logo{position:absolute;left:172px;top:50%;height:408px;transform:translateY(-50%)}
 .ok-cover .card--1{--w:230px;--r:-7deg;left:1490px;top:110px}
