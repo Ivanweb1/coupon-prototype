@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Все купоны — соцсети</title>
+<link rel="stylesheet" href="fonts/onest.css">
+<link rel="stylesheet" href="kit.css">
+<script>
+  /* ?bare=1 — только артборды в натуральную величину: для рендера PNG
+     и импорта в Figma. ?city=Ельца — другой город в заголовках. */
+  if (new URLSearchParams(location.search).has("bare")) document.documentElement.classList.add("bare");
+</script>
+</head>
+<body>
+<main class="page">
+
+  <header class="page__head">
+    <h1>Упаковка соцсетей</h1>
+    <p>ВКонтакте, Одноклассники, Telegram и MAX в стилистике витрины. Каждый макет свёрстан в натуральном размере площадки;
+      ниже показан уменьшенным под окно. Готовые PNG лежат в <a href="out/">out/</a>, пересобираются командой
+      <code>python social-kit/render.py</code>. Другой город: <a href="?city=Ельца">?city=Ельца</a>.</p>
+  </header>
+
+  <!-- ================================================================ ВК -->
+  <section class="net">
+    <h2><i style="--c:#0077FF"></i>ВКонтакте</h2>
+    <div class="row">
+      <figure class="slot"><figcaption><b>Обложка сообщества</b> 1920×768</figcaption>
+        <div class="fit"><div class="art vk-cover" id="vk-cover" data-out="vk/vk-cover-1920x768">
+          <div class="txt">
+            <div class="eyebrow">Бесплатно · без регистрации</div>
+            <h1 class="h1">Все скидки <span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Делаете скриншот</li><li><b>3</b>Платите со скидкой</li></ol>
+          </div>
+          <div class="art-r">
+            <img class="logo" src="../assets/brand/logo-red.png" alt="">
+            <div class="card card--1" data-card="coffee"></div>
+            <div class="card card--2" data-card="beauty"></div>
+          </div>
+        </div></div>
+      </figure>
+
+      <figure class="slot"><figcaption><b>Живая обложка</b> 1080×1920</figcaption>
+        <div class="fit"><div class="art vk-mob" id="vk-mobile" data-out="vk/vk-mobile-cover-1080x1920">
+          <div class="floor"></div>
+          <img class="logo" src="../assets/brand/logo-red.png" alt="">
+          <div class="txt">
+            <div class="eyebrow">Бесплатно · без регистрации</div>
+            <h1 class="h1">Все скидки<br><span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Скриншот</li><li><b>3</b>Скидка</li></ol>
+          </div>
+          <div class="card card--1" data-card="fitness"></div>
+          <div class="card card--2" data-card="coffee"></div>
+          <div class="card card--3" data-card="beauty"></div>
+        </div></div>
+      </figure>
+
+      <figure class="slot"><figcaption><b>Аватар</b> 400×400</figcaption>
+        <div class="fit fit--round"><div class="art ava" id="avatar-vk" data-out="vk/vk-avatar-400x400" style="width:400px;height:400px">
+          <img class="logo" src="../assets/brand/logo-white.png" alt="">
+        </div></div>
+      </figure>
+    </div>
+
+    <figure class="slot" style="margin-top:32px"><figcaption><b>Кнопки меню</b> 376×256 · шесть штук</figcaption>
+      <div class="row" id="menu" style="gap:16px"></div>
+    </figure>
+
+    <div class="row" style="margin-top:32px">
+      <figure class="slot"><figcaption><b>Пост с купоном</b> 1080×1350</figcaption>
+        <div class="fit"><div class="art post post45" id="post-vk" data-out="vk/vk-post-1080x1350" data-post="coffee"></div></div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================================================================ ОК -->
+  <section class="net">
+    <h2><i style="--c:#FF7700"></i>Одноклассники</h2>
+    <div class="row">
+      <figure class="slot"><figcaption><b>Обложка группы</b> 1944×600</figcaption>
+        <div class="fit"><div class="art ok-cover" id="ok-cover" data-out="ok/ok-cover-1944x600">
+          <img class="logo" src="../assets/brand/logo-red.png" alt="">
+          <div class="txt">
+            <div class="eyebrow">Бесплатно · без регистрации</div>
+            <h1 class="h1">Все скидки <span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Делаете скриншот</li><li><b>3</b>Платите со скидкой</li></ol>
+          </div>
+          <div class="card card--1" data-card="eda"></div>
+          <div class="card card--2" data-card="fitness"></div>
+        </div></div>
+      </figure>
+    </div>
+    <div class="row" style="margin-top:32px">
+      <figure class="slot"><figcaption><b>Аватар</b> 400×400</figcaption>
+        <div class="fit fit--round"><div class="art ava" id="avatar-ok" data-out="ok/ok-avatar-400x400" style="width:400px;height:400px">
+          <img class="logo" src="../assets/brand/logo-white.png" alt="">
+        </div></div>
+      </figure>
+      <figure class="slot"><figcaption><b>Пост с купоном</b> 1080×1080</figcaption>
+        <div class="fit"><div class="art post post11" id="post-ok" data-out="ok/ok-post-1080x1080" data-post="eda"></div></div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ========================================================== Telegram -->
+  <section class="net">
+    <h2><i style="--c:#2AABEE"></i>Telegram</h2>
+    <div class="row">
+      <figure class="slot"><figcaption><b>Аватар канала</b> 800×800</figcaption>
+        <div class="fit fit--round"><div class="art ava" id="avatar-tg" data-out="tg/tg-avatar-800x800" style="width:800px;height:800px">
+          <img class="logo" src="../assets/brand/logo-white.png" alt="">
+        </div></div>
+      </figure>
+      <figure class="slot"><figcaption><b>Пост с купоном</b> 1080×1350</figcaption>
+        <div class="fit"><div class="art post post45" id="post-tg" data-out="tg/tg-post-1080x1350" data-post="beauty"></div></div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- =============================================================== MAX -->
+  <section class="net">
+    <h2><i style="--c:#471AFF"></i>MAX</h2>
+    <div class="row">
+      <figure class="slot"><figcaption><b>Аватар канала</b> 512×512</figcaption>
+        <div class="fit fit--round"><div class="art ava" id="avatar-max" data-out="max/max-avatar-512x512" style="width:512px;height:512px">
+          <img class="logo" src="../assets/brand/logo-white.png" alt="">
+        </div></div>
+      </figure>
+      <figure class="slot"><figcaption><b>Пост с купоном</b> 1080×1350</figcaption>
+        <div class="fit"><div class="art post post45" id="post-max" data-out="max/max-post-1080x1350" data-post="fitness"></div></div>
+      </figure>
+    </div>
+  </section>
+
+</main>
+
+<script src="kit.js"></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+/* ==========================================================================
+   Все купоны — упаковка соцсетей
+   ==========================================================================
+   Язык снят с витрины (index-design-3.html), ничего нового не вводим:
+   - палитра: белый, нейтральные серые, чёрный и один фирменный #DD443C;
+     без градиентов (решение созвона 21.09.2026);
+   - один шрифт — Onest, заголовки 800;
+   - красная плашка города с наклоном −2°, как в заголовке первого экрана;
+   - выгода — красный билетик с полукруглыми вырезами по бокам, как
+     бейдж на карточке купона;
+   - значки ниш — те же линейные пути, что в строке категорий.
+   Каждый артборд свёрстан в натуральную величину площадки: PNG снимается
+   один к одному, без масштабирования. */
+
+:root{
+  --brand:#DD443C;
+  --brand-dark:#B9332C;
+  --ink:#1B1B1B;
+  --ink-2:#565656;
+  --ink-3:#8A8A8A;
+  --ink-4:#B6B6B6;
+  --line:#E8E8E8;
+  --line-strong:#D3D3D3;
+  --surface:#F6F6F6;
+  --surface-2:#ECECEC;
+  --chip:#F9F9F9;
+  --font:"Onest", ui-sans-serif, system-ui, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:#E4E4E4;color:var(--ink);
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* --------------------------------------------------------------------------
+   Страница-подложка (в режиме ?bare=1 скрыта)
+   -------------------------------------------------------------------------- */
+.page{max-width:2080px;margin:0 auto;padding:48px 40px 96px}
+.page__head{max-width:900px;margin:0 0 40px}
+.page__head h1{margin:0;font-size:40px;font-weight:800;letter-spacing:-.02em}
+.page__head p{margin:12px 0 0;font-size:17px;line-height:1.5;color:var(--ink-2)}
+.page__head a{color:var(--brand)}
+
+.net{margin:56px 0 0}
+.net > h2{
+  display:flex;align-items:center;gap:12px;
+  margin:0 0 20px;font-size:28px;font-weight:800;letter-spacing:-.02em;
+}
+.net > h2 i{width:14px;height:14px;border-radius:50%;background:var(--c)}
+.row{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+.slot{margin:0}
+.slot figcaption{
+  margin:0 0 10px;font-size:14px;font-weight:600;color:var(--ink-2);
+}
+.slot figcaption b{color:var(--ink);font-weight:800}
+.slot figcaption a{margin-left:8px;color:var(--brand);text-decoration:none}
+.fit{overflow:hidden;box-shadow:0 18px 40px -24px rgba(0,0,0,.35)}
+.fit--round{border-radius:50%}
+
+/* Режим для рендера и импорта: только артборды, в натуральную величину */
+.bare body{background:#fff}
+.bare .page__head,.bare figcaption,.bare .net > h2{display:none}
+.bare .page{max-width:none;padding:0}
+.bare .net{margin:0}
+.bare .row{gap:0}
+.bare .fit{box-shadow:none;border-radius:0}
+
+/* --------------------------------------------------------------------------
+   Общие элементы
+   -------------------------------------------------------------------------- */
+.art{position:relative;overflow:hidden;background:#fff;flex:none}
+
+.logo{display:block;height:auto}
+
+/* Плашка города — как .dzl__city на витрине */
+.city{
+  display:inline-block;
+  padding:0 .16em .04em;margin:0 .04em;border-radius:.18em;
+  background:var(--brand);color:#fff;
+  transform:rotate(-2deg);
+}
+
+.eyebrow{color:var(--brand);font-weight:600;letter-spacing:.01em}
+
+.h1{margin:0;font-weight:800;letter-spacing:-.025em;line-height:1.04}
+
+/* Три шага первого экрана */
+.steps{display:flex;align-items:center;margin:0;padding:0;list-style:none;color:var(--ink-2);font-weight:500}
+.steps li{display:flex;align-items:center;gap:.45em;position:relative;white-space:nowrap}
+.steps li + li{margin-left:1.5em}
+.steps li + li::before{
+  content:"";position:absolute;left:-.95em;top:50%;
+  width:.32em;height:.32em;
+  border-top:.07em solid var(--ink-4);border-right:.07em solid var(--ink-4);
+  transform:translateY(-50%) rotate(45deg);
+}
+.steps b{
+  width:1.55em;height:1.55em;border-radius:50%;flex:none;
+  display:grid;place-items:center;
+  background:var(--surface);color:var(--brand);
+  font-size:.82em;font-weight:800;
+}
+
+/* Билетик выгоды: красная плашка с полукруглыми вырезами по бокам.
+   Вырезы — маской, поэтому под ними виден снимок. Радиус выреза --n
+   задаётся в px там, где задан кегль: em в маске Chromium считает от
+   корня, а не от плашки. Норма — около 0.2 кегля. */
+.tk{
+  display:inline-block;
+  padding:.16em .62em .2em;border-radius:.2em;
+  background:var(--brand);color:#fff;
+  font-weight:800;letter-spacing:-.02em;line-height:1.05;
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+  -webkit-mask:radial-gradient(circle var(--n, 10px) at left center, #0000 98%, #000) left / 51% 100% no-repeat,
+               radial-gradient(circle var(--n, 10px) at right center, #0000 98%, #000) right / 51% 100% no-repeat;
+          mask:radial-gradient(circle var(--n, 10px) at left center, #0000 98%, #000) left / 51% 100% no-repeat,
+               radial-gradient(circle var(--n, 10px) at right center, #0000 98%, #000) right / 51% 100% no-repeat;
+}
+
+/* Карточка купона — та же, что в ленте: снимок 4:5, билетик, подпись */
+.card{
+  position:absolute;width:var(--w);
+  padding:calc(var(--w) * .045);
+  border-radius:calc(var(--w) * .09);
+  background:#fff;
+  box-shadow:0 30px 60px -28px rgba(40,10,8,.45), 0 0 0 1px rgba(0,0,0,.04);
+  transform:rotate(var(--r, 0deg));
+}
+.card__ph{
+  position:relative;aspect-ratio:4/4.2;border-radius:calc(var(--w) * .06);
+  background:var(--surface) center / cover no-repeat;
+}
+.card__ph .tk{position:absolute;left:7%;bottom:7%;font-size:calc(var(--w) * .1);--n:calc(var(--w) * .02)}
+.card__t{
+  margin:calc(var(--w) * .055) calc(var(--w) * .02) 0;
+  font-size:calc(var(--w) * .075);font-weight:700;line-height:1.18;letter-spacing:-.01em;
+}
+.card__c{
+  margin:calc(var(--w) * .02) calc(var(--w) * .02) calc(var(--w) * .02);
+  font-size:calc(var(--w) * .058);font-weight:500;color:var(--ink-3);
+}
+
+/* --------------------------------------------------------------------------
+   ВК — обложка сообщества 1920×768
+   --------------------------------------------------------------------------
+   Сверху ~85 px закрывает меню ВК, на телефоне по ~200 px режется с
+   боков: весь смысл — в средней полосе. */
+.vk-cover{width:1920px;height:768px}
+.vk-cover .txt{position:absolute;left:230px;top:180px;width:1000px}
+.vk-cover .eyebrow{font-size:30px}
+.vk-cover .h1{margin-top:22px;font-size:100px}
+.vk-cover .steps{margin-top:40px;font-size:28px}
+.vk-cover .art-r{position:absolute;left:1200px;top:0;width:540px;height:768px}
+.vk-cover .logo{position:absolute;left:130px;top:110px;height:540px;transform:rotate(6deg)}
+.vk-cover .card--1{--w:250px;--r:-8deg;left:20px;top:290px}
+.vk-cover .card--2{--w:250px;--r:7deg;left:285px;top:330px}
+
+/* --------------------------------------------------------------------------
+   ВК — живая обложка 1080×1920 (мобильная)
+   --------------------------------------------------------------------------
+   Сверху ~200 px — статус-бар и кнопки, снизу ~420 px перекрывает блок
+   с названием сообщества и кнопками. Смысл — между ними. */
+.vk-mob{width:1080px;height:1920px}
+.vk-mob .logo{position:absolute;left:50%;top:190px;height:360px;transform:translateX(-50%) rotate(6deg)}
+.vk-mob .txt{position:absolute;left:0;right:0;top:600px;text-align:center}
+.vk-mob .eyebrow{font-size:34px}
+.vk-mob .h1{margin-top:22px;font-size:100px}
+.vk-mob .steps{justify-content:center;margin-top:44px;font-size:32px}
+.vk-mob .card--1{--w:320px;--r:-9deg;left:120px;top:1180px}
+.vk-mob .card--2{--w:320px;--r:0deg;left:380px;top:1140px;z-index:2}
+.vk-mob .card--3{--w:320px;--r:9deg;left:640px;top:1180px}
+/* Низ под блоком сообщества — серая подложка, чтобы карточки не
+   упирались в белые кнопки ВК */
+.vk-mob .floor{display:none}
+
+/* --------------------------------------------------------------------------
+   ОК — обложка группы 1944×600
+   --------------------------------------------------------------------------
+   Из одного файла ОК собирает веб (3,24:1) и мобильную версию: на
+   телефоне остаётся центральная полоса ~800 px. В неё — заголовок. */
+.ok-cover{width:1944px;height:600px}
+.ok-cover .txt{position:absolute;left:0;right:0;top:92px;text-align:center}
+.ok-cover .eyebrow{font-size:28px}
+.ok-cover .h1{margin-top:18px;font-size:82px}
+.ok-cover .steps{justify-content:center;margin-top:36px;font-size:27px}
+.ok-cover .logo{position:absolute;left:150px;top:60px;height:480px;transform:rotate(-6deg)}
+.ok-cover .card--1{--w:230px;--r:-7deg;left:1490px;top:110px}
+.ok-cover .card--2{--w:230px;--r:7deg;left:1660px;top:180px}
+
+/* --------------------------------------------------------------------------
+   Аватар — красный круг, белый шар. Свёрстан в долях стороны (cqw),
+   поэтому один шаблон даёт 400, 512 и 800 без пересжатия.
+   Площадки режут аватар в круг: знак держим в центральных 70 %.
+   -------------------------------------------------------------------------- */
+.ava{container-type:size;background:var(--brand)}
+.ava .logo{position:absolute;left:50%;top:50%;height:68cqw;transform:translate(-50%,-50%) rotate(6deg)}
+
+/* --------------------------------------------------------------------------
+   ВК — кнопки меню 376×256
+   --------------------------------------------------------------------------
+   Правило витрины: в покое кнопка светлая со значком в кружке, ведущая —
+   инверсия, красная с белым. Ведущая одна — «Разместить купон». */
+.menu{width:376px;height:256px;padding:30px 32px;background:var(--surface);display:flex;flex-direction:column;justify-content:space-between}
+.menu__ic{
+  width:76px;height:76px;border-radius:50%;
+  display:grid;place-items:center;background:#fff;color:var(--brand);
+}
+.menu__ic svg{width:40px;height:40px}
+.menu__t{font-size:36px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.menu__go{position:absolute;right:30px;top:40px;width:28px;height:28px;color:var(--ink-4)}
+.menu--lead{background:var(--brand);color:#fff}
+.menu--lead .menu__ic{background:rgba(255,255,255,.16);color:#fff}
+.menu--lead .menu__go{color:rgba(255,255,255,.7)}
+
+/* --------------------------------------------------------------------------
+   Пост с купоном
+   --------------------------------------------------------------------------
+   Холст — серое поле, на нём белый купон: снимок, линия отрыва с
+   вырезами, сведения. Кода в посте нет — за ним идут на сайт; подпись
+   внизу не кнопка (картинку в ленте не нажать). Метка «Реклама · erid»
+   — часть шаблона: маркировка нужна на каждом объявлении. */
+.post{background:var(--surface-2)}
+.post__card{position:absolute;inset:40px;border-radius:40px;background:#fff;overflow:hidden;display:flex}
+.post__ph{position:relative;flex:none;background:var(--surface) center / cover no-repeat}
+.post__ph::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:140px;
+  background:linear-gradient(rgba(0,0,0,.38), rgba(0,0,0,0));
+}
+.post__erid{
+  position:absolute;left:30px;top:28px;
+  font-size:21px;font-weight:500;color:rgba(255,255,255,.92);letter-spacing:.01em;
+}
+.post__mark{
+  position:absolute;right:28px;top:24px;width:96px;height:96px;border-radius:50%;
+  display:grid;place-items:center;background:#fff;
+}
+.post__mark .logo{height:72px;transform:rotate(6deg)}
+.post__ph .tk{position:absolute;left:40px;bottom:40px;font-size:96px;--n:20px}
+.post__ph .tk.is-long{font-size:72px;--n:15px}
+
+/* Линия отрыва: пунктир и вырезы цвета поля */
+.perf{position:absolute;pointer-events:none}
+.perf::before{content:"";position:absolute;border:0 dashed var(--line-strong);display:none}
+.perf i{position:absolute;width:52px;height:52px;border-radius:50%;background:var(--surface-2)}
+
+.post__body{flex:1;min-width:0;padding:48px 56px 0;display:flex;flex-direction:column}
+.post__cat{display:flex;align-items:center;gap:16px;font-size:28px;font-weight:600;color:var(--ink-2)}
+.post__cat span{
+  width:56px;height:56px;border-radius:50%;flex:none;
+  display:grid;place-items:center;background:var(--surface);color:var(--brand);
+}
+.post__cat svg{width:30px;height:30px}
+.post__t{margin:26px 0 0;font-size:62px;font-weight:800;line-height:1.07;letter-spacing:-.025em}
+.post__c{margin:16px 0 0;font-size:31px;font-weight:500;color:var(--ink-3)}
+.post__meta{display:flex;flex-wrap:wrap;gap:12px 36px;margin:30px 0 0;padding:0;list-style:none;font-size:28px;font-weight:500;color:var(--ink-2)}
+.post__meta li{display:flex;align-items:center;gap:10px}
+.post__meta svg{width:30px;height:30px;color:var(--ink-3);flex:none}
+.post__foot{
+  margin-top:auto;padding:30px 0 36px;border-top:2px solid var(--line);
+  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  font-size:28px;font-weight:500;color:var(--ink-2);
+}
+.post__foot b{font-size:36px;font-weight:800;color:var(--brand);letter-spacing:-.01em}
+
+/* 4:5 — ВК, Telegram, MAX: снимок сверху, отрыв по горизонтали */
+.post45{width:1080px;height:1350px}
+.post45 .post__card{flex-direction:column}
+.post45 .post__ph{height:700px}
+.post45 .perf{left:14px;right:14px;top:714px;height:52px}
+.post45 .perf::before{left:44px;right:44px;top:25px;border-top-width:3px}
+.post45 .perf i:first-child{left:0}
+.post45 .perf i:last-child{right:0}
+
+/* 1:1 — ОК: снимок слева, отрыв по вертикали */
+.post11{width:1080px;height:1080px}
+.post11 .post__ph{width:430px}
+.post11 .post__ph .tk{left:32px;bottom:36px;font-size:80px;--n:17px}
+.post11 .post__mark{width:84px;height:84px;right:auto;left:30px;top:auto;bottom:150px}
+.post11 .post__mark .logo{height:62px}
+.post11 .post__erid{left:28px;right:20px;font-size:19px}
+.post11 .perf{top:14px;bottom:14px;left:444px;width:52px}
+.post11 .perf::before{top:44px;bottom:44px;left:25px;border-left-width:3px}
+.post11 .perf i:first-child{top:0}
+.post11 .perf i:last-child{bottom:0}
+.post11 .post__body{padding:52px 52px 0}
+.post11 .post__t{font-size:64px}
+.post11 .post__meta{flex-direction:column;gap:14px}
+.post11 .post__foot{flex-direction:column;align-items:flex-start;gap:6px}
