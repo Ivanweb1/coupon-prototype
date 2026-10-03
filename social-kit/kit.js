@@ -65,7 +65,6 @@ document.querySelectorAll("[data-post]").forEach(el => {
     <div class="post__card">
       <div class="post__ph" style="background-image:url('${PH + c.photo}')">
         <div class="post__erid">Реклама · ${c.company} · erid: ${c.erid}</div>
-        <div class="post__mark"><img class="logo" src="../assets/brand/logo-white.png" alt=""></div>
         <span class="tk${long}">${c.value}</span>
       </div>
       <div class="post__body">
@@ -76,7 +75,7 @@ document.querySelectorAll("[data-post]").forEach(el => {
           <li>${icon("pin")}${town || "Липецк"}, ${c.address}</li>
           <li>${icon("cal")}${c.until}</li>
         </ul>
-        <div class="post__foot"><span>Код купона — на сайте</span><b>vsekupony.ru</b></div>
+        <div class="post__foot"><div class="post__foot-t"><span>Код купона — на сайте</span><b>vsekupony.ru</b></div><img class="logo" src="../assets/brand/logo-red.png" alt=""></div>
       </div>
     </div>
     <div class="perf"><i></i><i></i></div>`;

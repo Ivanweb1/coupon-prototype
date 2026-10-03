@@ -198,21 +198,22 @@ body{
    поэтому один шаблон даёт 400, 512 и 800 без пересжатия.
    Площадки режут аватар в круг: знак держим в центральных 70 %.
    -------------------------------------------------------------------------- */
-.ava{container-type:size;background:var(--brand)}
+/* Логотип всегда красный (правка 03.10): фон белый, как на витрине */
+.ava{container-type:size;background:#fff}
 .ava .logo{position:absolute;left:50%;top:8cqw;height:48cqw;transform:translateX(-50%) rotate(6deg)}
 /* Город и площадка: у каждого города свои сообщества во всех четырёх
    сетях, и в списке подписок аватары иначе не отличить. Плашка города —
-   та же, что в заголовке витрины, только вывернута: белая на красном. */
+   та же, что в заголовке витрины: красная, белые буквы. */
 .ava__city{
   position:absolute;left:50%;top:58cqw;
   padding:.06em .3em .12em;border-radius:.18em;
-  background:#fff;color:var(--brand);
+  background:var(--brand);color:#fff;
   font-size:12.5cqw;font-weight:800;line-height:1.05;letter-spacing:-.02em;white-space:nowrap;
   transform:translateX(-50%) rotate(-2deg);
 }
 .ava__net{
   position:absolute;left:0;right:0;top:77cqw;text-align:center;
-  font-size:6.2cqw;font-weight:600;letter-spacing:.01em;color:rgba(255,255,255,.88);
+  font-size:6.2cqw;font-weight:600;letter-spacing:.01em;color:var(--ink-2);
 }
 
 /* --------------------------------------------------------------------------
@@ -252,8 +253,11 @@ body{
 }
 /* Логотип без подложки (правка 03.10): белый знак прямо на снимке.
    Читается за счёт затемнения сверху и мягкой тени под самим знаком. */
-.post__mark{position:absolute;right:34px;top:26px}
-.post__mark .logo{height:110px;transform:rotate(6deg);filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}
+/* Логотип всегда красный и без подложки, поэтому живёт на белом поле
+   в подвале поста, а не на снимке: на розовом и красном кадре он бы
+   пропал. */
+.post__foot .logo{height:132px;margin-block:-16px;flex:none;transform:rotate(6deg)}
+.post__foot-t{display:flex;flex-direction:column;gap:2px}
 .post__ph .tk{position:absolute;left:40px;bottom:40px;font-size:96px;--n:20px}
 .post__ph .tk.is-long{font-size:72px;--n:15px}
 
@@ -275,8 +279,8 @@ body{
 .post__meta li{display:flex;align-items:center;gap:10px}
 .post__meta svg{width:30px;height:30px;color:var(--ink-3);flex:none}
 .post__foot{
-  margin-top:auto;padding:30px 0 36px;border-top:2px solid var(--line);
-  display:flex;align-items:baseline;justify-content:space-between;gap:24px;
+  margin-top:auto;padding:24px 0 28px;border-top:2px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
   font-size:28px;font-weight:500;color:var(--ink-2);
 }
 .post__foot b{font-size:36px;font-weight:800;color:var(--brand);letter-spacing:-.01em}
@@ -294,9 +298,7 @@ body{
 .post11{width:1080px;height:1080px}
 .post11 .post__ph{width:430px}
 .post11 .post__ph .tk{left:32px;bottom:36px;font-size:80px;--n:17px}
-.post11 .post__mark{right:26px;top:24px}
-.post11 .post__mark .logo{height:92px}
-.post11 .post__erid{left:28px;right:110px;font-size:19px}
+.post11 .post__erid{left:28px;right:20px;font-size:19px}
 .post11 .perf{top:14px;bottom:14px;left:444px;width:52px}
 .post11 .perf::before{top:44px;bottom:44px;left:25px;border-left-width:3px}
 .post11 .perf i:first-child{top:0}
@@ -304,6 +306,6 @@ body{
 .post11 .post__body{padding:52px 52px 0}
 .post11 .post__t{font-size:64px}
 .post11 .post__meta{flex-direction:column;gap:14px}
-.post11 .post__foot{flex-direction:column;align-items:flex-start;gap:6px}
+.post11 .post__foot .logo{height:116px}
 /* Длинное имя города («Лев Толстой») — мельче, чтобы не выйти за круг */
 .ava__city.is-long{font-size:9cqw}
