@@ -96,6 +96,13 @@ body{
   .item__ph{min-height:0;padding:12px}
   .item__ph--menu{grid-template-columns:repeat(2,1fr)}
 }
+
+/* Скачать архив и открыть макеты для Figma */
+.get{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 0}
+.get a{display:inline-flex;align-items:center;height:44px;padding:0 18px;border-radius:999px;font-size:15px;font-weight:700;text-decoration:none}
+.get__zip{background:var(--brand);color:var(--on-brand)}
+.get__fig{border:1.5px solid var(--ink);color:var(--ink)}
+.get a:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 </style>
 
 <div class="wrap">
@@ -108,6 +115,11 @@ body{
         куда его загружать.</p>
     </div>
   </header>
+
+  <div class="get">
+    <a class="get__zip" href="out/vsekupony-social.zip">Скачать все PNG одним архивом</a>
+    <a class="get__fig" href="index.html?bare=1">Макеты для Figma в натуральную величину</a>
+  </div>
 
   <ul class="nav" aria-label="Соцсети">
     <li><a href="#vk">ВКонтакте <small>12</small></a></li>

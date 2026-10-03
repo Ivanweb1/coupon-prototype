@@ -61,12 +61,18 @@ body{
 .fit--round{border-radius:50%}
 
 /* Режим для рендера и импорта: только артборды, в натуральную величину */
-.bare body{background:#fff}
-.bare .page__head,.bare figcaption,.bare .net > h2{display:none}
-.bare .page{max-width:none;padding:0}
-.bare .net{margin:0}
-.bare .row{gap:0}
+/* Отступы между артбордами — чтобы в Figma они приехали отдельными
+   фреймами, а не слиплись; заголовки сетей остаются подписями групп */
+.bare body{background:#F0F0F0}
+.bare .page__head,.bare figcaption{display:none}
+.bare .page{max-width:none;padding:80px}
+.bare .net{margin:0 0 160px}
+.bare .net > h2{font-size:48px;margin-bottom:40px}
+.bare .row{gap:80px}
+.bare .row + .row,.bare .slot + .slot,.bare .row + .slot,.bare .slot + .row{margin-top:80px !important}
+.bare #menu{gap:40px !important}
 .bare .fit{box-shadow:none;border-radius:0}
+.bare .fit--round{border-radius:0}
 
 /* --------------------------------------------------------------------------
    Общие элементы
