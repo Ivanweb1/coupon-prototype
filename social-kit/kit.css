@@ -179,9 +179,9 @@ body{
 .vk-mob .h1{margin-top:22px;font-size:100px}
 .vk-mob .steps{justify-content:center;margin-top:40px;font-size:32px}
 .vk-mob .site{margin-top:30px;font-size:42px}
-.vk-mob .card--1{--w:320px;--r:-9deg;left:120px;top:1230px}
-.vk-mob .card--2{--w:320px;--r:0deg;left:380px;top:1190px;z-index:2}
-.vk-mob .card--3{--w:320px;--r:9deg;left:640px;top:1230px}
+.vk-mob .card--1{--w:320px;--r:-9deg;left:120px;top:1090px}
+.vk-mob .card--2{--w:320px;--r:0deg;left:380px;top:1050px;z-index:2}
+.vk-mob .card--3{--w:320px;--r:9deg;left:640px;top:1090px}
 /* Низ под блоком сообщества — серая подложка, чтобы карточки не
    упирались в белые кнопки ВК */
 .vk-mob .floor{display:none}
@@ -326,7 +326,8 @@ body{
 .cards-cap{position:absolute;font-weight:500;color:var(--ink-2);white-space:nowrap}
 .vk-cover .cards-cap{left:-10px;top:600px;font-size:26px}
 .ok-cover .cards-cap{left:1500px;top:520px;font-size:24px}
-.vk-mob .cards-cap{left:0;right:0;top:1720px;text-align:center;font-size:36px}
+/* Подпись под карточками — выбранный вариант для живой обложки (03.10) */
+.vk-mob .cards-cap{left:0;right:0;top:1610px;text-align:center;font-size:38px}
 .logo-cap{position:absolute;transform:translateX(-50%);white-space:nowrap}
 .vk-cover.has-logo-cap .logo{top:400px}
 .vk-cover .logo-cap{left:349px;top:620px;font-size:32px}
@@ -335,3 +336,26 @@ body{
 .vk-mob.has-logo-cap .logo{top:150px}
 .vk-mob.has-logo-cap .txt{top:590px}
 .vk-mob .logo-cap{left:540px;top:485px;font-size:40px}
+
+/* d — билетик */
+.site-tk .tk{letter-spacing:-.01em}
+.vk-cover .site-tk{margin-top:28px;font-size:34px;--n:7px}
+.ok-cover .site-tk{margin-top:24px;font-size:30px;--n:6px}
+.vk-mob .site-tk{margin-top:34px;font-size:44px;--n:9px}
+/* e — полоса */
+.strip{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:.3em;background:var(--brand);color:#fff;font-weight:500}
+.strip b{font-weight:800}
+.vk-cover .strip{height:70px;font-size:28px}
+.vk-cover.has-strip .logo,.vk-cover.has-strip .txt{top:391px}
+.vk-cover.has-strip .card--1{top:165px}.vk-cover.has-strip .card--2{top:255px}
+.ok-cover .strip{height:62px;font-size:26px}
+.ok-cover.has-strip .logo,.ok-cover.has-strip .txt{top:269px}
+.ok-cover.has-strip .card--1{top:60px}.ok-cover.has-strip .card--2{top:120px}
+.vk-mob .strip{top:1060px;bottom:auto;height:96px;font-size:38px}
+/* f — угол */
+.corner{position:absolute;white-space:nowrap;font-weight:600;color:var(--ink-2)}
+.corner .dom{font-weight:800}
+.corner__ar{color:var(--brand)}
+.vk-cover .corner{right:220px;top:118px;font-size:30px}
+.ok-cover .corner{right:70px;top:48px;font-size:28px}
+.vk-mob .corner{left:0;right:0;top:1075px;text-align:center;font-size:40px}

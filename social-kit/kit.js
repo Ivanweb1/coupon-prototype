@@ -118,11 +118,14 @@ addEventListener("resize", () => { document.querySelectorAll(".art").forEach(a =
    Без параметра — отдельной строкой под шагами.
    a — в надзаголовке, первым словом;
    b — подписью под карточками купонов;
-   c — подписью под логотипом, как фирменный блок «знак + адрес». */
+   c — подписью под логотипом, как фирменный блок «знак + адрес»;
+   d — билетиком с вырезами, как выгода на карточке купона;
+   e — красной полосой по нижнему краю;
+   f — в правом верхнем углу, на линии надзаголовка. */
 const siteV = new URLSearchParams(location.search).get("site");
 if (siteV) {
   const DOMAIN = '<span class="dom">vsekupony.ru</span>';
-  document.querySelectorAll(".vk-cover, .vk-mob, .ok-cover").forEach(art => {
+  document.querySelectorAll(".vk-cover, .ok-cover").forEach(art => {
     art.querySelector(".site")?.remove();
     if (siteV === "a") {
       const e = art.querySelector(".eyebrow");
@@ -131,7 +134,23 @@ if (siteV) {
       const cap = document.createElement("div");
       cap.className = "cards-cap";
       cap.innerHTML = 'Все купоны — на ' + DOMAIN;
-      (art.querySelector(".art-r") || art).appendChild(cap);
+      if (!art.querySelector(".cards-cap")) (art.querySelector(".art-r") || art).appendChild(cap);
+    } else if (siteV === "d") {
+      const t = document.createElement("div");
+      t.className = "site-tk";
+      t.innerHTML = '<span class="tk">vsekupony.ru</span>';
+      art.querySelector(".txt").appendChild(t);
+    } else if (siteV === "e") {
+      const st = document.createElement("div");
+      st.className = "strip";
+      st.innerHTML = 'Все купоны города — <b>vsekupony.ru</b>';
+      art.appendChild(st);
+      art.classList.add("has-strip");
+    } else if (siteV === "f") {
+      const c = document.createElement("div");
+      c.className = "corner";
+      c.innerHTML = DOMAIN + ' <span class="corner__ar">→</span>';
+      art.appendChild(c);
     } else if (siteV === "c") {
       const cap = document.createElement("div");
       cap.className = "logo-cap";
