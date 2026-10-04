@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
 <link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
-<link rel="stylesheet" href="assets/design-3-pages.css?v=20261004d">
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -37,10 +37,113 @@
       <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
       <span class="dz-logo__word">Все<br>купоны</span>
     </a>
-    <span class="header__spacer"></span>
-    <a class="btn btn--ghost" href="index-design-3.html">На витрину</a>
+    <!-- Подпись у логотипа: что за сервис и где — вместо подписи у соцсетей -->
+    <span class="dz-logo__tag">Все скидки <span data-geo-gen>Липецка</span><br>бесплатно и без регистрации</span>
+
+    <!-- Компактный поиск: появляется, когда большой поиск первого экрана
+         ушёл за край — лента бесконечная, и без него поиск теряется.
+         На страницах без поиска на первом экране виден сразу. -->
+    <div class="search search--compact dz-head-search" data-head-search>
+      <span class="search__icon" data-icon="search"></span>
+      <input type="text" placeholder="Кофе, маникюр, шиномонтаж…" aria-label="Поиск купонов">
+      <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
+    </div>
+
+    <!-- Справа две группы по смыслу. Для жителя — город и соцсети этого
+         города одной плашкой («Липецк в соцсетях»). Для бизнеса и аккаунта —
+         «Разместить купон» и кабинет, отдельно, с увеличенным отступом:
+         иначе значки соцсетей рядом с кнопкой для бизнеса читаются как
+         соцсети для бизнеса. -->
+    <div class="dz-city-group">
+      <button class="city-btn" data-city-open>
+        <span data-icon="pin"></span>
+        <span data-geo-short>Липецк</span>
+        <span class="chev" data-icon="chev"></span>
+      </button>
+      <div class="head-socials" aria-label="Мы в соцсетях города">
+        <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="vk"></a>
+        <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="tg"></a>
+        <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="ok"></a>
+        <!-- MAX. Вилл: «добавь его везде, не забудь» — в подвале и мобильном
+             меню он стоял, в шапке его не было -->
+        <a class="soc" href="#" data-city-social="MAX" title="Мы в MAX" data-icon="max"></a>
+      </div>
+    </div>
+
+    <a class="btn btn--solid header-cta" href="register-design.html">
+      <span data-icon="plus"></span><span class="header-cta__label">Разместить купон</span>
+    </a>
+
+    <a class="lk-chip" href="login-design.html" aria-label="Войти в личный кабинет">
+      <span data-icon="user"></span>
+      <span class="lk-chip__label">Войти в личный кабинет</span>
+    </a>
+
+    <!-- Бургер: на телефоне шапка сворачивается до иконок, ссылки подвала
+         (как это работает, тарифы, партнёрская программа) без него не
+         достать иначе, чем долистав до конца страницы. -->
+    <button type="button" class="burger" data-menu-open aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
+
+<!-- Мобильное меню: тот же список ссылок, что и в подвале, плюс город и
+     кабинет — то, что шапка на телефоне прячет до одних иконок. -->
+<div class="mobile-nav" id="mobileNav" data-mobile-nav hidden>
+  <div class="mobile-nav__bar">
+    <span class="dz-logo">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </span>
+    <button type="button" class="mobile-nav__close" data-menu-close aria-label="Закрыть меню" data-icon="close"></button>
+  </div>
+
+  <div class="mobile-nav__body">
+    <button type="button" class="mobile-nav__city" data-city-open>
+      <span class="mobile-nav__city-ic" data-icon="pin"></span>
+      <span class="mobile-nav__city-txt"><small>Ваш город</small><b data-geo-short>Липецк</b></span>
+      <span class="mobile-nav__city-go">Сменить</span>
+    </button>
+
+    <div class="mobile-nav__acts">
+      <a class="btn btn--solid" href="register-design.html"><span data-icon="plus"></span>Разместить купон</a>
+      <a class="btn btn--ghost" href="login-design.html"><span data-icon="user"></span>Личный кабинет</a>
+    </div>
+
+    <nav class="mobile-nav__groups" aria-label="Меню">
+      <div class="mobile-nav__group">
+        <h4>Сервис</h4>
+        <a href="service.html#how">Как это работает</a>
+        <a href="faq.html">Вопросы и ответы</a>
+        <a href="contacts.html">Контакты</a>
+      </div>
+      <div class="mobile-nav__group">
+        <h4>Бизнесу</h4>
+        <a href="register-design.html">Зарегистрироваться</a>
+        <a href="pricing.html">Сколько стоит</a>
+        <a href="docs.html">Документы</a>
+      </div>
+      <div class="mobile-nav__group">
+        <h4>Партнёрам</h4>
+        <a href="partner.html">Стать партнёром</a>
+        <a href="partner.html#cities">Города присутствия</a>
+        <a href="service.html#partners">Партнёрская программа</a>
+      </div>
+    </nav>
+
+    <div class="mobile-nav__soc">
+      <span class="mobile-nav__soc-label">Мы в соцсетях <span data-geo-gen>Липецка</span></span>
+      <div class="mobile-nav__soc-row">
+        <a class="soc" href="#" data-city-social="ВКонтакте" aria-label="ВКонтакте" data-icon="vk"></a>
+        <a class="soc" href="#" data-city-social="Telegram" aria-label="Telegram" data-icon="tg"></a>
+        <a class="soc" href="#" data-city-social="Одноклассники" aria-label="Одноклассники" data-icon="ok"></a>
+        <a class="soc" href="#" data-city-social="MAX" aria-label="MAX" data-icon="max"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <main class="wrap">
   <section class="nf">
@@ -146,12 +249,40 @@
   </div>
 </footer>
 
+<div class="overlay" id="overlay"></div>
+
+<!-- Выбор города -->
+<!-- Город спрашиваем полноэкранным попапом на входе: это ключевой триггер
+     сервиса, тихой плашкой его пропускают. Домашний город и область поиска
+     по ТЗ v7.0 разведены, поэтому «вся область» стоит здесь же отдельной
+     строкой, а не прячется в фильтрах каталога. -->
+<div class="modal" id="cityModal">
+  <div class="modal__box">
+    <h3>Вы в городе <span data-city-detected>Липецк</span>?</h3>
+    <p>Определили автоматически. Покажем купоны, которые действуют рядом с вами.</p>
+    <button class="btn btn--solid btn--lg modal__yes" data-city-yes>
+      Да, я в городе <span data-city-detected>Липецк</span>
+    </button>
+    <div class="modal__or">или выберите другую выдачу</div>
+    <div data-region-row></div>
+    <div class="city-list"></div>
+    <p class="modal__note">Города других областей — по мере запуска сервиса.</p>
+    <button class="btn btn--ghost" data-city-close>Позже</button>
+  </div>
+</div>
+
 <script src="assets/data.js?v=20261004b"></script>
 <script src="assets/app.js?v=20261004c"></script>
 <script>
+  /* Шапка — как на главной (Иван 04.10): город, соцсети, «Разместить
+     купон», кабинет и мобильное меню. Попап города на входе не
+     показываем — на 404 приходят по ссылке, город меняют из шапки. */
   initCatsStyle();
   initIcons();
+  buildCityModal();
   renderGeo();
+  initSearch();
+  initMobileMenu();
 
   /* Поиск ведёт туда же, куда поиск в шапке витрины — в каталог города */
   const nfForm = qs(".nf__search");
@@ -161,6 +292,16 @@
     location.href = catalogUrl() + "&q=" + encodeURIComponent(qs("input", nfForm).value.trim());
   };
   initHeaderShadow();
+
+  /* Поиск в шапке — только когда поиск страницы ушёл под шапку, как на
+     главной; иначе на первом экране два поиска подряд */
+  const head = qs(".dz-header");
+  const syncHeadSearch = () => head.classList.toggle("has-search",
+    nfForm.getBoundingClientRect().bottom < head.getBoundingClientRect().bottom);
+  window.addEventListener("scroll", syncHeadSearch, { passive: true });
+  window.addEventListener("resize", syncHeadSearch);
+  syncHeadSearch();
+
   qs("[data-to-top]").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   /* Выход в область и популярные ниши — по городу посетителя: на 404

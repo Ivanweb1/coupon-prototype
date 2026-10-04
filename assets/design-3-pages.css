@@ -383,10 +383,16 @@
   display:flex;align-items:center;gap:6px;
   font-size:168px;font-weight:800;line-height:.9;letter-spacing:-.06em;color:var(--brand);
 }
-.nf__code img{width:auto;height:150px;margin:0 6px;animation:nfFloat 3.2s ease-in-out infinite}
-@keyframes nfFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+/* Шарик в картинке — круглое тело сверху и нитка снизу. Центр тела
+   стоит на 36 % высоты, поэтому картинку сдвигаем вниз на 13 %: тогда
+   по центру цифр оказывается шарик, а нитка свисает ниже строки */
+.nf__code img{width:auto;height:150px;margin:0 6px;transform:translateY(13%);animation:nfFloat 3.2s ease-in-out infinite}
+@keyframes nfFloat{
+  0%,100%{transform:translateY(13%) rotate(-3deg)}
+  50%{transform:translateY(calc(13% - 10px)) rotate(3deg)}
+}
 @media (prefers-reduced-motion:reduce){.nf__code img{animation:none}}
-.nf__title{margin:28px 0 0;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.nf__title{margin:44px 0 0;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
 .nf__text{margin:14px 0 0;max-width:52ch;font-size:16px;line-height:1.55;color:var(--ink-2)}
 
 .nf__search{
@@ -408,7 +414,7 @@
   .nf{padding:40px 0 56px}
   .nf__code{font-size:104px}
   .nf__code img{height:92px}
-  .nf__title{font-size:28px;margin-top:20px}
+  .nf__title{font-size:28px;margin-top:30px}
   .nf__text{font-size:15px}
   .nf__search{padding:5px 5px 5px 14px}
   .nf__search .btn{padding:0 14px;font-size:14px}
