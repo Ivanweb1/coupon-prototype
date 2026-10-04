@@ -380,7 +380,7 @@ function buildTags(l1) {
     a.style.setProperty("--ct-bg", bg);
     a.style.setProperty("--ct-fg", fg);
     a.innerHTML = '<span class="tag__ic">' + catIcon(c.slug, 20) + '</span>' +
-      '<span class="tag__name">' + c.name + '</span> <span class="tag__n">' + c.n + "</span>";
+      '<span class="tag__name">' + c.name + '</span> <span class="tag__n">' + nicheCount(c) + "</span>";
     host.appendChild(a);
   });
 
@@ -1012,7 +1012,7 @@ function feedBatch(n) {
 function consumePin(gridSel) {
   let raw;
   try { raw = sessionStorage.getItem("cp_pin"); } catch (e) { return false; }
-  if (!raw) return false;
+  if (!raw || isEmptyFeed()) return false;
   try { sessionStorage.removeItem("cp_pin"); } catch (e) {}
   let c;
   try { c = JSON.parse(raw); } catch (e) { return false; }
@@ -1028,7 +1028,7 @@ function consumePin(gridSel) {
 let feedBusy = false;
 function fillFeed(gridSel, n) {
   const grid = qs(gridSel);
-  if (!grid) return;
+  if (!grid || isEmptyFeed()) return;
   const batch = feedBatch(n);
   if (state.near) {
     /* В режиме «рядом» выдача идёт от ближней точки к дальней,
@@ -1074,6 +1074,7 @@ function initInfinite(gridSel) {
   const loader = qs("#loader");
   const grid = qs(gridSel);
   if (!loader || !grid) return;
+  if (isEmptyFeed()) { renderEmptyFeed(grid, loader); return; }
 
   const dots = '<span class="loader__dot"></span><span class="loader__dot"></span>' +
                '<span class="loader__dot"></span><span style="margin-left:6px">подгружаем ещё купоны</span>';
@@ -1118,12 +1119,92 @@ function showFeedRecos() {
   if (!cat || cat.adult) cat = catsOf(state.l1 || "regional").filter(c => !c.adult).sort((a, b) => b.n - a.n)[0];
 
   const src = qs("#recosSource");
-  if (src) src.textContent = state.interest.length
+  if (src) src.textContent = isEmptyFeed()
+    ? "Рядом с «" + cat.name + "»"
+    : state.interest.length
     ? "Вы смотрели «" + cat.name + "»"
     : "Популярное " + geoIn() + " — «" + cat.name + "»";
   buildRecommendations(cat);
   host.dataset.on = "1";
   host.hidden = false;
+}
+
+/* ==========================================================================
+   Пустая выдача — заглушка в формате купона
+   ==========================================================================
+   Ниша есть в справочнике, а в выбранном городе в ней сейчас ни одного
+   купона. Пустая сетка с вечной «подгрузкой» выглядит как поломка, а
+   голая строка «ничего не найдено» — как тупик. Поэтому на месте ленты
+   встаёт карточка того же формата, что и купон, и у неё два выхода:
+   все предложения области (там ниша не пустая — купоны соседних
+   городов) и сообщества проекта по области, где предложений больше,
+   чем на сайте. Для показа на любой странице выдачи — ?empty=1. */
+const EMPTY_DEMO = /[?&]empty=1/.test(location.search);
+
+function isEmptyFeed() {
+  if (EMPTY_DEMO) return true;
+  if (isRegion() || !state.l1 || !state.l2) return false;
+  return emptyInCity(state.city.slug, state.l1 + "/" + state.l2);
+}
+
+/* Число купонов ниши в текущей выдаче: в пустой нише города — ноль, а не
+   общий счётчик по области */
+function nicheCount(cat) {
+  return feedCity() && emptyInCity(feedCity().slug, cat.id) ? 0 : cat.n;
+}
+
+/* Сообщества проекта по области. Аккаунтов на момент прототипа нет —
+   ссылки-заглушки, как в подвале и на странице «Мы в соцсетях». */
+const REGION_SOCIALS = [
+  { key: "vk",  name: "ВКонтакте" },
+  { key: "tg",  name: "Telegram" },
+  { key: "ok",  name: "Одноклассники" },
+  { key: "max", name: "MAX" }
+];
+
+/* Адрес «всех предложений региона»: та же страница, но по всей области.
+   Ниша сохраняется — в области она не пустая. Если и так смотрим область
+   (режим ?empty=1), ведём на всю витрину области. */
+function regionFeedUrl() {
+  const page = location.pathname.split("/").pop() || "index.html";
+  let u = page + "?region=" + REGION.slug;
+  if (!isRegion() && state.l1) u += "&l1=" + state.l1;
+  if (!isRegion() && state.l1 && state.l2) u += "&l2=" + state.l2;
+  return u;
+}
+
+function renderEmptyFeed(grid, loader) {
+  const cat = state.l1 && state.l2 ? findCat(state.l1 + "/" + state.l2) : null;
+  const where = cat ? "В разделе «" + cat.name + "»" : "В этом разделе";
+  const geo = isRegion() ? "по всей " + REGION.gen : "в городе " + state.city.name;
+  const socs = REGION_SOCIALS.map(s =>
+    '<a class="soc empty-coupon__soc" href="#" title="Все купоны · ' + REGION.name + " в " + s.name + '">' +
+      ICON[s.key] + "<span>" + s.name + "</span></a>").join("");
+
+  grid.innerHTML = `
+    <article class="empty-coupon" role="status">
+      <div class="empty-coupon__stub" aria-hidden="true">
+        <span class="empty-coupon__zero">0</span>
+        <span class="empty-coupon__unit">купонов</span>
+        <span class="empty-coupon__geo">${isRegion() ? REGION.name : state.city.name}</span>
+      </div>
+      <div class="empty-coupon__body">
+        <h3 class="empty-coupon__title">${where} ${geo} сейчас нет купонов</h3>
+        <p class="empty-coupon__text">Новые предложения появляются каждый день. А пока —
+          купоны соседних городов или наши сообщества, где предложений больше, чем на сайте.</p>
+        <div class="empty-coupon__acts">
+          <a class="btn btn--solid btn--lg empty-coupon__main" href="${regionFeedUrl()}">
+            Все предложения ${isRegion() ? "области" : REGION.gen}
+          </a>
+          <div class="empty-coupon__socs">
+            <span class="empty-coupon__label">Больше предложений — в наших соцсетях по ${REGION.gen}</span>
+            <div class="empty-coupon__row">${socs}</div>
+          </div>
+        </div>
+      </div>
+    </article>`;
+  loader.style.display = "none";
+  showFeedRecos();
 }
 
 /* ==========================================================================
@@ -1631,7 +1712,8 @@ function buildRecommendations(cat) {
      «одежда» в городе — разные категории, и подмешивать одну в выдачу
      другой нельзя. Блок обещает «не прямых конкурентов» — значит,
      показывать он должен ровно то, что назвал в подписи. */
-  const adjacent = adjacentOf(cat);
+  const adjacent = adjacentOf(cat)
+    .filter(c => !feedCity() || !emptyInCity(feedCity().slug, c.id));
   if (!adjacent.length) return;
 
   const label = qs("#railLabel");
@@ -1745,7 +1827,7 @@ function renderCatalog() {
   buildTags(state.l1);
 
   const count = qs("#catCount");
-  if (count) count.textContent = (cat ? cat.n : (v ? countOf(v.slug) : "1 800")) + " купонов";
+  if (count) count.textContent = (cat ? nicheCount(cat) : (v ? countOf(v.slug) : "1 800")) + " купонов";
 
   /* Переключатель «город / вся область» — тот самый переход на /region/
      из ТЗ. Живёт в тулбаре рядом с городом, а не прячется в попапе. */
@@ -1766,7 +1848,8 @@ function renderCatalog() {
   initInfinite("#feed");
   initNear("#feed");
   buildRecommendations(cat || catsOf(state.l1 || "regional").filter(c => !c.adult).sort((a, b) => b.n - a.n)[0]);
-  if (cat && cat.adult) adultGate();
+  /* В пустой нише прятать нечего — заглушка не блюрится */
+  if (cat && cat.adult && !isEmptyFeed()) adultGate();
 }
 
 /* ==========================================================================

@@ -129,6 +129,20 @@ window.adjacentOf = function (cat) {
     .filter(Boolean);
 };
 
+/* Ниши, в которых в городе сейчас нет ни одного купона. В проде это
+   просто нулевой счётчик по паре «город + ниша»; в прототипе пустые пары
+   заданы руками, чтобы заглушку пустой выдачи было где посмотреть:
+   catalog.html?city=gryazi&l1=regional&l2=puteshestviya. В выдаче
+   области ниша не пустеет — купоны соседних городов в ней остаются. */
+window.EMPTY_IN_CITY = {
+  gryazi: ["regional/puteshestviya", "regional/pitomtsy", "regional/18plus"],
+  elets:  ["regional/puteshestviya"]
+};
+
+window.emptyInCity = function (citySlug, catId) {
+  return (EMPTY_IN_CITY[citySlug] || []).includes(catId);
+};
+
 /* ==========================================================================
    Заготовки офферов: [заголовок ≤2 строк, величина, компания].
    Разложены по разделам: оффер маркетплейса и оффер заведения в городе —
@@ -408,7 +422,8 @@ window.makeBatch = function (n, catId, city) {
 /* Лента раздела целиком или всей витрины города: ниша у каждого купона
    своя. l1 = null — вся витрина (главная). */
 window.makeMixedBatch = function (n, l1, city) {
-  const pool = (l1 ? catsOf(l1) : CATEGORIES).filter(c => !c.adult);
+  const pool = (l1 ? catsOf(l1) : CATEGORIES)
+    .filter(c => !c.adult && !(city && emptyInCity(city.slug, c.id)));
   /* Ниши в общей выдаче встречаются пропорционально своему объёму, а не
      поровну: иначе девять ниш «Для бизнеса» дают в ленте города столько же
      купонов, сколько двести кафе, и витрина перестаёт быть похожей на

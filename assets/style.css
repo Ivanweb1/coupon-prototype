@@ -1044,6 +1044,75 @@ input{font:inherit;color:inherit}
 
 .feed-end{color:var(--ink-3);font-size:14px;text-align:center}
 
+/* ---------- Пустая выдача: заглушка в формате купона ----------
+   Ниша в городе пустая. Карточка — тот же купон, только лёжа: слева
+   корешок с нулём, справа текст и два выхода. Линия отрыва с вырезами —
+   чтобы заглушка читалась как часть ленты, а не как системная ошибка. */
+.empty-coupon{
+  --notch:22px;
+  grid-column:1/-1;
+  display:grid;grid-template-columns:minmax(180px,240px) 1fr;
+  max-width:920px;
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  background:var(--bg);
+  position:relative;overflow:hidden;
+  animation:cardIn .42s var(--ease) backwards;
+}
+.empty-coupon__stub{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  padding:28px 18px;text-align:center;
+  background:var(--surface-2);
+  background-image:repeating-linear-gradient(-45deg,
+     rgba(21,21,20,.05) 0 1px, transparent 1px 10px);
+  border-right:2px dashed var(--line-strong);
+}
+/* Вырезы на линии отрыва — круги цвета страницы сверху и снизу */
+.empty-coupon__stub::before,
+.empty-coupon__stub::after{
+  content:"";position:absolute;right:calc(var(--notch) / -2 - 1px);
+  width:var(--notch);height:var(--notch);border-radius:50%;
+  background:var(--page-bg, var(--bg));border:1px solid var(--line);
+  z-index:1;
+}
+.empty-coupon__stub::before{top:calc(var(--notch) / -2 - 1px)}
+.empty-coupon__stub::after{bottom:calc(var(--notch) / -2 - 1px)}
+.empty-coupon__zero{font-size:72px;font-weight:700;letter-spacing:-.05em;line-height:.9;color:var(--ink)}
+.empty-coupon__unit{font-size:15px;font-weight:600;color:var(--ink-2)}
+.empty-coupon__geo{margin-top:8px;font-size:12.5px;color:var(--ink-3)}
+
+.empty-coupon__body{padding:26px 28px 26px 32px;display:flex;flex-direction:column;gap:10px}
+.empty-coupon__title{margin:0;font-size:21px;font-weight:600;letter-spacing:-.02em;line-height:1.25;max-width:30ch}
+.empty-coupon__text{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2);max-width:56ch}
+.empty-coupon__acts{display:flex;flex-direction:column;align-items:flex-start;gap:18px;margin-top:8px}
+.empty-coupon__main{text-align:center}
+.empty-coupon__socs{display:flex;flex-direction:column;gap:9px}
+.empty-coupon__label{font-size:13px;font-weight:500;color:var(--ink-2)}
+.empty-coupon__row{display:flex;flex-wrap:wrap;gap:8px}
+.empty-coupon .empty-coupon__soc{height:38px;padding:0 14px 0 5px;gap:8px;font-size:13px}
+.empty-coupon__soc .soc-ic{width:28px;height:28px;border-radius:50%;overflow:hidden}
+/* Ч/Б: значки соцсетей серым кругом с белым знаком — без цвета брендов */
+.empty-coupon__soc .soc-ic__bg{fill:var(--ink-3)}
+.empty-coupon__soc .soc-ic__g{fill:#fff}
+.empty-coupon__soc .soc-ic--img{object-fit:cover;filter:grayscale(1)}
+
+@media (max-width:640px){
+  .empty-coupon{grid-template-columns:1fr}
+  .empty-coupon__stub{
+    flex-direction:row;align-items:baseline;justify-content:flex-start;gap:8px;
+    padding:18px 20px;border-right:0;border-bottom:2px dashed var(--line-strong);
+  }
+  .empty-coupon__stub::before,
+  .empty-coupon__stub::after{right:auto;top:auto;bottom:calc(var(--notch) / -2 - 1px)}
+  .empty-coupon__stub::before{left:calc(var(--notch) / -2 - 1px)}
+  .empty-coupon__stub::after{right:calc(var(--notch) / -2 - 1px)}
+  .empty-coupon__zero{font-size:44px}
+  .empty-coupon__geo{margin:0 0 0 auto}
+  .empty-coupon__body{padding:18px 18px 20px}
+  .empty-coupon__title{font-size:18px}
+  .empty-coupon__main{width:100%}
+}
+
 .card-in{animation:cardIn .42s var(--ease) backwards}
 @keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
