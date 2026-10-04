@@ -1054,12 +1054,7 @@ input{font:inherit;color:inherit}
   animation:cardIn .42s var(--ease) backwards;
 }
 .empty-feed__head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;max-width:640px;margin:0 auto}
-.empty-feed__ic{
-  width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
-  background:var(--bg);color:var(--ink-2);border:1px solid var(--line);
-}
-.empty-feed__ic svg{width:24px;height:24px}
-.empty-feed__title{margin:6px 0 0;text-wrap:balance;font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
+.empty-feed__title{margin:0;text-wrap:balance;font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
 .empty-feed__text{margin:0;font-size:15px;color:var(--ink-2)}
 
 .empty-feed__ways{

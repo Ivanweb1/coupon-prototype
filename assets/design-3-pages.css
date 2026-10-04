@@ -357,19 +357,61 @@
 /* --------------------------------------------------------------------------
    Пустая выдача (дизайн-версия)
    --------------------------------------------------------------------------
-   Подложка — фирменный розовый, плитки белые. Значки соцсетей серые в
-   покое и в цвете бренда под курсором, как в шапке и подвале. */
+   Подложка — фирменный розовый, плитки белые. Значки соцсетей — сразу
+   в цвете бренда. */
 .dz3 .empty-feed{background:var(--brand-50);border-color:var(--brand-100);border-radius:28px}
-.dz3 .empty-feed__ic{background:#fff;border-color:var(--brand-100);color:var(--brand)}
 .dz3 .empty-feed__title{font-weight:700}
 .dz3 .empty-feed__way{border-color:transparent;border-radius:22px;box-shadow:0 1px 2px rgba(34,26,25,.04)}
 .dz3 .empty-feed__way--link:hover{border-color:var(--brand-100);box-shadow:var(--shadow-1)}
 .dz3 .empty-feed__k svg{color:var(--brand)}
 .dz3 .empty-feed__soc{border-color:var(--line-strong);color:var(--ink-2)}
 .dz3 .empty-feed__soc:hover{border-color:var(--line-strong);color:var(--ink);background:#fff}
-.dz3 .empty-feed__soc .soc-ic__bg{fill:#F3EEED}
-.dz3 .empty-feed__soc .soc-ic__g{fill:#8F8684}
-.dz3 .empty-feed__soc:hover .soc-ic__bg{fill:var(--soc-c)}
-.dz3 .empty-feed__soc:hover .soc-ic__g{fill:#fff}
-.dz3 .empty-feed__soc .soc-ic--img{filter:grayscale(1);opacity:.55}
-.dz3 .empty-feed__soc:hover .soc-ic--img{filter:none;opacity:1}
+/* Значки сразу в цвете соцсети (Иван 04.10): здесь это главный призыв
+   блока, а не служебная строка, как в шапке и подвале */
+.dz3 .empty-feed__soc .soc-ic__bg{fill:var(--soc-c)}
+.dz3 .empty-feed__soc .soc-ic__g{fill:#fff}
+.dz3 .empty-feed__soc .soc-ic--img{filter:none;opacity:1}
+.dz3 .empty-feed__soc:hover{transform:translateY(-2px);box-shadow:var(--shadow-1)}
+
+/* --------------------------------------------------------------------------
+   404
+   --------------------------------------------------------------------------
+   Не извиняемся, а возвращаем в выдачу: поиск, главная, вся область и
+   популярные ниши города. Ноль в «404» — наш знак-шарик. */
+.nf{display:flex;flex-direction:column;align-items:center;text-align:center;padding:72px 0 88px;max-width:760px;margin:0 auto}
+.nf__code{
+  display:flex;align-items:center;gap:6px;
+  font-size:168px;font-weight:800;line-height:.9;letter-spacing:-.06em;color:var(--brand);
+}
+.nf__code img{width:auto;height:150px;margin:0 6px;animation:nfFloat 3.2s ease-in-out infinite}
+@keyframes nfFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+@media (prefers-reduced-motion:reduce){.nf__code img{animation:none}}
+.nf__title{margin:28px 0 0;font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.nf__text{margin:14px 0 0;max-width:52ch;font-size:16px;line-height:1.55;color:var(--ink-2)}
+
+.nf__search{
+  display:flex;align-items:center;gap:10px;width:100%;margin-top:32px;
+  padding:6px 6px 6px 18px;border:1px solid var(--line-strong);border-radius:999px;background:#fff;
+  box-shadow:0 1px 2px rgba(34,26,25,.04);
+}
+.nf__search:focus-within{border-color:var(--brand-300)}
+.nf__search-ic{display:flex;color:var(--brand)}
+.nf__search input{flex:1;min-width:0;height:44px;border:0;outline:0;background:none;font:inherit;font-size:15px;color:var(--ink)}
+.nf__search .btn{height:46px;padding:0 22px;font-weight:600}
+
+.nf__acts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:16px}
+.nf__cats{margin-top:44px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.nf__cats-k{font-size:13px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.nf__cats-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+
+@media (max-width:640px){
+  .nf{padding:40px 0 56px}
+  .nf__code{font-size:104px}
+  .nf__code img{height:92px}
+  .nf__title{font-size:28px;margin-top:20px}
+  .nf__text{font-size:15px}
+  .nf__search{padding:5px 5px 5px 14px}
+  .nf__search .btn{padding:0 14px;font-size:14px}
+  .nf__acts{flex-direction:column;width:100%}
+  .nf__acts .btn{width:100%}
+}

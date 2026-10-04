@@ -1191,7 +1191,6 @@ function renderEmptyFeed(grid, loader) {
   host.setAttribute("role", "status");
   host.innerHTML = `
     <div class="empty-feed__head">
-      <span class="empty-feed__ic" aria-hidden="true">${ICON.search}</span>
       <h3 class="empty-feed__title">${where} ${geo} сейчас нет купонов</h3>
       <p class="empty-feed__text">Новые предложения появляются каждый день. А пока загляните сюда:</p>
     </div>
