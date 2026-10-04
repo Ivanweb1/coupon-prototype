@@ -1130,15 +1130,16 @@ function showFeedRecos() {
 }
 
 /* ==========================================================================
-   Пустая выдача — заглушка в формате купона
+   Пустая выдача — заглушка
    ==========================================================================
    Ниша есть в справочнике, а в выбранном городе в ней сейчас ни одного
    купона. Пустая сетка с вечной «подгрузкой» выглядит как поломка, а
    голая строка «ничего не найдено» — как тупик. Поэтому на месте ленты
-   встаёт карточка того же формата, что и купон, и у неё два выхода:
-   все предложения области (там ниша не пустая — купоны соседних
-   городов) и сообщества проекта по области, где предложений больше,
-   чем на сайте. Для показа на любой странице выдачи — ?empty=1. */
+   встаёт блок с двумя выходами рядом, плитками равного веса: все
+   предложения области (там ниша не пустая — купоны соседних городов) и
+   сообщества проекта по области, где предложений больше, чем на сайте.
+   Формат купона пробовали (04.10) — пустой «купон» читался как купон.
+   Для показа на любой странице выдачи — ?empty=1. */
 const EMPTY_DEMO = /[?&]empty=1/.test(location.search);
 
 function isEmptyFeed() {
@@ -1177,32 +1178,43 @@ function renderEmptyFeed(grid, loader) {
   const cat = state.l1 && state.l2 ? findCat(state.l1 + "/" + state.l2) : null;
   const where = cat ? "В разделе «" + cat.name + "»" : "В этом разделе";
   const geo = isRegion() ? "по всей " + REGION.gen : "в городе " + state.city.name;
+  /* Подпись к области называет конкретные города — «соседние города»
+     без имён ничего не обещают */
+  const others = ACTIVE_CITIES.filter(c => isRegion() || c.slug !== state.city.slug)
+    .map(c => c.name).join(", ");
   const socs = REGION_SOCIALS.map(s =>
-    '<a class="soc empty-coupon__soc" href="#" title="Все купоны · ' + REGION.name + " в " + s.name + '">' +
+    '<a class="soc empty-feed__soc" href="#" title="Все купоны · ' + REGION.name + " в " + s.name + '">' +
       ICON[s.key] + "<span>" + s.name + "</span></a>").join("");
 
-  grid.innerHTML = `
-    <article class="empty-coupon" role="status">
-      <div class="empty-coupon__stub" aria-hidden="true">
-        <span class="empty-coupon__zero">0</span>
-        <span class="empty-coupon__unit">купонов</span>
-        <span class="empty-coupon__geo">${isRegion() ? REGION.name : state.city.name}</span>
+  const host = document.createElement("div");
+  host.className = "empty-feed";
+  host.setAttribute("role", "status");
+  host.innerHTML = `
+    <div class="empty-feed__head">
+      <span class="empty-feed__ic" aria-hidden="true">${ICON.search}</span>
+      <h3 class="empty-feed__title">${where} ${geo} сейчас нет купонов</h3>
+      <p class="empty-feed__text">Новые предложения появляются каждый день. А пока загляните сюда:</p>
+    </div>
+    <div class="empty-feed__ways">
+      <a class="empty-feed__way empty-feed__way--link" href="${regionFeedUrl()}">
+        <span class="empty-feed__k">${ICON.pin}Вся ${REGION.name}</span>
+        <b class="empty-feed__name">Все предложения ${isRegion() ? "области" : REGION.gen}</b>
+        <span class="empty-feed__sub">${cat && !isRegion() ? "«" + cat.name + "» в городах: " : "Купоны городов: "}${others}</span>
+        <span class="btn btn--solid empty-feed__btn">Смотреть предложения</span>
+      </a>
+      <div class="empty-feed__way">
+        <span class="empty-feed__k">${ICON.link}Соцсети проекта</span>
+        <b class="empty-feed__name">Больше предложений — в наших группах</b>
+        <span class="empty-feed__sub">Сообщества «Все купоны» по ${REGION.gen}</span>
+        <div class="empty-feed__socs">${socs}</div>
       </div>
-      <div class="empty-coupon__body">
-        <h3 class="empty-coupon__title">${where} ${geo} сейчас нет купонов</h3>
-        <p class="empty-coupon__text">Новые предложения появляются каждый день. А пока —
-          купоны соседних городов или наши сообщества, где предложений больше, чем на сайте.</p>
-        <div class="empty-coupon__acts">
-          <a class="btn btn--solid btn--lg empty-coupon__main" href="${regionFeedUrl()}">
-            Все предложения ${isRegion() ? "области" : REGION.gen}
-          </a>
-          <div class="empty-coupon__socs">
-            <span class="empty-coupon__label">Больше предложений — в наших соцсетях по ${REGION.gen}</span>
-            <div class="empty-coupon__row">${socs}</div>
-          </div>
-        </div>
-      </div>
-    </article>`;
+    </div>`;
+  /* «Рядом со мной» перерисовывает выдачу — старую заглушку убираем */
+  const old = qs(".empty-feed", grid.parentNode);
+  if (old) old.remove();
+  grid.innerHTML = "";
+  grid.parentNode.insertBefore(host, grid);
+  grid.hidden = true;
   loader.style.display = "none";
   showFeedRecos();
 }

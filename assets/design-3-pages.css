@@ -355,27 +355,21 @@
 }
 
 /* --------------------------------------------------------------------------
-   Пустая выдача — заглушка в формате купона (дизайн-версия)
+   Пустая выдача (дизайн-версия)
    --------------------------------------------------------------------------
-   Корешок — в фирменном розовом, ноль красным; значки соцсетей серые в
+   Подложка — фирменный розовый, плитки белые. Значки соцсетей серые в
    покое и в цвете бренда под курсором, как в шапке и подвале. */
-.dz3 .empty-coupon{border-color:var(--line);border-radius:24px}
-.dz3 .empty-coupon__stub{
-  background:var(--brand-50);background-image:none;
-  border-right-color:var(--brand-100);
-}
-.dz3 .empty-coupon__stub::before,
-.dz3 .empty-coupon__stub::after{border-color:var(--line)}
-.dz3 .empty-coupon__zero{color:var(--brand)}
-.dz3 .empty-coupon__unit{color:var(--ink)}
-.dz3 .empty-coupon__soc{border-color:var(--line-strong);color:var(--ink-2);background:#fff}
-.dz3 .empty-coupon__soc:hover{border-color:var(--line-strong);color:var(--ink);background:#fff}
-.dz3 .empty-coupon__soc .soc-ic__bg{fill:#F3EEED}
-.dz3 .empty-coupon__soc .soc-ic__g{fill:#8F8684}
-.dz3 .empty-coupon__soc:hover .soc-ic__bg{fill:var(--soc-c)}
-.dz3 .empty-coupon__soc:hover .soc-ic__g{fill:#fff}
-.dz3 .empty-coupon__soc .soc-ic--img{filter:grayscale(1);opacity:.55}
-.dz3 .empty-coupon__soc:hover .soc-ic--img{filter:none;opacity:1}
-@media (max-width:640px){
-  .dz3 .empty-coupon__stub{border-bottom-color:var(--brand-100)}
-}
+.dz3 .empty-feed{background:var(--brand-50);border-color:var(--brand-100);border-radius:28px}
+.dz3 .empty-feed__ic{background:#fff;border-color:var(--brand-100);color:var(--brand)}
+.dz3 .empty-feed__title{font-weight:700}
+.dz3 .empty-feed__way{border-color:transparent;border-radius:22px;box-shadow:0 1px 2px rgba(34,26,25,.04)}
+.dz3 .empty-feed__way--link:hover{border-color:var(--brand-100);box-shadow:var(--shadow-1)}
+.dz3 .empty-feed__k svg{color:var(--brand)}
+.dz3 .empty-feed__soc{border-color:var(--line-strong);color:var(--ink-2)}
+.dz3 .empty-feed__soc:hover{border-color:var(--line-strong);color:var(--ink);background:#fff}
+.dz3 .empty-feed__soc .soc-ic__bg{fill:#F3EEED}
+.dz3 .empty-feed__soc .soc-ic__g{fill:#8F8684}
+.dz3 .empty-feed__soc:hover .soc-ic__bg{fill:var(--soc-c)}
+.dz3 .empty-feed__soc:hover .soc-ic__g{fill:#fff}
+.dz3 .empty-feed__soc .soc-ic--img{filter:grayscale(1);opacity:.55}
+.dz3 .empty-feed__soc:hover .soc-ic--img{filter:none;opacity:1}
