@@ -903,10 +903,10 @@ body{
   filter:drop-shadow(0 22px 30px rgba(40,10,8,.28))}
 .vk-cover.cv-stone-panel .txt::before{
   content:"";position:absolute;inset:0;z-index:-1;background:#fff;border-radius:40px;
-  -webkit-mask:radial-gradient(circle 30px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,
-               radial-gradient(circle 30px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
-          mask:radial-gradient(circle 30px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,
-               radial-gradient(circle 30px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
+  -webkit-mask:radial-gradient(circle 46px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,
+               radial-gradient(circle 46px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 46px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,
+               radial-gradient(circle 46px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
 /* Корешок купона: блок текста по центру левой части (правка 05.10) */
 .vk-cover.cpn .cpn__l{padding-left:0;align-items:center}
 .vk-cover.cpn .cpn__l > *{width:640px}
