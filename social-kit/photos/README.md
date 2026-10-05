@@ -65,3 +65,56 @@ Top-down flat lay on a light warm grey stone surface, everyday city purchases an
 3D render of a single glossy red balloon (color #DD443C) with a large white percent sign "%" printed on it, floating in the center of the frame, thin curly white string below, soft studio lighting, subtle reflections, plain solid red background of the same tone #DD443C, minimal, clean, centered composition with the balloon filling about 65% of the frame, rounded friendly shapes, toy-like, high detail. No other text, no letters, no logos, no watermark.
 ```
 Если знак % выходит кривым — убрать его из промпта, знак наложим поверх.
+
+## Второй заход — под обложку-купон K–O (05.10)
+
+Сейчас снимки сделаны под широкий кадр, а в купоне окно под фото ~16:10
+(850×540), на телефоне видна только верхняя полоса. Отсюда пустые половины
+кадра (улица слева у пары и прогулки, голый камень у раскладки) и мелкие
+предметы, к которым трудно привязать выгоду. Новые снимки:
+- **16:10, от 2400 px**; главное заполняет 75–85 % кадра;
+- **лица — в верхней трети**: тогда тот же файл работает и на телефоне;
+- **крупные отдельные предметы** — к каждому ставится метка выгоды;
+- без текста, логотипов и вывесок, тёплый свет, акценты красного #DD443C.
+
+Для Midjourney в конце: `--ar 16:10 --style raw`.
+
+| Файл | Обложка | Что лучше, чем сейчас |
+|---|---|---|
+| `cafe-2.jpg` | K, L | крупнее люди, выпечка и кофе на первом плане |
+| `couple-2.jpg` | M | пара на весь кадр, больше покупок в руках |
+| `flatlay-2.jpg` | N | предметы по всему кадру, а не в углу |
+| `walk-2.jpg` | O | девушка по пояс, покупки и кофе крупно |
+| `checkout.jpg` | новая | показывает механику: купон на экране на кассе |
+| `table.jpg` | новая | стол в кафе сверху — много блюд под метки |
+
+### cafe-2.jpg
+```
+Medium close-up in a cozy bright coffee shop, a cheerful young Slavic woman in a red knitted sweater at the counter smiles and holds up her smartphone toward a friendly bearded barista, who hands her a cappuccino in a white cup; in the foreground on the wooden counter a glass display with large golden croissants, cinnamon rolls and eclairs. Both people fill the frame, faces in the upper third, pastries and cup large and clearly separated. Warm natural window light, rich saturated colors, shallow depth of field, editorial lifestyle photo. Phone screen not visible. No text, no logos, no signage, no watermark.
+```
+
+### couple-2.jpg
+```
+Medium shot of a happy Slavic couple in their 30s walking out of a florist and bakery street in early autumn, both laughing, filling 80% of the frame, faces in the upper third. The man holds a big bouquet of red and white flowers and two kraft shopping bags, the woman holds an open pastry box with glazed donuts and a takeaway coffee, she wears a beige coat and a red scarf. Each item large and clearly visible. Warm golden afternoon light, saturated, blurred city background, candid editorial photo. No text, no logos, no signage, no watermark.
+```
+
+### flatlay-2.jpg
+```
+Top-down flat lay filling the entire frame evenly, on a light warm grey stone surface, a curated set of city purchases arranged in a loose grid with small gaps between them: cappuccino with latte art and a croissant, red lipstick and red nail polish, a red kettlebell, a wooden toy car, a slice of pepperoni pizza on a white plate, a bouquet of red gerberas, white sneakers, a perfume bottle, two blank cinema tickets, car keys. Every object is large, distinct and fully visible, no overlaps. Bright soft daylight, rich saturated colors with red accents, clean commercial still life. No text, no logos, no brand names, no watermark.
+```
+
+### walk-2.jpg
+```
+Waist-up lifestyle photo of a happy young Slavic woman walking down an autumn city street, laughing, filling 75% of the frame, face in the upper third, holding three colorful kraft shopping bags, a takeaway coffee cup and a small bouquet of flowers, wearing a beige trench coat and a red knitted scarf. Purchases large and clearly visible. Warm golden light, saturated colors, blurred golden trees and shop windows behind, 50mm, editorial. No text, no logos, no signage, no watermark.
+```
+
+### checkout.jpg
+```
+Close-up at a cafe checkout counter: a woman's hand holds a smartphone vertically with the screen facing the camera, perfectly frontal and flat, the screen is plain solid white and blank; behind it, slightly blurred, a smiling barista at a payment terminal, a cappuccino and croissants on the counter. Phone in the left-center of the frame, about 40% of frame height. Warm light, saturated, shallow depth of field. No text on the screen, no logos, no watermark.
+```
+На белый экран телефона накладывается наш купон из вёрстки.
+
+### table.jpg
+```
+Top-down view of a wooden restaurant table for two filling the whole frame: a pepperoni pizza, a fresh salad bowl, a plate of sushi rolls, two cappuccinos, a slice of red velvet cake, a jug of red berry lemonade with glasses, hands of two people reaching for food. Every dish large and clearly separated. Warm daylight, rich saturated appetizing colors, food photography, clean composition. No text, no logos, no watermark.
+```
