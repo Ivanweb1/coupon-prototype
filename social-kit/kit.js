@@ -285,7 +285,9 @@ function placeHot(shot) {
     if (X < leftLim + fs || X > W - fs || Y < top + fs || Y > H - bottom - fs) return;
     /* Ширина плашки — грубо по числу знаков; сторона — где помещается */
     const w = fs * (3 + .64 * name.length + (value ? .7 * value.length + 1.6 : 0)) + fs * 2.4;
-    const side = X + w < W ? "r" : "l";
+    const right = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-right")) || 0;
+    if (X > W - right - fs) return;
+    const side = X + w < W - right ? "r" : "l";
     const el = document.createElement("div");
     el.className = "hot hot--" + side;
     el.style.cssText = `left:${X}px;top:${Y}px`;
