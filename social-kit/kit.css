@@ -741,3 +741,77 @@ body{
 :is(#covers2,#vkprev) .vk-cover.cv-stone .shot{left:0;top:0;right:0;bottom:70px;--pos:50% 45%}
 :is(#covers2,#vkprev) .vk-cover.cv-stone .txt{left:330px}
 :is(#covers2,#vkprev) .vk-mob2.cv-stone .shot{--pos:88% 50%}
+
+/* ==========================================================================
+   Обложка-купон K–O (05.10)
+   ==========================================================================
+   Вся обложка — купон на сером поле: слева корешок с заголовком (белый
+   или красный), справа снимок с метками; по линии отрыва — пунктир и
+   полукруглые вырезы цвета поля. Внизу корешка — рамка «как код купона»
+   с адресом сайта, поэтому красной полосы снизу нет.
+   Компьютер: купон в 135–675 px — ниже среза ВК (~117) и выше аватара.
+   Телефон: купон вертикальный, отрыв на 1060 — по нему встаёт аватар. */
+.cpn{background:var(--surface-2) !important;--cut:#ECECEC}
+.cpn__l{position:absolute;background:#fff;display:flex;flex-direction:column;justify-content:center}
+.cpn--red .cpn__l{background:var(--brand)}
+:is(#covers2,#vkprev) .cpn .cpn__ph{position:absolute;--hot-top:0px}
+.cpn__n{position:absolute;width:var(--nd);height:var(--nd);border-radius:50%;background:var(--cut);z-index:4}
+.cpn--red .eyebrow{color:rgba(255,255,255,.82)}
+.cpn--red .h1{color:#fff}
+.cpn--red .city{background:#fff;color:var(--brand)}
+.cpn--red .steps{color:rgba(255,255,255,.9)}
+.cpn--red .steps b{background:rgba(255,255,255,.18);color:#fff}
+.cpn--red .steps li + li::before{border-color:rgba(255,255,255,.6)}
+.cpn__code{
+  display:inline-flex;align-items:center;gap:.6em;align-self:flex-start;
+  padding:.45em .8em;border:2px dashed var(--line-strong);border-radius:.6em;
+  font-weight:500;color:var(--ink-2);
+}
+.cpn__code b{color:var(--brand);font-weight:800;letter-spacing:-.01em}
+.cpn--red .cpn__code{border-color:rgba(255,255,255,.55);color:rgba(255,255,255,.88)}
+.cpn--red .cpn__code b{color:#fff}
+
+/* Компьютер */
+.vk-cover.cpn{--nd:64px}
+.vk-cover.cpn .cpn__l{left:70px;top:135px;width:930px;height:540px;padding:0 0 0 150px;border-radius:40px 0 0 40px;
+  border-right:3px dashed var(--line-strong)}
+.vk-cover.cpn--red .cpn__l{border-right-color:rgba(255,255,255,.5)}
+:is(#covers2,#vkprev) .vk-cover.cpn .eyebrow{font-size:24px}
+:is(#covers2,#vkprev) .vk-cover.cpn .h1{margin-top:14px;font-size:80px}
+:is(#covers2,#vkprev) .vk-cover.cpn .steps{margin-top:26px;font-size:22px}
+.vk-cover.cpn .cpn__code{margin-top:28px;font-size:24px}
+:is(#covers2,#vkprev) .vk-cover.cpn .cpn__ph{left:1000px;top:135px;width:850px;height:540px;border-radius:0 40px 40px 0;--pos:55% 40%}
+:is(#covers2,#vkprev) .vk-cover.cpn[id$="flat"] .cpn__ph{--pos:88% 50%}
+:is(#covers2,#vkprev) .vk-cover.cpn[id$="walk"] .cpn__ph{--pos:75% 30%}
+.vk-cover.cpn .cpn__n--a{left:968px;top:103px}
+.vk-cover.cpn .cpn__n--b{left:968px;top:643px}
+
+/* Телефон */
+.vk-mob2.cpn{--nd:76px}
+.vk-mob2.cpn .cpn__l{left:140px;right:140px;top:560px;height:500px;align-items:center;text-align:center;
+  border-radius:44px 44px 0 0;border-bottom:3px dashed var(--line-strong)}
+.vk-mob2.cpn--red .cpn__l{border-bottom-color:rgba(255,255,255,.5)}
+:is(#covers2,#vkprev) .vk-mob2.cpn .h1{font-size:92px}
+:is(#covers2,#vkprev) .vk-mob2.cpn .steps{justify-content:center;margin-top:26px;font-size:27px}
+:is(#covers2,#vkprev) .vk-mob2.cpn .cpn__ph{left:140px;right:140px;top:1060px;bottom:40px;border-radius:0 0 44px 44px;--hot-left:290px}
+.vk-mob2.cpn .cpn__n--a{left:102px;top:1022px}
+.vk-mob2.cpn .cpn__n--b{right:102px;top:1022px}
+
+/* ==========================================================================
+   Вариации рамки P–S (05.10): формат G с другими снимками и фоном
+   ========================================================================== */
+:is(#covers2,#vkprev) .vk-cover.cv-frame[id$="fr-walk"] .shot{--pos:72% 30%}
+:is(#covers2,#vkprev) .vk-cover.cv-frame[id$="fr-flat"] .shot{--pos:86% 50%}
+/* R: красный фон, белый заголовок; рамка та же */
+.cv-redbg{background:var(--brand) !important}
+:is(#covers2,#vkprev) .cv-redbg .eyebrow{color:rgba(255,255,255,.82)}
+:is(#covers2,#vkprev) .cv-redbg .h1{color:#fff}
+:is(#covers2,#vkprev) .cv-redbg .city{background:#fff;color:var(--brand)}
+.cv-redbg .steps{color:rgba(255,255,255,.9)}
+.cv-redbg .steps b{background:rgba(255,255,255,.18);color:#fff}
+.cv-redbg .steps li + li::before{border-color:rgba(255,255,255,.6)}
+/* S: две рамки внахлёст — большая справа, малая ниже и левее, с белой
+   обводкой, чтобы читалась отдельным снимком */
+:is(#covers2,#vkprev) .vk-cover.cv-duo .shot{left:1130px;top:125px;right:60px;bottom:130px;--pos:72% 40%}
+:is(#covers2,#vkprev) .vk-cover.cv-duo .shot--2{left:960px;top:400px;right:auto;bottom:auto;width:420px;height:270px;
+  border-radius:32px;box-shadow:0 0 0 8px #fff, 0 30px 60px -30px rgba(40,10,8,.5);--pos:88% 75%;--hot-fs:24px;z-index:2}

@@ -245,7 +245,7 @@ function photoBox(shot) {
   if (f) {
     const sc = Math.max(W / size[0], H / size[1]) * f[2];
     const dw = size[0] * sc, dh = size[1] * sc;
-    const ox = Math.min(0, Math.max(W - dw, f[3] - f[0] * dw));
+    const ox = Math.min(0, Math.max(W - dw, f[3] - shot.offsetLeft - f[0] * dw));
     const oy = Math.min(0, Math.max(H - dh, f[4] - f[1] * dh));
     shot.style.backgroundSize = `${dw}px ${dh}px`;
     shot.style.backgroundPosition = `${ox}px ${oy}px`;
@@ -276,7 +276,7 @@ function placeHot(shot) {
     const leftLim = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-left")) || 0;
     if (X < leftLim + fs || X > W - fs || Y < top + fs || Y > H - bottom - fs) return;
     /* Ширина плашки — грубо по числу знаков; сторона — где помещается */
-    const w = fs * (2.6 + .58 * name.length + (value ? .62 * value.length + 1.4 : 0)) + fs * 2.4;
+    const w = fs * (3 + .64 * name.length + (value ? .7 * value.length + 1.6 : 0)) + fs * 2.4;
     const side = X + w < W ? "r" : "l";
     const el = document.createElement("div");
     el.className = "hot hot--" + side;
@@ -478,7 +478,12 @@ if (siteV) {
 /* Шапка группы ВК: копии обложек и выбранного аватара в масштабе ВК */
 const VKP_COVERS = [["vk-cover", "Сейчас"], ["vk-cover-people", "A. Люди"], ["vk-cover-shelf", "B. Витрина"], ["vk-cover-flat", "C. Раскладка"],
   ["vk-cover-red", "D. Красная"], ["vk-cover-phone", "E. Как это работает"], ["vk-cover-mosaic", "F. Мозаика"],
-  ["vk-cover-Gcafe", "G. Кафе"], ["vk-cover-Hcouple", "H. Пара"], ["vk-cover-Istone", "I. Раскладка на камне"]];
+  ["vk-cover-Gcafe", "G. Кафе"], ["vk-cover-Hcouple", "H. Пара"], ["vk-cover-Istone", "I. Раскладка на камне"],
+  ["vk-cover-cpn-white-cafe", "K. Купон, белый, кафе"], ["vk-cover-cpn-red-cafe", "L. Купон, красный, кафе"],
+  ["vk-cover-cpn-red-couple", "M. Купон, красный, пара"], ["vk-cover-cpn-white-flat", "N. Купон, белый, раскладка"],
+  ["vk-cover-cpn-red-walk", "O. Купон, красный, прогулка"],
+  ["vk-cover-fr-walk", "P. Рамка, прогулка"], ["vk-cover-fr-flat", "Q. Рамка, раскладка"],
+  ["vk-cover-fr-red", "R. Рамка на красном"], ["vk-cover-fr-duo", "S. Две рамки"]];
 const plainCopy = (src, zoom) => {
   const c = src.cloneNode(true);
   c.removeAttribute("id"); c.removeAttribute("data-out"); c.classList.remove("art");
@@ -515,7 +520,12 @@ function vkPreview() {
   mlist.innerHTML = "";
   [["vk-mobile", "Сейчас"], ["vk-mob-people", "A. Люди"], ["vk-mob-flat", "C. Раскладка"],
    ["vk-mob-red", "D. Красная"], ["vk-mob-phone", "E. Как это работает"], ["vk-mob-mosaic", "F. Мозаика"],
-   ["vk-mob-Gcafe", "G. Кафе"], ["vk-mob-Hcouple", "H. Пара"], ["vk-mob-Istone", "I. Раскладка на камне"]].forEach(([id, name]) => {
+   ["vk-mob-Gcafe", "G. Кафе"], ["vk-mob-Hcouple", "H. Пара"], ["vk-mob-Istone", "I. Раскладка на камне"],
+   ["vk-mob-cpn-white-cafe", "K. Купон, белый, кафе"], ["vk-mob-cpn-red-cafe", "L. Купон, красный, кафе"],
+   ["vk-mob-cpn-red-couple", "M. Купон, красный, пара"], ["vk-mob-cpn-white-flat", "N. Купон, белый, раскладка"],
+   ["vk-mob-cpn-red-walk", "O. Купон, красный, прогулка"],
+   ["vk-mob-fr-walk", "P. Рамка, прогулка"], ["vk-mob-fr-flat", "Q. Рамка, раскладка"],
+   ["vk-mob-fr-red", "R. Рамка на красном"], ["vk-mob-fr-duo", "S. Две рамки"]].forEach(([id, name]) => {
     const f = document.createElement("figure");
     f.innerHTML = `<figcaption>${name}</figcaption>
       <div class="vkm">
