@@ -141,9 +141,16 @@ function avatarSizes() {
 /* Новые обложки (05.10). Выгода на снимке — пилюля «значок · ниша · билетик» */
 PATH.detyam = '<circle cx="12" cy="13.5" r="6"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><path d="M10 14.5h.01M14 14.5h.01M10.5 17h3"/>';
 PATH.avto = '<path d="M4 16.5v-4.5l2.2-5h11.6l2.2 5v4.5z"/><path d="M5 16.5v2.5h3v-2.5M16 16.5v2.5h3v-2.5"/><path d="M7.5 12.5h.01M16.5 12.5h.01"/>';
+/* Выгода на фото — корешок купона (правка 05.10: билетик внутри
+   скруглённой пилюли выглядел наклейкой на наклейке). Одна фигура:
+   слева белая часть «значок · ниша», справа красная с выгодой, на линии
+   отрыва — полукруглые вырезы сверху и снизу. Контур строит shapeStubs. */
+const stubHTML = (cat, name, value) =>
+  `<span class="stub${value ? "" : " stub--solo"}"><span class="stub__l"><span class="offer__ic">${icon(cat)}</span>${name}</span>` +
+  (value ? `<span class="stub__r">${value}</span>` : "") + `</span>`;
 document.querySelectorAll("[data-offer]").forEach(el => {
   const [cat, name, value] = el.dataset.offer.split("|");
-  el.innerHTML = `<span class="offer__ic">${icon(cat)}</span>${name}` + (value ? `<span class="tk">${value}</span>` : "");
+  el.innerHTML = stubHTML(cat, name, value);
 });
 
 PATH.dom = '<path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/>';
@@ -220,16 +227,43 @@ const HOT = {
                 pizza: [.89, .76, "eda", "Пиццерии", "2 по цене 1"], keys: [.75, .85, "avto", "Автомойка", "−30%"] }
 };
 const PHOTO_SIZE = {};
-function placeHot(shot) {
-  shot.querySelectorAll(".hot").forEach(h => h.remove());
-  const file = shot.dataset.file, size = PHOTO_SIZE[file], spots = HOT[file];
-  if (!size || !spots || !shot.dataset.hot) return;
+/* Живая обложка на телефоне: в шапке ВК от снимка видна только полоса
+   справа от аватара, над названием (в кадре снимка ~0–240 px по высоте,
+   правее ~420 px). Поэтому кадр на телефоне строится от главного — лица
+   или предмета: [x, y] в долях снимка, увеличение, куда его поставить. */
+const MOB_FOCUS = {
+  "people":   [.70, .20, 1,   680, 130],
+  "people-2": [.75, .20, 1,   700, 130],
+  "people-3": [.58, .30, 1.6, 640, 130],
+  "flatlay":  [.65, .15, 1,   470, 125]
+};
+/* Где лежит снимок в кадре: обычно cover по --pos; на телефоне — от фокуса */
+function photoBox(shot) {
+  const size = PHOTO_SIZE[shot.dataset.file];
   const W = shot.clientWidth, H = shot.clientHeight;
+  const f = shot.closest(".vk-mob2") && MOB_FOCUS[shot.dataset.file];
+  if (f) {
+    const sc = Math.max(W / size[0], H / size[1]) * f[2];
+    const dw = size[0] * sc, dh = size[1] * sc;
+    const ox = Math.min(0, Math.max(W - dw, f[3] - f[0] * dw));
+    const oy = Math.min(0, Math.max(H - dh, f[4] - f[1] * dh));
+    shot.style.backgroundSize = `${dw}px ${dh}px`;
+    shot.style.backgroundPosition = `${ox}px ${oy}px`;
+    return { dw, dh, ox, oy };
+  }
   const pos = (getComputedStyle(shot).getPropertyValue("--pos").trim() || "50% 50%").split(/\s+/)
     .map(v => v === "center" ? .5 : parseFloat(v) / 100);
   const sc = Math.max(W / size[0], H / size[1]);
   const dw = size[0] * sc, dh = size[1] * sc;
-  const ox = (W - dw) * pos[0], oy = (H - dh) * (pos[1] ?? .5);
+  return { dw, dh, ox: (W - dw) * pos[0], oy: (H - dh) * (pos[1] ?? .5) };
+}
+function placeHot(shot) {
+  shot.querySelectorAll(".hot").forEach(h => h.remove());
+  const file = shot.dataset.file, size = PHOTO_SIZE[file], spots = HOT[file];
+  if (!size) return;
+  if (!spots || !shot.dataset.hot) { photoBox(shot); return; }
+  const W = shot.clientWidth, H = shot.clientHeight;
+  const { dw, dh, ox, oy } = photoBox(shot);
   const fs = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-fs")) || 26;
   /* Видимая часть кадра: у обложек ВК верх срезан (компьютер ~117 px,
      телефон — до 1060 снимок и так не доходит) */
@@ -239,7 +273,8 @@ function placeHot(shot) {
     const [x, y, cat, name, value] = sp;
     const X = ox + x * dw, Y = oy + y * dh;
     const bottom = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-bottom")) || 0;
-    if (X < fs || X > W - fs || Y < top + fs || Y > H - bottom - fs) return;
+    const leftLim = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-left")) || 0;
+    if (X < leftLim + fs || X > W - fs || Y < top + fs || Y > H - bottom - fs) return;
     /* Ширина плашки — грубо по числу знаков; сторона — где помещается */
     const w = fs * (2.6 + .58 * name.length + (value ? .62 * value.length + 1.4 : 0)) + fs * 2.4;
     const side = X + w < W ? "r" : "l";
@@ -247,10 +282,10 @@ function placeHot(shot) {
     el.className = "hot hot--" + side;
     el.style.cssText = `left:${X}px;top:${Y}px`;
     el.innerHTML = `<i class="hot__dot"></i><span class="hot__line"></span>
-      <div class="hot__tag"><span class="offer__ic">${icon(cat)}</span>${name}${value ? `<span class="tk">${value}</span>` : ""}</div>`;
+      <div class="hot__tag">${stubHTML(cat, name, value)}</div>`;
     shot.appendChild(el);
   });
-  if (document.fonts.status === "loaded") shapeTickets();
+  if (document.fonts.status === "loaded") { shapeTickets(); shapeStubs(); }
 }
 
 /* A и C: снимки генерируются отдельно и кладутся в social-kit/photos/
@@ -341,6 +376,28 @@ function ticketPath(w, h) {
          `V${h - r}A${r},${r} 0 0 1 ${w - r},${h}H${r}A${r},${r} 0 0 1 0,${h - r}` +
          `V${c + n}A${n},${n} 0 0 0 0,${c - n}V${r}A${r},${r} 0 0 1 ${r},0Z`;
 }
+/* Контур корешка: две фигуры, стык по линии отрыва. В долях высоты
+   (h = 100), поэтому от zoom превью не зависит. */
+function shapeStubs() {
+  document.querySelectorAll(".stub").forEach(st => {
+    st.querySelector(".stub__bg")?.remove();
+    const b = st.getBoundingClientRect();
+    if (!b.height) return;
+    const h = 100, w = Math.round(100 * b.width / b.height * 10) / 10;
+    const r = h * .3, n = h * .2;
+    const rp = st.querySelector(".stub__r");
+    const sx = rp ? Math.round(100 * (rp.getBoundingClientRect().left - b.left) / b.height * 10) / 10 : w;
+    const left = rp
+      ? `M${r},0H${sx - n}A${n},${n} 0 0 0 ${sx},${n}V${h - n}A${n},${n} 0 0 0 ${sx - n},${h}H${r}A${r},${r} 0 0 1 0,${h - r}V${r}A${r},${r} 0 0 1 ${r},0Z`
+      : `M${r},0H${w - r}A${r},${r} 0 0 1 ${w},${r}V${h - r}A${r},${r} 0 0 1 ${w - r},${h}H${r}A${r},${r} 0 0 1 0,${h - r}V${r}A${r},${r} 0 0 1 ${r},0Z`;
+    const right = rp
+      ? `<path class="stub__red" d="M${sx + n},0H${w - r}A${r},${r} 0 0 1 ${w},${r}V${h - r}A${r},${r} 0 0 1 ${w - r},${h}H${sx + n}A${n},${n} 0 0 0 ${sx},${h - n}V${n}A${n},${n} 0 0 0 ${sx + n},0Z"/>`
+      : "";
+    st.insertAdjacentHTML("afterbegin",
+      `<svg class="stub__bg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="stub__white" d="${left}"/>${right}</svg>`);
+  });
+}
+
 function shapeTickets() {
   document.querySelectorAll(".tk").forEach(tk => {
     tk.querySelector(".tk__bg")?.remove();
@@ -485,4 +542,4 @@ document.getElementById("vkp-avas").addEventListener("click", e => {
 });
 document.getElementById("vkp-nologo").addEventListener("change", vkPreview);
 
-document.fonts.ready.then(() => { shapeTickets(); fitAvatarTowns(); avatarSizes(); vkPreview(); });
+document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); avatarSizes(); vkPreview(); });
