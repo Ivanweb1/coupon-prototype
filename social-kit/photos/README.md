@@ -138,3 +138,33 @@ Top-down view of a wooden restaurant table for two filling the whole frame: a pe
 | `walk-2-mob.jpg` | O |
 | `checkout-mob.jpg` | T |
 | `table-mob.jpg` | U |
+
+### cafe-2-mob.jpg
+```
+Wide panoramic lifestyle photo in a cozy bright coffee shop: a cheerful young Slavic woman in a red knitted sweater on the left-center and a smiling bearded barista on the right-center face each other across a wooden counter, he hands her a cappuccino in a white cup held at the exact center of the frame, a few golden croissants on the counter in front. Both people shown from the chest up, heads in the middle band of the frame with empty space above, all key content in the central 60% of the width, top corners are calm blurred background. Warm window light, rich colors, shallow depth of field. No text, no logos, no signage, no watermark.
+```
+
+### couple-2-mob.jpg
+```
+Wide panoramic photo of a happy Slavic couple walking on an autumn street, both laughing, shown from the chest up in the central 60% of the frame, heads in the middle band with space above. The man holds a large bouquet of red roses on the left, the woman on the right holds a takeaway coffee cup and an open box of glazed donuts in the center-right. Top corners calm blurred golden bokeh. Warm golden light, saturated, candid editorial. No text, no logos, no signage, no watermark.
+```
+
+### flatlay-2-mob.jpg
+```
+Wide panoramic top-down flat lay on light warm grey stone: a single row of large city purchases spaced evenly through the central 70% of the width and centered vertically — cappuccino with latte art, a croissant, red lipstick, a red kettlebell, a slice of pepperoni pizza, a bouquet of red gerberas. Top corners and top edge empty stone. Bright soft daylight, rich colors with red accents, clean commercial still life. No text, no logos, no watermark.
+```
+
+### walk-2-mob.jpg
+```
+Wide panoramic photo of a happy young Slavic woman walking down an autumn city street, shown from the chest up in the center of the frame, face in the middle band with empty space above her head, holding a takeaway coffee cup at the center-right and colorful kraft shopping bags at the left, beige trench coat and red knitted scarf. Top corners calm blurred golden trees. Warm golden light, saturated, editorial. No text, no logos, no signage, no watermark.
+```
+
+### checkout-mob.jpg
+```
+Wide panoramic close-up at a cafe checkout: a hand holds a smartphone horizontally-centered in the frame with the screen facing the camera, perfectly frontal, screen plain solid white and blank, phone occupying the central 20% of the width and 70% of the height; behind it, softly blurred, a smiling barista at a payment terminal, a cappuccino and croissants on the counter to the right. Top corners calm blurred background. Warm light, saturated. No text on the screen, no logos, no watermark.
+```
+
+### table-mob.jpg
+```
+Wide panoramic top-down view of a wooden restaurant table: a single row of dishes through the central 70% of the width, centered vertically — pepperoni pizza, a plate of sushi rolls, a cappuccino, a slice of red velvet cake, a glass of red berry lemonade. Top corners plain wood. Warm daylight, appetizing saturated colors, food photography. No text, no logos, no watermark.
+```
