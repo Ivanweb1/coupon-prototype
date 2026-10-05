@@ -617,3 +617,82 @@ body{
 .vkm__name{position:absolute;left:18px;top:615px;font-size:27px;font-weight:600;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.35)}
 .vkm__btn{position:absolute;top:668px;width:270px;height:52px;border-radius:14px;background:#fff;color:#000;font-size:20px;line-height:52px;text-align:center}
 .vkm__sub{position:absolute;left:18px;top:765px;font-size:20px;color:#E1E3E6}
+
+/* ==========================================================================
+   Обложки D, E, F (05.10) — компьютер и телефон
+   ==========================================================================
+   Без большого шара: знак уже на аватаре прямо под обложкой. Сетка та же:
+   на компьютере значимое в 120–698 px, левый нижний угол — под аватар;
+   на телефоне текст в 640–1040, ниже — то, что ляжет под аватар и название. */
+:is(#covers2,#vkprev) .vk-cover.cv:is(.cv-red,.cv-phone) .txt{left:300px;top:400px;width:auto}
+
+/* ---------------- D. Красная ---------------- */
+.cv-red{background:var(--brand) !important}
+:is(#covers2,#vkprev) .cv-red .eyebrow{color:rgba(255,255,255,.82)}
+:is(#covers2,#vkprev) .cv-red .h1{color:#fff}
+:is(#covers2,#vkprev) .cv-red .city{background:#fff;color:var(--brand)}
+:is(#covers2,#vkprev) .vk-cover.cv-red .eyebrow{font-size:26px}
+:is(#covers2,#vkprev) .vk-cover.cv-red .h1{margin-top:16px;font-size:86px}
+.chips{display:flex;flex-wrap:wrap;gap:12px;max-width:900px}
+.chip{display:inline-flex;align-items:center;gap:.45em;padding:.38em .8em .38em .6em;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font-weight:600;white-space:nowrap}
+.chip svg{width:1.15em;height:1.15em}
+:is(#covers2,#vkprev) .vk-cover.cv-red .chips{margin-top:34px;font-size:23px}
+:is(#covers2,#vkprev) .vk-cover.cv-red .card--1{--w:250px;--r:-9deg;left:1170px;top:200px}
+:is(#covers2,#vkprev) .vk-cover.cv-red .card--2{--w:270px;--r:2deg;left:1370px;top:150px;z-index:2}
+:is(#covers2,#vkprev) .vk-cover.cv-red .card--3{--w:250px;--r:10deg;left:1590px;top:210px}
+.strip--white{background:#fff;color:var(--brand)}
+
+.vk-mob2.cv-red .steps{color:rgba(255,255,255,.9)}
+.vk-mob2.cv-red .steps b{background:rgba(255,255,255,.18);color:#fff}
+.vk-mob2.cv-red .steps li + li::before{border-color:rgba(255,255,255,.6)}
+/* Крупный купон — справа от аватара и правее названия сообщества */
+:is(#covers2,#vkprev) .vk-mob2.cv-red .card--1{--w:250px;--r:-8deg;left:120px;top:1370px}
+:is(#covers2,#vkprev) .vk-mob2.cv-red .card--2{--w:360px;--r:6deg;left:590px;top:1080px;z-index:2}
+
+/* ---------------- E. Как это работает ---------------- */
+.phone{position:absolute;padding:1.1%;border-radius:calc(var(--pw) * .14);background:#1B1B1B;width:var(--pw);aspect-ratio:9/16;transform:rotate(var(--r, 0deg));
+  box-shadow:0 40px 80px -36px rgba(40,10,8,.55)}
+.phone__scr{height:100%;border-radius:calc(var(--pw) * .12);background:#fff;overflow:hidden;padding:calc(var(--pw) * .05);display:flex;flex-direction:column;font-size:calc(var(--pw) * .052)}
+.phone__bar{display:flex;align-items:center;justify-content:space-between;margin:2% 2% 5%;font-weight:700;color:var(--ink-3);font-size:.85em}
+.phone__bar img{height:2.2em}
+.phone__ph{position:relative;aspect-ratio:4/4.1;border-radius:.9em;background:var(--surface) center / cover no-repeat;flex:none}
+.phone__ph .tk{position:absolute;left:6%;bottom:6%;font-size:1.6em}
+.phone__t{margin:.7em .2em 0;font-weight:800;line-height:1.15;font-size:1.2em;letter-spacing:-.01em}
+.phone__c{margin:.3em .2em 0;color:var(--ink-3);font-weight:500;font-size:.9em}
+.phone__code{margin:auto 0 0;padding:.7em .8em;border:2px dashed var(--line-strong);border-radius:.8em;display:flex;align-items:center;justify-content:space-between;font-weight:600;color:var(--ink-2);font-size:.9em}
+.phone__code b{font-size:1.35em;color:var(--brand);letter-spacing:.04em}
+.phone__hint{margin:.6em 0 .2em;text-align:center;font-size:.8em;color:var(--ink-3);font-weight:500}
+
+:is(#covers2,#vkprev) .vk-cover.cv-phone .eyebrow{font-size:26px}
+:is(#covers2,#vkprev) .vk-cover.cv-phone .h1{margin-top:16px;font-size:84px}
+:is(#covers2,#vkprev) .vk-cover.cv-phone .steps{margin-top:32px;font-size:24px}
+:is(#covers2,#vkprev) .vk-cover.cv-phone .phone{--pw:290px;--r:-6deg;left:1300px;top:150px}
+:is(#covers2,#vkprev) .vk-cover.cv-phone .offers{font-size:26px}
+:is(#covers2,#vkprev) .vk-cover.cv-phone .offer:nth-child(1){left:1030px;top:300px;--r:-3deg}
+:is(#covers2,#vkprev) .vk-cover.cv-phone .offer:nth-child(2){left:1480px;top:480px;--r:3deg}
+
+/* Телефон: низ красный — белое название сообщества читается на нём */
+.vk-mob2 .bg-red{position:absolute;left:0;right:0;top:1060px;bottom:0;background:var(--brand)}
+:is(#covers2,#vkprev) .vk-mob2.cv-phone .phone{--pw:360px;--r:6deg;left:520px;top:1100px}
+.vk-mob2.cv-phone .dom-pill{top:1810px}
+:is(#covers2,#vkprev) .vk-mob2.cv-phone .offers{font-size:34px}
+:is(#covers2,#vkprev) .vk-mob2.cv-phone .offer:nth-child(1){left:60px;top:1560px;--r:-3deg}
+
+/* ---------------- F. Мозаика ---------------- */
+.mosaic{position:absolute;display:grid;gap:8px;background:#fff}
+.mosaic__i{position:relative;background:var(--surface) center / cover no-repeat}
+.mosaic__i .tk{position:absolute;left:10%;bottom:10%}
+:is(#covers2,#vkprev) .vk-cover.cv-mosaic .mosaic{inset:0 0 70px 0;grid-template-columns:repeat(8, 1fr);grid-auto-rows:290px}
+:is(#covers2,#vkprev) .vk-cover.cv-mosaic .mosaic__i .tk{font-size:30px}
+:is(#covers2,#vkprev) .vk-cover.cv-mosaic .panel{
+  position:absolute;left:520px;top:180px;width:880px;height:440px;border-radius:40px;background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  box-shadow:0 30px 70px -30px rgba(40,10,8,.5);
+}
+:is(#covers2,#vkprev) .vk-cover.cv-mosaic .eyebrow{font-size:26px}
+:is(#covers2,#vkprev) .vk-cover.cv-mosaic .h1{margin-top:16px;font-size:74px}
+:is(#covers2,#vkprev) .vk-cover.cv-mosaic .steps{margin-top:30px;font-size:23px}
+:is(#covers2,#vkprev) .vk-mob2.cv-mosaic .mosaic{left:0;right:0;top:1060px;bottom:0;grid-template-columns:repeat(3, 1fr);grid-auto-rows:1fr;padding-top:8px}
+:is(#covers2,#vkprev) .vk-mob2.cv-mosaic .mosaic__i .tk{font-size:40px}
+/* Первый ряд мозаики на телефоне — под названием сообщества, без билетиков */
+.vk-mob2 .mosaic__i:nth-child(-n+3) .tk{display:none}

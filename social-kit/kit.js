@@ -143,7 +143,47 @@ PATH.detyam = '<circle cx="12" cy="13.5" r="6"/><circle cx="7" cy="7" r="2"/><ci
 PATH.avto = '<path d="M4 16.5v-4.5l2.2-5h11.6l2.2 5v4.5z"/><path d="M5 16.5v2.5h3v-2.5M16 16.5v2.5h3v-2.5"/><path d="M7.5 12.5h.01M16.5 12.5h.01"/>';
 document.querySelectorAll("[data-offer]").forEach(el => {
   const [cat, name, value] = el.dataset.offer.split("|");
-  el.innerHTML = `<span class="offer__ic">${icon(cat)}</span>${name}<span class="tk">${value}</span>`;
+  el.innerHTML = `<span class="offer__ic">${icon(cat)}</span>${name}` + (value ? `<span class="tk">${value}</span>` : "");
+});
+
+PATH.dom = '<path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/>';
+
+/* D. Ниши строкой: «значок · название» */
+document.querySelectorAll("[data-chips]").forEach(el => {
+  el.innerHTML = el.dataset.chips.split("|").map(c => {
+    const [cat, name] = c.split(":");
+    return `<span class="chip">${icon(cat)}${name}</span>`;
+  }).join("");
+});
+
+/* E. Телефон с открытым купоном: снимок, выгода, код для кассы */
+document.querySelectorAll("[data-phone]").forEach(el => {
+  const c = COUPONS.beauty;
+  el.innerHTML = `
+    <div class="phone__scr">
+      <div class="phone__bar"><img src="../assets/brand/logo-red.png" alt=""><span>vsekupony.ru</span></div>
+      <div class="phone__ph" style="background-image:url('${PH + c.photo}')"><span class="tk">${c.value}</span></div>
+      <div class="phone__t">${c.title}</div>
+      <div class="phone__c">${c.company}</div>
+      <div class="phone__code"><span>Код купона</span><b>LIP-2547</b></div>
+      <div class="phone__hint">Покажите экран на кассе</div>
+    </div>`;
+});
+
+/* F. Мозаика: снимки всех ниш из библиотеки ленты, на части — выгода */
+const MOSAIC = [
+  ["kofe-warm.jpg", "5 = 4"], ["manikyur-rose.jpg", ""], ["sport-teal.jpg", ""], ["eda-cool.jpg", ""],
+  ["detyam-yellow.jpg", "−20%"], ["avto-steel.jpg", ""], ["razvlecheniya-blue.jpg", "2 по цене 1"], ["dom-beige.jpg", ""],
+  ["beauty.jpg", "−25%"], ["pitomtsy-brown.jpg", ""], ["fitness.jpg", "−35%"], ["coffee.jpg", "−50%"],
+  ["krasota-green.jpg", ""], ["entertainment.jpg", ""], ["odezhda-dark.jpg", ""], ["obuchenie-purple.jpg", "−15%"],
+  ["meditsina-white.jpg", ""], ["biz-warm.jpg", "−10%"]
+];
+document.querySelectorAll("[data-mosaic]").forEach(el => {
+  const n = +el.dataset.mosaic;
+  el.innerHTML = Array.from({ length: n }, (_, i) => {
+    const [ph, v] = MOSAIC[i % MOSAIC.length];
+    return `<div class="mosaic__i" style="background-image:url('${PH + ph}')">${v ? `<span class="tk">${v}</span>` : ""}</div>`;
+  }).join("");
 });
 
 /* B. Витрина: шесть ниш, снимки из общей библиотеки ленты */
@@ -323,7 +363,8 @@ if (siteV) {
 
 /* Билетики строятся после шрифтов: от них зависит ширина плашки */
 /* Шапка группы ВК: копии обложек и выбранного аватара в масштабе ВК */
-const VKP_COVERS = [["vk-cover", "Сейчас"], ["vk-cover-people", "A. Люди"], ["vk-cover-shelf", "B. Витрина"], ["vk-cover-flat", "C. Раскладка"]];
+const VKP_COVERS = [["vk-cover", "Сейчас"], ["vk-cover-people", "A. Люди"], ["vk-cover-shelf", "B. Витрина"], ["vk-cover-flat", "C. Раскладка"],
+  ["vk-cover-red", "D. Красная"], ["vk-cover-phone", "E. Как это работает"], ["vk-cover-mosaic", "F. Мозаика"]];
 const plainCopy = (src, zoom) => {
   const c = src.cloneNode(true);
   c.removeAttribute("id"); c.removeAttribute("data-out"); c.classList.remove("art");
@@ -358,7 +399,8 @@ function vkPreview() {
   /* Телефон: живая обложка в приложении ВК */
   const mlist = document.getElementById("vkm-list");
   mlist.innerHTML = "";
-  [["vk-mobile", "Сейчас"], ["vk-mob-people", "A. Люди"], ["vk-mob-flat", "C. Раскладка"]].forEach(([id, name]) => {
+  [["vk-mobile", "Сейчас"], ["vk-mob-people", "A. Люди"], ["vk-mob-flat", "C. Раскладка"],
+   ["vk-mob-red", "D. Красная"], ["vk-mob-phone", "E. Как это работает"], ["vk-mob-mosaic", "F. Мозаика"]].forEach(([id, name]) => {
     const f = document.createElement("figure");
     f.innerHTML = `<figcaption>${name}</figcaption>
       <div class="vkm">
