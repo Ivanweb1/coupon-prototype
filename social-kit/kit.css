@@ -371,7 +371,7 @@ body{
    кадре конечный продукт — люди с покупками (A), ниши с выгодой (B),
    товары и услуги на одном столе (C). Палитра та же, без градиентов:
    снимок отделяется от белого поля ровной границей, а не растушёвкой.
-   Селекторы через #covers2 — чтобы не спорить с правилами старых обложек
+   Селекторы через :is(#covers2,#vkprev) — чтобы не спорить с правилами старых обложек
    (.vk-cover .logo и т. п.). */
 .var-h{margin:40px 0 14px;font-size:20px;font-weight:700;color:var(--ink-2)}
 .var-h b{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:8px;border-radius:50%;background:var(--brand);color:#fff;font-size:16px}
@@ -408,31 +408,31 @@ body{
 .offer .tk{font-size:1.04em;margin-left:.2em}
 
 /* ---------------- A. Люди ---------------- */
-#covers2 .vk-cover.cv-people .logo{left:200px;top:391px;height:300px}
-#covers2 .vk-cover.cv-people .txt{left:460px;top:391px;width:auto}
-#covers2 .vk-cover.cv-people .h1{font-size:78px}
-#covers2 .vk-cover.cv-people .eyebrow{font-size:26px}
-#covers2 .vk-cover.cv-people .steps{margin-top:30px;font-size:22px}
-#covers2 .vk-cover.cv-people .shot{left:1160px;top:0;right:0;bottom:70px;--pos:70% 30%}
-#covers2 .vk-cover.cv-people .offers{font-size:26px}
-#covers2 .vk-cover.cv-people .offer:nth-child(1){left:1150px;top:170px;--r:-3deg}
-#covers2 .vk-cover.cv-people .offer:nth-child(2){left:1240px;top:320px;--r:2deg}
-#covers2 .vk-cover.cv-people .offer:nth-child(3){left:1170px;top:470px;--r:-2deg}
+:is(#covers2,#vkprev) .vk-cover.cv-people .logo{left:200px;top:391px;height:300px}
+:is(#covers2,#vkprev) .vk-cover.cv-people .txt{left:460px;top:391px;width:auto}
+:is(#covers2,#vkprev) .vk-cover.cv-people .h1{font-size:78px}
+:is(#covers2,#vkprev) .vk-cover.cv-people .eyebrow{font-size:26px}
+:is(#covers2,#vkprev) .vk-cover.cv-people .steps{margin-top:30px;font-size:22px}
+:is(#covers2,#vkprev) .vk-cover.cv-people .shot{left:1160px;top:0;right:0;bottom:70px;--pos:70% 30%}
+:is(#covers2,#vkprev) .vk-cover.cv-people .offers{font-size:26px}
+:is(#covers2,#vkprev) .vk-cover.cv-people .offer:nth-child(1){left:1150px;top:170px;--r:-3deg}
+:is(#covers2,#vkprev) .vk-cover.cv-people .offer:nth-child(2){left:1240px;top:320px;--r:2deg}
+:is(#covers2,#vkprev) .vk-cover.cv-people .offer:nth-child(3){left:1170px;top:470px;--r:-2deg}
 
-#covers2 .ok-cover.cv-people .logo{left:172px;top:269px;height:340px}
-#covers2 .ok-cover.cv-people .txt{left:590px;top:269px}
-#covers2 .ok-cover.cv-people .h1{font-size:64px}
-#covers2 .ok-cover.cv-people .eyebrow{font-size:26px}
-#covers2 .ok-cover.cv-people .steps{margin-top:28px;font-size:23px}
-#covers2 .ok-cover.cv-people .shot{left:1440px;top:0;right:0;bottom:62px;--pos:70% 30%}
-#covers2 .ok-cover.cv-people .offers{font-size:24px}
-#covers2 .ok-cover.cv-people .offer:nth-child(1){left:1390px;top:120px;--r:-3deg}
-#covers2 .ok-cover.cv-people .offer:nth-child(2){left:1450px;top:290px;--r:2deg}
+:is(#covers2,#vkprev) .ok-cover.cv-people .logo{left:172px;top:269px;height:340px}
+:is(#covers2,#vkprev) .ok-cover.cv-people .txt{left:590px;top:269px}
+:is(#covers2,#vkprev) .ok-cover.cv-people .h1{font-size:64px}
+:is(#covers2,#vkprev) .ok-cover.cv-people .eyebrow{font-size:26px}
+:is(#covers2,#vkprev) .ok-cover.cv-people .steps{margin-top:28px;font-size:23px}
+:is(#covers2,#vkprev) .ok-cover.cv-people .shot{left:1440px;top:0;right:0;bottom:62px;--pos:70% 30%}
+:is(#covers2,#vkprev) .ok-cover.cv-people .offers{font-size:24px}
+:is(#covers2,#vkprev) .ok-cover.cv-people .offer:nth-child(1){left:1390px;top:120px;--r:-3deg}
+:is(#covers2,#vkprev) .ok-cover.cv-people .offer:nth-child(2){left:1450px;top:290px;--r:2deg}
 
 /* ---------------- B. Витрина ---------------- */
-#covers2 .cv-shelf .head{position:absolute;display:flex;align-items:center}
-#covers2 .cv-shelf .head .logo{position:static;transform:none;flex:none}
-#covers2 .cv-shelf .tiles{position:absolute;display:grid;grid-template-columns:repeat(6, minmax(0, 1fr))}
+:is(#covers2,#vkprev) .cv-shelf .head{position:absolute;display:flex;align-items:center}
+:is(#covers2,#vkprev) .cv-shelf .head .logo{position:static;transform:none;flex:none}
+:is(#covers2,#vkprev) .cv-shelf .tiles{position:absolute;display:grid;grid-template-columns:repeat(6, minmax(0, 1fr))}
 .tile{display:flex;flex-direction:column;min-height:0}
 .tile__ph{position:relative;flex:1;min-height:0;border-radius:var(--rad);background:var(--surface) center / cover no-repeat}
 .tile__ph .tk{position:absolute;left:var(--in);bottom:var(--in)}
@@ -440,49 +440,49 @@ body{
 .tile__t span{width:1.6em;height:1.6em;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--surface);color:var(--brand)}
 .tile__t svg{width:1em;height:1em}
 
-#covers2 .vk-cover.cv-shelf .head{left:240px;right:240px;top:108px;gap:32px}
-#covers2 .vk-cover.cv-shelf .head .logo{height:150px}
-#covers2 .vk-cover.cv-shelf .eyebrow{font-size:24px}
-#covers2 .vk-cover.cv-shelf .h1{margin-top:8px;font-size:66px}
-#covers2 .vk-cover.cv-shelf .tiles{left:240px;right:240px;top:296px;bottom:100px;gap:24px;--rad:28px;--in:16px}
-#covers2 .vk-cover.cv-shelf .tile__ph .tk{font-size:34px}
-#covers2 .vk-cover.cv-shelf .tile__t{font-size:24px}
+:is(#covers2,#vkprev) .vk-cover.cv-shelf .head{left:240px;right:240px;top:152px;gap:32px}
+:is(#covers2,#vkprev) .vk-cover.cv-shelf .head .logo{height:150px}
+:is(#covers2,#vkprev) .vk-cover.cv-shelf .eyebrow{font-size:24px}
+:is(#covers2,#vkprev) .vk-cover.cv-shelf .h1{margin-top:8px;font-size:66px}
+:is(#covers2,#vkprev) .vk-cover.cv-shelf .tiles{left:240px;right:240px;top:328px;bottom:92px;gap:24px;--rad:28px;--in:16px}
+:is(#covers2,#vkprev) .vk-cover.cv-shelf .tile__ph .tk{font-size:34px}
+:is(#covers2,#vkprev) .vk-cover.cv-shelf .tile__t{font-size:24px}
 
-#covers2 .ok-cover.cv-shelf .head{left:0;right:0;top:34px;justify-content:center;gap:26px}
-#covers2 .ok-cover.cv-shelf .head .logo{height:140px}
-#covers2 .ok-cover.cv-shelf .eyebrow{font-size:22px}
-#covers2 .ok-cover.cv-shelf .h1{margin-top:6px;font-size:50px}
-#covers2 .ok-cover.cv-shelf .tiles{left:120px;right:120px;top:206px;bottom:86px;gap:20px;--rad:24px;--in:14px}
-#covers2 .ok-cover.cv-shelf .tile__ph .tk{font-size:30px}
-#covers2 .ok-cover.cv-shelf .tile__t{font-size:21px}
+:is(#covers2,#vkprev) .ok-cover.cv-shelf .head{left:0;right:0;top:34px;justify-content:center;gap:26px}
+:is(#covers2,#vkprev) .ok-cover.cv-shelf .head .logo{height:140px}
+:is(#covers2,#vkprev) .ok-cover.cv-shelf .eyebrow{font-size:22px}
+:is(#covers2,#vkprev) .ok-cover.cv-shelf .h1{margin-top:6px;font-size:50px}
+:is(#covers2,#vkprev) .ok-cover.cv-shelf .tiles{left:120px;right:120px;top:206px;bottom:86px;gap:20px;--rad:24px;--in:14px}
+:is(#covers2,#vkprev) .ok-cover.cv-shelf .tile__ph .tk{font-size:30px}
+:is(#covers2,#vkprev) .ok-cover.cv-shelf .tile__t{font-size:21px}
 
 /* ---------------- C. Раскладка ---------------- */
-#covers2 .cv-flat .shot{left:0;top:0;right:0}
-#covers2 .cv-flat .panel{
+:is(#covers2,#vkprev) .cv-flat .shot{left:0;top:0;right:0}
+:is(#covers2,#vkprev) .cv-flat .panel{
   position:absolute;display:flex;align-items:center;background:#fff;
   box-shadow:0 30px 70px -30px rgba(40,10,8,.45);
 }
-#covers2 .cv-flat .panel .logo,#covers2 .cv-flat .panel .txt{position:static;transform:none;width:auto}
-#covers2 .cv-flat > .tk{position:absolute;transform:rotate(var(--r, 0deg));box-shadow:none;filter:drop-shadow(0 16px 22px rgba(40,10,8,.35))}
+:is(#covers2,#vkprev) .cv-flat .panel .logo,:is(#covers2,#vkprev) .cv-flat .panel .txt{position:static;transform:none;width:auto}
+:is(#covers2,#vkprev) .cv-flat > .tk{position:absolute;transform:rotate(var(--r, 0deg));box-shadow:none;filter:drop-shadow(0 16px 22px rgba(40,10,8,.35))}
 
-#covers2 .vk-cover.cv-flat .shot{bottom:70px;--pos:70% 50%}
-#covers2 .vk-cover.cv-flat .panel{left:210px;top:120px;width:1000px;height:520px;padding:0 56px;gap:44px;border-radius:40px}
-#covers2 .vk-cover.cv-flat .panel .logo{height:300px}
-#covers2 .vk-cover.cv-flat .eyebrow{font-size:24px}
-#covers2 .vk-cover.cv-flat .h1{margin-top:14px;font-size:74px}
-#covers2 .vk-cover.cv-flat .steps{margin-top:28px;font-size:22px}
-#covers2 .vk-cover.cv-flat .tk--1{left:1330px;top:180px;font-size:60px;--r:-4deg}
-#covers2 .vk-cover.cv-flat .tk--2{left:1530px;top:420px;font-size:46px;--r:3deg}
-#covers2 .vk-cover.cv-flat .tk--3{left:1300px;top:540px;font-size:50px;--r:-2deg}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .shot{bottom:70px;--pos:70% 50%}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .panel{left:210px;top:145px;width:1000px;height:500px;padding:0 56px;gap:44px;border-radius:40px}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .panel .logo{height:300px}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .eyebrow{font-size:24px}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .h1{margin-top:14px;font-size:74px}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .steps{margin-top:28px;font-size:22px}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .tk--1{left:1330px;top:180px;font-size:60px;--r:-4deg}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .tk--2{left:1530px;top:420px;font-size:46px;--r:3deg}
+:is(#covers2,#vkprev) .vk-cover.cv-flat .tk--3{left:1300px;top:540px;font-size:50px;--r:-2deg}
 
-#covers2 .ok-cover.cv-flat .shot{bottom:62px;--pos:70% 50%}
-#covers2 .ok-cover.cv-flat .panel{left:560px;top:48px;width:830px;height:442px;padding:0 48px;gap:40px;border-radius:36px}
-#covers2 .ok-cover.cv-flat .panel .logo{height:250px}
-#covers2 .ok-cover.cv-flat .eyebrow{font-size:22px}
-#covers2 .ok-cover.cv-flat .h1{margin-top:12px;font-size:58px}
-#covers2 .ok-cover.cv-flat .steps{margin-top:24px;font-size:21px}
-#covers2 .ok-cover.cv-flat .tk--1{left:1500px;top:110px;font-size:56px;--r:-4deg}
-#covers2 .ok-cover.cv-flat .tk--2{left:1580px;top:330px;font-size:44px;--r:3deg}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .shot{bottom:62px;--pos:70% 50%}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .panel{left:560px;top:48px;width:830px;height:442px;padding:0 48px;gap:40px;border-radius:36px}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .panel .logo{height:250px}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .eyebrow{font-size:22px}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .h1{margin-top:12px;font-size:58px}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .steps{margin-top:24px;font-size:21px}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .tk--1{left:1500px;top:110px;font-size:56px;--r:-4deg}
+:is(#covers2,#vkprev) .ok-cover.cv-flat .tk--2{left:1580px;top:330px;font-size:44px;--r:3deg}
 
 /* ==========================================================================
    Аватар — варианты (05.10)
@@ -534,3 +534,39 @@ body{
 
 /* 6. Объёмный шар — сгенерированный снимок, photos/avatar-3d.jpg */
 .av-3d .shot{position:absolute;inset:0}
+
+/* ==========================================================================
+   Шапка группы ВК — как обложка выглядит вместе с аватаром (05.10)
+   ==========================================================================
+   Размеры сняты со скриншота ВК на компьютере: обложка ужата до ~0,466,
+   сверху срезано ~117 px, аватар ~200 px (в масштабе обложки) стоит у
+   левого нижнего угла и заходит на обложку на ~45 px. Справа от аватара —
+   название сообщества, в нём уже есть город. */
+.bare #vkprev{display:none}
+.vkp-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 24px;font-size:15px;font-weight:600;color:var(--ink-2)}
+.vkp-ctl button{font:inherit;padding:8px 14px;border:0;border-radius:999px;background:#fff;color:var(--ink);cursor:pointer}
+.vkp-ctl button.is-on{background:var(--brand);color:#fff}
+.vkp-ctl label{display:flex;align-items:center;gap:8px;margin-left:16px;cursor:pointer}
+.vkp-list{display:flex;flex-wrap:wrap;gap:28px 32px}
+.vkp-list figure{margin:0}
+.vkp-list figcaption{margin:0 0 8px;font-size:14px;font-weight:700;color:var(--ink-2)}
+.vkp{position:relative;width:895px;height:440px;border-radius:12px;overflow:hidden;background:#EDEEF0;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;zoom:1.1}
+.vkp__cover{position:absolute;left:0;top:0;width:895px;height:303px;overflow:hidden;background:#fff}
+.vkp__cover > div{position:absolute !important;left:0;top:-117px}
+.vkp__card{position:absolute;left:0;right:0;top:303px;height:125px;background:#fff;border-radius:0 0 12px 12px;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+.vkp__ava{position:absolute;left:18px;top:283px;width:94px;height:94px;border-radius:50%;overflow:hidden;background:#fff;box-shadow:0 0 0 4px #fff;z-index:2}
+.vkp__ava > div{position:relative;overflow:hidden}
+.vkp__plus{position:absolute;left:88px;top:352px;width:22px;height:22px;border-radius:50%;background:#4B7DC4;box-shadow:0 0 0 3px #fff;z-index:3;color:#fff;font-size:18px;line-height:21px;text-align:center}
+.vkp__name{position:absolute;left:130px;top:24px;font-size:20px;font-weight:600;color:#000}
+.vkp__rate{position:absolute;left:130px;top:52px;font-size:14px;color:#818C99}
+.vkp__rate i{letter-spacing:2px;color:#C4C8CC;font-style:normal}
+.vkp__sub{position:absolute;left:130px;top:80px;font-size:13px;color:#818C99}
+.vkp__btn{position:absolute;top:20px;height:34px;padding:0 16px;border-radius:8px;font-size:14px;font-weight:600;line-height:34px}
+.vkp__btn--a{right:107px;background:#4B7DC4;color:#fff}
+.vkp__btn--b{right:16px;background:#EDF0F4;color:#2C5E9E}
+/* Без шара на обложке: знак остаётся на аватаре, текст сдвигается влево */
+.vkp.no-logo .vkp__cover .logo{display:none}
+.vkp.no-logo .vkp__cover .vk-cover:not(.cv) .txt{left:260px}
+.vkp.no-logo .vkp__cover .vk-cover:not(.cv) .h1{font-size:96px}
+.vkp.no-logo .vkp__cover .cv-people .txt{left:200px !important}
+.vkp.no-logo .vkp__cover .cv-people .h1{font-size:90px !important}

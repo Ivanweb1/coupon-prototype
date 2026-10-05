@@ -322,4 +322,48 @@ if (siteV) {
 }
 
 /* Билетики строятся после шрифтов: от них зависит ширина плашки */
-document.fonts.ready.then(() => { shapeTickets(); fitAvatarTowns(); avatarSizes(); });
+/* Шапка группы ВК: копии обложек и выбранного аватара в масштабе ВК */
+const VKP_COVERS = [["vk-cover", "Сейчас"], ["vk-cover-people", "A. Люди"], ["vk-cover-shelf", "B. Витрина"], ["vk-cover-flat", "C. Раскладка"]];
+const plainCopy = (src, zoom) => {
+  const c = src.cloneNode(true);
+  c.removeAttribute("id"); c.removeAttribute("data-out"); c.classList.remove("art");
+  c.style.cssText = "position:relative;overflow:hidden;zoom:" + zoom;
+  c.querySelectorAll("[id]").forEach(n => { n.id += "-p"; });
+  c.querySelectorAll("textPath").forEach(n => n.setAttribute("href", n.getAttribute("href") + "-p"));
+  return c;
+};
+let vkpAva = "tilt";
+function vkPreview() {
+  const list = document.getElementById("vkp-list");
+  const noLogo = document.getElementById("vkp-nologo").checked;
+  list.innerHTML = "";
+  VKP_COVERS.forEach(([id, name]) => {
+    const f = document.createElement("figure");
+    f.innerHTML = `<figcaption>${name}</figcaption>
+      <div class="vkp${noLogo ? " no-logo" : ""}">
+        <div class="vkp__cover"></div>
+        <div class="vkp__card">
+          <div class="vkp__name">ВСЕКУПОНЫ | ${town || "Липецк"}</div>
+          <div class="vkp__rate"><i>★★★★★</i> · Нет отзывов</div>
+          <div class="vkp__sub">✓ Вы подписаны</div>
+          <div class="vkp__btn vkp__btn--a">Сообщение</div>
+          <div class="vkp__btn vkp__btn--b">Ещё ⌄</div>
+        </div>
+        <div class="vkp__ava"></div><div class="vkp__plus">+</div>
+      </div>`;
+    f.querySelector(".vkp__cover").appendChild(plainCopy(document.getElementById(id), .466));
+    f.querySelector(".vkp__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 94 / 400));
+    list.appendChild(f);
+  });
+}
+document.getElementById("vkp-avas").innerHTML = AVAS.map(([id, , , name], i) =>
+  `<button data-a="${id}"${id === vkpAva ? ' class="is-on"' : ""}>${i + 1}. ${name}</button>`).join(" ");
+document.getElementById("vkp-avas").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  vkpAva = b.dataset.a;
+  document.querySelectorAll("#vkp-avas button").forEach(x => x.classList.toggle("is-on", x === b));
+  vkPreview();
+});
+document.getElementById("vkp-nologo").addEventListener("change", vkPreview);
+
+document.fonts.ready.then(() => { shapeTickets(); fitAvatarTowns(); avatarSizes(); vkPreview(); });
