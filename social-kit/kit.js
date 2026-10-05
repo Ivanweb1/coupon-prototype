@@ -443,7 +443,7 @@ document.querySelectorAll("[data-post]").forEach(el => {
           <li>${icon("pin")}${town || "Липецк"}, ${c.address}</li>
           <li>${icon("cal")}${c.until}</li>
         </ul>
-        ${el.dataset.code ? `<div class="post__code"><span>Промокод</span><b>${c.code}</b><i>Назовите на кассе</i></div>` : ""}
+        ${el.dataset.code ? `<div class="post__code"><div class="pc__l"><span>Промокод</span><b>${c.code}</b></div><div class="pc__r">${icon("ticket", 2)}<span>Назовите<br>на кассе</span></div><i class="pc__n pc__n--t"></i><i class="pc__n pc__n--b"></i></div>` : ""}
         <div class="post__foot"><div class="post__foot-t"><span>${el.dataset.code ? "Все купоны города" : "Код купона — на сайте"}</span><b>vsekupony.ru</b></div><img class="logo" src="../assets/brand/logo-red.png" alt=""></div>
       </div>
     </div>

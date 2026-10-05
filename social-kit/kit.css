@@ -918,17 +918,24 @@ body{
 .vk-mob2.cpn .cpn__side{left:282px;right:40px}
 .vk-mob2.cpn .cpn__n--a{left:83px}
 .vk-mob2.cpn .cpn__n--b{left:927px}
-/* Пост с промокодом: код в пунктирной рамке, как на кассе */
-.post__code{
-  display:flex;align-items:center;gap:24px;margin:30px 0 0;padding:20px 28px;
-  border:3px dashed var(--line-strong);border-radius:24px;background:var(--chip);
-}
-.post__code span{font-size:26px;font-weight:600;color:var(--ink-3)}
-.post__code b{font-size:52px;font-weight:800;letter-spacing:.04em;color:var(--brand)}
-.post__code i{margin-left:auto;font-style:normal;font-size:24px;font-weight:500;color:var(--ink-3);text-align:right;max-width:150px;line-height:1.2}
-.post11 .post__code{margin-top:24px;padding:16px 22px;gap:16px;flex-wrap:wrap}
-.post11 .post__code b{font-size:44px}
-.post11 .post__code i{display:none}
+/* Пост с промокодом — маленький купон: слева код на светлом поле,
+   справа красный корешок «Назовите на кассе», между ними линия отрыва
+   с вырезами (правка 05.10) */
+.post__code{position:relative;display:flex;align-items:stretch;margin:30px 0 0;border-radius:22px;overflow:hidden}
+.pc__l{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:16px 28px;background:#F6F6F6}
+.pc__l span{font-size:20px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.pc__l b{font-size:52px;font-weight:800;letter-spacing:.06em;line-height:1.05;color:var(--ink);font-variant-numeric:tabular-nums}
+.pc__r{flex:none;width:220px;display:flex;align-items:center;gap:14px;padding:0 24px;background:var(--brand);color:#fff;
+  border-left:3px dashed rgba(255,255,255,.55);font-size:23px;font-weight:700;line-height:1.15}
+.pc__r svg{width:40px;height:40px;flex:none}
+.pc__n{position:absolute;right:202px;width:36px;height:36px;border-radius:50%;background:#fff}
+.pc__n--t{top:-18px}.pc__n--b{bottom:-18px}
+.post11 .post__code{margin-top:24px}
+.post11 .pc__l{padding:14px 22px}
+.post11 .pc__l b{font-size:42px}
+.post11 .pc__r{width:170px;padding:0 18px;font-size:19px;gap:10px}
+.post11 .pc__r svg{width:32px;height:32px}
+.post11 .pc__n{right:152px}
 /* С промокодом место уходит под код: заголовок и мета компактнее */
 [data-code] .post__t{font-size:56px}
 [data-code] .post__meta{margin-top:22px}
