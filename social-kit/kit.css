@@ -786,16 +786,27 @@ body{
 .vk-cover.cpn .cpn__n--a{left:968px;top:103px}
 .vk-cover.cpn .cpn__n--b{left:968px;top:643px}
 
-/* Телефон */
-.vk-mob2.cpn{--nd:76px}
-.vk-mob2.cpn .cpn__l{left:140px;right:140px;top:560px;height:500px;align-items:center;text-align:center;
-  border-radius:44px 44px 0 0;border-bottom:3px dashed var(--line-strong)}
-.vk-mob2.cpn--red .cpn__l{border-bottom-color:rgba(255,255,255,.5)}
-:is(#covers2,#vkprev) .vk-mob2.cpn .h1{font-size:92px}
-:is(#covers2,#vkprev) .vk-mob2.cpn .steps{justify-content:center;margin-top:26px;font-size:27px}
-:is(#covers2,#vkprev) .vk-mob2.cpn .cpn__ph{left:140px;right:140px;top:1060px;bottom:40px;border-radius:0 0 44px 44px;--hot-left:290px}
-.vk-mob2.cpn .cpn__n--a{left:102px;top:1022px}
-.vk-mob2.cpn .cpn__n--b{right:102px;top:1022px}
+/* Телефон — весь купон в видимом окне шапки ВК (~118–962 × 423–1480):
+   сверху снимок (на него ложатся кнопки «назад» и «настройки»), отрыв на
+   770, ниже корешок: заголовок до 1040 — выше аватара, шаги и адрес —
+   справа от аватара; купон кончается на 1290, над названием сообщества.
+   Фон вокруг цветной, чтобы белое название ВК читалось: под белым
+   купоном — красный, под красным — тёмный. */
+.vk-mob2.cpn{--nd:70px;--cut:var(--brand);background:var(--brand) !important}
+.vk-mob2.cpn--red{--cut:#1B1B1B;background:#1B1B1B !important}
+:is(#covers2,#vkprev) .vk-mob2.cpn .cpn__ph{left:150px;width:780px;top:470px;height:300px;bottom:auto;border-radius:40px 40px 0 0;
+  --hot-left:0px;--hot-bottom:0px;--hot-top:150px;--hot-fs:26px}
+.vk-mob2.cpn .cpn__l{left:150px;width:780px;top:770px;height:520px;display:block;padding:26px 0 0;text-align:center;
+  border-radius:0 0 40px 40px;border-top:3px dashed var(--line-strong)}
+.vk-mob2.cpn--red .cpn__l{border-top-color:rgba(255,255,255,.5)}
+:is(#covers2,#vkprev) .vk-mob2.cpn .h1{font-size:76px}
+.vk-mob2.cpn .cpn__side{position:absolute;left:250px;right:30px;top:290px;display:flex;flex-direction:column;align-items:flex-start;gap:18px;text-align:left}
+:is(#covers2,#vkprev) .vk-mob2.cpn .steps{flex-direction:column;align-items:flex-start;gap:8px;margin:0;font-size:26px}
+.vk-mob2.cpn .steps li + li{margin-left:0}
+.vk-mob2.cpn .steps li + li::before{display:none}
+.vk-mob2.cpn .cpn__code{font-size:25px}
+.vk-mob2.cpn .cpn__n--a{left:115px;top:735px}
+.vk-mob2.cpn .cpn__n--b{left:895px;top:735px}
 
 /* ==========================================================================
    Вариации рамки P–S (05.10): формат G с другими снимками и фоном

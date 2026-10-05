@@ -237,11 +237,19 @@ const MOB_FOCUS = {
   "people-3": [.58, .30, 1.6, 640, 130],
   "flatlay":  [.65, .15, 1,   470, 125]
 };
+/* Купон на телефоне: снимок — полоса 780×300 вверху купона, лица и
+   главное — по центру полосы */
+const MOB_FOCUS_CPN = {
+  "people":   [.70, .22, 1,   640, 120],
+  "people-2": [.75, .22, 1,   560, 120],
+  "people-3": [.62, .30, 1,   520, 120],
+  "flatlay":  [.75, .45, 1,   560, 150]
+};
 /* Где лежит снимок в кадре: обычно cover по --pos; на телефоне — от фокуса */
 function photoBox(shot) {
   const size = PHOTO_SIZE[shot.dataset.file];
   const W = shot.clientWidth, H = shot.clientHeight;
-  const f = shot.closest(".vk-mob2") && MOB_FOCUS[shot.dataset.file];
+  const f = shot.closest(".vk-mob2") && (shot.closest(".cpn") ? MOB_FOCUS_CPN : MOB_FOCUS)[shot.dataset.file];
   if (f) {
     const sc = Math.max(W / size[0], H / size[1]) * f[2];
     const dw = size[0] * sc, dh = size[1] * sc;
