@@ -944,3 +944,6 @@ body{
 .post45[data-code] .perf{top:614px}
 .post45[data-code] .post__body{padding-top:40px}
 .pc__r{justify-content:center;text-align:center}
+/* В макетах шапки ВК системный шрифт — только у интерфейса ВК; копии
+   обложек и аватаров внутри — Onest, как в PNG */
+.vkp__cover,.vkm__cover,.vkp__ava,.vkm__ava,.art{font-family:var(--font)}
