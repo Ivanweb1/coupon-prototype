@@ -91,12 +91,21 @@ document.getElementById("ava-list").innerHTML = AVAS.map(([id, cls, inner, name,
     <div class="av-desc"><b>${name}</b>${desc}</div>
   </div>` + (examples ? `<div class="av-row av-sizes" style="margin-top:-12px">${examples}</div>` : "");
 }).join("");
-/* Примеры городов — полноразмерные копии, уменьшенные zoom'ом */
+/* Уменьшенная копия аватара — шириной, а не zoom'ом. Аватар свёрстан
+   в cqw и сам перестраивается под сторону; zoom плагины импорта в Figma
+   не понимают: берут кегль до уменьшения, а рамку после, и текст лезет
+   из блока. Пиксельный кегль плашки города пересчитываем. */
+function sizeAva(c, px) {
+  const k = px / (parseFloat(getComputedStyle(c).width) || 400);
+  c.style.cssText = `position:relative;overflow:hidden;width:${px}px;height:${px}px`;
+  c.querySelectorAll(".tag").forEach(t => { if (t.style.fontSize) t.style.fontSize = parseFloat(t.style.fontSize) * k + "px"; });
+}
+/* Примеры городов — копии шириной 160 */
 document.querySelectorAll("[data-ex]").forEach(el => {
   const [id, t] = el.dataset.ex.split("|");
   const [, cls, inner] = AVAS.find(a => a[0] === id);
   el.innerHTML = avArt(id, cls, inner, t, false);
-  el.firstElementChild.style.zoom = .4;
+  sizeAva(el.firstElementChild, 160);
 });
 document.querySelectorAll("[data-av-town]").forEach(el => {
   el.textContent = el.closest("[data-town-v]").dataset.townV;
@@ -110,10 +119,11 @@ function fitAvatarTowns() {
     const two = t.length > 10 && /[ -]/.test(t);
     const lines = two ? t.replace(/-/, "-\n").replace(/ /, "\n").split("\n") : [t];
     tag.innerHTML = lines.map(l => `<span>${l}</span>`).join("");
-    const box = 400 * .68;
-    let fs = two ? 44 : 60;
+    const k = (parseFloat(getComputedStyle(tag.closest(".av")).width) || 400) / 400;
+    const box = 400 * .68 * k;
+    let fs = (two ? 44 : 60) * k;
     tag.style.fontSize = fs + "px";
-    while (fs > 18 && Math.max(...[...tag.children].map(s => s.scrollWidth)) > box) tag.style.fontSize = (fs -= 1) + "px";
+    while (fs > 18 * k && Math.max(...[...tag.children].map(s => s.scrollWidth)) > box) tag.style.fontSize = (fs -= k) + "px";
   });
   document.querySelectorAll(".av-ring textPath[data-av-town]").forEach(tp => {
     const text = tp.parentNode;
@@ -167,12 +177,12 @@ function avatarSizes() {
       m.className = "av-mini"; m.style.width = m.style.height = px + "px";
       const c = src.cloneNode(true);
       c.removeAttribute("id"); c.removeAttribute("data-out"); c.classList.remove("art");
-      c.style.cssText = "position:relative;overflow:hidden;zoom:" + px / 400;
       c.querySelectorAll("[id]").forEach(n => { n.id += "-m" + px; });
       c.querySelectorAll("textPath").forEach(n => n.setAttribute("href", n.getAttribute("href") + "-m" + px));
       m.appendChild(c);
       f.append(m, px + " px");
       box.appendChild(f);
+      sizeAva(c, px);
     });
   });
 }
@@ -617,15 +627,26 @@ const VKP_COVERS = [["vk-cover", "Сейчас"], ["vk-cover-people", "A. Люд
   ["vk-cover-cpn-red-walk", "O. Купон, красный, прогулка"],
   ["vk-cover-fr-walk", "P. Рамка, прогулка"], ["vk-cover-fr-flat", "Q. Рамка, раскладка"],
   ["vk-cover-fr-red", "R. Рамка на красном"], ["vk-cover-fr-duo", "S. Две рамки"]];
+/* ?vk=1 — превью шапки ВК для Figma: всё в натуральную величину, без
+   zoom. Обложка — 1:1, интерфейс ВК вокруг неё увеличен множителем --s
+   (в CSS все размеры .vkp/.vkm — calc(var(--s) * N px)), аватар собран
+   шириной своего круга. */
+const VKFIG = document.documentElement.classList.contains("vkfig");
+const VKP_S = 1920 / 895, VKM_S = 1 / .7;
 const plainCopy = (src, zoom) => {
   const c = src.cloneNode(true);
   c.removeAttribute("id"); c.removeAttribute("data-out"); c.classList.remove("art");
-  c.style.cssText = "position:relative;overflow:hidden;zoom:" + zoom;
+  c.style.cssText = "position:relative;overflow:hidden" + (VKFIG ? "" : ";zoom:" + zoom);
   c.querySelectorAll("[id]").forEach(n => { n.id += "-p"; });
   c.querySelectorAll("textPath").forEach(n => n.setAttribute("href", n.getAttribute("href") + "-p"));
   return c;
 };
-let vkpAva = "big";
+let vkpAva = new URLSearchParams(location.search).get("ava") || "big";
+/* Аватар в шапке — копия шириной круга (px), без zoom */
+const avaCopy = px => {
+  const c = plainCopy(document.getElementById("ava-" + vkpAva), 1);
+  return c;
+};
 /* Под каждой обложкой — как она выглядит в ВК (правка 05.10): под обложкой
    для компьютера — шапка группы на компьютере, под живой — шапка в
    приложении на телефоне. Аватар и «без шара» переключаются наверху. */
@@ -645,7 +666,10 @@ const vkDesk = (art, noLogo) => {
       <div class="vkp__ava"></div><div class="vkp__plus">+</div>
     </div>`;
   d.querySelector(".vkp__cover").appendChild(plainCopy(art, .466));
-  d.querySelector(".vkp__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 94 / 400));
+  const a = avaCopy();
+  d.querySelector(".vkp__ava").appendChild(a);
+  d._ava = [a, 94 * (VKFIG ? VKP_S : 1)];
+  if (VKFIG) d.querySelector(".vkp").style.setProperty("--s", VKP_S);
   return d;
 };
 const vkPhone = art => {
@@ -662,15 +686,41 @@ const vkPhone = art => {
       <div class="vkm__sub">Вы подписаны · 2 подписчика</div>
     </div>`;
   d.querySelector(".vkm__cover").appendChild(plainCopy(art, .7));
-  d.querySelector(".vkm__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 150 / 400));
+  const a = avaCopy();
+  d.querySelector(".vkm__ava").appendChild(a);
+  d._ava = [a, 150 * (VKFIG ? VKM_S : 1)];
+  if (VKFIG) d.querySelector(".vkm").style.setProperty("--s", VKM_S);
   return d;
 };
+/* Копия аватара ужимается, когда она уже в документе: размер плашки
+   города считается от вычисленной ширины */
+const placeAva = d => sizeAva(...d._ava);
 function vkPreview() {
   const noLogo = document.getElementById("vkp-nologo").checked;
   document.querySelectorAll(".vk-inline").forEach(n => n.remove());
-  document.querySelectorAll(".art.vk-cover").forEach(art => art.closest(".fit").after(vkDesk(art, noLogo)));
-  document.querySelectorAll(".art.vk-mob2, .art.vk-mob").forEach(art => art.closest(".fit").after(vkPhone(art)));
+  if (VKFIG) return vkFigma(noLogo);
+  document.querySelectorAll(".art.vk-cover").forEach(art => { const d = vkDesk(art, noLogo); art.closest(".fit").after(d); placeAva(d); });
+  document.querySelectorAll(".art.vk-mob2, .art.vk-mob").forEach(art => { const d = vkPhone(art); art.closest(".fit").after(d); placeAva(d); });
   avatarInVk();
+}
+/* ?vk=1: каждая обложка — парой «компьютер + телефон» в одну строку,
+   подпись — заголовок варианта. Исходные макеты остаются в вёрстке
+   невидимыми: от их размеров считаются билетики и метки на снимках. */
+function vkFigma(noLogo) {
+  const box = document.getElementById("vkfig") || document.querySelector(".page").insertAdjacentElement("afterbegin", Object.assign(document.createElement("section"), { id: "vkfig" }));
+  box.innerHTML = "";
+  document.querySelectorAll(".page > .net .row").forEach(row => {
+    const desk = row.querySelector(".art.vk-cover"), mob = row.querySelector(".art.vk-mob2, .art.vk-mob");
+    if (!desk && !mob) return;
+    const h = row.previousElementSibling;
+    const r = document.createElement("div");
+    r.className = "vkfig__row";
+    r.innerHTML = `<div class="vkfig__h">${h && h.matches("h2,h3") ? h.textContent.trim() : "ВКонтакте"}</div><div class="vkfig__pair"></div>`;
+    box.appendChild(r);
+    const pair = r.lastElementChild;
+    if (desk) { const d = vkDesk(desk, noLogo); pair.appendChild(d); placeAva(d); }
+    if (mob) { const d = vkPhone(mob); pair.appendChild(d); placeAva(d); }
+  });
 }
 /* Аватары списком (правка 05.10): у каждого варианта — он же в шапке ВК
    на компьютере и в приложении, на обложке I2 */
@@ -685,8 +735,10 @@ function avatarInVk() {
     vkpAva = id;
     const box = document.createElement("div");
     box.className = "av-vk";
-    box.append(vkDesk(cov, false), vkPhone(mob));
+    const d = vkDesk(cov, false), m = vkPhone(mob);
+    box.append(d, m);
     row.after(box);
+    placeAva(d); placeAva(m);
   });
   vkpAva = keep;
 }
