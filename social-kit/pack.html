@@ -78,6 +78,8 @@ body{
 .item__ph img{display:block;max-width:100%;max-height:420px;height:auto;box-shadow:0 10px 24px -14px rgba(0,0,0,.4)}
 .item__ph--round img{border-radius:50%;max-width:200px}
 .item__ph--menu{grid-template-columns:repeat(3,1fr);gap:10px;align-items:start}
+.item__ph--vk{grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:12px;align-items:center}
+.item__ph--vk img{max-height:none;width:100%}
 .item__ph--menu img{border-radius:8px;box-shadow:none}
 .item__body{display:flex;flex-direction:column;gap:4px;padding:14px 2px 0;min-width:0}
 .item__t{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
@@ -117,8 +119,9 @@ body{
   </header>
 
   <div class="get">
-    <a class="get__zip" href="out/vsekupony-social.zip">Скачать все PNG одним архивом</a>
+    <a class="get__zip" href="out/vsekupony-social.zip">Скачать все PNG одним архивом (все варианты)</a>
     <a class="get__fig" href="index.html?bare=1">Макеты для Figma в натуральную величину</a>
+    <a class="get__fig" href="index.html?vk=1">Превью шапки ВК для Figma</a>
   </div>
 
   <ul class="nav" aria-label="Соцсети">
@@ -126,6 +129,9 @@ body{
     <li><a href="#ok">Одноклассники <small>4</small></a></li>
     <li><a href="#tg">Telegram <small>2</small></a></li>
     <li><a href="#max">MAX <small>2</small></a></li>
+    <li><a href="#covers">Обложки ВК — варианты <small>14</small></a></li>
+    <li><a href="#avas">Аватары <small>7</small></a></li>
+    <li><a href="#posts-code">Посты с промокодом <small>4</small></a></li>
   </ul>
 
   <!-- ВКонтакте -->
@@ -291,6 +297,202 @@ body{
           <div class="item__t"><b>Пост с купоном</b><span class="size">1080×1350</span></div>
           <p class="item__where">Картинка к публикации, ссылка на купон в тексте.</p>
           <p class="item__file"><a href="out/max/max-post-1080x1350.png">max-post-1080x1350.png</a></p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Обложки ВК — все варианты (05.10) -->
+  <section class="net" id="covers">
+    <div class="net__head"><h2>Обложки ВК — варианты</h2><span>для компьютера 1920×768 и живая для телефона 1080×1920</span></div>
+    <div class="grid grid--pair">
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-stone-1920x768.png" alt="Обложка I для компьютера"><img src="out/vk/vk-mobile-cover-stone-1080x1920.png" alt="Обложка I, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>I. Раскладка без панели: заголовок прямо на камне, метки на товарах</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-stone-1920x768.png">vk-cover-stone-1920x768</a> · <a href="out/vk/vk-mobile-cover-stone-1080x1920.png">vk-mobile-cover-stone-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-stone-panel-1920x768.png" alt="Обложка I2 для компьютера"><img src="out/vk/vk-mobile-cover-stone-panel-1080x1920.png" alt="Обложка I2, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>I2. Раскладка на камне, заголовок на белой подложке</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-stone-panel-1920x768.png">vk-cover-stone-panel-1920x768</a> · <a href="out/vk/vk-mobile-cover-stone-panel-1080x1920.png">vk-mobile-cover-stone-panel-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-red-table-1920x768.png" alt="Обложка U для компьютера"><img src="out/vk/vk-mobile-cover-cpn-red-table-1080x1920.png" alt="Обложка U, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>U. Красный корешок, стол в кафе</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-red-table-1920x768.png">vk-cover-cpn-red-table-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-red-table-1080x1920.png">vk-mobile-cover-cpn-red-table-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-white-table-1920x768.png" alt="Обложка U2 для компьютера"><img src="out/vk/vk-mobile-cover-cpn-white-table-1080x1920.png" alt="Обложка U2, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>U2. Инверсия: белый корешок, стол в кафе</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-white-table-1920x768.png">vk-cover-cpn-white-table-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-white-table-1080x1920.png">vk-mobile-cover-cpn-white-table-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-people-1920x768.png" alt="Обложка A для компьютера"><img src="out/vk/vk-mobile-cover-people-1080x1920.png" alt="Обложка A, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>A. Люди: довольный покупатель и выгоды на снимке</b><span class="size">1920×768 + 1080×1920 + ОК 1944×600</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-people-1920x768.png">vk-cover-people-1920x768</a> · <a href="out/vk/vk-mobile-cover-people-1080x1920.png">vk-mobile-cover-people-1080x1920</a> · <a href="out/ok/ok-cover-people-1944x600.png">ok-cover-people-1944x600</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cafe-1920x768.png" alt="Обложка G для компьютера"><img src="out/vk/vk-mobile-cover-cafe-1080x1920.png" alt="Обложка G, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>G. Кафе: снимок в скруглённой рамке, выгоды привязаны к предметам на фото</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cafe-1920x768.png">vk-cover-cafe-1920x768</a> · <a href="out/vk/vk-mobile-cover-cafe-1080x1920.png">vk-mobile-cover-cafe-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-couple-1920x768.png" alt="Обложка H для компьютера"><img src="out/vk/vk-mobile-cover-couple-1080x1920.png" alt="Обложка H, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>H. Пара с покупками: рамка, метки на букете, выпечке и пакетах</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-couple-1920x768.png">vk-cover-couple-1920x768</a> · <a href="out/vk/vk-mobile-cover-couple-1080x1920.png">vk-mobile-cover-couple-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-fr-walk-1920x768.png" alt="Обложка P для компьютера"><img src="out/vk/vk-mobile-cover-fr-walk-1080x1920.png" alt="Обложка P, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>P. Рамка: прогулка с покупками</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-fr-walk-1920x768.png">vk-cover-fr-walk-1920x768</a> · <a href="out/vk/vk-mobile-cover-fr-walk-1080x1920.png">vk-mobile-cover-fr-walk-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-white-cafe-1920x768.png" alt="Обложка K для компьютера"><img src="out/vk/vk-mobile-cover-cpn-white-cafe-1080x1920.png" alt="Обложка K, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>K. Белый корешок, кафе</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-white-cafe-1920x768.png">vk-cover-cpn-white-cafe-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-white-cafe-1080x1920.png">vk-mobile-cover-cpn-white-cafe-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-red-cafe-1920x768.png" alt="Обложка L для компьютера"><img src="out/vk/vk-mobile-cover-cpn-red-cafe-1080x1920.png" alt="Обложка L, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>L. Красный корешок, кафе</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-red-cafe-1920x768.png">vk-cover-cpn-red-cafe-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-red-cafe-1080x1920.png">vk-mobile-cover-cpn-red-cafe-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-red-couple-1920x768.png" alt="Обложка M для компьютера"><img src="out/vk/vk-mobile-cover-cpn-red-couple-1080x1920.png" alt="Обложка M, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>M. Красный корешок, пара с покупками</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-red-couple-1920x768.png">vk-cover-cpn-red-couple-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-red-couple-1080x1920.png">vk-mobile-cover-cpn-red-couple-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-white-couple-1920x768.png" alt="Обложка M2 для компьютера"><img src="out/vk/vk-mobile-cover-cpn-white-couple-1080x1920.png" alt="Обложка M2, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>M2. Инверсия: белый корешок, пара с покупками</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-white-couple-1920x768.png">vk-cover-cpn-white-couple-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-white-couple-1080x1920.png">vk-mobile-cover-cpn-white-couple-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-red-walk-1920x768.png" alt="Обложка O для компьютера"><img src="out/vk/vk-mobile-cover-cpn-red-walk-1080x1920.png" alt="Обложка O, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>O. Красный корешок, прогулка</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-red-walk-1920x768.png">vk-cover-cpn-red-walk-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-red-walk-1080x1920.png">vk-mobile-cover-cpn-red-walk-1080x1920</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--vk"><img src="out/vk/vk-cover-cpn-white-walk-1920x768.png" alt="Обложка O2 для компьютера"><img src="out/vk/vk-mobile-cover-cpn-white-walk-1080x1920.png" alt="Обложка O2, живая для телефона"></div>
+        <div class="item__body">
+          <div class="item__t"><b>O2. Инверсия: белый корешок, прогулка</b><span class="size">1920×768 + 1080×1920</span></div>
+          <p class="item__file"><a href="out/vk/vk-cover-cpn-white-walk-1920x768.png">vk-cover-cpn-white-walk-1920x768</a> · <a href="out/vk/vk-mobile-cover-cpn-white-walk-1080x1920.png">vk-mobile-cover-cpn-white-walk-1080x1920</a></p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Аватар — все варианты -->
+  <section class="net" id="avas">
+    <div class="net__head"><h2>Аватар — варианты</h2><span>один на все сети, круглая обрезка</span></div>
+    <div class="grid">
+      <article class="item">
+        <div class="item__ph item__ph--round"><img src="out/ava/ava-1-big-400x400.png" alt="Аватар: Шар крупно"></div>
+        <div class="item__body">
+          <div class="item__t"><b>1. Шар крупно</b><span class="size">400×400</span></div>
+          <p class="item__file"><a href="out/ava/ava-1-big-400x400.png">ava-1-big-400x400.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--round"><img src="out/ava/ava-2-inv-400x400.png" alt="Аватар: Белый шар на красном"></div>
+        <div class="item__body">
+          <div class="item__t"><b>2. Белый шар на красном</b><span class="size">400×400</span></div>
+          <p class="item__file"><a href="out/ava/ava-2-inv-400x400.png">ava-2-inv-400x400.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--round"><img src="out/ava/ava-3-tilt-400x400.png" alt="Аватар: Наклейка"></div>
+        <div class="item__body">
+          <div class="item__t"><b>3. Наклейка</b><span class="size">400×400</span></div>
+          <p class="item__file"><a href="out/ava/ava-3-tilt-400x400.png">ava-3-tilt-400x400.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--round"><img src="out/ava/ava-4-ring-400x400.png" alt="Аватар: Город по кругу"></div>
+        <div class="item__body">
+          <div class="item__t"><b>4. Город по кругу</b><span class="size">400×400</span></div>
+          <p class="item__file"><a href="out/ava/ava-4-ring-400x400.png">ava-4-ring-400x400.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--round"><img src="out/ava/ava-5-ring-red-400x400.png" alt="Аватар: Город по кругу, на красном"></div>
+        <div class="item__body">
+          <div class="item__t"><b>5. Город по кругу, на красном</b><span class="size">400×400</span></div>
+          <p class="item__file"><a href="out/ava/ava-5-ring-red-400x400.png">ava-5-ring-red-400x400.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--round"><img src="out/ava/ava-6-ring-band-400x400.png" alt="Аватар: Печать с красным ободом"></div>
+        <div class="item__body">
+          <div class="item__t"><b>6. Печать с красным ободом</b><span class="size">400×400</span></div>
+          <p class="item__file"><a href="out/ava/ava-6-ring-band-400x400.png">ava-6-ring-band-400x400.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph item__ph--round"><img src="out/ava/ava-7-ring-band-red-400x400.png" alt="Аватар: Печать на красном"></div>
+        <div class="item__body">
+          <div class="item__t"><b>7. Печать на красном</b><span class="size">400×400</span></div>
+          <p class="item__file"><a href="out/ava/ava-7-ring-band-red-400x400.png">ava-7-ring-band-red-400x400.png</a></p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Пост с промокодом -->
+  <section class="net" id="posts-code">
+    <div class="net__head"><h2>Пост с промокодом</h2><span>второй вариант поста: код купона мини-купоном «Назовите на кассе»</span></div>
+    <div class="grid">
+      <article class="item">
+        <div class="item__ph"><img src="out/vk/vk-post-code-1080x1350.png" alt="Пост с промокодом, ВКонтакте"></div>
+        <div class="item__body">
+          <div class="item__t"><b>ВКонтакте</b><span class="size">1080×1350</span></div>
+          <p class="item__file"><a href="out/vk/vk-post-code-1080x1350.png">vk-post-code-1080x1350.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph"><img src="out/ok/ok-post-code-1080x1080.png" alt="Пост с промокодом, Одноклассники"></div>
+        <div class="item__body">
+          <div class="item__t"><b>Одноклассники</b><span class="size">1080×1080</span></div>
+          <p class="item__file"><a href="out/ok/ok-post-code-1080x1080.png">ok-post-code-1080x1080.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph"><img src="out/tg/tg-post-code-1080x1350.png" alt="Пост с промокодом, Telegram"></div>
+        <div class="item__body">
+          <div class="item__t"><b>Telegram</b><span class="size">1080×1350</span></div>
+          <p class="item__file"><a href="out/tg/tg-post-code-1080x1350.png">tg-post-code-1080x1350.png</a></p>
+        </div>
+      </article>
+      <article class="item">
+        <div class="item__ph"><img src="out/max/max-post-code-1080x1350.png" alt="Пост с промокодом, MAX"></div>
+        <div class="item__body">
+          <div class="item__t"><b>MAX</b><span class="size">1080×1350</span></div>
+          <p class="item__file"><a href="out/max/max-post-code-1080x1350.png">max-post-code-1080x1350.png</a></p>
         </div>
       </article>
     </div>
