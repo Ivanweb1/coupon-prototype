@@ -885,3 +885,5 @@ body{
 .vk-mob2.cpn:not(.cpn--red) .cpn__l{background:#F9F9F9;border-top-color:#D0D0D0}
 /* Вырезы белые на всех мобильных купонах, и на красном тоже */
 .vk-mob2.cpn{--cut:#fff}
+/* U на телефоне: блюда в середине полосы — метки выше, между кнопками ВК */
+:is(#covers2,#vkprev) #vk-mob-cpn-red-table .cpn__ph,.vkm #vk-mob-cpn-red-table .cpn__ph{--hot-top:110px}
