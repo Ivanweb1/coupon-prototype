@@ -813,5 +813,5 @@ body{
 /* S: две рамки внахлёст — большая справа, малая ниже и левее, с белой
    обводкой, чтобы читалась отдельным снимком */
 :is(#covers2,#vkprev) .vk-cover.cv-duo .shot{left:1130px;top:125px;right:60px;bottom:130px;--pos:72% 40%}
-:is(#covers2,#vkprev) .vk-cover.cv-duo .shot--2{left:960px;top:400px;right:auto;bottom:auto;width:420px;height:270px;
+:is(#covers2,#vkprev) .vk-cover.cv-duo .shot--2{left:1040px;top:410px;right:auto;bottom:auto;width:400px;height:260px;
   border-radius:32px;box-shadow:0 0 0 8px #fff, 0 30px 60px -30px rgba(40,10,8,.5);--pos:88% 75%;--hot-fs:24px;z-index:2}
