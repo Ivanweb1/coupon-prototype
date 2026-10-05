@@ -56,3 +56,12 @@ Top-down flat lay on a light warm grey stone surface, everyday city purchases an
 
 Если на раскладке билетики выгоды (−50%, 2 по цене 1, −30%) легли
 неудачно — их места правятся в `kit.css`, блок «C. Раскладка».
+
+## Аватар 6. Объёмный шар
+
+### avatar-3d.jpg
+Квадрат 1:1, от 1600 px. Для Midjourney — `--ar 1:1`.
+```
+3D render of a single glossy red balloon (color #DD443C) with a large white percent sign "%" printed on it, floating in the center of the frame, thin curly white string below, soft studio lighting, subtle reflections, plain solid red background of the same tone #DD443C, minimal, clean, centered composition with the balloon filling about 65% of the frame, rounded friendly shapes, toy-like, high detail. No other text, no letters, no logos, no watermark.
+```
+Если знак % выходит кривым — убрать его из промпта, знак наложим поверх.

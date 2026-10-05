@@ -382,16 +382,18 @@ body{
 
 /* Снимок. Пока файла нет — серая штриховка с именем файла, чтобы было
    видно, куда и что положить (kit.js снимает заглушку по загрузке). */
-#covers2 .shot{
+
+.shot{
   position:absolute;overflow:hidden;
   background:var(--surface-2) repeating-linear-gradient(-45deg, transparent 0 22px, rgba(0,0,0,.035) 22px 44px);
 }
-#covers2 .shot::after{
+
+.shot::after{
   content:attr(data-label);position:absolute;left:0;right:0;bottom:36px;
   padding:0 40px;text-align:center;font-size:24px;font-weight:600;line-height:1.35;color:var(--ink-3);white-space:pre-line;
 }
-#covers2 .shot.is-loaded{background:var(--surface-2) var(--img) var(--pos, center) / cover no-repeat}
-#covers2 .shot.is-loaded::after{display:none}
+.shot.is-loaded{background:var(--surface-2) var(--img) var(--pos, center) / cover no-repeat}
+.shot.is-loaded::after{display:none}
 
 /* Выгода на снимке: белая пилюля — значок ниши, ниша, билетик */
 .offer{
@@ -481,3 +483,54 @@ body{
 #covers2 .ok-cover.cv-flat .steps{margin-top:24px;font-size:21px}
 #covers2 .ok-cover.cv-flat .tk--1{left:1500px;top:110px;font-size:56px;--r:-4deg}
 #covers2 .ok-cover.cv-flat .tk--2{left:1580px;top:330px;font-size:44px;--r:3deg}
+
+/* ==========================================================================
+   Аватар — варианты (05.10)
+   ==========================================================================
+   Всё в долях стороны (cqw): один шаблон даёт 400, 512 и 800. Площадки
+   режут аватар в круг — смысл держим в центральных ~80 %. */
+.var-note{max-width:1100px;margin:-6px 0 24px;font-size:17px;line-height:1.5;color:var(--ink-2)}
+.bare .var-note{display:none}
+.av-row{display:flex;align-items:center;gap:40px;margin:0 0 36px}
+.av-row .slot{flex:none}
+.av-sizes{display:flex;align-items:flex-end;gap:28px}
+.av-sizes figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.av-mini{border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.av-desc{max-width:420px;font-size:16px;line-height:1.45;color:var(--ink-2)}
+.av-desc b{display:block;margin-bottom:4px;font-size:20px;color:var(--ink)}
+.bare .av-sizes,.bare .av-desc{display:none}
+.bare .av-row{margin-bottom:80px}
+
+.av{container-type:size;width:400px;height:400px;background:#fff}
+.av--red{background:var(--brand)}
+/* Голова шара без нитки: в PNG она занимает верхние ~72 % высоты */
+.av .ball{position:absolute;overflow:hidden;aspect-ratio:357/428}
+.av .ball img{display:block;width:100%;height:auto}
+.av .whole{position:absolute;left:50%;transform:translateX(-50%);height:auto}
+
+/* 1. Шар крупно, без нитки */
+.av-big .ball{left:50%;top:50%;height:76cqw;transform:translate(-46%,-50%)}
+/* 2. Белый шар на красном — заметен в белых списках ВК и ОК */
+.av-inv .whole{top:12cqw;height:76cqw}
+/* 3. Наклейка: белый шар крупно, наклон как у плашки города */
+.av-tilt .ball{left:50%;top:50%;height:78cqw;transform:translate(-48%,-50%) rotate(-8deg)}
+
+/* 4. Город на ленте: белая плашка снизу, город красным, подгоняется
+   по ширине; длинное название — в две строки */
+.av-tag .ball{left:50%;top:9cqw;height:52cqw;transform:translateX(-47%)}
+.av-tag .tag{
+  position:absolute;left:50%;top:63cqw;width:74cqw;
+  padding:1.6cqw 3cqw 2.2cqw;border-radius:3cqw;background:#fff;color:var(--brand);
+  text-align:center;font-weight:800;line-height:1;letter-spacing:-.02em;
+  transform:translateX(-50%) rotate(-2deg);
+}
+.av-tag .tag span{display:block;white-space:nowrap}
+
+/* 5. Город по кругу: шар в центре, город дугой по нижнему краю */
+.av-ring .ball{left:50%;top:13cqw;height:58cqw;transform:translateX(-47%)}
+.av-ring svg.arc{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.av-ring .arc text{fill:var(--brand);font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.av-ring .arc circle{fill:none;stroke:var(--brand);stroke-width:1.1}
+
+/* 6. Объёмный шар — сгенерированный снимок, photos/avatar-3d.jpg */
+.av-3d .shot{position:absolute;inset:0}
