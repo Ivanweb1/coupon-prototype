@@ -384,7 +384,7 @@ body{
    видно, куда и что положить (kit.js снимает заглушку по загрузке). */
 
 .shot{
-  position:absolute;overflow:hidden;
+  position:absolute;
   background:var(--surface-2) repeating-linear-gradient(-45deg, transparent 0 22px, rgba(0,0,0,.035) 22px 44px);
 }
 
@@ -696,3 +696,47 @@ body{
 :is(#covers2,#vkprev) .vk-mob2.cv-mosaic .mosaic__i .tk{font-size:40px}
 /* Первый ряд мозаики на телефоне — под названием сообщества, без билетиков */
 .vk-mob2 .mosaic__i:nth-child(-n+3) .tk{display:none}
+
+/* ==========================================================================
+   Метки на снимке и обложки G, H, I (05.10)
+   ==========================================================================
+   Выгода — не плавающая пилюля, а метка на предмете: точка, линия, плашка.
+   Ставит kit.js (placeHot) по координатам предмета в снимке. */
+.shot{--hot-fs:28px}
+/* Телефон: низ кадра — под адресом сайта, меток там нет */
+.vk-mob2 .shot{--hot-fs:32px;--hot-bottom:230px}
+.ok-cover .shot{--hot-fs:22px}
+.vk-cover .shot{--hot-top:117px}
+.hot{position:absolute;width:0;height:0;font-size:var(--hot-fs);z-index:3}
+.hot__dot{position:absolute;left:-.42em;top:-.42em;width:.84em;height:.84em;border-radius:50%;background:var(--brand);
+  box-shadow:0 0 0 .2em #fff, 0 0 0 .62em rgba(255,255,255,.38), 0 6px 16px rgba(0,0,0,.25)}
+.hot__line{position:absolute;top:-1.5px;width:1.5em;height:3px;border-radius:2px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hot--r .hot__line{left:.75em}
+.hot--l .hot__line{right:.75em}
+.hot__tag{
+  position:absolute;top:0;transform:translateY(-50%);
+  display:flex;align-items:center;gap:.45em;padding:.3em .34em .3em .3em;border-radius:999px;background:#fff;
+  font-weight:700;letter-spacing:-.01em;white-space:nowrap;color:var(--ink);
+  box-shadow:0 18px 36px -18px rgba(20,8,6,.55), 0 0 0 1px rgba(0,0,0,.04);
+}
+.hot__tag .offer__ic{width:1.8em;height:1.8em}
+.hot__tag .tk{font-size:1.02em;margin-left:.15em}
+.hot__tag:not(:has(.tk)){padding-right:.9em}
+.hot--r .hot__tag{left:2.2em}
+.hot--l .hot__tag{right:2.2em}
+
+/* Снимок в скруглённой рамке справа (G, H) */
+:is(#covers2,#vkprev) .vk-cover.cv-hot .txt{left:300px;top:400px;width:auto;transform:translateY(-50%)}
+:is(#covers2,#vkprev) .vk-cover.cv-hot .eyebrow{font-size:26px}
+:is(#covers2,#vkprev) .vk-cover.cv-hot .h1{margin-top:16px;font-size:84px}
+:is(#covers2,#vkprev) .vk-cover.cv-hot .steps{margin-top:32px;font-size:24px}
+:is(#covers2,#vkprev) .vk-cover.cv-frame .shot{left:1010px;top:135px;right:70px;bottom:110px;border-radius:44px;--hot-top:0px;--pos:60% 45%}
+:is(#covers2,#vkprev) .vk-cover#vk-cover-Hcouple .shot,:is(#covers2,#vkprev) .vk-cover.cv-frame[id$="Hcouple"] .shot{--pos:70% 40%}
+:is(#covers2,#vkprev) .vk-mob2.cv-hot .shot{left:0;right:0;top:1060px;bottom:0}
+:is(#covers2,#vkprev) .vk-mob2.cv-frame .shot{--pos:72% 45%}
+
+/* I. Раскладка на камне: снимок на всю обложку, заголовок прямо на
+   пустом камне слева — без белой панели */
+:is(#covers2,#vkprev) .vk-cover.cv-stone .shot{left:0;top:0;right:0;bottom:70px;--pos:50% 45%}
+:is(#covers2,#vkprev) .vk-cover.cv-stone .txt{left:330px}
+:is(#covers2,#vkprev) .vk-mob2.cv-stone .shot{--pos:88% 50%}

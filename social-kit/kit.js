@@ -203,6 +203,56 @@ document.querySelectorAll("[data-tiles]").forEach(el => {
     </div>`).join("");
 });
 
+/* Метки на снимке (05.10): выгода привязана к предмету в кадре — точка на
+   предмете, тонкая линия, белая плашка «значок · ниша · билетик».
+   Координаты — в долях снимка, поэтому метка попадает на предмет при любом
+   кадрировании (компьютер, телефон, ОК). Плашка встаёт с той стороны, где
+   ей хватает места в кадре. Ключ — имя файла без .jpg. */
+PATH.odezhda = '<path d="M8.5 4 12 6l3.5-2 5 4-2.8 3-1.7-1V20h-8v-10l-1.7 1-2.8-3z"/>';
+PATH.spa = '<path d="M12 20c-4.5 0-7.5-3.5-7.5-8 4 0 7.5 3 7.5 8zm0 0c4.5 0 7.5-3.5 7.5-8-4 0-7.5 3-7.5 8z"/><path d="M12 12c-1.8-1.8-1.8-5.2 0-8 1.8 2.8 1.8 6.2 0 8z"/>';
+PATH.phone = '<rect x="7" y="3.5" width="10" height="17" rx="2"/><path d="M11 17.5h2"/>';
+const HOT = {
+  "people":   { cup: [.735, .50, "eda", "Кофе с собой", "5 = 4"], bags: [.60, .80, "odezhda", "Одежда", "−30%"] },
+  "people-2": { flowers: [.55, .42, "spa", "Цветы", "−15%"], box: [.89, .53, "eda", "Выпечка", "5 = 4"], bags: [.51, .78, "odezhda", "Одежда", "−30%"] },
+  "people-3": { phone: [.715, .48, "phone", "Купон на экране", ""], cup: [.77, .615, "eda", "Капучино", "5 = 4"], bakery: [.94, .74, "eda", "Выпечка", "−20%"] },
+  "flatlay":  { coffee: [.65, .15, "eda", "Кофейни", "5 = 4"], lipstick: [.665, .43, "krasota", "Красота", "−25%"],
+                kettle: [.78, .52, "sport", "Фитнес", "−35%"], toy: [.68, .63, "detyam", "Детям", "−20%"],
+                pizza: [.89, .76, "eda", "Пиццерии", "2 по цене 1"], keys: [.75, .85, "avto", "Автомойка", "−30%"] }
+};
+const PHOTO_SIZE = {};
+function placeHot(shot) {
+  shot.querySelectorAll(".hot").forEach(h => h.remove());
+  const file = shot.dataset.file, size = PHOTO_SIZE[file], spots = HOT[file];
+  if (!size || !spots || !shot.dataset.hot) return;
+  const W = shot.clientWidth, H = shot.clientHeight;
+  const pos = (getComputedStyle(shot).getPropertyValue("--pos").trim() || "50% 50%").split(/\s+/)
+    .map(v => v === "center" ? .5 : parseFloat(v) / 100);
+  const sc = Math.max(W / size[0], H / size[1]);
+  const dw = size[0] * sc, dh = size[1] * sc;
+  const ox = (W - dw) * pos[0], oy = (H - dh) * (pos[1] ?? .5);
+  const fs = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-fs")) || 26;
+  /* Видимая часть кадра: у обложек ВК верх срезан (компьютер ~117 px,
+     телефон — до 1060 снимок и так не доходит) */
+  const top = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-top")) || 0;
+  shot.dataset.hot.split(",").forEach(id => {
+    const sp = spots[id]; if (!sp) return;
+    const [x, y, cat, name, value] = sp;
+    const X = ox + x * dw, Y = oy + y * dh;
+    const bottom = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-bottom")) || 0;
+    if (X < fs || X > W - fs || Y < top + fs || Y > H - bottom - fs) return;
+    /* Ширина плашки — грубо по числу знаков; сторона — где помещается */
+    const w = fs * (2.6 + .58 * name.length + (value ? .62 * value.length + 1.4 : 0)) + fs * 2.4;
+    const side = X + w < W ? "r" : "l";
+    const el = document.createElement("div");
+    el.className = "hot hot--" + side;
+    el.style.cssText = `left:${X}px;top:${Y}px`;
+    el.innerHTML = `<i class="hot__dot"></i><span class="hot__line"></span>
+      <div class="hot__tag"><span class="offer__ic">${icon(cat)}</span>${name}${value ? `<span class="tk">${value}</span>` : ""}</div>`;
+    shot.appendChild(el);
+  });
+  if (document.fonts.status === "loaded") shapeTickets();
+}
+
 /* A и C: снимки генерируются отдельно и кладутся в social-kit/photos/
    (промпты — photos/README.md). ?people=2 — второй кадр с людьми
    (photos/people-2.jpg) и т. д. Пока файла нет — заглушка с именем. */
@@ -214,9 +264,15 @@ document.querySelectorAll("[data-photo]").forEach(el => {
   const img = new Image();
   /* По загрузке — всем узлам с этим снимком, включая уменьшенные копии
      аватара, которые могли появиться раньше */
-  img.onload = () => document.querySelectorAll(`[data-photo="${key}"]`).forEach(n => {
-    n.style.setProperty("--img", `url('${file}')`); n.classList.add("is-loaded");
-  });
+  img.onload = () => {
+    const stem = file.replace(/^photos\/|\.jpg$/g, "");
+    PHOTO_SIZE[stem] = [img.naturalWidth, img.naturalHeight];
+    document.querySelectorAll(`[data-photo="${key}"]`).forEach(n => {
+      n.style.setProperty("--img", `url('${file}')`); n.classList.add("is-loaded");
+      n.dataset.file = stem;
+      placeHot(n);
+    });
+  };
   img.src = file;
 });
 
@@ -364,7 +420,8 @@ if (siteV) {
 /* Билетики строятся после шрифтов: от них зависит ширина плашки */
 /* Шапка группы ВК: копии обложек и выбранного аватара в масштабе ВК */
 const VKP_COVERS = [["vk-cover", "Сейчас"], ["vk-cover-people", "A. Люди"], ["vk-cover-shelf", "B. Витрина"], ["vk-cover-flat", "C. Раскладка"],
-  ["vk-cover-red", "D. Красная"], ["vk-cover-phone", "E. Как это работает"], ["vk-cover-mosaic", "F. Мозаика"]];
+  ["vk-cover-red", "D. Красная"], ["vk-cover-phone", "E. Как это работает"], ["vk-cover-mosaic", "F. Мозаика"],
+  ["vk-cover-Gcafe", "G. Кафе"], ["vk-cover-Hcouple", "H. Пара"], ["vk-cover-Istone", "I. Раскладка на камне"]];
 const plainCopy = (src, zoom) => {
   const c = src.cloneNode(true);
   c.removeAttribute("id"); c.removeAttribute("data-out"); c.classList.remove("art");
@@ -400,7 +457,8 @@ function vkPreview() {
   const mlist = document.getElementById("vkm-list");
   mlist.innerHTML = "";
   [["vk-mobile", "Сейчас"], ["vk-mob-people", "A. Люди"], ["vk-mob-flat", "C. Раскладка"],
-   ["vk-mob-red", "D. Красная"], ["vk-mob-phone", "E. Как это работает"], ["vk-mob-mosaic", "F. Мозаика"]].forEach(([id, name]) => {
+   ["vk-mob-red", "D. Красная"], ["vk-mob-phone", "E. Как это работает"], ["vk-mob-mosaic", "F. Мозаика"],
+   ["vk-mob-Gcafe", "G. Кафе"], ["vk-mob-Hcouple", "H. Пара"], ["vk-mob-Istone", "I. Раскладка на камне"]].forEach(([id, name]) => {
     const f = document.createElement("figure");
     f.innerHTML = `<figcaption>${name}</figcaption>
       <div class="vkm">
