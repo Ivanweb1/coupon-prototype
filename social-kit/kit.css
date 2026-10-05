@@ -363,3 +363,121 @@ body{
 .vk-cover .corner{right:220px;top:118px;font-size:30px}
 .ok-cover .corner{right:70px;top:48px;font-size:28px}
 .vk-mob .corner{left:0;right:0;top:1075px;text-align:center;font-size:40px}
+
+/* ==========================================================================
+   Обложки — новые варианты (05.10)
+   ==========================================================================
+   Прежние обложки сухие: шар, заголовок и две мелкие карточки. Здесь в
+   кадре конечный продукт — люди с покупками (A), ниши с выгодой (B),
+   товары и услуги на одном столе (C). Палитра та же, без градиентов:
+   снимок отделяется от белого поля ровной границей, а не растушёвкой.
+   Селекторы через #covers2 — чтобы не спорить с правилами старых обложек
+   (.vk-cover .logo и т. п.). */
+.var-h{margin:40px 0 14px;font-size:20px;font-weight:700;color:var(--ink-2)}
+.var-h b{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:8px;border-radius:50%;background:var(--brand);color:#fff;font-size:16px}
+.var-h:first-of-type{margin-top:0}
+.bare .var-h{font-size:36px;margin:0 0 30px}
+.bare .var-h b{width:48px;height:48px;font-size:26px}
+.bare .row + .var-h{margin-top:100px}
+
+/* Снимок. Пока файла нет — серая штриховка с именем файла, чтобы было
+   видно, куда и что положить (kit.js снимает заглушку по загрузке). */
+#covers2 .shot{
+  position:absolute;overflow:hidden;
+  background:var(--surface-2) repeating-linear-gradient(-45deg, transparent 0 22px, rgba(0,0,0,.035) 22px 44px);
+}
+#covers2 .shot::after{
+  content:attr(data-label);position:absolute;left:0;right:0;bottom:36px;
+  padding:0 40px;text-align:center;font-size:24px;font-weight:600;line-height:1.35;color:var(--ink-3);white-space:pre-line;
+}
+#covers2 .shot.is-loaded{background:var(--surface-2) var(--img) var(--pos, center) / cover no-repeat}
+#covers2 .shot.is-loaded::after{display:none}
+
+/* Выгода на снимке: белая пилюля — значок ниши, ниша, билетик */
+.offer{
+  position:absolute;display:flex;align-items:center;gap:.5em;
+  padding:.32em .36em .32em .32em;border-radius:999px;background:#fff;
+  font-weight:700;letter-spacing:-.01em;white-space:nowrap;
+  box-shadow:0 22px 44px -22px rgba(40,10,8,.5), 0 0 0 1px rgba(0,0,0,.04);
+  transform:rotate(var(--r, 0deg));
+}
+.offer__ic{width:1.9em;height:1.9em;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--surface);color:var(--brand)}
+.offer__ic svg{width:1.1em;height:1.1em}
+.offer .tk{font-size:1.04em;margin-left:.2em}
+
+/* ---------------- A. Люди ---------------- */
+#covers2 .vk-cover.cv-people .logo{left:200px;top:391px;height:300px}
+#covers2 .vk-cover.cv-people .txt{left:460px;top:391px;width:auto}
+#covers2 .vk-cover.cv-people .h1{font-size:78px}
+#covers2 .vk-cover.cv-people .eyebrow{font-size:26px}
+#covers2 .vk-cover.cv-people .steps{margin-top:30px;font-size:22px}
+#covers2 .vk-cover.cv-people .shot{left:1160px;top:0;right:0;bottom:70px;--pos:70% 30%}
+#covers2 .vk-cover.cv-people .offers{font-size:26px}
+#covers2 .vk-cover.cv-people .offer:nth-child(1){left:1150px;top:170px;--r:-3deg}
+#covers2 .vk-cover.cv-people .offer:nth-child(2){left:1240px;top:320px;--r:2deg}
+#covers2 .vk-cover.cv-people .offer:nth-child(3){left:1170px;top:470px;--r:-2deg}
+
+#covers2 .ok-cover.cv-people .logo{left:172px;top:269px;height:340px}
+#covers2 .ok-cover.cv-people .txt{left:590px;top:269px}
+#covers2 .ok-cover.cv-people .h1{font-size:64px}
+#covers2 .ok-cover.cv-people .eyebrow{font-size:26px}
+#covers2 .ok-cover.cv-people .steps{margin-top:28px;font-size:23px}
+#covers2 .ok-cover.cv-people .shot{left:1440px;top:0;right:0;bottom:62px;--pos:70% 30%}
+#covers2 .ok-cover.cv-people .offers{font-size:24px}
+#covers2 .ok-cover.cv-people .offer:nth-child(1){left:1390px;top:120px;--r:-3deg}
+#covers2 .ok-cover.cv-people .offer:nth-child(2){left:1450px;top:290px;--r:2deg}
+
+/* ---------------- B. Витрина ---------------- */
+#covers2 .cv-shelf .head{position:absolute;display:flex;align-items:center}
+#covers2 .cv-shelf .head .logo{position:static;transform:none;flex:none}
+#covers2 .cv-shelf .tiles{position:absolute;display:grid;grid-template-columns:repeat(6, minmax(0, 1fr))}
+.tile{display:flex;flex-direction:column;min-height:0}
+.tile__ph{position:relative;flex:1;min-height:0;border-radius:var(--rad);background:var(--surface) center / cover no-repeat}
+.tile__ph .tk{position:absolute;left:var(--in);bottom:var(--in)}
+.tile__t{display:flex;align-items:center;gap:.4em;margin-top:.5em;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.tile__t span{width:1.6em;height:1.6em;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--surface);color:var(--brand)}
+.tile__t svg{width:1em;height:1em}
+
+#covers2 .vk-cover.cv-shelf .head{left:240px;right:240px;top:108px;gap:32px}
+#covers2 .vk-cover.cv-shelf .head .logo{height:150px}
+#covers2 .vk-cover.cv-shelf .eyebrow{font-size:24px}
+#covers2 .vk-cover.cv-shelf .h1{margin-top:8px;font-size:66px}
+#covers2 .vk-cover.cv-shelf .tiles{left:240px;right:240px;top:296px;bottom:100px;gap:24px;--rad:28px;--in:16px}
+#covers2 .vk-cover.cv-shelf .tile__ph .tk{font-size:34px}
+#covers2 .vk-cover.cv-shelf .tile__t{font-size:24px}
+
+#covers2 .ok-cover.cv-shelf .head{left:0;right:0;top:34px;justify-content:center;gap:26px}
+#covers2 .ok-cover.cv-shelf .head .logo{height:140px}
+#covers2 .ok-cover.cv-shelf .eyebrow{font-size:22px}
+#covers2 .ok-cover.cv-shelf .h1{margin-top:6px;font-size:50px}
+#covers2 .ok-cover.cv-shelf .tiles{left:120px;right:120px;top:206px;bottom:86px;gap:20px;--rad:24px;--in:14px}
+#covers2 .ok-cover.cv-shelf .tile__ph .tk{font-size:30px}
+#covers2 .ok-cover.cv-shelf .tile__t{font-size:21px}
+
+/* ---------------- C. Раскладка ---------------- */
+#covers2 .cv-flat .shot{left:0;top:0;right:0}
+#covers2 .cv-flat .panel{
+  position:absolute;display:flex;align-items:center;background:#fff;
+  box-shadow:0 30px 70px -30px rgba(40,10,8,.45);
+}
+#covers2 .cv-flat .panel .logo,#covers2 .cv-flat .panel .txt{position:static;transform:none;width:auto}
+#covers2 .cv-flat > .tk{position:absolute;transform:rotate(var(--r, 0deg));box-shadow:none;filter:drop-shadow(0 16px 22px rgba(40,10,8,.35))}
+
+#covers2 .vk-cover.cv-flat .shot{bottom:70px;--pos:70% 50%}
+#covers2 .vk-cover.cv-flat .panel{left:210px;top:120px;width:1000px;height:520px;padding:0 56px;gap:44px;border-radius:40px}
+#covers2 .vk-cover.cv-flat .panel .logo{height:300px}
+#covers2 .vk-cover.cv-flat .eyebrow{font-size:24px}
+#covers2 .vk-cover.cv-flat .h1{margin-top:14px;font-size:74px}
+#covers2 .vk-cover.cv-flat .steps{margin-top:28px;font-size:22px}
+#covers2 .vk-cover.cv-flat .tk--1{left:1330px;top:180px;font-size:60px;--r:-4deg}
+#covers2 .vk-cover.cv-flat .tk--2{left:1530px;top:420px;font-size:46px;--r:3deg}
+#covers2 .vk-cover.cv-flat .tk--3{left:1300px;top:540px;font-size:50px;--r:-2deg}
+
+#covers2 .ok-cover.cv-flat .shot{bottom:62px;--pos:70% 50%}
+#covers2 .ok-cover.cv-flat .panel{left:560px;top:48px;width:830px;height:442px;padding:0 48px;gap:40px;border-radius:36px}
+#covers2 .ok-cover.cv-flat .panel .logo{height:250px}
+#covers2 .ok-cover.cv-flat .eyebrow{font-size:22px}
+#covers2 .ok-cover.cv-flat .h1{margin-top:12px;font-size:58px}
+#covers2 .ok-cover.cv-flat .steps{margin-top:24px;font-size:21px}
+#covers2 .ok-cover.cv-flat .tk--1{left:1500px;top:110px;font-size:56px;--r:-4deg}
+#covers2 .ok-cover.cv-flat .tk--2{left:1580px;top:330px;font-size:44px;--r:3deg}

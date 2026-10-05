@@ -57,6 +57,44 @@ document.querySelectorAll("[data-card]").forEach(el => {
     <div class="card__c">${c.company}</div>`;
 });
 
+/* Новые обложки (05.10). Выгода на снимке — пилюля «значок · ниша · билетик» */
+PATH.detyam = '<circle cx="12" cy="13.5" r="6"/><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><path d="M10 14.5h.01M14 14.5h.01M10.5 17h3"/>';
+PATH.avto = '<path d="M4 16.5v-4.5l2.2-5h11.6l2.2 5v4.5z"/><path d="M5 16.5v2.5h3v-2.5M16 16.5v2.5h3v-2.5"/><path d="M7.5 12.5h.01M16.5 12.5h.01"/>';
+document.querySelectorAll("[data-offer]").forEach(el => {
+  const [cat, name, value] = el.dataset.offer.split("|");
+  el.innerHTML = `<span class="offer__ic">${icon(cat)}</span>${name}<span class="tk">${value}</span>`;
+});
+
+/* B. Витрина: шесть ниш, снимки из общей библиотеки ленты */
+const SHELF = [
+  ["kofe-warm.jpg",     "eda",     "Кофейни",        "5 = 4"],
+  ["beauty.jpg",        "krasota", "Красота",        "−25%"],
+  ["eda-cool.jpg",      "eda",     "Обеды",          "349 ₽"],
+  ["fitness.jpg",       "sport",   "Фитнес",         "−35%"],
+  ["detyam-yellow.jpg", "detyam",  "Детям",          "−20%"],
+  ["avto-steel.jpg",    "avto",    "Автомойка",      "−30%"]
+];
+document.querySelectorAll("[data-tiles]").forEach(el => {
+  el.innerHTML = SHELF.map(([ph, cat, name, value]) => `
+    <div class="tile">
+      <div class="tile__ph" style="background-image:url('${PH + ph}')"><span class="tk">${value}</span></div>
+      <div class="tile__t"><span>${icon(cat)}</span>${name}</div>
+    </div>`).join("");
+});
+
+/* A и C: снимки генерируются отдельно и кладутся в social-kit/photos/
+   (промпты — photos/README.md). ?people=2 — второй кадр с людьми
+   (photos/people-2.jpg) и т. д. Пока файла нет — заглушка с именем. */
+const PHOTO_V = { people: new URLSearchParams(location.search).get("people"), flatlay: new URLSearchParams(location.search).get("flatlay") };
+document.querySelectorAll("[data-photo]").forEach(el => {
+  const key = el.dataset.photo;
+  const file = "photos/" + key + (PHOTO_V[key] ? "-" + PHOTO_V[key] : "") + ".jpg";
+  el.dataset.label = "Снимок: social-kit/" + file + "\nпромпт — в photos/README.md";
+  const img = new Image();
+  img.onload = () => { el.style.setProperty("--img", `url('${file}')`); el.classList.add("is-loaded"); };
+  img.src = file;
+});
+
 /* Обложки ВК и ОК — ещё и без адреса сайта: копия рядом, файл с
    суффиксом -nolink. Основной вариант — с красной полосой (03.10). */
 ["vk-cover", "ok-cover"].forEach(id => {
