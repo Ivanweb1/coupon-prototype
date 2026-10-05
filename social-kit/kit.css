@@ -958,3 +958,5 @@ body{
 .vkfig__row{margin:0 0 120px}
 .vkfig__h{margin:0 0 32px;font-size:40px;font-weight:800;color:var(--ink)}
 .vkfig__pair{display:flex;align-items:flex-start;gap:80px}
+/* I2: подложка — SVG-контур с вырезами вместо маски (правка 05.10) */
+.vk-cover.cv-stone-panel .txt.is-cut::before{display:none}

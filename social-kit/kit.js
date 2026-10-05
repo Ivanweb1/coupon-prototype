@@ -166,6 +166,87 @@ function arcToGlyphs() {
     text.replaceWith(g);
   });
 }
+/* Вырезы — настоящие (правка 05.10). Раньше на линии отрыва лежали
+   круги цвета фона, а у подложки I2 — CSS-маска: в Figma первое
+   приезжало белыми кругами поверх, второе пропадало. Теперь корешок,
+   снимок и подложка — SVG-контуры с вогнутыми дугами, снимок — заливка
+   контура картинкой. В Figma это фигура с вырезом, сквозь него виден фон.
+   Форма: прямоугольник, у каждого угла — скругление (r > 0) или вырез
+   (r < 0, центр выреза в самом углу); side — полукруглые вырезы по
+   середине левой и правой сторон. */
+function cutPath(w, h, c, side) {
+  const arc = (r, x, y) => `A${Math.abs(r)},${Math.abs(r)} 0 0 ${r > 0 ? 1 : 0} ${x},${y}`;
+  const a = v => Math.abs(v || 0);
+  const [tl, tr, br, bl] = c;
+  let d = `M${a(tl)},0H${w - a(tr)}` + (tr ? arc(tr, w, a(tr)) : "");
+  if (side) d += `V${h / 2 - side}` + arc(-side, w, h / 2 + side);
+  d += `V${h - a(br)}` + (br ? arc(br, w - a(br), h) : "") + `H${a(bl)}` + (bl ? arc(bl, 0, h - a(bl)) : "");
+  if (side) d += `V${h / 2 + side}` + arc(-side, 0, h / 2 - side);
+  return d + `V${a(tl)}` + (tl ? arc(tl, a(tl), 0) : "") + "Z";
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+let cutN = 0;
+function cutSvg(el, w, h) {
+  el.querySelector(":scope > svg.cut")?.remove();
+  const svg = document.createElementNS(SVGNS, "svg");
+  svg.setAttribute("class", "cut");
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  svg.setAttribute("width", w); svg.setAttribute("height", h);
+  el.style.isolation = "isolate";
+  el.prepend(svg);
+  svg.style.cssText = `position:absolute;left:0;top:0;width:${w}px;height:${h}px;margin:0;z-index:-1;overflow:visible`;
+  return svg;
+}
+/* Углы элемента, в которых стоит вырез: центр круга совпадает с углом */
+function notchCorners(el, notches) {
+  const x0 = el.offsetLeft, y0 = el.offsetTop, w = el.offsetWidth, h = el.offsetHeight;
+  return [[x0, y0], [x0 + w, y0], [x0 + w, y0 + h], [x0, y0 + h]].map(([x, y]) => {
+    const n = notches.find(n => Math.abs(n.x - x) < 4 && Math.abs(n.y - y) < 4);
+    return n ? -n.r : 0;
+  });
+}
+function cutCoupon(art) {
+  const l = art.querySelector(".cpn__l"), ph = art.querySelector(".cpn__ph");
+  if (!art._notches) {
+    art._notches = [...art.querySelectorAll(".cpn__n")].map(n => ({ x: n.offsetLeft + n.offsetWidth / 2, y: n.offsetTop + n.offsetHeight / 2, r: n.offsetWidth / 2 }));
+    const cs = getComputedStyle(l);
+    art._stub = { fill: cs.backgroundColor, line: cs.borderRightColor, lw: parseFloat(cs.borderRightWidth) };
+  }
+  const N = art._notches, st = art._stub;
+  /* Корешок: контур с вырезами и пунктир линии отрыва между ними */
+  const lw = l.offsetWidth, lh = l.offsetHeight, lc = notchCorners(l, N);
+  const sl = cutSvg(l, lw, lh);
+  sl.innerHTML = `<path d="${cutPath(lw, lh, lc)}" fill="${st.fill}"/>` +
+    `<line x1="${lw - st.lw / 2}" y1="${-lc[1]}" x2="${lw - st.lw / 2}" y2="${lh + lc[2]}" stroke="${st.line}" stroke-width="${st.lw}" stroke-dasharray="${st.lw * 3} ${st.lw * 2}"/>`;
+  l.style.background = "transparent";
+  l.style.borderRightColor = "transparent";
+  /* Снимок: тот же кадр, что давал background cover + --pos */
+  const size = PHOTO_SIZE[ph.dataset.file];
+  if (size) {
+    const pw = ph.offsetWidth, phh = ph.offsetHeight;
+    /* Кадр снимаем один раз: после замены фон снимка уже пуст */
+    if (!ph._pos) { const cs = getComputedStyle(ph); ph._pos = [parseFloat(cs.backgroundPositionX) / 100, parseFloat(cs.backgroundPositionY) / 100]; }
+    const k = Math.max(pw / size[0], phh / size[1]), iw = size[0] * k, ih = size[1] * k;
+    const [px, py] = ph._pos;
+    const id = "cutimg" + (++cutN);
+    const sp = cutSvg(ph, pw, phh);
+    sp.innerHTML = `<defs><pattern id="${id}" patternUnits="userSpaceOnUse" width="${pw}" height="${phh}">` +
+      `<image href="photos/${ph.dataset.file}.jpg" x="${(pw - iw) * px}" y="${(phh - ih) * py}" width="${iw}" height="${ih}" preserveAspectRatio="none"/></pattern></defs>` +
+      `<path d="${cutPath(pw, phh, notchCorners(ph, N))}" fill="url(#${id})"/>`;
+    ph.style.background = "none";
+  }
+  art.querySelectorAll(".cpn__n").forEach(n => { n.style.display = "none"; });
+}
+/* I2: подложка заголовка — контур с полукруглыми вырезами по бокам */
+function cutPanels() {
+  document.querySelectorAll(".vk-cover.cv-stone-panel .txt").forEach(t => {
+    const w = t.offsetWidth, h = t.offsetHeight;
+    if (!h) return;
+    const svg = cutSvg(t, w, h);
+    svg.innerHTML = `<path d="${cutPath(w, h, [40, 40, 40, 40], 46)}" fill="#fff"/>`;
+    t.classList.add("is-cut");
+  });
+}
 /* Уменьшенные копии: 160 — страница группы, 64 — лента, 32 — списки */
 function avatarSizes() {
   document.querySelectorAll("[data-sizes]").forEach(box => {
@@ -436,6 +517,8 @@ document.querySelectorAll("[data-photo]").forEach(el => {
       n.style.setProperty("--img", `url('${file}')`); n.classList.add("is-loaded");
       n.dataset.file = stem;
       placeHot(n);
+      const cpn = n.closest(".vk-cover.cpn");
+      if (cpn) cutCoupon(cpn);
     });
     vkPreviewSoon();
   };
@@ -638,6 +721,7 @@ const plainCopy = (src, zoom) => {
   c.removeAttribute("id"); c.removeAttribute("data-out"); c.classList.remove("art");
   c.style.cssText = "position:relative;overflow:hidden" + (VKFIG ? "" : ";zoom:" + zoom);
   c.querySelectorAll("[id]").forEach(n => { n.id += "-p"; });
+  c.querySelectorAll("[fill^='url(#']").forEach(n => n.setAttribute("fill", n.getAttribute("fill").replace(")", "-p)")));
   c.querySelectorAll("textPath").forEach(n => n.setAttribute("href", n.getAttribute("href") + "-p"));
   return c;
 };
@@ -745,4 +829,4 @@ function avatarInVk() {
 
 
 loadMobPhotos();
-document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); arcToGlyphs(); avatarSizes(); vkPreview(); });
+document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); arcToGlyphs(); cutPanels(); document.querySelectorAll(".vk-cover.cpn").forEach(a => { if (a.querySelector(".cpn__ph.is-loaded")) cutCoupon(a); }); avatarSizes(); vkPreview(); });
