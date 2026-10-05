@@ -975,13 +975,13 @@ body{
 .vk-mob2.cpn.cpn-big-ph .cpn__n{top:770px}
 /* M2 на компьютере (правка 05.10): купон на красном фоне, как на телефоне —
    красная рамка вокруг, корешок белый, вырезы сквозные до красного.
-   Рамка видна одинаковой со всех сторон, ~60 px (замер по странице ВК:
-   сверху срезано ~134, снизу ~14 закрывает карточка группы) — купон 192–696 */
+   Рамка видна одинаковой со всех сторон (замер по странице ВК:
+   сверху срезано ~134, снизу ~14 закрывает карточка группы); по просьбе — ~30 px, купон 164–724 */
 .vk-cover.cpn.cpn-frame{--cut:var(--brand);background:var(--brand) !important}
-.vk-cover.cpn.cpn-frame .cpn__l{left:60px;top:192px;width:940px;height:504px;background:#fff;border-radius:36px 0 0 36px}
-:is(#covers2,#vkprev,#vkfig) .vk-cover.cpn.cpn-frame .cpn__ph{left:1000px;top:192px;right:60px;bottom:72px;border-radius:0 36px 36px 0;--hot-top:0px}
-.vk-cover.cpn.cpn-frame .cpn__n--a{top:160px}
-.vk-cover.cpn.cpn-frame .cpn__n--b{top:664px}
+.vk-cover.cpn.cpn-frame .cpn__l{left:30px;top:164px;width:970px;height:560px;background:#fff;border-radius:36px 0 0 36px}
+:is(#covers2,#vkprev,#vkfig) .vk-cover.cpn.cpn-frame .cpn__ph{left:1000px;top:164px;right:30px;bottom:44px;border-radius:0 36px 36px 0;--hot-top:0px}
+.vk-cover.cpn.cpn-frame .cpn__n--a{top:132px}
+.vk-cover.cpn.cpn-frame .cpn__n--b{top:692px}
 /* Корешок M2 стал ниже (504) — текст на ~10% мельче, чтобы были поля */
 :is(#covers2,#vkprev,#vkfig) .vk-cover.cpn.cpn-frame .eyebrow{font-size:24px}
 :is(#covers2,#vkprev,#vkfig) .vk-cover.cpn.cpn-frame .h1{margin-top:12px;font-size:76px}
