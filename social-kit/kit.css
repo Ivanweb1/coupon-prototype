@@ -799,7 +799,7 @@ body{
    открытии обложки целиком: там размытое продолжение снимка. */
 .vk-mob2.cpn{--nd:70px;--cut:var(--brand);background:var(--brand) !important}
 .vk-mob2.cpn--red{--cut:#1B1B1B;background:#1B1B1B !important}
-:is(#covers2,#vkprev,#vkfig) .vk-mob2.cpn .cpn__ph{left:0;right:0;width:auto;top:420px;height:350px;bottom:auto;border-radius:0;
+:is(#covers2,#vkprev,#vkfig) .vk-mob2.cpn .cpn__ph{left:0;right:0;width:auto;top:440px;height:330px;bottom:auto;border-radius:0;
   --hot-left:130px;--hot-right:130px;--hot-bottom:0px;--hot-top:190px;--hot-fs:28px}
 .vk-mob2.cpn .cpn__l{left:0;right:0;width:auto;top:770px;height:520px;display:block;padding:26px 0 0;text-align:center;
   border-radius:0;border-top:3px dashed var(--line-strong)}
@@ -915,11 +915,15 @@ body{
 .vk-cover.cpn .cpn__l .cpn__code{width:auto;align-self:auto;margin-right:auto;margin-left:calc(50% - 320px)}
 /* Телефон: в самом файле купон той же формы, что в превью ВК (правка 05.10):
    ширина — видимая полоса 118–962, вырезы на её краях, низ скруглён */
-:is(#covers2,#vkprev,#vkfig) .vk-mob2.cpn .cpn__ph{left:118px;right:118px;border-radius:36px 36px 0 0}
-.vk-mob2.cpn .cpn__l{left:118px;right:118px;border-radius:0 0 36px 36px}
-.vk-mob2.cpn .cpn__side{left:282px;right:40px}
-.vk-mob2.cpn .cpn__n--a{left:83px}
-.vk-mob2.cpn .cpn__n--b{left:927px}
+/* Правка 05.10 по скриншоту iPhone: видимое окно шапки — ~103–977 по
+   ширине и от ~415 по высоте, статус-бар до ~520, кнопки ВК — 540–615.
+   Купон сужен до 150–930, чтобы вырезы целиком были в кадре; снимок —
+   с 440, лица ниже кнопок (MOB_FOCUS_CPN в kit.js) */
+:is(#covers2,#vkprev,#vkfig) .vk-mob2.cpn .cpn__ph{left:150px;right:150px;border-radius:36px 36px 0 0}
+.vk-mob2.cpn .cpn__l{left:150px;right:150px;border-radius:0 0 36px 36px}
+.vk-mob2.cpn .cpn__side{left:250px;right:30px}
+.vk-mob2.cpn .cpn__n--a{left:115px}
+.vk-mob2.cpn .cpn__n--b{left:895px}
 /* Пост с промокодом — маленький купон: слева код на светлом поле,
    справа красный корешок «Назовите на кассе», между ними линия отрыва
    с вырезами (правка 05.10) */

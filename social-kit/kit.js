@@ -202,36 +202,39 @@ function notchCorners(el, notches) {
   const x0 = el.offsetLeft, y0 = el.offsetTop, w = el.offsetWidth, h = el.offsetHeight;
   return [[x0, y0], [x0 + w, y0], [x0 + w, y0 + h], [x0, y0 + h]].map(([x, y]) => {
     const n = notches.find(n => Math.abs(n.x - x) < 4 && Math.abs(n.y - y) < 4);
-    return n ? -n.r : 0;
-  });
+    return n ? -n.r : null;
+  }).map((v, i) => v ?? (parseFloat(getComputedStyle(el)[["borderTopLeftRadius", "borderTopRightRadius", "borderBottomRightRadius", "borderBottomLeftRadius"][i]]) || 0));
 }
 function cutCoupon(art) {
   const l = art.querySelector(".cpn__l"), ph = art.querySelector(".cpn__ph");
   if (!art._notches) {
     art._notches = [...art.querySelectorAll(".cpn__n")].map(n => ({ x: n.offsetLeft + n.offsetWidth / 2, y: n.offsetTop + n.offsetHeight / 2, r: n.offsetWidth / 2 }));
     const cs = getComputedStyle(l);
-    art._stub = { fill: cs.backgroundColor, line: cs.borderRightColor, lw: parseFloat(cs.borderRightWidth) };
+    /* Линия отрыва: справа от корешка (компьютер) или над ним (телефон) */
+    const top = cs.borderTopStyle === "dashed";
+    art._stub = { fill: cs.backgroundColor, top, line: top ? cs.borderTopColor : cs.borderRightColor, lw: parseFloat(top ? cs.borderTopWidth : cs.borderRightWidth) };
   }
   const N = art._notches, st = art._stub;
   /* Корешок: контур с вырезами и пунктир линии отрыва между ними */
   const lw = l.offsetWidth, lh = l.offsetHeight, lc = notchCorners(l, N);
   const sl = cutSvg(l, lw, lh);
+  const ln = st.top
+    ? [-lc[0], st.lw / 2, lw + lc[1], st.lw / 2]
+    : [lw - st.lw / 2, -lc[1], lw - st.lw / 2, lh + lc[2]];
   sl.innerHTML = `<path d="${cutPath(lw, lh, lc)}" fill="${st.fill}"/>` +
-    `<line x1="${lw - st.lw / 2}" y1="${-lc[1]}" x2="${lw - st.lw / 2}" y2="${lh + lc[2]}" stroke="${st.line}" stroke-width="${st.lw}" stroke-dasharray="${st.lw * 3} ${st.lw * 2}"/>`;
+    `<line x1="${ln[0]}" y1="${ln[1]}" x2="${ln[2]}" y2="${ln[3]}" stroke="${st.line}" stroke-width="${st.lw}" stroke-dasharray="${st.lw * 3} ${st.lw * 2}"/>`;
   l.style.background = "transparent";
-  l.style.borderRightColor = "transparent";
+  l.style[st.top ? "borderTopColor" : "borderRightColor"] = "transparent";
   /* Снимок: тот же кадр, что давал background cover + --pos */
   const size = PHOTO_SIZE[ph.dataset.file];
   if (size) {
     const pw = ph.offsetWidth, phh = ph.offsetHeight;
-    /* Кадр снимаем один раз: после замены фон снимка уже пуст */
-    if (!ph._pos) { const cs = getComputedStyle(ph); ph._pos = [parseFloat(cs.backgroundPositionX) / 100, parseFloat(cs.backgroundPositionY) / 100]; }
-    const k = Math.max(pw / size[0], phh / size[1]), iw = size[0] * k, ih = size[1] * k;
-    const [px, py] = ph._pos;
+    /* Кадр — тот же, что у фона: cover по --pos или фокус на телефоне */
+    const { dw: iw, dh: ih, ox, oy } = photoBox(ph);
     const id = "cutimg" + (++cutN);
     const sp = cutSvg(ph, pw, phh);
     sp.innerHTML = `<defs><pattern id="${id}" patternUnits="userSpaceOnUse" width="${pw}" height="${phh}">` +
-      `<image href="photos/${ph.dataset.file}.jpg" x="${(pw - iw) * px}" y="${(phh - ih) * py}" width="${iw}" height="${ih}" preserveAspectRatio="none"/></pattern></defs>` +
+      `<image href="photos/${ph.dataset.file}.jpg" x="${ox}" y="${oy}" width="${iw}" height="${ih}" preserveAspectRatio="none"/></pattern></defs>` +
       `<path d="${cutPath(pw, phh, notchCorners(ph, N))}" fill="url(#${id})"/>`;
     ph.style.background = "none";
   }
@@ -284,6 +287,7 @@ function loadMobPhotos() {
       n.style.backgroundSize = n.style.backgroundPosition = "";
       n.style.setProperty("--img", `url('photos/${stem}.jpg')`); n.classList.add("is-loaded");
       placeHot(n);
+      cutCoupon(n.closest(".vk-mob2.cpn"));
       vkPreviewSoon();
     };
     img.src = "photos/" + stem + ".jpg";
@@ -421,16 +425,16 @@ const MOB_FOCUS = {
 /* Купон на телефоне: снимок — полоса 780×300 вверху купона, лица и
    главное — по центру полосы */
 const MOB_FOCUS_CPN = {
-  "people":    [.70, .18, 1, 540, 140],
-  "people-2":  [.75, .18, 1, 540, 140],
-  "people-3":  [.60, .25, 1, 540, 140],
-  "flatlay":   [.72, .45, 1, 540, 175],
-  "cafe-2":    [.45, .18, 1, 540, 140],
-  "couple-2":  [.55, .18, 1, 540, 140],
-  "flatlay-2": [.50, .30, 1, 540, 175],
-  "walk-2":    [.48, .14, 1, 540, 130],
-  "checkout":  [.40, .35, 1, 540, 175],
-  "table":     [.50, .45, 1, 540, 175]
+  "people":    [.70, .18, 1, 540, 200],
+  "people-2":  [.75, .18, 1, 540, 200],
+  "people-3":  [.60, .25, 1, 540, 200],
+  "flatlay":   [.72, .45, 1, 540, 235],
+  "cafe-2":    [.45, .18, 1, 540, 200],
+  "couple-2":  [.55, .18, 1, 540, 200],
+  "flatlay-2": [.50, .30, 1, 540, 235],
+  "walk-2":    [.48, .14, 1, 540, 190],
+  "checkout":  [.40, .35, 1, 540, 235],
+  "table":     [.50, .45, 1, 540, 235]
 };
 /* Где лежит снимок в кадре: обычно cover по --pos; на телефоне — от фокуса */
 function photoBox(shot) {
@@ -517,7 +521,7 @@ document.querySelectorAll("[data-photo]").forEach(el => {
       n.style.setProperty("--img", `url('${file}')`); n.classList.add("is-loaded");
       n.dataset.file = stem;
       placeHot(n);
-      const cpn = n.closest(".vk-cover.cpn");
+      const cpn = n.closest(".vk-cover.cpn, .vk-mob2.cpn");
       if (cpn) cutCoupon(cpn);
     });
     vkPreviewSoon();
@@ -829,4 +833,4 @@ function avatarInVk() {
 
 
 loadMobPhotos();
-document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); arcToGlyphs(); cutPanels(); document.querySelectorAll(".vk-cover.cpn").forEach(a => { if (a.querySelector(".cpn__ph.is-loaded")) cutCoupon(a); }); avatarSizes(); vkPreview(); });
+document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); arcToGlyphs(); cutPanels(); document.querySelectorAll(".vk-cover.cpn, .vk-mob2.cpn").forEach(a => { if (a.querySelector(".cpn__ph.is-loaded")) cutCoupon(a); }); avatarSizes(); vkPreview(); });
