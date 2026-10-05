@@ -887,3 +887,7 @@ body{
 .vk-mob2.cpn{--cut:#fff}
 /* U на телефоне: блюда в середине полосы — метки выше, между кнопками ВК */
 :is(#covers2,#vkprev) #vk-mob-cpn-red-table .cpn__ph,.vkm #vk-mob-cpn-red-table .cpn__ph{--hot-top:110px}
+/* I2: тот же снимок, текст слева на белой подложке */
+:is(#covers2,#vkprev) .vk-cover.cv-stone-panel .txt{
+  left:250px;padding:44px 60px 48px;background:#fff;border-radius:40px;
+  box-shadow:0 30px 70px -30px rgba(40,10,8,.45)}
