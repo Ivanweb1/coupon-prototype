@@ -14,6 +14,7 @@
 </head>
 <body>
 <main class="page">
+  <input type="checkbox" id="vkp-nologo" hidden>
 
   <header class="page__head">
     <h1>Упаковка соцсетей</h1>
@@ -21,6 +22,108 @@
       ниже показан уменьшенным под окно. Готовые PNG по соцсетям — на странице <a href="pack.html">набора</a>, файлы лежат в <a href="out/">out/</a>, пересобираются командой
       <code>python social-kit/render.py</code>. Другой город: <a href="?city=Ельца&amp;town=Елец">?city=Ельца&amp;town=Елец</a> (city — в заголовках, родительный падеж; town — на аватарах).</p>
   </header>
+
+
+  <!-- ===================================================== Обложки 2.0 -->
+  <!-- Правка 05.10: прежние обложки сухие — шар, заголовок и две мелкие
+       карточки. Здесь три варианта с конечным продуктом: люди с покупками,
+       витрина ниш, раскладка товаров. Снимки A и C ждут генерации
+       (photos/README.md), пока на их месте серая заглушка с именем файла. -->
+  <section class="net" id="covers2">
+    <h2><i style="--c:var(--brand)"></i>Обложки — новые варианты</h2>
+
+    <h3 class="var-h" style="margin-top:56px">Обложка-купон: слева корешок с заголовком, справа снимок, линия отрыва с вырезами</h3>
+    <h3 class="var-h"><b>I</b> Раскладка без панели: заголовок прямо на камне, метки на товарах</h3>
+    <div class="row">
+      <figure class="slot"><figcaption><b>ВК</b> 1920×768</figcaption>
+        <div class="fit"><div class="art vk-cover cv cv-hot cv-stone has-strip" id="vk-cover-Istone" data-out="vk/vk-cover-stone-1920x768">
+          <div class="shot" data-photo="flatlay" data-hot="lipstick,kettle,pizza"></div>
+          <div class="txt">
+            <div class="eyebrow">Бесплатно · без регистрации</div>
+            <h1 class="h1">Все скидки<br><span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Скриншот</li><li><b>3</b>Скидка на кассе</li></ol>
+          </div>
+          <div class="strip">Все купоны города — <b>vsekupony.ru</b></div>
+        </div></div>
+      </figure>
+      <figure class="slot"><figcaption><b>ВК, живая обложка (телефон)</b> 1080×1920</figcaption>
+        <div class="fit"><div class="art vk-mob2 cv-hot cv-stone" id="vk-mob-Istone" data-out="vk/vk-mobile-cover-stone-1080x1920">
+          <div class="txt">
+            <h1 class="h1">Все скидки<br><span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Скриншот</li><li><b>3</b>Скидка</li></ol>
+          </div>
+          <div class="shot" data-photo="flatlay" data-hot="coffee"></div>
+        </div></div>
+      </figure>
+    </div>
+
+    <h3 class="var-h"><b>I2</b> Раскладка на камне, заголовок на белой подложке</h3>
+    <div class="row">
+      <figure class="slot"><figcaption><b>ВК</b> 1920×768</figcaption>
+        <div class="fit"><div class="art vk-cover cv cv-hot cv-stone cv-stone-panel has-strip" id="vk-cover-Istone2" data-out="vk/vk-cover-stone-panel-1920x768">
+          <div class="shot" data-photo="flatlay" data-hot="lipstick,kettle,pizza"></div>
+          <div class="txt">
+            <div class="eyebrow">Бесплатно · без регистрации</div>
+            <h1 class="h1">Все скидки<br><span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Скриншот</li><li><b>3</b>Скидка на кассе</li></ol>
+          </div>
+          <div class="strip">Все купоны города — <b>vsekupony.ru</b></div>
+        </div></div>
+      </figure>
+      <figure class="slot"><figcaption><b>ВК, живая обложка (телефон)</b> 1080×1920</figcaption>
+        <div class="fit"><div class="art vk-mob2 cv-hot cv-stone" id="vk-mob-Istone2" data-out="vk/vk-mobile-cover-stone-panel-1080x1920">
+          <div class="txt">
+            <h1 class="h1">Все скидки<br><span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Скриншот</li><li><b>3</b>Скидка</li></ol>
+          </div>
+          <div class="shot" data-photo="flatlay" data-hot="coffee"></div>
+        </div></div>
+      </figure>
+    </div>
+
+<h3 class="var-h"><b>U</b> Красный корешок, стол в кафе</h3>
+    <div class="row">
+      <figure class="slot"><figcaption><b>ВК</b> 1920×768</figcaption>
+        <div class="fit"><div class="art vk-cover cv cpn cpn--red" id="vk-cover-cpn-red-table" data-out="vk/vk-cover-cpn-red-table-1920x768">
+          <div class="cpn__l">
+            <div class="eyebrow">Бесплатно · без регистрации</div>
+            <h1 class="h1">Все скидки<br><span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Скриншот</li><li><b>3</b>Скидка на кассе</li></ol>
+            <div class="cpn__code"><span>Все купоны города</span><b>vsekupony.ru</b></div>
+          </div>
+          <div class="shot cpn__ph" data-photo="table" data-hot="pizza,lemonade,sushi,cake"></div>
+          <i class="cpn__n cpn__n--a"></i><i class="cpn__n cpn__n--b"></i>
+        </div></div>
+      </figure>
+      <figure class="slot"><figcaption><b>ВК, живая обложка (телефон)</b> 1080×1920</figcaption>
+        <div class="fit"><div class="art vk-mob2 cpn cpn--red" id="vk-mob-cpn-red-table" data-out="vk/vk-mobile-cover-cpn-red-table-1080x1920">
+          <div class="shot cpn__ph" data-photo="table" data-hot="sushi"></div>
+          <div class="cpn__l">
+            <h1 class="h1">Все скидки<br><span class="city" data-city>Липецка</span><br>в одном месте</h1>
+            <div class="cpn__side">
+              <ol class="steps"><li><b>1</b>Находите купон</li><li><b>2</b>Скриншот</li><li><b>3</b>Скидка на кассе</li></ol>
+              <div class="cpn__code"><span>Все купоны</span><b>vsekupony.ru</b></div>
+            </div>
+          </div>
+          <i class="cpn__n cpn__n--a"></i><i class="cpn__n cpn__n--b"></i>
+        </div></div>
+      </figure>
+    </div>
+
+  </section>
+
+  <!-- ==================================================== Аватары 2.0 -->
+  <!-- Правка 05.10: аватар один на все четыре сети. Варианты собирает
+       kit.js (блок «Аватары — варианты»); рядом с каждым — он же в
+       размерах, в которых его видят: 160 (страница группы), 64 (лента),
+       32 (список подписок, уведомления). -->
+  <section class="net" id="avas2">
+    <h2><i style="--c:var(--brand)"></i>Аватар — варианты</h2>
+    <p class="var-note">Город на аватаре читается только на странице группы (160–200 px). В ленте и списках (32–64 px) его не видно
+      ни в каком исполнении — там город даёт название сообщества: «Все купоны · Липецк». Поэтому варианты 1–3 без города,
+      4–5 — с городом для тех, кто открыл группу; примеры с длинными названиями — ниже.</p>
+    <div id="ava-list"></div>
+  </section>
 
   <!-- ================================================================ ВК -->
   <section class="net">

@@ -50,6 +50,11 @@ def main():
         page.wait_for_timeout(300)
         for el in page.query_selector_all("[data-out]"):
             name = el.get_attribute("data-out")
+            # Макет со снимком, которого ещё нет в photos/, не снимаем:
+            # в out/ попала бы серая заглушка
+            if el.query_selector(".shot:not(.is-loaded)"):
+                print(f"пропуск {name}: нет снимка в photos/")
+                continue
             path = OUT / (name + ".png")
             path.parent.mkdir(parents=True, exist_ok=True)
             el.screenshot(path=str(path))
