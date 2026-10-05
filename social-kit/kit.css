@@ -786,7 +786,9 @@ body{
 :is(#covers2,#vkprev) .vk-cover.cpn .cpn__ph{left:1000px;top:0;right:0;bottom:0;width:auto;height:auto;border-radius:0;--hot-top:117px;--pos:55% 35%}
 :is(#covers2,#vkprev) .vk-cover.cpn[id$="flat"] .cpn__ph{--pos:88% 50%}
 :is(#covers2,#vkprev) .vk-cover.cpn[id$="walk"] .cpn__ph{--pos:75% 25%}
-.vk-cover.cpn .cpn__n--a{left:968px;top:-32px}
+/* Верхний вырез — на линии среза ВК (~117), а не на краю файла: край
+   ВК отрезает вместе с вырезом */
+.vk-cover.cpn .cpn__n--a{left:968px;top:85px}
 .vk-cover.cpn .cpn__n--b{left:968px;top:736px}
 
 /* Телефон — весь купон в видимом окне шапки ВК (~118–962 × 423–1480):
