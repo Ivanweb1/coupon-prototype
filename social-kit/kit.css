@@ -841,7 +841,8 @@ body{
 /* Вариации «города по кругу» (05.10) */
 .av-ring.av--red .arc text{fill:#fff}
 .av-ring.av--red .arc circle{stroke:#fff}
-.av-band .ball{top:17cqw !important;height:50cqw !important}
+/* Шар — по центру внутреннего круга (центр 50cqw) */
+.av-band .ball{top:25cqw !important;height:50cqw !important;transform:translateX(-49%) !important}
 .av-band .arc circle.band{fill:none;stroke:var(--brand);stroke-width:12}
 .av-band .arc text{fill:#fff !important;letter-spacing:.08em}
 .av-band.av--red .arc circle.band{stroke:#fff}
