@@ -875,13 +875,13 @@ body{
 .vk-cover.cpn .cpn__l{top:117px;height:651px;padding-top:0}
 /* Белый купон на белой странице ВК — корешок светло-серый, чтобы контур
    купона и вырезы читались (правка 05.10) */
-.vk-cover.cpn:not(.cpn--red) .cpn__l{background:#F3F3F3}
+.vk-cover.cpn:not(.cpn--red) .cpn__l{background:#F9F9F9}
 .vk-cover.cpn:not(.cpn--red) .cpn__l{border-right-color:#D0D0D0}
 .vk-mob2.cv-flat-red .eyebrow{color:rgba(255,255,255,.82)}
 .vk-mob2.cv-flat-red .h1{color:#fff}
 .vk-mob2.cv-flat-red .city{background:#fff;color:var(--brand)}
 /* Телефон, белый купон: корешок светло-серый, вырезы белые (правка 05.10) */
 .vk-mob2.cpn:not(.cpn--red){--cut:#fff}
-.vk-mob2.cpn:not(.cpn--red) .cpn__l{background:#F3F3F3;border-top-color:#D0D0D0}
+.vk-mob2.cpn:not(.cpn--red) .cpn__l{background:#F9F9F9;border-top-color:#D0D0D0}
 /* Вырезы белые на всех мобильных купонах, и на красном тоже */
 .vk-mob2.cpn{--cut:#fff}
