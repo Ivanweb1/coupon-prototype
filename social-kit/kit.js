@@ -140,6 +140,11 @@ function avatarSizes() {
   });
 }
 
+/* Макеты «как в ВК» — копии обложек: пересобираются, когда догрузится
+   снимок, иначе на медленной сети копия остаётся без фото и меток */
+let vkPrevT;
+const vkPreviewSoon = () => { clearTimeout(vkPrevT); vkPrevT = setTimeout(() => { if (typeof vkPreview === "function" && document.fonts.status === "loaded") vkPreview(); }, 150); };
+
 /* Отдельный снимок под живую обложку (правка 05.10): если в photos/ лежит
    <имя>-mob.jpg, на телефоне берётся он, иначе — общий снимок с кадрированием */
 function loadMobPhotos() {
@@ -151,6 +156,7 @@ function loadMobPhotos() {
       n.style.backgroundSize = n.style.backgroundPosition = "";
       n.style.setProperty("--img", `url('photos/${stem}.jpg')`); n.classList.add("is-loaded");
       placeHot(n);
+      vkPreviewSoon();
     };
     img.src = "photos/" + stem + ".jpg";
   });
@@ -383,6 +389,7 @@ document.querySelectorAll("[data-photo]").forEach(el => {
       n.dataset.file = stem;
       placeHot(n);
     });
+    vkPreviewSoon();
   };
   img.src = file;
 });
