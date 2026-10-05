@@ -118,3 +118,23 @@ Close-up at a cafe checkout counter: a woman's hand holds a smartphone verticall
 ```
 Top-down view of a wooden restaurant table for two filling the whole frame: a pepperoni pizza, a fresh salad bowl, a plate of sushi rolls, two cappuccinos, a slice of red velvet cake, a jug of red berry lemonade with glasses, hands of two people reaching for food. Every dish large and clearly separated. Warm daylight, rich saturated appetizing colors, food photography, clean composition. No text, no logos, no watermark.
 ```
+
+## Отдельные снимки под телефон — обложка-купон (05.10)
+
+На телефоне от снимка купона видна полоса **780×300 (≈ 2,6 : 1)**, и по её
+верхним углам лежат кнопки ВК «назад» и «настройки». Общий снимок туда
+влезает только сильно обрезанным. Если в `photos/` есть `<имя>-mob.jpg`,
+на телефоне берётся он. Формат **8:3, от 2600×975**; для Midjourney —
+`--ar 8:3 --style raw`. Общие правила: всё главное — в центральных 60 %
+ширины, по высоте по центру, головы не у верхнего края; верхние углы
+(~15 % ширины и ~30 % высоты) пустые — там кнопки; один крупный предмет
+правее центра под метку выгоды.
+
+| Файл | Обложка |
+|---|---|
+| `cafe-2-mob.jpg` | K, L |
+| `couple-2-mob.jpg` | M |
+| `flatlay-2-mob.jpg` | N |
+| `walk-2-mob.jpg` | O |
+| `checkout-mob.jpg` | T |
+| `table-mob.jpg` | U |

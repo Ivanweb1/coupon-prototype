@@ -65,9 +65,10 @@ const AVAS = [
   ["big",  "",        BALL.replace("LOGO", "logo-red"),   "Шар крупно", "Без нитки и подписей: буквы «ВСЕ КУПОНЫ» занимают весь круг и читаются даже в 64 px. Самый узнаваемый."],
   ["inv",  "av--red", '<img class="whole" src="../assets/brand/logo-white.png" alt="">', "Белый шар на красном", "Целиком, с ниткой. Красный круг выделяется среди белых аватаров в списках ВК и ОК, но буквы мельче."],
   ["tilt", "av--red", BALL.replace("LOGO", "logo-white"), "Наклейка", "Белый шар крупно на красном, с наклоном — живее, как плашка города на сайте. Ярко и читается в любом размере."],
-  ["tag",  "av--red", BALL.replace("LOGO", "logo-white") + '<div class="tag" data-av-town></div>', "Город на ленте", "Белая плашка с городом. Шрифт подгоняется под длину, длинное название — в две строки. Город читается от 160 px."],
   ["ring", "",        BALL.replace("LOGO", "logo-red") + '<svg class="arc" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47"/><path id="ARC" d="M9,50A41,41 0 0 0 91,50" fill="none"/><text text-anchor="middle"><textPath href="#ARC" startOffset="50%" data-av-town></textPath></text></svg>', "Город по кругу", "Город дугой по нижнему краю, как на печати или значке. Длинные названия ужимаются по дуге."],
-  ["3d",   "",        '<div class="shot" data-photo="avatar-3d"></div>', "Объёмный шар", "Красный глянцевый шар со знаком %, сгенерированный снимок. Живее плоского, но без фирменных букв — подходит как сезонный."]
+  ["ring-red",  "av--red av-ring", BALL.replace("LOGO", "logo-white") + '<svg class="arc" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47"/><path id="ARC" d="M9,50A41,41 0 0 0 91,50" fill="none"/><text text-anchor="middle"><textPath href="#ARC" startOffset="50%" data-av-town></textPath></text></svg>', "Город по кругу, на красном", "Тот же значок-печать, но белым по красному: ярче в списках, город по нижней дуге."],
+  ["ring-band", "av-ring av-band", BALL.replace("LOGO", "logo-red") + '<svg class="arc" viewBox="0 0 100 100"><circle class="band" cx="50" cy="50" r="44"/><path id="ARC" d="M2.6,50A47.4,47.4 0 0 0 97.4,50" fill="none"/><path id="ARCT" d="M9.5,50A40.5,40.5 0 0 1 90.5,50" fill="none"/><text text-anchor="middle" data-fs="7.4" data-max="128"><textPath href="#ARC" startOffset="50%" data-av-town></textPath></text><text text-anchor="middle" class="top" font-size="5.6"><textPath href="#ARCT" startOffset="50%">★ СКИДКИ ГОРОДА ★</textPath></text></svg>', "Печать с красным ободом", "Город белыми буквами в широком красном ободе, сверху «★ скидки города ★». Город крупнее и читается раньше."],
+  ["ring-band-red", "av--red av-ring av-band", BALL.replace("LOGO", "logo-white") + '<svg class="arc" viewBox="0 0 100 100"><circle class="band" cx="50" cy="50" r="44"/><path id="ARC" d="M2.6,50A47.4,47.4 0 0 0 97.4,50" fill="none"/><path id="ARCT" d="M9.5,50A40.5,40.5 0 0 1 90.5,50" fill="none"/><text text-anchor="middle" data-fs="7.4" data-max="128"><textPath href="#ARC" startOffset="50%" data-av-town></textPath></text><text text-anchor="middle" class="top" font-size="5.6"><textPath href="#ARCT" startOffset="50%">★ СКИДКИ ГОРОДА ★</textPath></text></svg>', "Печать на красном", "Наоборот: красный центр с белым шаром и белый обод с красным городом."]
 ];
 const AV_TOWNS = ["Елец", "Нижний Новгород", "Санкт-Петербург"];
 const avArt = (id, cls, inner, t, out, n) =>
@@ -112,9 +113,10 @@ function fitAvatarTowns() {
   });
   document.querySelectorAll(".av-ring textPath").forEach(tp => {
     const text = tp.parentNode;
-    let fs = 11;
+    let fs = parseFloat(text.dataset.fs) || 11;
+    const max = parseFloat(text.dataset.max) || 96;
     text.setAttribute("font-size", fs);
-    while (fs > 5 && text.getComputedTextLength() > 96) text.setAttribute("font-size", (fs -= .25));
+    while (fs > 4 && text.getComputedTextLength() > max) text.setAttribute("font-size", (fs -= .25));
   });
 }
 /* Уменьшенные копии: 160 — страница группы, 64 — лента, 32 — списки */
@@ -135,6 +137,21 @@ function avatarSizes() {
       f.append(m, px + " px");
       box.appendChild(f);
     });
+  });
+}
+
+/* Отдельный снимок под живую обложку (правка 05.10): если в photos/ лежит
+   <имя>-mob.jpg, на телефоне берётся он, иначе — общий снимок с кадрированием */
+function loadMobPhotos() {
+  document.querySelectorAll(".vk-mob2.cpn .shot[data-photo]").forEach(n => {
+    const stem = n.dataset.photo + "-mob", img = new Image();
+    img.onload = () => {
+      PHOTO_SIZE[stem] = [img.naturalWidth, img.naturalHeight];
+      n.dataset.mob = "1"; n.dataset.file = stem;
+      n.style.setProperty("--img", `url('photos/${stem}.jpg')`); n.classList.add("is-loaded");
+      placeHot(n);
+    };
+    img.src = "photos/" + stem + ".jpg";
   });
 }
 
@@ -226,6 +243,25 @@ const HOT = {
                 kettle: [.78, .52, "sport", "Фитнес", "−35%"], toy: [.68, .63, "detyam", "Детям", "−20%"],
                 pizza: [.89, .76, "eda", "Пиццерии", "2 по цене 1"], keys: [.75, .85, "avto", "Автомойка", "−30%"] }
 };
+Object.assign(HOT, {
+  "cafe-2":    { phone: [.31, .47, "phone", "Купон на экране", ""], cup: [.545, .51, "eda", "Капучино", "5 = 4"],
+                 rolls: [.72, .82, "eda", "Выпечка", "−20%"] },
+  "couple-2":  { flowers: [.22, .30, "spa", "Цветы", "−15%"], coffee: [.65, .48, "eda", "Кофе с собой", "5 = 4"],
+                 donuts: [.85, .62, "eda", "Пончики", "−20%"], bags: [.48, .80, "odezhda", "Одежда", "−30%"] },
+  "flatlay-2": { coffee: [.11, .22, "eda", "Кофейни", "5 = 4"], lipstick: [.46, .22, "krasota", "Красота", "−25%"],
+                 kettle: [.68, .30, "sport", "Фитнес", "−35%"], toy: [.88, .22, "detyam", "Детям", "−20%"],
+                 pizza: [.12, .70, "eda", "Пиццерии", "2 по цене 1"], flowers: [.37, .62, "spa", "Цветы", "−15%"],
+                 keys: [.87, .82, "avto", "Автомойка", "−30%"] },
+  "walk-2":    { cup: [.33, .40, "eda", "Кофе с собой", "5 = 4"], flowers: [.74, .48, "spa", "Цветы", "−15%"],
+                 bags: [.17, .75, "odezhda", "Одежда", "−30%"] },
+  "checkout":  { screen: [.43, .30, "ticket", "Купон на экране", ""], cup: [.70, .68, "eda", "Капучино", "5 = 4"],
+                 bakery: [.90, .70, "eda", "Выпечка", "−20%"] },
+  "table":     { pizza: [.25, .30, "eda", "Пиццерии", "2 по цене 1"], salad: [.58, .20, "eda", "Салаты", "−15%"],
+                 lemonade: [.86, .16, "eda", "Лимонады", "1 + 1"], sushi: [.68, .55, "eda", "Суши", "−25%"],
+                 cake: [.42, .78, "eda", "Десерты", "−20%"], cup: [.20, .78, "eda", "Кофе", "5 = 4"] }
+});
+/* Белый экран телефона на снимке checkout — наш купон поверх, в долях снимка */
+const SCREEN = { "checkout": [.268, .172, .435, .688] };
 const PHOTO_SIZE = {};
 /* Живая обложка на телефоне: в шапке ВК от снимка видна только полоса
    справа от аватара, над названием (в кадре снимка ~0–240 px по высоте,
@@ -243,7 +279,13 @@ const MOB_FOCUS_CPN = {
   "people":   [.70, .22, 1,   640, 120],
   "people-2": [.75, .22, 1,   560, 120],
   "people-3": [.62, .30, 1,   520, 120],
-  "flatlay":  [.75, .45, 1,   560, 150]
+  "flatlay":  [.75, .45, 1,   560, 150],
+  "cafe-2":    [.45, .28, 1, 540, 130],
+  "couple-2":  [.55, .28, 1, 540, 130],
+  "flatlay-2": [.40, .30, 1, 540, 150],
+  "walk-2":    [.48, .22, 1, 540, 120],
+  "checkout":  [.45, .42, 1, 540, 150],
+  "table":     [.50, .40, 1, 540, 150]
 };
 /* Где лежит снимок в кадре: обычно cover по --pos; на телефоне — от фокуса */
 function photoBox(shot) {
@@ -266,7 +308,7 @@ function photoBox(shot) {
   return { dw, dh, ox: (W - dw) * pos[0], oy: (H - dh) * (pos[1] ?? .5) };
 }
 function placeHot(shot) {
-  shot.querySelectorAll(".hot").forEach(h => h.remove());
+  shot.querySelectorAll(".hot, .scr").forEach(h => h.remove());
   const file = shot.dataset.file, size = PHOTO_SIZE[file], spots = HOT[file];
   if (!size) return;
   if (!spots || !shot.dataset.hot) { photoBox(shot); return; }
@@ -276,6 +318,19 @@ function placeHot(shot) {
   /* Видимая часть кадра: у обложек ВК верх срезан (компьютер ~117 px,
      телефон — до 1060 снимок и так не доходит) */
   const top = parseFloat(getComputedStyle(shot).getPropertyValue("--hot-top")) || 0;
+  const scr = SCREEN[file];
+  if (scr) {
+    const c = COUPONS.coffee, el = document.createElement("div");
+    const w = (scr[2] - scr[0]) * dw;
+    el.className = "scr";
+    el.style.cssText = `left:${ox + scr[0] * dw}px;top:${oy + scr[1] * dh}px;width:${w}px;height:${(scr[3] - scr[1]) * dh}px;--pw:${w * 1.05}px`;
+    el.innerHTML = `<div class="phone__scr">
+      <div class="phone__bar"><img src="../assets/brand/logo-red.png" alt=""><span>vsekupony.ru</span></div>
+      <div class="phone__ph" style="background-image:url('${PH + c.photo}')"><span class="tk">${c.value}</span></div>
+      <div class="phone__t">${c.title}</div>
+      <div class="phone__code"><span>Код</span><b>LIP-2547</b></div></div>`;
+    shot.appendChild(el);
+  }
   shot.dataset.hot.split(",").forEach(id => {
     const sp = spots[id]; if (!sp) return;
     const [x, y, cat, name, value] = sp;
@@ -313,6 +368,7 @@ document.querySelectorAll("[data-photo]").forEach(el => {
     const stem = file.replace(/^photos\/|\.jpg$/g, "");
     PHOTO_SIZE[stem] = [img.naturalWidth, img.naturalHeight];
     document.querySelectorAll(`[data-photo="${key}"]`).forEach(n => {
+      if (n.dataset.mob) return;
       n.style.setProperty("--img", `url('${file}')`); n.classList.add("is-loaded");
       n.dataset.file = stem;
       placeHot(n);
@@ -502,55 +558,51 @@ const plainCopy = (src, zoom) => {
   c.querySelectorAll("textPath").forEach(n => n.setAttribute("href", n.getAttribute("href") + "-p"));
   return c;
 };
-let vkpAva = "tilt";
+let vkpAva = "big";
+/* Под каждой обложкой — как она выглядит в ВК (правка 05.10): под обложкой
+   для компьютера — шапка группы на компьютере, под живой — шапка в
+   приложении на телефоне. Аватар и «без шара» переключаются наверху. */
+const vkDesk = (art, noLogo) => {
+  const d = document.createElement("div");
+  d.className = "vk-inline";
+  d.innerHTML = `<div class="vk-inline__cap">Так в ВК на компьютере</div>
+    <div class="vkp${noLogo ? " no-logo" : ""}">
+      <div class="vkp__cover"></div>
+      <div class="vkp__card">
+        <div class="vkp__name">ВСЕКУПОНЫ | ${town || "Липецк"}</div>
+        <div class="vkp__rate"><i>★★★★★</i> · Нет отзывов</div>
+        <div class="vkp__sub">✓ Вы подписаны</div>
+        <div class="vkp__btn vkp__btn--a">Сообщение</div>
+        <div class="vkp__btn vkp__btn--b">Ещё ⌄</div>
+      </div>
+      <div class="vkp__ava"></div><div class="vkp__plus">+</div>
+    </div>`;
+  d.querySelector(".vkp__cover").appendChild(plainCopy(art, .466));
+  d.querySelector(".vkp__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 94 / 400));
+  return d;
+};
+const vkPhone = art => {
+  const d = document.createElement("div");
+  d.className = "vk-inline";
+  d.innerHTML = `<div class="vk-inline__cap">Так в приложении ВК</div>
+    <div class="vkm">
+      <div class="vkm__cover"></div><div class="vkm__shade"></div>
+      <div class="vkm__time">14:45</div>
+      <div class="vkm__b" style="left:15px">‹</div><div class="vkm__b" style="left:445px">⚙</div><div class="vkm__b" style="left:518px">···</div>
+      <div class="vkm__ava"></div>
+      <div class="vkm__name">ВСЕКУПОНЫ | ${town || "Липецк"}</div>
+      <div class="vkm__btn" style="left:18px">Сообщения</div><div class="vkm__btn" style="left:302px">Продвижение</div>
+      <div class="vkm__sub">Вы подписаны · 2 подписчика</div>
+    </div>`;
+  d.querySelector(".vkm__cover").appendChild(plainCopy(art, .7));
+  d.querySelector(".vkm__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 150 / 400));
+  return d;
+};
 function vkPreview() {
-  const list = document.getElementById("vkp-list");
   const noLogo = document.getElementById("vkp-nologo").checked;
-  list.innerHTML = "";
-  VKP_COVERS.forEach(([id, name]) => {
-    const f = document.createElement("figure");
-    f.innerHTML = `<figcaption>${name}</figcaption>
-      <div class="vkp${noLogo ? " no-logo" : ""}">
-        <div class="vkp__cover"></div>
-        <div class="vkp__card">
-          <div class="vkp__name">ВСЕКУПОНЫ | ${town || "Липецк"}</div>
-          <div class="vkp__rate"><i>★★★★★</i> · Нет отзывов</div>
-          <div class="vkp__sub">✓ Вы подписаны</div>
-          <div class="vkp__btn vkp__btn--a">Сообщение</div>
-          <div class="vkp__btn vkp__btn--b">Ещё ⌄</div>
-        </div>
-        <div class="vkp__ava"></div><div class="vkp__plus">+</div>
-      </div>`;
-    f.querySelector(".vkp__cover").appendChild(plainCopy(document.getElementById(id), .466));
-    f.querySelector(".vkp__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 94 / 400));
-    list.appendChild(f);
-  });
-  /* Телефон: живая обложка в приложении ВК */
-  const mlist = document.getElementById("vkm-list");
-  mlist.innerHTML = "";
-  [["vk-mobile", "Сейчас"], ["vk-mob-people", "A. Люди"], ["vk-mob-flat", "C. Раскладка"],
-   ["vk-mob-red", "D. Красная"], ["vk-mob-phone", "E. Как это работает"], ["vk-mob-mosaic", "F. Мозаика"],
-   ["vk-mob-Gcafe", "G. Кафе"], ["vk-mob-Hcouple", "H. Пара"], ["vk-mob-Istone", "I. Раскладка на камне"],
-   ["vk-mob-cpn-white-cafe", "K. Купон, белый, кафе"], ["vk-mob-cpn-red-cafe", "L. Купон, красный, кафе"],
-   ["vk-mob-cpn-red-couple", "M. Купон, красный, пара"], ["vk-mob-cpn-white-flat", "N. Купон, белый, раскладка"],
-   ["vk-mob-cpn-red-walk", "O. Купон, красный, прогулка"],
-   ["vk-mob-fr-walk", "P. Рамка, прогулка"], ["vk-mob-fr-flat", "Q. Рамка, раскладка"],
-   ["vk-mob-fr-red", "R. Рамка на красном"], ["vk-mob-fr-duo", "S. Две рамки"]].forEach(([id, name]) => {
-    const f = document.createElement("figure");
-    f.innerHTML = `<figcaption>${name}</figcaption>
-      <div class="vkm">
-        <div class="vkm__cover"></div><div class="vkm__shade"></div>
-        <div class="vkm__time">14:45</div>
-        <div class="vkm__b" style="left:15px">‹</div><div class="vkm__b" style="left:445px">⚙</div><div class="vkm__b" style="left:518px">···</div>
-        <div class="vkm__ava"></div>
-        <div class="vkm__name">ВСЕКУПОНЫ | ${town || "Липецк"}</div>
-        <div class="vkm__btn" style="left:18px">Сообщения</div><div class="vkm__btn" style="left:302px">Продвижение</div>
-        <div class="vkm__sub">Вы подписаны · 2 подписчика</div>
-      </div>`;
-    f.querySelector(".vkm__cover").appendChild(plainCopy(document.getElementById(id), .7));
-    f.querySelector(".vkm__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 150 / 400));
-    mlist.appendChild(f);
-  });
+  document.querySelectorAll(".vk-inline").forEach(n => n.remove());
+  document.querySelectorAll(".art.vk-cover").forEach(art => art.closest(".fit").after(vkDesk(art, noLogo)));
+  document.querySelectorAll(".art.vk-mob2, .art.vk-mob").forEach(art => art.closest(".fit").after(vkPhone(art)));
 }
 document.getElementById("vkp-avas").innerHTML = AVAS.map(([id, , , name], i) =>
   `<button data-a="${id}"${id === vkpAva ? ' class="is-on"' : ""}>${i + 1}. ${name}</button>`).join(" ");
@@ -562,4 +614,5 @@ document.getElementById("vkp-avas").addEventListener("click", e => {
 });
 document.getElementById("vkp-nologo").addEventListener("change", vkPreview);
 
+loadMobPhotos();
 document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); avatarSizes(); vkPreview(); });

@@ -831,3 +831,27 @@ body{
 :is(#covers2,#vkprev) .vk-cover.cv-duo .shot{left:1130px;top:125px;right:60px;bottom:130px;--pos:72% 40%}
 :is(#covers2,#vkprev) .vk-cover.cv-duo .shot--2{left:1040px;top:410px;right:auto;bottom:auto;width:400px;height:260px;
   border-radius:32px;box-shadow:0 0 0 8px #fff, 0 30px 60px -30px rgba(40,10,8,.5);--pos:88% 75%;--hot-fs:24px;z-index:2}
+
+/* Макет «как в ВК» под каждой обложкой (05.10) */
+.vk-inline{margin-top:14px}
+.vk-inline__cap{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+.bare .vk-inline,.bare #vkprev{display:none}
+#vkprev{position:sticky;top:0;z-index:20;padding:12px 0;background:#E4E4E4}
+
+/* Вариации «города по кругу» (05.10) */
+.av-ring.av--red .arc text{fill:#fff}
+.av-ring.av--red .arc circle{stroke:#fff}
+.av-band .ball{top:17cqw !important;height:50cqw !important}
+.av-band .arc circle.band{fill:none;stroke:var(--brand);stroke-width:12}
+.av-band .arc text{fill:#fff !important;letter-spacing:.08em}
+.av-band.av--red .arc circle.band{stroke:#fff}
+.av-band.av--red .arc text{fill:var(--brand) !important}
+/* Наш купон на белом экране телефона в снимке checkout */
+.scr{position:absolute;z-index:2;border-radius:7%/3.4%;overflow:hidden;padding-top:4%;background:#fff}
+.scr .phone__scr{border-radius:0;padding-top:0}
+
+/* Головы не режутся (правка 05.10): ВК на компьютере срезает верх ~117 px,
+   поэтому снимок купона и обложки A начинается с линии среза — в шапке
+   он всё равно во всю высоту, а лица целиком в кадре */
+:is(#covers2,#vkprev) .vk-cover.cpn .cpn__ph{top:117px;--hot-top:0px}
+:is(#covers2,#vkprev) .vk-cover.cv-people .shot{top:117px;--hot-top:0px;--pos:70% 15%}
