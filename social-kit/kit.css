@@ -973,3 +973,12 @@ body{
 :is(#covers2,#vkprev,#vkfig) .vk-mob2.cpn.cpn-big-ph .h1{font-size:68px}
 .vk-mob2.cpn.cpn-big-ph .cpn__side{top:255px}
 .vk-mob2.cpn.cpn-big-ph .cpn__n{top:770px}
+/* M2 на компьютере (правка 05.10): купон на красном фоне, как на телефоне —
+   красная рамка вокруг, корешок белый, вырезы сквозные до красного.
+   Верх купона — на 40 px ниже среза ВК (~128), чтобы рамка читалась и
+   в шапке на компьютере */
+.vk-cover.cpn.cpn-frame{--cut:var(--brand);background:var(--brand) !important}
+.vk-cover.cpn.cpn-frame .cpn__l{left:60px;top:168px;width:940px;height:560px;background:#fff;border-radius:36px 0 0 36px}
+:is(#covers2,#vkprev,#vkfig) .vk-cover.cpn.cpn-frame .cpn__ph{left:1000px;top:168px;right:60px;bottom:40px;border-radius:0 36px 36px 0;--hot-top:0px}
+.vk-cover.cpn.cpn-frame .cpn__n--a{top:136px}
+.vk-cover.cpn.cpn-frame .cpn__n--b{top:696px}
