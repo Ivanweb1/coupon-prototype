@@ -791,27 +791,27 @@ body{
 .vk-cover.cpn .cpn__n--a{left:968px;top:85px}
 .vk-cover.cpn .cpn__n--b{left:968px;top:736px}
 
-/* Телефон — весь купон в видимом окне шапки ВК (~118–962 × 423–1480):
-   сверху снимок (на него ложатся кнопки «назад» и «настройки»), отрыв на
-   770, ниже корешок: заголовок до 1040 — выше аватара, шаги и адрес —
-   справа от аватара; купон кончается на 1290, над названием сообщества.
-   Фон вокруг цветной, чтобы белое название ВК читалось: под белым
-   купоном — красный, под красным — тёмный. */
+/* Телефон — во всю ширину (правка 05.10). Видимое окно шапки ВК —
+   ~118–962 × 423–1480: снимок 420–770 (по его верхним углам — кнопки ВК),
+   отрыв на 770 с вырезами на краях видимой полосы (118 и 962), ниже —
+   корешок: заголовок до 1040, шаги и адрес справа от аватара, конец на
+   1290 над названием. Выше 420 и по бокам — то, что видно только при
+   открытии обложки целиком: там размытое продолжение снимка. */
 .vk-mob2.cpn{--nd:70px;--cut:var(--brand);background:var(--brand) !important}
 .vk-mob2.cpn--red{--cut:#1B1B1B;background:#1B1B1B !important}
-:is(#covers2,#vkprev) .vk-mob2.cpn .cpn__ph{left:150px;width:780px;top:470px;height:300px;bottom:auto;border-radius:40px 40px 0 0;
-  --hot-left:0px;--hot-bottom:0px;--hot-top:150px;--hot-fs:26px}
-.vk-mob2.cpn .cpn__l{left:150px;width:780px;top:770px;height:520px;display:block;padding:26px 0 0;text-align:center;
-  border-radius:0 0 40px 40px;border-top:3px dashed var(--line-strong)}
+:is(#covers2,#vkprev) .vk-mob2.cpn .cpn__ph{left:0;right:0;width:auto;top:420px;height:350px;bottom:auto;border-radius:0;
+  --hot-left:130px;--hot-right:130px;--hot-bottom:0px;--hot-top:190px;--hot-fs:28px}
+.vk-mob2.cpn .cpn__l{left:0;right:0;width:auto;top:770px;height:520px;display:block;padding:26px 0 0;text-align:center;
+  border-radius:0;border-top:3px dashed var(--line-strong)}
 .vk-mob2.cpn--red .cpn__l{border-top-color:rgba(255,255,255,.5)}
-:is(#covers2,#vkprev) .vk-mob2.cpn .h1{font-size:76px}
-.vk-mob2.cpn .cpn__side{position:absolute;left:250px;right:30px;top:290px;display:flex;flex-direction:column;align-items:flex-start;gap:18px;text-align:left}
+:is(#covers2,#vkprev) .vk-mob2.cpn .h1{font-size:80px}
+.vk-mob2.cpn .cpn__side{position:absolute;left:400px;right:130px;top:290px;display:flex;flex-direction:column;align-items:flex-start;gap:18px;text-align:left}
 :is(#covers2,#vkprev) .vk-mob2.cpn .steps{flex-direction:column;align-items:flex-start;gap:8px;margin:0;font-size:26px}
 .vk-mob2.cpn .steps li + li{margin-left:0}
 .vk-mob2.cpn .steps li + li::before{display:none}
 .vk-mob2.cpn .cpn__code{font-size:25px}
-.vk-mob2.cpn .cpn__n--a{left:115px;top:735px}
-.vk-mob2.cpn .cpn__n--b{left:895px;top:735px}
+.vk-mob2.cpn .cpn__n--a{left:83px;top:735px}
+.vk-mob2.cpn .cpn__n--b{left:927px;top:735px}
 
 /* ==========================================================================
    Вариации рамки P–S (05.10): формат G с другими снимками и фоном
@@ -856,3 +856,27 @@ body{
    он всё равно во всю высоту, а лица целиком в кадре */
 :is(#covers2,#vkprev) .vk-cover.cpn .cpn__ph{top:117px;--hot-top:0px}
 :is(#covers2,#vkprev) .vk-cover.cv-people .shot{top:117px;--hot-top:0px;--pos:70% 15%}
+
+/* Снимок walk-2 в рамке — лицо целиком; C2 — инверсия: красная панель */
+:is(#covers2,#vkprev) .vk-cover.cv-frame .shot{--pos:50% 18%}
+:is(#covers2,#vkprev) .cv-flat .shot{--pos:70% 40%}
+:is(#covers2,#vkprev) .cv-flat-red .panel,.vk-mob2.cv-flat-red{background:var(--brand) !important}
+:is(#covers2,#vkprev) .cv-flat-red .eyebrow{color:rgba(255,255,255,.82)}
+:is(#covers2,#vkprev) .cv-flat-red .h1{color:#fff}
+:is(#covers2,#vkprev) .cv-flat-red .city{background:#fff;color:var(--brand)}
+.cv-flat-red .steps{color:rgba(255,255,255,.9)}
+.cv-flat-red .steps b{background:rgba(255,255,255,.18);color:#fff}
+.cv-flat-red .steps li + li::before{border-color:rgba(255,255,255,.6)}
+
+/* Купон целиком ниже линии среза ВК (правка 05.10): у снимков голова у
+   самого верха кадра, поэтому и корешок, и снимок начинаются на 117 —
+   в шапке ВК купон во всю высоту, а в целом файле над ним ровное белое поле,
+   без обрезанных голов и кривой полосы */
+.vk-cover.cpn .cpn__l{top:117px;height:651px;padding-top:0}
+/* Белый купон на белой странице ВК — корешок светло-серый, чтобы контур
+   купона и вырезы читались (правка 05.10) */
+.vk-cover.cpn:not(.cpn--red) .cpn__l{background:#F3F3F3}
+.vk-cover.cpn:not(.cpn--red) .cpn__l{border-right-color:#D0D0D0}
+.vk-mob2.cv-flat-red .eyebrow{color:rgba(255,255,255,.82)}
+.vk-mob2.cv-flat-red .h1{color:#fff}
+.vk-mob2.cv-flat-red .city{background:#fff;color:var(--brand)}
