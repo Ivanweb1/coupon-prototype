@@ -264,7 +264,7 @@ function fit() {
     if (a.closest(".av-mini")) return; // копии аватара уменьшены своим zoom
     const w = a.offsetWidth;
     const max = w >= 1900 ? page
-      : a.classList.contains("vk-mob") ? 440
+      : a.classList.contains("vk-mob") || a.classList.contains("vk-mob2") ? 440
       : a.classList.contains("post") ? 560
       : a.classList.contains("ava") ? 260
       : w;
@@ -354,6 +354,25 @@ function vkPreview() {
     f.querySelector(".vkp__cover").appendChild(plainCopy(document.getElementById(id), .466));
     f.querySelector(".vkp__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 94 / 400));
     list.appendChild(f);
+  });
+  /* Телефон: живая обложка в приложении ВК */
+  const mlist = document.getElementById("vkm-list");
+  mlist.innerHTML = "";
+  [["vk-mobile", "Сейчас"], ["vk-mob-people", "A. Люди"], ["vk-mob-flat", "C. Раскладка"]].forEach(([id, name]) => {
+    const f = document.createElement("figure");
+    f.innerHTML = `<figcaption>${name}</figcaption>
+      <div class="vkm">
+        <div class="vkm__cover"></div><div class="vkm__shade"></div>
+        <div class="vkm__time">14:45</div>
+        <div class="vkm__b" style="left:15px">‹</div><div class="vkm__b" style="left:445px">⚙</div><div class="vkm__b" style="left:518px">···</div>
+        <div class="vkm__ava"></div>
+        <div class="vkm__name">ВСЕКУПОНЫ | ${town || "Липецк"}</div>
+        <div class="vkm__btn" style="left:18px">Сообщения</div><div class="vkm__btn" style="left:302px">Продвижение</div>
+        <div class="vkm__sub">Вы подписаны · 2 подписчика</div>
+      </div>`;
+    f.querySelector(".vkm__cover").appendChild(plainCopy(document.getElementById(id), .7));
+    f.querySelector(".vkm__ava").appendChild(plainCopy(document.getElementById("ava-" + vkpAva), 150 / 400));
+    mlist.appendChild(f);
   });
 }
 document.getElementById("vkp-avas").innerHTML = AVAS.map(([id, , , name], i) =>

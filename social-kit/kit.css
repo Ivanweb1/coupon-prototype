@@ -551,7 +551,7 @@ body{
 .vkp-list figure{margin:0}
 .vkp-list figcaption{margin:0 0 8px;font-size:14px;font-weight:700;color:var(--ink-2)}
 .vkp{position:relative;width:895px;height:440px;border-radius:12px;overflow:hidden;background:#EDEEF0;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;zoom:1.1}
-.vkp__cover{position:absolute;left:0;top:0;width:895px;height:303px;overflow:hidden;background:#fff}
+.vkp__cover{position:absolute;left:0;top:0;width:895px;height:303px;overflow:hidden;isolation:isolate;background:#fff}
 .vkp__cover > div{position:absolute !important;left:0;top:-117px}
 .vkp__card{position:absolute;left:0;right:0;top:303px;height:125px;background:#fff;border-radius:0 0 12px 12px;box-shadow:0 1px 0 rgba(0,0,0,.06)}
 .vkp__ava{position:absolute;left:18px;top:283px;width:94px;height:94px;border-radius:50%;overflow:hidden;background:#fff;box-shadow:0 0 0 4px #fff;z-index:2}
@@ -570,3 +570,50 @@ body{
 .vkp.no-logo .vkp__cover .vk-cover:not(.cv) .h1{font-size:96px}
 .vkp.no-logo .vkp__cover .cv-people .txt{left:200px !important}
 .vkp.no-logo .vkp__cover .cv-people .h1{font-size:90px !important}
+
+/* ==========================================================================
+   Живая обложка ВК 2.0 (телефон) — A и C, 05.10
+   ==========================================================================
+   Замер со скриншотов приложения ВК: обложка увеличена ~×1,4 (в кадре
+   ~0,7 от 1080 px на экране 591), сверху скрыто ~420 px, по бокам по
+   ~120 px; на 550–620 — статус-бар и кнопки «назад» / «настройки»;
+   с ~1050 слева аватар, с ~1300 — название и кнопки, ниже ~1480 шапка
+   кончается. Видимая полоса под текст — 640–1040. Шар — выше 420: в
+   шапке его нет, он виден только при открытии обложки на весь экран. */
+.vk-mob2{width:1080px;height:1920px}
+:is(#covers2,#vkprev) .vk-mob2 .logo{position:absolute;left:50%;top:110px;height:280px;transform:translateX(-50%)}
+:is(#covers2,#vkprev) .vk-mob2 .txt{position:absolute;left:0;right:0;top:640px;text-align:center}
+:is(#covers2,#vkprev) .vk-mob2 .h1{font-size:104px}
+:is(#covers2,#vkprev) .vk-mob2 .steps{justify-content:center;margin-top:30px;font-size:30px}
+/* Снимок — сразу под текстом: аватар встаёт на границу белого и фото,
+   белое название сообщества ложится уже на снимок */
+:is(#covers2,#vkprev) .vk-mob2 .shot{left:0;right:0;top:1060px;bottom:0}
+:is(#covers2,#vkprev) .vk-mob2.cv-people .shot{--pos:75% 40%}
+:is(#covers2,#vkprev) .vk-mob2.cv-flat .shot{--pos:80% 50%}
+:is(#covers2,#vkprev) .vk-mob2 .offers{font-size:34px}
+/* Выгоды в A — ниже шапки (видны на весь экран): в полосе 1060–1300
+   они закрыли бы лицо на снимке */
+:is(#covers2,#vkprev) .vk-mob2 .offer:nth-child(1){left:90px;top:1500px;--r:-3deg}
+:is(#covers2,#vkprev) .vk-mob2 .offer:nth-child(2){left:150px;top:1610px;--r:2deg}
+:is(#covers2,#vkprev) .vk-mob2 > .tk--1{left:600px;top:1100px;font-size:66px;--r:-4deg}
+:is(#covers2,#vkprev) .vk-mob2 > .tk--2{left:560px;top:1215px;font-size:50px;--r:3deg}
+/* Адрес — для просмотра на весь экран, в шапке его закрывают кнопки */
+.vk-mob2 .dom-pill{
+  position:absolute;left:50%;top:1760px;transform:translateX(-50%);
+  padding:.4em .9em;border-radius:999px;background:#fff;
+  font-size:38px;font-weight:500;color:var(--ink-2);white-space:nowrap;
+}
+.vk-mob2 .dom-pill b{color:var(--brand);font-weight:800}
+
+/* Шапка группы в приложении ВК — по скриншоту iPhone (экран 591 px) */
+.vkm{position:relative;width:591px;height:820px;border-radius:28px;overflow:hidden;background:#19191A;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;zoom:.8}
+.vkm__cover{position:absolute;left:0;top:0;width:591px;height:740px;overflow:hidden;isolation:isolate;border-radius:0 0 18px 18px;background:#fff}
+.vkm__cover > div{position:absolute !important;left:-118px;top:-423px}
+.vkm__shade{position:absolute;left:0;right:0;top:470px;height:270px;background:linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.55))}
+.vkm__time{position:absolute;left:63px;top:26px;font-size:22px;font-weight:600;color:#000}
+.vkm__b{position:absolute;top:84px;width:56px;height:56px;border-radius:50%;background:rgba(110,110,110,.55);color:#fff;display:grid;place-items:center;font-size:26px;font-weight:700}
+.vkm__ava{position:absolute;left:30px;top:440px;width:150px;height:150px;border-radius:50%;overflow:hidden;background:#fff;box-shadow:0 0 0 5px #19191A}
+.vkm__ava > div{position:relative;overflow:hidden}
+.vkm__name{position:absolute;left:18px;top:615px;font-size:27px;font-weight:600;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.vkm__btn{position:absolute;top:668px;width:270px;height:52px;border-radius:14px;background:#fff;color:#000;font-size:20px;line-height:52px;text-align:center}
+.vkm__sub{position:absolute;left:18px;top:765px;font-size:20px;color:#E1E3E6}
