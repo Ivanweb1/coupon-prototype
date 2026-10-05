@@ -148,6 +148,7 @@ function loadMobPhotos() {
     img.onload = () => {
       PHOTO_SIZE[stem] = [img.naturalWidth, img.naturalHeight];
       n.dataset.mob = "1"; n.dataset.file = stem;
+      n.style.backgroundSize = n.style.backgroundPosition = "";
       n.style.setProperty("--img", `url('photos/${stem}.jpg')`); n.classList.add("is-loaded");
       placeHot(n);
     };
@@ -259,6 +260,13 @@ Object.assign(HOT, {
   "table":     { pizza: [.25, .30, "eda", "Пиццерии", "2 по цене 1"], salad: [.58, .20, "eda", "Салаты", "−15%"],
                  lemonade: [.86, .16, "eda", "Лимонады", "1 + 1"], sushi: [.68, .55, "eda", "Суши", "−25%"],
                  cake: [.42, .78, "eda", "Десерты", "−20%"], cup: [.20, .78, "eda", "Кофе", "5 = 4"] }
+});
+/* Отдельные снимки под телефон (*-mob.jpg, 2600×975) */
+Object.assign(HOT, {
+  "cafe-2-mob":    { bakery: [.70, .86, "eda", "Выпечка", "−20%"] },
+  "walk-2-mob":    { cup: [.63, .63, "eda", "Кофе с собой", "5 = 4"], bags: [.32, .78, "odezhda", "Одежда", "−30%"] },
+  "flatlay-2-mob": { coffee: [.12, .52, "eda", "Кофейни", "5 = 4"], kettle: [.54, .56, "sport", "Фитнес", "−35%"],
+                     pizza: [.67, .55, "eda", "Пиццерии", "2 по цене 1"], flowers: [.88, .45, "spa", "Цветы", "−15%"] }
 });
 /* Белый экран телефона на снимке checkout — наш купон поверх, в долях снимка */
 const SCREEN = { "checkout": [.268, .172, .435, .688] };
