@@ -123,6 +123,39 @@ function fitAvatarTowns() {
     while (fs > 4 && text.getComputedTextLength() > max) text.setAttribute("font-size", (fs -= .25));
   });
 }
+/* Текст по дуге — побуквенно. textPath Figma (и html.to.design) не
+   понимает: город приезжает прямой строкой поверх шара. Поэтому после
+   подгонки снимаем у браузера место и угол каждой буквы и ставим её
+   отдельным <text> с поворотом; шрифт и цвет пишем атрибутами, а не
+   классом — при импорте SVG стили страницы не едут. */
+function arcToGlyphs() {
+  document.querySelectorAll(".arc textPath").forEach(tp => {
+    const text = tp.parentNode;
+    const cs = getComputedStyle(text);
+    const str = tp.textContent.toUpperCase();
+    /* Скрытый макет не разложен браузером — букв у него нет, оставляем дугу */
+    if (text.getNumberOfChars() < str.length) return;
+    const fs = text.getAttribute("font-size") || parseFloat(cs.fontSize);
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.setAttribute("class", text.getAttribute("class") || "");
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === " ") continue;
+      const p = text.getStartPositionOfChar(i), r = text.getRotationOfChar(i);
+      const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      const x = +p.x.toFixed(3), y = +p.y.toFixed(3);
+      t.setAttribute("x", x); t.setAttribute("y", y);
+      t.setAttribute("transform", `rotate(${+r.toFixed(3)} ${x} ${y})`);
+      t.setAttribute("font-family", "Onest");
+      t.setAttribute("font-weight", cs.fontWeight);
+      t.setAttribute("font-size", fs);
+      t.setAttribute("fill", cs.fill);
+      t.style.letterSpacing = "0";
+      t.textContent = str[i];
+      g.appendChild(t);
+    }
+    text.replaceWith(g);
+  });
+}
 /* Уменьшенные копии: 160 — страница группы, 64 — лента, 32 — списки */
 function avatarSizes() {
   document.querySelectorAll("[data-sizes]").forEach(box => {
@@ -660,4 +693,4 @@ function avatarInVk() {
 
 
 loadMobPhotos();
-document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); avatarSizes(); vkPreview(); });
+document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); arcToGlyphs(); avatarSizes(); vkPreview(); });
