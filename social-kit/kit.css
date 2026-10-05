@@ -918,3 +918,21 @@ body{
 .vk-mob2.cpn .cpn__side{left:282px;right:40px}
 .vk-mob2.cpn .cpn__n--a{left:83px}
 .vk-mob2.cpn .cpn__n--b{left:927px}
+/* Пост с промокодом: код в пунктирной рамке, как на кассе */
+.post__code{
+  display:flex;align-items:center;gap:24px;margin:30px 0 0;padding:20px 28px;
+  border:3px dashed var(--line-strong);border-radius:24px;background:var(--chip);
+}
+.post__code span{font-size:26px;font-weight:600;color:var(--ink-3)}
+.post__code b{font-size:52px;font-weight:800;letter-spacing:.04em;color:var(--brand)}
+.post__code i{margin-left:auto;font-style:normal;font-size:24px;font-weight:500;color:var(--ink-3);text-align:right;max-width:150px;line-height:1.2}
+.post11 .post__code{margin-top:24px;padding:16px 22px;gap:16px;flex-wrap:wrap}
+.post11 .post__code b{font-size:44px}
+.post11 .post__code i{display:none}
+/* С промокодом место уходит под код: заголовок и мета компактнее */
+[data-code] .post__t{font-size:56px}
+[data-code] .post__meta{margin-top:22px}
+.post11[data-code] .post__t{font-size:52px}
+.post45[data-code] .post__ph{height:600px}
+.post45[data-code] .perf{top:614px}
+.post45[data-code] .post__body{padding-top:40px}

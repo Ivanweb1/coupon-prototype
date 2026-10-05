@@ -4,21 +4,25 @@
    выдуманное название читалось бы как настоящий оффер. */
 const COUPONS = {
   coffee: {
+    code: "KOFE-5X4",
     photo: "coffee.jpg", value: "5 = 4", cat: "eda", catName: "Кафе и рестораны",
     title: "Каждая пятая чашка кофе в подарок", company: "Кофейня «Пример»",
     address: "ул. Советская, 8", until: "с 1 по 31 октября", erid: "2Vt1NKPQW"
   },
   beauty: {
+    code: "KRASA-25",
     photo: "beauty.jpg", value: "−25%", cat: "krasota", catName: "Красота",
     title: "Окрашивание любой сложности", company: "Салон «Пример»",
     address: "пр-т Победы, 45", until: "с 3 по 24 октября", erid: "2Vt1NLTRB"
   },
   fitness: {
+    code: "FIT-35",
     photo: "fitness.jpg", value: "−35%", cat: "sport", catName: "Фитнес и спорт",
     title: "Годовой абонемент в клуб со скидкой", company: "Фитнес-клуб «Пример»",
     address: "ул. Зелёная, 3", until: "с 1 по 14 октября", erid: "2Vt1NMXZC"
   },
   eda: {
+    code: "OBED-349",
     photo: "eda-cool.jpg", value: "349 ₽", cat: "eda", catName: "Кафе и рестораны",
     title: "Комбо-обед по будням до 16:00", company: "Кафе «Пример»",
     address: "пл. Центральная, 1", until: "с 1 по 21 октября", erid: "2Vt1NJILR"
@@ -410,6 +414,17 @@ document.querySelectorAll("[data-photo]").forEach(el => {
   fig.after(copy);
 });
 
+/* Пост с промокодом (правка 05.10) — копия каждого поста рядом, файл с
+   суффиксом -code: вместо «Код купона — на сайте» сам промокод в рамке */
+document.querySelectorAll("[data-post]").forEach(src => {
+  const fig = src.closest(".slot"), copy = fig.cloneNode(true), art = copy.querySelector(".art");
+  art.id = src.id + "-code";
+  art.dataset.out = src.dataset.out.replace(/(-\d+x\d+)$/, "-code$1");
+  art.dataset.code = "1";
+  copy.querySelector("figcaption").insertAdjacentHTML("beforeend", " · с промокодом");
+  fig.after(copy);
+});
+
 /* Пост с купоном — один шаблон на оба формата */
 document.querySelectorAll("[data-post]").forEach(el => {
   const c = COUPONS[el.dataset.post];
@@ -428,7 +443,8 @@ document.querySelectorAll("[data-post]").forEach(el => {
           <li>${icon("pin")}${town || "Липецк"}, ${c.address}</li>
           <li>${icon("cal")}${c.until}</li>
         </ul>
-        <div class="post__foot"><div class="post__foot-t"><span>Код купона — на сайте</span><b>vsekupony.ru</b></div><img class="logo" src="../assets/brand/logo-red.png" alt=""></div>
+        ${el.dataset.code ? `<div class="post__code"><span>Промокод</span><b>${c.code}</b><i>Назовите на кассе</i></div>` : ""}
+        <div class="post__foot"><div class="post__foot-t"><span>${el.dataset.code ? "Все купоны города" : "Код купона — на сайте"}</span><b>vsekupony.ru</b></div><img class="logo" src="../assets/brand/logo-red.png" alt=""></div>
       </div>
     </div>
     <div class="perf"><i></i><i></i></div>`;
