@@ -966,3 +966,10 @@ body{
 .vkfig__pair{display:flex;align-items:flex-start;gap:80px}
 /* I2: подложка — SVG-контур с вырезами вместо маски (правка 05.10) */
 .vk-cover.cv-stone-panel .txt.is-cut::before{display:none}
+/* M2 на телефоне (правка 05.10): заголовок на 15% мельче, снимок выше —
+   линия отрыва 805 вместо 770; метки на цветах, кофе */
+:is(#covers2,#vkprev,#vkfig) .vk-mob2.cpn.cpn-big-ph .cpn__ph{height:365px;--hot-left:0px;--hot-right:0px;--hot-top:110px}
+.vk-mob2.cpn.cpn-big-ph .cpn__l{top:805px;height:485px}
+:is(#covers2,#vkprev,#vkfig) .vk-mob2.cpn.cpn-big-ph .h1{font-size:68px}
+.vk-mob2.cpn.cpn-big-ph .cpn__side{top:255px}
+.vk-mob2.cpn.cpn-big-ph .cpn__n{top:770px}
