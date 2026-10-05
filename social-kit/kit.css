@@ -947,3 +947,9 @@ body{
 /* В макетах шапки ВК системный шрифт — только у интерфейса ВК; копии
    обложек и аватаров внутри — Onest, как в PNG */
 .vkp__cover,.vkm__cover,.vkp__ava,.vkm__ava,.art{font-family:var(--font)}
+/* Перенос в Figma (правка 05.10): плагин задаёт текстовым слоям ширину
+   по браузеру, а Onest в Figma чуть шире — короткие подписи переносились.
+   Однострочные подписи запрещаем переносить, тогда слой растёт по тексту */
+.steps,.steps li,.cpn__code,.cpn__code span,.cpn__code b,.eyebrow,.strip,.dom-pill,
+.offer,.stub,.stub__l,.stub__r,.hot__tag,.chip,.post__cat,.post__c,.post__meta li,
+.post__foot-t span,.post__foot-t b,.pc__l span,.pc__l b,.menu__t,.ava__net,.card__c{white-space:nowrap}
