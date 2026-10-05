@@ -621,16 +621,27 @@ function vkPreview() {
   document.querySelectorAll(".vk-inline").forEach(n => n.remove());
   document.querySelectorAll(".art.vk-cover").forEach(art => art.closest(".fit").after(vkDesk(art, noLogo)));
   document.querySelectorAll(".art.vk-mob2, .art.vk-mob").forEach(art => art.closest(".fit").after(vkPhone(art)));
+  avatarInVk();
 }
-document.getElementById("vkp-avas").innerHTML = AVAS.map(([id, , , name], i) =>
-  `<button data-a="${id}"${id === vkpAva ? ' class="is-on"' : ""}>${i + 1}. ${name}</button>`).join(" ");
-document.getElementById("vkp-avas").addEventListener("click", e => {
-  const b = e.target.closest("button"); if (!b) return;
-  vkpAva = b.dataset.a;
-  document.querySelectorAll("#vkp-avas button").forEach(x => x.classList.toggle("is-on", x === b));
-  vkPreview();
-});
-document.getElementById("vkp-nologo").addEventListener("change", vkPreview);
+/* Аватары списком (правка 05.10): у каждого варианта — он же в шапке ВК
+   на компьютере и в приложении, на обложке I2 */
+function avatarInVk() {
+  const cov = document.getElementById("vk-cover-Istone2"), mob = document.getElementById("vk-mob-Istone2");
+  if (!cov) return;
+  const keep = vkpAva;
+  document.querySelectorAll(".av-vk").forEach(n => n.remove());
+  AVAS.forEach(([id]) => {
+    const row = document.getElementById("ava-" + id)?.closest(".av-row");
+    if (!row) return;
+    vkpAva = id;
+    const box = document.createElement("div");
+    box.className = "av-vk";
+    box.append(vkDesk(cov, false), vkPhone(mob));
+    row.after(box);
+  });
+  vkpAva = keep;
+}
+
 
 loadMobPhotos();
 document.fonts.ready.then(() => { shapeTickets(); shapeStubs(); fitAvatarTowns(); avatarSizes(); vkPreview(); });

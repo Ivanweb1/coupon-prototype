@@ -891,3 +891,30 @@ body{
 :is(#covers2,#vkprev) .vk-cover.cv-stone-panel .txt{
   left:250px;padding:44px 60px 48px;background:#fff;border-radius:40px;
   box-shadow:0 30px 70px -30px rgba(40,10,8,.45)}
+
+.av-vk{display:flex;align-items:flex-start;gap:24px;margin:-16px 0 48px}
+.av-vk .vk-inline{margin:0}
+.av-vk .vkp{zoom:.8}.av-vk .vkm{zoom:.55}
+.bare .av-vk{display:none}
+/* I2: подложка в форме купона — полукруглые вырезы по центру боковых сторон.
+   Фигура — псевдоэлемент с маской, тень — drop-shadow по её контуру */
+:is(#covers2,#vkprev) .vk-cover.cv-stone-panel .txt{
+  background:none;box-shadow:none;isolation:isolate;
+  filter:drop-shadow(0 22px 30px rgba(40,10,8,.28))}
+.vk-cover.cv-stone-panel .txt::before{
+  content:"";position:absolute;inset:0;z-index:-1;background:#fff;border-radius:40px;
+  -webkit-mask:radial-gradient(circle 30px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,
+               radial-gradient(circle 30px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 30px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,
+               radial-gradient(circle 30px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
+/* Корешок купона: блок текста по центру левой части (правка 05.10) */
+.vk-cover.cpn .cpn__l{padding-left:0;align-items:center}
+.vk-cover.cpn .cpn__l > *{width:640px}
+.vk-cover.cpn .cpn__l .cpn__code{width:auto;align-self:auto;margin-right:auto;margin-left:calc(50% - 320px)}
+/* Телефон: в самом файле купон той же формы, что в превью ВК (правка 05.10):
+   ширина — видимая полоса 118–962, вырезы на её краях, низ скруглён */
+:is(#covers2,#vkprev) .vk-mob2.cpn .cpn__ph{left:118px;right:118px;border-radius:36px 36px 0 0}
+.vk-mob2.cpn .cpn__l{left:118px;right:118px;border-radius:0 0 36px 36px}
+.vk-mob2.cpn .cpn__side{left:282px;right:40px}
+.vk-mob2.cpn .cpn__n--a{left:83px}
+.vk-mob2.cpn .cpn__n--b{left:927px}
