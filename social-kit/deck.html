@@ -207,16 +207,16 @@ a{color:inherit;text-decoration:none}
 /* ==========================================================================
    2. Все купоны — примеры купонами под ниши
    ========================================================================== */
-#s2 .in{left:130px;top:96px;width:1660px}
-#s2 .h1{margin:0;font-size:96px}
-#s2 .sub{margin-top:8px;font-size:32px}
-.short{position:absolute;left:130px;top:288px;display:flex;flex-direction:column;align-items:flex-start;gap:16px}
-.short__k{font-size:30px;font-weight:800;letter-spacing:-.01em}
-.short .steps{font-size:23px}
-.niches{position:absolute;left:110px;right:110px;top:420px;display:flex;gap:22px}
-.nc{flex:1;position:relative;height:580px;border-radius:30px;background:#fff;
+#s2 .in{left:130px;top:92px;width:1660px}
+#s2 .h1{margin:0;font-size:80px}
+#s2 .sub{margin-top:10px;font-size:30px}
+.short{position:absolute;left:130px;top:282px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.short__k{font-size:28px;font-weight:800;letter-spacing:-.01em}
+.short .steps{font-size:22px}
+.niches{position:absolute;left:110px;right:110px;top:440px;display:flex;gap:22px}
+.nc{flex:1;position:relative;height:556px;border-radius:30px;background:#fff;
   box-shadow:0 0 0 2px var(--line);overflow:hidden;display:flex;flex-direction:column}
-.nc__ph{position:relative;height:240px;background:var(--surface-2) center / cover no-repeat}
+.nc__ph{position:relative;height:210px;background:var(--surface-2) center / cover no-repeat}
 .nc__ph .stub{position:absolute;left:16px;bottom:16px;font-size:20px}
 .nc__perf{position:relative;height:0;border-top:3px dashed var(--line-strong)}
 .nc__perf i{position:absolute;top:-16px;width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px var(--line)}
@@ -234,21 +234,25 @@ a{color:inherit;text-decoration:none}
    из data-ws; пока их нет — заглушка. */
 #s3 .in{left:150px;top:120px;width:1500px}
 #s3 .h1{margin:0;font-size:96px}
-/* Рамки окна браузера под настоящие скриншоты Вордстата: файл кладём в
-   photos/wordstat/<слово>.png — он сам встанет в рамку. Пока файла нет —
-   пунктирная заглушка с подписью, что сюда. */
-.ws{position:absolute;left:150px;right:150px;top:400px;display:flex;gap:30px}
-.ws__c{flex:1;display:flex;flex-direction:column}
-.ws__win{height:380px;border-radius:22px;background:#fff;box-shadow:0 0 0 2px var(--line), 0 24px 40px -30px rgba(0,0,0,.35);overflow:hidden;display:flex;flex-direction:column}
-.ws__bar{height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--surface);border-bottom:2px solid var(--line)}
-.ws__bar i{width:11px;height:11px;border-radius:50%;background:var(--line-strong)}
-.ws__bar span{margin-left:10px;font-size:16px;font-weight:600;color:var(--ink-3)}
-.ws__body{flex:1;background:#fff center / contain no-repeat}
-.ws__body.is-empty{margin:16px;border-radius:14px;border:2px dashed var(--line-strong);display:grid;place-items:center;text-align:center;
-  font-size:20px;font-weight:600;line-height:1.4;color:var(--ink-4)}
-.ws__q{margin-top:20px;display:flex;align-items:center;gap:12px;font-size:30px;font-weight:800;letter-spacing:-.015em}
-.ws__q svg{width:28px;height:28px;color:var(--brand)}
-.ws-src{position:absolute;left:150px;top:880px;font-size:26px;line-height:1.45;color:var(--ink-2);max-width:1100px}
+/* Вордстат: настоящие скриншоты (photos/wordstat/*.png, присланы 07.10)
+   в рамке окна браузера, рядом — то же число крупно, чтобы его не
+   приходилось искать на скрине. */
+#s3 .in{top:96px}
+#s3 .h1{font-size:88px}
+#s3 .sub{margin-top:16px;font-size:30px}
+.ws{position:absolute;left:110px;right:110px;top:350px;display:grid;grid-template-columns:1fr 1fr;gap:28px 40px}
+.ws__c{display:flex;align-items:center;gap:28px}
+.ws__win{flex:none;width:540px;border-radius:18px;background:#fff;box-shadow:0 0 0 2px var(--line), 0 24px 40px -30px rgba(0,0,0,.35);overflow:hidden}
+.ws__bar{height:36px;display:flex;align-items:center;gap:7px;padding:0 14px;background:var(--surface);border-bottom:2px solid var(--line)}
+.ws__bar i{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
+.ws__bar span{margin-left:8px;font-size:15px;font-weight:600;color:var(--ink-3)}
+.ws__body{height:184px;background:#fff center / contain no-repeat}
+.ws__body.is-empty{margin:12px;height:160px;border-radius:12px;border:2px dashed var(--line-strong);display:grid;place-items:center;text-align:center;
+  font-size:18px;font-weight:600;line-height:1.4;color:var(--ink-4)}
+.ws__n{font-size:60px;font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--brand);white-space:nowrap}
+.ws__q{margin-top:10px;font-size:23px;font-weight:600;line-height:1.3;color:var(--ink-2)}
+.ws__q b{color:var(--ink)}
+.ws-src{position:absolute;left:150px;top:930px;font-size:26px;line-height:1.45;color:var(--ink-2);max-width:1100px}
 
 /* ==========================================================================
    4. Сервис разработан предпринимателями — команда
@@ -421,25 +425,25 @@ a{color:inherit;text-decoration:none}
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1">Выгоду ищут <span class="city">каждый день</span></h2>
-        <p class="sub">Запросы со&nbsp;словами «купон», «акция» и&nbsp;«скидка» показывают интерес людей к&nbsp;выгодным предложениям.</p>
+        <p class="sub">Запросы со&nbsp;словами «купон», «акция», «скидка» и&nbsp;«промокод» показывают интерес людей к&nbsp;выгодным предложениям.</p>
       </div>
     </div>
-    <!-- Скриншоты Вордстата: photos/wordstat/*.png. Нет файла — заглушка. -->
+    <!-- Скриншоты Вордстата: photos/wordstat/*.png -->
     <div class="ws">
       <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
         <div class="ws__body" data-shot="photos/wordstat/kupon.png" data-label="Скрин Вордстата<br>«купон»"></div></div>
-        <div class="ws__q"><svg data-i="search"></svg>купон</div></div>
+        <div><div class="ws__n">619 тыс.</div><div class="ws__q">запросов <b>«купон»</b><br>за&nbsp;месяц</div></div></div>
       <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
         <div class="ws__body" data-shot="photos/wordstat/akciya.png" data-label="Скрин Вордстата<br>«акция»"></div></div>
-        <div class="ws__q"><svg data-i="search"></svg>акция</div></div>
+        <div><div class="ws__n">5 млн</div><div class="ws__q">запросов <b>«акция»</b><br>за&nbsp;месяц</div></div></div>
       <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
         <div class="ws__body" data-shot="photos/wordstat/skidka.png" data-label="Скрин Вордстата<br>«скидка»"></div></div>
-        <div class="ws__q"><svg data-i="search"></svg>скидка</div></div>
+        <div><div class="ws__n">3,8 млн</div><div class="ws__q">запросов <b>«скидка»</b><br>за&nbsp;месяц</div></div></div>
       <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
         <div class="ws__body" data-shot="photos/wordstat/promokod.png" data-label="Скрин Вордстата<br>«промокод»"></div></div>
-        <div class="ws__q"><svg data-i="search"></svg>промокод</div></div>
+        <div><div class="ws__n">10,6 млн</div><div class="ws__q">запросов <b>«промокод»</b><br>за&nbsp;месяц</div></div></div>
     </div>
-    <div class="ws-src">На&nbsp;слайде&nbsp;— данные Яндекс Вордстата: сколько раз пользователи искали эти слова за&nbsp;месяц</div>
+    <div class="ws-src">Данные Яндекс Вордстата: сколько раз пользователи искали эти слова с&nbsp;5&nbsp;сентября по&nbsp;4&nbsp;октября 2026, вся Россия</div>
   </section>
 
   <!-- ===================== 3. Все купоны ===================== -->
