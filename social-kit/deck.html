@@ -225,7 +225,7 @@ a{color:inherit;text-decoration:none}
    через drop-shadow, поэтому она идёт по контуру купона вместе с вырезами */
 .niches{filter:drop-shadow(0 8px 14px rgba(40,10,8,.10))}
 .nc{flex:1;position:relative;height:500px;isolation:isolate;display:flex;flex-direction:column}
-.nc__ph{position:relative;height:214px;flex:none;border-radius:30px 30px 0 0;background:var(--surface-2) center / cover no-repeat}
+.nc__ph{position:relative;height:230px;flex:none;border-radius:30px 30px 0 0;background:var(--surface-2) center / cover no-repeat}
 .nc__ph .stub{position:absolute;left:14px;top:14px;font-size:17px}
 /* Плашка счётчиков — как .card__stats на карточке витрины */
 .nc__st{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;
@@ -233,7 +233,7 @@ a{color:inherit;text-decoration:none}
 .nc__st svg{width:20px;height:20px;display:block}
 .nc__st span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:700;color:var(--ink)}
 .nc__ph .tk{position:absolute;left:16px;bottom:16px;font-size:30px}
-.nc__perf{position:relative;height:0;margin:15px 22px 0;border-top:3px dashed var(--line-strong)}
+.nc__perf{position:relative;height:0;margin:0 22px;border-top:3px dashed var(--line-strong)}
 .nc__perf i{display:none}
 .nc__b{flex:1;padding:22px 22px 22px;display:flex;flex-direction:column}
 .nc__t{font-size:25px;font-weight:800;line-height:1.18;letter-spacing:-.015em}
@@ -1107,6 +1107,8 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll(".nc").forEach(function (c) {
     var w = c.offsetWidth, h = c.offsetHeight;
     c.insertAdjacentHTML("afterbegin", '<svg class="nshape" viewBox="0 0 ' + w + ' ' + h + '"><path fill="#fff" d="' + notched(w, h, 30, 16, { l: [230], r: [230] }) + '"/></svg>');
+    /* фото — до линии отрыва, нижние углы срезаны по вырезам */
+    c.querySelector(".nc__ph").style.clipPath = "path('M30,0H" + (w - 30) + "A30,30 0 0 1 " + w + ",30V214A16,16 0 0 0 " + (w - 16) + ",230H16A16,16 0 0 0 0,214V30A30,30 0 0 1 30,0Z')";
   });
 
   /* Контуры билетика и корешка — те же формулы, что в kit.js */
