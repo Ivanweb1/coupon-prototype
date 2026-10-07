@@ -188,16 +188,19 @@ a{color:inherit;text-decoration:none}
 .qrc__l img{display:block;width:170px;height:170px}
 .qrc__n{position:absolute;left:213px;width:34px;height:34px;border-radius:50%;background:#fff}
 .qrc__n--t{top:-17px}.qrc__n--b{bottom:-17px}
-.qrc__r{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 36px}
-.qrc__k{font-size:21px;font-weight:600;color:var(--ink-3)}
-.qrc__site{font-size:46px;font-weight:800;letter-spacing:-.02em;color:var(--brand);line-height:1.1}
-.soc{display:flex;align-items:center;gap:12px;margin-top:14px}
-.soc__k{font-size:20px;font-weight:600;color:var(--ink-3);margin-right:6px}
-.soc a{display:block;width:50px;height:50px;border-radius:50%;overflow:hidden}
+/* Правая часть купона — ровные группы друг под другом: маленькая
+   подпись сверху, значение под ней, между группами тонкая линия. */
+.qrc__r{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 40px}
+.qrc__g{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.qrc__g + .qrc__g{margin-top:16px;padding-top:16px;border-top:2px solid #E6E6E6;align-self:stretch}
+.qrc__k{font-size:17px;font-weight:500;color:var(--ink-3);line-height:1.2}
+.qrc__site{font-size:42px;font-weight:800;letter-spacing:-.02em;color:var(--brand);line-height:1}
+.qrc__tel{font-size:30px;font-weight:800;letter-spacing:-.01em;color:var(--ink);line-height:1}
+.soc{display:flex;align-items:center;gap:10px}
+.soc a{display:block;width:44px;height:44px;border-radius:50%;overflow:hidden}
 .soc a svg,.soc a img{display:block;width:100%;height:100%}
 .soc a .soc-ic__bg{fill:var(--soc-c)}
 .soc a .soc-ic__g{fill:#fff}
-.soc a.is-empty{opacity:.9}
 /* Справа — витрина на телефоне (photos/lk/home-mobile.png) с метками:
    знаем город, знаем, что ищут, видим, что смотрят и забирают. */
 .phone-panel{position:absolute;left:1100px;top:40px;right:40px;bottom:40px;border-radius:0 40px 40px 0;background:#ECECEC;overflow:hidden}
@@ -427,9 +430,7 @@ a{color:inherit;text-decoration:none}
 .posts img:nth-child(2){left:330px;top:300px;transform:rotate(4deg)}
 .free{margin-top:30px;display:block;padding:18px 26px;border-radius:22px;background:var(--brand-50);font-size:25px;font-weight:700;line-height:1.35;color:var(--ink)}
 .free b{color:var(--brand)}
-.qrc--big{height:300px}
-.qrc--big .qrc__r{gap:10px}
-.qrc--big .soc{margin-top:6px}
+.qrc--big{height:340px}
 .cont__l{display:flex;flex-direction:column;gap:12px}
 .cont__r{display:flex;align-items:center;gap:14px;font-size:26px;font-weight:700;color:var(--ink)}
 .cont__r .ic{font-size:22px;background:#fff}
@@ -452,12 +453,12 @@ a{color:inherit;text-decoration:none}
         <div class="qrc__l"><a href="https://vsekupony.ru"><img src="qr-site.svg" alt="QR-код: vsekupony.ru"></a></div>
         <i class="qrc__n qrc__n--t"></i><i class="qrc__n qrc__n--b"></i>
         <div class="qrc__r">
-          <span class="qrc__k">Наведите камеру или перейдите по&nbsp;ссылке</span>
-          <a class="qrc__site" href="https://vsekupony.ru">vsekupony.ru</a>
-          <div class="soc"><span class="soc__k">Мы&nbsp;в&nbsp;соцсетях:</span>
-            <a data-soc="vk" title="ВКонтакте"></a><a data-soc="tg" title="Telegram"></a><a data-soc="ok" title="Одноклассники"></a><a data-soc="max" title="MAX"></a>
-          </div>
+          <div class="qrc__g"><span class="qrc__k">Наведите камеру или перейдите по&nbsp;ссылке</span>
+            <a class="qrc__site" href="https://vsekupony.ru">vsekupony.ru</a></div>
+          <div class="qrc__g"><span class="qrc__k">Мы&nbsp;в&nbsp;соцсетях</span>
+            <div class="soc"><a data-soc="vk" title="ВКонтакте"></a><a data-soc="tg" title="Telegram"></a><a data-soc="ok" title="Одноклассники"></a><a data-soc="max" title="MAX"></a></div></div>
         </div>
+      </div>
       </div>
     </div>
     <div class="phone-panel">
@@ -721,13 +722,14 @@ a{color:inherit;text-decoration:none}
         <div class="qrc__l"><a href="https://vsekupony.ru"><img src="qr-site.svg" alt="QR-код: vsekupony.ru"></a></div>
         <i class="qrc__n qrc__n--t"></i><i class="qrc__n qrc__n--b"></i>
         <div class="qrc__r">
-          <a class="qrc__site" href="https://vsekupony.ru">vsekupony.ru</a>
-          <a class="cont__r" href="https://vsekupony.ru"><span class="ic" data-ic="user"></span>Регистрация на&nbsp;сайте</a>
-          <a class="cont__r" href="tel:+78002228567"><span class="ic" data-ic="phone"></span>8&nbsp;800&nbsp;222-85-67</a>
-          <div class="soc"><span class="soc__k">Мы&nbsp;в&nbsp;соцсетях:</span>
-            <a data-soc="vk" title="ВКонтакте"></a><a data-soc="tg" title="Telegram"></a><a data-soc="ok" title="Одноклассники"></a><a data-soc="max" title="MAX"></a>
-          </div>
+          <div class="qrc__g"><span class="qrc__k">Регистрация на&nbsp;сайте</span>
+            <a class="qrc__site" href="https://vsekupony.ru">vsekupony.ru</a></div>
+          <div class="qrc__g"><span class="qrc__k">Телефон</span>
+            <a class="qrc__tel" href="tel:+78002228567">8&nbsp;800&nbsp;222-85-67</a></div>
+          <div class="qrc__g"><span class="qrc__k">Мы&nbsp;в&nbsp;соцсетях</span>
+            <div class="soc"><a data-soc="vk" title="ВКонтакте"></a><a data-soc="tg" title="Telegram"></a><a data-soc="ok" title="Одноклассники"></a><a data-soc="max" title="MAX"></a></div></div>
         </div>
+      </div>
       </div>
     </div>
     <div class="posts">
