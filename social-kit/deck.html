@@ -386,7 +386,7 @@ a{color:inherit;text-decoration:none}
 #s7 .sub{margin-top:14px}
 /* Четыре колонки слева направо: сверху номер и подпись, под ней — что это
    в кабинете; между колонками стрелки, как на слайде с шагами. */
-.ai{position:absolute;left:150px;right:150px;top:320px;display:grid;grid-template-columns:repeat(4,1fr);gap:0 52px}
+.ai{position:absolute;left:150px;right:150px;top:320px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 52px}
 .ai__c{position:relative;display:flex;flex-direction:column;gap:22px}
 .ai__c + .ai__c::before{content:"";position:absolute;left:-33px;top:360px;width:14px;height:14px;border-top:3px solid var(--ink-4);border-right:3px solid var(--ink-4);transform:rotate(45deg)}
 /* Блоки нарисованы разметкой по экранам кабинета (lk/client-design.html):
@@ -406,12 +406,13 @@ a{color:inherit;text-decoration:none}
 .ai__imgs i span{position:absolute;left:8px;bottom:8px;padding:3px 10px;border-radius:10px;background:rgba(255,255,255,.9);font-size:14px;font-weight:700;font-style:normal}
 .ai__imgs i.is-on span{background:var(--brand);color:#fff}
 /* Механики — рейтинг: место, название, чем хороша, кнопка */
-.ai__ms{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px}
-.ai__m{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;background:#fff}
+.ai__ms{flex:1;display:flex;flex-direction:column;justify-content:space-between;gap:8px;min-height:0}
+.ai__m{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:16px;background:#fff}
+.ai__m > i svg{width:18px;height:18px}
 .ai__m > i{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--brand-50);color:var(--brand);font-size:16px;font-weight:800;font-style:normal}
 .ai__m div{min-width:0}
-.ai__m b{display:block;font-size:19px;font-weight:800;line-height:1.2;white-space:nowrap}
-.ai__m span{display:block;margin-top:3px;font-size:15px;font-weight:500;color:var(--ink-3);white-space:nowrap}
+.ai__m b{display:block;font-size:18px;font-weight:800;line-height:1.2;white-space:nowrap}
+.ai__m span{display:block;margin-top:2px;font-size:14px;font-weight:500;color:var(--ink-3);white-space:nowrap}
 .ai__m em{margin-left:auto;flex:none;font-style:normal;width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff;font-size:22px;font-weight:600;line-height:1;display:grid;place-items:center}
 /* Воронка — вертикальные столбцы, как в статистике кабинета */
 .ai__f{flex:1;display:flex;align-items:flex-end;gap:10px;min-height:0;padding-top:10px}
@@ -653,9 +654,14 @@ a{color:inherit;text-decoration:none}
     <div class="ai">
       <div class="ai__c"><div class="ai__scr">
         <div class="ai__k">Варианты от&nbsp;нейросети — нажмите, чтобы подставить</div>
-        <div class="ai__v"><svg data-i="spark"></svg><div>−30% · Скидка на&nbsp;меню по&nbsp;будням<small>выгода в&nbsp;начале — заметнее в&nbsp;ленте</small></div></div>
-        <div class="ai__v"><svg data-i="spark"></svg><div>Скидка на&nbsp;меню — Кофейня «Пример»<small>с&nbsp;названием — купон узнают</small></div></div>
-        <div class="ai__v"><svg data-i="spark"></svg><div>Скидка на&nbsp;меню: только до&nbsp;конца месяца<small>срок — купон забирают быстрее</small></div></div>
+        <div class="ai__ms">
+          <div class="ai__m"><i><svg data-i="spark"></svg></i><div><b>−30% на&nbsp;меню по&nbsp;будням</b><span>выгода в&nbsp;начале — заметнее</span></div></div>
+          <div class="ai__m"><i><svg data-i="spark"></svg></i><div><b>Скидка с&nbsp;названием кафе</b><span>так купон узнают</span></div></div>
+          <div class="ai__m"><i><svg data-i="spark"></svg></i><div><b>Скидка до&nbsp;конца месяца</b><span>срок — забирают быстрее</span></div></div>
+          <div class="ai__m"><i><svg data-i="spark"></svg></i><div><b>Обед за&nbsp;349&nbsp;₽</b><span>цена понятнее процента</span></div></div>
+          <div class="ai__m"><i><svg data-i="spark"></svg></i><div><b>Десерт в&nbsp;подарок</b><span>подарок цепляет сильнее</span></div></div>
+          <div class="ai__m"><i><svg data-i="spark"></svg></i><div><b>−30% для новых гостей</b><span>приводит новых людей</span></div></div>
+        </div>
       </div><div class="ai__t"><b>1</b>Разработает оффер</div></div>
       <div class="ai__c"><div class="ai__scr">
         <div class="ai__p"><svg data-i="spark"></svg>Комбо-обед в&nbsp;кафе, тёплый свет, без текста на&nbsp;фото</div>
@@ -671,6 +677,9 @@ a{color:inherit;text-decoration:none}
           <div class="ai__m"><i>1</i><div><b>Подарок к&nbsp;покупке</b><span>больше новых гостей</span></div><em>+</em></div>
           <div class="ai__m"><i>2</i><div><b>Два по&nbsp;цене одного</b><span>выше средний чек</span></div><em>+</em></div>
           <div class="ai__m"><i>3</i><div><b>Приведи друга</b><span>гости зовут друзей</span></div><em>+</em></div>
+          <div class="ai__m"><i>4</i><div><b>Скидка в&nbsp;будни</b><span>заполняет тихие часы</span></div><em>+</em></div>
+          <div class="ai__m"><i>5</i><div><b>Пятый — в&nbsp;подарок</b><span>гости возвращаются</span></div><em>+</em></div>
+          <div class="ai__m"><i>6</i><div><b>Комбо по&nbsp;цене блюда</b><span>растёт средний чек</span></div><em>+</em></div>
         </div>
       </div><div class="ai__t"><b>3</b>Подскажет механику предложения</div></div>
       <div class="ai__c"><div class="ai__scr">
