@@ -90,10 +90,15 @@ a{color:inherit;text-decoration:none}
 /* Снимок — вторая часть купона */
 .shot{position:absolute;background:var(--surface-2) center / cover no-repeat}
 .shot--v{left:1100px;top:40px;right:40px;bottom:40px;border-radius:0 40px 40px 0}
-/* Вырезы по линии отрыва — круги цвета поля, насквозь до красного */
-.cut{position:absolute;width:68px;height:68px;border-radius:50%;background:var(--brand);z-index:4}
-.cut--vt{left:1066px;top:6px}
-.cut--vb{left:1066px;bottom:6px}
+/* Вырезы — настоящие: белая и серая части купона рисуются векторным контуром
+   с полукруглыми вырезами (svg.frame, строится скриптом), а не кругами поверх —
+   так они и приезжают в Figma одной фигурой. */
+.frame{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block}
+.has-frame .cpn__l--v{background:none;border-right:0}
+.has-frame .phone-panel{background:none}
+/* стена купонов начинается правее выреза, иначе снимки закрыли бы его */
+.has-frame .posts{left:1134px;background:none}
+.nshape{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;display:block;overflow:visible}
 
 /* --------------------------------------------------------------------------
    Типографика — как на обложках: надзаголовок красный 600, заголовок 800
@@ -184,11 +189,9 @@ a{color:inherit;text-decoration:none}
 /* QR — в форме купона: слева код, линия отрыва с вырезами, справа сайт
    и сообщества. Значки соцсетей — те же, что в шапке витрины (ICON в
    assets/app.js), здесь в фирменных цветах площадок. */
-.qrc{position:absolute;left:110px;bottom:80px;width:780px;height:230px;display:flex;border-radius:26px;background:var(--surface)}
-.qrc__l{flex:none;width:230px;display:grid;place-items:center;border-right:3px dashed var(--line-strong)}
+.qrc{position:absolute;left:110px;bottom:80px;width:780px;height:230px;display:flex;isolation:isolate}
+.qrc__l{flex:none;width:230px;display:grid;place-items:center}
 .qrc__l img{display:block;width:170px;height:170px}
-.qrc__n{position:absolute;left:213px;width:34px;height:34px;border-radius:50%;background:#fff}
-.qrc__n--t{top:-17px}.qrc__n--b{bottom:-17px}
 /* Правая часть купона — ровные группы друг под другом: маленькая
    подпись сверху, значение под ней, между группами тонкая линия. */
 .qrc__r{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 40px}
@@ -223,13 +226,11 @@ a{color:inherit;text-decoration:none}
 /* Купон ниши — как карточка ленты: снимок с плашкой бизнеса и билетиком
    выгоды, линия отрыва, предложение, второй вариант в рамке «или»,
    кнопка. Величины выгоды — примеры. */
-/* Вырезы — маской из самой карточки (сквозные), тень — у ряда целиком
+/* Вырезы — векторным контуром карточки (svg.nshape), тень — у ряда целиком
    через drop-shadow, поэтому она идёт по контуру купона вместе с вырезами */
 .niches{filter:drop-shadow(0 8px 14px rgba(40,10,8,.10))}
-.nc{flex:1;position:relative;height:500px;border-radius:30px;background:#fff;overflow:hidden;display:flex;flex-direction:column;
-  -webkit-mask:radial-gradient(circle 16px at 0 230px,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 16px at 100% 230px,#0000 98%,#000) right/51% 100% no-repeat;
-          mask:radial-gradient(circle 16px at 0 230px,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 16px at 100% 230px,#0000 98%,#000) right/51% 100% no-repeat}
-.nc__ph{position:relative;height:230px;flex:none;background:var(--surface-2) center / cover no-repeat}
+.nc{flex:1;position:relative;height:500px;isolation:isolate;display:flex;flex-direction:column}
+.nc__ph{position:relative;height:214px;flex:none;border-radius:30px 30px 0 0;background:var(--surface-2) center / cover no-repeat}
 .nc__ph .stub{position:absolute;left:14px;top:14px;font-size:17px}
 /* Плашка счётчиков — как .card__stats на карточке витрины */
 .nc__st{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;
@@ -237,7 +238,7 @@ a{color:inherit;text-decoration:none}
 .nc__st svg{width:20px;height:20px;display:block}
 .nc__st span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:700;color:var(--ink)}
 .nc__ph .tk{position:absolute;left:16px;bottom:16px;font-size:30px}
-.nc__perf{position:relative;height:0;margin:0 22px;border-top:3px dashed var(--line-strong)}
+.nc__perf{position:relative;height:0;margin:15px 22px 0;border-top:3px dashed var(--line-strong)}
 .nc__perf i{display:none}
 .nc__b{flex:1;padding:22px 22px 22px;display:flex;flex-direction:column}
 .nc__t{font-size:25px;font-weight:800;line-height:1.18;letter-spacing:-.015em}
@@ -502,8 +503,10 @@ a{color:inherit;text-decoration:none}
 /* Справа — стена купонов ленты под наклоном, на всю плиту; один из них —
    «ваш», обведён и подписан. Снимки — библиотека ленты assets/coupons/. */
 .posts{position:absolute;left:1100px;top:40px;right:40px;bottom:40px;border-radius:0 40px 40px 0;background:#ECECEC;overflow:hidden}
-.wall{position:absolute;left:-150px;top:-120px;width:1100px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;transform:rotate(-10deg)}
+.wall{position:absolute;left:-150px;top:-250px;width:1100px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;transform:rotate(-10deg)}
 .wall__col{display:flex;flex-direction:column;gap:22px}
+/* Остальные купоны слегка притушены: тёмная вуаль поверх стены, «ваш» купон — над ней */
+.wall__veil{position:absolute;left:-400px;top:-400px;right:-400px;bottom:-400px;background:rgba(24,14,12,.32);z-index:1;pointer-events:none}
 .wall__col:nth-child(2){margin-top:-140px}
 .wall__col:nth-child(3){margin-top:-60px}
 .wc{position:relative;border-radius:22px;background:#fff;overflow:hidden;box-shadow:0 20px 34px -24px rgba(40,10,8,.4)}
@@ -516,7 +519,7 @@ a{color:inherit;text-decoration:none}
 .wc__s span.is-hot{color:var(--brand)}
 .wc__s span.is-hot svg{color:var(--brand)}
 .wc.is-you .wc__s{color:var(--brand)}
-.wc.is-you{transform:scale(1.06);box-shadow:0 0 0 6px var(--brand), 0 30px 50px -20px rgba(120,20,10,.55);z-index:2}
+.wc.is-you{transform:scale(1.08);box-shadow:0 0 0 6px var(--brand), 0 30px 50px -20px rgba(120,20,10,.55);z-index:2}
 .wc__you{position:absolute;right:14px;top:14px;padding:8px 14px;border-radius:16px;background:var(--brand);color:#fff;font-size:18px;font-weight:800}
 /* Плашка и купон с QR — одной ширины (820), по одной левой линии */
 #s9 .qrc{width:820px}
@@ -640,7 +643,7 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="qrc">
         <div class="qrc__l"><a href="https://vsekupony.ru"><img src="qr-site.svg" alt="QR-код: vsekupony.ru"></a></div>
-        <i class="qrc__n qrc__n--t"></i><i class="qrc__n qrc__n--b"></i>
+        
         <div class="qrc__r">
           <div class="qrc__g"><span class="qrc__k">Наведите камеру или перейдите по&nbsp;ссылке</span>
             <a class="qrc__site" href="https://vsekupony.ru">vsekupony.ru</a></div>
@@ -654,7 +657,7 @@ a{color:inherit;text-decoration:none}
       <div class="hot hot--r" style="left:305px;top:102px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="pin|Знаем город"></span></div></div>
       <div class="hot hot--r" style="left:187px;top:516px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="search|Знаем, что ищут"></span></div></div>
       <div class="hot hot--r" style="left:219px;top:760px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="eye|Видим, что забирают"></span></div></div>
-      <div class="alt alt--1"><div class="alt__k"><i></i>Покупатели в Липецке</div><div class="pp" style="top:130px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вас</div></div></div>
+      <div class="alt alt--1"><div class="alt__k"><i></i>Покупатели в Липецке</div><div class="pp" style="top:130px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вашей точки</div></div></div>
           <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div>
           <div class="pp__s"><div><b>23</b>смотрела купонов</div><div><b class="r">4</b>забрала</div></div></div><div class="pp" style="top:445px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div></div>
           <div class="pp__c"><span>Детские секции</span><span>Кафе</span><span>Одежда</span></div>
@@ -668,13 +671,12 @@ a{color:inherit;text-decoration:none}
       <i class="pt__ar" style="top:625px"></i>
       <div class="pt" style="top:685px"><span class="pt__n">3</span><div class="pt__b"><div class="pt__k">Показывает код на&nbsp;кассе</div><div class="pt__ok"><b>KRASA-25</b><span>Скидка применена</span></div></div></div></div>
       <div class="alt alt--5"><div class="alt__k"><i></i>Где ваши покупатели</div><div class="mp"><i style="left:390px;top:391px;width:260px;height:260px"></i><i style="left:173px;top:388px;width:170px;height:170px"></i><i style="left:458px;top:430px;width:90px;height:90px"></i><i style="left:302px;top:258px;width:80px;height:80px"></i><i style="left:302px;top:179px;width:70px;height:70px"></i><i style="left:256px;top:463px;width:70px;height:70px"></i><i style="left:416px;top:577px;width:70px;height:70px"></i><em style="left:390px;top:391px">Липецк <b>9 800</b></em><em style="left:173px;top:388px">Елец <b>2 100</b></em><em style="left:458px;top:430px">Грязи <b>520</b></em><em style="left:302px;top:258px">Лебедянь <b>410</b></em><em style="left:302px;top:179px">Данков <b>330</b></em><em style="left:256px;top:463px">Задонск <b>290</b></em><em style="left:416px;top:577px">Усмань <b>260</b></em></div><div class="mp__t"><b>12&nbsp;400</b><span>покупателей пользуются купонами<br>в&nbsp;Липецкой области</span></div></div>
-      <div class="alt alt--6"><div class="hs"><div class="hs__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="hs__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:302px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:350px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вас</div></div>
+      <div class="alt alt--6"><div class="hs"><div class="hs__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="hs__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:302px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:350px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вашей точки</div></div>
           <div class="pp__x"><div><b>23</b>смотрела</div><div><b class="r">4</b>забрала</div></div></div>
           <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div></div><div class="pp pp--more" style="top:518px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div>
           <div class="pp__x"><div><b>41</b>смотрела</div><div><b class="r">7</b>забрала</div></div></div>
           <div class="pp__c"><span>Детские секции</span><span>Кафе</span><span>Одежда</span></div></div><div class="alt__k2"><i></i>Сейчас в Липецке<em>+38 смотрят купоны</em></div><div class="lf"><div class="lf__r"><span class="lf__ic" data-img="photos/people/maria.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Мария забрала купон<span>−20% на маникюр · Студия «Пример»</span></div><span class="lf__w">2 мин</span></div><div class="lf__r"><span class="lf__ic" data-img="photos/people/oleg.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><div class="lf__t">Олег открыл купон<span>Шиномонтаж перед сезоном</span></div><span class="lf__w">только что</span></div></div></div>
     </div>
-    <i class="cut cut--vt"></i><i class="cut cut--vb"></i>
   </section>
 
   <!-- ===================== 2. Выгоду ищут каждый день ===================== -->
@@ -950,7 +952,7 @@ a{color:inherit;text-decoration:none}
       </div>
       <div class="qrc qrc--big">
         <div class="qrc__l"><a href="https://vsekupony.ru"><img src="qr-site.svg" alt="QR-код: vsekupony.ru"></a></div>
-        <i class="qrc__n qrc__n--t"></i><i class="qrc__n qrc__n--b"></i>
+        
         <div class="qrc__r">
           <div class="qrc__g"><span class="qrc__k">Регистрация на&nbsp;сайте</span>
             <a class="qrc__site" href="https://vsekupony.ru">vsekupony.ru</a></div>
@@ -962,9 +964,8 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="posts">
-      <div class="wall"><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span class="tk">5 = 4</span></div><div class="wc__t">Каждая пятая чашка кофе в&nbsp;подарок</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>31,2к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 412</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/fitness.jpg')"><span class="tk">−35%</span></div><div class="wc__t">Годовой абонемент в&nbsp;клуб</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>18,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 236</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/pitomtsy-brown.jpg')"><span class="tk">−15%</span></div><div class="wc__t">Корм при покупке от&nbsp;3&nbsp;кг</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>12,9к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 518</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"><span class="tk">2 = 1</span></div><div class="wc__t">Маникюр с&nbsp;покрытием</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>24,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 905</span></div></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/avto-steel.jpg')"><span class="tk">−20%</span></div><div class="wc__t">Шиномонтаж перед сезоном</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>15,3к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 864</span></div></div><div class="wc is-you"><div class="wc__ph" style="background-image:url('../assets/coupons/eda-cool.jpg')"><span class=wc__you>Ваш купон</span><span class="tk">0 ₽</span></div><div class="wc__t">Ваше первое предложение</div><div class="wc__s"><span>Тут будут ваши клиенты</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/detyam-yellow.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Первое занятие в&nbsp;студии</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>20,8к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 471</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg')"><span class="tk">−30%</span></div><div class="wc__t">Боулинг в&nbsp;будни</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>27,1к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 198</span></div></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/dom-beige.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Текстиль и&nbsp;посуда</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>11,7к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 397</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/beauty.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Окрашивание любой сложности</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>34,5к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 4 052</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/coffee.jpg')"><span class="tk">Подарок</span></div><div class="wc__t">Десерт к&nbsp;любому напитку</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>19,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 340</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/sport-teal.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Пробная неделя в&nbsp;клубе</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>22,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 643</span></div></div></div></div>
+      <div class="wall"><i class="wall__veil"></i><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span class="tk">5 = 4</span></div><div class="wc__t">Каждая пятая чашка кофе в&nbsp;подарок</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>31,2к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 412</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/fitness.jpg')"><span class="tk">−35%</span></div><div class="wc__t">Годовой абонемент в&nbsp;клуб</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>18,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 236</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/pitomtsy-brown.jpg')"><span class="tk">−15%</span></div><div class="wc__t">Корм при покупке от&nbsp;3&nbsp;кг</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>12,9к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 518</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"><span class="tk">2 = 1</span></div><div class="wc__t">Маникюр с&nbsp;покрытием</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>24,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 905</span></div></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/avto-steel.jpg')"><span class="tk">−20%</span></div><div class="wc__t">Шиномонтаж перед сезоном</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>15,3к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 864</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/detyam-yellow.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Первое занятие в&nbsp;студии</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>20,8к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 471</span></div></div><div class="wc is-you"><div class="wc__ph" style="background-image:url('../assets/coupons/eda-cool.jpg')"><span class=wc__you>Ваш купон</span><span class="tk">0 ₽</span></div><div class="wc__t">Ваше первое предложение</div><div class="wc__s"><span>Тут будут ваши клиенты</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg')"><span class="tk">−30%</span></div><div class="wc__t">Боулинг в&nbsp;будни</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>27,1к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 198</span></div></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/dom-beige.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Текстиль и&nbsp;посуда</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>11,7к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 397</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/beauty.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Окрашивание любой сложности</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>34,5к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 4 052</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/coffee.jpg')"><span class="tk">Подарок</span></div><div class="wc__t">Десерт к&nbsp;любому напитку</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>19,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 340</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/sport-teal.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Пробная неделя в&nbsp;клубе</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>22,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 643</span></div></div></div></div>
     </div>
-    <i class="cut cut--vt"></i><i class="cut cut--vb"></i>
   </section>
 </div>
 <script>
@@ -1081,6 +1082,45 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll(".slide").forEach(function (sl, i) {
     var n = sl.querySelector(".foot__n");
     if (n) n.textContent = (i < 9 ? "0" : "") + (i + 1);
+  });
+
+  /* Векторные контуры с вырезами (вместо кругов поверх и CSS-маски — для Figma).
+     cuts: {t:[x…], b:[x…], l:[y…], r:[y…]}, n — радиус выреза */
+  function notched(w, h, r, n, cuts) {
+    var t = (cuts.t || []).slice().sort(function (a, b) { return a - b; }),
+        rt = (cuts.r || []).slice().sort(function (a, b) { return a - b; }),
+        bt = (cuts.b || []).slice().sort(function (a, b) { return b - a; }),
+        lt = (cuts.l || []).slice().sort(function (a, b) { return b - a; });
+    var d = "M" + r + ",0";
+    t.forEach(function (x) { d += "H" + (x - n) + "A" + n + "," + n + " 0 0 0 " + (x + n) + ",0"; });
+    d += "H" + (w - r) + "A" + r + "," + r + " 0 0 1 " + w + "," + r;
+    rt.forEach(function (y) { d += "V" + (y - n) + "A" + n + "," + n + " 0 0 0 " + w + "," + (y + n); });
+    d += "V" + (h - r) + "A" + r + "," + r + " 0 0 1 " + (w - r) + "," + h;
+    bt.forEach(function (x) { d += "H" + (x + n) + "A" + n + "," + n + " 0 0 0 " + (x - n) + "," + h; });
+    d += "H" + r + "A" + r + "," + r + " 0 0 1 0," + (h - r);
+    lt.forEach(function (y) { d += "V" + (y + n) + "A" + n + "," + n + " 0 0 0 0," + (y - n); });
+    return d + "V" + r + "A" + r + "," + r + " 0 0 1 " + r + ",0Z";
+  }
+  var DASH = 'stroke="#D3D3D3" stroke-width="3" stroke-dasharray="9 7"';
+  /* Слайды «купон на красном поле» с линией отрыва (1 и 10): белая часть,
+     серая часть и пунктир — одной векторной группой под содержимым */
+  document.querySelectorAll(".slide").forEach(function (sl) {
+    if (!sl.querySelector(".cpn__l--v")) return;
+    sl.classList.add("has-frame");
+    var grey = sl.querySelector(".phone-panel, .posts") ? '<path fill="#ECECEC" d="M1134,40H1840A40,40 0 0 1 1880,80V1000A40,40 0 0 1 1840,1040H1134A34,34 0 0 0 1100,1006V74A34,34 0 0 0 1134,40Z"/>' : "";
+    sl.insertAdjacentHTML("afterbegin", '<svg class="frame" viewBox="0 0 1920 1080"><path fill="#fff" d="M80,40H1066A34,34 0 0 0 1100,74V1006A34,34 0 0 0 1066,1040H80A40,40 0 0 1 40,1000V80A40,40 0 0 1 80,40Z"/>' +
+      grey + '<path fill="none" ' + DASH + ' d="M1098.5,82V998"/></svg>');
+  });
+  /* Блок с QR-кодом: вырезы сверху и снизу на линии отрыва */
+  document.querySelectorAll(".qrc").forEach(function (q) {
+    var w = q.offsetWidth, h = q.offsetHeight, x = q.querySelector(".qrc__l").offsetWidth;
+    q.insertAdjacentHTML("afterbegin", '<svg class="nshape" viewBox="0 0 ' + w + ' ' + h + '"><path fill="#F6F6F6" d="' + notched(w, h, 26, 17, { t: [x], b: [x] }) + '"/>' +
+      '<path fill="none" ' + DASH + ' d="M' + (x - 1.5) + ',24V' + (h - 24) + '"/></svg>');
+  });
+  /* Купоны ниш: вырезы слева и справа на линии отрыва под фото */
+  document.querySelectorAll(".nc").forEach(function (c) {
+    var w = c.offsetWidth, h = c.offsetHeight;
+    c.insertAdjacentHTML("afterbegin", '<svg class="nshape" viewBox="0 0 ' + w + ' ' + h + '"><path fill="#fff" d="' + notched(w, h, 30, 16, { l: [230], r: [230] }) + '"/></svg>');
   });
 
   /* Контуры билетика и корешка — те же формулы, что в kit.js */
