@@ -501,6 +501,66 @@ a{color:inherit;text-decoration:none}
 .cont__r .ic{font-size:22px;background:#fff}
 .cont__r small{display:block;font-size:19px;font-weight:500;color:var(--ink-3)}
 .cont__site{font-size:40px;font-weight:800;letter-spacing:-.02em;color:var(--brand)}
+/* ==========================================================================
+   Слайд 1 — варианты правой части (?s1=1…5), по умолчанию — телефон
+   ========================================================================== */
+.alt{display:none;position:absolute;inset:0}
+[data-s1] .phone-panel > .phone,[data-s1] .phone-panel > .hot{display:none}
+[data-s1="1"] .alt--1,[data-s1="2"] .alt--2,[data-s1="3"] .alt--3,[data-s1="4"] .alt--4,[data-s1="5"] .alt--5{display:block}
+.alt__k{position:absolute;left:60px;top:60px;right:60px;display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:var(--ink-2)}
+.alt__k i{width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 6px rgba(221,68,60,.18)}
+/* 1. Портреты */
+.pp{position:absolute;left:60px;right:60px;padding:26px 28px;border-radius:26px;background:#fff;box-shadow:0 24px 44px -28px rgba(40,10,8,.4)}
+.pp__h{display:flex;align-items:center;gap:18px}
+.pp__a{flex:none;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:28px;font-weight:800;color:#fff}
+.pp__n{font-size:28px;font-weight:800;letter-spacing:-.01em}
+.pp__m{margin-top:4px;font-size:19px;font-weight:500;color:var(--ink-3)}
+.pp__c{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pp__c span{padding:7px 14px;border-radius:16px;background:var(--surface);font-size:17px;font-weight:600;color:var(--ink-2)}
+.pp__s{display:flex;gap:28px;margin-top:18px;padding-top:16px;border-top:2px dashed var(--line-strong);font-size:18px;font-weight:600;color:var(--ink-3)}
+.pp__s b{display:block;font-size:30px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.pp__s b.r{color:var(--brand)}
+/* 2. Поток */
+.lf{position:absolute;left:60px;right:60px;top:130px;display:flex;flex-direction:column;gap:14px}
+.lf__r{display:flex;align-items:center;gap:18px;padding:18px 22px;border-radius:22px;background:#fff;box-shadow:0 16px 30px -24px rgba(40,10,8,.4)}
+.lf__r:nth-child(n+5){opacity:.75}.lf__r:nth-child(n+6){opacity:.5}
+.lf__ic{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--brand-50);color:var(--brand)}
+.lf__ic svg{width:28px;height:28px}
+.lf__t{flex:1;min-width:0;font-size:21px;font-weight:700;line-height:1.3}
+.lf__t span{display:block;font-size:17px;font-weight:500;color:var(--ink-3)}
+.lf__w{flex:none;font-size:16px;font-weight:600;color:var(--ink-4)}
+.lf__big{position:absolute;left:60px;right:60px;bottom:60px;padding:24px 28px;border-radius:24px;background:var(--brand);color:#fff;display:flex;align-items:center;gap:20px}
+.lf__big b{font-size:56px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.lf__big span{font-size:21px;font-weight:600;line-height:1.3}
+/* 3. Облако запросов */
+.bb{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#fff;box-shadow:0 20px 40px -26px rgba(40,10,8,.45);padding:10px}
+.bb b{font-weight:800;letter-spacing:-.01em;line-height:1.1}
+.bb span{margin-top:6px;font-weight:700;color:var(--brand)}
+.bb.is-red{background:var(--brand);color:#fff}.bb.is-red span{color:#fff}
+.bb.is-pink{background:#FDEEED}
+/* 4. Путь */
+.pt{position:absolute;left:60px;right:60px;display:flex;align-items:center;gap:20px}
+.pt__n{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:24px;font-weight:800}
+.pt__b{flex:1;padding:22px 24px;border-radius:24px;background:#fff;box-shadow:0 18px 34px -26px rgba(40,10,8,.4)}
+.pt__k{font-size:17px;font-weight:600;color:var(--ink-3);margin-bottom:12px}
+.pt__q{display:flex;align-items:center;gap:12px;height:58px;padding:0 20px;border-radius:29px;border:2px solid var(--line);font-size:23px;font-weight:600}
+.pt__q svg{width:24px;height:24px;color:var(--ink-4)}
+.pt__c{display:flex;gap:18px;align-items:center}
+.pt__ph{flex:none;width:130px;height:110px;border-radius:16px;background:center/cover}
+.pt__c b{display:block;font-size:22px;font-weight:800;line-height:1.2}
+.pt__c span{display:block;margin-top:4px;font-size:17px;color:var(--ink-3)}
+.pt__ok{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-radius:16px;background:var(--surface)}
+.pt__ok b{font-size:30px;font-weight:800;letter-spacing:.06em}
+.pt__ok span{padding:10px 18px;border-radius:20px;background:#2E9E5B;color:#fff;font-size:18px;font-weight:700}
+.pt__ar{position:absolute;left:84px;width:4px;height:44px;border-left:3px dashed var(--line-strong)}
+/* 5. Карта области */
+.mp{position:absolute;left:50px;top:150px;width:640px;height:700px;background:url('map-lipetsk.svg') 0 0/640px 700px no-repeat}
+.mp i{position:absolute;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(221,68,60,.55) 0%,rgba(221,68,60,.18) 55%,rgba(221,68,60,0) 72%)}
+.mp em{position:absolute;transform:translate(-50%,-50%);font-style:normal;white-space:nowrap;padding:6px 12px;border-radius:14px;background:#fff;font-size:18px;font-weight:700;box-shadow:0 8px 18px -10px rgba(0,0,0,.35)}
+.mp em b{color:var(--brand)}
+.mp__t{position:absolute;left:60px;right:60px;bottom:60px;display:flex;align-items:center;gap:20px;padding:22px 26px;border-radius:24px;background:#fff;box-shadow:0 18px 34px -26px rgba(40,10,8,.4)}
+.mp__t b{font-size:52px;font-weight:800;letter-spacing:-.03em;color:var(--brand);line-height:1}
+.mp__t span{font-size:21px;font-weight:600;line-height:1.3;color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -530,6 +590,20 @@ a{color:inherit;text-decoration:none}
       <div class="hot hot--r" style="left:305px;top:102px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="pin|Знаем город"></span></div></div>
       <div class="hot hot--r" style="left:187px;top:516px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="search|Знаем, что ищут"></span></div></div>
       <div class="hot hot--r" style="left:219px;top:760px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="eye|Видим, что забирают"></span></div></div>
+      <div class="alt alt--1"><div class="alt__k"><i></i>Покупатели в Липецке</div><div class="pp" style="top:130px"><div class="pp__h"><div class="pp__a" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вас</div></div></div>
+          <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div>
+          <div class="pp__s"><div><b>23</b>смотрела купонов</div><div><b class="r">4</b>забрала</div></div></div><div class="pp" style="top:445px"><div class="pp__h"><div class="pp__a" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div></div>
+          <div class="pp__c"><span>Детские секции</span><span>Кафе</span><span>Одежда</span></div>
+          <div class="pp__s"><div><b>41</b>смотрела купонов</div><div><b class="r">7</b>забрала</div></div></div><div class="pp" style="top:760px;opacity:.85"><div class="pp__h"><div class="pp__a" style="background:#A92A24">И</div><div><div class="pp__n">Игорь, 41 год</div><div class="pp__m">Елец · автомобилист</div></div></div><div class="pp__c"><span>Шиномонтаж</span><span>Автомойка</span><span>Бизнес-ланч</span></div></div></div>
+      <div class="alt alt--2"><div class="alt__k"><i></i>Сейчас в Липецке</div><div class="lf"><div class="lf__r"><span class="lf__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Мария забрала купон<span>−20% на маникюр · Студия «Пример»</span></div><span class="lf__w">2 мин</span></div><div class="lf__r"><span class="lf__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><div class="lf__t">Олег открыл купон<span>Шиномонтаж перед сезоном</span></div><span class="lf__w">только что</span></div><div class="lf__r"><span class="lf__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Анна забрала купон<span>Каждая пятая чашка кофе в подарок</span></div><span class="lf__w">5 мин</span></div><div class="lf__r"><span class="lf__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><div class="lf__t">Дмитрий сохранил купон<span>Годовой абонемент −35%</span></div><span class="lf__w">8 мин</span></div><div class="lf__r"><span class="lf__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Ольга забрала купон<span>Первое занятие в детской студии</span></div><span class="lf__w">12 мин</span></div><div class="lf__r"><span class="lf__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><div class="lf__t">Сергей открыл купон<span>Комбо-обед по будням</span></div><span class="lf__w">15 мин</span></div></div><div class="lf__big"><b>+38</b><span>человек прямо сейчас<br>смотрят купоны в&nbsp;городе</span></div></div>
+      <div class="alt alt--3"><div class="alt__k"><i></i>Что ищут в Липецке за&nbsp;месяц</div><div class="bb is-red" style="left:220.0px;top:270.0px;width:300px;height:300px"><b style="font-size:38px">Кофе с&nbsp;собой</b><span style="font-size:28px">4 200</span></div><div class="bb " style="left:35.0px;top:100.0px;width:230px;height:230px"><b style="font-size:30px">Маникюр</b><span style="font-size:22px">3 100</span></div><div class="bb " style="left:500.0px;top:115.0px;width:200px;height:200px"><b style="font-size:26px">Шиномонтаж</b><span style="font-size:20px">2 400</span></div><div class="bb is-pink" style="left:45.0px;top:535.0px;width:210px;height:210px"><b style="font-size:28px">Фитнес</b><span style="font-size:21px">2 800</span></div><div class="bb " style="left:475.0px;top:525.0px;width:230px;height:230px"><b style="font-size:28px">Доставка пиццы</b><span style="font-size:21px">3 500</span></div><div class="bb " style="left:275.0px;top:705.0px;width:190px;height:190px"><b style="font-size:24px">Детские секции</b><span style="font-size:18px">1 900</span></div><div class="bb is-pink" style="left:545.0px;top:805.0px;width:150px;height:150px"><b style="font-size:21px">Автомойка</b><span style="font-size:16px">1 300</span></div><div class="bb " style="left:55.0px;top:785.0px;width:150px;height:150px"><b style="font-size:21px">Цветы</b><span style="font-size:16px">1 100</span></div></div>
+      <div class="alt alt--4"><div class="alt__k"><i></i>Как покупатель приходит к&nbsp;вам</div>
+      <div class="pt" style="top:140px"><span class="pt__n">1</span><div class="pt__b"><div class="pt__k">Ищет, что ему нужно</div><div class="pt__q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>маникюр рядом</div></div></div>
+      <i class="pt__ar" style="top:330px"></i>
+      <div class="pt" style="top:390px"><span class="pt__n">2</span><div class="pt__b"><div class="pt__k">Находит ваш купон</div><div class="pt__c"><span class="pt__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"></span><div><b>Маникюр с&nbsp;покрытием: два по&nbsp;цене одного</b><span>Студия «Пример» · 7&nbsp;минут пешком</span></div></div></div></div>
+      <i class="pt__ar" style="top:625px"></i>
+      <div class="pt" style="top:685px"><span class="pt__n">3</span><div class="pt__b"><div class="pt__k">Показывает код на&nbsp;кассе</div><div class="pt__ok"><b>KRASA-25</b><span>Скидка применена</span></div></div></div></div>
+      <div class="alt alt--5"><div class="alt__k"><i></i>Где ваши покупатели</div><div class="mp"><i style="left:390px;top:391px;width:260px;height:260px"></i><i style="left:173px;top:388px;width:170px;height:170px"></i><i style="left:458px;top:430px;width:90px;height:90px"></i><i style="left:302px;top:258px;width:80px;height:80px"></i><i style="left:302px;top:179px;width:70px;height:70px"></i><i style="left:256px;top:463px;width:70px;height:70px"></i><i style="left:416px;top:577px;width:70px;height:70px"></i><em style="left:390px;top:391px">Липецк <b>9 800</b></em><em style="left:173px;top:388px">Елец <b>2 100</b></em><em style="left:458px;top:430px">Грязи <b>520</b></em><em style="left:302px;top:258px">Лебедянь <b>410</b></em><em style="left:302px;top:179px">Данков <b>330</b></em><em style="left:256px;top:463px">Задонск <b>290</b></em><em style="left:416px;top:577px">Усмань <b>260</b></em></div><div class="mp__t"><b>12&nbsp;400</b><span>покупателей пользуются купонами<br>в&nbsp;Липецкой области</span></div></div>
     </div>
     <i class="cut cut--vt"></i><i class="cut cut--vb"></i>
   </section>
@@ -811,6 +885,8 @@ a{color:inherit;text-decoration:none}
 (function () {
   var q = new URLSearchParams(location.search);
   if (q.get("bare")) document.documentElement.classList.add("bare");
+  /* ?s1=1…5 — варианты правой части первого слайда */
+  if (q.get("s1")) document.documentElement.dataset.s1 = q.get("s1");
 
   /* Сообщества в регионах присутствия. Пусто — кружок-заглушка. */
   var SOCIAL = { vk: "", ok: "", tg: "", max: "" };
@@ -940,6 +1016,18 @@ a{color:inherit;text-decoration:none}
     });
   }
   document.fonts.ready.then(shape);
+
+  /* Наклон плашек как на сайте: там −2° у короткого «Липецка». У длинной
+     плашки тот же угол задирает край заметно выше, и она кажется круче.
+     Поэтому угол считаем от длины: подъём края у всех плашек одинаковый —
+     как у слова «Липецка» (≈4,2 кегля) при −2°. */
+  document.fonts.ready.then(function () {
+    document.querySelectorAll(".city").forEach(function (el) {
+      var fs = parseFloat(getComputedStyle(el).fontSize), w = el.offsetWidth;
+      var deg = -2 * Math.min(1, fs * 4.2 / w);
+      el.style.transform = "rotate(" + deg.toFixed(2) + "deg)";
+    });
+  });
 
   /* Просмотр: слайды ужимаются под окно. В ?bare=1 и в печати — 1:1. */
   if (q.get("bare")) return;
