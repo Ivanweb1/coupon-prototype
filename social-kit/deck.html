@@ -14,24 +14,25 @@
      палитра, плашка, билетик, значки ниш и снимки — из этого же набора
      (kit.css, kit.js, photos/, ../assets/coupons/).
 
-     Текст — наполнение заказчика из макета (слайды 8, 16, 9, 10,
-     «Посчитаем выгоду», 12, 13, 14, 15), правки по комментариям к нему:
-       · первая страница — QR и ссылка на сайт; в кликабельной версии —
-         ссылки на сообщества в регионах присутствия (SOCIAL ниже);
-       · «Все купоны» — примеры предложений купонами под разные ниши;
-       · «Сервис разработан предпринимателями» — фото ребят и подписи;
-       · «Следующий шаг» — на схеме отмечен Липецк;
-       · «Первое размещение» — сайт, регистрация, телефон 8 800 222-85-67.
-     «Выгоду ищут» (16) поставлен вторым, чтобы последним слайдом
-     остался призыв с контактами.
+     Текст — наполнение заказчика из макета, правки по комментариям и по
+     созвону 07.10: до 10 слайдов, просто и на пальцах, где можно — экраны
+     самой платформы.
 
-     Скриншоты на «AI-помощнике» — настоящий кабинет (lk/client-design.html),
-     сняты playwright'ом в photos/lk/.
+     Порядок — как разговор с рекламодателем: покупатели уже здесь →
+     выгоду ищут каждый день → что такое «Все купоны» → запуск в 3 шага →
+     AI-помощник → посчитаем выгоду → кто сделал → куда растём → первое
+     размещение бесплатно.
 
-     Чего ещё нет и что стоит заглушкой (видно серым пунктиром):
-       · ссылки на сообщества — SOCIAL в скрипте внизу;
-       · цифры Вордстата — data-ws у карточек на слайде 2;
-       · фото и подписи команды — слайд 4.
+     Откуда картинки:
+       · экраны платформы — shoot-lk.py снимает прототип кабинета и
+         регистрации в photos/lk/;
+       · карта — build-map.py, настоящие границы регионов: Липецкая
+         область красная, следующие регионы светло-красные, остальное серое;
+       · скриншоты Вордстата — кладутся в photos/wordstat/<слово>.png,
+         пока файла нет — пунктирная заглушка.
+
+     Ещё заглушки: ссылки на сообщества (SOCIAL в скрипте), фото и подписи
+     команды. «Посчитаем выгоду» ждёт новый вариант от заказчика.
 
      Адресная строка:
        ?bare=1 — слайды без подложки и уменьшения (так снимает рендер).
@@ -219,18 +220,21 @@ a{color:inherit;text-decoration:none}
    из data-ws; пока их нет — заглушка. */
 #s3 .in{left:150px;top:120px;width:1500px}
 #s3 .h1{margin:0;font-size:96px}
-.ws{position:absolute;left:150px;right:150px;top:420px;display:flex;gap:30px}
-.ws__c{flex:1;height:340px;border-radius:30px;background:var(--surface);position:relative;overflow:hidden}
-.ws__q{margin:26px;height:72px;border-radius:36px;background:#fff;display:flex;align-items:center;gap:14px;padding:0 24px;
-  font-size:28px;font-weight:600;color:var(--ink);box-shadow:0 10px 24px -14px rgba(0,0,0,.25)}
-.ws__q svg{width:28px;height:28px;color:var(--ink-4);flex:none}
-.ws__q i{width:3px;height:30px;background:var(--brand);margin-left:-8px}
-.ws__perf{position:absolute;left:0;right:0;top:126px;border-top:3px dashed var(--line-strong)}
-.ws__perf i{position:absolute;top:-17px;width:32px;height:32px;border-radius:50%;background:#fff}
-.ws__perf i:first-child{left:-16px}.ws__perf i:last-child{right:-16px}
-.ws__n{position:absolute;left:30px;right:30px;top:160px;font-size:64px;font-weight:800;letter-spacing:-.03em;color:var(--brand);font-variant-numeric:tabular-nums}
-.ws__d{position:absolute;left:30px;right:30px;top:248px;font-size:23px;font-weight:500;color:var(--ink-2)}
-.ws-src{position:absolute;left:150px;top:810px;font-size:26px;line-height:1.45;color:var(--ink-2);max-width:1100px}
+/* Рамки окна браузера под настоящие скриншоты Вордстата: файл кладём в
+   photos/wordstat/<слово>.png — он сам встанет в рамку. Пока файла нет —
+   пунктирная заглушка с подписью, что сюда. */
+.ws{position:absolute;left:150px;right:150px;top:400px;display:flex;gap:30px}
+.ws__c{flex:1;display:flex;flex-direction:column}
+.ws__win{height:380px;border-radius:22px;background:#fff;box-shadow:0 0 0 2px var(--line), 0 24px 40px -30px rgba(0,0,0,.35);overflow:hidden;display:flex;flex-direction:column}
+.ws__bar{height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--surface);border-bottom:2px solid var(--line)}
+.ws__bar i{width:11px;height:11px;border-radius:50%;background:var(--line-strong)}
+.ws__bar span{margin-left:10px;font-size:16px;font-weight:600;color:var(--ink-3)}
+.ws__body{flex:1;background:#fff center / contain no-repeat}
+.ws__body.is-empty{margin:16px;border-radius:14px;border:2px dashed var(--line-strong);display:grid;place-items:center;text-align:center;
+  font-size:20px;font-weight:600;line-height:1.4;color:var(--ink-4)}
+.ws__q{margin-top:20px;display:flex;align-items:center;gap:12px;font-size:30px;font-weight:800;letter-spacing:-.015em}
+.ws__q svg{width:28px;height:28px;color:var(--brand)}
+.ws-src{position:absolute;left:150px;top:880px;font-size:26px;line-height:1.45;color:var(--ink-2);max-width:1100px}
 
 /* ==========================================================================
    4. Сервис разработан предпринимателями — команда
@@ -280,15 +284,18 @@ a{color:inherit;text-decoration:none}
    ========================================================================== */
 #s6 .in{width:1500px;top:120px}
 #s6 .h1{margin:0}
-.trio{position:absolute;left:150px;right:150px;top:420px;display:flex;gap:64px}
-.step{position:relative;flex:1;height:440px;border-radius:30px;background:var(--surface)}
-.step__h{height:120px;display:flex;align-items:center;justify-content:space-between;padding:0 36px;border-bottom:3px dashed var(--line-strong)}
-.step__n{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:32px;font-weight:800}
-.step__h svg{width:52px;height:52px;color:var(--brand)}
-.step__cut{position:absolute;top:101px;width:38px;height:38px;border-radius:50%;background:#fff}
+/* Шаг — купон: сверху экран платформы (photos/lk/step-*.png), линия
+   отрыва с вырезами, ниже номер, что сделать и зачем. */
+.trio{position:absolute;left:150px;right:150px;top:340px;display:flex;gap:64px}
+.step{position:relative;flex:1;height:650px;border-radius:30px;background:var(--surface)}
+.step__shot{height:320px;margin:0;border-radius:30px 30px 0 0;background:#EDEDEE center / contain no-repeat;background-origin:content-box;padding:22px;
+  border-bottom:3px dashed var(--line-strong)}
+.step__cut{position:absolute;top:303px;width:38px;height:38px;border-radius:50%;background:#fff}
 .step__cut--l{left:-19px}.step__cut--r{right:-19px}
-.step__t{margin:32px 36px 0;font-size:34px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
-.step__d{margin:14px 36px 0;font-size:24px;line-height:1.45;color:var(--ink-2)}
+.step__h{display:flex;align-items:center;gap:18px;margin:34px 36px 0}
+.step__n{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:28px;font-weight:800}
+.step__t{font-size:32px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
+.step__d{margin:18px 36px 0;font-size:24px;line-height:1.45;color:var(--ink-2)}
 .step + .step::before{
   content:"";position:absolute;left:-40px;top:50%;width:14px;height:14px;
   border-top:3px solid var(--ink-4);border-right:3px solid var(--ink-4);transform:translateY(-50%) rotate(45deg);
@@ -314,22 +321,31 @@ a{color:inherit;text-decoration:none}
    Не карта с границами, а схема: города стоят по настоящим координатам
    (равнопромежуточная проекция с поправкой cos 51°), от Липецка к каждому —
    пунктир. Москва — серым, для ориентира. */
-#s8 .in{width:1500px;top:110px}
-#s8 .h1{margin:0;font-size:80px}
-.map{position:absolute;left:150px;top:460px;width:1020px;height:540px;border-radius:30px;background:var(--surface);overflow:hidden}
-.map svg{position:absolute;left:0;top:0;width:100%;height:100%}
-.map__c{position:absolute;font-style:normal;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px var(--ink-4)}
-.map__c > span{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;font-size:22px;font-weight:700;color:var(--ink-2)}
-.map__c--l > span{left:auto;right:30px}
-.map__c--ref{width:14px;height:14px;box-shadow:0 0 0 4px var(--line-strong)}
-.map__c--ref > span{font-weight:500;color:var(--ink-4);font-size:20px}
-.map__c--home{width:30px;height:30px;background:var(--brand);box-shadow:0 0 0 7px #fff, 0 0 0 20px rgba(221,68,60,.18)}
-.map__c--home > span{left:48px;padding:10px 20px;border-radius:24px;background:var(--brand);color:#fff;font-size:24px;font-weight:800;box-shadow:0 14px 24px -12px rgba(120,20,10,.5)}
-.next{position:absolute;left:1240px;right:150px;top:470px}
-.next__k{font-size:30px;font-weight:800;letter-spacing:-.01em}
-.next ul{margin:22px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
-.next li{display:flex;align-items:center;gap:16px;height:52px;padding:0 20px;border-radius:26px;border:2px dashed var(--line-strong);font-size:24px;font-weight:600;color:var(--ink-2)}
-.next li i{width:12px;height:12px;border-radius:50%;background:var(--ink-4);flex:none}
+#s8 .in{width:1700px;top:100px}
+#s8 .h1{margin:0;font-size:76px}
+#s8 .sub{margin-top:16px;font-size:28px}
+/* Карта: map-ru.svg (build-map.py) — регионы по настоящим границам.
+   Подписи — поверх, по координатам, которые печатает build-map.py. */
+.map{position:absolute;left:110px;top:400px;width:1180px;height:600px;border-radius:30px;background:var(--surface) url('map-ru.svg') 0 0 / 1180px 600px no-repeat;overflow:hidden}
+.map__c{position:absolute;font-style:normal;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--ink)}
+.map__c > span{position:absolute;left:24px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:5px 12px;border-radius:16px;background:#fff;
+  font-size:20px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px -10px rgba(0,0,0,.35)}
+.map__c--l > span{left:auto;right:24px}
+.map__c--ref{width:10px;height:10px;box-shadow:0 0 0 3px var(--ink-4)}
+.map__c--ref > span{background:none;box-shadow:none;font-weight:500;color:var(--ink-3);padding:0}
+.map__c--home{width:26px;height:26px;background:var(--brand);box-shadow:0 0 0 6px #fff, 0 0 0 22px rgba(221,68,60,.22)}
+.map__c--home > span{left:44px;padding:9px 18px;border-radius:22px;background:var(--brand);color:#fff;font-size:24px;font-weight:800;box-shadow:0 14px 24px -12px rgba(120,20,10,.5)}
+.map__ins{position:absolute;left:18px;bottom:18px;width:300px;padding:8px 10px 6px;border-radius:18px;background:#fff;box-shadow:0 12px 30px -18px rgba(0,0,0,.35)}
+.map__ins img{display:block;width:100%}
+.map__ins span{display:block;margin:2px 4px 0;font-size:15px;font-weight:600;color:var(--ink-3)}
+.next{position:absolute;left:1350px;right:110px;top:410px}
+.leg{display:flex;flex-direction:column;gap:12px;margin-bottom:34px}
+.leg div{display:flex;align-items:center;gap:14px;font-size:22px;font-weight:600;color:var(--ink-2)}
+.leg i{width:26px;height:26px;border-radius:7px;flex:none}
+.next__k{font-size:28px;font-weight:800;letter-spacing:-.01em}
+.next ul{margin:18px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.next li{display:flex;align-items:center;gap:14px;height:46px;padding:0 18px;border-radius:23px;background:#FDEEED;font-size:22px;font-weight:700;color:var(--ink)}
+.next li i{width:12px;height:12px;border-radius:50%;background:#F3A9A3;flex:none}
 
 /* ==========================================================================
    9. Первое размещение бесплатно — контакты
@@ -387,18 +403,22 @@ a{color:inherit;text-decoration:none}
         <p class="sub">Запросы со&nbsp;словами «купон», «акция» и&nbsp;«скидка» показывают интерес людей к&nbsp;выгодным предложениям.</p>
       </div>
     </div>
-    <!-- data-ws — показы за месяц по Вордстату. Пусто — заглушка. -->
+    <!-- Скриншоты Вордстата: photos/wordstat/*.png. Нет файла — заглушка. -->
     <div class="ws">
-      <div class="ws__c" data-ws=""><div class="ws__q"><svg data-i="search"></svg>купон<i></i></div><div class="ws__perf"><i></i><i></i></div><div class="ws__n"></div><div class="ws__d">запросов за&nbsp;месяц</div></div>
-      <div class="ws__c" data-ws=""><div class="ws__q"><svg data-i="search"></svg>акция<i></i></div><div class="ws__perf"><i></i><i></i></div><div class="ws__n"></div><div class="ws__d">запросов за&nbsp;месяц</div></div>
-      <div class="ws__c" data-ws=""><div class="ws__q"><svg data-i="search"></svg>скидка<i></i></div><div class="ws__perf"><i></i><i></i></div><div class="ws__n"></div><div class="ws__d">запросов за&nbsp;месяц</div></div>
-      <div class="ws__c" data-ws=""><div class="ws__q"><svg data-i="search"></svg>промокод<i></i></div><div class="ws__perf"><i></i><i></i></div><div class="ws__n"></div><div class="ws__d">запросов за&nbsp;месяц</div></div>
+      <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
+        <div class="ws__body" data-shot="photos/wordstat/kupon.png" data-label="Скрин Вордстата<br>«купон»"></div></div>
+        <div class="ws__q"><svg data-i="search"></svg>купон</div></div>
+      <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
+        <div class="ws__body" data-shot="photos/wordstat/akciya.png" data-label="Скрин Вордстата<br>«акция»"></div></div>
+        <div class="ws__q"><svg data-i="search"></svg>акция</div></div>
+      <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
+        <div class="ws__body" data-shot="photos/wordstat/skidka.png" data-label="Скрин Вордстата<br>«скидка»"></div></div>
+        <div class="ws__q"><svg data-i="search"></svg>скидка</div></div>
+      <div class="ws__c"><div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru</span></div>
+        <div class="ws__body" data-shot="photos/wordstat/promokod.png" data-label="Скрин Вордстата<br>«промокод»"></div></div>
+        <div class="ws__q"><svg data-i="search"></svg>промокод</div></div>
     </div>
     <div class="ws-src">На&nbsp;слайде&nbsp;— данные Яндекс Вордстата: сколько раз пользователи искали эти слова за&nbsp;месяц</div>
-    <div class="foot">
-      <span class="foot__brand"><img src="../assets/brand/logo-red.png" alt=""><span>Все купоны города<b>vsekupony.ru</b></span></span>
-      <span class="foot__n"></span>
-    </div>
   </section>
 
   <!-- ===================== 3. Все купоны ===================== -->
@@ -452,19 +472,49 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
-  <!-- ===================== 4. Сервис разработан предпринимателями ===================== -->
-  <section class="slide" id="s4">
+  <!-- ===================== 4. Запуск занимает 3 шага ===================== -->
+  <section class="slide" id="s6">
     <div class="cpn__l cpn__l--full">
       <div class="in">
-        <h2 class="h1">Сервис разработан <span class="city">предпринимателями</span></h2>
-        <p class="sub">Из&nbsp;разных сфер, которые на&nbsp;своём опыте знают, как трудно и&nbsp;дорого подобрать эффективный рекламный канал и&nbsp;поддерживать его результативность. <b>Особенно сейчас.</b></p>
+        <h2 class="h1">Запуск занимает всего <span class="city">3 шага</span></h2>
+        <p class="sub">Вам не&nbsp;нужно ничего придумывать&nbsp;— мы&nbsp;придумали всё за&nbsp;вас</p>
       </div>
     </div>
-    <!-- Фото и подписи команды — ждём от заказчика -->
-    <div class="team">
-      <div class="mate"><div class="mate__ph"><svg data-i="user"></svg></div><div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
-      <div class="mate"><div class="mate__ph"><svg data-i="user"></svg></div><div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
-      <div class="mate"><div class="mate__ph"><svg data-i="user"></svg></div><div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
+    <div class="trio">
+      <div class="step">
+        <div class="step__shot" style="background-image:url('photos/lk/step-1-register.png')"></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">1</span><div class="step__t">Регистрация на&nbsp;платформе</div></div>
+        <div class="step__d">Заполните профиль и&nbsp;расскажите о&nbsp;своём бизнесе</div>
+      </div>
+      <div class="step">
+        <div class="step__shot" style="background-image:url('photos/lk/step-2-preview.png')"></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">2</span><div class="step__t">Выберите оффер, картинку и&nbsp;соцсети</div></div>
+        <div class="step__d">Более 100 офферов уже готовы, а&nbsp;AI-помощник сгенерирует изображение под ваше предложение</div>
+      </div>
+      <div class="step">
+        <div class="step__shot" style="background-image:url('photos/lk/step-3-live.png')"></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">3</span><div class="step__t">Опубликуйте предложение</div></div>
+        <div class="step__d">После модерации следите за&nbsp;статистикой онлайн и&nbsp;встречайте новых клиентов</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5. AI-помощник ===================== -->
+  <section class="slide" id="s7">
+    <div class="cpn__l cpn__l--full">
+      <div class="in">
+        <h2 class="h1"><span class="city">AI</span>-помощник</h2>
+        <p class="sub">Внутри сервиса «Все купоны» работает AI-ассистент, который:</p>
+      </div>
+    </div>
+    <div class="ai">
+      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-offer.png')"></div><div class="ai__t"><b>1</b>Разработает оффер</div></div>
+      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-image.png')"></div><div class="ai__t"><b>2</b>Сгенерирует изображение</div></div>
+      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-mech.png')"></div><div class="ai__t"><b>3</b>Подскажет механику предложения</div></div>
+      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-stats.png')"></div><div class="ai__t"><b>4</b>Изучит поведение пользователей</div></div>
     </div>
     <div class="foot">
       <span class="foot__brand"><img src="../assets/brand/logo-red.png" alt=""><span>Все купоны города<b>vsekupony.ru</b></span></span>
@@ -472,7 +522,7 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
-  <!-- ===================== 5. Посчитаем выгоду ===================== -->
+  <!-- ===================== 6. Посчитаем выгоду ===================== -->
   <section class="slide" id="s5">
     <div class="cpn__l cpn__l--full">
       <div class="in">
@@ -503,53 +553,19 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
-  <!-- ===================== 6. Запуск занимает 3 шага ===================== -->
-  <section class="slide" id="s6">
+  <!-- ===================== 7. Сервис разработан предпринимателями ===================== -->
+  <section class="slide" id="s4">
     <div class="cpn__l cpn__l--full">
       <div class="in">
-        <h2 class="h1">Запуск занимает всего <span class="city">3 шага</span></h2>
-        <p class="sub">Вам не&nbsp;нужно ничего придумывать&nbsp;— мы&nbsp;придумали всё за&nbsp;вас</p>
+        <h2 class="h1">Сервис разработан <span class="city">предпринимателями</span></h2>
+        <p class="sub">Из&nbsp;разных сфер, которые на&nbsp;своём опыте знают, как трудно и&nbsp;дорого подобрать эффективный рекламный канал и&nbsp;поддерживать его результативность. <b>Особенно сейчас.</b></p>
       </div>
     </div>
-    <div class="trio">
-      <div class="step">
-        <div class="step__h"><span class="step__n">1</span><svg data-i="user"></svg></div>
-        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
-        <div class="step__t">Регистрация на&nbsp;нашей платформе</div>
-        <div class="step__d">Заполните профиль и&nbsp;расскажите о&nbsp;своём бизнесе</div>
-      </div>
-      <div class="step">
-        <div class="step__h"><span class="step__n">2</span><svg data-i="ticket"></svg></div>
-        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
-        <div class="step__t">Выберите оффер, изображение и&nbsp;соцсети</div>
-        <div class="step__d">Более 100 офферов уже готовы для вашего бизнеса, а&nbsp;внутренний AI-помощник сгенерирует изображение под ваше предложение</div>
-      </div>
-      <div class="step">
-        <div class="step__h"><span class="step__n">3</span><svg data-i="chart"></svg></div>
-        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
-        <div class="step__t">Опубликуйте ваше предложение</div>
-        <div class="step__d">После модерации наблюдайте за&nbsp;статистикой онлайн и&nbsp;встречайте новых клиентов</div>
-      </div>
-    </div>
-    <div class="foot">
-      <span class="foot__brand"><img src="../assets/brand/logo-red.png" alt=""><span>Все купоны города<b>vsekupony.ru</b></span></span>
-      <span class="foot__n"></span>
-    </div>
-  </section>
-
-  <!-- ===================== 7. AI-помощник ===================== -->
-  <section class="slide" id="s7">
-    <div class="cpn__l cpn__l--full">
-      <div class="in">
-        <h2 class="h1"><span class="city">AI</span>-помощник</h2>
-        <p class="sub">Внутри сервиса «Все купоны» работает AI-ассистент, который:</p>
-      </div>
-    </div>
-    <div class="ai">
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-offer.png')"></div><div class="ai__t"><b>1</b>Разработает оффер</div></div>
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-image.png')"></div><div class="ai__t"><b>2</b>Сгенерирует изображение</div></div>
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-mech.png')"></div><div class="ai__t"><b>3</b>Подскажет механику предложения</div></div>
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-stats.png')"></div><div class="ai__t"><b>4</b>Изучит поведение пользователей</div></div>
+    <!-- Фото и подписи команды — ждём от заказчика -->
+    <div class="team">
+      <div class="mate"><div class="mate__ph"><svg data-i="user"></svg></div><div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
+      <div class="mate"><div class="mate__ph"><svg data-i="user"></svg></div><div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
+      <div class="mate"><div class="mate__ph"><svg data-i="user"></svg></div><div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
     </div>
     <div class="foot">
       <span class="foot__brand"><img src="../assets/brand/logo-red.png" alt=""><span>Все купоны города<b>vsekupony.ru</b></span></span>
@@ -565,8 +581,13 @@ a{color:inherit;text-decoration:none}
         <p class="sub">Мы&nbsp;готовим расширение «Всех купонов» и&nbsp;планируем запуск предложений в&nbsp;новых городах и&nbsp;регионах.</p>
       </div>
     </div>
-    <div class="map" data-map></div>
+    <div class="map" data-map><div class="map__ins"><img src="map-ru-inset.svg" alt=""><span>Россия: фрагмент в рамке</span></div></div>
     <div class="next">
+      <div class="leg">
+        <div><i style="background:#DD443C"></i>Липецкая область — работаем</div>
+        <div><i style="background:#F3A9A3"></i>Следующие регионы</div>
+        <div><i style="background:#DEDEDE"></i>Остальная Россия</div>
+      </div>
       <div class="next__k">Следующие направления:</div>
       <ul>
         <li><i></i>Нижний Новгород</li><li><i></i>Воронеж</li><li><i></i>Ростов-на-Дону</li>
@@ -598,7 +619,6 @@ a{color:inherit;text-decoration:none}
     </div>
     <i class="cut cut--vt"></i><i class="cut cut--vb"></i>
   </section>
-
 </div>
 <script>
 (function () {
@@ -612,11 +632,6 @@ a{color:inherit;text-decoration:none}
     if (url) { a.href = url; a.target = "_blank"; } else a.classList.add("is-empty");
   });
 
-  /* Цифры Вордстата: data-ws="1 234 567". Пусто — заглушка. */
-  document.querySelectorAll("[data-ws]").forEach(function (c) {
-    var n = c.querySelector(".ws__n");
-    if (c.dataset.ws) n.textContent = c.dataset.ws; else { n.textContent = "XX XXX"; n.classList.add("todo"); }
-  });
 
   /* Значки ниш — те же пути, что в kit.js (строка категорий витрины) */
   var PATH = {
@@ -671,27 +686,25 @@ a{color:inherit;text-decoration:none}
     });
   });
 
-  /* Схема городов: координаты настоящие, проекция с поправкой cos 51° */
+  /* Подписи на карте — координаты из build-map.py (холст 1180×600) */
   var MAP = [
-    ["Липецк", 52.61, 39.60, "home"], ["Москва", 55.75, 37.62, "ref"],
-    ["Нижний Новгород", 56.33, 44.00], ["Воронеж", 51.67, 39.20, "", "l"], ["Ростов-на-Дону", 47.23, 39.72],
-    ["Краснодар", 45.04, 38.98], ["Рязань", 54.63, 39.74], ["Волгоград", 48.71, 44.51], ["Тула", 54.19, 37.62, "", "l"]
+    ["Липецк · старт", 568, 224, "home"], ["Москва", 520, 80, "ref", "l"],
+    ["Нижний Новгород", 681, 55], ["Воронеж", 556, 266, "", "l"], ["Ростов-на-Дону", 567, 467],
+    ["Краснодар", 541, 566], ["Рязань", 573, 133], ["Волгоград", 711, 398], ["Тула", 517, 151, "", "l"]
   ];
   document.querySelectorAll("[data-map]").forEach(function (m) {
-    var W = m.offsetWidth, H = m.offsetHeight, k = 44, cx = Math.cos(51 * Math.PI / 180);
-    var lon0 = 41, lat0 = 50.7;
-    function xy(lat, lon) { return [W / 2 + (lon - lon0) * cx * k, H / 2 - (lat - lat0) * k]; }
-    var home = xy(MAP[0][1], MAP[0][2]), svg = '<svg viewBox="0 0 ' + W + ' ' + H + '">';
-    MAP.forEach(function (c) {
-      if (c[3]) return;
-      var p = xy(c[1], c[2]);
-      svg += '<line x1="' + home[0] + '" y1="' + home[1] + '" x2="' + p[0] + '" y2="' + p[1] + '" stroke="#DD443C" stroke-opacity=".55" stroke-width="3" stroke-dasharray="9 8"/>';
-    });
-    m.innerHTML = svg + '</svg>' + MAP.map(function (c) {
-      var p = xy(c[1], c[2]);
-      return '<i class="map__c' + (c[3] ? ' map__c--' + c[3] : '') + (c[4] ? ' map__c--l' : '') + '" style="left:' + p[0] + 'px;top:' + p[1] + 'px">' +
-        (c[3] === "home" ? '<span>Липецк · мы здесь</span>' : '<span>' + c[0] + '</span>') + '</i>';
-    }).join("");
+    m.insertAdjacentHTML("beforeend", MAP.map(function (c) {
+      return '<i class="map__c' + (c[3] ? ' map__c--' + c[3] : '') + (c[4] ? ' map__c--l' : '') +
+        '" style="left:' + c[1] + 'px;top:' + c[2] + 'px"><span>' + c[0] + '</span></i>';
+    }).join(""));
+  });
+
+  /* Скриншоты Вордстата: есть файл — в рамку, нет — заглушка */
+  document.querySelectorAll("[data-shot]").forEach(function (el) {
+    var img = new Image();
+    img.onload = function () { el.style.backgroundImage = "url('" + el.dataset.shot + "')"; };
+    img.onerror = function () { el.classList.add("is-empty"); el.innerHTML = el.dataset.label; };
+    img.src = el.dataset.shot;
   });
 
   /* Номера слайдов в подвале */
