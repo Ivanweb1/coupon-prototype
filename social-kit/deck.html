@@ -323,6 +323,21 @@ a{color:inherit;text-decoration:none}
 .chn .soc-ic,.chn img{width:28px;height:28px;border-radius:50%;flex:none}
 .chn .soc-ic__bg{fill:var(--soc-c)}.chn .soc-ic__g{fill:#fff}
 .chn span{margin-left:auto;font-size:16px;font-weight:600;color:var(--ink-3)}
+/* Шаг 2: оффер от AI, сгенерированные картинки, соцсети — всё в одном */
+.mix{display:flex;flex-direction:column;gap:10px;height:100%}
+.mix__offer{flex:none;height:50px;display:flex;align-items:center;gap:10px;padding:0 14px;border-radius:14px;background:#fff;font-size:18px;font-weight:700;white-space:nowrap}
+.mix__offer svg{width:20px;height:20px;color:var(--brand);flex:none}
+.mix em{font-style:normal;font-size:13px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:8px;background:var(--brand);color:#fff}
+.mix__offer em{margin-left:auto}
+.mix__imgs{flex:1;display:flex;gap:10px;min-height:0}
+.mix__imgs i{position:relative;flex:1;border-radius:14px;background:center / cover no-repeat}
+.mix__imgs i.is-on{box-shadow:0 0 0 4px var(--brand)}
+.mix__imgs i em{position:absolute;left:8px;top:8px}
+.mix__soc{flex:none;height:52px;display:flex;align-items:center;gap:8px;padding:0 14px;border-radius:14px;background:#fff}
+.mix__soc span{font-size:16px;font-weight:600;color:var(--ink-3);margin-right:2px}
+.mix__site{font-size:14px;font-weight:700;padding:5px 10px;border-radius:14px;background:var(--surface);color:var(--ink-2)}
+.mix__soc .soc-ic,.mix__soc img{width:32px;height:32px;border-radius:50%;flex:none}
+.mix__soc .soc-ic__bg{fill:var(--soc-c)}.mix__soc .soc-ic__g{fill:#fff}
 .kpi{display:grid;grid-template-columns:1fr 1fr;gap:12px;height:100%}
 .kpi div{display:flex;flex-direction:column;justify-content:center;padding:0 18px;border-radius:16px;background:#fff}
 .kpi b{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1.05;font-variant-numeric:tabular-nums}
@@ -570,12 +585,14 @@ a{color:inherit;text-decoration:none}
         <div class="step__d">Заполните профиль и&nbsp;расскажите о&nbsp;своём бизнесе</div>
       </div>
       <div class="step">
-        <div class="step__shot"><div class="chn">
-          <div class="is-off"><b></b>Сайт сервиса<span>всегда</span></div>
-          <div><b></b><i data-soc-ic="vk"></i>ВКонтакте</div>
-          <div><b></b><i data-soc-ic="tg"></i>Telegram</div>
-          <div><b></b><i data-soc-ic="ok"></i>Одноклассники</div>
-          <div><b></b><i data-soc-ic="max"></i>MAX</div>
+        <div class="step__shot"><div class="mix">
+          <div class="mix__offer"><svg data-i="spark"></svg>−30% · Скидка на&nbsp;меню по&nbsp;будням<em>AI</em></div>
+          <div class="mix__imgs">
+            <i class="is-on" style="background-image:url('../assets/coupons/eda-cool.jpg')"><em>AI</em></i>
+            <i style="background-image:url('photos/table.jpg');background-position:30% 50%"></i>
+            <i style="background-image:url('../assets/coupons/kofe-warm.jpg')"></i>
+          </div>
+          <div class="mix__soc"><span>Публикуем:</span><b class="mix__site">Сайт</b><i data-soc-ic="vk"></i><i data-soc-ic="tg"></i><i data-soc-ic="ok"></i><i data-soc-ic="max"></i></div>
         </div></div>
         <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
         <div class="step__h"><span class="step__n">2</span><div class="step__t">Выберите оффер, картинку и&nbsp;соцсети</div></div>
