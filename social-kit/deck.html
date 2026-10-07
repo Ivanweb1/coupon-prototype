@@ -457,10 +457,19 @@ a{color:inherit;text-decoration:none}
    первый купон. Слева — условие, сайт, регистрация, телефон и QR. */
 #s9 .in{top:110px;width:900px}
 #s9 .h1{font-size:80px}
+/* Справа — стена купонов ленты под наклоном, на всю плиту; один из них —
+   «ваш», обведён и подписан. Снимки — библиотека ленты assets/coupons/. */
 .posts{position:absolute;left:1100px;top:40px;right:40px;bottom:40px;border-radius:0 40px 40px 0;background:#ECECEC;overflow:hidden}
-.posts img{position:absolute;width:430px;border-radius:24px;box-shadow:0 30px 60px -28px rgba(40,10,8,.45)}
-.posts img:nth-child(1){left:40px;top:150px;transform:rotate(-5deg)}
-.posts img:nth-child(2){left:330px;top:300px;transform:rotate(4deg)}
+.wall{position:absolute;left:-150px;top:-120px;width:1100px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;transform:rotate(-10deg)}
+.wall__col{display:flex;flex-direction:column;gap:22px}
+.wall__col:nth-child(2){margin-top:-140px}
+.wall__col:nth-child(3){margin-top:-60px}
+.wc{position:relative;border-radius:22px;background:#fff;overflow:hidden;box-shadow:0 20px 34px -24px rgba(40,10,8,.4)}
+.wc__ph{position:relative;height:250px;background:center / cover no-repeat}
+.wc__ph .tk{position:absolute;left:14px;bottom:14px;font-size:26px}
+.wc__t{padding:14px 16px 18px;font-size:19px;font-weight:700;line-height:1.25}
+.wc.is-you{transform:scale(1.06);box-shadow:0 0 0 6px var(--brand), 0 30px 50px -20px rgba(120,20,10,.55);z-index:2}
+.wc__you{position:absolute;right:14px;top:14px;padding:8px 14px;border-radius:16px;background:var(--brand);color:#fff;font-size:18px;font-weight:800}
 .free{margin-top:30px;display:block;padding:18px 26px;border-radius:22px;background:var(--brand-50);font-size:25px;font-weight:700;line-height:1.35;color:var(--ink)}
 .free b{color:var(--brand)}
 .qrc--big{height:340px}
@@ -765,8 +774,7 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="posts">
-      <img src="out/vk/vk-post-1080x1350.png" alt="">
-      <img src="out/tg/tg-post-code-1080x1350.png" alt="">
+      <div class="wall"><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span class="tk">5 = 4</span></div><div class="wc__t">Каждая пятая чашка кофе в&nbsp;подарок</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/fitness.jpg')"><span class="tk">−35%</span></div><div class="wc__t">Годовой абонемент в&nbsp;клуб</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/pitomtsy-brown.jpg')"><span class="tk">−15%</span></div><div class="wc__t">Корм при покупке от&nbsp;3&nbsp;кг</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"><span class="tk">2 = 1</span></div><div class="wc__t">Маникюр с&nbsp;покрытием</div></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/avto-steel.jpg')"><span class="tk">−20%</span></div><div class="wc__t">Шиномонтаж перед сезоном</div></div><div class="wc is-you"><div class="wc__ph" style="background-image:url('../assets/coupons/eda-cool.jpg')"><span class=wc__you>Ваш купон</span><span class="tk">0 ₽</span></div><div class="wc__t">Ваше первое предложение</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/detyam-yellow.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Первое занятие в&nbsp;студии</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg')"><span class="tk">−30%</span></div><div class="wc__t">Боулинг в&nbsp;будни</div></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/dom-beige.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Текстиль и&nbsp;посуда</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/beauty.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Окрашивание любой сложности</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/coffee.jpg')"><span class="tk">Подарок</span></div><div class="wc__t">Десерт к&nbsp;любому напитку</div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/sport-teal.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Пробная неделя в&nbsp;клубе</div></div></div></div>
     </div>
     <i class="cut cut--vt"></i><i class="cut cut--vb"></i>
   </section>
