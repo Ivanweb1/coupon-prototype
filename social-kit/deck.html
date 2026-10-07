@@ -308,6 +308,31 @@ a{color:inherit;text-decoration:none}
 .step{position:relative;flex:1;height:650px;border-radius:30px;background:var(--surface)}
 .step__shot{height:320px;margin:0;border-radius:30px 30px 0 0;background:#EDEDEE center / contain no-repeat;background-origin:content-box;padding:22px;
   border-bottom:3px dashed var(--line-strong)}
+/* Шаг 2 и 3 нарисованы разметкой, а не скрином: так крупнее. Вид — как
+   в конструкторе («Каналы публикации») и на дашборде (плитки цифр). */
+.chn{display:flex;flex-direction:column;gap:9px;height:100%;justify-content:center}
+.chn div{display:flex;align-items:center;gap:14px;height:46px;padding:0 16px;border-radius:14px;background:#fff;font-size:21px;font-weight:700}
+.chn b{width:24px;height:24px;border-radius:6px;background:var(--ink);display:grid;place-items:center;flex:none}
+.chn b::after{content:"";width:10px;height:6px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:translateY(-2px) rotate(-45deg)}
+.chn div.is-off b{background:#C9C9C9}
+.chn .soc-ic,.chn img{width:28px;height:28px;border-radius:50%;flex:none}
+.chn .soc-ic__bg{fill:var(--soc-c)}.chn .soc-ic__g{fill:#fff}
+.chn span{margin-left:auto;font-size:16px;font-weight:600;color:var(--ink-3)}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:12px;height:100%}
+.kpi div{display:flex;flex-direction:column;justify-content:center;padding:0 18px;border-radius:16px;background:#fff}
+.kpi b{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1.05;font-variant-numeric:tabular-nums}
+.kpi span{margin-top:4px;font-size:18px;font-weight:600;color:var(--ink-3)}
+.kpi div.is-hot{background:var(--brand)}
+.kpi div.is-hot b,.kpi div.is-hot span{color:#fff}
+/* Шаг 1 — форма регистрации (register-design.html) крупно */
+.reg{display:flex;flex-direction:column;gap:12px;height:100%;justify-content:center}
+.reg__k{font-size:16px;font-weight:600;color:var(--ink-3);margin-bottom:-4px}
+.reg__chips{display:flex;gap:8px}
+.reg__chips span{height:40px;padding:0 16px;border-radius:20px;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-size:18px;font-weight:600}
+.reg__chips span.is-on{background:var(--brand);border-color:var(--brand);color:#fff}
+.reg__in{height:50px;border-radius:14px;border:2px solid var(--line);background:#fff;display:flex;align-items:center;padding:0 16px;font-size:19px;font-weight:600;color:var(--ink)}
+.reg__in em{font-style:normal;color:var(--ink-4);font-weight:500}
+.reg__in i{margin-left:auto;width:10px;height:10px;border-right:2.5px solid var(--ink-3);border-bottom:2.5px solid var(--ink-3);transform:rotate(45deg) translateY(-3px)}
 .step__cut{position:absolute;top:303px;width:38px;height:38px;border-radius:50%;background:#fff}
 .step__cut--l{left:-19px}.step__cut--r{right:-19px}
 .step__h{display:flex;align-items:center;gap:18px;margin:34px 36px 0}
@@ -328,8 +353,30 @@ a{color:inherit;text-decoration:none}
 #s7 .sub{margin-top:14px}
 .ai{position:absolute;left:150px;right:150px;top:310px;display:grid;grid-template-columns:1fr 1fr;gap:28px 40px}
 .ai__c{display:flex;align-items:center;gap:26px}
-.ai__scr{flex:none;width:580px;height:290px;border-radius:26px;background:var(--surface) center top / contain no-repeat;
-  background-color:#F4F4F5;box-shadow:inset 0 0 0 2px var(--line);background-origin:content-box;padding:8px}
+/* Блоки нарисованы разметкой по экранам кабинета (lk/client-design.html):
+   так текст читается с проектора. В генерации — настоящие фото из
+   библиотеки ленты assets/coupons/. */
+.ai__scr{flex:none;width:580px;height:290px;border-radius:26px;background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:10px}
+.ai__k{font-size:16px;font-weight:600;color:var(--ink-3)}
+.ai__v{display:flex;align-items:center;gap:12px;height:62px;padding:0 18px;border-radius:14px;background:#fff;font-size:20px;font-weight:700}
+.ai__v svg{width:22px;height:22px;color:var(--brand);flex:none}
+.ai__v small{display:block;font-size:15px;font-weight:500;color:var(--ink-3)}
+.ai__p{height:44px;flex:none;display:flex;align-items:center;gap:10px;padding:0 16px;border-radius:12px;background:#fff;font-size:17px;font-weight:500;color:var(--ink-2);white-space:nowrap;overflow:hidden}
+.ai__p svg{width:20px;height:20px;color:var(--brand);flex:none}
+.ai__imgs{flex:1;display:flex;gap:12px;min-height:0}
+.ai__imgs i{position:relative;flex:1;border-radius:14px;background:center / cover no-repeat}
+.ai__imgs i.is-on{box-shadow:0 0 0 4px var(--brand)}
+.ai__imgs i span{position:absolute;left:8px;bottom:8px;padding:3px 10px;border-radius:10px;background:rgba(255,255,255,.9);font-size:14px;font-weight:700;font-style:normal}
+.ai__imgs i.is-on span{background:var(--brand);color:#fff}
+.ai__m{display:flex;align-items:center;gap:14px;height:66px;padding:0 18px;border-radius:14px;background:#fff}
+.ai__m b{font-size:20px;font-weight:800;white-space:nowrap}
+.ai__m span{font-size:16px;font-weight:500;color:var(--ink-3)}
+.ai__m em{margin-left:auto;font-style:normal;white-space:nowrap;height:36px;padding:0 14px;border-radius:18px;background:var(--brand);color:#fff;font-size:15px;font-weight:700;display:grid;place-items:center}
+.ai__f{flex:1;display:flex;align-items:flex-end;gap:12px;min-height:0}
+.ai__f div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.ai__f b{font-size:24px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ai__f span{font-size:14px;font-weight:600;color:var(--ink-3);margin-bottom:6px}
+.ai__f i{display:block;border-radius:10px 10px 4px 4px}
 .ai__t{display:flex;flex-direction:column;align-items:flex-start;gap:14px;font-size:28px;font-weight:800;line-height:1.2;letter-spacing:-.015em}
 .ai__t b{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--brand-50);color:var(--brand);font-size:21px}
 
@@ -507,19 +554,37 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="trio">
       <div class="step">
-        <div class="step__shot" style="background-image:url('photos/lk/step-1-register.png')"></div>
+        <div class="step__shot"><div class="reg">
+          <div class="reg__k">Кто размещает купоны</div>
+          <div class="reg__chips"><span class="is-on">ООО</span><span>ИП</span><span>Самозанятый</span></div>
+          <div class="reg__k">ИНН</div>
+          <div class="reg__in">4826&nbsp;000&nbsp;000</div>
+          <div class="reg__k">Категория бизнеса</div>
+          <div class="reg__in">Кафе и рестораны<i></i></div>
+        </div></div>
         <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
         <div class="step__h"><span class="step__n">1</span><div class="step__t">Регистрация на&nbsp;платформе</div></div>
         <div class="step__d">Заполните профиль и&nbsp;расскажите о&nbsp;своём бизнесе</div>
       </div>
       <div class="step">
-        <div class="step__shot" style="background-image:url('photos/lk/step-2-preview.png')"></div>
+        <div class="step__shot"><div class="chn">
+          <div class="is-off"><b></b>Сайт сервиса<span>всегда</span></div>
+          <div><b></b><i data-soc-ic="vk"></i>ВКонтакте</div>
+          <div><b></b><i data-soc-ic="tg"></i>Telegram</div>
+          <div><b></b><i data-soc-ic="ok"></i>Одноклассники</div>
+          <div><b></b><i data-soc-ic="max"></i>MAX</div>
+        </div></div>
         <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
         <div class="step__h"><span class="step__n">2</span><div class="step__t">Выберите оффер, картинку и&nbsp;соцсети</div></div>
         <div class="step__d">Более 100 офферов уже готовы, а&nbsp;AI-помощник сгенерирует изображение под ваше предложение</div>
       </div>
       <div class="step">
-        <div class="step__shot" style="background-image:url('photos/lk/step-3-live.png')"></div>
+        <div class="step__shot"><div class="kpi">
+          <div><b>84&nbsp;890</b><span>Показы</span></div>
+          <div><b>10&nbsp;350</b><span>Просмотры</span></div>
+          <div class="is-hot"><b>2&nbsp;350</b><span>Купон забрали</span></div>
+          <div><b>903</b><span>Переходы к&nbsp;вам</span></div>
+        </div></div>
         <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
         <div class="step__h"><span class="step__n">3</span><div class="step__t">Опубликуйте предложение</div></div>
         <div class="step__d">После модерации следите за&nbsp;статистикой онлайн и&nbsp;встречайте новых клиентов</div>
@@ -536,14 +601,35 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="ai">
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-offer.png')"></div><div class="ai__t"><b>1</b>Разработает оффер</div></div>
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-image.png')"></div><div class="ai__t"><b>2</b>Сгенерирует изображение</div></div>
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-mech.png')"></div><div class="ai__t"><b>3</b>Подскажет механику предложения</div></div>
-      <div class="ai__c"><div class="ai__scr" style="background-image:url('photos/lk/ai-stats.png')"></div><div class="ai__t"><b>4</b>Изучит поведение пользователей</div></div>
-    </div>
-    <div class="foot">
-      <span class="foot__brand"><img src="../assets/brand/logo-red.png" alt=""><span>Все купоны города<b>vsekupony.ru</b></span></span>
-      <span class="foot__n"></span>
+      <div class="ai__c"><div class="ai__scr">
+        <div class="ai__k">Варианты от&nbsp;нейросети — нажмите, чтобы подставить</div>
+        <div class="ai__v"><svg data-i="spark"></svg><div>−30% · Скидка на&nbsp;меню по&nbsp;будням<small>выгода в&nbsp;начале — заметнее в&nbsp;ленте</small></div></div>
+        <div class="ai__v"><svg data-i="spark"></svg><div>Скидка на&nbsp;меню — Кофейня «Пример»<small>с&nbsp;названием — купон узнают</small></div></div>
+        <div class="ai__v"><svg data-i="spark"></svg><div>Скидка на&nbsp;меню: только до&nbsp;конца месяца<small>срок — купон забирают быстрее</small></div></div>
+      </div><div class="ai__t"><b>1</b>Разработает оффер</div></div>
+      <div class="ai__c"><div class="ai__scr">
+        <div class="ai__p"><svg data-i="spark"></svg>Комбо-обед в&nbsp;кафе, тёплый свет, без текста на&nbsp;фото</div>
+        <div class="ai__imgs">
+          <i class="is-on" style="background-image:url('../assets/coupons/eda-cool.jpg')"><span>Выбран</span></i>
+          <i style="background-image:url('photos/table.jpg');background-position:30% 50%"><span>Вариант 2</span></i>
+          <i style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span>Вариант 3</span></i>
+        </div>
+      </div><div class="ai__t"><b>2</b>Сгенерирует изображение</div></div>
+      <div class="ai__c"><div class="ai__scr">
+        <div class="ai__k">Лучшие механики в&nbsp;нише «Кафе и&nbsp;рестораны»</div>
+        <div class="ai__m"><div><b>Подарок к&nbsp;покупке</b><br><span>больше всего новых гостей</span></div><em>+ Создать</em></div>
+        <div class="ai__m"><div><b>Два по&nbsp;цене одного</b><br><span>приходят компанией — выше чек</span></div><em>+ Создать</em></div>
+        <div class="ai__m"><div><b>Приведи друга</b><br><span>гости сами приводят новых</span></div><em>+ Создать</em></div>
+      </div><div class="ai__t"><b>3</b>Подскажет механику предложения</div></div>
+      <div class="ai__c"><div class="ai__scr">
+        <div class="ai__k">Воронка по&nbsp;вашим купонам за&nbsp;30&nbsp;дней</div>
+        <div class="ai__f">
+          <div><b>81&nbsp;516</b><span>Показы</span><i style="height:100%;background:#F3A9A3"></i></div>
+          <div><b>9&nbsp;938</b><span>Просмотры</span><i style="height:46%;background:#EC7A72"></i></div>
+          <div><b>2&nbsp;257</b><span>Забрали</span><i style="height:26%;background:#DD443C"></i></div>
+          <div><b>865</b><span>Пришли</span><i style="height:14%;background:#A92A24"></i></div>
+        </div>
+      </div><div class="ai__t"><b>4</b>Изучит поведение пользователей</div></div>
     </div>
   </section>
 
@@ -663,6 +749,7 @@ a{color:inherit;text-decoration:none}
     ok: '<svg class="soc-ic" style="--soc-c:#FF7700" viewBox="0 0 44 44"><rect class="soc-ic__bg" width="44" height="44"/><path class="soc-ic__g" d="M26.868 19.87a6.85 6.85 0 0 1-2.229 1.492 6.88 6.88 0 0 1-7.5-1.492 6.87 6.87 0 0 1-1.875-3.51 6.84 6.84 0 0 1 .392-3.955 6.9 6.9 0 0 1 2.527-3.08 6.96 6.96 0 0 1 3.82-1.18 6.96 6.96 0 0 1 3.83 1.177 6.9 6.9 0 0 1 2.532 3.086 6.84 6.84 0 0 1 .389 3.962 6.87 6.87 0 0 1-1.886 3.512zm-4.877-7.978a3.15 3.15 0 0 0-2.21.917 3.105 3.105 0 0 0 0 4.397c.586.584 1.38.914 2.21.918a3.15 3.15 0 0 0 2.21-.918 3.1 3.1 0 0 0 .913-2.198c0-.824-.328-1.615-.914-2.199a3.15 3.15 0 0 0-2.209-.917m7.239 10.017 2.014 2.753a.315.315 0 0 1-.05.434 14.2 14.2 0 0 1-5.725 2.79l3.889 7.495a.316.316 0 0 1-.123.43.3.3 0 0 1-.16.041h-4.17a.32.32 0 0 1-.296-.19l-2.605-6.182-2.618 6.181a.32.32 0 0 1-.295.191H14.92c-.244 0-.386-.255-.283-.471l3.902-7.494c-2.054-.484-4.03-1.402-5.724-2.791a.32.32 0 0 1-.064-.434l2.027-2.74a.334.334 0 0 1 .475-.064 10.5 10.5 0 0 0 6.75 2.677c2.503 0 4.84-1.045 6.752-2.677.128-.127.359-.102.475.051"/></svg>',
     max: '<img src="../assets/brand/soc/max.svg" alt="">'
   };
+  document.querySelectorAll("[data-soc-ic]").forEach(function (i) { i.outerHTML = SOC_IC[i.dataset.socIc]; });
   document.querySelectorAll("[data-soc]").forEach(function (a) {
     a.innerHTML = SOC_IC[a.dataset.soc];
     var url = SOCIAL[a.dataset.soc];
@@ -683,6 +770,7 @@ a{color:inherit;text-decoration:none}
     site: '<rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 9h17M7 7h.01M9.5 7h.01"/>',
     chat: '<path d="M4.5 18.5 6 15a7.5 7.5 0 1 1 3 3z"/>',
     user: '<circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
+    spark: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
     eye: '<path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/>',
     phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
     pin: '<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>',

@@ -6,6 +6,7 @@
 lk/client-design.html) в двойной плотности, по одному блоку на снимок:
   step-1-register.png — форма регистрации;
   step-2-preview.png  — так купон увидят в ленте (превью конструктора);
+  step-2-channels.png — где публиковать: сайт и соцсети;
   step-3-live.png     — дашборд: что опубликовано и сколько забрали;
   home-mobile.png     — витрина Липецка на телефоне (первый слайд);
   ai-offer.png        — варианты заголовка от нейросети;
@@ -83,6 +84,7 @@ def main():
             "x": r1["x"] - 16, "y": r1["y"] - 16, "width": r1["width"] + 32,
             "height": r2["y"] + r2["height"] - r1["y"] + 32})
         print("ai-offer.png")
+        shot(pg, BY_TEXT.format(t="Каналы публикации", c=".lk-panel,section"), "step-2-channels.png")
         pg.evaluate(UNLOCK)
         for _ in range(3):
             pg.evaluate('document.querySelector("[data-img-gen]").click()')
