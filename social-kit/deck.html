@@ -306,8 +306,8 @@ a{color:inherit;text-decoration:none}
 .hub-l circle{fill:var(--brand)}
 .oc{position:absolute;left:740px;top:450px;width:440px;border-radius:30px;overflow:hidden;background:#fff;box-shadow:0 0 0 2px var(--line),0 40px 60px -40px rgba(40,10,8,.5)}
 .oc__ph{position:relative;height:220px;background:center/cover}
-.oc__v{position:absolute;left:22px;bottom:-26px;padding:10px 20px;border-radius:16px;background:var(--brand);color:#fff;font-size:34px;font-weight:800;letter-spacing:-.02em}
-.oc__b{padding:44px 26px 26px}
+.oc__ph .tk{position:absolute;left:20px;bottom:20px;font-size:34px}
+.oc__b{padding:24px 26px 26px}
 .oc__t{font-size:30px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
 .oc__m{margin-top:8px;font-size:20px;font-weight:500;color:var(--ink-3)}
 .oc__btn{margin-top:22px;height:60px;border-radius:30px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:700}
@@ -610,17 +610,17 @@ a{color:inherit;text-decoration:none}
 .alt--6 .lf__t span{font-size:15px}
 .alt--6 .alt__k2{top:705px}
 .alt--6 .lf{top:760px}
-/* 6: масштаб — крупная цифра и стопка лиц */
-.tk{position:absolute;left:60px;right:60px;top:60px;padding:28px 30px 26px;border-radius:28px;background:var(--brand);color:#fff;box-shadow:0 24px 44px -26px rgba(160,30,24,.6)}
-.tk__r{display:flex;align-items:center;gap:22px}
-.tk__r b{font-size:84px;font-weight:800;letter-spacing:-.04em;line-height:.9}
-.tk__r span{font-size:23px;font-weight:600;line-height:1.3}
-.tk__f{display:flex;align-items:center;margin-top:22px;padding-top:20px;border-top:2px dashed rgba(255,255,255,.4)}
-.tk__f i{flex:none;width:46px;height:46px;margin-right:-12px;border-radius:50%;border:3px solid var(--brand);background:#F6C9C5;color:var(--brand);display:grid;place-items:center;font-style:normal;font-size:18px;font-weight:800}
-.tk__f i:nth-child(2n){background:#fff}
-.tk__f em{height:46px;padding:0 14px 0 18px;border-radius:23px;border:3px solid var(--brand);background:#A92A24;display:grid;place-items:center;font-style:normal;font-size:17px;font-weight:800}
-.tk__f span{margin-left:30px;font-size:19px;font-weight:600;opacity:.92}
-.tk__f span b{font-size:24px;font-weight:800}
+/* 6: масштаб — крупная цифра и стопка лиц (класс hs — не путать с билетиком .tk) */
+.hs{position:absolute;left:60px;right:60px;top:60px;padding:28px 30px 26px;border-radius:28px;background:var(--brand);color:#fff;box-shadow:0 24px 44px -26px rgba(160,30,24,.6)}
+.hs__r{display:flex;align-items:center;gap:22px}
+.hs__r b{font-size:84px;font-weight:800;letter-spacing:-.04em;line-height:.9}
+.hs__r span{font-size:23px;font-weight:600;line-height:1.3}
+.hs__f{display:flex;align-items:center;margin-top:22px;padding-top:20px;border-top:2px dashed rgba(255,255,255,.4)}
+.hs__f i{flex:none;width:46px;height:46px;margin-right:-12px;border-radius:50%;border:3px solid var(--brand);background:#F6C9C5;color:var(--brand);display:grid;place-items:center;font-style:normal;font-size:18px;font-weight:800}
+.hs__f i:nth-child(2n){background:#fff}
+.hs__f em{height:46px;padding:0 14px 0 18px;border-radius:23px;border:3px solid var(--brand);background:#A92A24;display:grid;place-items:center;font-style:normal;font-size:17px;font-weight:800}
+.hs__f span{margin-left:30px;font-size:19px;font-weight:600;opacity:.92}
+.hs__f span b{font-size:24px;font-weight:800}
 .pp--more{box-shadow:0 10px 0 -4px #F7F7F7,0 20px 0 -8px #F1F1F1,0 24px 44px -28px rgba(40,10,8,.4)}
 .alt__k2{position:absolute;left:60px;right:60px;top:500px;display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:var(--ink-2)}
 .alt__k2 i{width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 6px rgba(221,68,60,.18)}
@@ -668,7 +668,7 @@ a{color:inherit;text-decoration:none}
       <i class="pt__ar" style="top:625px"></i>
       <div class="pt" style="top:685px"><span class="pt__n">3</span><div class="pt__b"><div class="pt__k">Показывает код на&nbsp;кассе</div><div class="pt__ok"><b>KRASA-25</b><span>Скидка применена</span></div></div></div></div>
       <div class="alt alt--5"><div class="alt__k"><i></i>Где ваши покупатели</div><div class="mp"><i style="left:390px;top:391px;width:260px;height:260px"></i><i style="left:173px;top:388px;width:170px;height:170px"></i><i style="left:458px;top:430px;width:90px;height:90px"></i><i style="left:302px;top:258px;width:80px;height:80px"></i><i style="left:302px;top:179px;width:70px;height:70px"></i><i style="left:256px;top:463px;width:70px;height:70px"></i><i style="left:416px;top:577px;width:70px;height:70px"></i><em style="left:390px;top:391px">Липецк <b>9 800</b></em><em style="left:173px;top:388px">Елец <b>2 100</b></em><em style="left:458px;top:430px">Грязи <b>520</b></em><em style="left:302px;top:258px">Лебедянь <b>410</b></em><em style="left:302px;top:179px">Данков <b>330</b></em><em style="left:256px;top:463px">Задонск <b>290</b></em><em style="left:416px;top:577px">Усмань <b>260</b></em></div><div class="mp__t"><b>12&nbsp;400</b><span>покупателей пользуются купонами<br>в&nbsp;Липецкой области</span></div></div>
-      <div class="alt alt--6"><div class="tk"><div class="tk__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="tk__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:302px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:350px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вас</div></div>
+      <div class="alt alt--6"><div class="hs"><div class="hs__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="hs__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:302px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:350px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вас</div></div>
           <div class="pp__x"><div><b>23</b>смотрела</div><div><b class="r">4</b>забрала</div></div></div>
           <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div></div><div class="pp pp--more" style="top:518px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div>
           <div class="pp__x"><div><b>41</b>смотрела</div><div><b class="r">7</b>забрала</div></div></div>
@@ -881,7 +881,7 @@ a{color:inherit;text-decoration:none}
     </div>
     <svg class="hub-l" viewBox="0 0 1920 1080"><path d="M740 705 C 680 705, 680 525, 620 525"/><path d="M740 705 C 680 705, 680 705, 620 705"/><path d="M740 705 C 680 705, 680 885, 620 885"/><path d="M1180 705 C 1240 705, 1240 525, 1300 525"/><path d="M1180 705 C 1240 705, 1240 705, 1300 705"/><path d="M1180 705 C 1240 705, 1240 885, 1300 885"/><circle cx="620" cy="525" r="7"/><circle cx="620" cy="705" r="7"/><circle cx="620" cy="885" r="7"/><circle cx="1300" cy="525" r="7"/><circle cx="1300" cy="705" r="7"/><circle cx="1300" cy="885" r="7"/></svg>
     <div class="oc">
-      <div class="oc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"><span class="oc__v">−20%</span></div>
+      <div class="oc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg');background-position:72% 18%;background-size:150%"><span class="tk">−20%</span></div>
       <div class="oc__b"><div class="oc__t">Скидка на&nbsp;маникюр<br>в&nbsp;будний день</div><div class="oc__m">Студия «Пример» · Липецк</div><div class="oc__btn">Забрать купон</div></div>
     </div>
       <div class="ch" style="left:150px;top:450px"><span class="ic" data-ic="site"></span><div><b>Сайт vsekupony.ru</b><span>Карточка в&nbsp;ленте города<br>и&nbsp;в&nbsp;каталоге ниши</span></div></div>
