@@ -222,14 +222,17 @@ a{color:inherit;text-decoration:none}
 /* Купон ниши — как карточка ленты: снимок с плашкой бизнеса и билетиком
    выгоды, линия отрыва, предложение, второй вариант в рамке «или»,
    кнопка. Величины выгоды — примеры. */
-.nc{flex:1;position:relative;height:556px;border-radius:30px;background:#fff;
-  box-shadow:0 0 0 2px var(--line), 0 24px 40px -32px rgba(0,0,0,.4);overflow:hidden;display:flex;flex-direction:column}
+/* Вырезы — маской из самой карточки (сквозные), тень — у ряда целиком
+   через drop-shadow, поэтому она идёт по контуру купона вместе с вырезами */
+.niches{filter:drop-shadow(0 8px 14px rgba(40,10,8,.10))}
+.nc{flex:1;position:relative;height:556px;border-radius:30px;background:#fff;overflow:hidden;display:flex;flex-direction:column;
+  -webkit-mask:radial-gradient(circle 16px at 0 230px,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 16px at 100% 230px,#0000 98%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 16px at 0 230px,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 16px at 100% 230px,#0000 98%,#000) right/51% 100% no-repeat}
 .nc__ph{position:relative;height:230px;flex:none;background:var(--surface-2) center / cover no-repeat}
 .nc__ph .stub{position:absolute;left:14px;top:14px;font-size:17px}
 .nc__ph .tk{position:absolute;left:16px;bottom:16px;font-size:30px}
-.nc__perf{position:relative;height:0;border-top:3px dashed var(--line-strong)}
-.nc__perf i{position:absolute;top:-16px;width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px var(--line)}
-.nc__perf i:first-child{left:-16px}.nc__perf i:last-child{right:-16px}
+.nc__perf{position:relative;height:0;margin:0 22px;border-top:3px dashed var(--line-strong)}
+.nc__perf i{display:none}
 .nc__b{flex:1;padding:22px 22px 22px;display:flex;flex-direction:column}
 .nc__t{font-size:25px;font-weight:800;line-height:1.18;letter-spacing:-.015em}
 .nc__or{margin-top:auto;padding:12px 14px;border-radius:14px;border:2px dashed var(--line-strong);font-size:17px;line-height:1.35;color:var(--ink-2)}
