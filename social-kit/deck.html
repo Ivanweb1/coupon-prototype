@@ -506,7 +506,7 @@ a{color:inherit;text-decoration:none}
    ========================================================================== */
 .alt{display:none;position:absolute;inset:0}
 [data-s1] .phone-panel > .phone,[data-s1] .phone-panel > .hot{display:none}
-[data-s1="1"] .alt--1,[data-s1="2"] .alt--2,[data-s1="3"] .alt--3,[data-s1="4"] .alt--4,[data-s1="5"] .alt--5{display:block}
+[data-s1="1"] .alt--1,[data-s1="2"] .alt--2,[data-s1="3"] .alt--3,[data-s1="4"] .alt--4,[data-s1="5"] .alt--5,[data-s1="6"] .alt--6{display:block}
 .alt__k{position:absolute;left:60px;top:60px;right:60px;display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:var(--ink-2)}
 .alt__k i{width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 6px rgba(221,68,60,.18)}
 /* 1. Портреты */
@@ -565,6 +565,24 @@ a{color:inherit;text-decoration:none}
    (наклон −6°, точка вращения внизу — шар на верёвочке) */
 .brandup{display:flex;align-items:flex-start;gap:18px}
 .brandup__m{flex:none;height:80px;width:auto;margin-top:12px;transform:rotate(-6deg);transform-origin:50% 90%}
+/* 6. Портреты + поток */
+.alt--6 .pp{padding:20px 24px}
+.alt--6 .pp__a{width:60px;height:60px;font-size:24px}
+.alt--6 .pp__n{font-size:24px}
+.alt--6 .pp__m{font-size:17px}
+.alt--6 .pp__c{margin-top:14px}
+.alt--6 .pp__c span{font-size:15px;padding:6px 12px}
+.alt--6 .pp__x{display:flex;align-items:center;gap:22px;margin-left:auto;text-align:right;font-size:15px;font-weight:600;color:var(--ink-3)}
+.alt--6 .pp__x b{display:block;font-size:28px;font-weight:800;color:var(--ink)}
+.alt--6 .pp__x b.r{color:var(--brand)}
+.alt--6 .lf{top:560px;gap:10px}
+.alt--6 .lf__r{padding:14px 20px}
+.alt--6 .lf__ic{width:48px;height:48px}
+.alt--6 .lf__t{font-size:19px}
+.alt--6 .lf__t span{font-size:15px}
+.alt__k2{position:absolute;left:60px;right:60px;top:500px;display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:var(--ink-2)}
+.alt__k2 i{width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 6px rgba(221,68,60,.18)}
+.alt__k2 em{margin-left:auto;font-style:normal;padding:8px 16px;border-radius:18px;background:var(--brand);color:#fff;font-size:18px;font-weight:700}
 </style>
 </head>
 <body>
@@ -608,6 +626,11 @@ a{color:inherit;text-decoration:none}
       <i class="pt__ar" style="top:625px"></i>
       <div class="pt" style="top:685px"><span class="pt__n">3</span><div class="pt__b"><div class="pt__k">Показывает код на&nbsp;кассе</div><div class="pt__ok"><b>KRASA-25</b><span>Скидка применена</span></div></div></div></div>
       <div class="alt alt--5"><div class="alt__k"><i></i>Где ваши покупатели</div><div class="mp"><i style="left:390px;top:391px;width:260px;height:260px"></i><i style="left:173px;top:388px;width:170px;height:170px"></i><i style="left:458px;top:430px;width:90px;height:90px"></i><i style="left:302px;top:258px;width:80px;height:80px"></i><i style="left:302px;top:179px;width:70px;height:70px"></i><i style="left:256px;top:463px;width:70px;height:70px"></i><i style="left:416px;top:577px;width:70px;height:70px"></i><em style="left:390px;top:391px">Липецк <b>9 800</b></em><em style="left:173px;top:388px">Елец <b>2 100</b></em><em style="left:458px;top:430px">Грязи <b>520</b></em><em style="left:302px;top:258px">Лебедянь <b>410</b></em><em style="left:302px;top:179px">Данков <b>330</b></em><em style="left:256px;top:463px">Задонск <b>290</b></em><em style="left:416px;top:577px">Усмань <b>260</b></em></div><div class="mp__t"><b>12&nbsp;400</b><span>покупателей пользуются купонами<br>в&nbsp;Липецкой области</span></div></div>
+      <div class="alt alt--6"><div class="alt__k"><i></i>Покупатели в Липецке</div><div class="pp" style="top:120px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вас</div></div>
+          <div class="pp__x"><div><b>23</b>смотрела</div><div><b class="r">4</b>забрала</div></div></div>
+          <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div></div><div class="pp" style="top:300px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div>
+          <div class="pp__x"><div><b>41</b>смотрела</div><div><b class="r">7</b>забрала</div></div></div>
+          <div class="pp__c"><span>Детские секции</span><span>Кафе</span><span>Одежда</span></div></div><div class="alt__k2"><i></i>Сейчас в Липецке<em>+38 смотрят купоны</em></div><div class="lf"><div class="lf__r"><span class="lf__ic" data-img="photos/people/maria.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Мария забрала купон<span>−20% на маникюр · Студия «Пример»</span></div><span class="lf__w">2 мин</span></div><div class="lf__r"><span class="lf__ic" data-img="photos/people/oleg.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><div class="lf__t">Олег открыл купон<span>Шиномонтаж перед сезоном</span></div><span class="lf__w">только что</span></div><div class="lf__r"><span class="lf__ic" data-img="photos/people/anna.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Анна забрала купон<span>Каждая пятая чашка кофе в подарок</span></div><span class="lf__w">5 мин</span></div><div class="lf__r"><span class="lf__ic" data-img="photos/people/olga.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Ольга забрала купон<span>Первое занятие в детской студии</span></div><span class="lf__w">12 мин</span></div></div></div>
     </div>
     <i class="cut cut--vt"></i><i class="cut cut--vb"></i>
   </section>
