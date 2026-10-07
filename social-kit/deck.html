@@ -335,6 +335,20 @@ a{color:inherit;text-decoration:none}
 .cmp tr.me td:first-child{border-radius:22px 0 0 22px;color:var(--brand)}
 .cmp tr.me td:last-child{border-radius:0 22px 22px 0;color:var(--brand)}
 .cmp tr.me + tr td{border-top:0}
+.cmp .rt{display:flex;align-items:center;gap:4px;height:44px;padding:0 12px;border-radius:12px;font-size:19px;font-weight:700}
+.cmp .rt i{width:6px;height:18px;border-radius:3px;background:rgba(0,0,0,.12);margin:0;vertical-align:0}
+.cmp .rt i:nth-of-type(3){margin-right:8px}
+.cmp .rt--g{background:#E3F3EA;color:#1F7A45}.cmp .rt--g i{background:#2E9E5B}
+.cmp .rt--y{background:#FCF0DC;color:#94600E}.cmp .rt--y i:nth-of-type(-n+2){background:#E8A33D}
+.cmp .rt--n{background:#FBE7E5;color:#A3352E}.cmp .rt--n i:nth-of-type(1){background:#E0665D}
+.cmp td{padding:0 5px}
+.cmp .bud{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.cmp .bud__b{width:84px;height:12px;border-radius:6px;background:var(--surface);overflow:hidden;display:block}
+.cmp .bud__b b{display:block;height:100%;border-radius:6px;background:var(--ink-4)}
+.cmp tr.me .bud__b{background:#fff}.cmp tr.me .bud__b b{background:var(--brand)}
+.cmp__lg{position:absolute;right:150px;top:290px;display:flex;gap:22px;font-size:19px;font-weight:600;color:var(--ink-3)}
+.cmp__lg span{display:flex;align-items:center;gap:8px}
+.cmp__lg i{width:14px;height:14px;border-radius:4px}
 .cmp__brand{display:flex;align-items:center;gap:12px}
 .cmp__brand img{height:40px;transform:rotate(-6deg)}
 /* ==========================================================================
@@ -886,18 +900,19 @@ a{color:inherit;text-decoration:none}
         <p class="sub">Сопоставили «Все купоны» с&nbsp;основными рекламными каналами</p>
       </div>
     </div>
+    <div class="cmp__lg"><span><i style="background:#2E9E5B"></i>выгодно</span><span><i style="background:#E8A33D"></i>средне</span><span><i style="background:#E0665D"></i>невыгодно</span></div>
     <table class="cmp">
       <thead><tr><th></th><th>Цена</th><th>Охват</th><th>Скорость<br>реализации</th><th>Измеримость</th><th>Масштаби&shy;рование</th><th>Удобство</th><th>Минимальный<br>бюджет</th></tr></thead>
       <tbody>
-        <tr class="me"><td><span class="cmp__brand"><img src="../assets/brand/logo-red.png" alt="">Все купоны</span></td><td><i class="g"></i>Низкая</td><td><i class="g"></i>Высокий</td><td><i class="g"></i>Высокая</td><td><i class="g"></i>Точная</td><td><i class="g"></i>Лёгкое</td><td><i class="g"></i>Максимальное</td><td>от 1&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>Доски объявлений</td><td><i class=""></i>Высокая, растёт</td><td><i class="g"></i>Высокий</td><td><i class="g"></i>Высокая</td><td><i class="y"></i>Умеренная</td><td><i class="g"></i>Лёгкое</td><td><i class="y"></i>Умеренное</td><td>от 10&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>Поисковые системы</td><td><i class="y"></i>Умеренная</td><td><i class="g"></i>Высокий</td><td><i class="y"></i>Умеренная</td><td><i class="g"></i>Точная</td><td><i class="g"></i>Лёгкое</td><td><i class=""></i>Минимальное</td><td>от 30&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>Наружная реклама</td><td><i class=""></i>Высокая</td><td><i class="g"></i>Высокий</td><td><i class=""></i>Низкая</td><td><i class=""></i>Низкая</td><td><i class=""></i>Сложное</td><td><i class=""></i>Минимальное</td><td>от 15&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>Визитки и флаеры</td><td><i class="g"></i>Низкая</td><td><i class=""></i>Низкий</td><td><i class=""></i>Низкая</td><td><i class="y"></i>Умеренная</td><td><i class=""></i>Сложное</td><td><i class=""></i>Минимальное</td><td>от 5&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>Соцсети</td><td><i class="y"></i>Умеренная</td><td><i class="g"></i>Высокий</td><td><i class="y"></i>Умеренная</td><td><i class="y"></i>Умеренная</td><td><i class="g"></i>Лёгкое</td><td><i class="y"></i>Умеренное</td><td>от 10&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>Радио</td><td><i class=""></i>Высокая</td><td><i class="y"></i>Умеренный</td><td><i class="y"></i>Умеренная</td><td><i class=""></i>Низкая</td><td><i class=""></i>Сложное</td><td><i class=""></i>Минимальное</td><td>от 20&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>ТВ</td><td><i class=""></i>Высокая</td><td><i class="y"></i>Умеренный</td><td><i class=""></i>Низкая</td><td><i class=""></i>Низкая</td><td><i class=""></i>Сложное</td><td><i class=""></i>Минимальное</td><td>от 50&nbsp;000&nbsp;₽</td></tr>
-        <tr><td>Блогеры</td><td><i class="y"></i>Умеренная</td><td><i class="y"></i>Умеренный</td><td><i class="y"></i>Умеренная</td><td><i class="y"></i>Умеренная</td><td><i class=""></i>Сложное</td><td><i class="y"></i>Умеренное</td><td>от 10&nbsp;000&nbsp;₽</td></tr>
+        <tr class="me"><td><span class="cmp__brand"><img src="../assets/brand/logo-red.png" alt="">Все купоны</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Точная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Максимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:4%"></b></span>от&nbsp;1&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>Доски объявлений</td><td><span class="rt rt--n"><i></i><i></i><i></i>Высокая ↑</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренное</span></td><td><span class="bud"><span class="bud__b"><b style="width:20%"></b></span>от&nbsp;10&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>Поисковые системы</td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Точная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Минимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:60%"></b></span>от&nbsp;30&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>Наружная реклама</td><td><span class="rt rt--n"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Сложное</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Минимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:30%"></b></span>от&nbsp;15&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>Визитки и флаеры</td><td><span class="rt rt--g"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкий</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Сложное</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Минимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:10%"></b></span>от&nbsp;5&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>Соцсети</td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренное</span></td><td><span class="bud"><span class="bud__b"><b style="width:20%"></b></span>от&nbsp;10&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>Радио</td><td><span class="rt rt--n"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренный</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Сложное</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Минимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:40%"></b></span>от&nbsp;20&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>ТВ</td><td><span class="rt rt--n"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренный</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Сложное</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Минимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:100%"></b></span>от&nbsp;50&nbsp;000&nbsp;₽</span></td></tr>
+        <tr><td>Блогеры</td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренный</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Сложное</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренное</span></td><td><span class="bud"><span class="bud__b"><b style="width:20%"></b></span>от&nbsp;10&nbsp;000&nbsp;₽</span></td></tr>
       </tbody>
     </table>
   </section>
