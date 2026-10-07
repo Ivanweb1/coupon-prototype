@@ -96,8 +96,10 @@ a{color:inherit;text-decoration:none}
 .frame{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block}
 .has-frame .cpn__l--v{background:none;border-right:0}
 .has-frame .phone-panel{background:none}
-/* стена купонов начинается правее выреза, иначе снимки закрыли бы его */
-.has-frame .posts{left:1134px;background:none}
+/* стена купонов обрезана по контуру купона вместе с вырезами слева сверху и снизу.
+   В Figma, если плагин не перенесёт clip-path: серый контур под стеной (svg.frame) —
+   готовая маска, «Use as mask» на нём и стене */
+.has-frame .posts{background:none;border-radius:0;clip-path:path('M34,0H740A40,40 0 0 1 780,40V960A40,40 0 0 1 740,1000H34A34,34 0 0 0 0,966V34A34,34 0 0 0 34,0Z')}
 .nshape{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;display:block;overflow:visible}
 
 /* --------------------------------------------------------------------------
