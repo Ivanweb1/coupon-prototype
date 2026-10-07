@@ -7,6 +7,7 @@ lk/client-design.html) в двойной плотности, по одному �
   step-1-register.png — форма регистрации;
   step-2-preview.png  — так купон увидят в ленте (превью конструктора);
   step-3-live.png     — дашборд: что опубликовано и сколько забрали;
+  home-mobile.png     — витрина Липецка на телефоне (первый слайд);
   ai-offer.png        — варианты заголовка от нейросети;
   ai-image.png        — генерация изображения;
   ai-mech.png         — топовые механики в нише;
@@ -97,6 +98,27 @@ def main():
         pg.wait_for_timeout(400)
         shot(pg, BY_TEXT.format(t="Опубликовано сейчас", c=".lk-panel,section"), "step-3-live.png")
         shot(pg, BY_TEXT.format(t="Топовые механики в ваших нишах", c=".lk-panel,section"), "ai-mech.png")
+
+        # Витрина на телефоне (первый слайд): первые четыре карточки — понятные
+        # купоны из набора соцсетей, чтобы снимок и заголовок совпадали
+        m = b.new_page(viewport={"width": 400, "height": 860}, device_scale_factor=2, is_mobile=True, has_touch=True)
+        m.goto((REPO / "index-design-3.html").as_uri() + "?city=lipetsk")
+        m.wait_for_timeout(1500)
+        m.evaluate('''()=>{const x=[...document.querySelectorAll("button")].find(b=>/Да, я в городе/.test(b.textContent));x&&x.click()}''')
+        m.wait_for_timeout(700)
+        m.evaluate('''(cards)=>{document.querySelectorAll(".card").forEach((c,i)=>{const d=cards[i];if(!d)return;
+          c.querySelector(".card__media").style.background="url(assets/coupons/"+d[0]+") center/cover no-repeat";
+          c.querySelector(".card__title").textContent=d[1];c.querySelector(".card__meta b").textContent=d[2];
+          c.querySelector(".card__meta span").textContent=d[3];c.querySelector(".card__badge").textContent=d[4];
+          const n=c.querySelector(".card__near");if(n)n.textContent=d[5];
+          c.querySelectorAll(".card__stat-full,.card__stat-short").forEach(e=>e.textContent=d[6]);})}''',
+          [["kofe-warm.jpg", "Каждая пятая чашка кофе в подарок", "Кофейня «Пример»", "Кафе", "5 = 4", "7 мин от вас", "3,1к"],
+           ["manikyur-rose.jpg", "Маникюр с покрытием: два по цене одного", "Студия «Пример»", "Красота", "2 = 1", "12 мин от вас", "2,4к"],
+           ["fitness.jpg", "Годовой абонемент в клуб", "Фитнес «Пример»", "Спорт", "−35%", "9 мин от вас", "1,8к"],
+           ["eda-cool.jpg", "Комбо-обед по будням до 16:00", "Кафе «Пример»", "Кафе", "349 ₽", "4 мин от вас", "2,7к"]])
+        m.wait_for_timeout(300)
+        m.screenshot(path=str(OUT / "home-mobile.png"), clip={"x": 0, "y": 0, "width": 400, "height": 860})
+        print("home-mobile.png")
 
         # Статистика: воронка
         pg.goto(LK + "?view=stats")
