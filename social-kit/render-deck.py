@@ -9,7 +9,7 @@ PDF — печатью страницы, по слайду на лист; PNG �
     python social-kit/render-deck.py                # город по умолчанию
     python social-kit/render-deck.py --city Ельца   # другой город
 
-Результат — out/deck/: vsekupony-deck.pdf и slide-01.png … slide-06.png.
+Результат — out/deck/: vsekupony-deck.pdf и slide-01.png … slide-05.png.
 Нужны playwright и chromium (в облачной среде — /opt/pw-browsers/chromium).
 """
 
@@ -27,7 +27,7 @@ OUT = ROOT / "out" / "deck"
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--city", help="город на последнем слайде, родительный падеж: Ельца")
+    ap.add_argument("--city", help="город, родительный падеж: Ельца (если есть на слайдах)")
     args = ap.parse_args()
 
     url = PAGE.as_uri() + "?bare=1"
