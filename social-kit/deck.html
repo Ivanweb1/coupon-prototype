@@ -134,13 +134,6 @@ a{color:inherit;text-decoration:none}
   width:1.55em;height:1.55em;border-radius:50%;flex:none;display:grid;place-items:center;
   background:var(--surface);color:var(--brand);font-size:.82em;font-weight:800;
 }
-/* Подвал: знак со словом и номер */
-.foot{position:absolute;left:150px;right:150px;bottom:96px;display:flex;align-items:center;justify-content:space-between}
-.foot__brand{display:flex;align-items:center;gap:14px}
-.foot__brand img{height:62px;display:block}
-.foot__brand span{display:flex;flex-direction:column;gap:2px;font-size:20px;font-weight:500;color:var(--ink-3)}
-.foot__brand b{font-size:28px;font-weight:800;color:var(--brand);letter-spacing:-.01em}
-.foot__n{font-size:22px;font-weight:700;color:var(--ink-4);font-variant-numeric:tabular-nums}
 
 /* Заглушка под данные, которых пока нет: серый пунктир, видно сразу */
 .todo{color:var(--ink-4) !important;font-weight:600}
@@ -288,7 +281,7 @@ a{color:inherit;text-decoration:none}
 #s4 .in{width:1660px;top:90px}
 #s4 .h1{margin:0}
 #s4 .sub{max-width:1640px}
-.team{position:absolute;left:150px;right:150px;top:475px;display:flex;gap:30px}
+.team{position:absolute;left:150px;right:150px;top:510px;display:flex;gap:30px}
 .mate{flex:1;min-width:0}
 .mate__ph{height:290px;border-radius:28px;background:var(--surface) center top/cover no-repeat}
 .mate__ph--pk{background-size:78%;background-position:center}
@@ -657,7 +650,7 @@ a{color:inherit;text-decoration:none}
       <div class="hot hot--r" style="left:305px;top:102px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="pin|Знаем город"></span></div></div>
       <div class="hot hot--r" style="left:187px;top:516px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="search|Знаем, что ищут"></span></div></div>
       <div class="hot hot--r" style="left:219px;top:760px"><i class="hot__dot"></i><span class="hot__line"></span><div class="hot__tag"><span data-stub="eye|Видим, что забирают"></span></div></div>
-      <div class="alt alt--1"><div class="alt__k"><i></i>Покупатели в Липецке</div><div class="pp" style="top:130px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вашей точки</div></div></div>
+      <div class="alt alt--1"><div class="alt__k"><i></i>Покупатели в Липецке</div><div class="pp" style="top:130px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · Советский район</div></div></div>
           <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div>
           <div class="pp__s"><div><b>23</b>смотрела купонов</div><div><b class="r">4</b>забрала</div></div></div><div class="pp" style="top:445px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div></div>
           <div class="pp__c"><span>Детские секции</span><span>Кафе</span><span>Одежда</span></div>
@@ -671,7 +664,7 @@ a{color:inherit;text-decoration:none}
       <i class="pt__ar" style="top:625px"></i>
       <div class="pt" style="top:685px"><span class="pt__n">3</span><div class="pt__b"><div class="pt__k">Показывает код на&nbsp;кассе</div><div class="pt__ok"><b>KRASA-25</b><span>Скидка применена</span></div></div></div></div>
       <div class="alt alt--5"><div class="alt__k"><i></i>Где ваши покупатели</div><div class="mp"><i style="left:390px;top:391px;width:260px;height:260px"></i><i style="left:173px;top:388px;width:170px;height:170px"></i><i style="left:458px;top:430px;width:90px;height:90px"></i><i style="left:302px;top:258px;width:80px;height:80px"></i><i style="left:302px;top:179px;width:70px;height:70px"></i><i style="left:256px;top:463px;width:70px;height:70px"></i><i style="left:416px;top:577px;width:70px;height:70px"></i><em style="left:390px;top:391px">Липецк <b>9 800</b></em><em style="left:173px;top:388px">Елец <b>2 100</b></em><em style="left:458px;top:430px">Грязи <b>520</b></em><em style="left:302px;top:258px">Лебедянь <b>410</b></em><em style="left:302px;top:179px">Данков <b>330</b></em><em style="left:256px;top:463px">Задонск <b>290</b></em><em style="left:416px;top:577px">Усмань <b>260</b></em></div><div class="mp__t"><b>12&nbsp;400</b><span>покупателей пользуются купонами<br>в&nbsp;Липецкой области</span></div></div>
-      <div class="alt alt--6"><div class="hs"><div class="hs__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="hs__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:302px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:350px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · 1,2 км от вашей точки</div></div>
+      <div class="alt alt--6"><div class="hs"><div class="hs__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="hs__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:302px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:350px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · Советский район</div></div>
           <div class="pp__x"><div><b>23</b>смотрела</div><div><b class="r">4</b>забрала</div></div></div>
           <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div></div><div class="pp pp--more" style="top:518px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div>
           <div class="pp__x"><div><b>41</b>смотрела</div><div><b class="r">7</b>забрала</div></div></div>
@@ -866,10 +859,6 @@ a{color:inherit;text-decoration:none}
       <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-25.png')"></div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div>
       <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-1.png')"></div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div>
       <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-4.png')"></div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div>
-    </div>
-    <div class="foot">
-      <span class="foot__brand"><img src="../assets/brand/logo-red.png" alt=""><span>Все купоны города<b>vsekupony.ru</b></span></span>
-      <span class="foot__n"></span>
     </div>
   </section>
 
@@ -1076,12 +1065,6 @@ a{color:inherit;text-decoration:none}
     img.onload = function () { el.style.backgroundImage = "url('" + el.dataset.shot + "')"; };
     img.onerror = function () { el.classList.add("is-empty"); el.innerHTML = el.dataset.label; };
     img.src = el.dataset.shot;
-  });
-
-  /* Номера слайдов в подвале */
-  document.querySelectorAll(".slide").forEach(function (sl, i) {
-    var n = sl.querySelector(".foot__n");
-    if (n) n.textContent = (i < 9 ? "0" : "") + (i + 1);
   });
 
   /* Векторные контуры с вырезами (вместо кругов поверх и CSS-маски — для Figma).
