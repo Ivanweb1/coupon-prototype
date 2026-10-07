@@ -97,7 +97,9 @@ a{color:inherit;text-decoration:none}
 /* --------------------------------------------------------------------------
    Типографика — как на обложках: надзаголовок красный 600, заголовок 800
    -------------------------------------------------------------------------- */
-.in{position:absolute;left:150px;top:150px;width:860px}
+/* Все отступы слева — от края слайда 150 px. Тексты лежат внутри
+   корешка (.cpn__l, он сам сдвинут на 40), поэтому у них 110. */
+.in{position:absolute;left:110px;top:150px;width:860px}
 .eyebrow{display:block;font-size:26px;font-weight:600;letter-spacing:.01em;color:var(--brand)}
 .h1{margin:18px 0 0;font-size:84px;font-weight:800;line-height:1.06;letter-spacing:-.025em}
 .sub{margin:28px 0 0;font-size:32px;font-weight:500;line-height:1.38;color:var(--ink-2)}
@@ -181,7 +183,7 @@ a{color:inherit;text-decoration:none}
 /* QR — в форме купона: слева код, линия отрыва с вырезами, справа сайт
    и сообщества. Значки соцсетей — те же, что в шапке витрины (ICON в
    assets/app.js), здесь в фирменных цветах площадок. */
-.qrc{position:absolute;left:150px;bottom:80px;width:780px;height:230px;display:flex;border-radius:26px;background:var(--surface)}
+.qrc{position:absolute;left:110px;bottom:80px;width:780px;height:230px;display:flex;border-radius:26px;background:var(--surface)}
 .qrc__l{flex:none;width:230px;display:grid;place-items:center;border-right:3px dashed var(--line-strong)}
 .qrc__l img{display:block;width:170px;height:170px}
 .qrc__n{position:absolute;left:213px;width:34px;height:34px;border-radius:50%;background:#fff}
@@ -207,13 +209,13 @@ a{color:inherit;text-decoration:none}
 /* ==========================================================================
    2. Все купоны — примеры купонами под ниши
    ========================================================================== */
-#s2 .in{left:130px;top:92px;width:1660px}
+#s2 .in{top:92px;width:1660px}
 #s2 .h1{margin:0;font-size:80px}
 #s2 .sub{margin-top:10px;font-size:30px}
-.short{position:absolute;left:130px;top:282px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.short{position:absolute;left:110px;top:282px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
 .short__k{font-size:28px;font-weight:800;letter-spacing:-.01em}
 .short .steps{font-size:22px}
-.niches{position:absolute;left:110px;right:110px;top:440px;display:flex;gap:22px}
+.niches{position:absolute;left:150px;right:150px;top:440px;display:flex;gap:22px}
 .nc{flex:1;position:relative;height:556px;border-radius:30px;background:#fff;
   box-shadow:0 0 0 2px var(--line);overflow:hidden;display:flex;flex-direction:column}
 .nc__ph{position:relative;height:210px;background:var(--surface-2) center / cover no-repeat}
@@ -232,24 +234,24 @@ a{color:inherit;text-decoration:none}
    ==========================================================================
    Карточка — строка поиска и число показов за месяц. Числа подставляются
    из data-ws; пока их нет — заглушка. */
-#s3 .in{left:150px;top:120px;width:1500px}
+#s3 .in{top:120px;width:1660px}
 #s3 .h1{margin:0;font-size:96px}
 /* Вордстат: настоящие скриншоты (photos/wordstat/*.png, присланы 07.10)
    в рамке окна браузера, рядом — то же число крупно, чтобы его не
    приходилось искать на скрине. */
 #s3 .in{top:96px}
 #s3 .h1{font-size:88px}
-#s3 .sub{margin-top:16px;font-size:30px}
-.ws{position:absolute;left:110px;right:110px;top:350px;display:grid;grid-template-columns:1fr 1fr;gap:28px 40px}
+#s3 .sub{margin-top:16px;font-size:28px}
+.ws{position:absolute;left:150px;right:150px;top:350px;display:grid;grid-template-columns:1fr 1fr;gap:28px 40px}
 .ws__c{display:flex;align-items:center;gap:28px}
-.ws__win{flex:none;width:540px;border-radius:18px;background:#fff;box-shadow:0 0 0 2px var(--line), 0 24px 40px -30px rgba(0,0,0,.35);overflow:hidden}
+.ws__win{flex:none;width:500px;border-radius:18px;background:#fff;box-shadow:0 0 0 2px var(--line), 0 24px 40px -30px rgba(0,0,0,.35);overflow:hidden}
 .ws__bar{height:36px;display:flex;align-items:center;gap:7px;padding:0 14px;background:var(--surface);border-bottom:2px solid var(--line)}
 .ws__bar i{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
 .ws__bar span{margin-left:8px;font-size:15px;font-weight:600;color:var(--ink-3)}
-.ws__body{height:184px;background:#fff center / contain no-repeat}
+.ws__body{height:170px;background:#fff center / contain no-repeat}
 .ws__body.is-empty{margin:12px;height:160px;border-radius:12px;border:2px dashed var(--line-strong);display:grid;place-items:center;text-align:center;
   font-size:18px;font-weight:600;line-height:1.4;color:var(--ink-4)}
-.ws__n{font-size:60px;font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--brand);white-space:nowrap}
+.ws__n{font-size:56px;font-weight:800;line-height:1;letter-spacing:-.03em;color:var(--brand);white-space:nowrap}
 .ws__q{margin-top:10px;font-size:23px;font-weight:600;line-height:1.3;color:var(--ink-2)}
 .ws__q b{color:var(--ink)}
 .ws-src{position:absolute;left:150px;top:930px;font-size:26px;line-height:1.45;color:var(--ink-2);max-width:1100px}
@@ -257,9 +259,9 @@ a{color:inherit;text-decoration:none}
 /* ==========================================================================
    4. Сервис разработан предпринимателями — команда
    ========================================================================== */
-#s4 .in{width:1500px;top:110px}
+#s4 .in{width:1660px;top:110px}
 #s4 .h1{margin:0}
-#s4 .sub{max-width:1400px}
+#s4 .sub{max-width:1640px}
 .team{position:absolute;left:150px;right:150px;top:520px;display:flex;gap:40px}
 .mate{flex:1;display:flex;align-items:center;gap:28px;padding:26px;border-radius:30px;background:var(--surface)}
 .mate__ph{width:170px;height:170px;border-radius:50%;flex:none;display:grid;place-items:center;
@@ -391,7 +393,7 @@ a{color:inherit;text-decoration:none}
 #s8 .sub{margin-top:16px;font-size:28px}
 /* Карта: map-ru.svg (build-map.py) — регионы по настоящим границам.
    Подписи — поверх, по координатам, которые печатает build-map.py. */
-.map{position:absolute;left:110px;top:400px;width:1180px;height:600px;border-radius:30px;background:var(--surface) url('map-ru.svg') 0 0 / 1180px 600px no-repeat;overflow:hidden}
+.map{position:absolute;left:150px;top:400px;width:1180px;height:600px;border-radius:30px;background:var(--surface) url('map-ru.svg') 0 0 / 1180px 600px no-repeat;overflow:hidden}
 .map__c{position:absolute;font-style:normal;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--ink)}
 .map__c > span{position:absolute;left:24px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:5px 12px;border-radius:16px;background:#fff;
   font-size:20px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px -10px rgba(0,0,0,.35)}
@@ -403,7 +405,7 @@ a{color:inherit;text-decoration:none}
 .map__ins{position:absolute;left:18px;bottom:18px;width:300px;padding:8px 10px 6px;border-radius:18px;background:#fff;box-shadow:0 12px 30px -18px rgba(0,0,0,.35)}
 .map__ins img{display:block;width:100%}
 .map__ins span{display:block;margin:2px 4px 0;font-size:15px;font-weight:600;color:var(--ink-3)}
-.next{position:absolute;left:1350px;right:110px;top:410px}
+.next{position:absolute;left:1380px;right:150px;top:410px}
 .leg{display:flex;flex-direction:column;gap:12px;margin-bottom:34px}
 .leg div{display:flex;align-items:center;gap:14px;font-size:22px;font-weight:600;color:var(--ink-2)}
 .leg i{width:26px;height:26px;border-radius:7px;flex:none}
@@ -669,7 +671,7 @@ a{color:inherit;text-decoration:none}
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1">Сервис разработан <span class="city">предпринимателями</span></h2>
-        <p class="sub">Из&nbsp;разных сфер, которые на&nbsp;своём опыте знают, как трудно и&nbsp;дорого подобрать эффективный рекламный канал и&nbsp;поддерживать его результативность. <b>Особенно сейчас.</b></p>
+        <p class="sub">Из&nbsp;разных сфер, которые на&nbsp;своём опыте знают, как трудно и&nbsp;дорого подобрать эффективный рекламный канал и&nbsp;поддерживать его результативность. <b>Особенно&nbsp;сейчас.</b></p>
       </div>
     </div>
     <!-- Фото и подписи команды — ждём от заказчика -->
@@ -688,7 +690,7 @@ a{color:inherit;text-decoration:none}
   <section class="slide" id="s8">
     <div class="cpn__l cpn__l--full">
       <div class="in">
-        <h2 class="h1">Наш следующий шаг&nbsp;— выход за&nbsp;пределы <span class="city">Липецка</span></h2>
+        <h2 class="h1">Наш следующий шаг&nbsp;—<br>выход за&nbsp;пределы <span class="city">Липецка</span></h2>
         <p class="sub">Мы&nbsp;готовим расширение «Всех купонов» и&nbsp;планируем запуск предложений в&nbsp;новых городах и&nbsp;регионах.</p>
       </div>
     </div>
