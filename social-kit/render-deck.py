@@ -16,10 +16,12 @@ PDF — печатью страницы, по слайду на лист; PNG �
 """
 
 import argparse
+import io
 import os
 from pathlib import Path
 from urllib.parse import quote
 
+from PIL import Image
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent
@@ -56,9 +58,18 @@ def main():
         if args.png:
             browser.close()
             return
+        # PDF — из снимков слайдов в двойном разрешении, а не печатью страницы:
+        # тени и фильтры в «векторном» PDF некоторые просмотрщики (Просмотр
+        # на Mac, Figma) рисуют серыми плашками. Картинка выглядит везде одинаково.
+        hi = browser.new_page(viewport={"width": 1920, "height": 1080}, device_scale_factor=2)
+        hi.goto(url, wait_until="networkidle")
+        hi.evaluate("document.fonts.ready")
+        hi.wait_for_timeout(300)
+        shots = []
+        for el in hi.query_selector_all(".slide"):
+            shots.append(Image.open(io.BytesIO(el.screenshot(type="jpeg", quality=92))).convert("RGB"))
         pdf = OUT / ("vsekupony-" + args.src + ".pdf")
-        page.pdf(path=str(pdf), width="1920px", height="1080px", print_background=True,
-                 margin={"top": "0", "right": "0", "bottom": "0", "left": "0"})
+        shots[0].save(pdf, save_all=True, append_images=shots[1:], resolution=144)
         print(pdf.relative_to(ROOT))
         browser.close()
 
