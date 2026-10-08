@@ -328,14 +328,13 @@ a{color:inherit;text-decoration:none}
 #s4 .sub{max-width:1640px}
 .team{position:absolute;left:150px;top:400px;display:flex;gap:28px}
 .mate{flex:1;min-width:0}
-/* Ряд на четыре человека (384 px на каждого). Правка 08.10 (вторая): каждый — цельная
-   карточка: сверху портрет на светлой подложке, снизу имя и подпись. Одежда обрезана
-   ровным краем подложки — у исходников Москвичева и Резвякова края кадра неровные,
-   растушёвка их не прятала. */
-.mate{position:relative;flex:none;width:384px;display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:#fff;
-  box-shadow:0 0 0 2px var(--line),0 30px 50px -34px rgba(40,10,8,.4)}
-.mate__ph{height:400px;background:#F1EFEE center bottom / cover no-repeat}
-.mate__c{position:relative;flex:1;padding:26px 28px 28px;background:#fff}
+/* Ряд на четыре человека (384 px на каждого). Правка 08.10: фото без фона и без рамки,
+   низ растушёван в белое; имя и подпись — крупно, в своей плашке под фото.
+   Края кадра, где одежда упирается в границу исходника, растворены в самих PNG. */
+.mate{position:relative;flex:none;width:384px;display:flex;flex-direction:column}
+.mate__ph{height:400px;background:center top/contain no-repeat;
+  -webkit-mask-image:linear-gradient(#000 78%,transparent 100%);mask-image:linear-gradient(#000 78%,transparent 100%)}
+.mate__c{position:relative;margin-top:-26px;flex:1;padding:26px 28px 28px;border-radius:24px;background:#fff;box-shadow:0 0 0 2px var(--line),0 24px 40px -28px rgba(40,10,8,.35)}
 .mate__c::before{content:"";position:absolute;left:24px;top:0;width:48px;height:5px;border-radius:0 0 4px 4px;background:var(--brand)}
 .mate__n{white-space:nowrap;font-size:30px;font-weight:800;letter-spacing:-.015em;line-height:1.12}
 .mate__r{margin-top:10px;min-height:2.7em;font-size:22px;font-weight:500;line-height:1.35;color:#3A3A3A}
