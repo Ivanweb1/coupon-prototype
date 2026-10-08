@@ -9,6 +9,7 @@ PDF — печатью страницы, по слайду на лист; PNG �
     python social-kit/render-deck.py                # город по умолчанию
     python social-kit/render-deck.py --city Ельца   # другой город
     python social-kit/render-deck.py --png          # только PNG, PDF не трогать
+    python social-kit/render-deck.py --src deck-v2  # копия с правками → out/deck-v2/
 
 Результат — out/deck/: vsekupony-deck.pdf и slide-01.png … slide-05.png.
 Нужны playwright и chromium (в облачной среде — /opt/pw-browsers/chromium).
@@ -22,15 +23,16 @@ from urllib.parse import quote
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parent
-PAGE = ROOT / "deck.html"
-OUT = ROOT / "out" / "deck"
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--png", action="store_true", help="только PNG, без PDF")
     ap.add_argument("--city", help="город, родительный падеж: Ельца (если есть на слайдах)")
+    ap.add_argument("--src", default="deck", help="страница без .html: deck или deck-v2")
     args = ap.parse_args()
+    PAGE = ROOT / (args.src + ".html")
+    OUT = ROOT / "out" / args.src
 
     url = PAGE.as_uri() + "?bare=1"
     if args.city:
@@ -54,7 +56,7 @@ def main():
         if args.png:
             browser.close()
             return
-        pdf = OUT / "vsekupony-deck.pdf"
+        pdf = OUT / ("vsekupony-" + args.src + ".pdf")
         page.pdf(path=str(pdf), width="1920px", height="1080px", print_background=True,
                  margin={"top": "0", "right": "0", "bottom": "0", "left": "0"})
         print(pdf.relative_to(ROOT))

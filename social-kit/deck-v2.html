@@ -20,9 +20,16 @@
      самой платформы.
 
      Порядок — как разговор с рекламодателем: покупатели уже здесь →
-     выгоду ищут каждый день → что такое «Все купоны» → запуск в 3 шага →
-     AI-помощник → посчитаем выгоду → кто сделал → куда растём → первое
-     размещение бесплатно.
+     выгоду ищут каждый день → что такое «Все купоны» (путь покупателя и
+     форматы предложений) → AI-помощник → запуск в 3 шага → кто сделал →
+     одно предложение — несколько площадок → реклама дорогой быть не
+     должна → куда растём → первое размещение бесплатно.
+
+     Правки созвона 08.10 (эта копия, deck.html не тронут): рамка 16 px
+     вместо 40, заголовки одного кегля 80, подзаголовки темнее и с воздухом,
+     красные слайды через несколько белых (2, 4, 7), висячие предлоги
+     склеиваются скриптом, AI-помощник перед «3 шагами», слайды 2, 3 и 7
+     пересобраны, акцент с «купона» — на предложение и платформу.
 
      Откуда картинки:
        · экраны платформы — shoot-lk.py снимает прототип кабинета и
@@ -54,6 +61,11 @@
   --surface:#F6F6F6;
   --surface-2:#ECECEC;
   --font:"Onest", ui-sans-serif, system-ui, sans-serif;
+  /* Правка 08.10: рамка 40 → 16 px — на телевизоре и проекторе толстая
+     красная рамка забирала внимание и воздух. --cut — линия отрыва. */
+  --f:16px;
+  --r:28px;
+  --cut:1100px;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -75,7 +87,7 @@ a{color:inherit;text-decoration:none}
 }
 
 /* --------------------------------------------------------------------------
-   Слайд — купон на красном поле (как M2: рамка 40 px со всех сторон)
+   Слайд — купон на красном поле (как M2; рамка --f, с 08.10 — 16 px)
    -------------------------------------------------------------------------- */
 .slide{
   position:relative;flex:none;overflow:hidden;
@@ -84,12 +96,12 @@ a{color:inherit;text-decoration:none}
 }
 .bare .slide{box-shadow:none}
 /* Корешок — белая часть купона. Линия отрыва — его пунктирный край. */
-.cpn__l{position:absolute;left:40px;top:40px;bottom:40px;background:#fff;border-radius:40px}
-.cpn__l--v{right:auto;width:1060px;border-radius:40px 0 0 40px;border-right:3px dashed var(--line-strong)}
-.cpn__l--full{right:40px}
+.cpn__l{position:absolute;left:var(--f);top:var(--f);bottom:var(--f);background:#fff;border-radius:var(--r)}
+.cpn__l--v{right:auto;width:calc(var(--cut) - var(--f));border-radius:var(--r) 0 0 var(--r);border-right:3px dashed var(--line-strong)}
+.cpn__l--full{right:var(--f)}
 /* Снимок — вторая часть купона */
 .shot{position:absolute;background:var(--surface-2) center / cover no-repeat}
-.shot--v{left:1100px;top:40px;right:40px;bottom:40px;border-radius:0 40px 40px 0}
+.shot--v{left:var(--cut);top:var(--f);right:var(--f);bottom:var(--f);border-radius:0 var(--r) var(--r) 0}
 /* Вырезы — настоящие: белая и серая части купона рисуются векторным контуром
    с полукруглыми вырезами (svg.frame, строится скриптом), а не кругами поверх —
    так они и приезжают в Figma одной фигурой. */
@@ -99,7 +111,7 @@ a{color:inherit;text-decoration:none}
 /* стена купонов обрезана по контуру купона вместе с вырезами слева сверху и снизу.
    В Figma, если плагин не перенесёт clip-path: серый контур под стеной (svg.frame) —
    готовая маска, «Use as mask» на нём и стене */
-.has-frame .posts{background:none;border-radius:0;clip-path:path('M34,0H740A40,40 0 0 1 780,40V960A40,40 0 0 1 740,1000H34A34,34 0 0 0 0,966V34A34,34 0 0 0 34,0Z')}
+.has-frame .posts{background:none;border-radius:0}
 .nshape{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;display:block;overflow:visible}
 
 /* --------------------------------------------------------------------------
@@ -107,10 +119,10 @@ a{color:inherit;text-decoration:none}
    -------------------------------------------------------------------------- */
 /* Все отступы слева — от края слайда 150 px. Тексты лежат внутри
    корешка (.cpn__l, он сам сдвинут на 40), поэтому у них 110. */
-.in{position:absolute;left:110px;top:150px;width:860px}
+.in{position:absolute;left:calc(150px - var(--f));top:150px;width:860px}
 .eyebrow{display:block;font-size:26px;font-weight:600;letter-spacing:.01em;color:var(--brand)}
-.h1{margin:18px 0 0;font-size:84px;font-weight:800;line-height:1.06;letter-spacing:-.025em}
-.sub{margin:28px 0 0;font-size:32px;font-weight:500;line-height:1.38;color:var(--ink-2)}
+.h1{margin:18px 0 0;font-size:80px;font-weight:800;line-height:1.06;letter-spacing:-.025em}
+.sub{margin:28px 0 0;font-size:32px;font-weight:500;line-height:1.38;color:#3A3A3A}
 .sub b{color:var(--ink);font-weight:700}
 .city{
   display:inline-block;padding:0 .16em .04em;margin:0 .04em;border-radius:.18em;
@@ -179,12 +191,12 @@ a{color:inherit;text-decoration:none}
    QR ведёт на vsekupony.ru (qr-site.svg, собран python qrcode). Ряд
    сообществ — ссылки: в PDF и на странице они нажимаются; адреса —
    SOCIAL в скрипте. Пока адреса нет, кружок серый пунктирный. */
-#s1 .in{top:120px;width:880px}
-#s1 .h1{font-size:68px}
+#s1{--cut:1240px}
+#s1 .in{top:110px;width:1040px}
 /* QR — в форме купона: слева код, линия отрыва с вырезами, справа сайт
    и сообщества. Значки соцсетей — те же, что в шапке витрины (ICON в
    assets/app.js), здесь в фирменных цветах площадок. */
-.qrc{position:absolute;left:110px;bottom:80px;width:780px;height:230px;display:flex;isolation:isolate}
+.qrc{position:absolute;left:calc(150px - var(--f));bottom:80px;width:780px;height:230px;display:flex;isolation:isolate}
 .qrc__l{flex:none;width:230px;display:grid;place-items:center}
 .qrc__l img{display:block;width:170px;height:170px}
 /* Правая часть купона — ровные группы друг под другом: маленькая
@@ -192,7 +204,7 @@ a{color:inherit;text-decoration:none}
 .qrc__r{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 40px}
 .qrc__g{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .qrc__g + .qrc__g{margin-top:16px;padding-top:16px;border-top:2px solid #E6E6E6;align-self:stretch}
-.qrc__k{font-size:17px;font-weight:500;color:var(--ink-3);line-height:1.2}
+.qrc__k{font-size:20px;font-weight:500;color:var(--ink-2);line-height:1.2}
 .qrc__site{font-size:42px;font-weight:800;letter-spacing:-.02em;color:var(--brand);line-height:1}
 .qrc__tel{font-size:30px;font-weight:800;letter-spacing:-.01em;color:var(--ink);line-height:1}
 .soc{display:flex;align-items:center;gap:10px}
@@ -202,80 +214,79 @@ a{color:inherit;text-decoration:none}
 .soc a .soc-ic__g{fill:#fff}
 /* Справа — витрина на телефоне (photos/lk/home-mobile.png) с метками:
    знаем город, знаем, что ищут, видим, что смотрят и забирают. */
-.phone-panel{position:absolute;left:1100px;top:40px;right:40px;bottom:40px;border-radius:0 40px 40px 0;background:#ECECEC;overflow:hidden}
+.phone-panel{position:absolute;left:var(--cut);top:var(--f);right:var(--f);bottom:var(--f);border-radius:0 var(--r) var(--r) 0;background:#ECECEC;overflow:hidden}
 .phone{position:absolute;left:40px;top:58px;width:424px;height:884px;padding:12px;border-radius:52px;background:#1B1B1B;
   box-shadow:0 40px 80px -40px rgba(40,10,8,.55)}
 .phone__scr{width:400px;height:860px;border-radius:40px;background:#fff url('photos/lk/home-mobile.png') 0 0 / 400px auto no-repeat}
 .phone-panel .hot{font-size:24px}
 
 /* ==========================================================================
-   2. Все купоны — примеры купонами под ниши
-   ========================================================================== */
-#s2 .in{top:80px;width:1660px}
-#s2 .h1{margin:0;font-size:80px}
-#s2 .sub{margin-top:10px;font-size:30px}
-.short{position:absolute;left:110px;top:300px;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
-.short__k{font-size:28px;font-weight:800;letter-spacing:-.01em}
-.short .steps{font-size:22px}
-.niches{position:absolute;left:150px;right:150px;top:465px;display:flex;gap:22px}
-/* Купон ниши — как карточка ленты: снимок с плашкой бизнеса и билетиком
-   выгоды, линия отрыва, предложение, второй вариант в рамке «или»,
-   кнопка. Величины выгоды — примеры. */
-/* Вырезы — векторным контуром карточки (svg.nshape), тень — у ряда целиком
-   через drop-shadow, поэтому она идёт по контуру купона вместе с вырезами */
-.niches{filter:drop-shadow(0 8px 14px rgba(40,10,8,.10))}
-.nc{flex:1;position:relative;height:500px;isolation:isolate;display:flex;flex-direction:column}
-.nc__ph{position:relative;height:230px;flex:none;border-radius:30px 30px 0 0;background:var(--surface-2) center / cover no-repeat}
-.nc__ph .stub{position:absolute;left:14px;top:14px;font-size:17px}
-/* Плашка счётчиков — как .card__stats на карточке витрины */
-.nc__st{position:absolute;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;
-  padding:12px 8px;border-radius:24px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px -10px rgba(0,0,0,.35);color:var(--ink-2)}
-.nc__st svg{width:20px;height:20px;display:block}
-.nc__st span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:700;color:var(--ink)}
-.nc__ph .tk{position:absolute;left:16px;bottom:16px;font-size:30px}
-.nc__perf{position:relative;height:0;margin:0 22px;border-top:3px dashed var(--line-strong)}
-.nc__perf i{display:none}
-.nc__b{flex:1;padding:22px 22px 22px;display:flex;flex-direction:column}
-.nc__t{font-size:25px;font-weight:800;line-height:1.18;letter-spacing:-.015em}
-.nc__or{margin-top:auto;padding:12px 14px;border-radius:14px;border:2px dashed var(--line-strong);font-size:17px;line-height:1.35;color:var(--ink-2)}
-.nc__or span{display:block;margin-bottom:2px;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--brand)}
-.nc__go{margin-top:auto;height:46px;border-radius:23px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:18px;font-weight:700}
+   3. Все купоны — путь покупателя и форматы предложений (переделан 08.10)
+   ==========================================================================
+   Две задачи слайда: 1) путь покупателя 1-2-3-4 — главная информация,
+   инфографикой; 2) предприниматель видит, что предложить можно что угодно:
+   скидку, подарок, 1+1, первое посещение — не только «купон».
+   Пять одинаковых карточек ленты убраны: человек не знаком с интерфейсом. */
+#s2 .in{top:110px;width:1660px}
+#s2 .h1{margin:0}
+#s2 .sub{margin-top:14px}
+.path__k,.offs__k{position:absolute;left:150px;font-size:30px;font-weight:800;letter-spacing:-.01em}
+.path__k{top:350px}
+.path{position:absolute;left:150px;right:150px;top:410px;display:flex;gap:56px}
+.pst{position:relative;flex:1;min-width:0;height:280px;padding:30px 30px 28px;border-radius:30px;background:var(--surface);display:flex;flex-direction:column}
+.pst + .pst::before{content:"";position:absolute;left:-36px;top:50%;width:16px;height:16px;border-top:4px solid var(--brand);border-right:4px solid var(--brand);transform:translateY(-50%) rotate(45deg)}
+.pst__h{display:flex;align-items:center;gap:16px}
+.pst__n{flex:none;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:28px;font-weight:800}
+.pst__t{font-size:30px;font-weight:800;line-height:1.12;letter-spacing:-.015em}
+.pst__v{margin-top:auto;height:82px;border-radius:20px;background:#fff;display:flex;align-items:center;gap:14px;padding:0 22px;font-size:26px;font-weight:700;box-shadow:0 14px 26px -20px rgba(40,10,8,.4)}
+.pst__v svg{width:30px;height:30px;color:var(--brand);flex:none}
+.pst__v i{margin-left:auto;width:12px;height:12px;border-right:3px solid var(--ink-3);border-bottom:3px solid var(--ink-3);transform:rotate(45deg) translateY(-4px)}
+.pst__v small{display:block;font-size:17px;font-weight:600;color:var(--ink-3)}
+.pst__v.is-code{justify-content:center;border:3px dashed var(--brand);box-shadow:none;font-size:34px;font-weight:800;letter-spacing:.06em;color:var(--brand)}
+.pst__v.is-ok{background:#2E9E5B;color:#fff;font-size:23px;white-space:nowrap}
+.pst__v.is-ok svg{color:#fff}
+.offs__k{top:770px}
+.offs{position:absolute;left:150px;right:150px;top:830px;display:flex;gap:22px}
+.off{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.off .tk{font-size:38px}
+.off > span:not(.tk){font-size:21px;font-weight:600;line-height:1.3;color:var(--ink)}
 
 /* ==========================================================================
-   3. Выгоду ищут каждый день — запросы Вордстата
+   Красный слайд (правка 08.10): презентация белая подряд — скучно; через
+   несколько белых — слайд на фирменном красном, текст белый, плашка белая.
+   Шар знака — крупно и прозрачно, для жизни.
+   ========================================================================== */
+.slide--red .cpn__l{background:none}
+.slide--red .h1{color:#fff}
+.slide--red .sub{color:rgba(255,255,255,.94)}
+.slide--red .city{background:#fff;color:var(--brand)}
+.wm{position:absolute;right:-90px;bottom:-170px;height:820px;opacity:.09;transform:rotate(-14deg);pointer-events:none}
+
+/* ==========================================================================
+   2. Выгоду ищут каждый день — запросы Вордстата (переделан 08.10)
    ==========================================================================
-   Карточка — строка поиска и число показов за месяц. Числа подставляются
-   из data-ws; пока их нет — заглушка. */
-#s3 .in{top:120px;width:1660px}
-#s3 .h1{margin:0;font-size:96px}
-/* Вордстат: итог крупно, четыре запроса полосами по величине, справа —
-   настоящие скриншоты (photos/wordstat/*.png, присланы 07.10) веером. */
-#s3 .in{top:96px}
-#s3 .h1{font-size:88px}
-#s3 .sub{margin-top:16px;font-size:28px}
-.wt{position:absolute;left:150px;top:330px;display:flex;align-items:center;gap:26px}
-.wt b{font-size:120px;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--brand)}
-.wt span{transform:translateY(10px);font-size:28px;font-weight:600;line-height:1.3;color:var(--ink-2)}
-.wq{position:absolute;left:150px;width:960px;top:500px;display:flex;flex-direction:column;gap:16px}
-.wq__r{display:flex;align-items:center;gap:20px;height:70px}
-.wq__q{flex:none;width:250px;height:62px;border-radius:31px;background:#fff;box-shadow:0 0 0 2px var(--line), 0 12px 24px -16px rgba(0,0,0,.3);
-  display:flex;align-items:center;gap:12px;padding:0 22px;font-size:24px;font-weight:700}
-.wq__q svg{width:24px;height:24px;color:var(--ink-4);flex:none}
-.wq__bar{flex:1;height:22px;border-radius:11px;background:var(--surface);overflow:hidden}
-.wq__bar i{display:block;height:100%;border-radius:11px;background:var(--brand)}
-.wq__n{flex:none;width:170px;text-align:right;font-size:36px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.ws{position:absolute;left:1190px;top:320px;width:580px;height:580px}
-.ws__win{position:absolute;left:0;width:560px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--line), 0 30px 50px -30px rgba(0,0,0,.45);overflow:hidden}
-.ws__win:nth-child(1){top:0;transform:rotate(-3deg)}
-.ws__win:nth-child(2){top:130px;left:20px;transform:rotate(2deg)}
-.ws__win:nth-child(3){top:260px;transform:rotate(-2deg)}
-.ws__win:nth-child(4){top:390px;left:20px;transform:rotate(2.5deg)}
-.ws__bar{height:30px;display:flex;align-items:center;gap:6px;padding:0 12px;background:var(--surface);border-bottom:2px solid var(--line)}
-.ws__bar i{width:9px;height:9px;border-radius:50%;background:var(--line-strong)}
-.ws__bar span{margin-left:8px;font-size:13px;font-weight:600;color:var(--ink-3)}
-.ws__body{height:150px;background:#fff center top / cover no-repeat}
-.ws__body.is-empty{display:grid;place-items:center;font-size:16px;color:var(--ink-4)}
-.ws-src{position:absolute;left:150px;top:900px;font-size:26px;line-height:1.45;color:var(--ink-2);max-width:1100px}
+   Четыре скриншота веером не читались с телевизора — убраны. Слева —
+   белая карточка с запросами крупно, справа — тот же объём в разрезе
+   месяц → день → секунда: 20 млн за 30 дней ≈ 670 тыс. в день ≈ 8 в секунду.
+   Динамику по месяцам добавим, когда будет выгрузка вкладки «Динамика». */
+#s3 .in{top:110px;width:1660px}
+#s3 .h1{margin:0}
+#s3 .sub{margin-top:24px;max-width:1300px}
+.wq{position:absolute;left:150px;width:1000px;top:400px;padding:44px 48px 40px;border-radius:32px;background:#fff;box-shadow:0 40px 70px -40px rgba(80,10,6,.55)}
+.wq__k{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;font-size:24px;font-weight:600;color:var(--ink-2)}
+.wq__k b{font-size:26px;font-weight:800;color:var(--ink)}
+.wq__r{display:flex;align-items:center;gap:24px;height:96px;border-top:2px solid var(--line)}
+.wq__q{flex:none;width:260px;display:flex;align-items:center;gap:14px;font-size:34px;font-weight:800;letter-spacing:-.01em}
+.wq__q svg{width:30px;height:30px;color:var(--ink-4);flex:none}
+.wq__bar{flex:1;height:26px;border-radius:13px;background:var(--surface);overflow:hidden}
+.wq__bar i{display:block;height:100%;border-radius:13px;background:var(--brand)}
+.wq__n{flex:none;width:210px;text-align:right;font-size:44px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pace{position:absolute;left:1230px;right:150px;top:400px;display:flex;flex-direction:column;color:#fff}
+.pace div{padding:26px 0 24px;border-top:3px dashed rgba(255,255,255,.45)}
+.pace div:first-child{padding-top:0;border-top:0}
+.pace b{display:block;font-size:96px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.pace span{display:block;margin-top:8px;font-size:28px;font-weight:600;line-height:1.3;opacity:.94}
+.ws-src{position:absolute;left:150px;top:960px;font-size:22px;font-weight:500;color:rgba(255,255,255,.85)}
 
 /* ==========================================================================
    4. Сервис разработан предпринимателями — команда
@@ -283,44 +294,76 @@ a{color:inherit;text-decoration:none}
 #s4 .in{width:1660px;top:90px}
 #s4 .h1{margin:0}
 #s4 .sub{max-width:1640px}
-.team{position:absolute;left:150px;right:150px;top:510px;display:flex;gap:30px}
+.team{position:absolute;left:150px;right:150px;top:400px;display:flex;align-items:flex-start;gap:28px}
 .mate{flex:1;min-width:0}
-.mate__ph{height:290px;border-radius:28px;background:var(--surface) center top/cover no-repeat}
-.mate__ph--pk{background-size:78%;background-position:center}
-.mate__n{margin-top:20px;font-size:28px;font-weight:800;letter-spacing:-.015em;line-height:1.15}
-.mate__r{margin-top:8px;font-size:20px;line-height:1.35;color:var(--ink-2)}
+/* Правка 08.10: фото без рамки, края растушёваны в фон; имя и подпись —
+   крупно, в своей плашке под фото, чтобы участники выглядели весомо */
+.mate{position:relative;display:flex;flex-direction:column}
+.mate__ph{height:380px;background:center top/cover no-repeat;
+  -webkit-mask-image:radial-gradient(ellipse 56% 62% at 50% 46%,#000 50%,transparent 100%);mask-image:radial-gradient(ellipse 56% 62% at 50% 46%,#000 50%,transparent 100%)}
+.mate__ph--pk{background-size:70%;background-position:center 40%}
+.mate__c{position:relative;margin-top:-30px;min-height:190px;padding:22px 24px 24px;border-radius:24px;background:#fff;box-shadow:0 0 0 2px var(--line),0 24px 40px -28px rgba(40,10,8,.35)}
+.mate__c::before{content:"";position:absolute;left:24px;top:0;width:48px;height:5px;border-radius:0 0 4px 4px;background:var(--brand)}
+.mate__n{font-size:30px;font-weight:800;letter-spacing:-.015em;line-height:1.12}
+.mate__r{margin-top:10px;font-size:22px;font-weight:500;line-height:1.35;color:#3A3A3A}
 
 /* ==========================================================================
-   7а. Один купон — несколько площадок: купон в центре, каналы по бокам
-   ========================================================================== */
+   7а. Одно предложение — несколько площадок (переделан 08.10)
+   ==========================================================================
+   Раньше в центре стоял купон, и казалось, что кроме купона ничего не
+   происходит. Теперь главный объект — платформа: предложение сначала
+   выкладывается на сайт (лента города, каталог ниши), а уже с сайта
+   расходится в поиск и соцсети. Слайд красный — для ритма. */
 #s10 .in,#s11 .in{width:1660px;top:96px}
 #s10 .h1,#s11 .h1{margin:0}
-#s10 .sub,#s11 .sub{margin-top:14px;max-width:1300px}
-#s10 .sub{max-width:1660px;font-size:30px}
-.hub-l{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none}
-.hub-l path{fill:none;stroke:var(--line-strong);stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
-.hub-l circle{fill:var(--brand)}
-.oc{position:absolute;left:740px;top:450px;width:440px;border-radius:30px;overflow:hidden;background:#fff;box-shadow:0 0 0 2px var(--line),0 40px 60px -40px rgba(40,10,8,.5)}
-.oc__ph{position:relative;height:220px;background:center/cover}
-.oc__ph .tk{position:absolute;left:20px;bottom:20px;font-size:34px}
-.oc__b{padding:24px 26px 26px}
-.oc__t{font-size:30px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
-.oc__m{margin-top:8px;font-size:20px;font-weight:500;color:var(--ink-3)}
-.oc__btn{margin-top:22px;height:60px;border-radius:30px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:700}
-.ch{position:absolute;width:470px;height:150px;display:flex;align-items:center;gap:22px;padding:0 28px;border-radius:28px;background:var(--surface)}
-.ch .ic{font-size:36px;background:#fff}
+#s10 .sub,#s11 .sub{margin-top:24px;max-width:1500px}
+#s10 .in{top:90px}
+.fl__k{position:absolute;display:flex;align-items:center;gap:14px;font-size:26px;font-weight:800;color:#fff}
+.fl__k b{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--brand);font-size:23px}
+.fl__ar{position:absolute;width:22px;height:22px;border-top:4px solid #fff;border-right:4px solid #fff;transform:rotate(45deg)}
+/* 1. Ваше предложение — маленькая карточка */
+.fo{position:absolute;left:150px;top:520px;width:330px;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 40px 60px -36px rgba(80,10,6,.6)}
+.fo__ph{position:relative;height:190px;background:center/cover}
+.fo__ph .tk{position:absolute;left:16px;bottom:16px;font-size:28px}
+.fo__b{padding:18px 22px 22px}
+.fo__t{font-size:24px;font-weight:800;line-height:1.18;letter-spacing:-.01em}
+.fo__m{margin-top:6px;font-size:18px;font-weight:500;color:var(--ink-3)}
+/* 2. Сайт — окно браузера с лентой города */
+.site{position:absolute;left:580px;top:460px;width:620px;height:520px;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 50px 80px -40px rgba(80,10,6,.65)}
+.site__bar{height:54px;display:flex;align-items:center;gap:8px;padding:0 20px;background:var(--surface);border-bottom:2px solid var(--line)}
+.site__bar i{width:12px;height:12px;border-radius:50%;background:var(--line-strong)}
+.site__bar span{margin-left:14px;flex:1;height:34px;border-radius:17px;background:#fff;display:flex;align-items:center;padding:0 16px;font-size:18px;font-weight:700;color:var(--ink-2)}
+.site__bar span b{color:var(--brand)}
+.site__top{display:flex;align-items:center;gap:10px;padding:18px 22px 4px}
+.site__top em{font-style:normal;height:38px;padding:0 16px;border-radius:19px;background:var(--surface);display:flex;align-items:center;font-size:17px;font-weight:700;color:var(--ink-2)}
+.site__top em.is-on{background:var(--ink);color:#fff}
+.site__g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:14px 22px}
+.sc{position:relative;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 0 0 2px var(--line)}
+.sc__ph{position:relative;height:118px;background:center/cover}
+.sc__ph .tk{position:absolute;left:8px;bottom:8px;font-size:17px}
+.sc__t{padding:8px 10px 10px;font-size:14px;font-weight:700;line-height:1.25}
+.sc.is-you{box-shadow:0 0 0 4px var(--brand)}
+.sc__you{position:absolute;right:8px;top:8px;padding:3px 10px;border-radius:10px;background:var(--brand);color:#fff;font-size:13px;font-weight:800}
+/* 3. Каналы — с сайта в поиск и соцсети */
+.fl__l{position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none}
+.fl__l path{fill:none;stroke:rgba(255,255,255,.6);stroke-width:3;stroke-dasharray:2 9;stroke-linecap:round}
+.fl__l circle{fill:#fff}
+.chs{position:absolute;left:1300px;right:150px;top:460px;display:flex;flex-direction:column;gap:14px}
+.ch2{height:92px;display:flex;align-items:center;gap:18px;padding:0 22px;border-radius:22px;background:#fff}
+.ch2 .ic{font-size:28px}
+.ch2 .ch__ic{width:54px;height:54px}
+.ch2 b{display:block;font-size:25px;font-weight:800;letter-spacing:-.01em}
+.ch2 span span{display:block;margin-top:2px;font-size:18px;font-weight:500;color:var(--ink-2)}
 .ch__ic{flex:none;width:68px;height:68px;border-radius:50%;overflow:hidden}
 .ch__ic svg,.ch__ic img{display:block;width:100%;height:100%}
 .ch__ic .soc-ic__bg{fill:var(--soc-c)}.ch__ic .soc-ic__g{fill:#fff}
-.ch b{display:block;font-size:30px;font-weight:800;letter-spacing:-.01em}
-.ch div span{display:block;margin-top:6px;font-size:21px;font-weight:500;line-height:1.3;color:var(--ink-3)}
 /* ==========================================================================
    7б. Реклама не должна быть дорогой — сравнение с каналами
    Оценки — из таблицы заказчика; точка: зелёная — лучше, жёлтая — средне,
    серая — хуже. Строка «Все купоны» выделена.
    ========================================================================== */
 .cmp{position:absolute;left:150px;right:150px;top:340px;border-collapse:separate;border-spacing:0;font-size:23px;font-weight:600}
-.cmp th{height:62px;padding:0 14px;text-align:left;vertical-align:bottom;padding-bottom:14px;font-size:19px;font-weight:600;line-height:1.2;color:var(--ink-3)}
+.cmp th{height:62px;padding:0 14px;text-align:left;vertical-align:bottom;padding-bottom:14px;font-size:20px;font-weight:600;line-height:1.2;color:var(--ink-2)}
 .cmp td{height:62px;padding:0 14px;border-top:2px solid var(--line);white-space:nowrap}
 .cmp td:first-child{font-weight:800;padding-left:24px}
 .cmp td:last-child{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;padding-right:24px}
@@ -343,7 +386,7 @@ a{color:inherit;text-decoration:none}
 .cmp .bud__b{width:84px;height:12px;border-radius:6px;background:var(--surface);overflow:hidden;display:block}
 .cmp .bud__b b{display:block;height:100%;border-radius:6px;background:var(--ink-4)}
 .cmp tr.me .bud__b{background:rgba(255,255,255,.3)}.cmp tr.me .bud__b b{background:#fff}
-.cmp__lg{position:absolute;right:150px;top:290px;display:flex;gap:22px;font-size:19px;font-weight:600;color:var(--ink-3)}
+.cmp__lg{position:absolute;right:150px;top:290px;display:flex;gap:22px;font-size:20px;font-weight:600;color:var(--ink-2)}
 .cmp__lg span{display:flex;align-items:center;gap:8px}
 .cmp__lg i{width:14px;height:14px;border-radius:4px}
 .cmp__brand{display:flex;align-items:center;gap:12px}
@@ -355,9 +398,9 @@ a{color:inherit;text-decoration:none}
 #s6 .h1{margin:0}
 /* Шаг — купон: сверху экран платформы (photos/lk/step-*.png), линия
    отрыва с вырезами, ниже номер, что сделать и зачем. */
-.trio{position:absolute;left:150px;right:150px;top:340px;display:flex;gap:64px}
-.step{position:relative;flex:1;height:650px;border-radius:30px;background:var(--surface)}
-.step__shot{height:320px;margin:0;border-radius:30px 30px 0 0;background:#EDEDEE center / contain no-repeat;background-origin:content-box;padding:22px;
+.trio{position:absolute;left:150px;right:150px;top:380px;display:flex;gap:64px}
+.step{position:relative;flex:1;height:590px;border-radius:30px;background:var(--surface)}
+.step__shot{height:290px;margin:0;border-radius:30px 30px 0 0;background:#EDEDEE center / contain no-repeat;background-origin:content-box;padding:22px;
   border-bottom:3px dashed var(--line-strong)}
 /* Шаг 2 и 3 нарисованы разметкой, а не скрином: так крупнее. Вид — как
    в конструкторе («Каналы публикации») и на дашборде (плитки цифр). */
@@ -399,12 +442,12 @@ a{color:inherit;text-decoration:none}
 .reg__in{height:50px;border-radius:14px;border:2px solid var(--line);background:#fff;display:flex;align-items:center;padding:0 16px;font-size:19px;font-weight:600;color:var(--ink)}
 .reg__in em{font-style:normal;color:var(--ink-4);font-weight:500}
 .reg__in i{margin-left:auto;width:10px;height:10px;border-right:2.5px solid var(--ink-3);border-bottom:2.5px solid var(--ink-3);transform:rotate(45deg) translateY(-3px)}
-.step__cut{position:absolute;top:303px;width:38px;height:38px;border-radius:50%;background:#fff}
+.step__cut{position:absolute;top:273px;width:38px;height:38px;border-radius:50%;background:#fff}
 .step__cut--l{left:-19px}.step__cut--r{right:-19px}
-.step__h{display:flex;align-items:center;gap:18px;margin:34px 36px 0}
+.step__h{display:flex;align-items:center;gap:18px;margin:30px 36px 0}
 .step__n{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:28px;font-weight:800}
-.step__t{font-size:32px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
-.step__d{margin:18px 36px 0;font-size:24px;line-height:1.45;color:var(--ink-2)}
+.step__t{font-size:30px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
+.step__d{margin:16px 36px 0;font-size:23px;line-height:1.42;color:#3A3A3A}
 .step + .step::before{
   content:"";position:absolute;left:-40px;top:50%;width:14px;height:14px;
   border-top:3px solid var(--ink-4);border-right:3px solid var(--ink-4);transform:translateY(-50%) rotate(45deg);
@@ -416,16 +459,16 @@ a{color:inherit;text-decoration:none}
    ========================================================================== */
 #s7 .in{width:1500px;top:110px}
 #s7 .h1{margin:0}
-#s7 .sub{margin-top:14px}
+#s7 .sub{margin-top:24px}
 /* Четыре колонки слева направо: сверху номер и подпись, под ней — что это
    в кабинете; между колонками стрелки, как на слайде с шагами. */
-.ai{position:absolute;left:150px;right:150px;top:320px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 52px}
+.ai{position:absolute;left:150px;right:150px;top:340px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 52px}
 .ai__c{position:relative;display:flex;flex-direction:column;gap:22px}
 .ai__c + .ai__c::before{content:"";position:absolute;left:-33px;top:360px;width:14px;height:14px;border-top:3px solid var(--ink-4);border-right:3px solid var(--ink-4);transform:rotate(45deg)}
 /* Блоки нарисованы разметкой по экранам кабинета (lk/client-design.html):
    так текст читается с проектора. В генерации — настоящие фото из
    библиотеки ленты assets/coupons/. */
-.ai__scr{flex:none;width:100%;height:540px;border-radius:26px;background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:10px}
+.ai__scr{flex:none;width:100%;height:530px;border-radius:26px;background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:10px}
 .ai__k{font-size:16px;font-weight:600;color:var(--ink-3)}
 .ai__v{display:flex;align-items:center;gap:12px;flex:1;padding:12px 16px;border-radius:14px;background:#fff;font-size:20px;font-weight:700}
 .ai__v svg{width:22px;height:22px;color:var(--brand);flex:none}
@@ -456,6 +499,13 @@ a{color:inherit;text-decoration:none}
 .ai__f i{display:block;width:100%;border-radius:10px 10px 4px 4px}
 .ai__t{order:-1;display:flex;flex-direction:row;align-items:center;gap:14px;min-height:64px;font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-.015em}
 .ai__t b{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:24px}
+/* AI на красном (правка 08.10): экраны — белые карточки, подписи белые */
+#s7 .ai__t{color:#fff}
+#s7 .ai__t b{background:#fff;color:var(--brand)}
+#s7 .ai__scr{background:#fff;box-shadow:0 40px 60px -40px rgba(80,10,6,.55)}
+#s7 .ai__v,#s7 .ai__p,#s7 .ai__m{background:var(--surface)}
+#s7 .ai__k{color:var(--ink-2)}
+#s7 .ai__c + .ai__c::before{border-color:#fff}
 
 /* ==========================================================================
    8. Следующий шаг — схема городов
@@ -464,8 +514,8 @@ a{color:inherit;text-decoration:none}
    (равнопромежуточная проекция с поправкой cos 51°), от Липецка к каждому —
    пунктир. Москва — серым, для ориентира. */
 #s8 .in{width:1700px;top:100px}
-#s8 .h1{margin:0;font-size:76px}
-#s8 .sub{margin-top:16px;font-size:28px}
+#s8 .h1{margin:0}
+#s8 .sub{margin-top:24px}
 /* Карта: map-ru.svg (build-map.py) — регионы по настоящим границам.
    Подписи — поверх, по координатам, которые печатает build-map.py. */
 .map{position:absolute;left:150px;top:400px;width:1180px;height:600px;border-radius:30px;background:var(--surface) url('map-ru.svg') 0 0 / 1180px 600px no-repeat;overflow:hidden}
@@ -495,10 +545,9 @@ a{color:inherit;text-decoration:none}
    Справа — серое поле с двумя постами из набора соцсетей: так выглядит
    первый купон. Слева — условие, сайт, регистрация, телефон и QR. */
 #s9 .in{top:110px;width:900px}
-#s9 .h1{font-size:80px}
 /* Справа — стена купонов ленты под наклоном, на всю плиту; один из них —
    «ваш», обведён и подписан. Снимки — библиотека ленты assets/coupons/. */
-.posts{position:absolute;left:1100px;top:40px;right:40px;bottom:40px;border-radius:0 40px 40px 0;background:#ECECEC;overflow:hidden}
+.posts{position:absolute;left:var(--cut);top:var(--f);right:var(--f);bottom:var(--f);border-radius:0 var(--r) var(--r) 0;background:#ECECEC;overflow:hidden}
 .wall{position:absolute;left:-150px;top:-250px;width:1100px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;transform:rotate(-10deg)}
 .wall__col{display:flex;flex-direction:column;gap:22px}
 /* Остальные купоны слегка притушены: у каждой карточки своя тёмная плашка последним
@@ -520,7 +569,7 @@ a{color:inherit;text-decoration:none}
 .wc__you{position:absolute;right:14px;top:14px;padding:8px 14px;border-radius:16px;background:var(--brand);color:#fff;font-size:18px;font-weight:800}
 /* Плашка и купон с QR — одной ширины (820), по одной левой линии */
 #s9 .qrc{width:820px}
-.free{margin-top:34px;width:820px;display:flex;align-items:center;gap:24px;padding:20px 28px;border-radius:22px;background:var(--brand-50)}
+.free{margin-top:40px;width:820px;display:flex;align-items:center;gap:24px;padding:20px 28px;border-radius:22px;background:var(--brand-50)}
 .free b{flex:none;font-size:64px;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--brand)}
 .free span{font-size:23px;font-weight:600;line-height:1.35;color:var(--ink)}
 .qrc--big{height:340px}
@@ -625,6 +674,35 @@ a{color:inherit;text-decoration:none}
 .alt__k2{position:absolute;left:60px;right:60px;top:500px;display:flex;align-items:center;gap:12px;font-size:22px;font-weight:700;color:var(--ink-2)}
 .alt__k2 i{width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 6px rgba(221,68,60,.18)}
 .alt__k2 em{margin-left:auto;font-style:normal;padding:8px 16px;border-radius:18px;background:var(--brand);color:#fff;font-size:18px;font-weight:700}
+/* Правка 08.10: правая часть первого слайда мельче и правее — её не читают,
+   а схватывают взглядом («людей много, они что-то делают»); заголовок слева
+   получил место и встал в общий кегль 80. */
+#s1 .sub{max-width:940px}
+.alt--6 .hs,.alt--6 .alt__k,.alt--6 .pp,.alt--6 .alt__k2,.alt--6 .lf{left:48px;right:48px}
+.alt--6 .hs{top:110px;padding:22px 26px 20px}
+.alt--6 .hs__r{gap:18px}
+.alt--6 .hs__r b{font-size:62px}
+.alt--6 .hs__r span{font-size:19px}
+.alt--6 .hs__f{margin-top:16px;padding-top:14px}
+.alt--6 .hs__f i{width:38px;height:38px;font-size:15px}
+.alt--6 .hs__f span{margin-left:24px;font-size:16px}
+.alt--6 .hs__f span b{font-size:20px}
+.alt--6 .alt__k,.alt--6 .alt__k2{font-size:19px}
+.alt--6 .pp{padding:16px 20px}
+.alt--6 .pp__a{width:50px;height:50px}
+.alt--6 .pp__n{font-size:21px}
+.alt--6 .pp__m{font-size:15px}
+.alt--6 .pp__c{margin-top:10px}
+.alt--6 .pp__c span{font-size:14px;padding:5px 11px}
+.alt--6 .pp__x{gap:16px;font-size:13px}
+.alt--6 .pp__x b{font-size:23px}
+.alt--6 .alt__k2{top:708px}
+.alt--6 .alt__k2 em{font-size:16px;padding:6px 14px}
+.alt--6 .lf{top:756px}
+.alt--6 .lf__r{padding:12px 18px}
+.alt--6 .lf__ic{width:42px;height:42px}
+.alt--6 .lf__t{font-size:17px}
+.alt--6 .lf__t span{font-size:14px}
 </style>
 </head>
 <body>
@@ -668,35 +746,34 @@ a{color:inherit;text-decoration:none}
       <i class="pt__ar" style="top:625px"></i>
       <div class="pt" style="top:685px"><span class="pt__n">3</span><div class="pt__b"><div class="pt__k">Показывает код на&nbsp;кассе</div><div class="pt__ok"><b>KRASA-25</b><span>Скидка применена</span></div></div></div></div>
       <div class="alt alt--5"><div class="alt__k"><i></i>Где ваши покупатели</div><div class="mp"><i style="left:390px;top:391px;width:260px;height:260px"></i><i style="left:173px;top:388px;width:170px;height:170px"></i><i style="left:458px;top:430px;width:90px;height:90px"></i><i style="left:302px;top:258px;width:80px;height:80px"></i><i style="left:302px;top:179px;width:70px;height:70px"></i><i style="left:256px;top:463px;width:70px;height:70px"></i><i style="left:416px;top:577px;width:70px;height:70px"></i><em style="left:390px;top:391px">Липецк <b>9 800</b></em><em style="left:173px;top:388px">Елец <b>2 100</b></em><em style="left:458px;top:430px">Грязи <b>520</b></em><em style="left:302px;top:258px">Лебедянь <b>410</b></em><em style="left:302px;top:179px">Данков <b>330</b></em><em style="left:256px;top:463px">Задонск <b>290</b></em><em style="left:416px;top:577px">Усмань <b>260</b></em></div><div class="mp__t"><b>12&nbsp;400</b><span>покупателей пользуются купонами<br>в&nbsp;Липецкой области</span></div></div>
-      <div class="alt alt--6"><div class="hs"><div class="hs__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="hs__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:302px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:350px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · Советский район</div></div>
+      <div class="alt alt--6"><div class="hs"><div class="hs__r"><b>9&nbsp;800</b><span>покупателей в&nbsp;Липецке<br>уже выбирают купоны у&nbsp;нас</span></div><div class="hs__f"><i data-img="photos/people/anna.jpg">А</i><i data-img="photos/people/oleg.jpg">О</i><i data-img="photos/people/marina.jpg">М</i><i data-img="photos/people/igor.jpg">И</i><i data-img="photos/people/olga.jpg">О</i><i data-img="photos/people/dmitry.jpg">Д</i><span><b>2&nbsp;300</b> забрали купон за&nbsp;неделю</span></div></div><div class="alt__k" style="top:340px"><i></i>И&nbsp;про каждого мы знаем, что ему интересно</div><div class="pp" style="top:384px"><div class="pp__h"><div class="pp__a" data-img="photos/people/anna.jpg" style="background:#DD443C">А</div><div><div class="pp__n">Анна, 29 лет</div><div class="pp__m">Липецк · Советский район</div></div>
           <div class="pp__x"><div><b>23</b>смотрела</div><div><b class="r">4</b>забрала</div></div></div>
-          <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div></div><div class="pp pp--more" style="top:518px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div>
+          <div class="pp__c"><span>Маникюр</span><span>Кофе с собой</span><span>Фитнес</span></div></div><div class="pp pp--more" style="top:536px"><div class="pp__h"><div class="pp__a" data-img="photos/people/marina.jpg" style="background:#EC7A72">М</div><div><div class="pp__n">Марина, 34 года</div><div class="pp__m">Липецк · Октябрьский район</div></div>
           <div class="pp__x"><div><b>41</b>смотрела</div><div><b class="r">7</b>забрала</div></div></div>
           <div class="pp__c"><span>Детские секции</span><span>Кафе</span><span>Одежда</span></div></div><div class="alt__k2"><i></i>Сейчас в Липецке<em>+38 смотрят купоны</em></div><div class="lf"><div class="lf__r"><span class="lf__ic" data-img="photos/people/maria.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg></span><div class="lf__t">Мария забрала купон<span>−20% на маникюр · Студия «Пример»</span></div><span class="lf__w">2 мин</span></div><div class="lf__r"><span class="lf__ic" data-img="photos/people/oleg.jpg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><div class="lf__t">Олег открыл купон<span>Шиномонтаж перед сезоном</span></div><span class="lf__w">только что</span></div></div></div>
     </div>
   </section>
 
   <!-- ===================== 2. Выгоду ищут каждый день ===================== -->
-  <section class="slide" id="s3">
+  <section class="slide slide--red" id="s3">
+    <img class="wm" src="../assets/brand/logo-white.png" alt="">
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1">Выгоду ищут <span class="city">каждый день</span></h2>
-        <p class="sub">Запросы со&nbsp;словами «купон», «акция», «скидка» и&nbsp;«промокод» показывают интерес людей к&nbsp;выгодным предложениям.</p>
+        <p class="sub">Запросы со&nbsp;словами «купон», «акция», «скидка» и&nbsp;«промокод» показывают интерес людей к&nbsp;выгодным предложениям</p>
       </div>
     </div>
-    <div class="wt"><b>20&nbsp;млн</b><span>запросов за&nbsp;месяц<br>по&nbsp;четырём словам о&nbsp;выгоде</span></div>
     <div class="wq">
+      <div class="wq__k"><b>Запросов за&nbsp;месяц в&nbsp;Яндексе</b>по&nbsp;всей России</div>
       <div class="wq__r"><div class="wq__q"><svg data-i="search"></svg>промокод</div><div class="wq__bar"><i style="width:100%"></i></div><div class="wq__n">10,6 млн</div></div>
       <div class="wq__r"><div class="wq__q"><svg data-i="search"></svg>акция</div><div class="wq__bar"><i style="width:47%"></i></div><div class="wq__n">5 млн</div></div>
       <div class="wq__r"><div class="wq__q"><svg data-i="search"></svg>скидка</div><div class="wq__bar"><i style="width:36%"></i></div><div class="wq__n">3,8 млн</div></div>
       <div class="wq__r"><div class="wq__q"><svg data-i="search"></svg>купон</div><div class="wq__bar"><i style="width:6%"></i></div><div class="wq__n">619 тыс.</div></div>
     </div>
-    <!-- Скриншоты Вордстата: photos/wordstat/*.png -->
-    <div class="ws">
-      <div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «купон»</span></div><div class="ws__body" data-shot="photos/wordstat/kupon.png" data-label="Скрин «купон»"></div></div>
-      <div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «акция»</span></div><div class="ws__body" data-shot="photos/wordstat/akciya.png" data-label="Скрин «акция»"></div></div>
-      <div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «скидка»</span></div><div class="ws__body" data-shot="photos/wordstat/skidka.png" data-label="Скрин «скидка»"></div></div>
-      <div class="ws__win"><div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «промокод»</span></div><div class="ws__body" data-shot="photos/wordstat/promokod.png" data-label="Скрин «промокод»"></div></div>
+    <div class="pace">
+      <div><b>20&nbsp;млн</b><span>запросов о&nbsp;выгоде за&nbsp;месяц</span></div>
+      <div><b>670&nbsp;тыс.</b><span>каждый день</span></div>
+      <div><b>8</b><span>каждую секунду</span></div>
     </div>
     <div class="ws-src">Яндекс Вордстат, 5&nbsp;сентября&nbsp;— 4&nbsp;октября 2026</div>
   </section>
@@ -708,97 +785,33 @@ a{color:inherit;text-decoration:none}
         <div class="brandup"><img class="brandup__m" src="../assets/brand/logo-red.png" alt=""><div><h2 class="h1">Все купоны</h2>
         <p class="sub">честный сервис для создания и&nbsp;распространения специальных предложений</p></div></div>
       </div>
-      <div class="short">
-        <div class="short__k">Мы&nbsp;сокращаем путь клиента от&nbsp;предложения до&nbsp;покупки</div>
-        <ol class="steps"><li><b>1</b>Выбирает город</li><li><b>2</b>Находит предложение</li><li><b>3</b>Получает без регистрации</li><li><b>4</b>Приходит к&nbsp;вам</li></ol>
-      </div>
     </div>
-    <div class="niches">
-      <div class="nc">
-        <div class="nc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg');background-position:50% 20%"><div class="nc__st"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>24,3к</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg></div><span data-stub="krasota|Салоны и барбершопы"></span><span class="tk">−20%</span></div>
-        <div class="nc__perf"><i></i><i></i></div>
-        <div class="nc__b"><div class="nc__t">Скидка на&nbsp;первое посещение</div>
-          <div class="nc__go">Забрать купон</div></div>
-      </div>
-      <div class="nc">
-        <div class="nc__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg');background-position:50% 30%"><div class="nc__st"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>31,8к</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg></div><span data-stub="eda|Кафе и доставка"></span><span class="tk">Подарок</span></div>
-        <div class="nc__perf"><i></i><i></i></div>
-        <div class="nc__b"><div class="nc__t">Десерт к&nbsp;обеду по&nbsp;купону</div>
-          <div class="nc__go">Забрать купон</div></div>
-      </div>
-      <div class="nc">
-        <div class="nc__ph" style="background-image:url('../assets/coupons/fitness.jpg');background-position:40% 70%"><div class="nc__st"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>18,6к</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg></div><span data-stub="sport|Фитнес и секции"></span><span class="tk">0&nbsp;₽</span></div>
-        <div class="nc__perf"><i></i><i></i></div>
-        <div class="nc__b"><div class="nc__t">Первое занятие на&nbsp;специальных условиях</div>
-          <div class="nc__go">Забрать купон</div></div>
-      </div>
-      <div class="nc">
-        <div class="nc__ph" style="background-image:url('../assets/coupons/avto-steel.jpg');background-position:50% 50%"><div class="nc__st"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>42,1к</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg></div><span data-stub="avto|Автосервисы"></span><span class="tk">−15%</span></div>
-        <div class="nc__perf"><i></i><i></i></div>
-        <div class="nc__b"><div class="nc__t">Предложение на&nbsp;сезонную услугу</div>
-          <div class="nc__go">Забрать купон</div></div>
-      </div>
-      <div class="nc">
-        <div class="nc__ph" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg');background-position:50% 50%"><div class="nc__st"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>27,5к</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4"/></svg></div><span data-stub="ticket|Кино и досуг"></span><span class="tk">−30%</span></div>
-        <div class="nc__perf"><i></i><i></i></div>
-        <div class="nc__b"><div class="nc__t">Скидка на&nbsp;посещение в&nbsp;будний день</div>
-          <div class="nc__go">Забрать купон</div></div>
-      </div>
+    <div class="path__k">Мы&nbsp;сокращаем путь покупателя от&nbsp;предложения до&nbsp;покупки</div>
+    <div class="path">
+      <div class="pst"><div class="pst__h"><span class="pst__n">1</span><div class="pst__t">Выбирает<br>город</div></div>
+        <div class="pst__v"><svg data-i="pin"></svg>Липецк<i></i></div></div>
+      <div class="pst"><div class="pst__h"><span class="pst__n">2</span><div class="pst__t">Находит<br>предложение</div></div>
+        <div class="pst__v"><svg data-i="search"></svg><div>маникюр<small>−20% · Студия «Пример»</small></div></div></div>
+      <div class="pst"><div class="pst__h"><span class="pst__n">3</span><div class="pst__t">Получает без&nbsp;регистрации</div></div>
+        <div class="pst__v is-code">KRASA-25</div></div>
+      <div class="pst"><div class="pst__h"><span class="pst__n">4</span><div class="pst__t">Приходит<br>к&nbsp;вам</div></div>
+        <div class="pst__v is-ok"><svg data-i="check"></svg>Скидка применена</div></div>
     </div>
-  </section>
-
-  <!-- ===================== 4. Запуск занимает 3 шага ===================== -->
-  <section class="slide" id="s6">
-    <div class="cpn__l cpn__l--full">
-      <div class="in">
-        <h2 class="h1">Запуск занимает всего <span class="city">3 шага</span></h2>
-        <p class="sub">Вам не&nbsp;нужно ничего придумывать&nbsp;— мы&nbsp;придумали всё за&nbsp;вас</p>
-      </div>
-    </div>
-    <div class="trio">
-      <div class="step">
-        <div class="step__shot"><div class="reg">
-          <div class="reg__k">Кто размещает купоны</div>
-          <div class="reg__chips"><span class="is-on">ООО</span><span>ИП</span><span>Самозанятый</span></div>
-          <div class="reg__k">ИНН</div>
-          <div class="reg__in">4826&nbsp;000&nbsp;000</div>
-          <div class="reg__k">Категория бизнеса</div>
-          <div class="reg__in">Кафе и рестораны<i></i></div>
-        </div></div>
-        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
-        <div class="step__h"><span class="step__n">1</span><div class="step__t">Регистрация на&nbsp;платформе</div></div>
-        <div class="step__d">Заполните профиль и&nbsp;расскажите о&nbsp;своём бизнесе</div>
-      </div>
-      <div class="step">
-        <div class="step__shot"><div class="mix">
-          <div class="mix__offer"><svg data-i="spark"></svg>−30% · Скидка на&nbsp;меню по&nbsp;будням<em>AI</em></div>
-          <div class="mix__imgs">
-            <i class="is-on" style="background-image:url('../assets/coupons/eda-cool.jpg')"><em>AI</em></i>
-            <i style="background-image:url('photos/table.jpg');background-position:30% 50%"></i>
-            <i style="background-image:url('../assets/coupons/kofe-warm.jpg')"></i>
-          </div>
-          <div class="mix__soc"><span>Публикуем:</span><b class="mix__site">Сайт</b><i data-soc-ic="vk"></i><i data-soc-ic="tg"></i><i data-soc-ic="ok"></i><i data-soc-ic="max"></i></div>
-        </div></div>
-        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
-        <div class="step__h"><span class="step__n">2</span><div class="step__t">Выберите оффер, картинку и&nbsp;соцсети</div></div>
-        <div class="step__d">Более 100 офферов уже готовы, а&nbsp;AI-помощник сгенерирует изображение под ваше предложение</div>
-      </div>
-      <div class="step">
-        <div class="step__shot"><div class="kpi">
-          <div><b>84&nbsp;890</b><span>Показы</span></div>
-          <div><b>10&nbsp;350</b><span>Просмотры</span></div>
-          <div class="is-hot"><b>2&nbsp;350</b><span>Купон забрали</span></div>
-          <div><b>903</b><span>Переходы к&nbsp;вам</span></div>
-        </div></div>
-        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
-        <div class="step__h"><span class="step__n">3</span><div class="step__t">Опубликуйте предложение</div></div>
-        <div class="step__d">После модерации следите за&nbsp;статистикой онлайн и&nbsp;встречайте новых клиентов</div>
-      </div>
+    <div class="offs__k">Что можно предложить&nbsp;— любой формат</div>
+    <div class="offs">
+      <div class="off"><span class="tk">−20%</span><span>Скидка на&nbsp;услугу или товар</span></div>
+      <div class="off"><span class="tk">1&nbsp;+&nbsp;1</span><span>Два по&nbsp;цене одного</span></div>
+      <div class="off"><span class="tk">Подарок</span><span>Подарок к&nbsp;покупке</span></div>
+      <div class="off"><span class="tk">0&nbsp;₽</span><span>Первое посещение бесплатно</span></div>
+      <div class="off"><span class="tk">349&nbsp;₽</span><span>Специальная цена</span></div>
+      <div class="off"><span class="tk">5&nbsp;=&nbsp;4</span><span>Каждый пятый&nbsp;— в&nbsp;подарок</span></div>
+      <div class="off"><span class="tk">Код</span><span>Промокод на&nbsp;заказ</span></div>
     </div>
   </section>
 
   <!-- ===================== 5. AI-помощник ===================== -->
-  <section class="slide" id="s7">
+  <section class="slide slide--red" id="s7">
+    <img class="wm" src="../assets/brand/logo-white.png" alt="" style="right:-150px;bottom:auto;top:-260px;height:700px">
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1"><span class="city">AI</span>-помощник</h2>
@@ -848,6 +861,56 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
+  <!-- ===================== 4. Запуск занимает 3 шага ===================== -->
+  <section class="slide" id="s6">
+    <div class="cpn__l cpn__l--full">
+      <div class="in">
+        <h2 class="h1">Запуск занимает всего <span class="city">3 шага</span></h2>
+        <p class="sub">Вам не&nbsp;нужно ничего придумывать&nbsp;— мы&nbsp;придумали всё за&nbsp;вас</p>
+      </div>
+    </div>
+    <div class="trio">
+      <div class="step">
+        <div class="step__shot"><div class="reg">
+          <div class="reg__k">Кто размещает предложение</div>
+          <div class="reg__chips"><span class="is-on">ООО</span><span>ИП</span><span>Самозанятый</span></div>
+          <div class="reg__k">ИНН</div>
+          <div class="reg__in">4826&nbsp;000&nbsp;000</div>
+          <div class="reg__k">Категория бизнеса</div>
+          <div class="reg__in">Кафе и рестораны<i></i></div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">1</span><div class="step__t">Регистрация на&nbsp;платформе</div></div>
+        <div class="step__d">Заполните профиль и&nbsp;расскажите о&nbsp;своём бизнесе</div>
+      </div>
+      <div class="step">
+        <div class="step__shot"><div class="mix">
+          <div class="mix__offer"><svg data-i="spark"></svg>−30% · Скидка на&nbsp;меню по&nbsp;будням<em>AI</em></div>
+          <div class="mix__imgs">
+            <i class="is-on" style="background-image:url('../assets/coupons/eda-cool.jpg')"><em>AI</em></i>
+            <i style="background-image:url('photos/table.jpg');background-position:30% 50%"></i>
+            <i style="background-image:url('../assets/coupons/kofe-warm.jpg')"></i>
+          </div>
+          <div class="mix__soc"><span>Публикуем:</span><b class="mix__site">Сайт</b><i data-soc-ic="vk"></i><i data-soc-ic="tg"></i><i data-soc-ic="ok"></i><i data-soc-ic="max"></i></div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">2</span><div class="step__t">Выберите оффер, картинку и&nbsp;соцсети</div></div>
+        <div class="step__d">Более 100 офферов уже готовы, а&nbsp;<span style="white-space:nowrap">AI-помощник</span> сгенерирует изображение под ваше предложение</div>
+      </div>
+      <div class="step">
+        <div class="step__shot"><div class="kpi">
+          <div><b>84&nbsp;890</b><span>Показы</span></div>
+          <div><b>10&nbsp;350</b><span>Просмотры</span></div>
+          <div class="is-hot"><b>2&nbsp;350</b><span>Купон забрали</span></div>
+          <div><b>903</b><span>Переходы к&nbsp;вам</span></div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">3</span><div class="step__t">Опубликуйте предложение</div></div>
+        <div class="step__d">После модерации следите за&nbsp;статистикой онлайн и&nbsp;встречайте новых клиентов</div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== 7. Сервис разработан предпринимателями ===================== -->
   <section class="slide" id="s4">
     <div class="cpn__l cpn__l--full">
@@ -858,40 +921,58 @@ a{color:inherit;text-decoration:none}
     </div>
     <!-- Команда: фото в photos/team/. Покемоны — заглушки, пока нет остальных участников -->
     <div class="team">
-      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/yankovoy.jpg')"></div><div class="mate__n">Александр Янковой</div><div class="mate__r">Строю дома для&nbsp;семей с&nbsp;детьми</div></div>
-      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/krom.png')"></div><div class="mate__n">Вильгельм Кром</div><div class="mate__r">Серийный предприниматель. Сервисы для&nbsp;жизни и&nbsp;продаж</div></div>
-      <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-25.png')"></div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div>
-      <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-1.png')"></div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div>
-      <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-4.png')"></div><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div>
+      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/yankovoy.jpg')"></div><div class="mate__c"><div class="mate__n">Александр Янковой</div><div class="mate__r">Строю дома для&nbsp;семей с&nbsp;детьми</div></div></div>
+      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/krom.png')"></div><div class="mate__c"><div class="mate__n">Вильгельм Кром</div><div class="mate__r">Серийный предприниматель. Сервисы для&nbsp;жизни и&nbsp;продаж</div></div></div>
+      <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-25.png')"></div><div class="mate__c"><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
+      <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-1.png')"></div><div class="mate__c"><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
+      <div class="mate"><div class="mate__ph mate__ph--pk" style="background-image:url('photos/team/pokemon-4.png')"></div><div class="mate__c"><div class="mate__n todo">Имя Фамилия</div><div class="mate__r todo">Чем занимается, какой бизнес ведёт</div></div></div>
     </div>
   </section>
 
-  <!-- ===================== 7а. Один купон — несколько площадок ===================== -->
-  <section class="slide" id="s10">
+  <!-- ===================== 7а. Одно предложение — несколько площадок ===================== -->
+  <section class="slide slide--red" id="s10">
+    <img class="wm" src="../assets/brand/logo-white.png" alt="" style="right:-160px;bottom:auto;top:-240px;height:700px">
     <div class="cpn__l cpn__l--full">
       <div class="in">
-        <h2 class="h1">Один купон&nbsp;— <span class="city">несколько площадок</span><br>для продвижения</h2>
-        <p class="sub">После размещения купона на&nbsp;нашем сервисе мы&nbsp;публикуем его в&nbsp;соцсетях и&nbsp;привлекаем к&nbsp;вашему предложению покупателей</p>
+        <h2 class="h1">Одно предложение&nbsp;—<br><span class="city">несколько площадок</span> для продвижения</h2>
+        <p class="sub">Размещаете предложение на&nbsp;нашем сайте&nbsp;— мы&nbsp;публикуем его в&nbsp;поиске и&nbsp;соцсетях</p>
       </div>
     </div>
-    <svg class="hub-l" viewBox="0 0 1920 1080"><path d="M740 705 C 680 705, 680 525, 620 525"/><path d="M740 705 C 680 705, 680 705, 620 705"/><path d="M740 705 C 680 705, 680 885, 620 885"/><path d="M1180 705 C 1240 705, 1240 525, 1300 525"/><path d="M1180 705 C 1240 705, 1240 705, 1300 705"/><path d="M1180 705 C 1240 705, 1240 885, 1300 885"/><circle cx="620" cy="525" r="7"/><circle cx="620" cy="705" r="7"/><circle cx="620" cy="885" r="7"/><circle cx="1300" cy="525" r="7"/><circle cx="1300" cy="705" r="7"/><circle cx="1300" cy="885" r="7"/></svg>
-    <div class="oc">
-      <div class="oc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg');background-position:72% 18%;background-size:150%"><span class="tk">−20%</span></div>
-      <div class="oc__b"><div class="oc__t">Скидка на&nbsp;маникюр<br>в&nbsp;будний день</div><div class="oc__m">Студия «Пример» · Липецк</div><div class="oc__btn">Забрать купон</div></div>
+    <div class="fl__k" style="left:150px;top:458px"><b>1</b>Ваше предложение</div>
+    <div class="fo">
+      <div class="fo__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg');background-position:60% 25%"><span class="tk">−20%</span></div>
+      <div class="fo__b"><div class="fo__t">Маникюр в&nbsp;будний день</div><div class="fo__m">Студия «Пример»</div></div>
     </div>
-      <div class="ch" style="left:150px;top:450px"><span class="ic" data-ic="site"></span><div><b>Сайт vsekupony.ru</b><span>Карточка в&nbsp;ленте города<br>и&nbsp;в&nbsp;каталоге ниши</span></div></div>
-      <div class="ch" style="left:150px;top:630px"><span class="ic" data-ic="search"></span><div><b>Поиск Яндекса</b><span>Своя страница купона<br>в&nbsp;поисковой выдаче</span></div></div>
-      <div class="ch" style="left:150px;top:810px"><span class="ch__ic" data-soc-ic2="vk"></span><div><b>ВКонтакте</b><span>Пост в&nbsp;сообществе города</span></div></div>
-      <div class="ch" style="left:1300px;top:450px"><span class="ch__ic" data-soc-ic2="tg"></span><div><b>Telegram</b><span>Пост в&nbsp;канале города</span></div></div>
-      <div class="ch" style="left:1300px;top:630px"><span class="ch__ic" data-soc-ic2="ok"></span><div><b>Одноклассники</b><span>Пост в&nbsp;группе города</span></div></div>
-      <div class="ch" style="left:1300px;top:810px"><span class="ch__ic" data-soc-ic2="max"></span><div><b>MAX</b><span>Пост в&nbsp;канале города</span></div></div>
+    <i class="fl__ar" style="left:522px;top:705px"></i>
+    <div class="fl__k" style="left:580px;top:398px"><b>2</b>Сайт vsekupony.ru&nbsp;— основа</div>
+    <div class="site">
+      <div class="site__bar"><i></i><i></i><i></i><span><b>vsekupony.ru</b>&nbsp;/ lipetsk</span></div>
+      <div class="site__top"><em class="is-on">Все</em><em>Красота</em><em>Еда</em><em>Спорт</em><em>Авто</em></div>
+      <div class="site__g">
+        <div class="sc is-you"><div class="sc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg');background-position:60% 25%"><span class="sc__you">Ваше</span><span class="tk">−20%</span></div><div class="sc__t">Маникюр в&nbsp;будний день</div></div>
+        <div class="sc"><div class="sc__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span class="tk">5 = 4</span></div><div class="sc__t">Пятая чашка кофе в&nbsp;подарок</div></div>
+        <div class="sc"><div class="sc__ph" style="background-image:url('../assets/coupons/fitness.jpg')"><span class="tk">0 ₽</span></div><div class="sc__t">Пробная тренировка</div></div>
+        <div class="sc"><div class="sc__ph" style="background-image:url('../assets/coupons/avto-steel.jpg')"><span class="tk">−15%</span></div><div class="sc__t">Шиномонтаж перед сезоном</div></div>
+        <div class="sc"><div class="sc__ph" style="background-image:url('../assets/coupons/eda-cool.jpg')"><span class="tk">Подарок</span></div><div class="sc__t">Десерт к&nbsp;обеду</div></div>
+        <div class="sc"><div class="sc__ph" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg')"><span class="tk">1 + 1</span></div><div class="sc__t">Боулинг в&nbsp;будни</div></div>
+      </div>
+    </div>
+    <svg class="fl__l" viewBox="0 0 1920 1080"><path d="M1200 720 C 1250 720, 1250 506, 1300 506"/><path d="M1200 720 C 1250 720, 1250 612, 1300 612"/><path d="M1200 720 C 1250 720, 1250 718, 1300 718"/><path d="M1200 720 C 1250 720, 1250 824, 1300 824"/><path d="M1200 720 C 1250 720, 1250 930, 1300 930"/><circle cx="1200" cy="720" r="7"/></svg>
+    <div class="fl__k" style="left:1300px;top:398px"><b>3</b>Расходится дальше</div>
+    <div class="chs">
+      <div class="ch2"><span class="ic" data-ic="search"></span><span><b>Поиск Яндекса</b><span>своя страница в&nbsp;выдаче</span></span></div>
+      <div class="ch2"><span class="ch__ic" data-soc-ic2="vk"></span><span><b>ВКонтакте</b><span>пост в&nbsp;сообществе города</span></span></div>
+      <div class="ch2"><span class="ch__ic" data-soc-ic2="tg"></span><span><b>Telegram</b><span>пост в&nbsp;канале города</span></span></div>
+      <div class="ch2"><span class="ch__ic" data-soc-ic2="ok"></span><span><b>Одноклассники</b><span>пост в&nbsp;группе города</span></span></div>
+      <div class="ch2"><span class="ch__ic" data-soc-ic2="max"></span><span><b>MAX</b><span>пост в&nbsp;канале города</span></span></div>
+    </div>
   </section>
 
   <!-- ===================== 7б. Реклама не должна быть дорогой ===================== -->
   <section class="slide" id="s11">
     <div class="cpn__l cpn__l--full">
       <div class="in">
-        <h2 class="h1">Реклама не&nbsp;должна быть <span class="city">дорогой</span></h2>
+        <h2 class="h1">Реклама дорогой <span class="city">быть не&nbsp;должна</span></h2>
         <p class="sub">Сопоставили «Все купоны» с&nbsp;основными рекламными каналами</p>
       </div>
     </div>
@@ -916,7 +997,7 @@ a{color:inherit;text-decoration:none}
   <section class="slide" id="s8">
     <div class="cpn__l cpn__l--full">
       <div class="in">
-        <h2 class="h1">Наш следующий шаг&nbsp;—<br>выход за&nbsp;пределы <span class="city">Липецка</span></h2>
+        <h2 class="h1">Наш следующий шаг&nbsp;—<br>выход <span class="city">за&nbsp;пределы</span> Липецка</h2>
         <p class="sub">Мы&nbsp;готовим расширение «Всех купонов» и&nbsp;планируем запуск предложений в&nbsp;новых городах и&nbsp;регионах.</p>
       </div>
     </div>
@@ -940,8 +1021,8 @@ a{color:inherit;text-decoration:none}
     <div class="cpn__l cpn__l--v">
       <div class="in">
         <h2 class="h1">Первое размещение<br><span class="city">бесплатно</span></h2>
-        <p class="sub">Создайте свой первый купон<br>и&nbsp;встречайте новых клиентов уже сейчас</p>
-        <div class="free"><b>500</b><span>первых зарегистрировавшихся рекламодателей размещают купон бесплатно</span></div>
+        <p class="sub">Разместите своё первое предложение<br>и&nbsp;встречайте новых клиентов уже сейчас</p>
+        <div class="free"><b>500</b><span>первых зарегистрировавшихся рекламодателей размещают предложение бесплатно</span></div>
       </div>
       <div class="qrc qrc--big">
         <div class="qrc__l"><a href="https://vsekupony.ru"><img src="qr-site.svg" alt="QR-код: vsekupony.ru"></a></div>
@@ -957,7 +1038,7 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="posts">
-      <div class="wall"><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span class="tk">5 = 4</span></div><div class="wc__t">Каждая пятая чашка кофе в&nbsp;подарок</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>31,2к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 412</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/fitness.jpg')"><span class="tk">−35%</span></div><div class="wc__t">Годовой абонемент в&nbsp;клуб</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>18,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 236</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/pitomtsy-brown.jpg')"><span class="tk">−15%</span></div><div class="wc__t">Корм при покупке от&nbsp;3&nbsp;кг</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>12,9к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 518</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"><span class="tk">2 = 1</span></div><div class="wc__t">Маникюр с&nbsp;покрытием</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>24,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 905</span></div><i class="wc__dim"></i></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/avto-steel.jpg')"><span class="tk">−20%</span></div><div class="wc__t">Шиномонтаж перед сезоном</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>15,3к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 864</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/detyam-yellow.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Первое занятие в&nbsp;студии</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>20,8к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 471</span></div><i class="wc__dim"></i></div><div class="wc is-you"><div class="wc__ph" style="background-image:url('../assets/coupons/eda-cool.jpg')"><span class=wc__you>Ваш купон</span><span class="tk">0 ₽</span></div><div class="wc__t">Ваше первое предложение</div><div class="wc__s"><span>Тут будут ваши клиенты</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg')"><span class="tk">−30%</span></div><div class="wc__t">Боулинг в&nbsp;будни</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>27,1к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 198</span></div><i class="wc__dim"></i></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/dom-beige.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Текстиль и&nbsp;посуда</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>11,7к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 397</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/beauty.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Окрашивание любой сложности</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>34,5к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 4 052</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/coffee.jpg')"><span class="tk">Подарок</span></div><div class="wc__t">Десерт к&nbsp;любому напитку</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>19,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 340</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/sport-teal.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Пробная неделя в&nbsp;клубе</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>22,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 643</span></div><i class="wc__dim"></i></div></div></div>
+      <div class="wall"><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span class="tk">5 = 4</span></div><div class="wc__t">Каждая пятая чашка кофе в&nbsp;подарок</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>31,2к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 412</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/fitness.jpg')"><span class="tk">−35%</span></div><div class="wc__t">Годовой абонемент в&nbsp;клуб</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>18,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 236</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/pitomtsy-brown.jpg')"><span class="tk">−15%</span></div><div class="wc__t">Корм при покупке от&nbsp;3&nbsp;кг</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>12,9к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 518</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"><span class="tk">2 = 1</span></div><div class="wc__t">Маникюр с&nbsp;покрытием</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>24,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 905</span></div><i class="wc__dim"></i></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/avto-steel.jpg')"><span class="tk">−20%</span></div><div class="wc__t">Шиномонтаж перед сезоном</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>15,3к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 864</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/odezhda-dark.jpg')"><span class="tk">−30%</span></div><div class="wc__t">Пальто из&nbsp;новой коллекции</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>20,8к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 471</span></div><i class="wc__dim"></i></div><div class="wc is-you"><div class="wc__ph" style="background-image:url('../assets/coupons/eda-cool.jpg')"><span class=wc__you>Ваше</span><span class="tk">0 ₽</span></div><div class="wc__t">Ваше первое предложение</div><div class="wc__s"><span>Тут будут ваши клиенты</span></div></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg')"><span class="tk">−30%</span></div><div class="wc__t">Боулинг в&nbsp;будни</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>27,1к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 3 198</span></div><i class="wc__dim"></i></div></div><div class="wall__col"><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/dom-beige.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Текстиль и&nbsp;посуда</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>11,7к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 1 397</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/beauty.jpg')"><span class="tk">−25%</span></div><div class="wc__t">Окрашивание любой сложности</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>34,5к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 4 052</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/coffee.jpg')"><span class="tk">Подарок</span></div><div class="wc__t">Десерт к&nbsp;любому напитку</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>19,6к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 340</span></div><i class="wc__dim"></i></div><div class="wc"><div class="wc__ph" style="background-image:url('../assets/coupons/sport-teal.jpg')"><span class="tk">0 ₽</span></div><div class="wc__t">Пробная неделя в&nbsp;клубе</div><div class="wc__s"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>22,4к</span><span class="is-hot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/></svg>забрали 2 643</span></div><i class="wc__dim"></i></div></div></div>
     </div>
   </section>
 </div>
@@ -1005,7 +1086,8 @@ a{color:inherit;text-decoration:none}
     eye: '<path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/>',
     phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
     pin: '<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>',
-    chart: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>'
+    chart: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>',
+    check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>'
   };
   function icon(k) {
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + PATH[k] + '</svg>';
@@ -1094,9 +1176,18 @@ a{color:inherit;text-decoration:none}
   document.querySelectorAll(".slide").forEach(function (sl) {
     if (!sl.querySelector(".cpn__l--v")) return;
     sl.classList.add("has-frame");
-    var grey = sl.querySelector(".phone-panel, .posts") ? '<path fill="#ECECEC" d="M1134,40H1840A40,40 0 0 1 1880,80V1000A40,40 0 0 1 1840,1040H1134A34,34 0 0 0 1100,1006V74A34,34 0 0 0 1134,40Z"/>' : "";
-    sl.insertAdjacentHTML("afterbegin", '<svg class="frame" viewBox="0 0 1920 1080"><path fill="#fff" d="M80,40H1066A34,34 0 0 0 1100,74V1006A34,34 0 0 0 1066,1040H80A40,40 0 0 1 40,1000V80A40,40 0 0 1 80,40Z"/>' +
-      grey + '<path fill="none" ' + DASH + ' d="M1098.5,82V998"/></svg>');
+    /* рамка F, скругление R, линия отрыва X, вырез N — из CSS-переменных слайда */
+    var cs = getComputedStyle(sl), F = parseFloat(cs.getPropertyValue("--f")), R = parseFloat(cs.getPropertyValue("--r")),
+        X = parseFloat(cs.getPropertyValue("--cut")), N = 34, W = 1920 - F, H = 1080 - F;
+    var grey = sl.querySelector(".phone-panel, .posts") ? '<path fill="#ECECEC" d="M' + (X + N) + ',' + F + 'H' + (W - R) + 'A' + R + ',' + R + ' 0 0 1 ' + W + ',' + (F + R) + 'V' + (H - R) + 'A' + R + ',' + R + ' 0 0 1 ' + (W - R) + ',' + H + 'H' + (X + N) + 'A' + N + ',' + N + ' 0 0 0 ' + X + ',' + (H - N) + 'V' + (F + N) + 'A' + N + ',' + N + ' 0 0 0 ' + (X + N) + ',' + F + 'Z"/>' : "";
+    sl.insertAdjacentHTML("afterbegin", '<svg class="frame" viewBox="0 0 1920 1080"><path fill="#fff" d="M' + (F + R) + ',' + F + 'H' + (X - N) + 'A' + N + ',' + N + ' 0 0 0 ' + X + ',' + (F + N) + 'V' + (H - N) + 'A' + N + ',' + N + ' 0 0 0 ' + (X - N) + ',' + H + 'H' + (F + R) + 'A' + R + ',' + R + ' 0 0 1 ' + F + ',' + (H - R) + 'V' + (F + R) + 'A' + R + ',' + R + ' 0 0 1 ' + (F + R) + ',' + F + 'Z"/>' +
+      grey + '<path fill="none" ' + DASH + ' d="M' + (X - 1.5) + ',' + (F + N + 8) + 'V' + (H - N - 8) + '"/></svg>');
+    /* стена купонов обрезана по контуру купона с вырезами слева (в Figma — маска по серому контуру) */
+    var posts = sl.querySelector(".posts");
+    if (posts) {
+      var pw = W - X, ph = H - F;
+      posts.style.clipPath = "path('M" + N + ",0H" + (pw - R) + "A" + R + "," + R + " 0 0 1 " + pw + "," + R + "V" + (ph - R) + "A" + R + "," + R + " 0 0 1 " + (pw - R) + "," + ph + "H" + N + "A" + N + "," + N + " 0 0 0 0," + (ph - N) + "V" + N + "A" + N + "," + N + " 0 0 0 " + N + ",0Z')";
+    }
   });
   /* Блок с QR-кодом: вырезы сверху и снизу на линии отрыва */
   document.querySelectorAll(".qrc").forEach(function (q) {
@@ -1153,6 +1244,16 @@ a{color:inherit;text-decoration:none}
       el.style.transform = "rotate(" + deg.toFixed(2) + "deg)";
     });
   });
+
+  /* Висячие предлоги и союзы (правка 08.10): короткое слово в конце строки
+     ломает чтение — приклеиваем его к следующему неразрывным пробелом */
+  (function glue(node) {
+    if (node.nodeType === 3) {
+      node.nodeValue = node.nodeValue.replace(/(^|[\s\u00A0(«])(в|во|на|с|со|к|ко|и|а|о|об|у|от|до|по|за|из|не|ни|но|для|без|при|под|над|что|как|мы|вы|их|его|её|это|то|же|или|—)\s+/gi, "$1$2\u00A0");
+      return;
+    }
+    if (node.nodeType === 1 && !/^(SCRIPT|STYLE|SVG)$/i.test(node.nodeName)) node.childNodes.forEach(glue);
+  })(document.querySelector(".deck"));
 
   /* Просмотр: слайды ужимаются под окно. В ?bare=1 и в печати — 1:1. */
   if (q.get("bare")) return;
