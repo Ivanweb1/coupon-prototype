@@ -260,7 +260,9 @@ a{color:inherit;text-decoration:none}
    несколько белых — слайд на фирменном красном, текст белый, плашка белая.
    Шар знака — крупно и прозрачно, для жизни.
    ========================================================================== */
-.slide--red .cpn__l{background:none}
+/* Белая рамка 16 px вокруг красного поля — зеркально красной рамке белых слайдов */
+.slide--red{background:#fff}
+.slide--red .cpn__l{background:var(--brand);overflow:hidden}
 .slide--red .h1{color:#fff}
 .slide--red .sub{color:rgba(255,255,255,.94)}
 .slide--red .city{background:#fff;color:var(--brand)}
@@ -759,8 +761,8 @@ a{color:inherit;text-decoration:none}
 
   <!-- ===================== 2. Выгоду ищут каждый день ===================== -->
   <section class="slide slide--red" id="s3">
-    <img class="wm" src="../assets/brand/logo-white.png" alt="">
     <div class="cpn__l cpn__l--full">
+      <img class="wm" src="../assets/brand/logo-white.png" alt="">
       <div class="in">
         <h2 class="h1">Выгоду ищут <span class="city">каждый день</span></h2>
         <p class="sub">Запросы «купон», «акция», «скидка» и&nbsp;«промокод» показывают интерес людей к&nbsp;выгоде</p>
@@ -930,8 +932,8 @@ a{color:inherit;text-decoration:none}
 
   <!-- ===================== 7а. Одно предложение — несколько площадок ===================== -->
   <section class="slide slide--red" id="s10">
-    <img class="wm" src="../assets/brand/logo-white.png" alt="" style="right:-160px;bottom:auto;top:-240px;height:700px">
     <div class="cpn__l cpn__l--full">
+      <img class="wm" src="../assets/brand/logo-white.png" alt="" style="right:-160px;bottom:auto;top:-240px;height:700px">
       <div class="in">
         <h2 class="h1">Одно предложение&nbsp;—<br><span class="city">несколько площадок</span> для продвижения</h2>
         <p class="sub">Размещаете предложение на&nbsp;нашем сайте&nbsp;— мы&nbsp;публикуем его в&nbsp;поиске и&nbsp;соцсетях</p>
