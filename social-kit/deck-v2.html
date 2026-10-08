@@ -122,7 +122,7 @@ a{color:inherit;text-decoration:none}
 .in{position:absolute;left:calc(150px - var(--f));top:150px;width:860px}
 .eyebrow{display:block;font-size:26px;font-weight:600;letter-spacing:.01em;color:var(--brand)}
 .h1{margin:18px 0 0;font-size:80px;font-weight:800;line-height:1.06;letter-spacing:-.025em}
-.sub{margin:28px 0 0;font-size:32px;font-weight:500;line-height:1.38;color:#3A3A3A}
+.sub{margin:24px 0 0;font-size:32px;font-weight:500;line-height:1.38;color:#3A3A3A}
 .sub b{color:var(--ink);font-weight:700}
 .city{
   display:inline-block;padding:0 .16em .04em;margin:0 .04em;border-radius:.18em;
@@ -227,9 +227,8 @@ a{color:inherit;text-decoration:none}
    инфографикой; 2) предприниматель видит, что предложить можно что угодно:
    скидку, подарок, 1+1, первое посещение — не только «купон».
    Пять одинаковых карточек ленты убраны: человек не знаком с интерфейсом. */
-#s2 .in{top:110px;width:1660px}
+#s2 .in{top:100px;width:1660px}
 #s2 .h1{margin:0}
-#s2 .sub{margin-top:14px}
 .path__k,.offs__k{position:absolute;left:150px;font-size:30px;font-weight:800;letter-spacing:-.01em}
 .path__k{top:350px}
 .path{position:absolute;left:150px;right:150px;top:410px;display:flex;gap:56px}
@@ -270,9 +269,9 @@ a{color:inherit;text-decoration:none}
    в день ≈ 8 в секунду); слева — четыре запроса крупно; справа — один
    скриншот Вордстата («промокод») крупно, итоговая строка обведена и
    продублирована выноской, чтобы цифру было видно издалека. */
-#s3 .in{top:96px;width:1660px}
+#s3 .in{top:100px;width:1660px}
 #s3 .h1{margin:0}
-#s3 .sub{margin-top:20px;max-width:1300px}
+#s3 .sub{max-width:1620px}
 /* Строка запросов: четыре слова и итог — крупно, белым по красному */
 .pace{position:absolute;left:150px;right:150px;top:340px;display:flex;color:#fff}
 .pace div{flex:1;display:flex;flex-direction:column;gap:6px;padding-left:34px;border-left:3px dashed rgba(255,255,255,.45)}
@@ -288,6 +287,7 @@ a{color:inherit;text-decoration:none}
 .ws__bar{height:48px;display:flex;align-items:center;gap:8px;padding:0 18px;background:var(--surface);border-bottom:2px solid var(--line)}
 .ws__bar i{width:11px;height:11px;border-radius:50%;background:var(--line-strong)}
 .ws__bar span{margin-left:12px;font-size:18px;font-weight:700;color:var(--ink-2)}
+.ws__bar em{margin-left:auto;font-style:normal;font-size:16px;font-weight:600;color:var(--ink-3)}
 .ws__body{position:relative;height:486px;background:#fff url('photos/wordstat/promokod-dynamics-clean.png') 0 14px / 1620px auto no-repeat}
 .ws__ring{position:absolute;left:214px;top:211px;width:34px;height:34px;border-radius:50%;box-shadow:0 0 0 4px var(--brand),0 0 0 10px rgba(221,68,60,.2)}
 .ws__pk{position:absolute;left:276px;top:203px;display:flex;align-items:center;gap:12px}
@@ -298,7 +298,7 @@ a{color:inherit;text-decoration:none}
 /* ==========================================================================
    4. Сервис разработан предпринимателями — команда
    ========================================================================== */
-#s4 .in{width:1660px;top:90px}
+#s4 .in{width:1660px;top:100px}
 #s4 .h1{margin:0}
 #s4 .sub{max-width:1640px}
 .team{position:absolute;left:150px;top:400px;display:flex;align-items:flex-start;gap:48px}
@@ -321,10 +321,9 @@ a{color:inherit;text-decoration:none}
    происходит. Теперь главный объект — платформа: предложение сначала
    выкладывается на сайт (лента города, каталог ниши), а уже с сайта
    расходится в поиск и соцсети. Слайд красный — для ритма. */
-#s10 .in,#s11 .in{width:1660px;top:96px}
+#s10 .in,#s11 .in{width:1660px;top:100px}
 #s10 .h1,#s11 .h1{margin:0}
-#s10 .sub,#s11 .sub{margin-top:24px;max-width:1500px}
-#s10 .in{top:90px}
+#s10 .sub,#s11 .sub{max-width:1500px}
 .fl__k{position:absolute;display:flex;align-items:center;gap:14px;font-size:26px;font-weight:800;color:#fff}
 .fl__k b{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--brand);font-size:23px}
 .fl__ar{position:absolute;width:22px;height:22px;border-top:4px solid #fff;border-right:4px solid #fff;transform:rotate(45deg)}
@@ -401,7 +400,7 @@ a{color:inherit;text-decoration:none}
 /* ==========================================================================
    6. Запуск занимает 3 шага
    ========================================================================== */
-#s6 .in{width:1500px;top:120px}
+#s6 .in{width:1500px;top:100px}
 #s6 .h1{margin:0}
 /* Шаг — купон: сверху экран платформы (photos/lk/step-*.png), линия
    отрыва с вырезами, ниже номер, что сделать и зачем. */
@@ -464,9 +463,8 @@ a{color:inherit;text-decoration:none}
    7. AI-помощник — скриншоты кабинета (lk/client-design.html), снятые
    playwright'ом в photos/lk/
    ========================================================================== */
-#s7 .in{width:1500px;top:110px}
+#s7 .in{width:1500px;top:100px}
 #s7 .h1{margin:0}
-#s7 .sub{margin-top:24px}
 /* Четыре колонки слева направо: сверху номер и подпись, под ней — что это
    в кабинете; между колонками стрелки, как на слайде с шагами. */
 .ai{position:absolute;left:150px;right:150px;top:340px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 52px}
@@ -516,7 +514,6 @@ a{color:inherit;text-decoration:none}
    пунктир. Москва — серым, для ориентира. */
 #s8 .in{width:1700px;top:100px}
 #s8 .h1{margin:0}
-#s8 .sub{margin-top:24px}
 /* Карта: map-ru.svg (build-map.py) — регионы по настоящим границам.
    Подписи — поверх, по координатам, которые печатает build-map.py. */
 .map{position:absolute;left:150px;top:400px;width:1180px;height:600px;border-radius:30px;background:var(--surface) url('map-ru.svg') 0 0 / 1180px 600px no-repeat;overflow:hidden}
@@ -761,7 +758,7 @@ a{color:inherit;text-decoration:none}
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1">Выгоду ищут <span class="city">каждый день</span></h2>
-        <p class="sub">Запросы со&nbsp;словами «купон», «акция», «скидка» и&nbsp;«промокод» показывают интерес людей к&nbsp;выгодным предложениям</p>
+        <p class="sub">Запросы «купон», «акция», «скидка» и&nbsp;«промокод» показывают интерес людей к&nbsp;выгоде</p>
       </div>
     </div>
     <div class="pace">
@@ -774,10 +771,9 @@ a{color:inherit;text-decoration:none}
     <!-- Настоящий скриншот Вордстата — доказательство: любой может открыть и проверить.
          photos/wordstat/promokod-dynamics.png 1509×591, кадр x 100–1480 -->
     <div class="ws">
-      <div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «промокод» · Динамика</span></div>
+      <div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «промокод» · Динамика</span><em>Яндекс Вордстат, вся Россия · запросы за&nbsp;5&nbsp;сентября&nbsp;— 4&nbsp;октября 2026</em></div>
       <div class="ws__body"><i class="ws__ring"></i><div class="ws__pk"><span class="tk">13&nbsp;млн</span><span>пик&nbsp;— декабрь 2024</span></div></div>
     </div>
-    <div class="ws-src">Яндекс Вордстат, вся Россия: запросы за&nbsp;5&nbsp;сентября&nbsp;— 4&nbsp;октября 2026, динамика за&nbsp;октябрь 2024&nbsp;— сентябрь 2026</div>
   </section>
 
   <!-- ===================== 3. Все купоны ===================== -->
@@ -1239,6 +1235,30 @@ a{color:inherit;text-decoration:none}
       var fs = parseFloat(getComputedStyle(el).fontSize), w = el.offsetWidth;
       var deg = -2 * Math.min(1, fs * 4.2 / w);
       el.style.transform = "rotate(" + deg.toFixed(2) + "deg)";
+    });
+  });
+
+  /* Единые отступы (правка 08.10): заголовок → подзаголовок — 24 px (CSS .sub),
+     подзаголовок → содержимое — 64 px на всех слайдах. Блоки содержимого
+     стоят абсолютно, поэтому после загрузки шрифтов сдвигаем их группой так,
+     чтобы верх первого блока был ровно на 64 px ниже подзаголовка. */
+  var BODY = {
+    s3: ".pace,.ws", s2: ".path__k,.path,.offs__k,.offs", s7: ".ai", s6: ".trio",
+    s4: ".team", s10: ".fl__k,.fo,.fl__ar,.site,.fl__l,.chs", s11: ".cmp__lg,.cmp", s8: ".map,.next"
+  };
+  document.fonts.ready.then(function () {
+    Object.keys(BODY).forEach(function (id) {
+      var sl = document.getElementById(id), sub = sl.querySelector(".sub");
+      var base = sl.getBoundingClientRect().top, z = sl.getBoundingClientRect().height / 1080;
+      var want = (sub.getBoundingClientRect().bottom - base) / z + 64;
+      var els = [].slice.call(sl.querySelectorAll(BODY[id]));
+      var top = Math.min.apply(null, els.filter(function (e) { return !e.matches(".fl__l"); })
+        .map(function (e) { return (e.getBoundingClientRect().top - base) / z; }));
+      var d = Math.round(want - top);
+      els.forEach(function (e) {
+        if (e.matches(".fl__l")) { e.style.transform = "translateY(" + d + "px)"; return; }
+        e.style.top = (parseFloat(getComputedStyle(e).top) + d) + "px";
+      });
     });
   });
 
