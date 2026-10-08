@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Все купоны — презентация для бизнеса (v2, правки)</title>
+<title>ВСЕКУПОНЫ — презентация для бизнеса (v2, правки)</title>
 <!-- ==========================================================================
      Презентация для бизнеса — девять слайдов 1920×1080
      ==========================================================================
@@ -246,10 +246,10 @@ a{color:inherit;text-decoration:none}
 .pst__v.is-ok{background:#2E9E5B;color:#fff;font-size:23px;white-space:nowrap}
 .pst__v.is-ok svg{color:#fff}
 .offs__k{top:770px}
-.offs{position:absolute;left:150px;right:150px;top:830px;display:flex;gap:22px}
+.offs{position:absolute;left:150px;right:150px;top:830px;display:flex;gap:28px}
 .off{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
 .off .tk{font-size:38px}
-.off > span:not(.tk){font-size:21px;font-weight:600;line-height:1.3;color:var(--ink)}
+.off > span:not(.tk){font-size:22px;font-weight:600;line-height:1.3;color:var(--ink-2);white-space:nowrap}
 
 /* ==========================================================================
    Красный слайд (правка 08.10): презентация белая подряд — скучно; через
@@ -265,28 +265,40 @@ a{color:inherit;text-decoration:none}
 /* ==========================================================================
    2. Выгоду ищут каждый день — запросы Вордстата (переделан 08.10)
    ==========================================================================
-   Четыре скриншота веером не читались с телевизора — убраны. Слева —
-   белая карточка с запросами крупно, справа — тот же объём в разрезе
-   месяц → день → секунда: 20 млн за 30 дней ≈ 670 тыс. в день ≈ 8 в секунду.
-   Динамику по месяцам добавим, когда будет выгрузка вкладки «Динамика». */
-#s3 .in{top:110px;width:1660px}
+   Веер из четырёх скриншотов не читался с телевизора. Теперь: строкой —
+   объём в разрезе месяц → день → секунда (20 млн за 30 дней ≈ 670 тыс.
+   в день ≈ 8 в секунду); слева — четыре запроса крупно; справа — один
+   скриншот Вордстата («промокод») крупно, итоговая строка обведена и
+   продублирована выноской, чтобы цифру было видно издалека. */
+#s3 .in{top:96px;width:1660px}
 #s3 .h1{margin:0}
-#s3 .sub{margin-top:24px;max-width:1300px}
-.wq{position:absolute;left:150px;width:1000px;top:400px;padding:44px 48px 40px;border-radius:32px;background:#fff;box-shadow:0 40px 70px -40px rgba(80,10,6,.55)}
-.wq__k{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:22px;font-size:24px;font-weight:600;color:var(--ink-2)}
-.wq__k b{font-size:26px;font-weight:800;color:var(--ink)}
-.wq__r{display:flex;align-items:center;gap:24px;height:96px;border-top:2px solid var(--line)}
-.wq__q{flex:none;width:260px;display:flex;align-items:center;gap:14px;font-size:34px;font-weight:800;letter-spacing:-.01em}
-.wq__q svg{width:30px;height:30px;color:var(--ink-4);flex:none}
-.wq__bar{flex:1;height:26px;border-radius:13px;background:var(--surface);overflow:hidden}
-.wq__bar i{display:block;height:100%;border-radius:13px;background:var(--brand)}
-.wq__n{flex:none;width:210px;text-align:right;font-size:44px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.pace{position:absolute;left:1230px;right:150px;top:400px;display:flex;flex-direction:column;color:#fff}
-.pace div{padding:26px 0 24px;border-top:3px dashed rgba(255,255,255,.45)}
-.pace div:first-child{padding-top:0;border-top:0}
-.pace b{display:block;font-size:96px;font-weight:800;letter-spacing:-.04em;line-height:1}
-.pace span{display:block;margin-top:8px;font-size:28px;font-weight:600;line-height:1.3;opacity:.94}
-.ws-src{position:absolute;left:150px;top:960px;font-size:22px;font-weight:500;color:rgba(255,255,255,.85)}
+#s3 .sub{margin-top:20px;max-width:1300px}
+.pace{position:absolute;left:150px;right:150px;top:350px;display:flex;color:#fff}
+.pace div{flex:1;display:flex;align-items:baseline;gap:16px;padding-left:36px;border-left:3px dashed rgba(255,255,255,.45)}
+.pace div:first-child{padding-left:0;border-left:0}
+.pace b{font-size:76px;font-weight:800;letter-spacing:-.04em;line-height:1;white-space:nowrap}
+.pace span{font-size:26px;font-weight:600;line-height:1.25;opacity:.94}
+.wq{position:absolute;left:150px;width:780px;top:500px;padding:30px 38px 26px;border-radius:30px;background:#fff;box-shadow:0 40px 70px -40px rgba(80,10,6,.55)}
+.wq__k{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;font-size:21px;font-weight:600;color:var(--ink-2)}
+.wq__k b{font-size:23px;font-weight:800;color:var(--ink)}
+.wq__r{display:flex;align-items:center;gap:20px;height:84px;border-top:2px solid var(--line)}
+.wq__q{flex:none;width:220px;display:flex;align-items:center;gap:12px;font-size:31px;font-weight:800;letter-spacing:-.01em}
+.wq__q svg{width:27px;height:27px;color:var(--ink-4);flex:none}
+.wq__bar{flex:1;height:22px;border-radius:11px;background:var(--surface);overflow:hidden}
+.wq__bar i{display:block;height:100%;border-radius:11px;background:var(--brand)}
+.wq__n{flex:none;width:180px;text-align:right;font-size:38px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+/* Скриншот: promokod.png 1367×466 один к одному, кадр x 10–790, y 105–405 —
+   вкладки, итоговая строка и начало таблицы; уменьшать нельзя — не читается */
+.ws{position:absolute;left:990px;right:150px;top:566px;border-radius:24px;background:#fff;overflow:hidden;box-shadow:0 40px 70px -40px rgba(80,10,6,.55)}
+.ws__bar{height:48px;display:flex;align-items:center;gap:8px;padding:0 18px;background:var(--surface);border-bottom:2px solid var(--line)}
+.ws__bar i{width:11px;height:11px;border-radius:50%;background:var(--line-strong)}
+.ws__bar span{margin-left:12px;font-size:18px;font-weight:700;color:var(--ink-2)}
+.ws__body{position:relative;height:250px;background:#fff url('photos/wordstat/promokod.png') -10px -105px / 1367px auto no-repeat}
+.ws__hl{position:absolute;left:10px;top:128px;width:672px;height:44px;border-radius:10px;box-shadow:0 0 0 4px var(--brand),0 0 0 9999px rgba(255,255,255,.55)}
+.ws__call{position:absolute;left:12px;top:196px;display:flex;align-items:center;gap:16px}
+.ws__call .tk{font-size:36px}
+.ws__call > span:not(.tk){font-size:24px;font-weight:700;color:var(--ink)}
+.ws-src{position:absolute;left:150px;top:1000px;font-size:22px;font-weight:500;color:rgba(255,255,255,.85)}
 
 /* ==========================================================================
    4. Сервис разработан предпринимателями — команда
@@ -712,7 +724,7 @@ a{color:inherit;text-decoration:none}
   <section class="slide" id="s1">
     <div class="cpn__l cpn__l--v">
       <div class="in">
-        <span class="eyebrow">Все купоны · для бизнеса</span>
+        <span class="eyebrow">ВСЕКУПОНЫ · для бизнеса</span>
         <h1 class="h1">Тысячи покупателей с&nbsp;реальным спросом уже <span class="city">внутри нашей платформы</span></h1>
         <p class="sub">Мы&nbsp;знаем, кто они, чего они хотят и&nbsp;как довести их до&nbsp;покупки именно вашего продукта</p>
       </div>
@@ -763,6 +775,11 @@ a{color:inherit;text-decoration:none}
         <p class="sub">Запросы со&nbsp;словами «купон», «акция», «скидка» и&nbsp;«промокод» показывают интерес людей к&nbsp;выгодным предложениям</p>
       </div>
     </div>
+    <div class="pace">
+      <div><b>20&nbsp;млн</b><span>запросов о&nbsp;выгоде<br>за&nbsp;месяц</span></div>
+      <div><b>670&nbsp;тыс.</b><span>каждый<br>день</span></div>
+      <div><b>8</b><span>каждую<br>секунду</span></div>
+    </div>
     <div class="wq">
       <div class="wq__k"><b>Запросов за&nbsp;месяц в&nbsp;Яндексе</b>по&nbsp;всей России</div>
       <div class="wq__r"><div class="wq__q"><svg data-i="search"></svg>промокод</div><div class="wq__bar"><i style="width:100%"></i></div><div class="wq__n">10,6 млн</div></div>
@@ -770,10 +787,9 @@ a{color:inherit;text-decoration:none}
       <div class="wq__r"><div class="wq__q"><svg data-i="search"></svg>скидка</div><div class="wq__bar"><i style="width:36%"></i></div><div class="wq__n">3,8 млн</div></div>
       <div class="wq__r"><div class="wq__q"><svg data-i="search"></svg>купон</div><div class="wq__bar"><i style="width:6%"></i></div><div class="wq__n">619 тыс.</div></div>
     </div>
-    <div class="pace">
-      <div><b>20&nbsp;млн</b><span>запросов о&nbsp;выгоде за&nbsp;месяц</span></div>
-      <div><b>670&nbsp;тыс.</b><span>каждый день</span></div>
-      <div><b>8</b><span>каждую секунду</span></div>
+    <div class="ws">
+      <div class="ws__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «промокод»</span></div>
+      <div class="ws__body"><i class="ws__hl"></i><div class="ws__call"><span class="tk">10&nbsp;619&nbsp;003</span><span>запроса за&nbsp;месяц</span></div></div>
     </div>
     <div class="ws-src">Яндекс Вордстат, 5&nbsp;сентября&nbsp;— 4&nbsp;октября 2026</div>
   </section>
@@ -782,7 +798,7 @@ a{color:inherit;text-decoration:none}
   <section class="slide" id="s2">
     <div class="cpn__l cpn__l--full">
       <div class="in">
-        <div class="brandup"><img class="brandup__m" src="../assets/brand/logo-red.png" alt=""><div><h2 class="h1">Все купоны</h2>
+        <div class="brandup"><img class="brandup__m" src="../assets/brand/logo-red.png" alt=""><div><h2 class="h1">ВСЕКУПОНЫ</h2>
         <p class="sub">честный сервис для создания и&nbsp;распространения специальных предложений</p></div></div>
       </div>
     </div>
@@ -799,13 +815,12 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="offs__k">Что можно предложить&nbsp;— любой формат</div>
     <div class="offs">
-      <div class="off"><span class="tk">−20%</span><span>Скидка на&nbsp;услугу или товар</span></div>
+      <div class="off"><span class="tk">−20%</span><span>Скидка на&nbsp;услугу</span></div>
       <div class="off"><span class="tk">1&nbsp;+&nbsp;1</span><span>Два по&nbsp;цене одного</span></div>
       <div class="off"><span class="tk">Подарок</span><span>Подарок к&nbsp;покупке</span></div>
-      <div class="off"><span class="tk">0&nbsp;₽</span><span>Первое посещение бесплатно</span></div>
+      <div class="off"><span class="tk">0&nbsp;₽</span><span>Первый визит</span></div>
       <div class="off"><span class="tk">349&nbsp;₽</span><span>Специальная цена</span></div>
-      <div class="off"><span class="tk">5&nbsp;=&nbsp;4</span><span>Каждый пятый&nbsp;— в&nbsp;подарок</span></div>
-      <div class="off"><span class="tk">Код</span><span>Промокод на&nbsp;заказ</span></div>
+      <div class="off"><span class="tk">5&nbsp;=&nbsp;4</span><span>Пятый&nbsp;— в&nbsp;подарок</span></div>
     </div>
   </section>
 
@@ -815,7 +830,7 @@ a{color:inherit;text-decoration:none}
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1"><span class="city">AI</span>-помощник</h2>
-        <p class="sub">Внутри сервиса «Все купоны» работает AI-ассистент, который:</p>
+        <p class="sub">Внутри сервиса ВСЕКУПОНЫ работает AI-ассистент, который:</p>
       </div>
     </div>
     <div class="ai">
@@ -973,14 +988,14 @@ a{color:inherit;text-decoration:none}
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1">Реклама дорогой <span class="city">быть не&nbsp;должна</span></h2>
-        <p class="sub">Сопоставили «Все купоны» с&nbsp;основными рекламными каналами</p>
+        <p class="sub">Сопоставили ВСЕКУПОНЫ с&nbsp;основными рекламными каналами</p>
       </div>
     </div>
     <div class="cmp__lg"><span><i style="background:#2E9E5B"></i>выгодно</span><span><i style="background:#E8A33D"></i>средне</span><span><i style="background:#E0665D"></i>невыгодно</span></div>
     <table class="cmp">
       <thead><tr><th></th><th>Цена</th><th>Охват</th><th>Скорость<br>реализации</th><th>Измеримость</th><th>Масштаби&shy;рование</th><th>Удобство</th><th>Минимальный<br>бюджет</th></tr></thead>
       <tbody>
-        <tr class="me"><td><span class="cmp__brand"><img src="../assets/brand/logo-white.png" alt="">Все купоны</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Точная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Максимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:4%"></b></span>от&nbsp;1&nbsp;000&nbsp;₽</span></td></tr>
+        <tr class="me"><td><span class="cmp__brand"><img src="../assets/brand/logo-white.png" alt="">ВСЕКУПОНЫ</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Точная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Максимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:4%"></b></span>от&nbsp;1&nbsp;000&nbsp;₽</span></td></tr>
         <tr><td>Доски объявлений</td><td><span class="rt rt--n"><i></i><i></i><i></i>Высокая ↑</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренное</span></td><td><span class="bud"><span class="bud__b"><b style="width:20%"></b></span>от&nbsp;10&nbsp;000&nbsp;₽</span></td></tr>
         <tr><td>Поисковые системы</td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Точная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Минимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:60%"></b></span>от&nbsp;30&nbsp;000&nbsp;₽</span></td></tr>
         <tr><td>Наружная реклама</td><td><span class="rt rt--n"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Сложное</span></td><td><span class="rt rt--n"><i></i><i></i><i></i>Минимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:30%"></b></span>от&nbsp;15&nbsp;000&nbsp;₽</span></td></tr>
@@ -998,7 +1013,7 @@ a{color:inherit;text-decoration:none}
     <div class="cpn__l cpn__l--full">
       <div class="in">
         <h2 class="h1">Наш следующий шаг&nbsp;—<br>выход <span class="city">за&nbsp;пределы</span> Липецка</h2>
-        <p class="sub">Мы&nbsp;готовим расширение «Всех купонов» и&nbsp;планируем запуск предложений в&nbsp;новых городах и&nbsp;регионах.</p>
+        <p class="sub">Мы&nbsp;готовим расширение сервиса ВСЕКУПОНЫ и&nbsp;планируем запуск предложений в&nbsp;новых городах и&nbsp;регионах.</p>
       </div>
     </div>
     <div class="map" data-map><div class="map__ins"><img src="map-ru-inset.svg" alt=""><span>Россия: фрагмент в рамке</span></div></div>
