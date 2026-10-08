@@ -335,12 +335,13 @@ a{color:inherit;text-decoration:none}
 .fl__k b{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--brand);font-size:23px}
 .fl__ar{position:absolute;width:22px;height:22px;border-top:4px solid #fff;border-right:4px solid #fff;transform:rotate(45deg)}
 /* 1. Ваше предложение — маленькая карточка */
-.fo{position:absolute;left:150px;top:520px;width:330px;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 40px 60px -36px rgba(80,10,6,.6)}
-.fo__ph{position:relative;height:190px;background:center/cover}
+.fo{position:absolute;left:150px;top:460px;width:330px;height:520px;display:flex;flex-direction:column;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 40px 60px -36px rgba(80,10,6,.6)}
+.fo__ph{position:relative;flex:none;height:290px;background:center/cover}
 .fo__ph .tk{position:absolute;left:16px;bottom:16px;font-size:28px}
-.fo__b{padding:18px 22px 22px}
-.fo__t{font-size:24px;font-weight:800;line-height:1.18;letter-spacing:-.01em}
-.fo__m{margin-top:6px;font-size:18px;font-weight:500;color:var(--ink-3)}
+.fo__b{flex:1;display:flex;flex-direction:column;padding:22px 24px 24px}
+.fo__t{font-size:27px;font-weight:800;line-height:1.18;letter-spacing:-.01em}
+.fo__btn{margin-top:auto;height:52px;border-radius:26px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:20px;font-weight:700}
+.fo__m{margin-top:8px;font-size:19px;font-weight:500;color:var(--ink-3)}
 /* 2. Сайт — окно браузера с лентой города */
 .site{position:absolute;left:580px;top:460px;width:620px;height:520px;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 50px 80px -40px rgba(80,10,6,.65)}
 .site__bar{height:54px;display:flex;align-items:center;gap:8px;padding:0 20px;background:var(--surface);border-bottom:2px solid var(--line)}
@@ -941,12 +942,12 @@ a{color:inherit;text-decoration:none}
         <p class="sub">Размещаете предложение на&nbsp;нашем сайте&nbsp;— мы&nbsp;публикуем его в&nbsp;поиске и&nbsp;соцсетях</p>
       </div>
     </div>
-    <div class="fl__k" style="left:150px;top:458px"><b>1</b>Ваше предложение</div>
+    <div class="fl__k" style="left:150px;top:398px"><b>1</b>Ваше предложение</div>
     <div class="fo">
       <div class="fo__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg');background-position:60% 25%"><span class="tk">−20%</span></div>
-      <div class="fo__b"><div class="fo__t">Маникюр в&nbsp;будний день</div><div class="fo__m">Студия «Пример»</div></div>
+      <div class="fo__b"><div class="fo__t">Маникюр в&nbsp;будний день</div><div class="fo__m">Студия «Пример»</div><div class="fo__btn">Получить скидку</div></div>
     </div>
-    <i class="fl__ar" style="left:522px;top:705px"></i>
+    <i class="fl__ar" style="left:522px;top:709px"></i>
     <div class="fl__k" style="left:580px;top:398px"><b>2</b>Сайт vsekupony.ru&nbsp;— основа</div>
     <div class="site">
       <div class="site__bar"><i></i><i></i><i></i><span><b>vsekupony.ru</b>&nbsp;/ lipetsk</span></div>
