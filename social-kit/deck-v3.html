@@ -334,6 +334,8 @@ a{color:inherit;text-decoration:none}
 .mate{position:relative;flex:none;width:384px;display:flex;flex-direction:column}
 .mate__ph{height:400px;background:center top/contain no-repeat;
   -webkit-mask-image:linear-gradient(#000 78%,transparent 100%);mask-image:linear-gradient(#000 78%,transparent 100%)}
+/* Кромм: пальто обрезано справа внизу — сдвигаем влево и чуть вниз, чтобы низ уходил под плашку */
+.mate__ph--krom{background-size:400px auto;background-position:-22px 4px}
 .mate__c{position:relative;margin-top:-26px;flex:1;padding:26px 28px 28px;border-radius:24px;background:#fff;box-shadow:0 0 0 2px var(--line),0 24px 40px -28px rgba(40,10,8,.35)}
 .mate__c::before{content:"";position:absolute;left:24px;top:0;width:48px;height:5px;border-radius:0 0 4px 4px;background:var(--brand)}
 .mate__n{white-space:nowrap;font-size:30px;font-weight:800;letter-spacing:-.015em;line-height:1.12}
@@ -1205,7 +1207,7 @@ a{color:inherit;text-decoration:none}
     <div class="team">
       <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/moskvichev.png')"></div><div class="mate__c"><div class="mate__n">Антон Москвичев</div><div class="mate__r">Внедряю CRM-систему для&nbsp;управления бизнесом</div></div></div>
       <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/yankovoy.png')"></div><div class="mate__c"><div class="mate__n">Александр Янковой</div><div class="mate__r">Строю дома для&nbsp;семей с&nbsp;детьми</div></div></div>
-      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/krom.png')"></div><div class="mate__c"><div class="mate__n">Вильгельм Кромм</div><div class="mate__r">Создаю сервисы для&nbsp;жизни, менеджмента и&nbsp;продаж</div></div></div>
+      <div class="mate"><div class="mate__ph mate__ph--krom" style="background-image:url('photos/team/krom.png')"></div><div class="mate__c"><div class="mate__n">Вильгельм Кромм</div><div class="mate__r">Создаю сервисы для&nbsp;жизни, менеджмента и&nbsp;продаж</div></div></div>
       <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/rezvyakov.png')"></div><div class="mate__c"><div class="mate__n">Дмитрий Резвяков</div><div class="mate__r">Создаю нестандартные продукты</div></div></div>
     </div>
   </section>
