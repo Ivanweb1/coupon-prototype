@@ -845,21 +845,25 @@ a{color:inherit;text-decoration:none}
 .art__ok span::before{content:"";width:8px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-1px) rotate(-45deg)}
 /* 3. Внешний трафик: источники → карточка, столбцы переходов */
 .ext{display:flex;flex-direction:column;gap:10px;height:100%}
-.ext__top{flex:none;display:flex;align-items:center;gap:10px}
-.ext__src{display:flex;flex-direction:column;gap:6px}
-.ext__src div{display:flex;gap:6px}
-.ext__src i,.ext__src img,.ext__src .soc-ic{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--ink-2)}
-.ext__src img.is-logo{padding:5px;object-fit:contain}
-.ext__src .soc-ic__bg{fill:var(--soc-c)}.ext__src .soc-ic__g{fill:#fff}
-.ext__src i svg{width:20px;height:20px}
-.ext__src span{font-size:12px;font-weight:700;color:var(--ink-3)}
-.ext__ar{flex:1;display:flex;align-items:center;color:var(--brand)}
-.ext__ar::before{content:"";flex:1;border-top:3px dashed var(--brand)}
-.ext__ar::after{content:"";width:11px;height:11px;margin-left:-8px;border-top:3px solid var(--brand);border-right:3px solid var(--brand);transform:rotate(45deg)}
-.ext__card{flex:none;width:176px;display:flex;align-items:center;gap:8px;padding:8px}
-.ext__card .thumb{width:42px;height:56px;background-position:50% 40%}
-.ext__card b{white-space:nowrap;font-size:14px;font-weight:800;line-height:1.2}
-.ext__card small{display:block;font-size:12px;font-weight:600;color:var(--ink-3)}
+.ext__top{flex:none;height:132px;display:flex;align-items:center}
+.ext__src{flex:none;display:flex;flex-direction:column;gap:6px}
+.ext__src .box{height:40px;display:flex;align-items:center;gap:8px;padding:0 12px 0 6px;font-size:15px;font-weight:800}
+.ext__src img.is-logo{width:28px;height:28px;padding:4px;border-radius:50%;background:var(--brand-50);object-fit:contain}
+.ext__socs{display:flex}
+.ext__socs .soc-ic,.ext__socs img{width:24px;height:24px;border-radius:50%;margin-right:-5px;box-shadow:0 0 0 2px #fff}
+.ext__socs .soc-ic__bg{fill:var(--soc-c)}.ext__socs .soc-ic__g{fill:#fff}
+.ext__socs + *{margin-left:0}
+.ext__src .box > .ext__socs{margin-right:5px}
+.ext__se{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--ink-2)}
+.ext__se svg{width:17px;height:17px}
+.ext__ln{flex:1;height:132px;overflow:visible}
+.ext__ln path{fill:none;stroke:var(--brand);stroke-width:2.5;stroke-dasharray:5 5;vector-effect:non-scaling-stroke}
+.ext__card{position:relative;flex:none;width:120px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.ext__card::before{content:"";position:absolute;left:-14px;top:50%;border:8px solid transparent;border-left-color:var(--brand);transform:translate(0,-50%)}
+.ext__card .thumb{width:100%;height:70px;background-position:50% 40%}
+.ext__card div{display:flex;align-items:center;gap:6px}
+.ext__card div img{width:20px;height:20px;border-radius:5px}
+.ext__card b{font-size:13px;font-weight:800;line-height:1.15}
 .ext__ch{flex:1;display:flex;flex-direction:column;padding:12px 14px 10px;min-height:0}
 .ext__k{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;color:var(--ink-2)}
 .ext__k .tk{font-size:22px}
@@ -1118,9 +1122,13 @@ a{color:inherit;text-decoration:none}
       <div class="step">
         <div class="step__shot"><div class="ext">
           <div class="ext__top">
-            <div class="ext__src"><div><img class="is-logo" src="../assets/brand/logo-red.png" alt=""><i data-soc-ic="vk"></i><i data-soc-ic="tg"></i></div><div><i data-soc-ic="ok"></i><i data-soc-ic="max"></i><i><svg data-i="search"></svg></i></div></div>
-            <div class="ext__ar"></div>
-            <div class="box ext__card"><span class="thumb" style="background-image:url('../assets/coupons/dom-beige.jpg')"></span><div><b>Ваша карточка</b><small>на&nbsp;маркетплейсе</small></div></div>
+            <div class="ext__src">
+              <div class="box"><img class="is-logo" src="../assets/brand/logo-red.png" alt="">ВСЕКУПОНЫ</div>
+              <div class="box"><span class="ext__socs"><i data-soc-ic="vk"></i><i data-soc-ic="tg"></i><i data-soc-ic="ok"></i><i data-soc-ic="max"></i></span>Соцсети</div>
+              <div class="box"><i class="ext__se"><svg data-i="search"></svg></i>Поиск</div>
+            </div>
+            <svg class="ext__ln" viewBox="0 0 100 132" preserveAspectRatio="none"><path d="M0 20 C 45 20, 55 66, 92 66"/><path d="M0 66 H 92"/><path d="M0 112 C 45 112, 55 66, 92 66"/></svg>
+            <div class="box ext__card"><span class="thumb" style="background-image:url('../assets/coupons/dom-beige.jpg')"></span><div><img src="../assets/brand/mp/wildberries.svg" alt=""><b>Ваша карточка</b></div></div>
           </div>
           <div class="box ext__ch">
             <div class="ext__k">Переходы на&nbsp;карточку извне<span class="tk">×5</span></div>
