@@ -1,0 +1,275 @@
+#!/usr/bin/env python3
+"""Иконки категорий L2 (сводный список от 08.10.2026, ТЗ §3.2.10).
+
+Один источник — словарь ICONS ниже. Скрипт раскладывает его в:
+  assets/icons/categories/<раздел>/<slug>.svg — по файлу на нишу
+  assets/icons/categories/sprite.svg           — спрайт, <use href="…#<раздел>--<slug>">
+  category-icons.html                          — лист для согласования
+
+Стиль тот же, что у служебных значков прототипа: сетка 24×24, контур
+currentColor 1.8, скруглённые концы. Цвет задаёт место, где значок стоит, —
+сами файлы одноцветные (созвон 21.09: «значки ниш — в один цвет»).
+
+Запуск: python3 tools/category-icons.py
+"""
+import math
+import os
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUT = os.path.join(ROOT, 'assets', 'icons', 'categories')
+
+
+def gear(cx=12, cy=12, r_out=8.5, r_in=6.6, teeth=8):
+    pts = []
+    step = 2 * math.pi / teeth
+    for i in range(teeth):
+        a = i * step - math.pi / 2
+        for k, r in ((-0.27, r_in), (-0.13, r_out), (0.13, r_out), (0.27, r_in)):
+            pts.append((cx + r * math.cos(a + k * step), cy + r * math.sin(a + k * step)))
+    d = 'M' + ' '.join(f'{x:.2f} {y:.2f}' for x, y in pts) + 'Z'
+    return f'<path d="{d}"/><circle cx="{cx}" cy="{cy}" r="2.6"/>'
+
+
+SECTIONS = [
+    ('regional', 'Просто купоны'),
+    ('for-business', 'Для бизнеса'),
+    ('marketplace', 'Маркетплейсы'),
+]
+
+# (раздел, slug, название, разметка внутри <svg>)
+ICONS = [
+    # --- Просто купоны -------------------------------------------------
+    ('regional', 'eda-i-restorany', 'Еда и рестораны',
+     '<path d="M6 3v6a2.5 2.5 0 0 0 5 0V3M8.5 3v18"/>'
+     '<path d="M18 21V3c-2.2 1.4-3.5 4-3.5 7.5V14H18"/>'),
+    ('regional', 'razvlecheniya', 'Развлечения',
+     '<path d="M3.5 6.5h17v3.7a1.8 1.8 0 0 0 0 3.6v3.7h-17v-3.7a1.8 1.8 0 0 0 0-3.6Z"/>'
+     '<path d="M14.5 6.5v1.6M14.5 11.2v1.6M14.5 15.9v1.6"/>'),
+    ('regional', 'prazdniki-i-sobytiya', 'Праздники и события',
+     '<path d="M12 15c3.3 0 6-3.2 6-6.6A6 6 0 0 0 6 8.4c0 3.4 2.7 6.6 6 6.6Z"/>'
+     '<path d="m11 15-.8 1.6h3.6L13 15"/>'
+     '<path d="M12 16.6c0 1.6-1.6 2.2-1.6 4.4"/>'),
+    ('regional', 'deti-i-semya', 'Дети и семья',
+     '<path d="M3 4.5h2.4l2.4 8.5H20"/>'
+     '<path d="M20 13a7 7 0 0 0-7-7v7"/>'
+     '<circle cx="9" cy="18.5" r="1.8"/><circle cx="17" cy="18.5" r="1.8"/>'),
+    ('regional', 'zdorove', 'Здоровье',
+     '<path d="M12 20s-7.5-4.5-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.5 12 20 12 20Z"/>'
+     '<path d="M7.5 12.5h2.3l1.3-2.2 1.8 4.2 1.3-2h2.3"/>'),
+    ('regional', 'krasota', 'Красота',
+     '<circle cx="12" cy="9" r="5.8"/>'
+     '<path d="M12 14.8V21M9.5 21h5"/>'
+     '<path d="M9.2 7.6a3.2 3.2 0 0 1 2.2-1.8"/>'),
+    ('regional', 'sport-i-fitnes', 'Спорт и фитнес',
+     '<path d="M6.5 6.5v11M17.5 6.5v11M3.5 9.5v5M20.5 9.5v5M6.5 12h11"/>'),
+    ('regional', 'obuchenie-i-razvitie', 'Обучение и развитие',
+     '<path d="m2.5 9 9.5-4.5L21.5 9 12 13.5Z"/>'
+     '<path d="M6.5 11.2v4.4c1.5 1.3 3.5 2 5.5 2s4-.7 5.5-2v-4.4"/>'
+     '<path d="M21.5 9v5"/>'),
+    ('regional', 'puteshestviya-i-otdykh', 'Путешествия и отдых',
+     '<rect x="5.5" y="7" width="13" height="12" rx="2"/>'
+     '<path d="M9.5 7V4.5h5V7M9.5 10.5v5M14.5 10.5v5M8.5 19v1.5M15.5 19v1.5"/>'),
+    ('regional', 'shopping-i-tovary', 'Шопинг и товары',
+     '<path d="M2.5 4h2.4l2.3 10.5h10.6L20.5 7.5H6"/>'
+     '<circle cx="9" cy="19" r="1.6"/><circle cx="16.8" cy="19" r="1.6"/>'),
+    ('regional', 'dom-i-remont', 'Дом и ремонт',
+     '<path d="M4 10.5 12 4l8 6.5V20H4Z"/>'
+     '<path d="M10 20v-5.5h4V20"/>'),
+    ('regional', 'avto-i-transport', 'Авто и транспорт',
+     '<path d="M3.5 16.5v-4l2.2-5a1.6 1.6 0 0 1 1.5-1h9.6a1.6 1.6 0 0 1 1.5 1l2.2 5v4Z"/>'
+     '<path d="M3.5 12.5h17M6.5 14.5h1.5M16 14.5h1.5M6 16.5v2M18 16.5v2"/>'),
+    ('regional', '18-plus', '18+ (опционально)',
+     '<path d="M3.5 9.3 5.5 7.5V17"/>'
+     '<circle cx="10.5" cy="9.8" r="2.3"/><circle cx="10.5" cy="14.45" r="2.55"/>'
+     '<path d="M15.5 12.2H21M18.25 9.45v5.5"/>'),
+
+    # --- Для бизнеса ---------------------------------------------------
+    ('for-business', 'registratsiya-i-yuridicheskie', 'Регистрация и юридические услуги',
+     '<path d="M12 4v16M8 20h8M5 7h14"/>'
+     '<path d="m5 7-2.5 6a2.5 2.5 0 0 0 5 0Z"/>'
+     '<path d="m19 7-2.5 6a2.5 2.5 0 0 0 5 0Z"/>'),
+    ('for-business', 'bukhgalteriya-i-finansy', 'Бухгалтерия и финансы',
+     '<rect x="5" y="3" width="14" height="18" rx="2"/>'
+     '<path d="M8.5 6.5h7v3h-7Z"/>'
+     '<path d="M8.8 13.5h.01M12 13.5h.01M15.2 13.5h.01M8.8 17h.01M12 17h.01M15.2 17h.01"/>'),
+    ('for-business', 'personal-i-hr', 'Персонал и HR',
+     '<circle cx="9" cy="8" r="3.2"/>'
+     '<path d="M3.5 19.5a5.5 5.5 0 0 1 11 0"/>'
+     '<path d="M15.2 5a3.2 3.2 0 0 1 0 6M17.2 14.2a5.5 5.5 0 0 1 3.3 5.3"/>'),
+    ('for-business', 'obuchenie-i-konsalting', 'Обучение и консалтинг',
+     '<rect x="3.5" y="4" width="17" height="11" rx="1.5"/>'
+     '<path d="M12 15v3M8 21l4-3 4 3"/>'
+     '<path d="m7.5 11.5 3-3 2 2 4-4"/>'),
+    ('for-business', 'marketing-i-reklama', 'Маркетинг и реклама',
+     '<path d="M3.5 10v4a1 1 0 0 0 1 1H8l7 4V5L8 9H4.5a1 1 0 0 0-1 1Z"/>'
+     '<path d="m8 15 1 4.5h2.4L10.6 16"/>'
+     '<path d="M18.2 9.3a3.8 3.8 0 0 1 0 5.4"/>'),
+    ('for-business', 'prodazhi-i-crm', 'Продажи и CRM',
+     '<path d="M4 4v16h16"/>'
+     '<path d="m7.5 15 3.5-3.5 3 3 5-5.5"/>'
+     '<path d="M15.5 9H19v3.5"/>'),
+    ('for-business', 'it-i-tsifrovye-resheniya', 'IT и цифровые решения',
+     '<rect x="4.5" y="5" width="15" height="10.5" rx="1.5"/>'
+     '<path d="M2.5 19h19"/>'
+     '<path d="m10 8.6-2 1.7 2 1.7M14 8.6l2 1.7-2 1.7"/>'),
+    ('for-business', 'ofisy-i-rabochie-prostranstva', 'Офисы и рабочие пространства',
+     '<path d="M5 21V4.5A1.5 1.5 0 0 1 6.5 3h7A1.5 1.5 0 0 1 15 4.5V21"/>'
+     '<path d="M15 9h3.5a1.5 1.5 0 0 1 1.5 1.5V21M3 21h18"/>'
+     '<path d="M8.5 7h3M8.5 11h3M8.5 15h3"/>'),
+    ('for-business', 'oborudovanie-i-tovary', 'Оборудование и товары для бизнеса',
+     None),  # шестерёнка строится в gear()
+    ('for-business', 'logistika-i-dostavka', 'Логистика и доставка',
+     '<path d="M14 16.5V6.5H3v10h2.2M8.8 16.5h6.9"/>'
+     '<path d="M14 10h4l3 3.5v3h-1.7"/>'
+     '<circle cx="7" cy="17" r="1.8"/><circle cx="17.5" cy="17" r="1.8"/>'),
+    ('for-business', 'bezopasnost-i-strakhovanie', 'Безопасность и страхование',
+     '<path d="M12 3 5 6v5.5c0 4.4 3 8 7 9.5 4-1.5 7-5.1 7-9.5V6Z"/>'
+     '<path d="m9 12 2.2 2.2L15.5 10"/>'),
+    ('for-business', 'kommercheskaya-nedvizhimost', 'Коммерческая недвижимость',
+     '<path d="M4.5 12v8h15v-8"/>'
+     '<path d="M3 9.5 4.5 4h15L21 9.5a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z"/>'
+     '<path d="M10 20v-4.5h4V20"/>'),
+
+    # --- Маркетплейсы --------------------------------------------------
+    ('marketplace', 'elektronika-i-gadzhety', 'Электроника и гаджеты',
+     '<rect x="6.5" y="3" width="11" height="18" rx="2.2"/>'
+     '<path d="M11 17.5h2"/>'),
+    ('marketplace', 'bytovaya-tekhnika', 'Бытовая техника',
+     '<rect x="4.5" y="3" width="15" height="18" rx="2"/>'
+     '<path d="M4.5 7.5h15M7.8 5.3h.01M10.3 5.3h.01"/>'
+     '<circle cx="12" cy="14" r="4"/>'),
+    ('marketplace', 'dom-i-interer', 'Дом и интерьер',
+     '<path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/>'
+     '<path d="M3 13a2 2 0 0 1 4 0v1h10v-1a2 2 0 0 1 4 0v4H3Z"/>'
+     '<path d="M5 17v2M19 17v2"/>'),
+    ('marketplace', 'remont-i-stroitelstvo', 'Ремонт и строительство',
+     '<rect x="3.5" y="3.5" width="13" height="5" rx="1.5"/>'
+     '<path d="M16.5 6h3v5H11v3"/>'
+     '<rect x="9.5" y="14" width="3" height="7" rx="1"/>'),
+    ('marketplace', 'sad-i-dacha', 'Сад и дача',
+     '<path d="M12 21v-9M7 21h10"/>'
+     '<path d="M12 12c0-4.5-3-7-7.5-7 0 4.5 3 7 7.5 7Z"/>'
+     '<path d="M12 14.5c0-3.5 2.5-6 7-6 0 3.5-2.5 6-7 6Z"/>'),
+    ('marketplace', 'muzhskaya-odezhda', 'Мужская одежда',
+     '<path d="M9 3.5 4 6l-1.5 4.5 3 1.2L7 10v10.5h10V10l1.5 1.7 3-1.2L20 6l-5-2.5a3 3 0 0 1-6 0Z"/>'),
+    ('marketplace', 'zhenskaya-odezhda', 'Женская одежда',
+     '<path d="M9 3v3.5l-2 4-3 10h16l-3-10-2-4V3"/>'
+     '<path d="M9 6.5c1 .8 2 1.1 3 1.1s2-.3 3-1.1M7 10.5h10"/>'),
+    ('marketplace', 'detskaya-odezhda-malchiki', 'Детская одежда для мальчиков',
+     '<path d="M4.5 15.5a7.5 7.5 0 0 1 15 0"/>'
+     '<path d="M3 15.5h18.5V16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>'
+     '<path d="M12 8V6.5M12 8v7.5"/>'),
+    ('marketplace', 'detskaya-odezhda-devochki', 'Детская одежда для девочек',
+     '<path d="M10.3 11 3.5 7v8l6.8-3"/>'
+     '<path d="M13.7 11l6.8-4v8l-6.8-3"/>'
+     '<rect x="10.3" y="9.8" width="3.4" height="3.4" rx="1"/>'
+     '<path d="m10.8 13.2-2.3 6M13.2 13.2l2.3 6"/>'),
+    ('marketplace', 'aksessuary', 'Аксессуары',
+     '<circle cx="6.5" cy="14" r="3.5"/><circle cx="17.5" cy="14" r="3.5"/>'
+     '<path d="M10 13.5c1.3-.9 2.7-.9 4 0M3 14l1.2-6.5M21 14l-1.2-6.5"/>'),
+    ('marketplace', 'obuv-i-sumki', 'Обувь и сумки',
+     '<path d="M3 16.5v-9h4.5L9 10l3-.8 6 3.6c1.8 1 3 2 3 3.7Z"/>'
+     '<path d="M3 16.5V19h18v-2.5M11 11.6l1 1.5M13.6 13l1 1.5"/>'),
+    ('marketplace', 'krasota-i-ukhod', 'Красота и уход',
+     '<rect x="7" y="9" width="10" height="12" rx="2"/>'
+     '<path d="M10 9V6h4v3M12 6V3.5h3.5M10 14h4"/>'),
+    ('marketplace', 'zdorove-i-sport', 'Здоровье и спорт',
+     '<path d="M9 9.2V7.5a3 3 0 0 1 6 0v1.7"/>'
+     '<circle cx="12" cy="14.5" r="6"/>'),
+    ('marketplace', 'tovary-dlya-detey', 'Товары для детей',
+     '<circle cx="12" cy="13.5" r="6.8"/>'
+     '<path d="M7.2 8.7a2.6 2.6 0 1 1 1.9-3.4M16.8 8.7a2.6 2.6 0 1 0-1.9-3.4"/>'
+     '<path d="M9.6 12.5h.01M14.4 12.5h.01M10.6 15.6c.8.6 2 .6 2.8 0"/>'),
+    ('marketplace', 'avtotovary', 'Автотовары',
+     '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2"/>'
+     '<path d="M3.7 10.6 10 12M20.3 10.6 14 12M12 14v6.5"/>'),
+    ('marketplace', 'tovary-dlya-zhivotnykh-i-khobbi', 'Товары для животных и хобби',
+     '<path d="M12 12.5c-2.6 0-5 2.6-5 5 0 1.7 1.3 2.5 2.7 2.5 1 0 1.6-.5 2.3-.5s1.3.5 2.3.5c1.4 0 2.7-.8 2.7-2.5 0-2.4-2.4-5-5-5Z"/>'
+     '<circle cx="5.6" cy="10.8" r="1.9"/><circle cx="9.4" cy="6" r="1.9"/>'
+     '<circle cx="14.6" cy="6" r="1.9"/><circle cx="18.4" cy="10.8" r="1.9"/>'),
+]
+
+ATTRS = ('fill="none" stroke="currentColor" stroke-width="1.8" '
+         'stroke-linecap="round" stroke-linejoin="round"')
+
+
+def body(markup):
+    return markup if markup is not None else gear()
+
+
+def main():
+    sprite = []
+    for section, slug, title, markup in ICONS:
+        inner = body(markup)
+        d = os.path.join(OUT, section)
+        os.makedirs(d, exist_ok=True)
+        with open(os.path.join(d, slug + '.svg'), 'w') as f:
+            f.write(f'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" '
+                    f'viewBox="0 0 24 24" {ATTRS}>{inner}</svg>\n')
+        sprite.append(f'<symbol id="{section}--{slug}" viewBox="0 0 24 24" {ATTRS}>'
+                      f'<title>{title}</title>{inner}</symbol>')
+    with open(os.path.join(OUT, 'sprite.svg'), 'w') as f:
+        f.write('<svg xmlns="http://www.w3.org/2000/svg" style="display:none">\n'
+                + '\n'.join(sprite) + '\n</svg>\n')
+
+    groups = []
+    for section, name in SECTIONS:
+        items = [i for i in ICONS if i[0] == section]
+        cells = ''.join(
+            f'<figure class="ic"><div class="ic__box"><svg width="28" height="28" '
+            f'viewBox="0 0 24 24" {ATTRS}>{body(m)}</svg></div>'
+            f'<div class="ic__chip"><svg width="18" height="18" viewBox="0 0 24 24" {ATTRS}>{body(m)}</svg>{t}</div>'
+            f'<figcaption><b>{t}</b><code>{s}.svg</code></figcaption></figure>'
+            for _, s, t, m in items)
+        groups.append(f'<section><h2>{name} <span>{section} · {len(items)}</span></h2>'
+                      f'<div class="grid">{cells}</div></section>')
+
+    html = PAGE.replace('{{GROUPS}}', '\n'.join(groups))
+    with open(os.path.join(ROOT, 'category-icons.html'), 'w') as f:
+        f.write(html)
+    print(f'{len(ICONS)} icons → {os.path.relpath(OUT, ROOT)}')
+
+
+PAGE = '''<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Иконки категорий — Все купоны</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/brand/logo-red.png">
+<style>
+  :root { --red:#DD443C; --ink:#1a1a1a; --mute:#7a7a7a; --line:#e6e6e6; --bg:#f5f5f5; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.45 Onest, system-ui, sans-serif; }
+  main { max-width:1180px; margin:0 auto; padding:40px 16px 80px; }
+  h1 { font-size:30px; margin:0 0 6px; }
+  .lead { color:var(--mute); max-width:720px; margin:0 0 36px; }
+  h2 { font-size:20px; margin:40px 0 16px; }
+  h2 span { color:var(--mute); font-weight:400; font-size:14px; margin-left:8px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; }
+  .ic { margin:0; background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:12px; }
+  .ic__box { width:56px; height:56px; border-radius:14px; background:#fff; color:var(--red); border:1.5px solid var(--red); display:grid; place-items:center; }
+  .ic:hover .ic__box { background:var(--red); color:#fff; }
+  .ic__chip { align-self:flex-start; display:inline-flex; align-items:center; gap:6px; padding:6px 12px 6px 10px; border-radius:999px; border:1px solid var(--line); font-size:13px; color:var(--ink); max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ic__chip svg { flex:none; color:var(--ink); }
+  figcaption b { display:block; font-weight:500; font-size:14px; }
+  figcaption code { font-size:12px; color:var(--mute); word-break:break-all; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Иконки категорий</h1>
+  <p class="lead">40 ниш по сводному списку от 08.10.2026 плюс опциональная 18+.
+  Контур 1.8 на сетке 24×24, один цвет — currentColor, как у остальных значков прототипа.
+  Наведите на карточку — так значок выглядит в активном состоянии (инверсия).
+  Файлы: <code>assets/icons/categories/&lt;раздел&gt;/&lt;slug&gt;.svg</code>, спрайт — <code>sprite.svg</code>.</p>
+{{GROUPS}}
+</main>
+</body>
+</html>
+'''
+
+if __name__ == '__main__':
+    main()
