@@ -1271,7 +1271,7 @@ a{color:inherit;text-decoration:none}
      стоят абсолютно, поэтому после загрузки шрифтов сдвигаем их группой так,
      чтобы верх первого блока был ровно на 64 px ниже подзаголовка. */
   var BODY = {
-    s3: ".pace,.ws", s2: ".path__k,.path,.offs__k,.offs", s7: ".ai", s6: ".trio,.ten",
+    s3: ".pace,.ws", s2: ".path__k,.path,.offs__k,.offs", s7: ".ai", s6: ".trio",
     s4: ".team", s10: ".fl__k,.fo,.fl__ar,.site,.fl__l,.chs", s11: ".cmp", s8: ".map,.next"
   };
   document.fonts.ready.then(function () {
@@ -1288,6 +1288,10 @@ a{color:inherit;text-decoration:none}
         e.style.top = (parseFloat(getComputedStyle(e).top) + d) + "px";
       });
     });
+    /* «10 минут» — посередине между шагами и нижним краем белого поля */
+    var s6 = document.getElementById("s6"), z6 = s6.getBoundingClientRect().height / 1080, b6 = s6.getBoundingClientRect().top;
+    var tb = (s6.querySelector(".trio").getBoundingClientRect().bottom - b6) / z6;
+    s6.querySelector(".ten").style.top = Math.round((tb + 1080 - 16) / 2) + "px";
   });
 
   /* Висячие предлоги и союзы (правка 08.10): короткое слово в конце строки
