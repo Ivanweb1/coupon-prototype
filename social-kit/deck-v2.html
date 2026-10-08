@@ -267,7 +267,10 @@ a{color:inherit;text-decoration:none}
 .slide--red .h1{color:#fff}
 .slide--red .sub{color:rgba(255,255,255,.94)}
 .slide--red .city{background:#fff;color:var(--brand)}
-.cpn__l:has(.wm){overflow:hidden}
+.cpn__l:has(.wm),.cpn__l:has(.deco){overflow:hidden}
+/* Билетики выгоды выглядывают из-за угла (правка 08.10) — вместо шара на белых слайдах */
+.deco{position:absolute;inset:0;pointer-events:none}
+.deco .tk{position:absolute;filter:drop-shadow(0 18px 24px rgba(120,20,10,.18))}
 .wm--red{opacity:.07}
 .wm{position:absolute;right:-90px;bottom:-170px;height:820px;opacity:.09;transform:rotate(-14deg);pointer-events:none}
 
@@ -625,7 +628,7 @@ a{color:inherit;text-decoration:none}
 .lf__t span{display:block;font-size:17px;font-weight:500;color:var(--ink-3)}
 .lf__w{flex:none;font-size:16px;font-weight:600;color:var(--ink-4)}
 .lf__big{position:absolute;left:60px;right:60px;bottom:60px;padding:24px 28px;border-radius:24px;background:var(--brand);color:#fff;display:flex;align-items:center;gap:20px}
-.lf__big b{font-size:56px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.lf__big b{font-size:48px;font-weight:800;letter-spacing:-.03em;line-height:1}
 .lf__big span{font-size:21px;font-weight:600;line-height:1.3}
 /* 3. Облако запросов */
 .bb{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:#fff;box-shadow:0 20px 40px -26px rgba(40,10,8,.45);padding:10px}
@@ -680,7 +683,7 @@ a{color:inherit;text-decoration:none}
 /* 6: масштаб — крупная цифра и стопка лиц (класс hs — не путать с билетиком .tk) */
 .hs{position:absolute;left:60px;right:60px;top:60px;padding:28px 30px 26px;border-radius:28px;background:var(--brand);color:#fff;box-shadow:0 24px 44px -26px rgba(160,30,24,.6)}
 .hs__r{display:flex;align-items:center;gap:22px}
-.hs__r b{font-size:84px;font-weight:800;letter-spacing:-.04em;line-height:.9}
+.hs__r b{font-size:72px;font-weight:800;letter-spacing:-.04em;line-height:.9}
 .hs__r span{font-size:23px;font-weight:600;line-height:1.3}
 .hs__f{display:flex;align-items:center;margin-top:22px;padding-top:20px;border-top:2px dashed rgba(255,255,255,.4)}
 .hs__f i{flex:none;width:46px;height:46px;margin-right:-12px;border-radius:50%;border:3px solid var(--brand);background:#F6C9C5;color:var(--brand);display:grid;place-items:center;font-style:normal;font-size:18px;font-weight:800}
@@ -830,7 +833,7 @@ a{color:inherit;text-decoration:none}
   <!-- ===================== 5. AI-помощник ===================== -->
   <section class="slide" id="s7">
     <div class="cpn__l cpn__l--full">
-      <img class="wm wm--red" src="../assets/brand/logo-red.png" alt="" style="right:-160px;bottom:auto;top:-240px;height:700px">
+      <div class="deco"><span class="tk" style="right:90px;top:40px;font-size:72px;transform:rotate(-8deg)">5&nbsp;=&nbsp;4</span><span class="tk" style="right:380px;top:-30px;font-size:48px;transform:rotate(10deg)">−30%</span><span class="tk" style="right:-50px;top:170px;font-size:48px;transform:rotate(9deg)">Подарок</span></div>
       <div class="in">
         <h2 class="h1"><span class="city">AI</span>-помощник</h2>
         <p class="sub">Внутри сервиса ВСЕКУПОНЫ работает AI-ассистент, который:</p>
@@ -882,7 +885,7 @@ a{color:inherit;text-decoration:none}
   <!-- ===================== 4. Запуск занимает 3 шага ===================== -->
   <section class="slide" id="s6">
     <div class="cpn__l cpn__l--full">
-      <img class="wm wm--red" src="../assets/brand/logo-red.png" alt="" style="right:-160px;bottom:auto;top:-240px;height:700px">
+      <div class="deco"><span class="tk" style="right:70px;top:46px;font-size:72px;transform:rotate(9deg)">−20%</span><span class="tk" style="right:330px;top:-34px;font-size:48px;transform:rotate(-7deg)">1&nbsp;+&nbsp;1</span><span class="tk" style="right:-30px;top:180px;font-size:48px;transform:rotate(-12deg)">0&nbsp;₽</span></div>
       <div class="in">
         <h2 class="h1">Запуск занимает всего <span class="city">3 шага</span></h2>
         <p class="sub">Вам не&nbsp;нужно ничего придумывать&nbsp;— мы&nbsp;придумали всё за&nbsp;вас</p>
@@ -934,7 +937,7 @@ a{color:inherit;text-decoration:none}
   <!-- ===================== 7. Сервис разработан предпринимателями ===================== -->
   <section class="slide" id="s4">
     <div class="cpn__l cpn__l--full">
-      <img class="wm wm--red" src="../assets/brand/logo-red.png" alt="" style="right:-120px;bottom:-200px;height:640px">
+      <div class="deco"><span class="tk" style="right:80px;bottom:40px;font-size:72px;transform:rotate(-9deg)">−15%</span><span class="tk" style="right:400px;bottom:-30px;font-size:48px;transform:rotate(7deg)">349&nbsp;₽</span><span class="tk" style="right:-40px;bottom:150px;font-size:48px;transform:rotate(11deg)">1&nbsp;+&nbsp;1</span></div>
       <div class="in">
         <h2 class="h1">Сервис разработан <span class="city">предпринимателями</span></h2>
         <p class="sub">Из&nbsp;разных сфер, которые на&nbsp;своём опыте знают, как трудно и&nbsp;дорого подобрать эффективный рекламный канал и&nbsp;поддерживать его результативность. <b>Особенно&nbsp;сейчас.</b></p>
@@ -1017,7 +1020,6 @@ a{color:inherit;text-decoration:none}
   <!-- ===================== 8. Следующий шаг ===================== -->
   <section class="slide" id="s8">
     <div class="cpn__l cpn__l--full">
-      <img class="wm wm--red" src="../assets/brand/logo-red.png" alt="" style="right:-160px;bottom:auto;top:-260px;height:640px">
       <div class="in">
         <h2 class="h1">Наш следующий шаг&nbsp;—<br><span class="city">выход за&nbsp;пределы</span> Липецка</h2>
         <p class="sub">Готовим расширение сервиса и&nbsp;запуск предложений в&nbsp;новых городах и&nbsp;регионах</p>
