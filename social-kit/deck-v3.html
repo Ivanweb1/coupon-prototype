@@ -45,7 +45,11 @@
      Адресная строка:
        ?bare=1 — слайды без подложки и уменьшения (так снимает рендер).
 
-     PDF и PNG — render-deck.py → out/deck/.
+     Добавлено 08.10: после AI-помощника — «Бизнес и маркетплейсы тоже на
+     ВСЕКУПОНАХ» (куда доходит B2B-предложение) и «Продаёте на маркетплейсах?»
+     (промокод → артикул → внешний трафик).
+
+     PDF и PNG — render-deck.py --src deck-v3 → out/deck-v3/.
      ========================================================================== -->
 <link rel="stylesheet" href="fonts/onest.css">
 <style>
@@ -732,6 +736,140 @@ a{color:inherit;text-decoration:none}
 .alt--6 .lf__ic{width:42px;height:42px}
 .alt--6 .lf__t{font-size:17px}
 .alt--6 .lf__t span{font-size:14px}
+
+/* ==========================================================================
+   5а. Бизнес и маркетплейсы — B2B-раздел (добавлен 08.10)
+   ==========================================================================
+   Те же три купона-шага, что на «3 шагах», но в каждом — не шаг, а место,
+   куда доходит предложение для бизнеса. Предложение одно и то же во всех
+   трёх («Настройка CRM −25%») — видно, что одно размещение работает в
+   нескольких местах. */
+#s12 .in,#s13 .in{width:1660px;top:100px}
+#s12 .h1,#s13 .h1{margin:0}
+#s12 .sub,#s13 .sub{max-width:1560px}
+#s12 .step{height:560px}
+#s12 .step__shot{height:330px}
+#s12 .step__cut{top:313px}
+#s13 .step{height:690px}
+#s13 .step__shot{height:440px}
+#s13 .step__cut{top:423px}
+#s12 .step__d,#s13 .step__d{font-size:22px}
+/* «Ваше» — общая метка предложения рекламодателя на всех мокапах */
+.you{position:absolute;right:10px;top:-13px;padding:3px 10px;border-radius:10px;background:var(--brand);color:#fff;font-size:13px;font-weight:800;font-style:normal;letter-spacing:.02em}
+.box{position:relative;border-radius:14px;background:#fff}
+.box.is-you{box-shadow:0 0 0 3px var(--brand),0 18px 30px -18px rgba(160,30,24,.5)}
+.thumb{flex:none;border-radius:10px;background:center / cover no-repeat}
+.ptk{flex:none;margin-left:auto;padding:4px 10px;border-radius:9px;background:#FCE4E2;color:var(--brand);font-size:17px;font-weight:800;white-space:nowrap}
+.box.is-you .ptk{background:var(--brand);color:#fff}
+/* 1. Раздел «Для бизнеса» на сайте */
+.bsite{display:flex;flex-direction:column;gap:10px;height:100%}
+.bsite__bar{flex:none;height:36px;display:flex;align-items:center;padding:0 14px;border-radius:18px;background:#fff;font-size:16px;font-weight:700;color:var(--ink-2)}
+.bsite__bar b{color:var(--brand)}
+.bsite__tabs{flex:none;display:flex;gap:6px}
+.bsite__tabs span{height:30px;padding:0 12px;border-radius:15px;background:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;color:var(--ink-2)}
+.bsite__tabs span.is-on{background:var(--ink);color:#fff}
+.brow{flex:1;display:flex;align-items:center;gap:12px;padding:0 12px}
+.brow .thumb{width:44px;height:44px}
+.brow b{display:block;font-size:17px;font-weight:800;line-height:1.2;white-space:nowrap}
+.brow small{display:block;font-size:13px;font-weight:600;color:var(--ink-3)}
+/* 2. Рекламный блок в кабинете другого предпринимателя */
+.bcab{display:flex;flex-direction:column;gap:10px;height:100%}
+.bcab__h{flex:none;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:var(--ink-2)}
+.bcab__h i{width:30px;height:30px;border-radius:50%;background:center/cover}
+.bcab__h em{margin-left:auto;font-style:normal;font-size:13px;color:var(--ink-3)}
+.bcab__k{flex:none;display:flex;gap:10px}
+.bcab__k div{flex:1;padding:8px 12px;border-radius:12px;background:#fff}
+.bcab__k b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em}
+.bcab__k span{font-size:13px;font-weight:600;color:var(--ink-3)}
+.bad{flex:1;display:flex;gap:14px;padding:12px}
+.bad .thumb{width:120px}
+.bad__b{flex:1;min-width:0;display:flex;flex-direction:column}
+.bad__l{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.bad__t{margin-top:4px;font-size:20px;font-weight:800;line-height:1.15}
+.bad__m{margin-top:4px;font-size:15px;font-weight:600;color:var(--ink-2)}
+.bad__btn{margin-top:auto;align-self:flex-start;height:34px;padding:0 16px;border-radius:17px;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:700}
+/* 3. Подборка по нише — уведомления */
+.bpush{display:flex;flex-direction:column;justify-content:center;gap:10px;height:100%}
+.bpush__k{font-size:15px;font-weight:600;color:var(--ink-3)}
+.npush{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.npush > img{flex:none;width:38px;height:38px;padding:6px;border-radius:10px;background:var(--brand-50);object-fit:contain}
+.npush div{min-width:0;flex:1}
+.npush small{display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--ink-3)}
+.npush b{display:block;margin-top:2px;font-size:17px;font-weight:800;line-height:1.25}
+.npush.is-dim{opacity:.6}
+
+/* ==========================================================================
+   5б. Продаёте на маркетплейсах — промокод продавца (добавлен 08.10)
+   ==========================================================================
+   Красный — для ритма. Три шага: промокод в кабинете маркетплейса →
+   артикул на ВСЕКУПОНАХ, карточку подтягиваем сами → внешний трафик на
+   карточку. Первый шаг — разметкой, пока нет скриншота: положите его в
+   photos/mp/promo-cabinet.png — встанет вместо разметки. */
+.slide--red .step{background:#fff}
+.slide--red .step__cut{background:var(--brand)}
+.slide--red .step + .step::before{border-color:#fff}
+#s13 .step__shot{background-color:#F3F3F3}
+#s13 .step__shot.is-img{padding:0;background-size:cover;background-position:0 0}
+/* 1. Кабинет продавца — форма промокода */
+.mpf{display:flex;flex-direction:column;gap:9px;height:100%}
+.mpf__h{flex:none;display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800}
+.mpf__h img{width:34px;height:34px;border-radius:9px}
+.mpf__h em{margin-left:auto;font-style:normal;font-size:13px;font-weight:600;color:var(--ink-3)}
+.mpf__r{flex:none}
+.mpf__r span{display:block;margin-bottom:4px;font-size:13px;font-weight:600;color:var(--ink-3)}
+.mpf__r div{height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;border-radius:11px;border:2px solid var(--line);background:#fff;font-size:17px;font-weight:700}
+.mpf__r div.is-code{letter-spacing:.06em;border-color:#CB11AB;color:#CB11AB}
+.mpf__2{display:flex;gap:10px}.mpf__2 .mpf__r{flex:1}
+.mpf__btn{flex:none;margin-top:auto;height:44px;border-radius:12px;background:#CB11AB;color:#fff;display:grid;place-items:center;font-size:17px;font-weight:700}
+/* 2. Артикул → карточка подтянулась сама */
+.art{display:flex;flex-direction:column;gap:10px;height:100%}
+.art__in{flex:none;display:flex;gap:10px}
+.art__in div{flex:1;padding:8px 14px;border-radius:12px;background:#fff;box-shadow:0 0 0 2px var(--line)}
+.art__in div.is-on{box-shadow:0 0 0 3px var(--brand)}
+.art__in span{display:block;font-size:13px;font-weight:600;color:var(--ink-3)}
+.art__in b{display:flex;align-items:center;font-size:21px;font-weight:800;letter-spacing:.02em}
+.art__in b i{width:2px;height:22px;margin-left:3px;background:var(--brand)}
+.art__go{flex:none;display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--brand)}
+.art__go svg{width:20px;height:20px}
+.art__go::after{content:"";flex:1;border-top:2px dashed #F3A9A3}
+.art__c{flex:1;display:flex;gap:14px;padding:12px;min-height:0}
+.art__c .thumb{height:100%;aspect-ratio:230 / 306;background-size:contain}
+.art__b{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.art__t{font-size:18px;font-weight:800;line-height:1.2}
+.art__s{font-size:14px;font-weight:600;color:var(--ink-3)}
+.art__p{display:flex;align-items:baseline;gap:8px;font-size:22px;font-weight:800}
+.art__p s{font-size:15px;font-weight:600;color:var(--ink-3)}
+.art__p em{font-style:normal;font-size:15px;font-weight:700;color:var(--ink-2)}
+.art__ok{margin-top:auto;display:flex;flex-wrap:wrap;gap:5px}
+.art__ok span{display:flex;align-items:center;gap:4px;height:26px;padding:0 9px;border-radius:13px;background:#E3F3EA;color:#1F7A45;font-size:13px;font-weight:700}
+.art__ok span::before{content:"";width:8px;height:5px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-1px) rotate(-45deg)}
+/* 3. Внешний трафик: источники → карточка, столбцы переходов */
+.ext{display:flex;flex-direction:column;gap:10px;height:100%}
+.ext__top{flex:none;display:flex;align-items:center;gap:10px}
+.ext__src{display:flex;flex-direction:column;gap:6px}
+.ext__src div{display:flex;gap:6px}
+.ext__src i,.ext__src img,.ext__src .soc-ic{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--ink-2)}
+.ext__src img.is-logo{padding:5px;object-fit:contain}
+.ext__src .soc-ic__bg{fill:var(--soc-c)}.ext__src .soc-ic__g{fill:#fff}
+.ext__src i svg{width:20px;height:20px}
+.ext__src span{font-size:12px;font-weight:700;color:var(--ink-3)}
+.ext__ar{flex:1;display:flex;align-items:center;color:var(--brand)}
+.ext__ar::before{content:"";flex:1;border-top:3px dashed var(--brand)}
+.ext__ar::after{content:"";width:11px;height:11px;margin-left:-8px;border-top:3px solid var(--brand);border-right:3px solid var(--brand);transform:rotate(45deg)}
+.ext__card{flex:none;width:176px;display:flex;align-items:center;gap:8px;padding:8px}
+.ext__card .thumb{width:42px;height:56px;background-position:center top}
+.ext__card b{white-space:nowrap;font-size:14px;font-weight:800;line-height:1.2}
+.ext__card small{display:block;font-size:12px;font-weight:600;color:var(--ink-3)}
+.ext__ch{flex:1;display:flex;flex-direction:column;padding:12px 14px 10px;min-height:0}
+.ext__k{display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;color:var(--ink-2)}
+.ext__k .tk{font-size:22px}
+.ext__bars{flex:1;display:flex;align-items:flex-end;gap:8px;margin-top:8px;min-height:0}
+.ext__bars i{flex:1;border-radius:6px 6px 2px 2px;background:#E2E2E2}
+.ext__bars i.is-on{background:var(--brand)}
+.ext__x{display:flex;margin-top:6px;font-size:12px;font-weight:700;color:var(--ink-3)}
+.ext__x span:first-child{flex:3}.ext__x span:last-child{flex:5;color:var(--brand)}
+.ext__def{flex:none;font-size:13px;font-weight:600;line-height:1.35;color:var(--ink-2)}
+.ext__def b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -893,6 +1031,108 @@ a{color:inherit;text-decoration:none}
           <div><p><b>865</b><span>Пришли</span></p><i style="height:13%;background:#A92A24"></i></div>
         </div>
       </div><div class="ai__t"><b>4</b>Изучит поведение пользователей</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== 5а. Бизнес и маркетплейсы — B2B ===================== -->
+  <section class="slide" id="s12">
+    <div class="cpn__l cpn__l--full">
+      <img class="wm wm--red" src="../assets/brand/logo-red.png" alt="" style="right:-160px;bottom:auto;top:-240px;height:700px">
+      <div class="in">
+        <h2 class="h1">Бизнес и&nbsp;маркетплейсы<br>тоже на&nbsp;<span class="city">ВСЕКУПОНАХ</span></h2>
+        <p class="sub">Есть что предложить другим компаниям? Разместите предложение в&nbsp;нашем <span style="white-space:nowrap">B2B-разделе</span>&nbsp;— предприниматели уже готовы его рассмотреть</p>
+      </div>
+    </div>
+    <div class="trio">
+      <div class="step">
+        <div class="step__shot"><div class="bsite">
+          <div class="bsite__bar"><b>vsekupony.ru</b>&nbsp;/ для бизнеса</div>
+          <div class="bsite__tabs"><span>Услуги</span><span>Реклама</span><span class="is-on">IT и&nbsp;сервисы</span><span>Логистика</span></div>
+          <div class="box brow is-you"><i class="you">Ваше</i><span class="thumb" style="background-image:url('../assets/coupons/biz-warm.jpg')"></span><div><b>Настройка CRM под&nbsp;процесс</b><small>Студия «Пример»</small></div><span class="ptk">−25%</span></div>
+          <div class="box brow"><span class="thumb" style="background-image:url('../assets/coupons/obuchenie-purple.jpg')"></span><div><b>Аудит сайта и&nbsp;скорости</b><small>Компания «Название»</small></div><span class="ptk">0&nbsp;₽</span></div>
+          <div class="box brow"><span class="thumb" style="background-image:url('../assets/coupons/razvlecheniya-blue.jpg')"></span><div><b>Месяц техподдержки</b><small>Студия «Рыба»</small></div><span class="ptk">0&nbsp;₽</span></div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">1</span><div class="step__t">Отдельный раздел для&nbsp;бизнеса</div></div>
+        <div class="step__d">Витрина предложений для&nbsp;компаний: сюда приходят, когда ищут подрядчика или&nbsp;поставщика</div>
+      </div>
+      <div class="step">
+        <div class="step__shot"><div class="bcab">
+          <div class="bcab__h"><i style="background-image:url('../assets/coupons/coffee.jpg')"></i>Кабинет · Кафе «Рыба»<em>сегодня</em></div>
+          <div class="bcab__k"><div><b>1&nbsp;240</b><span>Просмотры купона</span></div><div><b>318</b><span>Забрали</span></div></div>
+          <div class="box bad is-you"><i class="you">Ваше</i><span class="thumb" style="background-image:url('../assets/coupons/biz-warm.jpg')"></span>
+            <div class="bad__b"><span class="bad__l">Предложение для&nbsp;бизнеса</span><div class="bad__t">Настройка CRM под&nbsp;ваш процесс</div><div class="bad__m">−25% · Студия «Пример»</div><span class="bad__btn">Подробнее</span></div></div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">2</span><div class="step__t">Рекламный блок в&nbsp;кабинетах</div></div>
+        <div class="step__d">Показываем ваше предложение другим компаниям, которым оно подходит</div>
+      </div>
+      <div class="step">
+        <div class="step__shot"><div class="bpush">
+          <div class="bpush__k">Подборка для&nbsp;ниши «IT и&nbsp;сервисы»</div>
+          <div class="box npush is-you"><i class="you">Ваше</i><img src="../assets/brand/logo-red.png" alt=""><div><small>ВСЕКУПОНЫ · для&nbsp;бизнеса<span>сейчас</span></small><b>Настройка CRM со&nbsp;скидкой 25% — для кафе и&nbsp;магазинов</b></div></div>
+          <div class="box npush is-dim"><img src="../assets/brand/logo-red.png" alt=""><div><small>ВСЕКУПОНЫ · для&nbsp;бизнеса<span>вчера</span></small><b>Кофемашина в&nbsp;аренду: первый месяц 0&nbsp;₽</b></div></div>
+          <div class="box npush is-dim"><img src="../assets/brand/logo-red.png" alt=""><div><small>ВСЕКУПОНЫ · для&nbsp;бизнеса<span>2 дня назад</span></small><b>Бухгалтерия: первый месяц бесплатно</b></div></div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">3</span><div class="step__t">Подборки по&nbsp;нишам</div></div>
+        <div class="step__d">Рассылаем предпринимателям подборки свежих предложений под&nbsp;их бизнес</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 5б. Продаёте на маркетплейсах ===================== -->
+  <section class="slide slide--red" id="s13">
+    <div class="cpn__l cpn__l--full">
+      <img class="wm" src="../assets/brand/logo-white.png" alt="" style="right:-160px;bottom:auto;top:-240px;height:700px">
+      <div class="in">
+        <h2 class="h1">Продаёте на&nbsp;<span class="city">маркетплейсах?</span></h2>
+        <p class="sub">Создайте уникальный промокод на&nbsp;маркетплейсе и&nbsp;разместите его на&nbsp;ВСЕКУПОНАХ в&nbsp;«два&nbsp;клика»</p>
+      </div>
+    </div>
+    <div class="trio">
+      <div class="step">
+        <div class="step__shot" data-mpshot="photos/mp/promo-cabinet.png"><div class="mpf">
+          <div class="mpf__h"><img src="../assets/brand/mp/wildberries.svg" alt="">Новый промокод<em>Кабинет продавца</em></div>
+          <div class="mpf__r"><span>Промокод</span><div class="is-code">WUCH15</div></div>
+          <div class="mpf__2"><div class="mpf__r"><span>Скидка</span><div>15&nbsp;%</div></div><div class="mpf__r"><span>Действует</span><div>1–31 октября</div></div></div>
+          <div class="mpf__r"><span>Товары</span><div>Носки мужские, 10&nbsp;пар</div></div>
+          <div class="mpf__btn">Создать промокод</div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">1</span><div class="step__t">Создайте промокод в&nbsp;кабинете продавца</div></div>
+        <div class="step__d">На&nbsp;любой свой товар: Wildberries, Ozon, Яндекс Маркет</div>
+      </div>
+      <div class="step">
+        <div class="step__shot"><div class="art">
+          <div class="art__in"><div class="is-on"><span>Артикул товара</span><b>184562397<i></i></b></div><div><span>Промокод</span><b>WUCH15</b></div></div>
+          <div class="art__go"><svg data-i="spark"></svg>Остальное подтянули сами</div>
+          <div class="box art__c"><span class="thumb" style="background-image:url('../assets/coupons/wuch-socks.png')"></span>
+            <div class="art__b"><div class="art__t">Носки мужские, 10&nbsp;пар</div><div class="art__s">WUCH · Wildberries</div><div class="art__p">459&nbsp;₽ <s>899&nbsp;₽</s><em>★ 4,8</em></div>
+              <div class="art__ok"><span>Фото</span><span>Название</span><span>Цена</span><span>Отзывы</span></div></div></div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">2</span><div class="step__t">Впишите только артикул</div></div>
+        <div class="step__d">Фото, название, цену и&nbsp;отзывы подтянем с&nbsp;карточки сами</div>
+      </div>
+      <div class="step">
+        <div class="step__shot"><div class="ext">
+          <div class="ext__top">
+            <div class="ext__src"><div><img class="is-logo" src="../assets/brand/logo-red.png" alt=""><i data-soc-ic="vk"></i><i data-soc-ic="tg"></i></div><div><i data-soc-ic="ok"></i><i data-soc-ic="max"></i><i><svg data-i="search"></svg></i></div></div>
+            <div class="ext__ar"></div>
+            <div class="box ext__card"><span class="thumb" style="background-image:url('../assets/coupons/wuch-socks.png')"></span><div><b>Ваша карточка</b><small>на&nbsp;маркетплейсе</small></div></div>
+          </div>
+          <div class="box ext__ch">
+            <div class="ext__k">Переходы на&nbsp;карточку извне<span class="tk">×5</span></div>
+            <div class="ext__bars"><i style="height:14%"></i><i style="height:12%"></i><i style="height:16%"></i><i class="is-on" style="height:34%"></i><i class="is-on" style="height:52%"></i><i class="is-on" style="height:66%"></i><i class="is-on" style="height:84%"></i><i class="is-on" style="height:100%"></i></div>
+            <div class="ext__x"><span>до</span><span>с&nbsp;ВСЕКУПОНАМИ</span></div>
+          </div>
+          <div class="ext__def"><b>Внешний трафик</b>&nbsp;— покупатели, которые пришли на&nbsp;карточку из-за пределов маркетплейса</div>
+        </div></div>
+        <i class="step__cut step__cut--l"></i><i class="step__cut step__cut--r"></i>
+        <div class="step__h"><span class="step__n">3</span><div class="step__t">В&nbsp;разы больше внешнего трафика</div></div>
+        <div class="step__d">Маркетплейс ценит такие переходы и&nbsp;поднимает карточку в&nbsp;выдаче</div>
+      </div>
     </div>
   </section>
 
@@ -1182,6 +1422,13 @@ a{color:inherit;text-decoration:none}
     img.src = el.dataset.img;
   });
 
+  /* Скриншот кабинета маркетплейса: есть файл — вместо разметки формы */
+  document.querySelectorAll("[data-mpshot]").forEach(function (el) {
+    var img = new Image();
+    img.onload = function () { el.classList.add("is-img"); el.style.backgroundImage = "url('" + el.dataset.mpshot + "')"; el.innerHTML = ""; };
+    img.src = el.dataset.mpshot;
+  });
+
   /* Скриншоты Вордстата: есть файл — в рамку, нет — заглушка */
   document.querySelectorAll("[data-shot]").forEach(function (el) {
     var img = new Image();
@@ -1288,7 +1535,7 @@ a{color:inherit;text-decoration:none}
      чтобы верх первого блока был ровно на 64 px ниже подзаголовка. */
   var BODY = {
     s3: ".pace,.ws", s2: ".path__k,.path,.offs__k,.offs", s7: ".ai", s6: ".trio",
-    s4: ".team", s10: ".fl__k,.fo,.fl__ar,.site,.fl__l,.chs", s11: ".cmp", s8: ".map,.next"
+    s12: ".trio", s13: ".trio", s4: ".team", s10: ".fl__k,.fo,.fl__ar,.site,.fl__l,.chs", s11: ".cmp", s8: ".map,.next"
   };
   document.fonts.ready.then(function () {
     Object.keys(BODY).forEach(function (id) {
