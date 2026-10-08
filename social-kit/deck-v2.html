@@ -313,7 +313,7 @@ a{color:inherit;text-decoration:none}
 /* Ряд на пять человек (302 px на каждого). Правка 08.10: фото без рамки, края растушёваны в фон; имя и подпись —
    крупно, в своей плашке под фото, чтобы участники выглядели весомо */
 .mate{position:relative;flex:none;width:302px;display:flex;flex-direction:column}
-.mate__ph{height:320px;background:center bottom/contain no-repeat;
+.mate__ph{height:292px;background:center top/contain no-repeat;
   -webkit-mask-image:linear-gradient(#000 78%,transparent 100%);mask-image:linear-gradient(#000 78%,transparent 100%)}
 .mate__ph--pk{background-size:70%;background-position:center 40%}
 .mate__c{position:relative;margin-top:-26px;flex:1;padding:22px 24px 24px;border-radius:24px;background:#fff;box-shadow:0 0 0 2px var(--line),0 24px 40px -28px rgba(40,10,8,.35)}
@@ -375,8 +375,8 @@ a{color:inherit;text-decoration:none}
    Оценки — из таблицы заказчика; точка: зелёная — лучше, жёлтая — средне,
    серая — хуже. Строка «Все купоны» выделена.
    ========================================================================== */
-.cmp{position:absolute;left:150px;right:150px;top:340px;border-collapse:separate;border-spacing:0;font-size:23px;font-weight:600}
-.cmp th{height:62px;padding:0 14px;text-align:left;vertical-align:bottom;padding-bottom:14px;font-size:20px;font-weight:600;line-height:1.2;color:var(--ink-2)}
+.cmp{position:absolute;left:150px;width:1620px;top:340px;border-collapse:separate;border-spacing:0;font-size:23px;font-weight:600}
+.cmp th{height:56px;padding:0 5px 14px;text-align:left;vertical-align:bottom;white-space:nowrap;font-size:20px;font-weight:600;line-height:1.2;color:var(--ink-2)}
 .cmp td{height:62px;padding:0 14px;border-top:2px solid var(--line);white-space:nowrap}
 .cmp td:first-child{font-weight:800;padding-left:24px}
 .cmp td:last-child{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;padding-right:24px}
@@ -399,7 +399,9 @@ a{color:inherit;text-decoration:none}
 .cmp .bud__b{width:84px;height:12px;border-radius:6px;background:var(--surface);overflow:hidden;display:block}
 .cmp .bud__b b{display:block;height:100%;border-radius:6px;background:var(--ink-4)}
 .cmp tr.me .bud__b{background:rgba(255,255,255,.3)}.cmp tr.me .bud__b b{background:#fff}
-.cmp__lg{position:absolute;right:150px;top:290px;display:flex;gap:22px;font-size:20px;font-weight:600;color:var(--ink-2)}
+/* Шапка таблицы (правка 08.10): подписи в одну строку, по левому краю плашек;
+   легенда — справа на строке подзаголовка */
+.cmp__lg{position:absolute;right:40px;bottom:8px;display:flex;gap:22px;font-size:20px;font-weight:600;color:var(--ink-2)}
 .cmp__lg span{display:flex;align-items:center;gap:8px}
 .cmp__lg i{width:14px;height:14px;border-radius:4px}
 .cmp__brand{display:flex;align-items:center;gap:12px}
@@ -975,11 +977,11 @@ a{color:inherit;text-decoration:none}
       <div class="in">
         <h2 class="h1">Реклама дорогой <span class="city">быть не&nbsp;должна</span></h2>
         <p class="sub">Сопоставили ВСЕКУПОНЫ с&nbsp;основными рекламными каналами</p>
+        <div class="cmp__lg"><span><i style="background:#2E9E5B"></i>выгодно</span><span><i style="background:#E8A33D"></i>средне</span><span><i style="background:#E0665D"></i>невыгодно</span></div>
       </div>
     </div>
-    <div class="cmp__lg"><span><i style="background:#2E9E5B"></i>выгодно</span><span><i style="background:#E8A33D"></i>средне</span><span><i style="background:#E0665D"></i>невыгодно</span></div>
     <table class="cmp">
-      <thead><tr><th></th><th>Цена</th><th>Охват</th><th>Скорость<br>реализации</th><th>Измеримость</th><th>Масштаби&shy;рование</th><th>Удобство</th><th>Минимальный<br>бюджет</th></tr></thead>
+      <thead><tr><th></th><th>Цена</th><th>Охват</th><th>Скорость</th><th>Измеримость</th><th>Масштаб</th><th>Удобство</th><th>Бюджет</th></tr></thead>
       <tbody>
         <tr class="me"><td><span class="cmp__brand"><img src="../assets/brand/logo-white.png" alt="">ВСЕКУПОНЫ</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Низкая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Точная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Максимальное</span></td><td><span class="bud"><span class="bud__b"><b style="width:4%"></b></span>от&nbsp;1&nbsp;000&nbsp;₽</span></td></tr>
         <tr><td>Доски объявлений</td><td><span class="rt rt--n"><i></i><i></i><i></i>Высокая ↑</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокий</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Высокая</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренная</span></td><td><span class="rt rt--g"><i></i><i></i><i></i>Лёгкое</span></td><td><span class="rt rt--y"><i></i><i></i><i></i>Умеренное</span></td><td><span class="bud"><span class="bud__b"><b style="width:20%"></b></span>от&nbsp;10&nbsp;000&nbsp;₽</span></td></tr>
@@ -1252,7 +1254,7 @@ a{color:inherit;text-decoration:none}
      чтобы верх первого блока был ровно на 64 px ниже подзаголовка. */
   var BODY = {
     s3: ".pace,.ws", s2: ".path__k,.path,.offs__k,.offs,.offs__ph", s7: ".ai", s6: ".trio",
-    s4: ".team", s10: ".fl__k,.fo,.fl__ar,.site,.fl__l,.chs", s11: ".cmp__lg,.cmp", s8: ".map,.next"
+    s4: ".team", s10: ".fl__k,.fo,.fl__ar,.site,.fl__l,.chs", s11: ".cmp", s8: ".map,.next"
   };
   document.fonts.ready.then(function () {
     Object.keys(BODY).forEach(function (id) {
