@@ -14,7 +14,6 @@
      краем, визитка с аватаром):
        A. Билет — волнистый верх и низ, красный QR с логотипом, корешок с сайтом.
        B. Визитка — логотип в круге сверху, название, пунктир с вырезами, QR.
-       C. Купон со скидкой — выгода и условия сверху, QR-код купона и сам код.
        D. Красный билет — инверсия A: белый QR на красном.
        E. «Просканируй меня» — по референсу с −50%, но вертикально: точечный
           QR в пунктирной рамке занимает большую часть, ниже линия отрыва и
@@ -26,7 +25,7 @@
      Контуры билетов — векторные, считает скрипт внизу: в Figma переносятся
      одним path, вырезы — настоящие, а не круги поверх.
 
-     PNG — render-qr.py → out/qr/qr-a.png … qr-d.png (1080×1350).
+     PNG — render-qr.py → out/qr/qr-a.png … qr-f.png (без C) (1080×1350).
      ========================================================================== -->
 <link rel="stylesheet" href="fonts/onest.css">
 <style>
@@ -90,19 +89,6 @@ a{color:inherit;text-decoration:none}
 .qb__site{margin-top:40px;font-size:30px;font-weight:700;color:var(--ink-2)}
 .qb__site b{color:var(--brand);font-weight:800}
 
-/* ---------- C. Купон со скидкой ---------- */
-.qc{width:660px;padding:92px 64px 0;align-items:stretch}
-.qc__top{display:flex;flex-direction:column-reverse;align-items:flex-start;gap:22px}
-.qc__val{font-size:132px;font-weight:800;letter-spacing:-.05em;line-height:.85;color:var(--brand)}
-.qc__cat{padding:10px 18px;border-radius:999px;background:var(--brand-50);color:var(--brand);font-size:22px;font-weight:700;white-space:nowrap}
-.qc__t{margin-top:30px;font-size:40px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
-.qc__m{margin-top:14px;font-size:24px;font-weight:500;color:var(--ink-2);line-height:1.4}
-.qc__bot{margin-top:116px;padding-bottom:84px;display:flex;align-items:center;gap:36px}
-.qc .qr{flex:none;width:250px;height:250px}
-.qc__k{font-size:22px;font-weight:500;color:var(--ink-3)}
-.qc__code{margin-top:8px;font-size:52px;font-weight:800;letter-spacing:.06em;line-height:1}
-.qc__note{margin-top:22px;font-size:21px;font-weight:500;color:var(--ink-2);line-height:1.35}
-.qc__erid{position:absolute;right:28px;bottom:22px;font-size:14px;color:var(--ink-3)}
 
 /* ---------- D. Красный билет ---------- */
 .qd .qt__bg path{fill:var(--brand)}
@@ -115,8 +101,8 @@ a{color:inherit;text-decoration:none}
 .qe__frame{width:548px;height:548px;padding:40px;border:7px dashed #D3D3D3;border-radius:40px}
 .qe .qr{width:100%;height:100%}
 .qe__gap{height:76px}
-.qe__plq{width:548px;margin-bottom:56px;height:190px;display:grid;place-items:center;background:var(--brand);color:#fff;
-  font-size:66px;font-weight:800;letter-spacing:-.02em;line-height:.95;text-align:center;text-transform:uppercase;
+.qe__plq{width:548px;margin-bottom:56px;height:150px;display:grid;place-items:center;white-space:nowrap;background:var(--brand);color:#fff;
+  font-size:46px;font-weight:800;letter-spacing:-.01em;line-height:1;text-align:center;text-transform:uppercase;
   /* ступенчатые «пиксельные» углы, как у плашки −50% в референсе */
   clip-path:polygon(0 24px,8px 24px,8px 16px,16px 16px,16px 8px,24px 8px,24px 0,calc(100% - 24px) 0,calc(100% - 24px) 8px,calc(100% - 16px) 8px,calc(100% - 16px) 16px,calc(100% - 8px) 16px,calc(100% - 8px) 24px,100% 24px,
     100% calc(100% - 24px),calc(100% - 8px) calc(100% - 24px),calc(100% - 8px) calc(100% - 16px),calc(100% - 16px) calc(100% - 16px),calc(100% - 16px) calc(100% - 8px),calc(100% - 24px) calc(100% - 8px),calc(100% - 24px) 100%,
@@ -157,28 +143,6 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
-  <!-- C. Купон со скидкой -->
-  <section class="tile tile--red" data-name="qr-c">
-    <div class="qt qt--shadow qc" data-shape="wave" data-cut="#qc-cut">
-      <div class="qc__top">
-        <div class="qc__val">−30%</div>
-        <span class="qc__cat">Кафе и&nbsp;рестораны</span>
-      </div>
-      <div class="qc__t">Комбо-обед по&nbsp;будням до&nbsp;16:00</div>
-      <div class="qc__m">Кафе «Рыба» · Липецк, ул.&nbsp;Первомайская,&nbsp;12<br>Действует с&nbsp;1 по&nbsp;14 октября</div>
-      <div class="qc__bot" id="qc-cut">
-        <a class="qr" href="https://vsekupony.ru/c/CITY482"><img src="qr/qr-coupon-ink.svg" alt="QR-код купона CITY482">
-          <span class="qr__logo"><img src="../assets/brand/logo-white.png" alt=""></span></a>
-        <div>
-          <div class="qc__k">Код купона</div>
-          <div class="qc__code">CITY482</div>
-          <div class="qc__note">Покажите QR или код на&nbsp;кассе — скидка применится сразу</div>
-        </div>
-      </div>
-      <span class="qc__erid">Реклама · erid 2Vt1A9F3K</span>
-    </div>
-  </section>
-
   <!-- D. Красный билет -->
   <section class="tile tile--light" data-name="qr-d">
     <div class="qt qt--shadow qa qd" data-shape="wave" data-cut="#qd-cut" data-dash="light">
@@ -196,7 +160,7 @@ a{color:inherit;text-decoration:none}
     <div class="qt qt--shadow qe" data-shape="round" data-cut="#qe-cut" data-dash="dots">
       <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
       <div class="qe__gap" id="qe-cut"></div>
-      <div class="qe__plq">Просканируй<br>меня</div>
+      <div class="qe__plq">Просканируй меня</div>
     </div>
   </section>
 
@@ -205,7 +169,7 @@ a{color:inherit;text-decoration:none}
     <div class="qt qt--shadow qe qf" data-shape="round" data-cut="#qf-cut" data-dash="dots-light">
       <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
       <div class="qe__gap" id="qf-cut"></div>
-      <div class="qe__plq">Просканируй<br>меня</div>
+      <div class="qe__plq">Просканируй меня</div>
     </div>
   </section>
 

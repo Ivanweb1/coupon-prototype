@@ -20,8 +20,6 @@ OUT = ROOT / "qr"
 
 CODES = {
     "site": "https://vsekupony.ru",
-    # Пример купона: код CITY482 открывает купон на сайте
-    "coupon": "https://vsekupony.ru/c/CITY482",
 }
 COLORS = {"red": "#DD443C", "ink": "#1B1B1B", "white": "#FFFFFF"}
 
