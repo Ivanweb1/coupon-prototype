@@ -113,9 +113,11 @@ a{color:inherit;text-decoration:none}
 .has-frame .cpn__l--v{background:none;border-right:0}
 .has-frame .phone-panel{background:none}
 /* стена купонов обрезана по контуру купона вместе с вырезами слева сверху и снизу.
-   В Figma, если плагин не перенесёт clip-path: серый контур под стеной (svg.frame) —
-   готовая маска, «Use as mask» на нём и стене */
-.has-frame .posts{background:none;border-radius:0}
+   Для Figma — без clip-path: стена — обычный прямоугольник со скруглением справа, а
+   вырезы слева рисуют два красных круга (.notch) поверх неё */
+.has-frame .posts{background:none}
+/* Вырезы на линии отрыва — два красных круга поверх стены (цвет поля слайда), без clip-path */
+.notch{position:absolute;width:68px;height:68px;border-radius:50%;background:var(--brand)}
 .nshape{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;display:block;overflow:visible}
 
 /* --------------------------------------------------------------------------
@@ -168,7 +170,9 @@ a{color:inherit;text-decoration:none}
 .stub{
   position:relative;isolation:isolate;display:inline-flex;align-items:stretch;
   font-weight:700;letter-spacing:-.01em;white-space:nowrap;color:var(--ink);
-  filter:drop-shadow(0 14px 18px rgba(20,8,6,.22)) drop-shadow(0 1px 1px rgba(0,0,0,.08));
+  /* Тень — box-shadow по скруглённому прямоугольнику (радиус задаёт скрипт, .3 высоты):
+     filter:drop-shadow Figma-плагин не переносит, а box-shadow становится эффектом Drop shadow */
+  box-shadow:0 14px 18px rgba(20,8,6,.22),0 1px 1px rgba(0,0,0,.08);
 }
 .stub__bg{position:absolute;left:0;top:0;width:100%;height:100%;z-index:-1;overflow:visible}
 .stub__white{fill:#fff}
@@ -332,8 +336,10 @@ a{color:inherit;text-decoration:none}
    низ растушёван в белое; имя и подпись — крупно, в своей плашке под фото.
    Края кадра, где одежда упирается в границу исходника, растворены в самих PNG. */
 .mate{position:relative;flex:none;width:384px;display:flex;flex-direction:column}
-.mate__ph{height:400px;background:center top/contain no-repeat;
-  -webkit-mask-image:linear-gradient(#000 78%,transparent 100%);mask-image:linear-gradient(#000 78%,transparent 100%)}
+.mate__ph{position:relative;height:400px;background:center top/contain no-repeat}
+/* Низ фото растворяется в белое отдельным слоем-градиентом (прозрачный → белый), а не
+   маской: mask-image Figma-плагин не переносит, градиентная заливка остаётся редактируемой */
+.mate__fade{position:absolute;left:0;right:0;bottom:0;height:88px;background:linear-gradient(180deg,rgba(255,255,255,0),#fff)}
 /* Москвичев: левый срез рубашки уводим со скругления плашки на её прямой край */
 .mate__ph--anton{background-position:26px 0}
 /* Кромм: пальто обрезано справа внизу — сдвигаем влево и чуть вниз, чтобы низ уходил под плашку */
@@ -1207,10 +1213,10 @@ a{color:inherit;text-decoration:none}
     </div>
     <!-- Команда: фото без фона в photos/team/*.png (фон вырезан rembg). Остальные участники — когда пришлют фото -->
     <div class="team">
-      <div class="mate"><div class="mate__ph mate__ph--anton" style="background-image:url('photos/team/moskvichev.png')"></div><div class="mate__c"><div class="mate__n">Антон Москвичев</div><div class="mate__r">Внедряю CRM-систему для&nbsp;управления бизнесом</div></div></div>
-      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/yankovoy.png')"></div><div class="mate__c"><div class="mate__n">Александр Янковой</div><div class="mate__r">Строю дома для&nbsp;семей с&nbsp;детьми</div></div></div>
-      <div class="mate"><div class="mate__ph mate__ph--krom" style="background-image:url('photos/team/krom.png')"></div><div class="mate__c"><div class="mate__n">Вильгельм Кромм</div><div class="mate__r">Создаю сервисы для&nbsp;жизни, менеджмента и&nbsp;продаж</div></div></div>
-      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/rezvyakov.png')"></div><div class="mate__c"><div class="mate__n">Дмитрий Резвяков</div><div class="mate__r">Создаю нестандартные продукты</div></div></div>
+      <div class="mate"><div class="mate__ph mate__ph--anton" style="background-image:url('photos/team/moskvichev.png')"><i class="mate__fade"></i></div><div class="mate__c"><div class="mate__n">Антон Москвичев</div><div class="mate__r">Внедряю CRM-систему для&nbsp;управления бизнесом</div></div></div>
+      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/yankovoy.png')"><i class="mate__fade"></i></div><div class="mate__c"><div class="mate__n">Александр Янковой</div><div class="mate__r">Строю дома для&nbsp;семей с&nbsp;детьми</div></div></div>
+      <div class="mate"><div class="mate__ph mate__ph--krom" style="background-image:url('photos/team/krom.png')"><i class="mate__fade"></i></div><div class="mate__c"><div class="mate__n">Вильгельм Кромм</div><div class="mate__r">Создаю сервисы для&nbsp;жизни, менеджмента и&nbsp;продаж</div></div></div>
+      <div class="mate"><div class="mate__ph" style="background-image:url('photos/team/rezvyakov.png')"><i class="mate__fade"></i></div><div class="mate__c"><div class="mate__n">Дмитрий Резвяков</div><div class="mate__r">Создаю нестандартные продукты</div></div></div>
     </div>
   </section>
 
@@ -1474,11 +1480,14 @@ a{color:inherit;text-decoration:none}
     var grey = sl.querySelector(".phone-panel, .posts") ? '<path fill="#ECECEC" d="M' + (X + N) + ',' + F + 'H' + (W - R) + 'A' + R + ',' + R + ' 0 0 1 ' + W + ',' + (F + R) + 'V' + (H - R) + 'A' + R + ',' + R + ' 0 0 1 ' + (W - R) + ',' + H + 'H' + (X + N) + 'A' + N + ',' + N + ' 0 0 0 ' + X + ',' + (H - N) + 'V' + (F + N) + 'A' + N + ',' + N + ' 0 0 0 ' + (X + N) + ',' + F + 'Z"/>' : "";
     sl.insertAdjacentHTML("afterbegin", '<svg class="frame" viewBox="0 0 1920 1080"><path fill="#fff" d="M' + (F + R) + ',' + F + 'H' + (X - N) + 'A' + N + ',' + N + ' 0 0 0 ' + X + ',' + (F + N) + 'V' + (H - N) + 'A' + N + ',' + N + ' 0 0 0 ' + (X - N) + ',' + H + 'H' + (F + R) + 'A' + R + ',' + R + ' 0 0 1 ' + F + ',' + (H - R) + 'V' + (F + R) + 'A' + R + ',' + R + ' 0 0 1 ' + (F + R) + ',' + F + 'Z"/>' +
       grey + '<path fill="none" ' + DASH + ' d="M' + (X - 1.5) + ',' + (F + N + 8) + 'V' + (H - N - 8) + '"/></svg>');
-    /* стена купонов обрезана по контуру купона с вырезами слева (в Figma — маска по серому контуру) */
-    var posts = sl.querySelector(".posts");
+        var posts = sl.querySelector(".posts");
     if (posts) {
-      var pw = W - X, ph = H - F;
-      posts.style.clipPath = "path('M" + N + ",0H" + (pw - R) + "A" + R + "," + R + " 0 0 1 " + pw + "," + R + "V" + (ph - R) + "A" + R + "," + R + " 0 0 1 " + (pw - R) + "," + ph + "H" + N + "A" + N + "," + N + " 0 0 0 0," + (ph - N) + "V" + N + "A" + N + "," + N + " 0 0 0 " + N + ",0Z')";
+      /* круги радиуса N с центрами в углах плиты на линии отрыва: на красном поле слайда
+         это и есть вырез; в Figma — два обычных эллипса, стена остаётся прямоугольником с
+         обычным скруглением справа */
+      [F, H].forEach(function (cy) {
+        sl.insertAdjacentHTML("beforeend", '<i class="notch" style="left:' + (X - N) + 'px;top:' + (cy - N) + 'px;width:' + (2 * N) + 'px;height:' + (2 * N) + 'px"></i>');
+      });
     }
   });
   /* Блок с QR-кодом: вырезы сверху и снизу на линии отрыва */
@@ -1512,6 +1521,7 @@ a{color:inherit;text-decoration:none}
       var old = st.querySelector(".stub__bg"); if (old) old.remove();
       if (!st.offsetHeight) return;
       var h = 100, w = Math.round(100 * st.offsetWidth / st.offsetHeight * 10) / 10, r = 30, n = 20;
+      st.style.borderRadius = (st.offsetHeight * r / 100) + "px";
       var rp = st.querySelector(".stub__r");
       var sx = rp ? Math.round(100 * rp.offsetLeft / st.offsetHeight * 10) / 10 : w;
       var left = rp
