@@ -26,6 +26,9 @@
        I. Тёмный купон: QR на белой подложке, красная плашка.
        J. Плашка с гладким скруглением и сайтом под надписью — для
           сравнения со ступенчатыми углами E/F.
+       K. Вырезной купон «из газеты»: пунктир по контуру и ножницы.
+       L. Марка: перфорация по всем краям, точечная линия отрыва.
+       M. Розовый купон (brand-50) с логотипом и названием сверху.
 
      QR — build-qr.py (уровень H, окно под логотип в центре) → qr/*.svg.
      Контуры билетов — векторные, считает скрипт внизу: в Figma переносятся
@@ -138,6 +141,22 @@ a{color:inherit;text-decoration:none}
 /* ---------- J. Гладкая плашка с сайтом ---------- */
 .qe__plq--round{clip-path:none;border-radius:28px;height:200px;display:flex;flex-direction:column;justify-content:center;gap:12px}
 .qe__plq--round small{font-size:32px;font-weight:600;letter-spacing:0;text-transform:none;opacity:.85}
+
+/* ---------- K. Вырезной купон ---------- */
+.qk__sc{position:absolute;left:58px;top:-62px;width:64px;height:64px;color:#fff;transform:rotate(-8deg)}
+
+/* ---------- L. Марка ---------- */
+.ql{padding:64px 64px 0}
+.ql .qe__plq{margin-bottom:64px}
+
+/* ---------- M. Розовый купон с логотипом ---------- */
+.qm .qt__bg path:first-child{fill:var(--brand-50)}
+.qm{padding-top:48px}
+.qm__head{display:flex;align-items:center;gap:16px;margin-bottom:32px}
+.qm__logo{width:72px;height:72px;border-radius:50%;background:var(--brand);display:grid;place-items:center}
+.qm__logo img{height:52px}
+.qm__name{font-size:40px;font-weight:800;letter-spacing:-.02em;color:var(--brand)}
+.qm .qe__frame{border:0;background:#fff;outline:6px dashed rgba(221,68,60,.35);outline-offset:14px;width:500px;height:500px;padding:46px;margin:14px 0}
 </style>
 </head>
 <body>
@@ -235,6 +254,35 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
+  <!-- K. Вырезной купон -->
+  <section class="tile tile--red" data-name="qr-k">
+    <div class="qt qt--shadow qe" data-shape="round" data-cut="#qk-cut" data-dash="dots" data-outline="1">
+      <svg class="qk__sc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></svg>
+      <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
+      <div class="qe__gap" id="qk-cut"></div>
+      <div class="qe__plq">Просканируй меня</div>
+    </div>
+  </section>
+
+  <!-- L. Марка -->
+  <section class="tile tile--grey" data-name="qr-l">
+    <div class="qt qt--soft qe ql" data-shape="stamp" data-cut="#ql-cut" data-dash="dots">
+      <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
+      <div class="qe__gap" id="ql-cut"></div>
+      <div class="qe__plq">Просканируй меня</div>
+    </div>
+  </section>
+
+  <!-- M. Розовый купон с логотипом -->
+  <section class="tile tile--red" data-name="qr-m">
+    <div class="qt qt--shadow qe qm" data-shape="wave" data-cut="#qm-cut" data-dash="dots-pink">
+      <div class="qm__head"><span class="qm__logo"><img src="../assets/brand/logo-white.png" alt=""></span><span class="qm__name">ВСЕКУПОНЫ</span></div>
+      <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
+      <div class="qe__gap" id="qm-cut"></div>
+      <div class="qe__plq">Просканируй меня</div>
+    </div>
+  </section>
+
 </main>
 <script>
 (function () {
@@ -255,6 +303,20 @@ a{color:inherit;text-decoration:none}
           "V" + (cy - N) + "A" + N + "," + N + " 0 0 0 " + w + "," + (cy + N) +
           "V" + (h - a) + wave(w, 0, h - a, -1, P, R) +
           "V" + (cy + N) + "A" + N + "," + N + " 0 0 0 0," + (cy - N) + "Z";
+    } else if (shape === "stamp") {
+      /* марка: полукруглые «укусы» шагом S по всем четырём краям */
+      var b = 11, S = 34;
+      var side = function (len) { var n = Math.floor(len / S), o = (len - (n - 1) * S) / 2, xs = []; for (var i = 0; i < n; i++) xs.push(o + i * S); return xs; };
+      var tx = side(w), ly = side(h);
+      d = "M0,0";
+      tx.forEach(function (x) { d += "H" + (x - b) + "A" + b + "," + b + " 0 0 0 " + (x + b) + ",0"; });
+      d += "H" + w;
+      ly.forEach(function (y) { d += "V" + (y - b) + "A" + b + "," + b + " 0 0 0 " + w + "," + (y + b); });
+      d += "V" + h;
+      tx.slice().reverse().forEach(function (x) { d += "H" + (x + b) + "A" + b + "," + b + " 0 0 0 " + (x - b) + "," + h; });
+      d += "H0";
+      ly.slice().reverse().forEach(function (y) { d += "V" + (y + b) + "A" + b + "," + b + " 0 0 0 0," + (y - b); });
+      d += "Z";
     } else {
       d = "M" + r + ",0H" + (w - r) + "A" + r + "," + r + " 0 0 1 " + w + "," + r +
           "V" + (cy - N) + "A" + N + "," + N + " 0 0 0 " + w + "," + (cy + N) +
@@ -280,14 +342,17 @@ a{color:inherit;text-decoration:none}
              : dd === "bold" || dd.indexOf("dots") === 0 ? cut.offsetTop + cut.offsetHeight / 2 : cut.offsetTop;
       var stroke = q.dataset.dash === "light" ? "rgba(255,255,255,.55)" : "#D3D3D3";
       var dash = dd.indexOf("dots") === 0
-        ? 'stroke="' + (dd === "dots-light" ? "rgba(255,255,255,.6)" : "#D3D3D3") + '" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 20"'
+        ? 'stroke="' + (dd === "dots-light" ? "rgba(255,255,255,.6)" : dd === "dots-pink" ? "rgba(221,68,60,.4)" : "#D3D3D3") + '" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 20"'
         : q.dataset.dash === "bold"
         ? 'stroke="#E3E3E3" stroke-width="8" stroke-linecap="round" stroke-dasharray="34 26"'
         : 'stroke="' + stroke + '" stroke-width="4" stroke-dasharray="14 11"';
       q.insertAdjacentHTML("afterbegin",
         '<svg class="qt__bg" viewBox="0 0 ' + (X ? h + ' ' + w : w + ' ' + h) + '" width="' + (X ? h : w) + '" height="' + (X ? w : h) + '" aria-hidden="true">' +
         '<g' + (X ? ' transform="matrix(0,1,1,0,0,0)"' : '') + '><path d="' + ticket(w, h, cy, N, q.dataset.shape) + '"/>' +
-        '<path fill="none" style="fill:none" ' + dash + ' d="M' + (N + 22) + ',' + cy + 'H' + (w - N - 22) + '"/></g></svg>');
+        '<path fill="none" style="fill:none" ' + dash + ' d="M' + (N + 22) + ',' + cy + 'H' + (w - N - 22) + '"/>' +
+        /* вырезной купон: белый пунктир «режь здесь» на 22 px снаружи контура */
+        (q.dataset.outline ? '<rect x="-22" y="-22" width="' + (w + 44) + '" height="' + (h + 44) + '" rx="54" fill="none" style="fill:none" stroke="#fff" stroke-width="5" stroke-dasharray="18 12"/>' : '') +
+        '</g></svg>');
     });
   }
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(build);
