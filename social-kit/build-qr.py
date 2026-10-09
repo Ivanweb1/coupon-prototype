@@ -1062,6 +1062,222 @@ def v24_calendar():
     return W, H, body, "Отрывной календарь"
 
 
+# --------------------------------------------------------------------------
+# Четвёртый заход: сам QR — купон
+# --------------------------------------------------------------------------
+# Поле модулей в форме билетика: скруглённые углы, полукруглые вырезы,
+# линия отрыва из модулей через один и корешок с пиксельной надписью.
+# Настоящий QR сидит в окне со свободным полем в два модуля; всё вокруг —
+# декоративные модули того же размера, так что граница кода растворяется
+# и купоном становится весь рисунок.
+
+PIX = {
+    "%": ["11000", "11001", "00010", "00100", "01000", "10011", "00011"],
+    "5": ["11111", "10000", "11110", "00001", "00001", "10001", "01110"],
+    "0": ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
+    "-": ["00000", "00000", "00000", "11111", "00000", "00000", "00000"],
+}
+
+
+def pix_text(text, scale=1, rotate=False):
+    """Пиксельная надпись: множество клеток (r, c), строки сверху вниз."""
+    cells = set()
+    x = 0
+    for ch in text:
+        g = PIX[ch]
+        for r, row in enumerate(g):
+            for c, v in enumerate(row):
+                if v == "1":
+                    for dr in range(scale):
+                        for dc in range(scale):
+                            cells.add((r * scale + dr, (x + c) * scale + dc))
+        x += len(g[0]) + 1
+    if rotate:  # поворот на −90°: читается снизу вверх
+        w = max(c for _, c in cells) + 1
+        cells = {(w - 1 - c, r) for r, c in cells}
+    return cells
+
+
+def cells_squares(on, rows, cols, x0, y0, s):
+    d = []
+    for r in range(rows):
+        c = 0
+        while c < cols:
+            if on(r, c):
+                c1 = c
+                while c1 + 1 < cols and on(r, c1 + 1):
+                    c1 += 1
+                d.append(f"M{f(x0 + c * s)},{f(y0 + r * s)}h{f((c1 - c + 1) * s)}v{f(s)}h{f(-(c1 - c + 1) * s)}z")
+                c = c1 + 1
+            else:
+                c += 1
+    return "".join(d)
+
+
+def cells_dots(on, rows, cols, x0, y0, s, k=.44):
+    return "".join(
+        f'<circle cx="{f(x0 + (c + .5) * s)}" cy="{f(y0 + (r + .5) * s)}" r="{f(s * k)}"/>'
+        for r in range(rows) for c in range(cols) if on(r, c)
+    )
+
+
+def cells_liquid(on, rows, cols, x0, y0, s):
+    R = s / 2
+    d = []
+    for r in range(rows):
+        for c in range(cols):
+            if not on(r, c):
+                continue
+            up, dn, lf, rt = on(r - 1, c), on(r + 1, c), on(r, c - 1), on(r, c + 1)
+            tl = 0 if (up or lf) else R
+            tr = 0 if (up or rt) else R
+            br = 0 if (dn or rt) else R
+            bl = 0 if (dn or lf) else R
+            x, y = x0 + c * s, y0 + r * s
+            p = f"M{f(x + tl)},{f(y)}H{f(x + s - tr)}"
+            if tr:
+                p += f"A{f(tr)},{f(tr)} 0 0 1 {f(x + s)},{f(y + tr)}"
+            p += f"V{f(y + s - br)}"
+            if br:
+                p += f"A{f(br)},{f(br)} 0 0 1 {f(x + s - br)},{f(y + s)}"
+            p += f"H{f(x + bl)}"
+            if bl:
+                p += f"A{f(bl)},{f(bl)} 0 0 1 {f(x)},{f(y + s - bl)}"
+            p += f"V{f(y + tl)}"
+            if tl:
+                p += f"A{f(tl)},{f(tl)} 0 0 1 {f(x + tl)},{f(y)}"
+            d.append(p + "Z")
+    return "".join(d)
+
+
+def coupon_field(gw, gh, corner, notches, perf, qr_at, glyph, glyph_at, density, seed):
+    """Раскладка купона в клетках модулей.
+    notches — [(x, y, r)] в единицах модулей; perf — ('col'|'row', индекс):
+    за ней корешок. Контур купона — сплошной ряд модулей, внутри основной
+    части — случайное заполнение, корешок залит целиком, а надпись на нём
+    вырезана пустыми клетками.
+    Возвращает функции клеток: qr, filler, stub, perf."""
+    qr_r, qr_c = qr_at
+    rnd = random.Random(seed)
+    kind, idx = perf
+
+    def in_shape(r, c):
+        if not (0 <= r < gh and 0 <= c < gw):
+            return False
+        x, y = c + .5, r + .5
+        for cx, cy in ((corner, corner), (gw - corner, corner), (corner, gh - corner), (gw - corner, gh - corner)):
+            if (x < corner or x > gw - corner) and (y < corner or y > gh - corner):
+                if abs(x - cx) <= corner and abs(y - cy) <= corner and math.hypot(x - cx, y - cy) > corner:
+                    return False
+        for nx, ny, nr in notches:
+            if math.hypot(x - nx, y - ny) < nr:
+                return False
+        return True
+
+    def edge(r, c):
+        return in_shape(r, c) and not all(in_shape(r + dr, c + dc) for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+
+    def gutter(r, c):
+        """Пустая дорожка внутри контура: рамка купона читается отдельно."""
+        return not edge(r, c) and any(edge(r + dr, c + dc) or not in_shape(r + dr, c + dc)
+                                      for dr in (-1, 0, 1) for dc in (-1, 0, 1))
+
+    def in_quiet(r, c):
+        return qr_r - 2 <= r < qr_r + N + 2 and qr_c - 2 <= c < qr_c + N + 2
+
+    def side(r, c):
+        """-1 — основная часть, 0 — линия отрыва, 1 — корешок."""
+        v = c if kind == "col" else r
+        return (v > idx) - (v < idx)
+
+    gr, gc = glyph_at
+    gl = {(r + gr, c + gc) for r, c in glyph}
+    rand = {(r, c): rnd.random() < density for r in range(gh) for c in range(gw)}
+
+    def qr(r, c):
+        return qr_r <= r < qr_r + N and qr_c <= c < qr_c + N and dark(r - qr_r, c - qr_c) and not in_finder(r - qr_r, c - qr_c)
+
+    def filler(r, c):
+        if not in_shape(r, c) or side(r, c) != -1 or in_quiet(r, c):
+            return False
+        v = c if kind == "col" else r
+        if v == idx - 1:
+            return False  # зазор перед линией отрыва
+        return edge(r, c) or (not gutter(r, c) and rand[(r, c)])
+
+    def stub(r, c):
+        v = c if kind == "col" else r
+        return in_shape(r, c) and side(r, c) == 1 and v > idx + 1 and (r, c) not in gl
+
+    def perf_on(r, c):
+        if not in_shape(r, c) or side(r, c) != 0:
+            return False
+        return (r if kind == "col" else c) % 2 == 0
+
+    return qr, filler, stub, perf_on
+
+
+def v25_coupon():
+    """Купон целиком из модулей: чёрное поле, красный корешок с вырезанным «%»."""
+    W, H = 1600, 1180
+    gw, gh = 58, 39
+    s = 25
+    x0, y0 = (W - gw * s) / 2, (H - gh * s) / 2
+    g = pix_text("%", 2)
+    qr, filler, stub, perf = coupon_field(
+        gw, gh, 4, [(0, gh / 2, 4.2), (40.5, 0, 2.6), (40.5, gh, 2.6)], ("col", 40), (5, 5),
+        g, ((gh - 14) // 2, 42 + (16 - 10) // 2), .45, 21)
+    body = (
+        f'<rect width="{W}" height="{H}" fill="#fff"/>'
+        f'<path fill="{INK}" d="{cells_squares(lambda r, c: qr(r, c) or filler(r, c) or perf(r, c), gh, gw, x0, y0, s)}"/>'
+        f'<path fill="{RED}" d="{cells_squares(stub, gh, gw, x0, y0, s)}"/>'
+        f'{finders(x0 + 5 * s, y0 + 5 * s, s, "square", INK, RED)}'
+    )
+    return W, H, body, "Купон из модулей"
+
+
+def v26_coupon_v():
+    """Вертикальный купон из точек: красный контур и корешок с «−50%», чёрный QR."""
+    W, H = 1080, 1350
+    gw, gh = 39, 56
+    s = 20
+    x0, y0 = (W - gw * s) / 2, (H - gh * s) / 2
+    g = pix_text("-50%")
+    gwid = max(c for _, c in g) + 1
+    qr, filler, stub, perf = coupon_field(
+        gw, gh, 4, [(0, 39.5, 3.6), (gw, 39.5, 3.6)], ("row", 39), (5, 5),
+        g, (41 + (15 - 7) // 2, (gw - gwid) // 2), .4, 8)
+    body = (
+        f'<rect width="{W}" height="{H}" fill="#fff"/>'
+        f'<g fill="{RED}">{cells_dots(lambda r, c: filler(r, c) or stub(r, c), gh, gw, x0, y0, s)}{cells_dots(perf, gh, gw, x0, y0, s, k=.28)}</g>'
+        f'<g fill="{INK}">{cells_dots(qr, gh, gw, x0, y0, s)}</g>'
+        f'{finders(x0 + 5 * s, y0 + 5 * s, s, "circle", INK, RED)}'
+    )
+    return W, H, body, "Вертикальный купон из точек"
+
+
+def v27_coupon_soft():
+    """Купон из слитых модулей: серое поле, красный корешок с «−50%» вдоль."""
+    W, H = 1600, 1180
+    gw, gh = 55, 39
+    s = 26
+    x0, y0 = (W - gw * s) / 2, (H - gh * s) / 2
+    g = pix_text("-50%", rotate=True)
+    gh_g = max(r for r, _ in g) + 1
+    qr, filler, stub, perf = coupon_field(
+        gw, gh, 5, [(40.5, 0, 3.2), (40.5, gh, 3.2)], ("col", 40), (5, 5),
+        g, ((gh - gh_g) // 2, 42 + (13 - 7) // 2), .45, 4)
+    body = (
+        f'<rect width="{W}" height="{H}" fill="#fff"/>'
+        f'<path fill="{LINE}" d="{cells_liquid(filler, gh, gw, x0, y0, s)}"/>'
+        f'<path fill="{INK4}" d="{cells_liquid(perf, gh, gw, x0, y0, s)}"/>'
+        f'<path fill="{RED}" d="{cells_liquid(stub, gh, gw, x0, y0, s)}"/>'
+        f'<path fill="{INK}" d="{cells_liquid(qr, gh, gw, x0, y0, s)}"/>'
+        f'{finders(x0 + 5 * s, y0 + 5 * s, s, "round", INK, RED)}'
+    )
+    return W, H, body, "Мягкий купон"
+
+
 VARIANTS = [
     ("qr-1-ticket", v1_ticket),
     ("qr-2-balloon", v2_balloon),
@@ -1087,6 +1303,9 @@ VARIANTS = [
     ("qr-22-card", v22_card),
     ("qr-23-flyer", v23_flyer),
     ("qr-24-calendar", v24_calendar),
+    ("qr-25-coupon", v25_coupon),
+    ("qr-26-coupon-v", v26_coupon_v),
+    ("qr-27-coupon-soft", v27_coupon_soft),
 ]
 
 
