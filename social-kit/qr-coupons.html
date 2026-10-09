@@ -20,6 +20,12 @@
           красная плашка с надписью. Купон белый.
        F. То же на красном купоне: плашка белая с красной надписью, QR —
           тёмный на белой подложке (белый на красном камеры не читают).
+       G. Горизонтальный, как исходный референс: QR слева, справа плашка
+          с надписью снизу вверх; линия отрыва вертикальная.
+       H. Плашка сверху, QR снизу; края волнистые, как у билета A.
+       I. Тёмный купон: QR на белой подложке, красная плашка.
+       J. Плашка с гладким скруглением и сайтом под надписью — для
+          сравнения со ступенчатыми углами E/F.
 
      QR — build-qr.py (уровень H, окно под логотип в центре) → qr/*.svg.
      Контуры билетов — векторные, считает скрипт внизу: в Figma переносятся
@@ -112,6 +118,26 @@ a{color:inherit;text-decoration:none}
    код тёмный на белой подложке, а пунктир рамки — вокруг неё. */
 .qf .qe__frame{border:0;background:#fff;outline:6px dashed rgba(255,255,255,.55);outline-offset:14px;width:520px;height:520px;padding:48px;margin:14px 0}
 .qf .qe__plq{background:#fff;color:var(--brand)}
+
+/* ---------- G. Горизонтальный ---------- */
+.qg{flex-direction:row;align-items:center;width:auto;padding:48px}
+.qg .qe__frame{width:560px;height:560px}
+.qg .qe__gap{width:76px;height:auto;align-self:stretch}
+.qg .qe__plq{width:180px;height:560px;margin:0}
+.qg .qe__plq{position:relative}
+.qg .qe__plq span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-90deg);font-size:50px}
+
+/* ---------- H. Плашка сверху, волнистые края ---------- */
+.qh{padding:72px 56px 72px}
+.qh .qe__plq{margin:0}
+
+/* ---------- I. Тёмный купон ---------- */
+.qi .qt__bg path:first-child{fill:var(--ink)}
+.qi .qe__frame{border:0;background:#fff;outline:6px dashed rgba(255,255,255,.35);outline-offset:14px;width:520px;height:520px;padding:48px;margin:14px 0}
+
+/* ---------- J. Гладкая плашка с сайтом ---------- */
+.qe__plq--round{clip-path:none;border-radius:28px;height:170px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.qe__plq--round small{font-size:32px;font-weight:600;letter-spacing:0;text-transform:none;opacity:.85}
 </style>
 </head>
 <body>
@@ -173,6 +199,42 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
+  <!-- G. Горизонтальный -->
+  <section class="tile tile--red" data-name="qr-g">
+    <div class="qt qt--shadow qe qg" data-shape="round" data-cut="#qg-cut" data-dash="dots" data-axis="x">
+      <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
+      <div class="qe__gap" id="qg-cut"></div>
+      <div class="qe__plq"><span>Просканируй меня</span></div>
+    </div>
+  </section>
+
+  <!-- H. Плашка сверху -->
+  <section class="tile tile--grey" data-name="qr-h">
+    <div class="qt qt--soft qe qh" data-shape="wave" data-cut="#qh-cut" data-dash="dots">
+      <div class="qe__plq">Просканируй меня</div>
+      <div class="qe__gap" id="qh-cut"></div>
+      <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
+    </div>
+  </section>
+
+  <!-- I. Тёмный купон -->
+  <section class="tile tile--red" data-name="qr-i">
+    <div class="qt qt--shadow qe qi" data-shape="round" data-cut="#qi-cut" data-dash="dots-light">
+      <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
+      <div class="qe__gap" id="qi-cut"></div>
+      <div class="qe__plq">Просканируй меня</div>
+    </div>
+  </section>
+
+  <!-- J. Гладкая плашка с сайтом -->
+  <section class="tile tile--light" data-name="qr-j">
+    <div class="qt qt--shadow qe" data-shape="round" data-cut="#qj-cut" data-dash="dots">
+      <div class="qe__frame"><a class="qr" href="https://vsekupony.ru"><img src="qr/qr-site-dots-ink.svg" alt="QR-код: vsekupony.ru"></a></div>
+      <div class="qe__gap" id="qj-cut"></div>
+      <div class="qe__plq qe__plq--round">Просканируй меня<small>vsekupony.ru</small></div>
+    </div>
+  </section>
+
 </main>
 <script>
 (function () {
@@ -210,7 +272,12 @@ a{color:inherit;text-decoration:none}
       var cut = q.querySelector(q.dataset.cut);
       /* линия отрыва — верх корешка; у визитки — середина промежутка */
       var dd = q.dataset.dash || "";
-      var cy = dd === "bold" || dd.indexOf("dots") === 0 ? cut.offsetTop + cut.offsetHeight / 2 : cut.offsetTop;
+      /* axis = x — линия отрыва вертикальная: контур строим как у
+         вертикального билета (w и h местами), а потом отражаем по диагонали */
+      var X = q.dataset.axis === "x";
+      if (X) { var t = w; w = h; h = t; }
+      var cy = X ? cut.offsetLeft + cut.offsetWidth / 2
+             : dd === "bold" || dd.indexOf("dots") === 0 ? cut.offsetTop + cut.offsetHeight / 2 : cut.offsetTop;
       var stroke = q.dataset.dash === "light" ? "rgba(255,255,255,.55)" : "#D3D3D3";
       var dash = dd.indexOf("dots") === 0
         ? 'stroke="' + (dd === "dots-light" ? "rgba(255,255,255,.6)" : "#D3D3D3") + '" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 20"'
@@ -218,9 +285,9 @@ a{color:inherit;text-decoration:none}
         ? 'stroke="#E3E3E3" stroke-width="8" stroke-linecap="round" stroke-dasharray="34 26"'
         : 'stroke="' + stroke + '" stroke-width="4" stroke-dasharray="14 11"';
       q.insertAdjacentHTML("afterbegin",
-        '<svg class="qt__bg" viewBox="0 0 ' + w + ' ' + h + '" width="' + w + '" height="' + h + '" aria-hidden="true">' +
-        '<path d="' + ticket(w, h, cy, N, q.dataset.shape) + '"/>' +
-        '<path fill="none" style="fill:none" ' + dash + ' d="M' + (N + 22) + ',' + cy + 'H' + (w - N - 22) + '"/></svg>');
+        '<svg class="qt__bg" viewBox="0 0 ' + (X ? h + ' ' + w : w + ' ' + h) + '" width="' + (X ? h : w) + '" height="' + (X ? w : h) + '" aria-hidden="true">' +
+        '<g' + (X ? ' transform="matrix(0,1,1,0,0,0)"' : '') + '><path d="' + ticket(w, h, cy, N, q.dataset.shape) + '"/>' +
+        '<path fill="none" style="fill:none" ' + dash + ' d="M' + (N + 22) + ',' + cy + 'H' + (w - N - 22) + '"/></g></svg>');
     });
   }
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(build);
