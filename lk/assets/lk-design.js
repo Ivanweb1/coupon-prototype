@@ -1046,11 +1046,35 @@ const feeRowShort = f => {
    · реклама — справа от таблицы, внизу её больше нет. */
 const kpiRow = items => kpi(items).replace('class="lk-kpi"', 'class="lk-kpi lkd-kpi-row"');
 
+/* Партнёрская ссылка — первая полоса дашборда: её партнёр берёт чаще
+   всего, чтобы отправить знакомому бизнесу. Ссылка — образец, настоящая
+   выдаётся при регистрации партнёра. Копируется одним нажатием. */
+const PARTNER_REF = "vsekupony.ru/p/751743";
+const refBar = () => `<div class="lkd-ref">
+    <div class="lkd-ref__txt">
+      <span class="lkd-ref__label">Партнёрская ссылка</span>
+      <a class="lkd-ref__link" href="https://${PARTNER_REF}" target="_blank" rel="noopener">${PARTNER_REF}</a>
+    </div>
+    <p class="lkd-ref__hint">Бизнес, который зарегистрируется по ней, закрепится за вами.</p>
+    <button class="btn btn--ghost lkd-ref__btn" type="button" data-ref-copy>
+      <i data-icon="copy"></i><span>Скопировать</span></button>
+  </div>`;
+const withRef = html => html.replace('<div class="lk-kpi', refBar() + '<div class="lk-kpi');
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-ref-copy]");
+  if (!b) return;
+  try { navigator.clipboard.writeText("https://" + PARTNER_REF); } catch (_) {}
+  const t = qs("span", b), was = t.textContent;
+  t.textContent = "Скопировано"; b.classList.add("is-done");
+  setTimeout(() => { t.textContent = was; b.classList.remove("is-done"); }, 1800);
+});
+
 const baseMpDashboard = VIEWS["partner:dashboard"];
 VIEWS["partner:dashboard"] = () => {
   /* Без региональной роли — дашборд по кодам из lk.js: показывать
      клиентов региона и купоны на клиента здесь нечем */
-  if (!state.regional) return baseMpDashboard() + offersRow();
+  if (!state.regional) return withRef(baseMpDashboard()) + offersRow();
 
   const now = FEES.filter(f => f.status === "live");
   const activeClients = new Set(now.map(f => f.client)).size;
@@ -1061,6 +1085,7 @@ VIEWS["partner:dashboard"] = () => {
   const last = FEES.slice().sort((a, b) => b.id - a.id).slice(0, 5);
 
   return head("Дашборд партнёра")
+    + refBar()
     + kpiRow([
         { label: "Клиентов в регионе",        value: LK_CLIENTS.length, note: fresh + " без первого купона" },
         { label: "Размещено купонов",         value: now.length, note: "активные на сегодня" },
