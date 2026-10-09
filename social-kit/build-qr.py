@@ -42,6 +42,7 @@ RED = "#DD443C"
 INK = "#1B1B1B"
 INK2 = "#565656"
 INK3 = "#8A8A8A"
+INK4 = "#B6B6B6"
 LINE = "#D3D3D3"
 SURFACE = "#F6F6F6"
 
@@ -59,8 +60,9 @@ FONT_CSS = "".join(
     f"src:url(data:font/woff2;base64,{b64(ROOT / 'fonts' / f)}) format('woff2');"
     f"unicode-range:{rng}}}"
     for f, rng in [
-        ("onest-latin.woff2", "U+0000-00FF,U+2013-2014,U+2192"),
-        ("onest-cyrillic.woff2", "U+0400-045F"),
+        ("onest-latin.woff2", "U+0000-00FF,U+2013-2014,U+2192,U+2212"),
+        ("onest-cyrillic.woff2", "U+0400-045F,U+2116"),
+        ("onest-latin-ext.woff2", "U+20BD"),
     ]
 )
 LOGO = {
@@ -457,6 +459,333 @@ def v8_clean():
     return W, H, body, "Базовый"
 
 
+# --------------------------------------------------------------------------
+# Второй заход: купонные сюжеты
+# --------------------------------------------------------------------------
+
+def qr_block(x0, y0, s, mods="squares", eyes="square", ink=INK, eye_out=None, eye_in=None, keep=always):
+    """QR целиком: модули выбранной формы плюс глазки."""
+    eye_out = eye_out or ink
+    if mods == "squares":
+        m = f'<path fill="{ink}" d="{mod_squares(x0, y0, s, keep)}"/>'
+    elif mods == "liquid":
+        m = f'<path fill="{ink}" d="{mod_liquid(x0, y0, s, keep)}"/>'
+    elif mods == "dots":
+        m = f'<g fill="{ink}">{mod_dots(x0, y0, s, keep)}</g>'
+    else:
+        m = f'<g fill="{ink}">{mod_rounded(x0, y0, s, keep)}</g>'
+    return m + finders(x0, y0, s, eyes, eye_out, eye_in)
+
+
+def zigzag(x0, x1, y, tooth, depth, down):
+    """Рваный край чека: зубцы от x0 до x1 (вниз или вверх от y)."""
+    pts = []
+    n = int((x1 - x0) / tooth)
+    step = (x1 - x0) / n
+    for i in range(n + 1):
+        pts.append((x0 + i * step, y))
+        if i < n:
+            pts.append((x0 + (i + .5) * step, y + (depth if down else -depth)))
+    return pts
+
+
+def v9_receipt():
+    """Кассовый чек: позиции со скидками, «к оплате 0 ₽», QR внизу."""
+    W, H = 1080, 1350
+    x0, x1, y0, y1 = 250, 830, 70, 1280
+    top = zigzag(x0, x1, y0, 29, 16, False)
+    bot = zigzag(x1, x0, y1, 29, 16, True)
+    pts = top + bot
+    paper = "M" + "L".join(f"{f(x)},{f(y)}" for x, y in pts) + "Z"
+    shadow = "M" + "L".join(f"{f(x + 14)},{f(y + 18)}" for x, y in pts) + "Z"
+    cx = (x0 + x1) / 2
+    L, R = x0 + 48, x1 - 48
+
+    def row(y, a, b, red=True, size=28, w=500):
+        return (
+            f'<text x="{L}" y="{y}" font-size="{size}" font-weight="{w}" fill="{INK}">{a}</text>'
+            f'<text x="{R}" y="{y}" text-anchor="end" font-size="{size}" font-weight="800" fill="{RED if red else INK}">{b}</text>'
+        )
+
+    def dash(y):
+        return f'<path d="M{L},{y}H{R}" stroke="{INK4}" stroke-width="3" stroke-dasharray="10 9"/>'
+
+    s = 13
+    qx = cx - N * s / 2
+    qy = 812
+    body = (
+        f'<rect width="{W}" height="{H}" fill="{SURFACE}"/>'
+        f'<g transform="rotate(-2 {cx} {H/2})">'
+        f'<path fill="#E2E2E2" d="{shadow}"/><path fill="#fff" d="{paper}"/>'
+        f'{logo("red", cx, 168, 120)}'
+        f'<text x="{cx}" y="290" text-anchor="middle" font-size="40" font-weight="800" letter-spacing=".14em" fill="{INK}">ВСЕ КУПОНЫ</text>'
+        f'<text x="{cx}" y="332" text-anchor="middle" font-size="22" font-weight="500" fill="{INK3}">Липецк · vsekupony.ru · касса 01</text>'
+        f'{dash(372)}'
+        f'{row(426, "Кофе с собой", "−30%")}'
+        f'{row(476, "Стрижка", "−20%")}'
+        f'{row(526, "Шиномонтаж", "−15%")}'
+        f'{row(576, "Пицца 30 см", "1+1")}'
+        f'{row(626, "Фитнес, месяц", "−25%")}'
+        f'{dash(666)}'
+        f'{row(730, "К ОПЛАТЕ", "0 ₽", red=False, size=44, w=800)}'
+        f'<text x="{L}" y="770" font-size="22" font-weight="500" fill="{INK3}">купоны бесплатны, всегда</text>'
+        f'{qr_block(qx, qy, s, "squares", "square", INK, INK)}'
+        f'{dash(1222 - 20)}'
+        f'<text x="{cx}" y="1246" text-anchor="middle" font-size="24" font-weight="800" letter-spacing=".14em" fill="{INK}">СПАСИБО! ЗАХОДИТЕ ЕЩЁ</text>'
+        f"</g>"
+    )
+    return W, H, body, "Чек"
+
+
+def v10_scratch():
+    """Скретч-карта: защитный слой стёрт, по краям окна остатки и монетка."""
+    W = H = 1080
+    cx0, cy0, cw, ch = 110, 90, 860, 900
+    s = 16
+    qs = N * s
+    m = 66
+    wx, wy = (W - qs) / 2 - m, 300
+    ww = wh = qs + 2 * m
+    qx, qy = wx + m, wy + m
+    rnd = random.Random(11)
+    strokes = []
+    edges = [((wx, wy), (wx + ww, wy)), ((wx + ww, wy), (wx + ww, wy + wh)),
+             ((wx + ww, wy + wh), (wx, wy + wh)), ((wx, wy + wh), (wx, wy))]
+    for (ax, ay), (bx, by) in edges:
+        nx, ny = (by - ay), -(bx - ax)  # нормаль внутрь окна (обход по часовой)
+        ln = math.hypot(nx, ny)
+        nx, ny = -nx / ln, -ny / ln
+        k = 0.0
+        while k < 1:
+            k2 = min(1, k + rnd.uniform(.12, .3))
+            if rnd.random() < .78:
+                pts = []
+                for t in (k, (k + k2) / 2, k2):
+                    off = rnd.uniform(0, 22)
+                    pts.append((ax + (bx - ax) * t + nx * off, ay + (by - ay) * t + ny * off))
+                strokes.append(
+                    f'<path d="M{f(pts[0][0])},{f(pts[0][1])}Q{f(pts[1][0])},{f(pts[1][1])} {f(pts[2][0])},{f(pts[2][1])}" '
+                    f'stroke-width="{rnd.randint(36, 52)}"/>')
+            k = k2
+    for _ in range(14):
+        a = rnd.uniform(0, 2 * math.pi)
+        # штрихи-царапины по слою
+        e = rnd.choice(edges)
+        t = rnd.random()
+        px = e[0][0] + (e[1][0] - e[0][0]) * t
+        py = e[0][1] + (e[1][1] - e[0][1]) * t
+        strokes.append(f'<path d="M{f(px)},{f(py)}l{f(math.cos(a)*40)},{f(math.sin(a)*40)}" stroke="#DADADA" stroke-width="5"/>')
+    coin_x, coin_y = wx + ww - 10, wy + wh - 6
+    body = (
+        f'<rect width="{W}" height="{H}" fill="{SURFACE}"/>'
+        f'<rect x="{cx0}" y="{cy0}" width="{cw}" height="{ch}" rx="48" fill="{RED}"/>'
+        f'<text x="{W/2}" y="186" text-anchor="middle" font-size="70" font-weight="800" letter-spacing="-.025em" fill="#fff">Сотри защитный слой</text>'
+        f'<text x="{W/2}" y="250" text-anchor="middle" font-size="36" font-weight="500" fill="#fff" opacity=".85">и забери скидку города</text>'
+        f'<defs><clipPath id="win"><rect x="{wx}" y="{wy}" width="{ww}" height="{wh}" rx="28"/></clipPath></defs>'
+        f'<rect x="{wx}" y="{wy}" width="{ww}" height="{wh}" rx="28" fill="#fff"/>'
+        f'<g clip-path="url(#win)" fill="none" stroke="#C7C7C7" stroke-linecap="round">{"".join(strokes)}</g>'
+        f'{qr_block(qx, qy, s, "squares", "round", INK, INK, RED)}'
+        f'<g transform="rotate(-18 {coin_x} {coin_y})">'
+        f'<circle cx="{coin_x}" cy="{coin_y}" r="82" fill="#D3D3D3" stroke="#B6B6B6" stroke-width="8"/>'
+        f'<circle cx="{coin_x}" cy="{coin_y}" r="62" fill="none" stroke="#B6B6B6" stroke-width="3" stroke-dasharray="4 7"/>'
+        f'<text x="{coin_x}" y="{coin_y + 26}" text-anchor="middle" font-size="76" font-weight="800" fill="{INK3}">%</text></g>'
+        f'<text x="{W/2}" y="{cy0 + ch - 48}" text-anchor="middle" font-size="52" font-weight="800" letter-spacing="-.01em" fill="#fff">vsekupony.ru</text>'
+    )
+    return W, H, body, "Скретч-карта"
+
+
+def v11_tag():
+    """Ценник на нитке: старая цена зачёркнута, новая — 0 ₽."""
+    W, H = 1080, 1350
+    cx = 560
+    tw, top, bot = 620, 230, 1270
+    roof = 150
+    x0, x1 = cx - tw / 2, cx + tw / 2
+    k = 36
+    tag = (
+        f"M{cx},{top}L{x1},{top + roof}V{bot - k}A{k},{k} 0 0 1 {x1 - k},{bot}"
+        f"H{x0 + k}A{k},{k} 0 0 1 {x0},{bot - k}V{top + roof}Z"
+    )
+    hole_y = top + 105
+    s = 16
+    qs = N * s
+    card = qs + 48
+    qx0 = cx - card / 2
+    qy0 = 420
+    body = (
+        f'<rect width="{W}" height="{H}" fill="{SURFACE}"/>'
+        f'<path d="M{cx},{hole_y}C{cx - 40},{hole_y - 180} {cx + 160},{40} {cx + 60},-10" fill="none" stroke="{INK}" stroke-width="5" stroke-linecap="round"/>'
+        f'<g transform="rotate(-6 {cx} {hole_y})">'
+        f'<path fill="{RED}" d="{tag}" stroke="{RED}" stroke-width="20" stroke-linejoin="round"/>'
+        f'<circle cx="{cx}" cy="{hole_y}" r="22" fill="{SURFACE}"/>'
+        f'<circle cx="{cx}" cy="{hole_y}" r="22" fill="none" stroke="#fff" stroke-width="5"/>'
+        f'<rect x="{qx0}" y="{qy0}" width="{card}" height="{card}" rx="26" fill="#fff"/>'
+        f'{qr_block(qx0 + 24, qy0 + 24, s, "rounded", "round", INK, INK, RED)}'
+        f'<text x="{x0 + 56}" y="{qy0 + card + 92}" font-size="56" font-weight="700" fill="#fff" opacity=".7">999 ₽</text>'
+        f'<path d="M{x0 + 50},{qy0 + card + 82}L{x0 + 230},{qy0 + card + 56}" stroke="#fff" stroke-width="7" stroke-linecap="round"/>'
+        f'<text x="{x1 - 56}" y="{qy0 + card + 112}" text-anchor="end" font-size="120" font-weight="800" letter-spacing="-.03em" fill="#fff">0 ₽</text>'
+        f'<text x="{cx}" y="{bot - 60}" text-anchor="middle" font-size="48" font-weight="800" letter-spacing="-.01em" fill="#fff">vsekupony.ru</text>'
+        f"</g>"
+    )
+    return W, H, body, "Ценник"
+
+
+def v12_stamp():
+    """Почтовая марка с перфорацией и гашением «Липецк»."""
+    W = H = 1080
+    sx, sy, sw, sh = 200, 110, 680, 860
+    r, gap = 15, 40
+    holes = []
+    for i in range(int(sw / gap) + 1):
+        x = sx + i * sw / int(sw / gap)
+        holes += [(x, sy), (x, sy + sh)]
+    for i in range(1, int(sh / gap)):
+        y = sy + i * sh / int(sh / gap)
+        holes += [(sx, y), (sx + sw, y)]
+    s = 16
+    qs = N * s
+    qx, qy = sx + (sw - qs) / 2, sy + 150
+    pm_x, pm_y = 820, 900
+    waves = "".join(
+        f'<path d="M{pm_x + 120},{pm_y - 48 + i * 32}' +
+        "".join(f"q20,-16 40,0t40,0" for _ in range(3)) + '" fill="none"/>'
+        for i in range(4)
+    )
+    body = (
+        f'<rect width="{W}" height="{H}" fill="{SURFACE}"/>'
+        f'<g transform="rotate(3 {W/2} {H/2})">'
+        f'<rect x="{sx}" y="{sy}" width="{sw}" height="{sh}" fill="#fff"/>'
+        f'<g fill="{SURFACE}">{"".join(f"<circle cx={chr(34)}{f(x)}{chr(34)} cy={chr(34)}{f(y)}{chr(34)} r={chr(34)}{r}{chr(34)}/>" for x, y in holes)}</g>'
+        f'<rect x="{sx + 40}" y="{sy + 40}" width="{sw - 80}" height="{sh - 80}" fill="none" stroke="{RED}" stroke-width="4"/>'
+        f'<text x="{sx + 74}" y="{sy + 112}" font-size="36" font-weight="800" letter-spacing=".12em" fill="{INK}">ПОЧТА СКИДОК</text>'
+        f'<text x="{sx + sw - 74}" y="{sy + 116}" text-anchor="end" font-size="56" font-weight="800" letter-spacing="-.02em" fill="{RED}">0 ₽</text>'
+        f'{qr_block(qx, qy, s, "squares", "square", INK, RED, INK)}'
+        f'{logo("red", sx + 120, sy + sh - 140, 130, rot=-8)}'
+        f'<text x="{sx + 190}" y="{sy + sh - 150}" font-size="40" font-weight="800" letter-spacing="-.02em" fill="{INK}">Все купоны</text>'
+        f'<text x="{sx + 190}" y="{sy + sh - 104}" font-size="30" font-weight="600" fill="{RED}">vsekupony.ru</text>'
+        f"</g>"
+        f'<g stroke="{INK2}" stroke-width="4" opacity=".9">'
+        f'<circle cx="{pm_x}" cy="{pm_y}" r="110" fill="none"/>'
+        f'<circle cx="{pm_x}" cy="{pm_y}" r="78" fill="none" stroke-width="2.5"/>{waves}</g>'
+        f'<defs><path id="pmT" d="M{pm_x - 92},{pm_y}A92,92 0 0 1 {pm_x + 92},{pm_y}"/>'
+        f'<path id="pmB" d="M{pm_x - 110},{pm_y}A110,110 0 0 0 {pm_x + 110},{pm_y}"/></defs>'
+        f'<g fill="{INK2}" font-weight="800" text-anchor="middle" opacity=".9">'
+        f'<text font-size="24" letter-spacing=".16em"><textPath href="#pmT" startOffset="50%">ЛИПЕЦК</textPath></text>'
+        f'<text font-size="22" letter-spacing=".16em"><textPath href="#pmB" startOffset="50%">ВСЕ КУПОНЫ</textPath></text>'
+        f'<text x="{pm_x}" y="{pm_y + 11}" font-size="30" letter-spacing=".02em">09.10.26</text></g>'
+    )
+    return W, H, body, "Почтовая марка"
+
+
+def v13_stack():
+    """Стопка купонов веером; верхний — с QR."""
+    W = H = 1080
+    cw, ch = 860, 440
+    cx, cy = W / 2, H / 2 + 30
+    x, y = cx - cw / 2, cy - ch / 2
+
+    def coupon(fill, rot, dx, dy, txt, tcol):
+        return (
+            f'<g transform="translate({dx} {dy}) rotate({rot} {cx} {cy})">'
+            f'<path fill="{fill}" d="{ticket_path(x, y, cw, ch, 34, 34)}"/>'
+            f'<text x="{x + cw - 60}" y="{y + 130}" text-anchor="end" font-size="110" font-weight="800" letter-spacing="-.03em" fill="{tcol}">{txt}</text>'
+            f"</g>"
+        )
+    s = 12
+    qs = N * s
+    split = x + qs + 92
+    body = (
+        f'<rect width="{W}" height="{H}" fill="#fff"/>'
+        f'{coupon(INK, -13, -20, -70, "1+1", "#fff")}'
+        f'{coupon(RED, 8, 10, -40, "−50%", "#fff")}'
+        f'<path fill="#E4E4E4" d="{ticket_path(x + 14, y + 20, cw, ch, 34, 34)}"/>'
+        f'<path fill="#fff" stroke="{INK}" stroke-width="4" d="{ticket_path(x, y, cw, ch, 34, 34)}"/>'
+        f'<path d="M{split},{y + 28}V{y + ch - 28}" stroke="{INK4}" stroke-width="4" stroke-dasharray="12 10"/>'
+        f'{qr_block(x + 46, cy - qs / 2, s, "liquid", "round", INK, INK, RED)}'
+        f'<text x="{split + 50}" y="{y + 108}" font-size="30" font-weight="600" fill="{INK3}">Купон №000001</text>'
+        f'<text x="{split + 50}" y="{y + 186}" font-size="60" font-weight="800" letter-spacing="-.025em" fill="{INK}">Все купоны</text>'
+        f'<text x="{split + 50}" y="{y + 250}" font-size="60" font-weight="800" letter-spacing="-.025em" fill="{INK}">города</text>'
+        f'{red_ticket(split + 50 + 180, y + 340, "vsekupony.ru", 38)}'
+    )
+    return W, H, body, "Стопка купонов"
+
+
+def v14_percent():
+    """Знак процента: в верхнем круге шар, в нижнем — QR; черта — билетик."""
+    W = H = 1080
+    s = 10
+    qs = N * s
+    c2 = 765
+    rin, sw = 226, 34
+    c1 = 292
+    L = 900
+    body = (
+        f'<rect width="{W}" height="{H}" fill="#fff"/>'
+        f'<g transform="rotate(-45 540 540)">'
+        f'<path fill="{RED}" d="{ticket_path(540 - L / 2, 540 - 44, L, 88, 22, 30)}"/></g>'
+        f'<circle cx="{c1}" cy="{c1}" r="{175}" fill="#fff" stroke="{RED}" stroke-width="{sw}"/>'
+        f'{logo("red", c1 + 4, c1 + 4, 230, rot=-8)}'
+        f'<circle cx="{c2}" cy="{c2}" r="{rin + sw / 2}" fill="#fff" stroke="{RED}" stroke-width="{sw}"/>'
+        f'{qr_block(c2 - qs / 2, c2 - qs / 2, s, "squares", "square", INK, INK)}'
+    )
+    return W, H, body, "Процент"
+
+
+def v15_hidden():
+    """QR с секретом: модули, попавшие в силуэт шара, красные."""
+    from PIL import Image, ImageFilter
+    W = H = 1080
+    s = 32
+    q0 = (W - N * s) / 2
+    im = Image.open(BRAND / "logo-red.png").split()[-1]
+    rows = N - 2
+    cols = round(rows * LOGO_RATIO)
+    blob = im.filter(ImageFilter.GaussianBlur(14)).resize((cols, rows), Image.BILINEAR)
+    c_off = (N - cols) // 2
+    r_off = 1
+
+    def inside(r, c):
+        rr, cc = r - r_off, c - c_off
+        return 0 <= rr < rows and 0 <= cc < cols and blob.getpixel((cc, rr)) > 60
+
+    body = (
+        f'<rect width="{W}" height="{H}" fill="#fff"/>'
+        f'<g fill="{SURFACE}">{"".join(f'<rect x="{f(q0 + c * s)}" y="{f(q0 + r * s)}" width="{s}" height="{s}"/>' for r in range(N) for c in range(N) if inside(r, c) and not in_finder(r, c))}</g>'
+        f'<g fill="{INK}">{mod_rounded(q0, q0, s, lambda r, c: not inside(r, c), k=.3)}</g>'
+        f'<g fill="{RED}">{mod_rounded(q0, q0, s, inside, k=.3)}</g>'
+        f'{finders(q0, q0, s, "round", INK, INK)}'
+    )
+    return W, H, body, "Шар внутри"
+
+
+def v16_burst():
+    """Наклейка «скидка»: красная звезда-вспышка, QR в белом круге, текст по кругу."""
+    W = H = 1080
+    c = W / 2
+    n = 32
+    pts = []
+    for i in range(2 * n):
+        a = math.pi * i / n
+        rr = 515 if i % 2 == 0 else 470
+        pts.append((c + rr * math.cos(a), c + rr * math.sin(a)))
+    star = "M" + "L".join(f"{f(x)},{f(y)}" for x, y in pts) + "Z"
+    s = 17
+    qs = N * s
+    ra = 418
+    words = "СКИДКИ · АКЦИИ · КУПОНЫ · VSEKUPONY.RU · "
+    body = (
+        f'<rect width="{W}" height="{H}" fill="{SURFACE}"/>'
+        f'<g transform="rotate(-8 {c} {c})">'
+        f'<path fill="{RED}" d="{star}"/>'
+        f'<circle cx="{c}" cy="{c}" r="380" fill="#fff"/>'
+        f'<defs><path id="ring" d="M{c - ra},{c}A{ra},{ra} 0 1 1 {c + ra},{c}A{ra},{ra} 0 1 1 {c - ra},{c}"/></defs>'
+        f'<text font-size="34" font-weight="800" letter-spacing=".1em" fill="#fff"><textPath href="#ring" textLength="{f(2 * math.pi * ra - 20)}" lengthAdjust="spacing">{words * 2}</textPath></text>'
+        f"</g>"
+        f'{qr_block(c - qs / 2, c - qs / 2, s, "dots", "circle", INK, RED)}'
+    )
+    return W, H, body, "Вспышка «скидка»"
+
+
 VARIANTS = [
     ("qr-1-ticket", v1_ticket),
     ("qr-2-balloon", v2_balloon),
@@ -466,6 +795,14 @@ VARIANTS = [
     ("qr-6-cut", v6_cut),
     ("qr-7-seal", v7_seal),
     ("qr-8-clean", v8_clean),
+    ("qr-9-receipt", v9_receipt),
+    ("qr-10-scratch", v10_scratch),
+    ("qr-11-tag", v11_tag),
+    ("qr-12-stamp", v12_stamp),
+    ("qr-13-stack", v13_stack),
+    ("qr-14-percent", v14_percent),
+    ("qr-15-hidden", v15_hidden),
+    ("qr-16-burst", v16_burst),
 ]
 
 
