@@ -1052,12 +1052,15 @@ const kpiRow = items => kpi(items).replace('class="lk-kpi"', 'class="lk-kpi lkd-
 const PARTNER_REF = "vsekupony.ru/p/751743";
 const refBar = () => `<div class="lkd-ref">
     <div class="lkd-ref__txt">
-      <span class="lkd-ref__label">Партнёрская ссылка</span>
-      <a class="lkd-ref__link" href="https://${PARTNER_REF}" target="_blank" rel="noopener">${PARTNER_REF}</a>
+      <b class="lkd-ref__label">Партнёрская ссылка</b>
+      <p class="lkd-ref__hint">Бизнес, который зарегистрируется по ней, закрепится за вами.</p>
     </div>
-    <p class="lkd-ref__hint">Бизнес, который зарегистрируется по ней, закрепится за вами.</p>
-    <button class="btn btn--ghost lkd-ref__btn" type="button" data-ref-copy>
-      <i data-icon="copy"></i><span>Скопировать</span></button>
+    <div class="lkd-ref__field">
+      <span class="lkd-ref__ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M14 10a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1"/></svg></span>
+      <a class="lkd-ref__link" href="https://${PARTNER_REF}" target="_blank" rel="noopener">${PARTNER_REF}</a>
+      <button class="btn btn--solid lkd-ref__btn" type="button" data-ref-copy>
+        <i data-icon="copy"></i><span>Скопировать</span></button>
+    </div>
   </div>`;
 const withRef = html => html.replace('<div class="lk-kpi', refBar() + '<div class="lk-kpi');
 
