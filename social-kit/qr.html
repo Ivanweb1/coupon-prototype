@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR-коды Все купоны</title>
+<link rel="stylesheet" href="fonts/onest.css">
+<style>
+/* Витрина вариантов QR. Сами коды — самостоятельные SVG в qr/,
+   собираются build-qr.py; здесь только раскладка и подписи. */
+:root{
+  --brand:#DD443C;--ink:#1B1B1B;--ink-2:#565656;--ink-3:#8A8A8A;
+  --line:#E8E8E8;--surface:#F6F6F6;
+  --font:"Onest", ui-sans-serif, system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
+.page{max-width:1440px;margin:0 auto;padding:56px 40px 96px}
+h1{margin:0;font-size:44px;font-weight:800;letter-spacing:-.025em}
+.lead{margin:12px 0 0;max-width:760px;font-size:17px;line-height:1.5;color:var(--ink-2)}
+.lead a{color:var(--brand);font-weight:700;text-decoration:none}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px 28px;margin:48px 0 0}
+.grid .wide{grid-column:span 2}
+figure{margin:0}
+.ph{display:grid;place-items:center;background:var(--surface);border-radius:20px;padding:20px;aspect-ratio:1}
+.wide .ph{aspect-ratio:2.08/1}
+.ph img{display:block;max-width:100%;max-height:100%;box-shadow:0 14px 32px -22px rgba(0,0,0,.4)}
+figcaption{margin:14px 2px 0;font-size:15px;line-height:1.45;color:var(--ink-2)}
+figcaption b{display:block;margin:0 0 2px;font-size:19px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+figcaption b i{font-style:normal;color:var(--brand);margin-right:6px}
+figcaption a{color:var(--brand);font-weight:600;text-decoration:none}
+@media (max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){
+  .page{padding:32px 16px 64px}
+  h1{font-size:32px}
+  .grid{grid-template-columns:1fr}
+  .grid .wide{grid-column:auto}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>QR-коды на vsekupony.ru</h1>
+  <p class="lead">Восемь вариантов на одной матрице: меняются только форма модулей, «глазки» и подложка. Палитра и приёмы те же, что в упаковке соцсетей: красный #DD443C, Onest, шар, билетик с вырезами, плашка с наклоном. Каждый файл — SVG со вшитыми шрифтом и логотипом, тащится в Figma как есть.</p>
+
+  <div class="grid">
+    <figure class="wide">
+      <div class="ph"><img src="qr/qr-1-ticket.svg" alt="QR на купоне с отрывным корешком"></div>
+      <figcaption><b><i>1</i>Купон с корешком</b>QR на белой части, адрес на красном корешке, линия отрыва с вырезами. Флаер, наклейка на кассу, вкладыш в заказ. <a href="qr/qr-1-ticket.svg">SVG</a></figcaption>
+    </figure>
+    <figure>
+      <div class="ph"><img src="qr/qr-2-balloon.svg" alt="QR из точек с шаром в центре"></div>
+      <figcaption><b><i>2</i>Шар</b>Модули-точки, круглые красные глазки, в центре шар-логотип. <a href="qr/qr-2-balloon.svg">SVG</a></figcaption>
+    </figure>
+    <figure>
+      <div class="ph"><img src="qr/qr-4-tickets.svg" alt="QR из билетиков"></div>
+      <figcaption><b><i>4</i>Из купонов</b>Каждый отрезок модулей — билетик с вырезами, часть красные. Глазки — тоже билетики. <a href="qr/qr-4-tickets.svg">SVG</a></figcaption>
+    </figure>
+    <figure>
+      <div class="ph"><img src="qr/qr-3-plate.svg" alt="QR с плашкой города"></div>
+      <figcaption><b><i>3</i>Плашка города</b>Пост 4:5: заголовок с красной плашкой «Липецка» под −2°, слитые модули. <a href="qr/qr-3-plate.svg">SVG</a></figcaption>
+    </figure>
+    <figure>
+      <div class="ph"><img src="qr/qr-5-sticker.svg" alt="QR на красной наклейке"></div>
+      <figcaption><b><i>5</i>Красная наклейка</b>Красный фон, белый шар, красный QR на белой карточке. <a href="qr/qr-5-sticker.svg">SVG</a></figcaption>
+    </figure>
+    <figure>
+      <div class="ph"><img src="qr/qr-6-cut.svg" alt="QR в купоне под ножницы"></div>
+      <figcaption><b><i>6</i>Вырезать не нужно</b>Купон под ножницы с подмигиванием; адрес — красный билетик на линии отреза. <a href="qr/qr-6-cut.svg">SVG</a></figcaption>
+    </figure>
+    <figure>
+      <div class="ph"><img src="qr/qr-7-seal.svg" alt="Круглый QR-печать"></div>
+      <figcaption><b><i>7</i>Печать</b>Круглый QR: серые заполнители до круга, текст по ободу — как значок-печать на аватарах. <a href="qr/qr-7-seal.svg">SVG</a></figcaption>
+    </figure>
+    <figure>
+      <div class="ph"><img src="qr/qr-8-clean.svg" alt="Базовый QR"></div>
+      <figcaption><b><i>8</i>Базовый</b>Чёткие квадраты, красные глазки. Для мелкой печати и презентаций. <a href="qr/qr-8-clean.svg">SVG</a></figcaption>
+    </figure>
+  </div>
+</div>
+</body>
+</html>
