@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Для бизнеса — прототип лендинга «Всекупоны»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/business.css?v=20261012a">
+</head>
+<body>
+
+<!-- ===================================================================
+     Лендинг для бизнеса. Ч/Б прототип по ТЗ «vsekupony_b2c_landing_texts»
+     (структура и тексты — лист «Структура и тексты», вопросы — лист «FAQ»).
+     Источник логики — дек v3 от 08.10.2026.
+
+     Фиксации, которые держим на всей странице:
+     — без QR; «бесплатно», а не «даром»;
+     — размещают только ООО и ИП, самозанятые — нет;
+     — охват сейчас Липецк и область, Москву не обещаем;
+     — 500 первых — первое размещение бесплатно, срок 1 месяц;
+     — цифры 9 800 / 2 300 и «от 1 000 ₽» из дека, обновлять по факту.
+     Серые плашки с пометкой — места под визуал/данные, которых в ТЗ нет.
+     =================================================================== -->
+
+<!-- 1. Шапка -->
+<header class="bz-header">
+  <div class="wrap bz-header__in">
+    <a class="bz-logo" href="#top" aria-label="Всекупоны — для бизнеса">
+      <span class="bz-logo__mark">Логотип</span>
+      <span class="bz-logo__sub">Всекупоны — для бизнеса</span>
+    </a>
+
+    <!-- 2. Меню: якоря по продающей логике -->
+    <nav class="bz-nav" aria-label="Разделы">
+      <a href="#demand">Спрос</a>
+      <a href="#how">Как это работает</a>
+      <a href="#ai">AI-помощник</a>
+      <a href="#launch">Запуск за 10 минут</a>
+      <a href="#channels">Каналы</a>
+      <a href="#benefit">Выгода</a>
+      <a href="#pilot">Пилот</a>
+      <a href="#faq">Вопросы</a>
+    </nav>
+
+    <div class="bz-header__contacts">
+      <a class="bz-phone" href="tel:88002228567">8 800 222-85-67</a>
+      <span class="bz-header__links">
+        <a href="#">email</a> · <a href="#">Telegram</a> · <a href="#">Max</a>
+      </span>
+    </div>
+
+    <a class="btn btn--ghost bz-header__pilot" href="#pilot">На пилот</a>
+    <a class="btn btn--primary bz-header__cta" href="#final">Разместить предложение бесплатно</a>
+  </div>
+
+  <!-- Мобилка — короткое меню -->
+  <nav class="bz-nav-m" aria-label="Разделы">
+    <a href="#demand">Спрос</a>
+    <a href="#how">Как работает</a>
+    <a href="#ai">AI</a>
+    <a href="#benefit">Выгода</a>
+    <a href="#faq">Вопросы</a>
+    <a class="is-accent" href="#pilot">На пилот</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- 3. Быстрый аргумент -->
+  <section class="bz-hero">
+    <div class="wrap bz-hero__in">
+      <div class="bz-hero__text">
+        <span class="bz-kicker">Для бизнеса</span>
+        <h1>Тысячи покупателей с&nbsp;реальным спросом — уже на&nbsp;платформе</h1>
+        <p class="bz-lead">Мы знаем, кто они, чего хотят и как довести их до покупки именно вашего продукта внутри «Всекупоны».</p>
+        <p class="bz-lead">Вы размещаете предложение. Покупатель забирает код бесплатно — без регистрации — и приходит к вам.</p>
+        <div class="bz-actions">
+          <a class="btn btn--primary btn--lg" href="#final">Разместить первое предложение бесплатно</a>
+          <a class="btn btn--ghost btn--lg" href="#how">Смотреть, как это работает</a>
+        </div>
+        <p class="bz-small">Старт — Липецк и Липецкая область.</p>
+      </div>
+
+      <div class="bz-hero__visual" aria-hidden="true">
+        <div class="ph ph--tall">
+          <span class="ph__note">Визуал: витрина города с предложениями бизнеса</span>
+        </div>
+        <div class="bz-hero__chip bz-hero__chip--a">
+          <b>9 800</b><span>покупателей в Липецке</span>
+        </div>
+        <div class="bz-hero__chip bz-hero__chip--b">
+          <b>Код бесплатно</b><span>без регистрации</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Живая аудитория -->
+  <section class="bz-sec" id="demand">
+    <div class="wrap">
+      <div class="bz-head">
+        <span class="bz-num">01</span>
+        <h2>В Липецке покупатели уже выбирают купоны</h2>
+      </div>
+
+      <div class="bz-live">
+        <div class="bz-live__stats">
+          <div class="bz-stat">
+            <b>9 800</b>
+            <span>покупателей в Липецке уже выбирают купоны у нас</span>
+          </div>
+          <div class="bz-stat">
+            <b>2 300</b>
+            <span>забрали купон за неделю</span>
+          </div>
+          <p class="bz-text">И про каждого мы понимаем, что ему интересно: маникюр, кофе, фитнес, детские секции, кафе, одежда…</p>
+
+          <!-- Карточки персон: пример, как платформа «видит» интересы -->
+          <div class="bz-personas">
+            <div class="bz-persona"><span class="bz-ava"></span><div><b>Покупатель · 27</b><span>маникюр · кофе</span></div></div>
+            <div class="bz-persona"><span class="bz-ava"></span><div><b>Покупатель · 34</b><span>детские секции · кафе</span></div></div>
+            <div class="bz-persona"><span class="bz-ava"></span><div><b>Покупатель · 41</b><span>фитнес · одежда</span></div></div>
+          </div>
+        </div>
+
+        <div class="bz-feed" aria-live="polite">
+          <div class="bz-feed__head">
+            <span class="bz-dot"></span> Сейчас на платформе
+          </div>
+          <ul class="bz-feed__list" id="feed"></ul>
+          <p class="bz-feed__foot">На экране — живая лента: кто смотрит и кто только что забрал предложение. Ваше предложение попадает в этот поток спроса.</p>
+        </div>
+      </div>
+
+      <div class="bz-actions">
+        <a class="btn btn--primary" href="#final">Хочу таких покупателей</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Спрос на выгоду -->
+  <section class="bz-sec bz-sec--alt">
+    <div class="wrap bz-split">
+      <div>
+        <div class="bz-head">
+          <span class="bz-num">02</span>
+          <h2>Люди каждый день ищут купон, скидку и&nbsp;промокод</h2>
+        </div>
+        <p class="bz-text">Запросы «купон», «акция», «скидка», «промокод» — это интерес к выгоде, который не нужно «прогревать с нуля».</p>
+        <p class="bz-text">По Яндекс Вордстат — десятки миллионов таких запросов в месяц по России. «Всекупоны» собирают этот спрос в понятный локальный канал: предложение → код → визит к вам.</p>
+        <div class="bz-actions">
+          <a class="btn btn--primary" href="#final">Разместить предложение</a>
+        </div>
+      </div>
+
+      <div class="bz-wordstat">
+        <div class="bz-wordstat__big"><b>10+ млн</b><span>запросов в месяц по России</span></div>
+        <div class="bz-tags">
+          <span>купон</span><span>акция</span><span>скидка</span><span>промокод</span>
+        </div>
+        <div class="bz-flow">
+          <span>предложение</span><i>→</i><span>код</span><i>→</i><span>визит к вам</span>
+        </div>
+        <p class="bz-src">Источник: Яндекс Вордстат</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Как это работает -->
+  <section class="bz-sec" id="how">
+    <div class="wrap">
+      <div class="bz-head">
+        <span class="bz-num">03</span>
+        <h2>От предложения до визита — четыре простых шага</h2>
+      </div>
+
+      <ol class="bz-steps bz-steps--4">
+        <li><span class="bz-steps__n">1</span><p>Покупатель выбирает город.</p></li>
+        <li><span class="bz-steps__n">2</span><p>Находит ваше предложение на витрине.</p></li>
+        <li><span class="bz-steps__n">3</span><p>Получает промокод бесплатно — без регистрации.</p></li>
+        <li><span class="bz-steps__n">4</span><p>Приходит к вам и применяет скидку.</p></li>
+      </ol>
+
+      <p class="bz-text bz-text--wide">Мы сокращаем путь от интереса к покупке. Вам не нужно «догонять» человека по всей воронке рекламы — он уже ищет выгоду.</p>
+
+      <div class="bz-actions">
+        <a class="btn btn--ghost" href="#formats">Показать форматы предложений</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Форматы предложений -->
+  <section class="bz-sec bz-sec--alt" id="formats">
+    <div class="wrap">
+      <div class="bz-head">
+        <span class="bz-num">04</span>
+        <h2>Можно предложить любой понятный формат</h2>
+      </div>
+
+      <div class="bz-formats">
+        <div class="bz-format"><b>−20%</b><span>Скидка на услугу</span></div>
+        <div class="bz-format"><b>1+1</b><span>Два по цене одного</span></div>
+        <div class="bz-format"><b>подарок</b><span>Подарок к покупке</span></div>
+        <div class="bz-format"><b>0 ₽</b><span>Первый визит — пробный</span></div>
+        <div class="bz-format"><b>349 ₽</b><span>Специальная цена — комбо</span></div>
+        <div class="bz-format"><b>5=4</b><span>Пятый — в подарок</span></div>
+      </div>
+
+      <div class="bz-facts">
+        <span>Одно предложение — один код.</span>
+        <span>Срок размещения — 1 месяц.</span>
+      </div>
+
+      <div class="bz-actions">
+        <a class="btn btn--primary" href="#ai">Подобрать формат</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. AI-помощник -->
+  <section class="bz-sec" id="ai">
+    <div class="wrap bz-split">
+      <div>
+        <div class="bz-head">
+          <span class="bz-num">05</span>
+          <h2>Внутри сервиса — AI-помощник</h2>
+        </div>
+        <p class="bz-text">Он помогает:</p>
+        <ol class="bz-list">
+          <li>разработать оффер — варианты формулировок под вашу нишу;</li>
+          <li>сгенерировать изображение купона;</li>
+          <li>подсказать механику, которая лучше работает в категории;</li>
+          <li>показать поведение пользователей по вашим купонам: показы → просмотры → забрали → пришли.</li>
+        </ol>
+        <p class="bz-text">Вам не нужно собирать акцию «с чистого листа» — сервис ведёт за руку.</p>
+        <div class="bz-actions">
+          <a class="btn btn--primary" href="#final">Попробовать с AI-помощником</a>
+        </div>
+      </div>
+
+      <!-- Макет окна помощника: что умеет, без обещаний сверх MVP -->
+      <div class="bz-ai" aria-hidden="true">
+        <div class="bz-ai__bar"><span></span><span></span><span></span> AI-помощник</div>
+        <div class="bz-ai__body">
+          <div class="bz-msg bz-msg--me">Кофейня, хочу привлечь новых гостей</div>
+          <div class="bz-msg">Варианты оффера под вашу нишу:</div>
+          <div class="bz-ai__opts">
+            <span>1+1 на капучино</span><span>Подарок к первой покупке</span><span>349 ₽ комбо</span>
+          </div>
+          <div class="ph ph--sm"><span class="ph__note">Сгенерированное изображение купона</span></div>
+          <div class="bz-funnel">
+            <div><i style="--h:100%"></i><span>показы</span></div>
+            <div><i style="--h:62%"></i><span>просмотры</span></div>
+            <div><i style="--h:34%"></i><span>забрали</span></div>
+            <div><i style="--h:18%"></i><span>пришли</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Запуск за 10 минут -->
+  <section class="bz-sec bz-sec--dark" id="launch">
+    <div class="wrap">
+      <div class="bz-head">
+        <span class="bz-num">06</span>
+        <h2>Три шага — и предложение в работе</h2>
+      </div>
+
+      <ol class="bz-steps bz-steps--3">
+        <li>
+          <span class="bz-steps__n">1</span>
+          <h3>Регистрация на платформе</h3>
+          <p>Профиль и данные бизнеса (только ООО или ИП).</p>
+        </li>
+        <li>
+          <span class="bz-steps__n">2</span>
+          <h3>Выберите оффер, картинку и каналы</h3>
+          <p>Готовые варианты + AI: текст и изображение под ваше предложение.</p>
+        </li>
+        <li>
+          <span class="bz-steps__n">3</span>
+          <h3>Опубликуйте</h3>
+          <p>После модерации следите за статистикой онлайн и встречайте клиентов.</p>
+        </li>
+      </ol>
+
+      <div class="bz-launch__foot">
+        <p class="bz-text">От идеи до рекламного продвижения — <b>около 10 минут</b>.</p>
+        <a class="btn btn--light" href="register.html">Зарегистрироваться и разместить</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Каналы показа -->
+  <section class="bz-sec" id="channels">
+    <div class="wrap">
+      <div class="bz-head">
+        <span class="bz-num">07</span>
+        <h2>Ваше предложение увидят там, где ищут выгоду</h2>
+      </div>
+      <p class="bz-text">Одно размещение — и предложение уже:</p>
+
+      <div class="bz-channels">
+        <div class="bz-channel">
+          <span class="bz-ico">www</span>
+          <h3>На сайте vsekupony.ru</h3>
+          <p>в витрине города</p>
+        </div>
+        <div class="bz-channel">
+          <span class="bz-ico">⌕</span>
+          <h3>В поиске</h3>
+          <p>своя страница в выдаче</p>
+        </div>
+        <div class="bz-channel bz-channel--wide">
+          <span class="bz-ico">#</span>
+          <h3>В соцсетях города</h3>
+          <div class="bz-socials">
+            <span>ВКонтакте</span><span>Telegram</span><span>Одноклассники</span><span>MAX</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="bz-text bz-text--wide">Клиенты находят вас там, где им удобно. Вам не нужно отдельно вести четыре канала «вручную».</p>
+      <div class="bz-actions">
+        <a class="btn btn--primary" href="#final">Хочу такое размещение</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Почему это выгодно -->
+  <section class="bz-sec bz-sec--alt" id="benefit">
+    <div class="wrap bz-split">
+      <div>
+        <div class="bz-head">
+          <span class="bz-num">08</span>
+          <h2>Реклама дорогой быть не должна</h2>
+        </div>
+        <p class="bz-text">Сопоставили «Всекупоны» с привычными каналами: доски, поиск, наружка, соцсети, блогеры…</p>
+        <p class="bz-text">На старте размещения — понятный вход: <b>от 1 000 ₽</b>. Ниже порог, выше ясность: вы платите за размещение предложения, а покупатель забирает код бесплатно.</p>
+        <p class="bz-text">Удобно считать результат: показы, просмотры, сколько раз забрали код.</p>
+        <div class="bz-actions">
+          <a class="btn btn--primary" href="pricing.html">Рассчитать размещение</a>
+          <a class="btn btn--ghost" href="#pilot">Сначала — бесплатный пилот</a>
+        </div>
+      </div>
+
+      <!-- Сравнение визуалом. Стоимость чужих каналов — из таблицы дека v3 -->
+      <div class="bz-compare">
+        <div class="bz-compare__row"><span>Доски объявлений</span><i class="bar" style="--w:58%"></i></div>
+        <div class="bz-compare__row"><span>Поиск</span><i class="bar" style="--w:86%"></i></div>
+        <div class="bz-compare__row"><span>Наружка</span><i class="bar" style="--w:100%"></i></div>
+        <div class="bz-compare__row"><span>Соцсети</span><i class="bar" style="--w:70%"></i></div>
+        <div class="bz-compare__row"><span>Блогеры</span><i class="bar" style="--w:78%"></i></div>
+        <div class="bz-compare__row is-us"><span>Всекупоны</span><i class="bar" style="--w:12%"></i><b>от 1 000 ₽</b></div>
+        <p class="bz-src">Порог входа, условно. Цифры по каналам — из таблицы сравнения в деке v3.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Кто делает сервис -->
+  <section class="bz-sec">
+    <div class="wrap bz-split bz-split--team">
+      <div>
+        <div class="bz-head">
+          <span class="bz-num">09</span>
+          <h2>Сервис разработан предпринимателями</h2>
+        </div>
+        <p class="bz-text">Мы сами из бизнеса и знаем, как трудно и дорого подобрать рабочий рекламный канал — и удержать результат. Особенно сейчас.</p>
+        <p class="bz-text">Поэтому «Всекупоны» собраны просто: понятное предложение, понятные каналы, понятная статистика.</p>
+      </div>
+      <!-- 2–4 основателя: финальные имена и роли подставить -->
+      <div class="bz-team">
+        <figure class="bz-person"><div class="ph ph--sq"><span class="ph__note">Фото</span></div><figcaption><b>Имя Фамилия</b><span>роль</span></figcaption></figure>
+        <figure class="bz-person"><div class="ph ph--sq"><span class="ph__note">Фото</span></div><figcaption><b>Имя Фамилия</b><span>роль</span></figcaption></figure>
+        <figure class="bz-person"><div class="ph ph--sq"><span class="ph__note">Фото</span></div><figcaption><b>Имя Фамилия</b><span>роль</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. География -->
+  <section class="bz-sec bz-sec--alt">
+    <div class="wrap bz-split">
+      <div>
+        <div class="bz-head">
+          <span class="bz-num">10</span>
+          <h2>Сейчас — Липецк. Дальше — новые города</h2>
+        </div>
+        <p class="bz-text">Работаем в Липецке и Липецкой области. Готовим расширение в новые города и регионы.</p>
+        <p class="bz-text">Если ваш бизнес здесь — самое время зайти в пилот первыми.</p>
+        <div class="bz-actions">
+          <a class="btn btn--primary" href="#final">Разместиться в Липецке</a>
+        </div>
+      </div>
+      <div class="bz-geo">
+        <div class="bz-geo__now">
+          <span class="bz-dot"></span>
+          <div><b>Липецк и Липецкая область</b><span>работаем сейчас</span></div>
+        </div>
+        <div class="bz-geo__next">
+          <span class="bz-dot bz-dot--empty"></span>
+          <div><b>Новые города и регионы</b><span>готовим расширение</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. Пилот -->
+  <section class="bz-sec bz-sec--dark" id="pilot">
+    <div class="wrap bz-pilot">
+      <div class="bz-pilot__num"><b>500</b><span>первых рекламодателей</span></div>
+      <div>
+        <h2>Первое размещение — бесплатно</h2>
+        <p class="bz-text">500 первых зарегистрировавшихся рекламодателей размещают предложение бесплатно.</p>
+        <p class="bz-text">Разместите первое предложение и встречайте новых клиентов уже сейчас. Условия пилота и что будет после — фиксируем до старта, без сюрпризов.</p>
+        <div class="bz-meter" aria-label="Занято мест в пилоте">
+          <i style="--w:0%"></i>
+          <span>Мест в пилоте: 500 · срок бесплатного размещения — 1 месяц</span>
+        </div>
+        <div class="bz-actions">
+          <a class="btn btn--light btn--lg" href="#final">Забрать бесплатное размещение</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. FAQ: 14 вопросов предпринимателя, который впервые видит канал -->
+  <section class="bz-sec" id="faq">
+    <div class="wrap bz-faq">
+      <div class="bz-faq__aside">
+        <div class="bz-head">
+          <span class="bz-num">11</span>
+          <h2>Вопросы и ответы</h2>
+        </div>
+        <div class="bz-actions bz-actions--col">
+          <a class="btn btn--ghost" href="#final">Задать вопрос</a>
+          <a class="btn btn--primary" href="#final">Разместиться</a>
+        </div>
+      </div>
+
+      <div class="bz-faq__list">
+        <details>
+          <summary>Это не развод? Кто вы такие и откуда цифры?</summary>
+          <p>«Всекупоны» — сервис спецпредложений для бизнеса. Сайт vsekupony.ru, телефон 8 800 222-85-67. Цифры по Липецку (сколько выбирают и забирают купоны) берём из статистики платформы и обновляем. Если сомневаетесь — начните с бесплатного первого размещения и сами посмотрите отклик.</p>
+        </details>
+        <details>
+          <summary>Люди правда придут ко мне — или только посмотрят в телефоне?</summary>
+          <p>Мы не обещаем «толпу завтра». Мы даём показ людям, которые уже ищут скидку и купон, и выдачу кода. Дальше человек решает прийти или нет — как после любой рекламы. Смотрите в кабинете: сколько посмотрели и сколько забрали код. Пришёл ли гость — видно у вас на месте, когда называют код.</p>
+        </details>
+        <details>
+          <summary>Сколько это стоит по-честному? Что входит в «от 1 000 ₽»?</summary>
+          <p>Вы платите за размещение предложения, не за «продажу купона» человеку. Ориентир входа — от 1 000 ₽. Точная сумма зависит от города и каналов (сайт + соцсети) и считается в кабинете до оплаты. Код покупатель забирает бесплатно.</p>
+        </details>
+        <details>
+          <summary>«Бесплатно для 500» — навсегда? Что потом?</summary>
+          <p>Нет, не навсегда. Первым 500 зарегистрировавшимся рекламодателям — первое размещение бесплатно (на условиях пилота, ориентир — 1 месяц). Потом — обычная оплата размещения, если решите продлить. Условия после пилота говорим до старта, без сюрпризов в конце месяца.</p>
+        </details>
+        <details>
+          <summary>Покупатель платит вам за купон?</summary>
+          <p>Нет. Покупатель забирает код бесплатно — без регистрации. Деньги за размещение платите вы как бизнес.</p>
+        </details>
+        <details>
+          <summary>Есть комиссия с моих продаж?</summary>
+          <p>Нет процента «с чека» за то, что гость пришёл по коду. Модель простая: оплата размещения на срок. Продажу и чек делаете вы у себя.</p>
+        </details>
+        <details>
+          <summary>Мне каждый день что-то вести — посты, настройки, ответы?</summary>
+          <p>Нет. Один раз оформили предложение, опубликовали — оно крутится на сайте и в каналах пакета. Статистику можно смотреть, когда удобно. Каждый день «вести SMM ради купона» не нужно.</p>
+        </details>
+        <details>
+          <summary>А если я не умею придумывать акции и делать картинки?</summary>
+          <p>Для этого AI-помощник: варианты оффера, картинка, подсказка механики под вашу нишу. Можно взять простой формат: скидка, 1+1, подарок, первый визит. Не нужно быть маркетологом.</p>
+        </details>
+        <details>
+          <summary>Где именно меня увидят?</summary>
+          <p>На витрине города на vsekupony.ru, в поиске по странице предложения и в соцсетях города из пакета: ВКонтакте, Telegram, Одноклассники, MAX. Одно размещение — несколько точек показа.</p>
+        </details>
+        <details>
+          <summary>Как я пойму на кассе, что человек «с Всекупонов»?</summary>
+          <p>Гость называет или показывает код из вашего предложения. Вы проверяете условия акции и применяете скидку / подарок у себя. Отдельное приложение на кассу для MVP не требуется.</p>
+        </details>
+        <details>
+          <summary>Можно ограничить: только будни, только новым, лимит штук?</summary>
+          <p>Да, условия задаёте вы в предложении: кому, когда и на каких правилах действует акция. Чем яснее условия — тем меньше вопросов у гостя и у вас на месте.</p>
+        </details>
+        <details>
+          <summary>Я ИП или ООО, точка одна — мне подойдёт?</summary>
+          <p>Да, если вы ИП или ООО. Самозанятым размещение недоступно. Локальному бизнесу как раз нужен показ в своём городе — без огромного рекламного бюджета.</p>
+        </details>
+        <details>
+          <summary>Сколько ждать от регистрации до первых гостей?</summary>
+          <p>Оформить предложение можно примерно за 10 минут. Дальше — модерация и публикация. Когда пойдут заборы кода — зависит от оффера, ниши и сезона. Мы ускоряем путь «увидел → взял код → пришёл», но не обещаем очередь у двери в конкретный день.</p>
+        </details>
+        <details>
+          <summary>Если не зайдёт — можно просто не продлевать?</summary>
+          <p>Да. Размещение на срок (1 месяц). Не продлили — не платите дальше. Это нормальный способ проверить канал без долгого договора «на год вперёд».</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. Финальный CTA: два пути — self-service регистрация и заявка -->
+  <section class="bz-sec bz-sec--alt" id="final">
+    <div class="wrap bz-final">
+      <div class="bz-final__text">
+        <h2>Разместите предложение — покупатели уже на&nbsp;платформе</h2>
+        <dl class="bz-contacts">
+          <div><dt>Регистрация</dt><dd><a href="register.html">vsekupony.ru</a></dd></div>
+          <div><dt>Телефон</dt><dd><a href="tel:88002228567">8 800 222-85-67</a></dd></div>
+        </dl>
+        <a class="btn btn--primary btn--lg" href="register.html">Зарегистрироваться</a>
+        <p class="bz-small">Первым 500 — размещение бесплатно. Код для покупателя — всегда бесплатно.</p>
+      </div>
+
+      <form class="bz-form" id="leadForm" novalidate>
+        <p class="bz-form__title">Или оставьте заявку</p>
+        <label><span>Компания</span><input name="company" required placeholder="ООО или ИП"></label>
+        <label><span>Сфера</span><input name="sphere" required placeholder="Например, кофейня"></label>
+        <label><span>Город</span><input name="city" required value="Липецк"></label>
+        <label><span>Имя</span><input name="name" required></label>
+        <label><span>Телефон / Telegram</span><input name="contact" required placeholder="+7 или @username"></label>
+        <label><span>Email</span><input name="email" type="email"></label>
+        <button class="btn btn--primary btn--lg" type="submit">Отправить заявку</button>
+        <div class="bz-form__done" hidden>
+          <b>Заявка отправлена</b>
+          <span>Свяжемся с вами и поможем разместить первое предложение.</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- 17. Подвал: только живые ссылки -->
+<footer class="bz-footer">
+  <div class="wrap">
+    <nav class="bz-footer__nav">
+      <a href="service.html">Сервис</a>
+      <a href="business.html">Для бизнеса</a>
+      <a href="pricing.html">Тарифы</a>
+      <a href="docs.html">Документы</a>
+      <a href="index.html">Витрина</a>
+      <a href="partner.html">Партнёрам</a>
+      <a href="catalog.html?city=lipetsk&amp;l1=for-business">B2B-размещение</a>
+    </nav>
+    <p>«Всекупоны» — честный сервис специальных предложений. Код покупателю бесплатно. Бизнес платит за размещение.</p>
+    <p class="bz-small">8 800 222-85-67 · vsekupony.ru</p>
+  </div>
+</footer>
+
+<script src="assets/business.js?v=20261012a"></script>
+</body>
+</html>
