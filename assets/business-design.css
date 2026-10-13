@@ -1736,3 +1736,4 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   transition:transform .2s var(--ease)}
 .btn--soft:hover,.hero .btn--soft:hover,.sec--gray .btn--soft:hover,.hd .hd__pilot:hover{background:var(--brand-50);color:var(--brand-d);border-color:var(--brand-d)}
 .btn--soft:hover::after{transform:translateX(3px)}
+.btn--soft::after{content:none}
