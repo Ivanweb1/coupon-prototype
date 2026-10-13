@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261013a">
+<link rel="stylesheet" href="assets/business-design.css?v=20261013d">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -54,7 +54,7 @@
   <section class="hero">
     <div class="wrap hero__in">
       <div class="hero__text">
-        <h1>Тысячи покупателей с&nbsp;реальным спросом — <span class="tag">уже на&nbsp;платформе</span></h1>
+        <h1>Тысячи покупателей с&nbsp;реальным спросом&nbsp;— <span class="tag">уже на&nbsp;платформе</span></h1>
         <p class="lead">Мы знаем, кто они, чего хотят и как довести их до покупки именно вашего продукта внутри ВСЕКУПОНЫ.</p>
         <div class="actions">
           <a class="btn btn--red btn--lg" href="#final">Разместить первое предложение бесплатно</a>
@@ -64,20 +64,24 @@
       </div>
 
       <div class="hero__vis" aria-hidden="true">
-        <div class="hcard">
-          <div class="hcard__top">
-            <b><span data-demand="month">9 800</span><sup>*</sup></b>
-            <span>покупателей в&nbsp;Липецкой области уже выбирают купоны у&nbsp;нас</span>
+        <div class="hcpn">
+          <div class="hcpn__ph" style="background-image:url('assets/coupons/coffee.jpg')">
+            <span class="hcpn__cat"><img src="assets/brand/logo-red.png" alt="">Кафе и&nbsp;рестораны · Липецк</span>
+            <span class="hcpn__v">5 = 4</span>
           </div>
-          <div class="hcard__bot">
-            <span class="faces" data-faces="maria,oleg,anna,dmitry,olga,sergey"></span>
-            <span><b data-demand="week">2 300</b> забрали купон за&nbsp;неделю</span>
+          <div class="hcpn__b">
+            <b>Каждая пятая чашка кофе в&nbsp;подарок</b>
+            <span>Кофейня «Пример» · ул. Советская, 8</span>
+            <div class="hcpn__code"><span>FIFTH</span><em>Забрать код</em></div>
           </div>
         </div>
-        <div class="hstack">
-          <div class="cpn cpn--a"><div class="cpn__ph" style="background-image:url('assets/coupons/coffee.jpg')"><span class="cpn__v">5 = 4</span></div><div class="cpn__b"><b>Каждая пятая чашка кофе в&nbsp;подарок</b><span>Кофейня «Пример»</span></div></div>
-          <div class="cpn cpn--b"><div class="cpn__ph" style="background-image:url('assets/coupons/beauty.jpg')"><span class="cpn__v">−30%</span></div><div class="cpn__b"><b>Стрижка и&nbsp;укладка на&nbsp;первый визит</b><span>Студия «Пример»</span></div></div>
-          <div class="cpn cpn--c"><div class="cpn__ph" style="background-image:url('assets/coupons/fitness.jpg')"><span class="cpn__v">0 ₽</span></div><div class="cpn__b"><b>Пробная неделя в&nbsp;клубе</b><span>Фитнес «Пример»</span></div></div>
+        <div class="hcard">
+          <b><span data-demand="month">9 800</span><sup>*</sup></b>
+          <span>покупателей в&nbsp;Липецкой области уже выбирают купоны у&nbsp;нас</span>
+          <div class="hcard__bot">
+            <span class="faces" data-faces="maria,oleg,anna,dmitry,olga"></span>
+            <span><b data-demand="week">2 300</b> забрали за&nbsp;неделю</span>
+          </div>
         </div>
         <div class="hchip"><i data-ic="ticket"></i><span><b>Код бесплатно</b>без регистрации</span></div>
       </div>
@@ -128,11 +132,13 @@
   <!-- 5. Спрос на выгоду — красный слайд, как в деке -->
   <section class="sec sec--red">
     <div class="wrap">
+<div class="hrow">
       <div class="head">
         <span class="num">02</span>
-        <h2>Люди каждый день ищут <span class="tag tag--w">купон, скидку и&nbsp;промокод</span></h2>
+        <h2>Люди <span class="tag tag--w">каждый день</span> ищут купон, скидку и&nbsp;промокод</h2>
       </div>
       <p class="text">Запросы «купон», «акция», «скидка», «промокод»&nbsp;— это интерес к&nbsp;выгоде, который не&nbsp;нужно «прогревать с&nbsp;нуля». По&nbsp;Яндекс Вордстат&nbsp;— около 20&nbsp;миллионов таких запросов в&nbsp;месяц по&nbsp;России. ВСЕКУПОНЫ собирают этот спрос в&nbsp;понятный локальный канал: предложение → код → визит к&nbsp;вам.</p>
+      </div>
 
       <div class="ws">
         <div><span>промокод</span><b>10,6 млн</b></div>
@@ -156,9 +162,12 @@
   <!-- 6. Как это работает -->
   <section class="sec" id="how">
     <div class="wrap">
+      <div class="hrow hrow--wide">
       <div class="head">
         <span class="num">03</span>
-        <h2>От предложения до визита — <span class="tag">четыре простых шага</span></h2>
+        <h2>От предложения до визита&nbsp;— <span class="tag">четыре простых шага</span></h2>
+      </div>
+      <p class="text text--big">Мы привлекаем тех, кто уже ищет, где и&nbsp;что купить.</p>
       </div>
 
       <ol class="path">
@@ -167,8 +176,6 @@
         <li><span class="path__n">3</span><i data-ic="ticket"></i><p>Получает промокод бесплатно и&nbsp;без регистрации.</p></li>
         <li><span class="path__n">4</span><i data-ic="check"></i><p>Приходит к&nbsp;вам.</p></li>
       </ol>
-
-      <p class="text text--big">Мы привлекаем тех, кто уже ищет, где и&nbsp;что купить.</p>
 
       <div class="actions">
         <a class="btn btn--ghost" href="#formats">Показать форматы предложений</a>
@@ -192,11 +199,12 @@
         <div class="fmt"><b>349 ₽</b><span>Специальная цена — комбо</span></div>
         <div class="fmt"><b>5 = 4</b><span>Пятый — в&nbsp;подарок</span></div>
       </div>
+      <div class="fmts__row">
       <p class="fmts__more">…и&nbsp;десятки других</p>
-
       <div class="facts">
         <span><i data-ic="ticket"></i>Одно предложение — один код</span>
         <span><i data-ic="cal"></i>Срок размещения — 1&nbsp;месяц</span>
+      </div>
       </div>
 
       <div class="actions">
@@ -211,7 +219,7 @@
       <div>
         <div class="head">
           <span class="num">05</span>
-          <h2>Внутри сервиса — <span class="tag">AI-помощник</span></h2>
+          <h2>Внутри сервиса&nbsp;— <span class="tag">AI-помощник</span></h2>
         </div>
         <p class="text">Он помогает:</p>
         <ol class="ailist">
@@ -236,7 +244,7 @@
             <span class="is-on">1+1 на&nbsp;капучино</span><span>Подарок к&nbsp;первой покупке</span><span>349&nbsp;₽ комбо</span>
           </div>
           <div class="ai__seo"><i data-ic="search"></i><div><span>Заголовок под SEO</span><b>Капучино 1+1 в&nbsp;Липецке — кофейня «Пример»</b></div></div>
-          <div class="ai__img" style="background-image:url('assets/coupons/kofe-warm.jpg')"><span><i data-ic="spark"></i>Сгенерировано</span></div>
+          <div class="ai__img" style="background-image:url('assets/coupons/coffee.jpg')"><span><i data-ic="spark"></i>Сгенерировано</span></div>
           <div class="funnel">
             <div><b>1 240</b><i style="--h:100%"></i><span>показы</span></div>
             <div><b>770</b><i style="--h:62%"></i><span>просмотры</span></div>
@@ -253,7 +261,7 @@
     <div class="wrap">
       <div class="head">
         <span class="num">06</span>
-        <h2>От идеи до рекламного продвижения — <span class="tag tag--w">до&nbsp;10&nbsp;минут</span></h2>
+        <h2>От идеи до рекламного продвижения&nbsp;— <span class="tag tag--w">до&nbsp;10&nbsp;минут</span></h2>
       </div>
 
       <ol class="tix">
@@ -281,11 +289,14 @@
   <!-- 10. Каналы -->
   <section class="sec" id="channels">
     <div class="wrap">
+<div class="hrow">
       <div class="head">
         <span class="num">07</span>
         <h2>Клиенты находят вас там, <span class="tag">где им удобно</span></h2>
       </div>
-      <p class="text">Одно размещение — и&nbsp;предложение уже:</p>
+      <p class="text">Ваше предложение увидят там, где ищут выгоду. Публикацию на&nbsp;сайте, в&nbsp;поиске и&nbsp;в&nbsp;соцсетях мы берём на&nbsp;себя — одно размещение работает сразу во&nbsp;всех каналах.</p>
+      </div>
+      <p class="kicker">Одно размещение — и&nbsp;предложение уже:</p>
 
       <div class="chs">
         <div class="ch">
@@ -307,7 +318,6 @@
         </div>
       </div>
 
-      <p class="text text--wide">Ваше предложение увидят там, где ищут выгоду. Публикацию на&nbsp;сайте, в&nbsp;поиске и&nbsp;в&nbsp;соцсетях мы берём на&nbsp;себя — одно размещение работает сразу во&nbsp;всех каналах.</p>
       <div class="actions">
         <a class="btn btn--red" href="#final">Хочу такое размещение</a>
       </div>
@@ -317,11 +327,13 @@
   <!-- 11. Выгода — таблица со слайда 11 дека v4, в цвете -->
   <section class="sec sec--gray" id="benefit">
     <div class="wrap">
+<div class="hrow">
       <div class="head">
         <span class="num">08</span>
         <h2>Реклама дорогой <span class="tag">быть не&nbsp;должна</span></h2>
       </div>
       <p class="text">Сопоставили ВСЕКУПОНЫ с&nbsp;основными рекламными каналами. На&nbsp;старте размещения — понятный вход: <b>от&nbsp;1&nbsp;000&nbsp;₽</b>. Ниже порог, выше ясность: вы платите за&nbsp;размещение предложения, а&nbsp;покупатель забирает код бесплатно.</p>
+      </div>
 
       <div class="cmp">
         <div class="cmp__lg"><span><i class="g"></i>выгодно</span><span><i class="y"></i>средне</span><span><i class="n"></i>невыгодно</span></div>
@@ -343,11 +355,13 @@
   <!-- 12. Команда -->
   <section class="sec">
     <div class="wrap">
+<div class="hrow">
       <div class="head">
         <span class="num">09</span>
         <h2>Сервис разработан <span class="tag">предпринимателями</span></h2>
       </div>
       <p class="text">Мы сами из&nbsp;бизнеса и&nbsp;знаем, как трудно и&nbsp;дорого подобрать рабочий рекламный канал — и&nbsp;удержать результат. <b>Особенно сейчас.</b> Поэтому ВСЕКУПОНЫ собраны просто: понятное предложение, понятные каналы, понятная статистика.</p>
+      </div>
 
       <div class="team">
         <figure class="mate"><div class="mate__ph" style="background-image:url('social-kit/photos/team/moskvichev.png')"></div><figcaption><b>Антон Москвичев</b><span>Внедряю CRM-систему для&nbsp;управления бизнесом</span></figcaption></figure>
@@ -361,11 +375,13 @@
   <!-- 13. География — карта со слайда 8 дека v4 -->
   <section class="sec sec--gray">
     <div class="wrap">
+<div class="hrow">
       <div class="head">
         <span class="num">10</span>
-        <h2>Сейчас — Липецк. Дальше — <span class="tag">вся Россия</span></h2>
+        <h2>Сейчас&nbsp;— Липецк. Дальше&nbsp;— <span class="tag">вся Россия</span></h2>
       </div>
       <p class="text">Работаем в&nbsp;Липецке и&nbsp;Липецкой области. Готовим расширение сервиса и&nbsp;запуск предложений в&nbsp;новых городах и&nbsp;регионах по&nbsp;всей России. Если ваш бизнес здесь — самое время зайти в&nbsp;пилот первыми.</p>
+      </div>
 
       <div class="geo">
         <div class="map" data-map>
@@ -401,7 +417,7 @@
           <span>первых рекламодателей</span>
         </div>
         <div class="pilot__r">
-          <h2>Первое размещение — <span class="tag">бесплатно</span></h2>
+          <h2>Первое размещение&nbsp;— <span class="tag">бесплатно</span></h2>
           <p class="text">500 первых зарегистрировавшихся рекламодателей размещают предложение бесплатно. Разместите первое предложение и&nbsp;встречайте новых клиентов уже сейчас.</p>
           <div class="meter" aria-label="Занято мест в пилоте">
             <i style="--w:0%"></i>
@@ -423,9 +439,14 @@
           <span class="num">11</span>
           <h2>Вопросы и&nbsp;ответы</h2>
         </div>
-        <div class="actions actions--col">
-          <a class="btn btn--red" href="#final">Разместиться</a>
-          <a class="btn btn--ghost" href="#final">Задать вопрос</a>
+        <div class="ask">
+          <b>Не&nbsp;нашли ответ?</b>
+          <p>Позвоните или напишите — расскажем, как запустить первое предложение.</p>
+          <a class="ask__phone" href="tel:88002228567"><i data-ic="phone"></i>8 800 222-85-67</a>
+          <div class="actions">
+            <a class="btn btn--red" href="#final">Разместиться</a>
+            <a class="btn btn--ghost" href="#final">Задать вопрос</a>
+          </div>
         </div>
       </div>
 
@@ -528,7 +549,7 @@
   <section class="sec sec--gray" id="final">
     <div class="wrap final">
       <div class="final__text">
-        <h2>Разместите предложение — <span class="tag">покупатели уже на&nbsp;платформе</span></h2>
+        <h2>Разместите предложение&nbsp;— покупатели <span class="tag">уже на&nbsp;платформе</span></h2>
         <div class="code"><span>Регистрация</span><a href="register.html">vsekupony.ru</a></div>
         <a class="final__phone" href="tel:88002228567"><i data-ic="phone"></i>8 800 222-85-67</a>
         <div class="actions">
