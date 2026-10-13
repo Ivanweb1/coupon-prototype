@@ -2063,3 +2063,35 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .aix__tabs button[aria-selected="true"]{border-radius:var(--r-md) 0 0 var(--r-md)}
   .aix__win{border-top-left-radius:var(--r-lg);border-bottom-left-radius:var(--r-lg)}
 }
+
+/* ==========================================================================
+   AI-помощник — купоном: слева «корешок» с пунктами, справа окно,
+   между ними перфорация с вырезами сверху и снизу
+   ========================================================================== */
+@media (min-width:1001px){
+  .aix{--cut:40%;grid-template-columns:40% 60%;padding:0;border-radius:var(--r-lg);
+    -webkit-mask:radial-gradient(circle 18px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 18px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+            mask:radial-gradient(circle 18px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 18px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+  .aix__l{padding:22px 22px 22px 18px}
+  .aix__win{border-radius:0;border-left:2px dashed var(--line-strong)}
+  .aix__win .aix__top{border-radius:0}
+  /* без «ушей»: вкладка — белая карточка внутри корешка */
+  .aix__tabs li:has(button[aria-selected="true"])::before,
+  .aix__tabs li:has(button[aria-selected="true"])::after{content:none}
+  .aix__tabs{gap:0}
+  .aix__tabs li + li{border-top:1px dashed var(--line-strong)}
+  .aix__tabs li{padding:5px 0}
+  .aix__tabs button{border-radius:var(--r-md);margin:0}
+  .aix__tabs button[aria-selected="true"]{border-radius:var(--r-md);margin-right:0;box-shadow:0 10px 24px -18px rgba(120,20,10,.45)}
+  .aix__tabs li:has(button[aria-selected="true"]),.aix__tabs li:has(button[aria-selected="true"]) + li{border-top-color:transparent}
+  .aix__bar{left:16px;right:16px}
+  .aix__foot{grid-template-columns:40% 60%;padding:0}
+  .aix__foot .text{margin-left:24px}
+}
+@media (min-width:1001px){
+  .aix{background:var(--surface)}
+  .aix__l{border-right:2px dashed var(--line-strong)}
+  .aix__win{border-left:0;margin:12px 12px 12px 20px;border-radius:calc(var(--r-lg) - 8px);box-shadow:0 14px 34px -26px rgba(0,0,0,.35)}
+  .aix__win .aix__top{border-radius:calc(var(--r-lg) - 8px) calc(var(--r-lg) - 8px) 0 0}
+}
+@media (min-width:1001px){.aix__foot .text{margin-left:20px}}
