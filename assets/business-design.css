@@ -802,3 +802,8 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
 /* Плашка соцсетей — ровно по высоте кнопок шапки */
 .hd .hd__soc{height:48px;padding:0 7px}
 .hd .hd__soc a{width:34px;height:34px}
+/* Кнопки шапки — как «Разместить купон» на витрине: 44px, 14px, 500.
+   Плашка соцсетей той же высоты */
+.hd .hd__cta,.hd .hd__pilot{height:44px;min-height:44px;padding:0 18px}
+.hd .hd__soc{height:44px;padding:0 5px}
+.hd .hd__soc a{width:32px;height:32px}
