@@ -1070,3 +1070,40 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
   .hcpn-w{width:300px}
 }
 @media (max-width:720px){.hcpn-w{width:100%}.hv{max-width:none}}
+
+/* ==========================================================================
+   Шапка, вариант 3 (14.10): первая строка — логотип и две кнопки,
+   вторая — меню по ширине пунктов слева и контакты справа на той же линии.
+   Предыдущий вид — коммит b541986.
+   ========================================================================== */
+.hd .logo,.hd .logo__tag{order:0}
+.hd .hd__pilot{order:1;margin-left:auto;margin-right:0}
+.hd .hd__cta{order:2}
+.hd .hd__br{order:3;flex-basis:100%;height:0}
+.hd .hd__nav{order:4;flex:0 0 auto;flex-basis:auto;justify-content:flex-start;gap:32px;padding:0 22px}
+.hd .hd__in > .hd__contacts{order:5;margin-left:auto;flex-direction:row;align-items:baseline;gap:16px}
+.hd .hd__mail{margin-top:0}
+.hd .hd__soc{order:6;margin:0 0 0 16px;height:34px;padding:0 3px}
+.hd .hd__soc a{width:28px;height:28px}
+.hd .hd__in{column-gap:12px}
+@media (max-width:1240px){.hd .hd__nav{gap:22px;padding:0 18px}}
+@media (max-width:1000px){
+  .hd .hd__br{display:none}
+  .hd .hd__in > .hd__contacts,.hd .hd__soc{display:none}
+  .hd .hd__nav{order:4;flex-basis:100%}
+}
+
+/* При прокрутке — одна строка: логотип · меню · кнопка */
+.hd.is-scrolled .hd__br{display:none}
+.hd.is-scrolled .hd__nav{order:1;flex:1 1 auto;padding:0 6px;justify-content:center}
+.hd.is-scrolled .hd__cta{order:3}
+@media (min-width:721px) and (max-width:1200px){
+  .hd.is-scrolled .hd__in > .hd__contacts{display:flex;order:1;flex-direction:column;align-items:flex-end;gap:0}
+  .hd.is-scrolled .hd__pilot{order:2;margin-left:0}
+}
+.hd .logo__tag{margin-left:2px}
+@media (max-width:1200px){
+  .hd:not(.is-scrolled) .hd__in > .hd__contacts,.hd:not(.is-scrolled) .hd__soc{display:none}
+  .hd:not(.is-scrolled) .hd__br{display:none}
+  .hd:not(.is-scrolled) .hd__nav{flex-basis:100%;justify-content:space-between}
+}
