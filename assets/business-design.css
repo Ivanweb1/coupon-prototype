@@ -1883,3 +1883,110 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 #ai .funnel{height:104px;margin-top:12px;padding:12px}
 .aig__k{margin-bottom:10px}
 .aif li{padding:12px 16px 12px 12px}
+
+/* ==========================================================================
+   AI-помощник: вкладки ↔ окно с примером
+   ========================================================================== */
+.aix{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);align-items:stretch}
+.aix__l{grid-column:1 / span 5;display:flex;flex-direction:column}
+.aix__win{grid-column:7 / -1}
+.aix__tabs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;flex:1}
+.aix__tabs li{flex:1;display:flex}
+.aix__tabs button{position:relative;flex:1;display:flex;align-items:center;gap:14px;width:100%;padding:14px 18px;border:0;border-radius:var(--r-md);background:var(--surface);text-align:left;cursor:pointer;overflow:hidden;transition:background .25s var(--ease),box-shadow .25s var(--ease)}
+.aix__tabs button:hover{background:#efefef}
+.aix__tabs em{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#fff;color:var(--brand);font-style:normal;font-size:14px;font-weight:700;transition:background .25s,color .25s}
+.aix__tabs span{font-size:15px;line-height:1.45;color:var(--ink-2);transition:color .25s}
+.aix__tabs button[aria-selected="true"]{background:#fff;box-shadow:inset 0 0 0 1.5px var(--brand),0 14px 30px -22px rgba(120,20,10,.5)}
+.aix__tabs button[aria-selected="true"] em{background:var(--brand);color:#fff}
+.aix__tabs button[aria-selected="true"] span{color:var(--ink)}
+.aix__bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--brand);opacity:0}
+.aix__tabs button[aria-selected="true"] .aix__bar{opacity:1;animation:aixBar var(--aix-dur,4500ms) linear forwards}
+@keyframes aixBar{from{width:0}to{width:100%}}
+
+.aix__win{display:flex;flex-direction:column;border-radius:var(--r-lg);background:var(--surface);overflow:hidden}
+.aix__top{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--brand);color:#fff}
+.aix__top > i{display:flex}.aix__top > i svg{width:20px;height:20px}
+.aix__top b{font-weight:600}
+.aix__ask{margin-left:auto;padding:7px 14px;border-radius:var(--r-pill);background:rgba(0,0,0,.18);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aix__p{display:none;flex:1;flex-direction:column;gap:12px;padding:20px 22px 22px;animation:aixIn .45s var(--ease)}
+.aix__p.is-on{display:flex}
+@keyframes aixIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.aix__k{margin:0;font-size:13.5px;color:var(--ink-3)}
+
+/* 1 — варианты оффера */
+.aix__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.aix__list li{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r-md);background:#fff}
+.aix__list li > i{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:10px;background:var(--brand-50);color:var(--brand)}
+.aix__list li > i svg{width:18px;height:18px}
+.aix__list b{display:block;font-size:15.5px;font-weight:600}
+.aix__list span{display:block;font-size:12.5px;color:var(--ink-3)}
+.aix__list li:first-child{box-shadow:inset 0 0 0 1.5px var(--brand)}
+
+/* 2 — SEO */
+.aix__seo{display:grid;grid-template-columns:1fr auto 1.6fr;align-items:center;gap:12px}
+.aix__was,.aix__now{padding:12px 14px;border-radius:var(--r-md);background:#fff;font-size:14.5px;font-weight:600;line-height:1.35}
+.aix__was{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--ink-4)}
+.aix__now{box-shadow:inset 0 0 0 1.5px var(--brand)}
+.aix__was span,.aix__now span{display:block;margin-bottom:2px;font-size:11.5px;font-weight:500;color:var(--ink-3);text-decoration:none}
+.aix__arr{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--brand);color:#fff}
+.aix__arr svg{width:18px;height:18px}
+.aix__snip{display:flex;flex-direction:column;gap:10px;margin-top:4px;padding:16px;border-radius:var(--r-md);background:#fff}
+.aix__q{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:var(--r-pill);background:var(--surface);font-size:14px}
+.aix__q i{display:flex;color:var(--brand)}.aix__q svg{width:16px;height:16px}
+.aix__res small{display:block;font-size:12px;color:var(--g-ink)}
+.aix__res b{display:block;margin-top:2px;font-size:16px;font-weight:600;color:#1a0dab}
+.aix__res span{display:block;margin-top:2px;font-size:13px;color:var(--ink-2)}
+
+/* 3 — изображение */
+.aix__prompt{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:var(--r-md);background:#fff;font-size:14px}
+.aix__prompt i{display:flex;color:var(--brand)}.aix__prompt svg{width:18px;height:18px}
+.aix__imgs{flex:1;display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:1fr 1fr;gap:8px;min-height:240px}
+.aix__imgs div{position:relative;border-radius:var(--r-md);background:center/cover no-repeat}
+.aix__imgs .is-sel{grid-row:1 / span 2;box-shadow:0 0 0 3px var(--brand)}
+.aix__imgs span{position:absolute;left:10px;bottom:10px;padding:4px 10px;border-radius:var(--r-pill);background:#fff;font-size:12px;font-weight:600}
+.aix__imgs .is-sel span{background:var(--brand);color:#fff}
+
+/* 4 — механики */
+.aix__mech{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.aix__mech li{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r-md);background:#fff}
+.aix__mech em{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--brand-50);color:var(--brand);font-style:normal;font-size:13px;font-weight:700}
+.aix__mech b{display:block;font-size:15.5px;font-weight:600}
+.aix__mech span{display:block;font-size:12.5px;color:var(--ink-3)}
+.aix__mech li > i{margin-left:auto;flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;font-style:normal;font-size:18px;line-height:1}
+.aix__mech li:first-child{box-shadow:inset 0 0 0 1.5px var(--brand)}
+
+/* 5 — воронка */
+.aix__fun{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end;min-height:240px;padding:16px;border-radius:var(--r-md);background:#fff}
+.aix__fun div{display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.aix__fun b{font-size:18px;font-weight:700}
+.aix__fun span{font-size:12px;color:var(--ink-3);margin-bottom:6px}
+.aix__fun i{display:block;height:calc(var(--h) * .62);min-height:10px;border-radius:10px 10px 4px 4px;background:var(--brand)}
+.aix__fun div:nth-child(1) i{opacity:.35}.aix__fun div:nth-child(2) i{opacity:.55}.aix__fun div:nth-child(3) i{opacity:.8}
+
+@media (max-width:1000px){
+  .aix{display:flex;flex-direction:column;gap:20px}
+  .aix__tabs li{flex:none}
+}
+@media (max-width:720px){
+  .aix__tabs button{padding:12px}
+  .aix__tabs span{font-size:14px}
+  .aix__ask{display:none}
+  .aix__seo{grid-template-columns:1fr}
+  .aix__arr{justify-self:center;transform:rotate(90deg)}
+  .aix__p{padding:16px}
+}
+/* Высоту ряда задаёт список слева — окно её заполняет и не прыгает */
+@media (min-width:1001px){
+  .aix__win{contain:size;align-self:stretch;margin-top:var(--aix-k,34px)}
+  .aix__p{overflow:hidden}
+  .aix__tabs button{padding:16px 18px}
+}
+@media (max-width:1000px){.aix__win{min-height:440px}}
+@media (min-width:1001px){
+  .aix__tabs button{padding:18px 18px}
+  .aix__list,.aix__mech{gap:6px}
+  .aix__list li,.aix__mech li{padding:10px 14px}
+  .aix__imgs{min-height:200px}
+  .aix__fun{min-height:200px}
+  .aix__p{gap:10px;padding:18px 22px 20px}
+}

@@ -149,3 +149,25 @@
   set(); window.addEventListener("resize", set);
   if (document.fonts) document.fonts.ready.then(set);
 })();
+
+/* AI-помощник: вкладки слева переключают пример в окне справа.
+   Сами — каждые 4,5 с; клик — выбрать вручную (автосмена продолжится). */
+(function () {
+  var box = document.querySelector("[data-aix]"); if (!box) return;
+  var tabs = box.querySelectorAll(".aix__tabs button");
+  var panes = box.querySelectorAll(".aix__p");
+  var cur = 0, timer = null, DUR = 4500;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function show(k) {
+    cur = k;
+    tabs.forEach(function (t, i) { t.setAttribute("aria-selected", i === k ? "true" : "false"); });
+    panes.forEach(function (p, i) { p.classList.toggle("is-on", i === k); });
+    box.style.setProperty("--aix-dur", DUR + "ms");
+    var bar = tabs[k].querySelector(".aix__bar");
+    bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+  }
+  function next() { show((cur + 1) % tabs.length); }
+  function start() { if (reduce) return; clearInterval(timer); timer = setInterval(next, DUR); }
+  tabs.forEach(function (t, i) { t.addEventListener("click", function () { show(i); start(); }); });
+  show(0); start();
+})();

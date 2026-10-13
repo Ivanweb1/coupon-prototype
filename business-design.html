@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261017q">
+<link rel="stylesheet" href="assets/business-design.css?v=20261017t">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -291,34 +291,72 @@
         <p class="text">Вам не&nbsp;нужно собирать акцию «с&nbsp;чистого листа» — сервис ведёт за&nbsp;руку.</p>
       </div>
 
-      <!-- Пункты списка связаны номерами с местами в окне помощника -->
-      <div class="aig">
-        <div class="aig__l">
+      <!-- Слева — пять пунктов (вкладки), справа — окно помощника с примером
+           активного пункта. Переключаются сами и по клику (business-design.js) -->
+      <div class="aix" data-aix>
+        <div class="aix__l">
           <p class="aig__k">Он помогает:</p>
-          <ol class="aif">
-            <li><i data-ic="chat"></i><span>разработать оффер — варианты формулировок под вашу нишу;</span></li>
-            <li><i data-ic="search"></i><span>оптимизировать заголовки рекламных сообщений под SEO — текст автоматически дорабатывается так, чтобы объявление получало максимальную видимость в&nbsp;поиске;</span></li>
-            <li><i data-ic="spark"></i><span>сгенерировать изображение купона;</span></li>
-            <li><i data-ic="ticket"></i><span>подсказать механику, которая лучше работает в&nbsp;категории;</span></li>
-            <li><i data-ic="chart"></i><span>показать поведение пользователей по&nbsp;вашим купонам: показы → просмотры → забрали → пришли.</span></li>
+          <ol class="aix__tabs" role="tablist">
+            <li><button type="button" role="tab" aria-selected="true"><em>1</em><span>разработать оффер — варианты формулировок под вашу нишу;</span><i class="aix__bar"></i></button></li>
+            <li><button type="button" role="tab"><em>2</em><span>оптимизировать заголовки рекламных сообщений под SEO — текст автоматически дорабатывается так, чтобы объявление получало максимальную видимость в&nbsp;поиске;</span><i class="aix__bar"></i></button></li>
+            <li><button type="button" role="tab"><em>3</em><span>сгенерировать изображение купона;</span><i class="aix__bar"></i></button></li>
+            <li><button type="button" role="tab"><em>4</em><span>подсказать механику, которая лучше работает в&nbsp;категории;</span><i class="aix__bar"></i></button></li>
+            <li><button type="button" role="tab"><em>5</em><span>показать поведение пользователей по&nbsp;вашим купонам: показы → просмотры → забрали → пришли.</span><i class="aix__bar"></i></button></li>
           </ol>
         </div>
 
-        <div class="ai" aria-hidden="true">
-          <div class="ai__bar"><i data-ic="spark"></i>AI-помощник</div>
-          <div class="ai__body">
-            <div class="msg msg--me">Кофейня, хочу привлечь новых гостей</div>
-            <div class="ai__row"><em class="ai__n">1</em><div class="msg">Варианты оффера под вашу нишу:</div></div>
-            <div class="ai__opts">
-              <span class="is-on">1+1 на&nbsp;капучино<em class="ai__n ai__n--in">4</em></span><span>Подарок к&nbsp;первой покупке</span><span>349&nbsp;₽ комбо</span>
+        <div class="aix__win" aria-hidden="true">
+          <div class="aix__top"><i data-ic="spark"></i><b>AI-помощник</b><span class="aix__ask">Кофейня, хочу привлечь новых гостей</span></div>
+
+          <div class="aix__p is-on">
+            <p class="aix__k">Варианты от&nbsp;нейросети — нажмите, чтобы подставить</p>
+            <ul class="aix__list">
+              <li><i data-ic="spark"></i><div><b>1+1 на&nbsp;капучино по&nbsp;будням</b><span>выгода в&nbsp;начале — заметнее</span></div></li>
+              <li><i data-ic="spark"></i><div><b>Десерт в&nbsp;подарок к&nbsp;кофе</b><span>подарок цепляет сильнее</span></div></li>
+              <li><i data-ic="spark"></i><div><b>Завтрак за&nbsp;349&nbsp;₽</b><span>цена понятнее процента</span></div></li>
+              <li><i data-ic="spark"></i><div><b>−20% для&nbsp;новых гостей</b><span>приводит новых людей</span></div></li>
+            </ul>
+          </div>
+
+          <div class="aix__p">
+            <p class="aix__k">Заголовок дорабатывается под&nbsp;поиск</p>
+            <div class="aix__seo">
+              <div class="aix__was"><span>было</span>Скидка на&nbsp;кофе</div>
+              <i class="aix__arr" data-ic="spark"></i>
+              <div class="aix__now"><span>стало</span>Капучино 1+1 в&nbsp;Липецке — кофейня «Пример»</div>
             </div>
-            <div class="ai__seo"><em class="ai__n">2</em><i data-ic="search"></i><div><span>Заголовок для&nbsp;поиска</span><b>Капучино 1+1 в&nbsp;Липецке — кофейня «Пример»</b></div></div>
-            <div class="ai__img" style="background-image:url('assets/coupons/coffee.jpg')"><em class="ai__n">3</em><span><i data-ic="spark"></i>Сгенерированное изображение купона</span></div>
-            <div class="funnel"><em class="ai__n">5</em>
-              <div><i style="--h:100%"></i><span>показы</span></div>
-              <div><i style="--h:62%"></i><span>просмотры</span></div>
-              <div><i style="--h:34%"></i><span>забрали</span></div>
-              <div><i style="--h:18%"></i><span>пришли</span></div>
+            <div class="aix__snip">
+              <div class="aix__q"><i data-ic="search"></i>кофе 1+1 липецк</div>
+              <div class="aix__res"><small>vsekupony.ru › lipetsk › kofe</small><b>Капучино 1+1 в&nbsp;Липецке — кофейня «Пример»</b><span>Купон бесплатно и&nbsp;без регистрации. Покажите код на&nbsp;кассе.</span></div>
+            </div>
+          </div>
+
+          <div class="aix__p">
+            <div class="aix__prompt"><i data-ic="spark"></i>Капучино и&nbsp;круассан, тёплый свет, без текста на&nbsp;фото</div>
+            <div class="aix__imgs">
+              <div class="is-sel" style="background-image:url('assets/coupons/coffee.jpg')"><span>Выбран</span></div>
+              <div style="background-image:url('assets/coupons/kofe-warm.jpg')"><span>Вариант 2</span></div>
+              <div style="background-image:url('assets/coupons/eda-cool.jpg')"><span>Вариант 3</span></div>
+            </div>
+          </div>
+
+          <div class="aix__p">
+            <p class="aix__k">Лучшие механики в&nbsp;нише «Кафе и&nbsp;рестораны»</p>
+            <ol class="aix__mech">
+              <li><em>1</em><div><b>Пятый — в&nbsp;подарок</b><span>гости возвращаются</span></div><i>+</i></li>
+              <li><em>2</em><div><b>Два по&nbsp;цене одного</b><span>выше средний чек</span></div><i>+</i></li>
+              <li><em>3</em><div><b>Подарок к&nbsp;покупке</b><span>больше новых гостей</span></div><i>+</i></li>
+              <li><em>4</em><div><b>Комбо по&nbsp;цене блюда</b><span>растёт средний чек</span></div><i>+</i></li>
+            </ol>
+          </div>
+
+          <div class="aix__p">
+            <p class="aix__k">Воронка по&nbsp;вашим купонам за&nbsp;30 дней</p>
+            <div class="aix__fun">
+              <div style="--h:100%"><b>81 516</b><span>показы</span><i></i></div>
+              <div style="--h:42%"><b>9 938</b><span>просмотры</span><i></i></div>
+              <div style="--h:24%"><b>2 257</b><span>забрали</span><i></i></div>
+              <div style="--h:12%"><b>865</b><span>пришли</span><i></i></div>
             </div>
           </div>
         </div>
@@ -662,6 +700,6 @@
 </footer>
 
 <script src="assets/business.js?v=20261013b"></script>
-<script src="assets/business-design.js?v=20261017c"></script>
+<script src="assets/business-design.js?v=20261017d"></script>
 </body>
 </html>
