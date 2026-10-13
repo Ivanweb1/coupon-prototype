@@ -1605,3 +1605,61 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .wcp__spark{width:100%;height:52px}
   .sec--red .head__cta{align-self:stretch}
 }
+
+/* ==========================================================================
+   «Четыре шага»: в каждой карточке — мини-интерфейс шага, ниже номер и текст
+   ========================================================================== */
+#how .hrow{align-items:stretch}
+#how .hrow > .head{display:flex;flex-direction:column;justify-content:space-between;gap:28px}
+#how .hrow > .text--big{align-self:end;padding:0 0 6px}
+.path--ui li{min-height:0;padding:0;overflow:hidden;background:var(--surface);gap:0}
+.path--ui li > i{display:none}
+.pv{display:flex;flex-direction:column;justify-content:center;gap:10px;height:168px;padding:22px;background:#fff;margin:10px 10px 0;border-radius:calc(var(--r-lg) - 8px)}
+.path__t{display:flex;align-items:flex-start;gap:14px;padding:22px 24px 26px}
+.path--ui .path__n{flex:none;width:36px;height:36px;font-size:15px}
+.path--ui p{margin:0;padding:0;font-size:15.5px;font-weight:500;line-height:1.45}
+.path--ui li:last-child p{font-size:20px;font-weight:700;padding-top:5px}
+.path--ui li:not(:last-child)::after{top:94px}
+
+.pv__city{display:flex;align-items:center;gap:8px;align-self:flex-start;height:40px;padding:0 16px 0 12px;border-radius:var(--r-pill);box-shadow:inset 0 0 0 1.5px var(--line-strong);font-weight:600;font-size:15px}
+.pv__city i{display:flex;color:var(--brand)}.pv__city svg{width:18px;height:18px}
+.pv__city em{font-style:normal;color:var(--ink-3);font-size:12px;margin-left:2px}
+.pv__soc{display:flex;gap:6px}
+.pv__soc i{display:block;width:30px;height:30px;border-radius:50%;overflow:hidden}
+.pv__soc svg,.pv__soc img{display:block;width:100%;height:100%}
+
+.pv__search{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:var(--r-pill);background:var(--surface);font-size:15px;font-weight:500}
+.pv__search i{display:flex;color:var(--brand)}.pv__search svg{width:17px;height:17px}
+.pv__hit{display:flex;align-items:center;gap:12px;padding:8px;border-radius:14px;box-shadow:0 10px 22px -14px rgba(0,0,0,.35),inset 0 0 0 1px var(--line)}
+.pv__hit b{display:grid;place-items:center;flex:none;width:52px;height:44px;border-radius:10px;background:var(--brand);color:#fff;font-size:15px;font-weight:800}
+.pv__hit span{font-size:13.5px;font-weight:600;line-height:1.25}
+.pv__hit small{display:block;font-size:12px;font-weight:400;color:var(--ink-3)}
+
+.pv__code{display:flex;align-items:center;gap:10px;height:52px;padding:0 16px;border:2px dashed var(--line-strong);border-radius:14px}
+.pv__code i{display:flex;color:var(--brand)}.pv__code svg{width:20px;height:20px}
+.pv__code b{font-size:20px;font-weight:800;letter-spacing:.08em}
+.pv__free{display:flex;gap:6px;flex-wrap:wrap}
+.pv__free span{padding:4px 10px;border-radius:var(--r-pill);background:var(--brand-50);color:var(--brand);font-size:12px;font-weight:600}
+
+.path--ui li:last-child{background:var(--brand)}
+.path--ui li:last-child .pv{background:#fff}
+.pv__ok{display:flex;align-items:center;gap:10px;align-self:flex-start;height:48px;padding:0 18px 0 12px;border-radius:var(--r-pill);background:var(--brand);color:#fff;font-weight:700;font-size:16px}
+.pv__ok i{display:flex}.pv__ok svg{width:22px;height:22px}
+.pv__shop{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-3)}
+.pv__shop i{display:flex;color:var(--ink-4)}.pv__shop svg{width:14px;height:14px}
+@media (max-width:1000px){
+  #how .hrow{display:flex;flex-direction:column}
+  #how .hrow > .head{display:contents}
+  #how .head__cta{order:2}
+}
+@media (max-width:720px){
+  .pv{height:auto;min-height:130px}
+  .path--ui li:not(:last-child)::after{display:none}
+  #how .head__cta{align-self:stretch}
+}
+.path--ui li{overflow:visible}
+.path--ui li:not(:last-child)::after{top:88px;right:-13px;z-index:2;box-shadow:0 4px 10px -4px rgba(0,0,0,.3)}
+.path--ui .pv{position:relative}
+#how .hrow > .text--big{padding-bottom:0;line-height:44px;font-size:clamp(18px,1.6vw,22px)}
+@media (max-width:1240px){#how .hrow > .text--big{line-height:1.4}}
+#how .hrow > .text--big{line-height:1.4;align-self:end;margin-bottom:-4px}
