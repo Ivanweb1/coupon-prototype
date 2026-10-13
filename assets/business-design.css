@@ -1448,3 +1448,28 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .wsw__foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:28px}
 .wsw__foot .src{margin:0}
 @media (max-width:720px){.wsw__foot{flex-direction:column-reverse;align-items:stretch}}
+
+/* Блок «Вордстат»: 20 млн и четыре запроса, окно графика, путь к визиту */
+.wsx{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:48px;margin-top:8px}
+.wsx__big{display:flex;align-items:center;gap:18px}
+.wsx__big b{padding:2px 16px 6px;border-radius:16px;background:#fff;color:var(--brand);font-size:clamp(44px,4.4vw,68px);font-weight:700;letter-spacing:-.04em;line-height:1.05;white-space:nowrap}
+.wsx__big span{max-width:150px;font-size:18px;font-weight:500;line-height:1.3}
+.wsx__q{list-style:none;margin:0;padding:0 0 0 48px;border-left:2px dashed rgba(255,255,255,.5);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.wsx__q li{display:flex;align-items:center;gap:10px;height:52px;padding:0 18px;border-radius:var(--r-pill);background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4);font-size:17px;font-weight:500}
+.wsx__q li i{display:flex}
+.wsx__q li svg{width:18px;height:18px}
+.wsx__flow{list-style:none;margin:0;padding:16px 24px;display:flex;align-items:center;gap:14px;background:var(--surface);border-top:1px solid var(--line);color:var(--ink)}
+.wsx__flow li{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600}
+.wsx__flow li span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fff;color:var(--brand);font-size:13px;font-weight:700;box-shadow:0 0 0 1.5px var(--brand-200)}
+.wsx__flow li.is-end span{background:var(--brand);color:#fff;box-shadow:none}
+.wsx__flow li:not(:last-child)::after{content:"→";margin-left:6px;color:var(--ink-4);font-weight:400}
+@media (max-width:1240px){.wsx__q{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1000px){
+  .wsx{grid-template-columns:1fr;gap:20px}
+  .wsx__q{padding:20px 0 0;border-left:0;border-top:2px dashed rgba(255,255,255,.5);grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:720px){
+  .wsx__q{grid-template-columns:1fr 1fr}
+  .wsx__q li{height:44px;font-size:15px}
+  .wsx__flow{flex-wrap:wrap;padding:14px 16px}
+}

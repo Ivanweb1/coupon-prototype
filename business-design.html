@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261016c">
+<link rel="stylesheet" href="assets/business-design.css?v=20261016d">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -168,22 +168,28 @@
       <p class="text">По&nbsp;Яндекс Вордстат&nbsp;— около 20&nbsp;миллионов таких запросов в&nbsp;месяц по&nbsp;России. ВСЕКУПОНЫ собирают этот спрос в&nbsp;понятный локальный канал: предложение → код → визит к&nbsp;вам.</p></div>
       </div>
 
-      <!-- Как на слайде дека: запросы по словам и итог, ниже — окно Вордстата.
-           Вордстат, вся Россия, запросы за 5 сентября — 4 октября 2026 -->
-      <div class="wsd">
-        <div><span>промокод</span><b>10,6 млн</b></div>
-        <div><span>акция</span><b>5 млн</b></div>
-        <div><span>скидка</span><b>3,8 млн</b></div>
-        <div><span>купон</span><b>619 тыс.</b></div>
-        <div class="wsd__total"><span>всего за&nbsp;месяц</span><b>20 млн</b></div>
+      <!-- Содержание — из прототипа: 20 млн, четыре запроса, путь к визиту.
+           Подача — по мотивам слайда дека: цифра на красном, окно Вордстата -->
+      <div class="wsx">
+        <div class="wsx__big"><b>20 млн</b><span>запросов в&nbsp;месяц по&nbsp;России</span></div>
+        <ul class="wsx__q">
+          <li><i data-ic="search"></i>купон</li>
+          <li><i data-ic="search"></i>акция</li>
+          <li><i data-ic="search"></i>скидка</li>
+          <li><i data-ic="search"></i>промокод</li>
+        </ul>
       </div>
 
       <div class="wsw">
-        <div class="wsw__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «промокод» · Динамика</span><em>Яндекс Вордстат, вся Россия · запросы за&nbsp;5&nbsp;сентября&nbsp;— 4&nbsp;октября 2026</em></div>
+        <div class="wsw__bar"><i></i><i></i><i></i><span>wordstat.yandex.ru — «промокод» · Динамика</span><em>Яндекс Вордстат, вся Россия</em></div>
         <div class="wsw__body">
-          <img src="social-kit/photos/wordstat/promokod-dynamics-clean.png" alt="График Вордстата: около 10 млн запросов «промокод» в месяц" loading="lazy">
-          <span class="wsw__tag">10+ млн запросов в&nbsp;месяц</span>
+          <img src="social-kit/photos/wordstat/promokod-dynamics-clean.png" alt="График запросов «промокод» в Яндекс Вордстате" loading="lazy">
         </div>
+        <ol class="wsx__flow">
+          <li><span>1</span>предложение</li>
+          <li><span>2</span>код</li>
+          <li class="is-end"><span>3</span>визит к&nbsp;вам</li>
+        </ol>
       </div>
       <div class="wsw__foot">
         <a class="btn btn--white" href="#final">Разместить предложение</a>
