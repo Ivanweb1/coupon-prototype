@@ -797,3 +797,5 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
 /* Кнопки — как «Разместить купон» на витрине: Onest 500 */
 .btn,.btn--lg,.hero .btn--lg,.hd__cta,.hd__pilot,.hd .hd__pilot,.hcpn__code em{font-weight:500}
 .hd__cta,.hd .hd__pilot{font-size:14px}
+/* Шапка без тени: от страницы её отделяет плашка меню */
+.hd{box-shadow:none}
