@@ -1718,3 +1718,10 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .how__foot{flex-direction:column-reverse;align-items:stretch;gap:16px}
   .how__foot .text{text-align:left}
 }
+/* Текст под шагами — с левого края четвёртой карточки */
+@media (min-width:1001px){
+  .how__foot{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut)}
+  .how__foot .btn{grid-column:1 / span 6;justify-self:start}
+  .how__foot .text{grid-column:10 / -1;text-align:left}
+}
+@media (min-width:1001px) and (max-width:1240px){.how__foot .text{grid-column:9 / -1}}
