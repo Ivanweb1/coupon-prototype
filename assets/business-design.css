@@ -1295,3 +1295,24 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 #demand .feed__foot{white-space:normal;overflow:visible;font-size:12.5px;line-height:1.5;margin-top:12px}
 /* «В Липецкой области покупатели уже выбирают купоны» — в одну строку */
 #demand .head{max-width:none}
+/* Корешок купона спроса: светло-красный талон, значок, неделя по дням */
+.dstat{background:linear-gradient(90deg,var(--surface) 0 62%,var(--brand-50) 62% 100%)}
+.dstat__sub{justify-content:flex-start;gap:6px;padding:24px 26px;border-left-color:#F3C5C1}
+.dstat__ic{display:grid;place-items:center;width:34px;height:34px;margin-bottom:6px;border-radius:10px;background:var(--brand);color:#fff}
+.dstat__ic svg{width:19px;height:19px}
+.dstat__sub > span{color:var(--ink-2)}
+.dstat__week{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;align-items:end;width:100%;height:58px;margin-top:auto;padding-top:12px}
+.dstat__week div{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px}
+.dstat__week i{display:block;width:100%;height:var(--h);min-height:4px;border-radius:4px 4px 2px 2px;background:#F3B7B2}
+.dstat__week .is-today i{background:var(--brand)}
+.dstat__week em{font-style:normal;font-size:10px;line-height:1;color:var(--ink-3)}
+@media (max-width:720px){
+  .dstat{background:var(--surface)}
+  .dstat__sub{background:var(--brand-50);flex-wrap:wrap}
+  .dstat__ic{display:none}
+  .dstat__week{flex-basis:100%;height:48px}
+}
+.dstat__week{height:auto}
+.dstat__week div{height:auto}
+.dstat__week i{height:calc(40px * var(--k))}
+@media (max-width:720px){.dstat__week i{height:calc(30px * var(--k))}}
