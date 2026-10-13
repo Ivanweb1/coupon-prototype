@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261017o">
+<link rel="stylesheet" href="assets/business-design.css?v=20261017q">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -282,39 +282,44 @@
 
   <!-- 8. AI-помощник -->
   <section class="sec" id="ai">
-    <div class="wrap split">
-      <div>
+    <div class="wrap">
+      <div class="hrow ai-head">
         <div class="head">
           <h2>Внутри сервиса&nbsp;— <span class="tag">AI-помощник</span></h2>
+          <a class="btn btn--red head__cta" href="#final">Попробовать с&nbsp;AI-помощником</a>
         </div>
-        <p class="text">Он помогает:</p>
-        <ol class="ailist">
-          <li>разработать оффер — варианты формулировок под вашу нишу;</li>
-          <li>оптимизировать заголовки рекламных сообщений под SEO — текст автоматически дорабатывается так, чтобы объявление получало максимальную видимость в&nbsp;поиске;</li>
-          <li>сгенерировать изображение купона;</li>
-          <li>подсказать механику, которая лучше работает в&nbsp;категории;</li>
-          <li>показать поведение пользователей по&nbsp;вашим купонам: показы → просмотры → забрали → пришли.</li>
-        </ol>
         <p class="text">Вам не&nbsp;нужно собирать акцию «с&nbsp;чистого листа» — сервис ведёт за&nbsp;руку.</p>
-        <div class="actions">
-          <a class="btn btn--red" href="#final">Попробовать с&nbsp;AI-помощником</a>
-        </div>
       </div>
 
-      <div class="ai" aria-hidden="true">
-        <div class="ai__bar"><i data-ic="spark"></i>AI-помощник</div>
-        <div class="ai__body">
-          <div class="msg msg--me">Кофейня, хочу привлечь новых гостей</div>
-          <div class="msg">Варианты оффера под вашу нишу:</div>
-          <div class="ai__opts">
-            <span class="is-on">1+1 на&nbsp;капучино</span><span>Подарок к&nbsp;первой покупке</span><span>349&nbsp;₽ комбо</span>
-          </div>
-          <div class="ai__img" style="background-image:url('assets/coupons/coffee.jpg')"><span><i data-ic="spark"></i>Сгенерированное изображение купона</span></div>
-          <div class="funnel">
-            <div><i style="--h:100%"></i><span>показы</span></div>
-            <div><i style="--h:62%"></i><span>просмотры</span></div>
-            <div><i style="--h:34%"></i><span>забрали</span></div>
-            <div><i style="--h:18%"></i><span>пришли</span></div>
+      <!-- Пункты списка связаны номерами с местами в окне помощника -->
+      <div class="aig">
+        <div class="aig__l">
+          <p class="aig__k">Он помогает:</p>
+          <ol class="aif">
+            <li><i data-ic="chat"></i><span>разработать оффер — варианты формулировок под вашу нишу;</span></li>
+            <li><i data-ic="search"></i><span>оптимизировать заголовки рекламных сообщений под SEO — текст автоматически дорабатывается так, чтобы объявление получало максимальную видимость в&nbsp;поиске;</span></li>
+            <li><i data-ic="spark"></i><span>сгенерировать изображение купона;</span></li>
+            <li><i data-ic="ticket"></i><span>подсказать механику, которая лучше работает в&nbsp;категории;</span></li>
+            <li><i data-ic="chart"></i><span>показать поведение пользователей по&nbsp;вашим купонам: показы → просмотры → забрали → пришли.</span></li>
+          </ol>
+        </div>
+
+        <div class="ai" aria-hidden="true">
+          <div class="ai__bar"><i data-ic="spark"></i>AI-помощник</div>
+          <div class="ai__body">
+            <div class="msg msg--me">Кофейня, хочу привлечь новых гостей</div>
+            <div class="ai__row"><em class="ai__n">1</em><div class="msg">Варианты оффера под вашу нишу:</div></div>
+            <div class="ai__opts">
+              <span class="is-on">1+1 на&nbsp;капучино<em class="ai__n ai__n--in">4</em></span><span>Подарок к&nbsp;первой покупке</span><span>349&nbsp;₽ комбо</span>
+            </div>
+            <div class="ai__seo"><em class="ai__n">2</em><i data-ic="search"></i><div><span>Заголовок для&nbsp;поиска</span><b>Капучино 1+1 в&nbsp;Липецке — кофейня «Пример»</b></div></div>
+            <div class="ai__img" style="background-image:url('assets/coupons/coffee.jpg')"><em class="ai__n">3</em><span><i data-ic="spark"></i>Сгенерированное изображение купона</span></div>
+            <div class="funnel"><em class="ai__n">5</em>
+              <div><i style="--h:100%"></i><span>показы</span></div>
+              <div><i style="--h:62%"></i><span>просмотры</span></div>
+              <div><i style="--h:34%"></i><span>забрали</span></div>
+              <div><i style="--h:18%"></i><span>пришли</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -657,6 +662,6 @@
 </footer>
 
 <script src="assets/business.js?v=20261013b"></script>
-<script src="assets/business-design.js?v=20261017a"></script>
+<script src="assets/business-design.js?v=20261017b"></script>
 </body>
 </html>
