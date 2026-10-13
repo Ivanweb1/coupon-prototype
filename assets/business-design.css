@@ -930,3 +930,65 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
   .vit__bar span{font-size:10.5px}
   .hcard{position:absolute;top:auto;bottom:0;left:10px}
 }
+
+/* ==========================================================================
+   Сетка — как у витрины (index-design-3)
+   Контейнер до 1760 px, поля 60 px (до 820 px), дальше 16 px.
+   12 колонок, промежуток 18 px: карточка ленты витрины = 3 колонки.
+   Блоки раскладываются по колонкам, поэтому края совпадают по всей странице.
+   ========================================================================== */
+:root{--maxw:1760px;--pad:60px;--gut:18px}
+@media (max-width:1000px){:root{--pad:60px}}
+@media (max-width:820px){:root{--pad:16px}}
+
+@media (min-width:1001px){
+  .hero__in,.hrow,.live,.split,.path,.fmts,.tix,.chs,.team,.geo,.faq,.final{
+    display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);
+  }
+  .path,.fmts,.tix,.chs,.team{row-gap:var(--gut)}
+
+  /* Первый экран: текст 6 + витрина 6 */
+  .hero__in > .hero__text{grid-column:1 / span 6}
+  .hero__in > .hero__vis{grid-column:7 / span 6}
+  /* Шапка блока: заголовок 7, пояснение 4 (через колонку) */
+  .hrow > .head{grid-column:1 / span 7}
+  .hrow > :not(.head){grid-column:9 / span 4}
+  .hrow--wide > .head{grid-column:1 / span 8}
+  /* 01: показатели 6 + лента 6 */
+  .live > .live__l{grid-column:1 / span 6}
+  .live > .feed{grid-column:7 / span 6}
+  /* 05: текст 5 + макет 6 (колонка между — воздух) */
+  .split > :first-child{grid-column:1 / span 5}
+  .split > :last-child{grid-column:7 / span 6}
+  /* Карточки: шаги 4×3, форматы 6×2, запуск 3×4, команда 4×3 */
+  .path > li,.team > *{grid-column:span 3}
+  .fmts > *{grid-column:span 2}
+  .tix > li{grid-column:span 4}
+  /* 07: сайт 3, поиск 3, соцсети 6 */
+  .chs > .ch{grid-column:span 3}
+  .chs > .ch--wide{grid-column:span 6}
+  /* 10: карта 9 + направления 3 */
+  .geo > .map{grid-column:1 / span 9}
+  .geo > .next{grid-column:10 / span 3}
+  /* FAQ: подпись 4 + вопросы 8; финал: текст 5 + форма 6 */
+  .faq > .faq__aside{grid-column:1 / span 4}
+  .faq > .faq__list{grid-column:5 / span 8}
+  .final > .final__text{grid-column:1 / span 5}
+  .final > .form{grid-column:7 / span 6}
+}
+@media (min-width:1001px) and (max-width:1240px){
+  .fmts > *{grid-column:span 4}
+  .hrow > .head{grid-column:1 / span 7}
+  .hrow > :not(.head){grid-column:8 / span 5}
+}
+/* Промежутки внутри карточек и рядов — тот же шаг 18 px */
+.stats,.pers,.ch__soc{gap:var(--gut)}
+.feed__list{gap:10px}
+@media (min-width:1001px){
+  .hero__vis{padding:28px 0}
+  .hcard{left:-28px}
+  .hchip{right:-14px}
+}
+/* Шапка блока: заголовок и пояснение — по верхнему краю */
+.hrow{align-items:start}
+.hrow > .text,.hrow > .hrow__txt{padding-top:6px}
