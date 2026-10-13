@@ -1473,3 +1473,19 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .wsx__q li{height:44px;font-size:15px}
   .wsx__flow{flex-wrap:wrap;padding:14px 16px}
 }
+
+/* Путь «предложение → код → визит к вам» — три белые карточки со стрелками */
+.wsp{list-style:none;margin:36px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}
+.wsp li{position:relative;display:flex;align-items:center;gap:16px;height:96px;padding:0 28px;border-radius:var(--r-lg);background:#fff;color:var(--ink)}
+.wsp li > i{display:grid;place-items:center;flex:none;width:52px;height:52px;border-radius:16px;background:var(--brand-50);color:var(--brand)}
+.wsp li > i svg{width:26px;height:26px}
+.wsp b{font-size:clamp(20px,1.8vw,26px);font-weight:700;letter-spacing:-.02em}
+.wsp li.is-end > i{background:var(--brand);color:#fff}
+.wsp li:not(:last-child)::after{content:"";position:absolute;right:-27px;top:50%;width:14px;height:14px;border-top:2.5px solid #fff;border-right:2.5px solid #fff;transform:translateY(-50%) rotate(45deg)}
+.wsw__foot{margin-top:32px}
+@media (max-width:720px){
+  .wsp{grid-template-columns:1fr;gap:28px;margin-top:28px}
+  .wsp li{height:72px;padding:0 20px}
+  .wsp li > i{width:44px;height:44px}
+  .wsp li:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-20px;transform:translateX(-50%) rotate(135deg)}
+}
