@@ -407,8 +407,9 @@ p{margin:0}
   .btn{white-space:normal;text-align:center;height:auto;min-height:48px;padding:12px 20px}
   .bz-hero__chip--a{left:8px}
   .bz-hero__chip--b{right:8px}
-  .bz-live__stats{grid-template-columns:1fr 1fr}
+  .bz-live__stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .bz-stat{padding:18px}
+  .bz-stat b{font-size:34px}
   .bz-personas{grid-template-columns:1fr}
   .bz-steps--4,.bz-steps--3,.bz-channels{grid-template-columns:1fr}
   .bz-steps li{min-height:0;padding:22px}

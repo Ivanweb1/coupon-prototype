@@ -6,7 +6,9 @@
   // «акции» по Липецкой области в Яндекс Вордстате за месяц, сумма × 1,6 —
   // «покупателей уже выбирают»; за неделю — эта цифра / 4. Пока все три
   // запроса не вписаны, на странице остаются прежние 9 800 / 2 300.
-  var WORDSTAT_LIPETSK = { skidki: null, promokody: null, akcii: null };
+  // Сентябрь 2026, Липецкая область, все устройства — сняты с графиков
+  // «Динамика» по месяцам (присланы 13.10.2026), точность ±1 тыс.
+  var WORDSTAT_LIPETSK = { skidki: 35500, promokody: 78000, akcii: 46000 };
   var ws = WORDSTAT_LIPETSK;
   if (ws.skidki != null && ws.promokody != null && ws.akcii != null) {
     var month = Math.round((ws.skidki + ws.promokody + ws.akcii) * 1.6 / 100) * 100;
