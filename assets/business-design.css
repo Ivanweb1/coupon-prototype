@@ -1710,3 +1710,11 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .sec--gray .btn--soft{background:#fff}
 .sec--gray .btn--soft:hover{background:#FBDCD9}
 .hero .btn--soft,.sec--gray .btn--soft{background:var(--brand-50)}
+/* Под шагами: кнопка слева, текст в две строки справа — по высоте кнопки */
+.how__foot{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:32px}
+.how__foot .text{margin:0;line-height:22px;text-align:right}
+#how .hrow{margin-bottom:40px}
+@media (max-width:720px){
+  .how__foot{flex-direction:column-reverse;align-items:stretch;gap:16px}
+  .how__foot .text{text-align:left}
+}
