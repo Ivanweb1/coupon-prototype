@@ -992,3 +992,81 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
 /* Шапка блока: заголовок и пояснение — по верхнему краю */
 .hrow{align-items:start}
 .hrow > .text,.hrow > .hrow__txt{padding-top:6px}
+
+/* ==========================================================================
+   Первый экран: купон по центру, вокруг — покупатели
+   ========================================================================== */
+.hv{position:relative;min-height:560px;padding:0;filter:none}
+.hv .hcpn{position:absolute;left:50%;top:50%;translate:-50% -50%;width:340px;--cut:230px;filter:drop-shadow(0 26px 34px rgba(40,10,8,.16))}
+.hv .hcpn__ph{height:230px}
+.hv .hcpn__v{left:16px;right:auto;bottom:16px;font-size:26px}
+.hv .hcpn__b{padding:18px 22px 22px}
+.hv .hcpn__b > b{font-size:18px}
+.hp{position:absolute;z-index:3;display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border-radius:var(--r-pill);background:#fff;box-shadow:0 14px 30px -16px rgba(40,10,8,.35);white-space:nowrap}
+.hp .ava{width:42px;height:42px}
+.hp b{display:block;font-size:14px;font-weight:600;line-height:1.2}
+.hp > div > span{display:block;font-size:12.5px;color:var(--ink-3)}
+.hp__ok{font-style:normal;margin-left:4px;padding:5px 10px;border-radius:var(--r-pill);background:var(--brand);color:#fff;font-size:12px;font-weight:500}
+.hp--a{left:0;top:40px}
+.hp--b{right:0;top:170px}
+.hp--c{left:8px;top:330px}
+.hv .hcard{left:auto;right:12px;top:auto;bottom:24px;z-index:3;width:auto;padding:16px 20px}
+.hv .hcard > b{font-size:34px}
+@media (max-width:1240px){
+  .hp--a{left:-10px}.hp--c{left:-10px}.hp--b{right:-10px}
+}
+@media (max-width:1000px){
+  .hv{max-width:600px;width:100%;margin:0 auto;min-height:580px}
+}
+@media (max-width:720px){
+  .hv{min-height:0;display:flex;flex-direction:column;gap:10px;padding:8px 0 0}
+  .hv .hcpn{position:relative;left:auto;top:auto;translate:none;width:100%;order:0}
+  .hp{position:relative;left:auto !important;right:auto !important;top:auto !important;align-self:flex-start;max-width:100%}
+  .hp--b{align-self:flex-end}
+  .hv .hcard{position:relative;right:auto;bottom:auto;margin:0;align-self:stretch}
+}
+/* Раскладка: купон справа, покупатели столбиком слева, спрос под ними.
+   Тень — на обёртке: маска с вырезами срезает тень самого купона */
+.hv{min-height:540px}
+.hcpn-w{position:absolute;right:0;top:50%;translate:0 -50%;width:330px;filter:drop-shadow(0 24px 30px rgba(40,10,8,.18))}
+.hv .hcpn{position:relative;left:auto;top:auto;translate:none;width:100%;filter:none}
+.hp--a{left:0;top:56px}
+.hp--b{left:28px;right:auto;top:146px}
+.hp--c{left:0;top:236px}
+.hv .hcard{left:0;right:auto;top:340px;bottom:auto;width:300px}
+@media (max-width:1240px){
+  .hcpn-w{width:300px}
+  .hp--a,.hp--c{left:-6px}.hp--b{left:14px;right:auto}
+  .hp__ok{display:none}
+}
+@media (max-width:1000px){
+  .hv{min-height:520px}
+  .hp__ok{display:inline-block}
+}
+@media (max-width:720px){
+  .hcpn-w{position:relative;right:auto;top:auto;translate:none;width:100%}
+  .hp--b{left:auto;align-self:flex-end}
+  .hv .hcard{position:relative;top:auto;width:auto}
+}
+/* Средние экраны: купон и плашки уже, без накладок */
+@media (min-width:1181px) and (max-width:1360px){
+  .hcpn-w{width:270px}
+  .hv .hcpn{--cut:190px}
+  .hv .hcpn__ph{height:190px}
+  .hv .hcpn__b > b{font-size:16px}
+  .hp{padding:8px 14px 8px 8px;gap:10px}
+  .hp .ava{width:36px;height:36px}
+  .hp--a,.hp--c{left:0}.hp--b{left:20px}
+  .hv .hcard{width:250px}
+  .hv .hcard > b{font-size:30px}
+}
+/* До 1180 первый экран — в одну колонку, композиция по центру */
+@media (min-width:1001px) and (max-width:1180px){
+  .hero__in{grid-template-columns:1fr !important;row-gap:44px}
+  .hero__in > .hero__text,.hero__in > .hero__vis{grid-column:1 / -1 !important}
+}
+@media (max-width:1180px){
+  .hv{width:100%;max-width:640px;margin:0 auto}
+  .hcpn-w{width:300px}
+}
+@media (max-width:720px){.hcpn-w{width:100%}.hv{max-width:none}}
