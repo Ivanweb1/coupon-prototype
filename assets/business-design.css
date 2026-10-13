@@ -1737,3 +1737,29 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .btn--soft:hover,.hero .btn--soft:hover,.sec--gray .btn--soft:hover,.hd .hd__pilot:hover{background:var(--brand-50);color:var(--brand-d);border-color:var(--brand-d)}
 .btn--soft:hover::after{transform:translateX(3px)}
 .btn--soft::after{content:none}
+
+/* Форматы: заголовок и кнопка в одной строке; купоны плотнее, с фото ниши */
+.fhead{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:36px}
+.fhead h2{max-width:1000px}
+.fhead .btn{flex:none;margin-bottom:6px}
+.fmt{--cut:96px;min-height:0;height:150px;position:relative}
+.fmt b{height:96px;align-items:center;padding:0 20px;font-size:clamp(28px,2.4vw,38px)}
+.fmt span{flex:none;height:54px;display:flex;align-items:center;padding:0 20px}
+.fmt__ph{position:absolute;right:16px;top:24px;width:48px;height:48px;border-radius:50%;background:var(--surface-2) center/cover no-repeat;box-shadow:0 0 0 3px #fff}
+.fmt:nth-child(1) .fmt__ph{box-shadow:0 0 0 3px rgba(255,255,255,.6)}
+.fmts__row{margin-top:20px}
+@media (max-width:1000px){
+  .fhead{flex-direction:column;align-items:flex-start;gap:20px}
+}
+@media (max-width:720px){
+  .fhead .btn{align-self:stretch}
+  .fmt{height:132px;--cut:80px}
+  .fmt b{height:80px;padding:0 14px;font-size:26px}
+  .fmt span{height:52px;padding:0 14px;font-size:12.5px;line-height:1.3}
+  .fmt__ph{width:36px;height:36px;right:12px;top:22px}
+}
+.fmt span{justify-content:space-between;gap:10px}
+.fmt__ph{position:static;flex:none;width:32px;height:32px;box-shadow:none}
+.fmt:nth-child(1) .fmt__ph{box-shadow:0 0 0 2px rgba(255,255,255,.7)}
+@media (max-width:720px){.fmt__ph{width:28px;height:28px}}
+.fmt b{font-size:clamp(30px,2.6vw,40px)}
