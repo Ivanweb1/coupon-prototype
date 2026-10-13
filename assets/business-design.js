@@ -24,6 +24,7 @@
     pin: '<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>',
     check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>',
     mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/>',
+    bookmark: '<path d="M7 3.5h10v17l-5-3.5-5 3.5z"/>',
     cal: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>'
   };
   function icon(k) {
@@ -45,35 +46,34 @@
   });
 
   // Живая лента с фото — те же люди и купоны, что на слайде дека
-  // События — как в прототипе (business.js), фото — для живости
+  // События — как на слайде «Сейчас в Липецке» дека v4: кто, что сделал,
+  // какой купон и где. Значок на аватаре — действие.
   var EVENTS = [
-    ["maria", true,  "забрал(а) −20% на маникюр"],
-    ["oleg", false,  "смотрит кофейни рядом"],
-    ["anna", true,   "забрал(а) 1+1 на капучино"],
-    ["olga", false,  "смотрит детские секции"],
-    ["dmitry", true, "забрал(а) первый визит в фитнес за 0 ₽"],
-    ["sergey", false, "смотрит кафе и рестораны"],
-    ["marina", true, "забрал(а) подарок к покупке в магазине одежды"],
-    ["igor", false,  "смотрит маникюр"],
-    ["maria", true,  "забрал(а) 349 ₽ комбо в кафе"],
-    ["oleg", false,  "смотрит фитнес"],
-    ["anna", true,   "забрал(а) 5=4 на стрижку"]
+    ["maria",  "took", "Мария забрала купон",    "−20% на маникюр · Студия «Пример»"],
+    ["oleg",   "open", "Олег открыл купон",      "Шиномонтаж перед сезоном · Автосервис «Пример»"],
+    ["anna",   "took", "Анна забрала купон",     "Каждая пятая чашка кофе в подарок · Кофейня «Пример»"],
+    ["dmitry", "save", "Дмитрий сохранил купон", "Годовой абонемент −35% · Фитнес «Пример»"],
+    ["olga",   "took", "Ольга забрала купон",    "Первое занятие в детской студии · Студия «Пример»"],
+    ["sergey", "open", "Сергей открыл купон",    "Комбо-обед по будням · Кафе «Пример»"],
+    ["marina", "took", "Марина забрала купон",   "Десерт в подарок к любому напитку · Пекарня «Пример»"],
+    ["igor",   "save", "Игорь сохранил купон",   "Комплексная мойка −30% · Мойка «Пример»"]
   ];
+  var ACT = { took: "ticket", open: "eye", save: "bookmark" };
   var list = document.getElementById("feedD");
   var MAX = 6, i = 0;
   function push() {
     var e = EVENTS[i++ % EVENTS.length];
     var li = document.createElement("li");
-    if (e[1]) li.className = "is-took";
-    li.innerHTML = '<span class="ava"></span><div class="feed__t">Покупатель из Липецкой области ' + e[2] +
-      '</div><em>только что</em>';
-    photo(li.firstChild, PEOPLE + e[0] + ".jpg");
+    li.className = "is-" + e[1];
+    li.innerHTML = '<span class="feed__ava"><span class="ava"></span><i class="feed__act">' + icon(ACT[e[1]]) + "</i></span>" +
+      '<div class="feed__t"><b>' + e[2] + "</b><span>" + e[3] + "</span></div><em>только что</em>";
+    photo(li.querySelector(".ava"), PEOPLE + e[0] + ".jpg");
     list.insertBefore(li, list.firstChild);
     // Новая строка появляется красной и за несколько секунд плавно
     // становится серой (анимация в CSS). Стартовое заполнение — без подсветки.
     if (started) li.classList.add("is-new");
     for (var k = 1; k < list.children.length; k++) {
-      list.children[k].querySelector("em").textContent = (k < 2 ? "1 мин" : k + " мин") + " назад";
+      list.children[k].querySelector("em").textContent = (k * 2) + " мин";
     }
     while (list.children.length > MAX) list.removeChild(list.lastChild);
   }
