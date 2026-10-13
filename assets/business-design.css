@@ -1663,3 +1663,13 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 #how .hrow > .text--big{padding-bottom:0;line-height:44px;font-size:clamp(18px,1.6vw,22px)}
 @media (max-width:1240px){#how .hrow > .text--big{line-height:1.4}}
 #how .hrow > .text--big{line-height:1.4;align-self:end;margin-bottom:-4px}
+/* «От предложения до визита — четыре простых шага» в одну строку:
+   заголовок на всю ширину, ниже — кнопка слева и текст справа */
+@media (min-width:1001px){
+  #how .hrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);row-gap:28px;align-items:center}
+  #how .hrow > .head{display:contents}
+  #how .hrow h2{grid-column:1 / -1;grid-row:1;white-space:nowrap}
+  #how .head__cta{grid-column:1 / span 6;grid-row:2;justify-self:start}
+  #how .hrow > .text--big{grid-column:7 / -1;grid-row:2;align-self:center;margin:0;justify-self:end;text-align:right}
+}
+@media (min-width:1001px) and (max-width:1280px){#how .hrow h2{white-space:normal}}
