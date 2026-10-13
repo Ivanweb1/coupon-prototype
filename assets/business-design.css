@@ -1489,3 +1489,45 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .wsp li > i{width:44px;height:44px}
   .wsp li:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-20px;transform:translateX(-50%) rotate(135deg)}
 }
+
+/* ==========================================================================
+   Блок «Вордстат»: одна белая карточка-купон, две зоны через перфорацию
+   ========================================================================== */
+.wsk{--cut:50%;margin-top:8px;border-radius:var(--r-lg);background:#fff;color:var(--ink);
+  -webkit-mask:radial-gradient(circle 14px at 0 var(--cut),#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% var(--cut),#0000 98%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 14px at 0 var(--cut),#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% var(--cut),#0000 98%,#000) right/51% 100% no-repeat}
+.wsk__top{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);align-items:center;height:132px;padding:0 40px;border-bottom:2px dashed var(--line-strong)}
+.wsk__big{grid-column:1 / span 4;display:flex;align-items:baseline;gap:14px}
+.wsk__big b{font-size:clamp(46px,4.2vw,64px);font-weight:700;letter-spacing:-.045em;line-height:1;color:var(--brand);white-space:nowrap}
+.wsk__big span{font-size:15px;font-weight:500;line-height:1.35;color:var(--ink-2);max-width:130px}
+.wsk__q{grid-column:5 / -1;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.wsk__q li{display:flex;align-items:center;gap:10px;height:48px;padding:0 18px;border-radius:var(--r-pill);background:var(--surface);font-size:16px;font-weight:500}
+.wsk__q li i{display:flex;color:var(--brand)}
+.wsk__q li svg{width:18px;height:18px}
+.wsk__path{list-style:none;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;height:132px;padding:0 40px}
+.wsk__path li{position:relative;display:flex;align-items:center;justify-content:center;gap:14px}
+.wsk__path li > i{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--brand-50);color:var(--brand)}
+.wsk__path li > i svg{width:24px;height:24px}
+.wsk__path b{font-size:clamp(19px,1.7vw,24px);font-weight:600;letter-spacing:-.015em}
+.wsk__path li.is-end > i{background:var(--brand);color:#fff}
+.wsk__path li:not(:last-child)::after{content:"";position:absolute;right:-6px;top:50%;width:11px;height:11px;border-top:2px solid var(--ink-4);border-right:2px solid var(--ink-4);transform:translateY(-50%) rotate(45deg)}
+.wsw__foot{margin-top:28px}
+.wsw__foot .src{font-size:13px}
+@media (max-width:1240px){
+  .wsk__big{grid-column:1 / -1}
+  .wsk__q{grid-column:1 / -1}
+  .wsk__top{height:auto;row-gap:20px;padding:28px 32px}
+  .wsk{--cut:62%}
+}
+@media (max-width:720px){
+  .wsk{-webkit-mask:none;mask:none}
+  .wsk__top{padding:22px}
+  .wsk__q{grid-template-columns:1fr 1fr;gap:8px}
+  .wsk__q li{height:42px;font-size:15px}
+  .wsk__path{grid-template-columns:1fr;height:auto;row-gap:22px;padding:22px}
+  .wsk__path li{justify-content:flex-start}
+  .wsk__path li:not(:last-child)::after{right:auto;left:20px;top:auto;bottom:-16px;transform:rotate(135deg)}
+}
+.wsk__big{align-items:center}
+.wsk__big span{max-width:150px}
+@media (max-width:720px){.wsk__big span{max-width:none}}
