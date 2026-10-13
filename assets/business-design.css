@@ -1701,3 +1701,12 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .pv__soc{gap:6px;padding-left:4px}
 .pv__soc span{margin-right:4px;font-size:12.5px;color:var(--ink-3);white-space:nowrap}
 .pv__soc i{width:28px;height:28px}
+/* Два стиля кнопок: красная — размещение и регистрация,
+   мягкая (как «На пилот») — всё остальное */
+.btn--soft{border:0;background:var(--brand-50);color:var(--brand)}
+.btn--soft:hover{background:#FBDCD9;color:var(--brand-d)}
+.hero .btn--soft{background:#fff}
+.hero .btn--soft:hover{background:#FBDCD9}
+.sec--gray .btn--soft{background:#fff}
+.sec--gray .btn--soft:hover{background:#FBDCD9}
+.hero .btn--soft,.sec--gray .btn--soft{background:var(--brand-50)}
