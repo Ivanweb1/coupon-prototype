@@ -1800,3 +1800,11 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .fmt__top{padding:0 14px 0 16px;gap:10px}
 .fmt__top b{font-size:clamp(24px,2.05vw,34px)}
 @media (max-width:1240px){.fmts .fmt span{white-space:normal}}
+/* Факты — просто текст со значками, кнопка — единственная «кнопка» в строке */
+.fmts__row .facts{gap:28px}
+.fmts__row .facts span{height:auto;padding:0;background:none;font-size:15px;font-weight:500;color:var(--ink-2)}
+.fmts__row .facts span i{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:#fff;color:var(--brand)}
+.fmts__row .facts span svg{width:18px;height:18px}
+.fmts__row .facts .btn{margin-left:8px}
+@media (max-width:720px){.fmts__row .facts{gap:12px;flex-direction:column;align-items:flex-start}}
+@media (max-width:720px){.fmts__row .facts{width:100%}.fmts__row .facts .btn{margin:6px 0 0;align-self:stretch;width:auto}}
