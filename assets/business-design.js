@@ -1,0 +1,104 @@
+/* Лендинг для бизнеса — дизайн: иконки, фото, живая лента и таблица.
+   Цифры спроса, подписи карты и форма — в business.js (общий с Ч/Б). */
+(function () {
+  "use strict";
+
+  // Значки соцсетей — те же, что в шапке витрины и в деке v4
+  var SOC_IC = {
+    vk: '<svg class="soc-ic" style="--soc-c:#0077FF" viewBox="0 0 32 32"><rect class="soc-ic__bg" width="32" height="32"/><path class="soc-ic__g" d="M16.8 21.615c-6.15 0-9.656-4.208-9.8-11.22h3.093c.099 5.142 2.364 7.318 4.163 7.767v-7.768h2.904v4.433c1.771-.19 3.641-2.212 4.27-4.442h2.896a8.57 8.57 0 0 1-3.938 5.602A8.87 8.87 0 0 1 25 21.615h-3.192c-.683-2.131-2.391-3.785-4.648-4.01v4.01h-.36"/></svg>',
+    tg: '<svg class="soc-ic" style="--soc-c:#2AABEE" viewBox="0 0 248 248"><rect class="soc-ic__bg" width="248" height="248"/><path class="soc-ic__g" d="M129.362 93.057q-16.659 6.93-66.588 28.682-8.107 3.225-8.494 6.308c-.436 3.475 3.916 4.844 9.842 6.707l.12.038q1.155.361 2.377.756c5.83 1.895 13.672 4.113 17.749 4.201q5.547.12 12.382-4.574 46.65-31.491 48.162-31.833c.711-.162 1.696-.365 2.364.228.668.594.602 1.718.531 2.019-.431 1.838-17.512 17.718-26.351 25.936l-.074.068c-2.717 2.526-4.64 4.315-5.037 4.726-.894.93-1.807 1.81-2.684 2.655-5.415 5.221-9.477 9.136.226 15.53 4.649 3.064 8.373 5.6 12.085 8.128l.031.02c4.064 2.768 8.119 5.53 13.365 8.968 1.336.876 2.613 1.787 3.856 2.673 4.731 3.372 8.981 6.402 14.232 5.919 3.051-.281 6.202-3.149 7.803-11.706 3.782-20.221 11.218-64.035 12.936-82.09.15-1.582-.039-3.606-.191-4.495-.152-.888-.47-2.155-1.625-3.092-1.368-1.11-3.48-1.344-4.424-1.328-4.295.076-10.884 2.367-42.593 15.556"/></svg>',
+    ok: '<svg class="soc-ic" style="--soc-c:#FF7700" viewBox="0 0 44 44"><rect class="soc-ic__bg" width="44" height="44"/><path class="soc-ic__g" d="M26.868 19.87a6.85 6.85 0 0 1-2.229 1.492 6.88 6.88 0 0 1-7.5-1.492 6.87 6.87 0 0 1-1.875-3.51 6.84 6.84 0 0 1 .392-3.955 6.9 6.9 0 0 1 2.527-3.08 6.96 6.96 0 0 1 3.82-1.18 6.96 6.96 0 0 1 3.83 1.177 6.9 6.9 0 0 1 2.532 3.086 6.84 6.84 0 0 1 .389 3.962 6.87 6.87 0 0 1-1.886 3.512zm-4.877-7.978a3.15 3.15 0 0 0-2.21.917 3.105 3.105 0 0 0 0 4.397c.586.584 1.38.914 2.21.918a3.15 3.15 0 0 0 2.21-.918 3.1 3.1 0 0 0 .913-2.198c0-.824-.328-1.615-.914-2.199a3.15 3.15 0 0 0-2.209-.917m7.239 10.017 2.014 2.753a.315.315 0 0 1-.05.434 14.2 14.2 0 0 1-5.725 2.79l3.889 7.495a.316.316 0 0 1-.123.43.3.3 0 0 1-.16.041h-4.17a.32.32 0 0 1-.296-.19l-2.605-6.182-2.618 6.181a.32.32 0 0 1-.295.191H14.92c-.244 0-.386-.255-.283-.471l3.902-7.494c-2.054-.484-4.03-1.402-5.724-2.791a.32.32 0 0 1-.064-.434l2.027-2.74a.334.334 0 0 1 .475-.064 10.5 10.5 0 0 0 6.75 2.677c2.503 0 4.84-1.045 6.752-2.677.128-.127.359-.102.475.051"/></svg>',
+    max: '<img src="assets/brand/soc/max.svg" alt="">'
+  };
+  document.querySelectorAll("[data-soc]").forEach(function (a) { a.innerHTML = SOC_IC[a.dataset.soc]; });
+
+  // Линейные значки — пути из дека v4 (kit.js)
+  var PATH = {
+    ticket: '<path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/><path d="M14 6.5v11" stroke-dasharray="1.5 2"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    site: '<rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 9h17M7 7h.01M9.5 7h.01"/>',
+    chat: '<path d="M4.5 18.5 6 15a7.5 7.5 0 1 1 3 3z"/>',
+    spark: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/>',
+    eye: '<path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/>',
+    phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+    pin: '<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>',
+    check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>',
+    mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/>',
+    cal: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>'
+  };
+  function icon(k) {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + PATH[k] + "</svg>";
+  }
+  document.querySelectorAll("[data-ic]").forEach(function (el) { el.innerHTML = icon(el.dataset.ic); });
+
+  // Фото людей: аватар-кружок; нет файла — остаётся серый кружок
+  var PEOPLE = "social-kit/photos/people/";
+  function photo(el, src) {
+    var img = new Image();
+    img.onload = function () { el.style.backgroundImage = "url('" + src + "')"; };
+    img.src = src;
+  }
+  document.querySelectorAll("[data-img]").forEach(function (el) { photo(el, el.dataset.img); });
+  document.querySelectorAll("[data-faces]").forEach(function (el) {
+    el.innerHTML = el.dataset.faces.split(",").map(function () { return '<i class="ava"></i>'; }).join("");
+    el.dataset.faces.split(",").forEach(function (n, k) { photo(el.children[k], PEOPLE + n + ".jpg"); });
+  });
+
+  // Живая лента с фото — те же люди и купоны, что на слайде дека
+  var EVENTS = [
+    ["maria", "Мария забрала купон", "−20% на маникюр · Студия «Пример»", true],
+    ["oleg", "Олег открыл купон", "Шиномонтаж перед сезоном", false],
+    ["anna", "Анна забрала купон", "Каждая пятая чашка кофе в подарок", true],
+    ["dmitry", "Дмитрий сохранил купон", "Годовой абонемент −35%", false],
+    ["olga", "Ольга забрала купон", "Первое занятие в детской студии", true],
+    ["sergey", "Сергей открыл купон", "Комбо-обед по будням", false],
+    ["marina", "Марина забрала купон", "Десерт в подарок к любому напитку", true],
+    ["igor", "Игорь открыл купон", "Диагностика подвески — 0 ₽", false]
+  ];
+  var list = document.getElementById("feedD");
+  var MAX = 5, i = 0;
+  function push() {
+    var e = EVENTS[i++ % EVENTS.length];
+    var li = document.createElement("li");
+    if (e[3]) li.className = "is-took";
+    li.innerHTML = '<span class="ava"></span><div class="feed__t"><b>' + e[1] + "</b><span>" + e[2] +
+      '</span></div><em>только что</em>';
+    photo(li.firstChild, PEOPLE + e[0] + ".jpg");
+    list.insertBefore(li, list.firstChild);
+    for (var k = 1; k < list.children.length; k++) {
+      list.children[k].querySelector("em").textContent = (k * 2) + " мин";
+    }
+    while (list.children.length > MAX) list.removeChild(list.lastChild);
+  }
+  if (list) {
+    for (var n = 0; n < MAX; n++) push();
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce) setInterval(push, 3200);
+  }
+
+  // Таблица сравнения — слайд 11 дека v4: g выгодно, y средне, n невыгодно
+  var CMP = [
+    ["ВСЕКУПОНЫ", "g:Низкая g:Высокий g:Высокая g:Точная g:Лёгкое g:Максимальное", 4, "от 1 000 ₽"],
+    ["Доски объявлений", "n:Высокая g:Высокий g:Высокая y:Умеренная g:Лёгкое y:Умеренное", 20, "от 10 000 ₽"],
+    ["Поисковые системы", "y:Умеренная g:Высокий y:Умеренная g:Точная g:Лёгкое n:Минимальное", 60, "от 30 000 ₽"],
+    ["Наружная реклама", "n:Высокая g:Высокий n:Низкая n:Низкая n:Сложное n:Минимальное", 30, "от 15 000 ₽"],
+    ["Визитки и флаеры", "g:Низкая n:Низкий n:Низкая y:Умеренная n:Сложное n:Минимальное", 10, "от 5 000 ₽"],
+    ["Соцсети", "y:Умеренная g:Высокий y:Умеренная y:Умеренная g:Лёгкое y:Умеренное", 20, "от 10 000 ₽"],
+    ["Радио", "n:Высокая y:Умеренный y:Умеренная n:Низкая n:Сложное n:Минимальное", 40, "от 20 000 ₽"],
+    ["ТВ", "n:Высокая y:Умеренный n:Низкая n:Низкая n:Сложное n:Минимальное", 100, "от 50 000 ₽"],
+    ["Блогеры", "y:Умеренная y:Умеренный y:Умеренная y:Умеренная n:Сложное y:Умеренное", 20, "от 10 000 ₽"]
+  ];
+  var tb = document.querySelector("#cmpTable tbody");
+  if (tb) {
+    tb.innerHTML = CMP.map(function (r, k) {
+      var name = k === 0 ? '<span class="cmp__me"><img src="assets/brand/logo-white.png" alt="">' + r[0] + "</span>" : r[0];
+      var cells = r[1].split(" ").map(function (c) {
+        var p = c.split(":");
+        return '<td><span class="rt rt--' + p[0] + '"><i></i><i></i><i></i>' + p[1] + "</span></td>";
+      }).join("");
+      return "<tr" + (k === 0 ? ' class="is-me"' : "") + '><th scope="row">' + name + "</th>" + cells +
+        '<td><span class="bud"><span class="bud__b"><b style="width:' + r[2] + '%"></b></span>' +
+        r[3].replace(/ /g, "\u00a0") + "</span></td></tr>";
+    }).join("");
+  }
+})();
