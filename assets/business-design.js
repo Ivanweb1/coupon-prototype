@@ -45,28 +45,32 @@
   });
 
   // Живая лента с фото — те же люди и купоны, что на слайде дека
+  // События — как в прототипе (business.js), фото — для живости
   var EVENTS = [
-    ["maria", "Мария забрала купон", "−20% на маникюр · Студия «Пример»", true],
-    ["oleg", "Олег открыл купон", "Шиномонтаж перед сезоном", false],
-    ["anna", "Анна забрала купон", "Каждая пятая чашка кофе в подарок", true],
-    ["dmitry", "Дмитрий сохранил купон", "Годовой абонемент −35%", false],
-    ["olga", "Ольга забрала купон", "Первое занятие в детской студии", true],
-    ["sergey", "Сергей открыл купон", "Комбо-обед по будням", false],
-    ["marina", "Марина забрала купон", "Десерт в подарок к любому напитку", true],
-    ["igor", "Игорь открыл купон", "Диагностика подвески — 0 ₽", false]
+    ["maria", true,  "забрал(а) −20% на маникюр"],
+    ["oleg", false,  "смотрит кофейни рядом"],
+    ["anna", true,   "забрал(а) 1+1 на капучино"],
+    ["olga", false,  "смотрит детские секции"],
+    ["dmitry", true, "забрал(а) первый визит в фитнес за 0 ₽"],
+    ["sergey", false, "смотрит кафе и рестораны"],
+    ["marina", true, "забрал(а) подарок к покупке в магазине одежды"],
+    ["igor", false,  "смотрит маникюр"],
+    ["maria", true,  "забрал(а) 349 ₽ комбо в кафе"],
+    ["oleg", false,  "смотрит фитнес"],
+    ["anna", true,   "забрал(а) 5=4 на стрижку"]
   ];
   var list = document.getElementById("feedD");
-  var MAX = 5, i = 0;
+  var MAX = 6, i = 0;
   function push() {
     var e = EVENTS[i++ % EVENTS.length];
     var li = document.createElement("li");
-    if (e[3]) li.className = "is-took";
-    li.innerHTML = '<span class="ava"></span><div class="feed__t"><b>' + e[1] + "</b><span>" + e[2] +
-      '</span></div><em>только что</em>';
+    if (e[1]) li.className = "is-took";
+    li.innerHTML = '<span class="ava"></span><div class="feed__t">Покупатель из Липецкой области ' + e[2] +
+      '</div><em>только что</em>';
     photo(li.firstChild, PEOPLE + e[0] + ".jpg");
     list.insertBefore(li, list.firstChild);
     for (var k = 1; k < list.children.length; k++) {
-      list.children[k].querySelector("em").textContent = (k * 2) + " мин";
+      list.children[k].querySelector("em").textContent = (k < 2 ? "1 мин" : k + " мин") + " назад";
     }
     while (list.children.length > MAX) list.removeChild(list.lastChild);
   }
@@ -79,7 +83,7 @@
   // Таблица сравнения — слайд 11 дека v4: g выгодно, y средне, n невыгодно
   var CMP = [
     ["ВСЕКУПОНЫ", "g:Низкая g:Высокий g:Высокая g:Точная g:Лёгкое g:Максимальное", 4, "от 1 000 ₽"],
-    ["Доски объявлений", "n:Высокая g:Высокий g:Высокая y:Умеренная g:Лёгкое y:Умеренное", 20, "от 10 000 ₽"],
+    ["Доски объявлений", "n:Высокая_↑ g:Высокий g:Высокая y:Умеренная g:Лёгкое y:Умеренное", 20, "от 10 000 ₽"],
     ["Поисковые системы", "y:Умеренная g:Высокий y:Умеренная g:Точная g:Лёгкое n:Минимальное", 60, "от 30 000 ₽"],
     ["Наружная реклама", "n:Высокая g:Высокий n:Низкая n:Низкая n:Сложное n:Минимальное", 30, "от 15 000 ₽"],
     ["Визитки и флаеры", "g:Низкая n:Низкий n:Низкая y:Умеренная n:Сложное n:Минимальное", 10, "от 5 000 ₽"],
@@ -94,7 +98,7 @@
       var name = k === 0 ? '<span class="cmp__me"><img src="assets/brand/logo-white.png" alt="">' + r[0] + "</span>" : r[0];
       var cells = r[1].split(" ").map(function (c) {
         var p = c.split(":");
-        return '<td><span class="rt rt--' + p[0] + '"><i></i><i></i><i></i>' + p[1] + "</span></td>";
+        return '<td><span class="rt rt--' + p[0] + '"><i></i><i></i><i></i>' + p[1].replace("_", " ") + "</span></td>";
       }).join("");
       return "<tr" + (k === 0 ? ' class="is-me"' : "") + '><th scope="row">' + name + "</th>" + cells +
         '<td><span class="bud"><span class="bud__b"><b style="width:' + r[2] + '%"></b></span>' +

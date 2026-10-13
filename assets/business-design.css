@@ -197,7 +197,7 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
 .hrow .head{margin-bottom:0}
 .hrow > .text{margin:0;max-width:none}
 .hrow > .text--big{font-size:clamp(20px,1.9vw,26px);line-height:1.35;padding-bottom:6px}
-.kicker{font-size:15px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.kicker{font-size:17px;font-weight:700;color:var(--ink-2)}
 
 /* ---------- 4. Живая аудитория ---------- */
 .live{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:start}
@@ -519,7 +519,6 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
   body{font-size:16px}
   .hd__in{gap:12px}
   .hd__contacts{display:none}
-  .hd__pilot{display:none}
   .logo__tag{display:none}
   .logo__mark{height:38px !important}
   .hd__cta{margin-left:auto;min-height:40px;height:40px;padding:0 16px;font-size:14px;white-space:nowrap}
@@ -594,8 +593,6 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
   *{animation:none !important;transition:none !important}
   html{scroll-behavior:auto}
 }
-.hd__cta-s{display:none}
-@media (max-width:720px){.hd__cta-l{display:none}.hd__cta-s{display:inline}}
 .chs > *,.path > *,.tix > *,.team > *{min-width:0}
 @media (max-width:720px){
   .ch__soc{grid-template-columns:1fr 1fr;gap:8px}
@@ -622,3 +619,54 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
   .hd .hd__in{padding-top:10px}
   .hd .hd__nav{margin-top:10px}
 }
+
+/* Пояснение в шапке блока может быть из двух абзацев */
+.hrow__txt .text{margin:0;max-width:none}
+.hrow__txt .text + .text{margin-top:12px}
+
+/* 02. Вордстат — как в прототипе: большая цифра, запросы, путь к визиту */
+.ws2{display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:center;padding:30px 36px;border-radius:var(--r-lg);background:#fff;color:var(--ink)}
+.ws2__big b{display:block;font-size:clamp(56px,6vw,88px);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--brand)}
+.ws2__big span{display:block;margin-top:6px;font-weight:600;color:var(--ink-2)}
+.ws2__side{display:flex;flex-direction:column;gap:18px;padding-left:48px;border-left:2px dashed var(--line-strong)}
+.ws2__tags{display:flex;flex-wrap:wrap;gap:8px}
+.ws2__tags span{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r-pill);background:var(--surface);font-size:15px;font-weight:600}
+.ws2__tags span::before{content:"";width:14px;height:14px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23DD443C' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center/contain no-repeat}
+.ws2__flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-weight:700}
+.ws2__flow span{padding:9px 16px;border-radius:12px;border:2px solid var(--brand);color:var(--brand)}
+.ws2__flow span:last-child{background:var(--brand);color:#fff}
+.ws2__flow i{font-style:normal;color:var(--ink-3)}
+.ws2 + .win{margin-top:20px}
+.src--w{color:rgba(255,255,255,.8)}
+
+/* 01. Карточки покупателей — в ряд, как в прототипе */
+.pers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.per{padding:14px;gap:12px}
+.per .ava{width:44px;height:44px}
+.per__t b{font-size:15px}
+.feed__t{font-size:14px;line-height:1.35}
+.feed__list li.is-took{background:var(--brand);color:#fff;box-shadow:none}
+.feed__list li.is-took em{color:rgba(255,255,255,.85)}
+.feed__list li.is-took .ava{box-shadow:0 0 0 2px #fff}
+
+/* Карточка спроса на первом экране — цифра и подпись */
+.hcard__bot{border-top:0;padding-top:0;margin-top:14px}
+
+/* Финал: телефон с подписью, как в прототипе */
+.final__phone{display:flex;align-items:center;gap:16px}
+.final__phone > span{font-size:15px;color:var(--ink-3);font-weight:600}
+.final__phone a{display:flex;align-items:center;gap:10px}
+
+@media (max-width:1000px){
+  .ws2{grid-template-columns:1fr;gap:20px}
+  .ws2__side{padding-left:0;border-left:0;padding-top:20px;border-top:2px dashed var(--line-strong)}
+}
+@media (max-width:720px){
+  .ws2{padding:22px}
+  .pers{grid-template-columns:1fr}
+  .hd .hd__cta{display:none}
+  .hd .hd__pilot{display:inline-flex;margin:0 0 0 auto;height:40px;min-height:40px;padding:0 18px;font-size:14px}
+}
+.pers .per{flex-direction:column;align-items:flex-start;gap:10px;padding:16px}
+.pers .per__t b{white-space:nowrap}
+@media (max-width:720px){.pers .per{flex-direction:row;align-items:center}}
