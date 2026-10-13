@@ -876,3 +876,12 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
 /* Плашка меню — 34px */
 .hd .hd__nav{height:34px}
 @media (max-width:720px){.hd .hd__nav{height:34px}}
+/* Плашка меню: у крайних пунктов отступ слева/справа равен отступу сверху
+   и снизу (34px − строка 14px = по 10px), между пунктами — равные
+   промежутки (space-between) */
+.hd .hd__nav{padding:0 8px;justify-content:space-between;line-height:14px}
+.hd .hd__nav a{padding:0;line-height:14px}
+.hd.is-scrolled .hd__nav{padding:0 6px}
+/* Скругление поменьше: в полной «пилюле» крайние пункты прижимаются к дуге
+   и равный отступ на глаз выглядит теснее */
+.hd .hd__nav{border-radius:10px}
