@@ -807,3 +807,10 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
 .hd .hd__cta,.hd .hd__pilot{height:44px;min-height:44px;padding:0 18px}
 .hd .hd__soc{height:44px;padding:0 5px}
 .hd .hd__soc a{width:32px;height:32px}
+/* Все кнопки — 44px, как на витрине */
+.btn,.btn--lg,.hero .btn--lg{height:44px;min-height:44px;padding:0 20px;font-size:14px}
+.form button.btn{height:44px}
+@media (max-width:720px){
+  .btn,.btn--lg{height:auto;min-height:44px;padding:10px 20px}
+}
+@media (max-width:720px){.btn,.btn--lg{padding:8px 20px;line-height:1.3}}
