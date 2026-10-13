@@ -1725,3 +1725,14 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .how__foot .text{grid-column:10 / -1;text-align:left}
 }
 @media (min-width:1001px) and (max-width:1240px){.how__foot .text{grid-column:9 / -1}}
+
+/* Второстепенная кнопка: белая, красная обводка, красный текст и стрелка →;
+   при наведении — светло-красная заливка. Основная — сплошная красная. */
+.btn--soft,.hero .btn--soft,.sec--gray .btn--soft,.hd .hd__pilot{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}
+.btn--soft::after{content:"";width:14px;height:14px;margin-left:2px;flex:none;
+  background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;
+  transition:transform .2s var(--ease)}
+.btn--soft:hover,.hero .btn--soft:hover,.sec--gray .btn--soft:hover,.hd .hd__pilot:hover{background:var(--brand-50);color:var(--brand-d);border-color:var(--brand-d)}
+.btn--soft:hover::after{transform:translateX(3px)}
