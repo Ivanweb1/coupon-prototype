@@ -38,7 +38,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth;scroll-padding-top:calc(var(--hd-h) + 24px)}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth;scroll-padding-top:calc(var(--hd-h) + 70px)}
 body{
   margin:0;background:#fff;color:var(--ink);
   font-family:"Onest",ui-sans-serif,-apple-system,"Segoe UI",sans-serif;
@@ -84,22 +84,38 @@ h1 .tag,h2 .tag{display:inline-block;white-space:nowrap;rotate:-1.5deg;margin:.0
 
 /* ---------- Шапка ---------- */
 .hd{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.hd__in{display:flex;align-items:center;gap:28px;height:var(--hd-h)}
+.hd__in{display:flex;align-items:center;flex-wrap:wrap;gap:0 28px;min-height:var(--hd-h)}
+.hd__in > .hd__contacts{margin-left:auto}
+/* Меню — вторым рядом: в первом логотип с подписью, контакты и две кнопки */
+.hd .hd__nav{order:10;flex-basis:100%;margin:0;height:46px;align-items:center;gap:30px;border-top:1px solid var(--line)}
 .logo{display:flex;align-items:center;gap:12px;flex:none}
 .logo img{width:22px;height:auto;display:block}
 .logo__t{display:flex;flex-direction:column;line-height:1.1}
 .logo__t b{font-size:19px;font-weight:800;letter-spacing:.01em}
 .logo__t span{font-size:12px;color:var(--ink-3);font-weight:500;margin-top:3px}
+/* Шапка — логотип как на витрине: знак, «Все купоны» в две строки, подпись через разделитель */
+.hd .logo{gap:10px}
+.logo__mark{height:44px !important;width:auto !important;transform-origin:50% 90%;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+.logo:hover .logo__mark{transform:rotate(-8deg) translateY(-2px)}
+.logo__word{font-weight:700;font-size:14px;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase}
+.logo__tag{flex:none;margin-left:-14px;padding-left:14px;border-left:1px solid var(--line-strong);font-size:12px;line-height:1.35;color:var(--ink-3);white-space:nowrap}
+.logo__tag b{color:var(--ink-2);font-weight:600}
 .logo--w .logo__t b{color:#fff}
 .logo--w .logo__t span{color:#a9a9a9}
-.hd__nav{display:flex;gap:22px;font-size:15px;font-weight:500;color:var(--ink-2);margin-left:auto;white-space:nowrap}
+.hd__nav{display:flex;gap:20px;font-size:14.5px;font-weight:500;color:var(--ink-2);margin-left:auto;white-space:nowrap}
 .hd__nav a{position:relative;padding:6px 0}
 .hd__nav a:hover{color:var(--brand)}
 .hd__contacts{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;flex:none}
 .hd__phone{font-weight:800;font-size:15px;white-space:nowrap}
-.hd__links{font-size:12px;color:var(--ink-3);white-space:nowrap}
-.hd__links a:hover{color:var(--brand)}
-.hd__cta{height:44px;padding:0 20px;font-size:15px;flex:none}
+/* Под телефоном — иконки связи: почта, Telegram, MAX */
+.hd__soc{display:flex;gap:6px;margin-top:5px}
+.hd__soc a{display:block;width:22px;height:22px;border-radius:50%;overflow:hidden;transition:transform .2s var(--ease)}
+.hd__soc a:hover{transform:translateY(-1px)}
+.hd__soc svg,.hd__soc img{display:block;width:100%;height:100%}
+.hd__mail{display:grid !important;place-items:center;background:var(--brand);color:#fff}
+.hd__mail svg{width:13px !important;height:13px !important}
+.hd__cta,.hd__pilot{height:44px;padding:0 20px;font-size:15px;flex:none}
+.hd__pilot{margin-left:-14px}
 
 /* Значки соцсетей (пути из дека) */
 .soc-ic__bg{fill:var(--soc-c)}
@@ -409,7 +425,7 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
 
 /* ---------- 15. FAQ ---------- */
 .faq{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:64px;align-items:start}
-.faq__aside{position:sticky;top:calc(var(--hd-h) + 40px)}
+.faq__aside{position:sticky;top:calc(var(--hd-h) + 86px)}
 .ask{margin-top:8px;padding:26px;border-radius:var(--r-lg);background:var(--surface)}
 .ask > b{display:block;font-size:20px;letter-spacing:-.01em}
 .ask > p{margin-top:8px;color:var(--ink-2);font-size:15px}
@@ -473,7 +489,6 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
    Адаптив
    ========================================================================== */
 @media (max-width:1240px){
-  .hd__nav{display:none}
   .fmts{grid-template-columns:repeat(3,1fr)}
   .hcard{margin-left:0}
 }
@@ -504,6 +519,9 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
   body{font-size:16px}
   .hd__in{gap:12px}
   .hd__contacts{display:none}
+  .hd__pilot{display:none}
+  .logo__tag{display:none}
+  .logo__mark{height:38px !important}
   .hd__cta{margin-left:auto;min-height:40px;height:40px;padding:0 16px;font-size:14px;white-space:nowrap}
   .logo__t span{display:none}
   .logo__t b{font-size:16px}
@@ -588,3 +606,19 @@ sup{position:relative;top:-.3em;vertical-align:baseline;font-size:.6em;margin-le
 }
 .hrow--wide{grid-template-columns:minmax(0,1.45fr) minmax(0,.55fr)}
 @media (max-width:1000px){.hrow--wide{grid-template-columns:1fr}}
+@media (max-width:1000px){
+  .hd .hd__nav{overflow-x:auto;scrollbar-width:none;gap:22px;font-size:14px}
+  .hd .hd__nav::-webkit-scrollbar{display:none}
+}
+@media (max-width:720px){
+  .hd .hd__nav{height:42px;gap:18px;font-size:13.5px;margin:0 calc(var(--pad) * -1);padding:0 var(--pad)}
+  html{scroll-padding-top:120px}
+}
+/* Ряды шапки: верхний с воздухом, меню под ним */
+.hd .hd__in{min-height:0;padding-top:14px}
+.hd .hd__nav{margin-top:14px}
+.hd .hd__pilot{margin-left:0;margin-right:-16px}
+@media (max-width:720px){
+  .hd .hd__in{padding-top:10px}
+  .hd .hd__nav{margin-top:10px}
+}
