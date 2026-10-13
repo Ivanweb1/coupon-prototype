@@ -1107,13 +1107,3 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
   .hd:not(.is-scrolled) .hd__br{display:none}
   .hd:not(.is-scrolled) .hd__nav{flex-basis:100%;justify-content:space-between}
 }
-/* Контакты — своя серая плашка той же высоты, что меню (34px):
-   телефон и почта слева, иконки справа, одним куском */
-@media (min-width:1201px){
-  .hd:not(.is-scrolled) .hd__in > .hd__contacts{height:34px;align-items:center;padding:0 14px 0 20px;margin-top:10px;margin-bottom:10px;border-radius:var(--r-pill) 0 0 var(--r-pill);background:var(--surface)}
-  .hd:not(.is-scrolled) .hd__soc{height:34px;margin:10px 0 10px -12px;padding:0 4px 0 0;border:0;border-radius:0 var(--r-pill) var(--r-pill) 0;background:var(--surface);gap:4px}
-  .hd:not(.is-scrolled) .hd__soc a{width:26px;height:26px}
-  .hd:not(.is-scrolled) .hd__soc a .soc-ic__bg{fill:#fff}
-  .hd .hd__phone{font-size:14px}
-  .hd .hd__mail{font-size:12.5px}
-}
