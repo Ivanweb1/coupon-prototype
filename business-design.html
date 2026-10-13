@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261014t">
+<link rel="stylesheet" href="assets/business-design.css?v=20261015a">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -118,10 +118,20 @@
             </div>
           </div>
           <p class="text">И&nbsp;про каждого мы понимаем, что ему интересно: маникюр, кофе, фитнес, детские секции, кафе, одежда…</p>
-          <div class="pers">
-            <div class="per"><span class="ava" data-img="social-kit/photos/people/anna.jpg"></span><div class="per__t"><b>Покупатель · 27</b><span>маникюр · кофе</span></div></div>
-            <div class="per"><span class="ava" data-img="social-kit/photos/people/marina.jpg"></span><div class="per__t"><b>Покупатель · 34</b><span>детские секции · кафе</span></div></div>
-            <div class="per"><span class="ava" data-img="social-kit/photos/people/dmitry.jpg"></span><div class="per__t"><b>Покупатель · 41</b><span>фитнес · одежда</span></div></div>
+          <!-- Покупатели — как на слайде дека: кто, где, интересы, активность -->
+          <div class="pers pers--deck">
+            <div class="pr">
+              <span class="ava" data-img="social-kit/photos/people/anna.jpg"></span>
+              <div class="pr__t"><b>Анна, 29&nbsp;лет</b><span>Липецк · Советский район</span></div>
+              <div class="pr__n"><div><b>23</b><span>смотрела</span></div><div class="is-red"><b>4</b><span>забрала</span></div></div>
+              <div class="pr__c"><i>Маникюр</i><i>Кофе с&nbsp;собой</i><i>Фитнес</i></div>
+            </div>
+            <div class="pr">
+              <span class="ava" data-img="social-kit/photos/people/marina.jpg"></span>
+              <div class="pr__t"><b>Марина, 34&nbsp;года</b><span>Липецк · Октябрьский район</span></div>
+              <div class="pr__n"><div><b>41</b><span>смотрела</span></div><div class="is-red"><b>7</b><span>забрала</span></div></div>
+              <div class="pr__c"><i>Детские секции</i><i>Кафе</i><i>Одежда</i></div>
+            </div>
           </div>
           <p class="src">* По данным Яндекс Вордстат</p>
           <div class="actions">
@@ -132,10 +142,10 @@
         <div class="feed" aria-live="polite">
           <div class="feed__head"><span class="dot"></span>Сейчас на&nbsp;платформе</div>
           <ul class="feed__list" id="feedD"></ul>
-          <p class="feed__foot">На&nbsp;экране — живая лента: кто смотрит и&nbsp;кто только что забрал предложение. Ваше предложение попадает в&nbsp;этот поток спроса.</p>
         </div>
       </div>
 
+      <p class="feed__cap">На&nbsp;экране — живая лента: кто смотрит и&nbsp;кто только что забрал предложение. Ваше предложение попадает в&nbsp;этот поток спроса.</p>
     </div>
   </section>
 
@@ -599,6 +609,6 @@
 </footer>
 
 <script src="assets/business.js?v=20261013b"></script>
-<script src="assets/business-design.js?v=20261014c"></script>
+<script src="assets/business-design.js?v=20261014d"></script>
 </body>
 </html>

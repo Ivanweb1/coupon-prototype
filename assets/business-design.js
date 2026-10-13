@@ -60,7 +60,7 @@
   ];
   var ACT = { took: "ticket", open: "eye", save: "bookmark" };
   var list = document.getElementById("feedD");
-  var MAX = 6, i = 0;
+  var MAX = 8, i = 0;
   function push() {
     var e = EVENTS[i++ % EVENTS.length];
     var li = document.createElement("li");

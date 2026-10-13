@@ -1229,3 +1229,50 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   #demand .feed__list li em{flex-basis:auto;margin-left:0}
   .feed__ava .ava{width:40px;height:40px}
 }
+/* Подпись под лентой — в одну строку */
+@media (min-width:721px){
+  #demand .feed__foot{font-size:12px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
+.feed__cap{margin-top:14px;text-align:right;font-size:12.5px;color:var(--ink-3)}
+@media (min-width:1001px){.feed__cap{white-space:nowrap}}
+@media (max-width:1000px){.feed__cap{text-align:left}}
+/* Цифры спроса — купоном: главная часть и «корешок» через перфорацию */
+.dstat{--cut:62%;--notch:14px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);padding:0;
+  -webkit-mask:radial-gradient(circle var(--notch) at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--notch) at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle var(--notch) at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle var(--notch) at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+.dstat__main{padding:30px 28px 30px 32px}
+.dstat__main b{font-size:clamp(46px,4.2vw,64px)}
+.dstat__main > span{font-size:15.5px;max-width:300px}
+.dstat__sub{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;margin:0;padding:30px 28px;border-top:0;border-left:2px dashed var(--line-strong)}
+.dstat__sub b{font-size:clamp(30px,2.6vw,40px)}
+.dstat__sub > span{font-size:14.5px}
+@media (max-width:720px){
+  .dstat{grid-template-columns:1fr;-webkit-mask:none;mask:none}
+  .dstat__main{padding:22px 22px 18px}
+  .dstat__sub{flex-direction:row;align-items:baseline;padding:16px 22px 20px;border-left:0;border-top:2px dashed var(--line-strong)}
+}
+/* Карточки покупателей — как на слайде дека */
+#demand .pers--deck{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.pr{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"a t n" "c c c";column-gap:16px;row-gap:14px;align-items:center;padding:18px 22px;border-radius:var(--r-lg);background:#fff;border:1px solid var(--line)}
+.pr > .ava{grid-area:a;width:52px;height:52px}
+.pr__t{grid-area:t;min-width:0}
+.pr__t b{display:block;font-size:19px;font-weight:700;letter-spacing:-.015em;line-height:1.2}
+.pr__t span{display:block;margin-top:2px;font-size:14px;color:var(--ink-3)}
+.pr__n{grid-area:n;display:flex;gap:22px;text-align:center}
+.pr__n b{display:block;font-size:22px;font-weight:700;line-height:1}
+.pr__n span{display:block;margin-top:4px;font-size:12px;color:var(--ink-3)}
+.pr__n .is-red b{color:var(--brand)}
+.pr__c{grid-area:c;display:flex;flex-wrap:wrap;gap:8px}
+.pr__c i{font-style:normal;padding:6px 12px;border-radius:var(--r-pill);background:var(--surface);font-size:13px;font-weight:500}
+@media (max-width:720px){
+  .pr{padding:14px 16px;column-gap:12px}
+  .pr > .ava{width:44px;height:44px}
+  .pr__t b{font-size:16px}
+  .pr__n{gap:12px}
+  .pr__n b{font-size:18px}
+}
+#demand .feed__list{min-height:0;overflow:hidden}
+@media (max-width:720px){#demand .feed__list{max-height:440px}}
+/* Высоту блока задаёт левая колонка, лента заполняет её и обрезается */
+@media (min-width:1001px){#demand .feed__list{flex:1 1 0;height:0;min-height:0;max-height:none}}
+#demand .feed__list{-webkit-mask:linear-gradient(#000 calc(100% - 56px),transparent);mask:linear-gradient(#000 calc(100% - 56px),transparent)}
