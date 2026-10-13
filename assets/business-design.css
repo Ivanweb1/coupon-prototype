@@ -2095,3 +2095,4 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .aix__win .aix__top{border-radius:calc(var(--r-lg) - 8px) calc(var(--r-lg) - 8px) 0 0}
 }
 @media (min-width:1001px){.aix__foot .text{margin-left:20px}}
+@media (min-width:1001px){.aix__foot .text{margin-left:0;padding-left:20px}}
