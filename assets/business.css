@@ -104,6 +104,9 @@ p{margin:0}
 .bz-sec--dark .bz-text b{color:#fff}
 .bz-small{font-size:13px;color:var(--ink-3);margin-top:16px}
 .bz-src{font-size:12px;color:var(--ink-3);margin-top:18px}
+/* Звёздочка у цифр спроса — сноска «по данным Вордстат» внизу блока */
+.bz-hero__chip sup,.bz-stat sup{font-size:.45em;vertical-align:super;margin-left:2px;letter-spacing:0}
+.bz-hero__chip b [data-demand],.bz-stat b [data-demand]{display:inline;margin:0;font-size:inherit;color:inherit}
 .bz-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
 .bz-actions--col{flex-direction:column;align-items:flex-start}
 .bz-split{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
@@ -204,6 +207,7 @@ p{margin:0}
 }
 .bz-format b{font-size:32px;letter-spacing:-.03em;line-height:1}
 .bz-format span{font-size:14px;color:var(--ink-2);line-height:1.35}
+.bz-formats__more{margin-top:16px;font-size:18px;font-weight:600;color:var(--ink-2)}
 .bz-facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .bz-facts span{padding:10px 16px;border-radius:var(--r-pill);background:#fff;border:1px solid var(--line);font-size:14px;font-weight:500}
 
@@ -240,15 +244,36 @@ p{margin:0}
 .bz-socials{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .bz-socials span{padding:8px 14px;border-radius:var(--r-pill);background:#fff;font-size:14px;font-weight:500}
 
-/* ---------- 11. Сравнение ---------- */
-.bz-compare{padding:32px;border-radius:var(--r-lg);background:#fff;border:1px solid var(--line)}
-.bz-compare__row{display:grid;grid-template-columns:150px 1fr auto;align-items:center;gap:14px;padding:10px 0}
-.bz-compare__row span{font-size:14px;color:var(--ink-2)}
-.bz-compare__row .bar{display:block;height:14px;width:var(--w);border-radius:var(--r-pill);background:var(--line-strong)}
-.bz-compare__row.is-us{border-top:1px solid var(--line);margin-top:8px;padding-top:18px}
-.bz-compare__row.is-us span{color:var(--ink);font-weight:700}
-.bz-compare__row.is-us .bar{background:var(--ink)}
-.bz-compare__row b{font-size:18px;white-space:nowrap}
+/* ---------- 11. Сравнение: таблица со слайда 11 дека v4 ----------
+   Оценка — три деления: закрашено 3 — выгодно, 2 — средне, 1 — невыгодно. */
+.bz-cmp{margin-top:36px;padding:28px 28px 16px;border-radius:var(--r-lg);background:#fff;border:1px solid var(--line)}
+.bz-cmp__lg{display:flex;flex-wrap:wrap;gap:8px 22px;margin-bottom:12px;font-size:13px;font-weight:500;color:var(--ink-2)}
+.bz-cmp__lg > span{display:flex;align-items:center;gap:8px}
+.bz-cmp__lg .rt{height:auto;padding:0;background:none}
+.bz-cmp__scroll{overflow-x:auto;margin:0 -28px;padding:0 28px;scrollbar-width:thin}
+.bz-cmp__table{width:100%;min-width:980px;border-collapse:separate;border-spacing:0;font-size:14px}
+.bz-cmp__table thead th{padding:0 6px 12px;text-align:left;font-size:12px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+.bz-cmp__table thead th:last-child{text-align:right;padding-right:16px}
+.bz-cmp__table tbody th,.bz-cmp__table td{height:52px;padding:0 6px;border-top:1px solid var(--line);white-space:nowrap}
+.bz-cmp__table tbody th{padding-left:16px;text-align:left;font-weight:700}
+.bz-cmp__table td:last-child{text-align:right;padding-right:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.bz-cmp__table tr.is-us th,.bz-cmp__table tr.is-us td{height:64px;border-top:0;background:var(--ink);color:#fff}
+.bz-cmp__table tr.is-us th{border-radius:16px 0 0 16px;font-size:16px;letter-spacing:.02em}
+.bz-cmp__table tr.is-us td:last-child{border-radius:0 16px 16px 0}
+.bz-cmp__table tr.is-us + tr th,.bz-cmp__table tr.is-us + tr td{border-top:0}
+.rt{display:inline-flex;align-items:center;gap:3px;height:32px;padding:0 10px;border-radius:9px;background:var(--surface);font-size:13px;font-weight:600}
+.rt i{width:5px;height:14px;border-radius:2px;background:var(--line-strong)}
+.rt i:nth-of-type(3){margin-right:6px}
+.rt--g i{background:var(--ink)}
+.rt--y i:nth-of-type(-n+2){background:var(--ink)}
+.rt--n i:nth-of-type(1){background:var(--ink)}
+.rt--n{color:var(--ink-3)}
+.bz-cmp__table tr.is-us .rt{background:#fff;color:var(--ink)}
+.bud{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.bud__b{display:block;width:72px;height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.bud__b b{display:block;height:100%;border-radius:5px;background:var(--ink-3)}
+.bz-cmp__table tr.is-us .bud__b{background:rgba(255,255,255,.25)}
+.bz-cmp__table tr.is-us .bud__b b{background:#fff}
 
 /* ---------- 12. Команда ---------- */
 .bz-team{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -256,13 +281,30 @@ p{margin:0}
 .bz-person figcaption{margin-top:12px;display:flex;flex-direction:column}
 .bz-person figcaption span{font-size:14px;color:var(--ink-3)}
 
-/* ---------- 13. География ---------- */
-.bz-geo{display:flex;flex-direction:column;gap:12px}
-.bz-geo__now,.bz-geo__next{display:flex;align-items:center;gap:16px;padding:26px;border-radius:var(--r-lg);background:#fff;border:1px solid var(--line)}
-.bz-geo__next{background:transparent;border-style:dashed;border-color:var(--line-strong)}
-.bz-geo b{display:block;font-size:18px}
-.bz-geo span{font-size:14px;color:var(--ink-3)}
-.bz-geo .bz-dot{width:12px;height:12px}
+/* ---------- 13. География: карта со слайда 8 дека v4 ----------
+   Холст map-ru.svg — 1180×600; подписи ставит business.js в процентах. */
+.bz-map-wrap{display:grid;grid-template-columns:1fr 300px;gap:32px;align-items:start;margin-top:40px}
+.bz-map{position:relative;aspect-ratio:1180/600;border-radius:var(--r-lg);background:#fff;border:1px solid var(--line);overflow:hidden}
+.bz-map__img{position:absolute;inset:0;width:100%;height:100%;filter:grayscale(1)}
+.bz-map__ins{position:absolute;left:1.5%;bottom:3%;width:25%;padding:6px 8px 4px;border-radius:12px;background:#fff;box-shadow:0 10px 24px -14px rgba(0,0,0,.35)}
+.bz-map__ins img{display:block;width:100%;filter:grayscale(1)}
+.bz-map__ins span{display:block;margin-top:2px;font-size:11px;font-weight:600;color:var(--ink-3)}
+.map__c{position:absolute;font-style:normal;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--ink)}
+.map__c > span{position:absolute;left:16px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:3px 9px;border-radius:12px;background:#fff;font-size:13px;font-weight:700;box-shadow:0 6px 14px -8px rgba(0,0,0,.35)}
+.map__c--l > span{left:auto;right:16px}
+.map__c--ref{width:7px;height:7px;box-shadow:0 0 0 2px var(--ink-3)}
+.map__c--ref > span{background:none;box-shadow:none;font-weight:500;color:var(--ink-3);padding:0}
+.map__c--home{width:16px;height:16px;background:var(--ink);box-shadow:0 0 0 4px #fff,0 0 0 12px rgba(21,21,20,.18)}
+.map__c--home > span{left:28px;padding:6px 12px;background:var(--ink);color:#fff;font-size:15px}
+.bz-next__leg{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.bz-next__leg div{display:flex;align-items:center;gap:10px}
+.bz-next__leg i{width:18px;height:18px;border-radius:5px;flex:none;background:#dedede}
+.bz-next__leg i.is-next{background:#b7b7b7}
+.bz-next__leg i.is-home{background:#717171}
+.bz-next__k{display:block;font-size:18px}
+.bz-next ul{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.bz-next li{display:flex;align-items:center;gap:10px;height:40px;padding:0 16px;border-radius:var(--r-pill);background:#fff;border:1px solid var(--line);font-weight:600;font-size:15px}
+.bz-next li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex:none}
 
 /* ---------- 14. Пилот ---------- */
 .bz-pilot{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center}
@@ -287,6 +329,10 @@ p{margin:0}
 .bz-faq__list summary::after{content:"+";flex:none;font-size:24px;line-height:1;font-weight:300;transition:transform .2s var(--ease)}
 .bz-faq__list details[open] summary::after{transform:rotate(45deg)}
 .bz-faq__list details p{padding:0 48px 24px 0;color:var(--ink-2)}
+.bz-faq__list details p:has(+ p,+ ul){padding-bottom:12px}
+.bz-faq__list details ul{margin:0;padding:0 48px 24px 22px;color:var(--ink-2)}
+.bz-faq__list details li{margin-top:6px}
+.bz-faq__list details li b{color:var(--ink);font-weight:600}
 
 /* ---------- 16. Финал ---------- */
 .bz-final{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
@@ -333,6 +379,8 @@ p{margin:0}
   .bz-channels{grid-template-columns:1fr 1fr}
   .bz-channel--wide{grid-column:1/-1}
   .bz-faq__aside{position:static}
+  .bz-map-wrap{grid-template-columns:1fr}
+  .bz-next ul{flex-direction:row;flex-wrap:wrap}
   .bz-nav{overflow-x:auto;scrollbar-width:none}
 }
 @media (max-width:720px){
@@ -366,11 +414,15 @@ p{margin:0}
   .bz-steps li{min-height:0;padding:22px}
   .bz-formats{grid-template-columns:1fr 1fr}
   .bz-format{min-height:140px}
-  .bz-compare{padding:20px}
-  .bz-compare__row{grid-template-columns:100px 1fr auto;gap:10px}
+  .bz-cmp{padding:18px 18px 10px}
+  .bz-cmp__scroll{margin:0 -18px;padding:0 18px}
+  .map__c > span{font-size:10px;padding:2px 6px;left:11px}
+  .map__c--l > span{right:11px}
+  .map__c--home > span{left:20px;font-size:11px;padding:4px 8px}
+  .bz-map__ins{display:none}
   .bz-team{grid-template-columns:repeat(3,1fr);gap:10px}
   .bz-form{grid-template-columns:1fr;padding:20px}
-  .bz-faq__list details p{padding-right:0}
+  .bz-faq__list details p,.bz-faq__list details ul{padding-right:0}
   .bz-launch__foot{flex-direction:column;align-items:stretch}
   .bz-contacts dd{font-size:18px}
   .bz-wordstat{padding:24px}
