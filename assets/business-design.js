@@ -69,6 +69,10 @@
       '</div><em>только что</em>';
     photo(li.firstChild, PEOPLE + e[0] + ".jpg");
     list.insertBefore(li, list.firstChild);
+    // Красным — только самый свежий забор купона
+    var lastTook = list.querySelector("li.is-took");
+    list.querySelectorAll("li.is-hot").forEach(function (x) { x.classList.remove("is-hot"); });
+    if (lastTook) lastTook.classList.add("is-hot");
     for (var k = 1; k < list.children.length; k++) {
       list.children[k].querySelector("em").textContent = (k < 2 ? "1 мин" : k + " мин") + " назад";
     }
