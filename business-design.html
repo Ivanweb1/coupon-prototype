@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261016i">
+<link rel="stylesheet" href="assets/business-design.css?v=20261016m">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -163,6 +163,7 @@
 <div class="hrow">
       <div class="head">
         <h2>Люди <span class="tag tag--w">каждый день</span> ищут купон, скидку и&nbsp;промокод</h2>
+        <a class="btn btn--white head__cta" href="#final">Разместить предложение</a>
       </div>
       <div class="hrow__txt"><p class="text">Запросы «купон», «акция», «скидка», «промокод»&nbsp;— это интерес к&nbsp;выгоде, который не&nbsp;нужно «прогревать с&nbsp;нуля».</p>
       <p class="text">По&nbsp;Яндекс Вордстат&nbsp;— около 20&nbsp;миллионов таких запросов в&nbsp;месяц по&nbsp;России. ВСЕКУПОНЫ собирают этот спрос в&nbsp;понятный локальный канал: предложение → код → визит к&nbsp;вам.</p></div>
@@ -173,7 +174,15 @@
       <!-- Купон: основная часть — спрос, корешок — путь к визиту -->
       <div class="wcp">
         <div class="wcp__main">
-          <div class="wcp__big"><b>20 млн</b><span>запросов в&nbsp;месяц по&nbsp;России</span></div>
+          <div class="wcp__big">
+            <div class="wcp__num"><b>20 млн</b><span>запросов в&nbsp;месяц<br>по&nbsp;России</span></div>
+            <!-- Схема спроса: запросы держатся высоко весь год -->
+            <svg class="wcp__spark" viewBox="0 0 300 80" preserveAspectRatio="none" aria-hidden="true">
+              <defs><linearGradient id="wcpFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DD443C" stop-opacity=".16"/><stop offset="1" stop-color="#DD443C" stop-opacity="0"/></linearGradient></defs>
+              <path d="M0 34 C 20 30, 30 58, 50 56 S 85 30, 105 34 S 140 52, 160 50 S 195 26, 215 28 S 250 18, 270 22 S 292 16, 300 14 L 300 80 L 0 80 Z" fill="url(#wcpFill)"/>
+              <path d="M0 34 C 20 30, 30 58, 50 56 S 85 30, 105 34 S 140 52, 160 50 S 195 26, 215 28 S 250 18, 270 22 S 292 16, 300 14" fill="none" stroke="#DD443C" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+            </svg>
+          </div>
           <ul class="wcp__q">
             <li><i data-ic="search"></i>купон</li>
             <li><i data-ic="search"></i>акция</li>
@@ -188,10 +197,7 @@
         </ol>
       </div>
 
-      <div class="wsw__foot">
-        <a class="btn btn--white" href="#final">Разместить предложение</a>
-        <p class="src src--w">Источник: Яндекс Вордстат</p>
-      </div>
+      <p class="src src--w wcp__src">Источник: Яндекс Вордстат</p>
     </div>
   </section>
 

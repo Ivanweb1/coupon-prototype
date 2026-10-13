@@ -1572,3 +1572,36 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
     -webkit-mask:radial-gradient(circle 14px at 0 var(--cutY),#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% var(--cutY),#0000 98%,#000) right/51% 100% no-repeat;
             mask:radial-gradient(circle 14px at 0 var(--cutY),#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% var(--cutY),#0000 98%,#000) right/51% 100% no-repeat}
 }
+/* Подпись к «20 млн» — последней строкой по базовой линии цифры */
+.wcp__big{align-items:flex-end}
+.wcp__big span{margin-bottom:calc(.135em * 77.76 / 17 - 6px);line-height:1.3}
+/* «20 млн» + подпись по базовой линии (inline-block берёт базу последней строки),
+   справа — схематичный график спроса */
+.wcp__big{display:flex;align-items:center;gap:32px}
+.wcp__num{flex:none;white-space:nowrap}
+.wcp__num b{display:inline;vertical-align:baseline}
+.wcp__num span{display:inline-block;vertical-align:baseline;margin:0 0 0 18px;max-width:none;line-height:1.3;white-space:normal}
+.wcp__spark{flex:1 1 auto;min-width:0;height:64px;align-self:center}
+.wcp__spark{position:relative}
+@media (max-width:720px){
+  .wcp__big{flex-direction:column;align-items:stretch;gap:14px}
+  .wcp__num span{display:block;margin:6px 0 0}
+  .wcp__spark{height:48px}
+}
+/* Блок «Вордстат»: кнопка под заголовком, по низу с описанием справа;
+   источник — слева сразу под купоном */
+.sec--red .hrow{align-items:stretch}
+.sec--red .hrow > .head{display:flex;flex-direction:column;justify-content:space-between;gap:28px}
+.head__cta{align-self:flex-start}
+.wcp__src{margin-top:14px}
+@media (max-width:1000px){
+  .sec--red .hrow{display:flex;flex-direction:column}
+  .sec--red .hrow > .head{display:contents}
+  .sec--red .hrow > .head h2{order:0}
+  .sec--red .hrow > .hrow__txt{order:1}
+  .sec--red .head__cta{order:2;margin-top:4px}
+}
+@media (max-width:720px){
+  .wcp__spark{width:100%;height:52px}
+  .sec--red .head__cta{align-self:stretch}
+}
