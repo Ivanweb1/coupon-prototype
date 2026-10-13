@@ -794,3 +794,6 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
   .hd .hd__soc{display:none}
   .hd .hd__pilot{margin:0 0 0 auto}
 }
+/* Кнопки — как «Разместить купон» на витрине: Onest 500 */
+.btn,.btn--lg,.hero .btn--lg,.hd__cta,.hd__pilot,.hd .hd__pilot,.hcpn__code em{font-weight:500}
+.hd__cta,.hd .hd__pilot{font-size:14px}
