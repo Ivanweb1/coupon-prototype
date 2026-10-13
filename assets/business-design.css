@@ -1350,3 +1350,11 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   #demand .feed__list{height:250px}
   #demand .dstat__week i{height:calc(52px * var(--k))}
 }
+/* Карточки покупателей вернулись; лента снова тянется по высоте левой колонки */
+@media (min-width:1001px){
+  #demand .dstat{flex:none}
+  #demand .dstat__week i{height:calc(40px * var(--k))}
+  #demand .live__l .text{margin-top:24px;padding-top:0}
+  #demand .feed__list{flex:1 1 0;height:0}
+}
+.dstat__src{font-style:normal;font-size:12px;color:var(--ink-3)}
