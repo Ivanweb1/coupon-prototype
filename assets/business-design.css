@@ -1293,3 +1293,5 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 }
 /* Подпись ленты — снова внутри карточки, под строками */
 #demand .feed__foot{white-space:normal;overflow:visible;font-size:12.5px;line-height:1.5;margin-top:12px}
+/* «В Липецкой области покупатели уже выбирают купоны» — в одну строку */
+#demand .head{max-width:none}
