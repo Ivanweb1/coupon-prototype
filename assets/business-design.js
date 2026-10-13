@@ -130,3 +130,12 @@
   }, { passive: true });
   check();
 })();
+
+/* Купон Вордстата: на узком экране вырезы — ровно на линии отрыва корешка */
+(function () {
+  var c = document.querySelector(".wcp"); if (!c) return;
+  var m = c.querySelector(".wcp__main");
+  function set() { c.style.setProperty("--main-h", m.offsetHeight + "px"); }
+  set(); window.addEventListener("resize", set);
+  if (document.fonts) document.fonts.ready.then(set);
+})();
