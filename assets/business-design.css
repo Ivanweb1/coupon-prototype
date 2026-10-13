@@ -1777,3 +1777,26 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .fhead h2{max-width:none}
 .br-d{display:none}
 @media (min-width:1241px){.br-d{display:inline}.fhead h2{white-space:nowrap}}
+/* Под купонами: факты и кнопка слева, «…и десятки других» — под шестым купоном */
+.fmts__row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gut);align-items:center}
+.fmts__row .facts{grid-column:1 / span 10;align-items:center}
+.fmts__row .facts .btn{margin-left:6px}
+.fmts__more{grid-column:11 / -1;justify-self:start;margin:0}
+.facts span{height:44px;padding:0 18px}
+@media (max-width:1240px){
+  .fmts__row .facts{grid-column:1 / span 8}
+  .fmts__more{grid-column:9 / -1}
+}
+@media (max-width:1000px){
+  .fmts__row{display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+  .fmts__more{order:-1}
+}
+@media (max-width:720px){.fmts__row .facts .btn{margin-left:0;width:100%}}
+/* Значок механики — слева, перед значением */
+.fmt__top{justify-content:flex-start;gap:12px;padding:0 16px 0 18px}
+.fmt__top .fmt__ic{order:-1}
+/* Подписи купонов — в одну строку */
+.fmt span{white-space:nowrap;font-size:clamp(11.5px,.92vw,14px);padding:0 16px}
+.fmt__top{padding:0 14px 0 16px;gap:10px}
+.fmt__top b{font-size:clamp(24px,2.05vw,34px)}
+@media (max-width:1240px){.fmts .fmt span{white-space:normal}}
