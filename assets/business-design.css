@@ -873,3 +873,6 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
   .hd.is-scrolled .hd__mail{display:none}
   .hd.is-scrolled .hd__pilot{display:inline-flex}
 }
+/* Плашка меню — 34px */
+.hd .hd__nav{height:34px}
+@media (max-width:720px){.hd .hd__nav{height:34px}}
