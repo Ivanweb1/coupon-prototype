@@ -106,3 +106,21 @@
     }).join("");
   }
 })();
+
+/* Шапка сворачивается при прокрутке. Порог с запасом в обе стороны,
+   чтобы на границе она не мигала: высота шапки меняет высоту страницы. */
+(function () {
+  var hd = document.querySelector(".hd");
+  if (!hd) return;
+  var on = false, tick = false;
+  function check() {
+    tick = false;
+    var y = window.scrollY;
+    if (!on && y > 140) { on = true; hd.classList.add("is-scrolled"); }
+    else if (on && y < 30) { on = false; hd.classList.remove("is-scrolled"); }
+  }
+  window.addEventListener("scroll", function () {
+    if (!tick) { tick = true; requestAnimationFrame(check); }
+  }, { passive: true });
+  check();
+})();
