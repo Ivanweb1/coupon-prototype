@@ -1826,3 +1826,8 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .fmts__more{flex:none}
 }
 @media (min-width:1001px) and (max-width:1366px){.more__stack i:nth-child(-n+2){display:none}}
+/* «Подобрать формат» — со значком AI; после — тонкий разделитель */
+.btn--ai i{display:flex}
+.btn--ai svg{width:17px;height:17px}
+.fmts__row .facts .facts__sep{width:1px;height:28px;padding:0;margin:0 4px;background:var(--line-strong);border-radius:1px}
+@media (max-width:720px){.fmts__row .facts .facts__sep{display:none}}
