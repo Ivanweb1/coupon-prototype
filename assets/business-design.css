@@ -1367,3 +1367,84 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 @media (max-width:720px){#demand .feed__bottom .feed__foot{white-space:normal;line-height:1.5}}
 #demand .live__l > .src{margin-top:14px}
 @media (max-width:1240px){#demand .feed__bottom .feed__foot{white-space:normal;line-height:1.5}}
+
+/* ==========================================================================
+   Блок «Вордстат»: одна белая карточка
+   ========================================================================== */
+.wsc{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:0;border-radius:var(--r-lg);background:#fff;color:var(--ink);overflow:hidden}
+.wsc__l{padding:36px 36px 32px;border-right:2px dashed var(--line-strong)}
+.wsc__big b{display:block;font-size:clamp(52px,5vw,76px);font-weight:700;letter-spacing:-.045em;line-height:1;color:var(--brand)}
+.wsc__big span{display:block;margin-top:8px;font-size:16px;font-weight:500;color:var(--ink-2)}
+.wsc__q{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.wsc__q li{display:grid;grid-template-columns:96px minmax(0,1fr) 72px;align-items:center;gap:12px}
+.wsc__q span{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:500}
+.wsc__q span::before{content:"";width:14px;height:14px;flex:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23DD443C' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") center/contain no-repeat}
+.wsc__q i{display:block;height:10px;border-radius:5px;background:var(--surface-2);position:relative;overflow:hidden}
+.wsc__q i::after{content:"";position:absolute;inset:0 auto 0 0;width:max(var(--w),4px);border-radius:inherit;background:var(--brand)}
+.wsc__q b{font-size:15px;font-weight:600;text-align:right;white-space:nowrap}
+.wsc__chart{margin:0;padding:28px 32px 24px;display:flex;flex-direction:column}
+.wsc__chart figcaption{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:600}
+.wsc__chart figcaption em{font-style:normal;font-weight:400;color:var(--ink-3)}
+.wsc__img{flex:1;margin-top:14px;border-radius:var(--r-md);background:var(--surface);overflow:hidden;display:flex;align-items:center;padding:8px 12px}
+.wsc__img img{display:block;width:100%;height:auto;mix-blend-mode:multiply}
+.wsc__src{margin-top:10px;font-size:12px;color:var(--ink-3)}
+.wsc__flow{grid-column:1/-1;list-style:none;margin:0;padding:20px 32px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;background:var(--surface);border-top:2px dashed var(--line-strong)}
+.wsc__flow li{position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"i s" "i b";column-gap:12px;align-items:center}
+.wsc__flow li > i{grid-area:i;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#fff;color:var(--brand)}
+.wsc__flow li > i svg{width:20px;height:20px}
+.wsc__flow span{grid-area:s;font-size:15px;font-weight:600}
+.wsc__flow b{grid-area:b;font-size:13px;font-weight:400;color:var(--ink-3)}
+.wsc__flow li:not(:last-child)::after{content:"";position:absolute;right:-12px;top:50%;width:8px;height:8px;border-top:2px solid var(--ink-4);border-right:2px solid var(--ink-4);transform:translateY(-50%) rotate(45deg)}
+.wsc__flow li.is-end > i{background:var(--brand);color:#fff}
+@media (max-width:1000px){
+  .wsc{grid-template-columns:1fr}
+  .wsc__l{border-right:0;border-bottom:2px dashed var(--line-strong)}
+  .wsc__flow{grid-template-columns:1fr 1fr;row-gap:16px}
+  .wsc__flow li:nth-child(2)::after{display:none}
+}
+@media (max-width:720px){
+  .wsc__l,.wsc__chart{padding:22px}
+  .wsc__q li{grid-template-columns:84px minmax(0,1fr) 64px;gap:8px}
+  .wsc__chart figcaption{flex-direction:column;gap:2px}
+  .wsc__flow{grid-template-columns:1fr;padding:18px 22px}
+  .wsc__flow li::after{display:none}
+}
+
+/* ==========================================================================
+   Блок «Вордстат» — как слайд дека
+   ========================================================================== */
+.wsd{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:8px}
+.wsd > div{padding:0 28px;border-left:2px dashed rgba(255,255,255,.5)}
+.wsd > div:first-child{padding-left:0;border-left:0}
+.wsd span{display:block;font-size:18px;font-weight:500;color:rgba(255,255,255,.9)}
+.wsd b{display:inline-block;margin-top:6px;font-size:clamp(32px,3.4vw,52px);font-weight:700;letter-spacing:-.035em;line-height:1.05;white-space:nowrap}
+.wsd__total b{padding:2px 14px 4px;border-radius:14px;background:#fff;color:var(--brand)}
+.wsw{margin-top:40px;border-radius:var(--r-lg);background:#fff;overflow:hidden;box-shadow:0 30px 60px -30px rgba(80,10,5,.6)}
+.wsw__bar{display:flex;align-items:center;gap:8px;padding:14px 22px;background:var(--surface);color:var(--ink);font-size:14px;font-weight:600}
+.wsw__bar i{width:10px;height:10px;border-radius:50%;background:var(--line-strong)}
+.wsw__bar span{margin-left:10px}
+.wsw__bar em{margin-left:auto;font-style:normal;font-weight:400;color:var(--ink-3);font-size:13px}
+.wsw__body{position:relative;padding:16px 24px 20px}
+.wsw__body img{display:block;width:100%;height:auto}
+.wsw__tag{position:absolute;right:5%;top:42%;padding:8px 20px;border-radius:10px;background:var(--brand);color:#fff;font-weight:700;font-size:clamp(14px,1.7vw,24px);white-space:nowrap;
+  -webkit-mask:radial-gradient(circle 6px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 6px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 6px at 0 50%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 6px at 100% 50%,#0000 98%,#000) right/51% 100% no-repeat}
+@media (max-width:1000px){
+  .wsd{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:24px}
+  .wsd > div:nth-child(4){padding-left:0;border-left:0}
+  .wsw__bar em{display:none}
+}
+@media (max-width:720px){
+  .wsd{grid-template-columns:1fr 1fr}
+  .wsd > div{padding:0 0 0 14px}
+  .wsd > div:nth-child(odd){padding-left:0;border-left:0}
+  .wsd > div:nth-child(4){padding-left:14px;border-left:2px dashed rgba(255,255,255,.5)}
+  .wsd__total{grid-column:1/-1;padding-left:0 !important;border-left:0 !important}
+  .wsd span{font-size:15px}
+  .wsw__bar span{font-size:12px;margin-left:6px}
+  .wsw__body{padding:10px}
+  .wsw__tag{position:static;display:inline-block;margin:10px 0 2px}
+}
+.wsw__foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:28px}
+.wsw__foot .src{margin:0}
+@media (max-width:720px){.wsw__foot{flex-direction:column-reverse;align-items:stretch}}
