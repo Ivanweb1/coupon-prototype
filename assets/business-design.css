@@ -1990,3 +1990,76 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .aix__fun{min-height:200px}
   .aix__p{gap:10px;padding:18px 22px 20px}
 }
+/* Вкладки: белые с тонкой рамкой, тёмный текст, значок справа;
+   активная — светло-красная с красной рамкой */
+.aix__tabs button{background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.aix__tabs button:hover{background:#fff;box-shadow:inset 0 0 0 1px var(--line-strong)}
+.aix__tabs em{background:var(--brand-50);color:var(--brand)}
+.aix__tabs span{color:var(--ink);flex:1}
+.aix__ic{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--surface);color:var(--ink-3);transition:background .25s,color .25s}
+.aix__ic svg{width:18px;height:18px}
+.aix__tabs button[aria-selected="true"]{background:var(--brand-50);box-shadow:inset 0 0 0 1.5px var(--brand)}
+.aix__tabs button[aria-selected="true"] .aix__ic{background:#fff;color:var(--brand)}
+
+/* ==========================================================================
+   AI-помощник: вкладки и окно — одна подложка; активная вкладка
+   сливается с окном, как вкладка со своей страницей
+   ========================================================================== */
+@media (min-width:1001px){
+  .aix{grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:0;padding:10px;border-radius:calc(var(--r-lg) + 10px);background:var(--surface)}
+  .aix__l{grid-column:1;padding:0}
+  .aix__l .aig__k{display:none}
+  .aix__win{grid-column:2;margin-top:0;background:#fff;border-radius:var(--r-lg)}
+  .aix__tabs{gap:6px}
+  .aix__tabs button{background:transparent;box-shadow:none;border-radius:var(--r-md) 0 0 var(--r-md);padding:16px 20px 16px 16px}
+  .aix__tabs button:hover{background:rgba(255,255,255,.55);box-shadow:none}
+  .aix__tabs em{background:#fff}
+  .aix__tabs button[aria-selected="true"]{background:#fff;box-shadow:none;margin-right:-1px}
+  .aix__tabs button[aria-selected="true"] em{background:var(--brand);color:#fff}
+  .aix__tabs button[aria-selected="true"] .aix__ic{background:var(--brand-50);color:var(--brand)}
+  .aix__tabs .aix__ic{background:#fff}
+  .aix__tabs button[aria-selected="true"]::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--brand)}
+  .aix__bar{left:16px;right:0;bottom:6px;height:2px;border-radius:2px}
+  /* Скругления-«уши» там, где вкладка входит в окно */
+  .aix__tabs li{position:relative}
+  .aix__tabs button[aria-selected="true"]::after{content:"";position:absolute;right:0;top:-16px;width:16px;height:calc(100% + 32px);pointer-events:none;
+    background:radial-gradient(circle 16px at 0 0,transparent 15.5px,#fff 16px) top/16px 16px no-repeat,
+               radial-gradient(circle 16px at 0 100%,transparent 15.5px,#fff 16px) bottom/16px 16px no-repeat;right:-16px}
+  .aix__win{border-top-left-radius:var(--r-lg)}
+  .aix__p .aix__list li,.aix__p .aix__mech li,.aix__prompt,.aix__was,.aix__now,.aix__snip,.aix__fun{background:var(--surface)}
+  .aix__win .aix__top{border-radius:var(--r-lg) var(--r-lg) 0 0}
+}
+/* Выбранное изображение — круассан и кофе в центре кадра */
+.aix__imgs .is-sel{background-position:42% 82%}
+@media (min-width:1001px){.aix__tabs button{padding:15px 20px 15px 16px}}
+@media (min-width:1001px){.aix__tabs button{min-height:78px}}
+/* Под панелью: кнопка слева, фраза — от левого края окна, по высоте кнопки */
+.ai-h{margin-bottom:36px}
+.aix__foot{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:28px}
+.aix__foot .text{margin:0;line-height:22px}
+@media (min-width:1001px){
+  .aix__foot{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);padding:0 10px}
+  .aix__foot .btn{justify-self:start}
+  .aix__foot .text{padding-left:0}
+}
+@media (max-width:720px){.aix__foot{flex-direction:column-reverse;align-items:stretch}.aix__foot .text br{display:none}}
+@media (min-width:1001px){.aix__foot{padding:0 10px 0 0}}
+@media (min-width:1001px){
+  .aix__foot .text{margin-left:-6px}
+  /* Плавный заход активной вкладки в окно — большие дуги на стыке */
+  .aix__tabs button[aria-selected="true"]::after{width:28px;right:-28px;top:-28px;height:calc(100% + 56px);
+    background:radial-gradient(circle 28px at 100% 0,transparent 27.5px,#fff 28px) top left/28px 28px no-repeat,
+               radial-gradient(circle 28px at 100% 100%,transparent 27.5px,#fff 28px) bottom left/28px 28px no-repeat}
+  .aix__tabs button[aria-selected="true"]::after{right:auto;left:auto}
+}
+
+@media (min-width:1001px){
+  .aix__tabs button[aria-selected="true"]::after{content:none}
+  .aix__tabs li{--r:28px}
+  .aix__tabs li:has(button[aria-selected="true"])::before,
+  .aix__tabs li:has(button[aria-selected="true"])::after{content:"";position:absolute;right:0;width:var(--r);height:var(--r);pointer-events:none;z-index:1}
+  .aix__tabs li:has(button[aria-selected="true"])::before{bottom:100%;background:radial-gradient(circle var(--r) at 0 0,transparent calc(var(--r) - .5px),#fff var(--r))}
+  .aix__tabs li:has(button[aria-selected="true"])::after{top:100%;background:radial-gradient(circle var(--r) at 0 100%,transparent calc(var(--r) - .5px),#fff var(--r))}
+  .aix__tabs button[aria-selected="true"]{border-radius:var(--r-md) 0 0 var(--r-md)}
+  .aix__win{border-top-left-radius:var(--r-lg);border-bottom-left-radius:var(--r-lg)}
+}
