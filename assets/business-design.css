@@ -1070,3 +1070,82 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
   .hcpn-w{width:300px}
 }
 @media (max-width:720px){.hcpn-w{width:100%}.hv{max-width:none}}
+
+/* ==========================================================================
+   Первый экран — одна карточка, как слайд дека:
+   слева светло-серая часть с текстом, справа красная с купоном и покупателями
+   ========================================================================== */
+.hero{padding:24px 0 72px}
+@media (min-width:1001px){
+  .hero__in{display:grid;grid-template-columns:repeat(12,minmax(0,1fr)) !important;column-gap:0 !important;gap:0 !important;min-height:600px;border-radius:36px;background:var(--surface);overflow:hidden;align-items:stretch}
+  .hero__in > .hero__text{grid-column:1 / span 6 !important;align-self:center;padding:64px 56px 64px 64px}
+  .hero__in > .hero__vis{grid-column:7 / span 6 !important}
+}
+.hero .actions{flex-wrap:wrap}
+.hero .src{margin-top:28px}
+.hero .btn--ghost{background:#fff;border-color:#fff}
+.hero .btn--ghost:hover{border-color:var(--brand)}
+
+/* Красная половина */
+.hv{background:var(--brand);min-height:600px;margin:0;max-width:none}
+.hcpn-w{right:56px}
+.hp--a{left:48px;top:118px}
+.hp--b{left:80px;top:208px}
+.hp--c{left:48px;top:298px}
+.hv .hcard{left:48px;top:398px;background:#fff;color:var(--ink);box-shadow:0 14px 30px -16px rgba(40,10,8,.45)}
+.hv .hcard > b{color:var(--brand)}
+.hv .hcard > span{color:var(--ink-2)}
+.hp{box-shadow:0 14px 30px -16px rgba(60,8,4,.5)}
+.hp__ok{background:var(--brand-50);color:var(--brand)}
+
+@media (min-width:1001px) and (max-width:1360px){
+  .hero__in > .hero__text{padding:56px 40px 56px 48px}
+  .hcpn-w{right:32px}
+  .hp--a,.hp--c,.hv .hcard{left:28px}.hp--b{left:48px}
+}
+/* До 1180 — текст сверху, красная часть снизу, внутри той же карточки */
+@media (max-width:1180px){
+  .hero__in{display:block !important;border-radius:32px;background:var(--surface);overflow:hidden}
+  .hero__in > .hero__text{padding:48px 40px 40px}
+  .hv{width:100%;max-width:none;min-height:520px}
+  .hcpn-w{right:40px;width:300px}
+  .hp--a,.hp--c,.hv .hcard{left:40px}.hp--b{left:64px}
+  .hp--a{top:64px}.hp--b{top:154px}.hp--c{top:244px}.hv .hcard{top:344px}
+}
+@media (max-width:720px){
+  .hero{padding:12px 0 56px}
+  .hero__in{border-radius:24px}
+  .hero__in > .hero__text{padding:32px 20px 28px}
+  .hv{min-height:0;padding:20px 16px 20px;gap:10px}
+  .hcpn-w{right:auto;width:100%}
+  .hp--a,.hp--b,.hp--c,.hv .hcard{left:auto;top:auto}
+}
+/* Карточка первого экрана — внутри полей контейнера, без серых краёв */
+.hero__in{width:calc(100% - 2 * var(--pad));max-width:calc(var(--maxw) - 2 * var(--pad));padding:0 !important;margin:0 auto}
+
+/* Красная часть — сеткой: покупатели и спрос столбиком слева, купон справа */
+.hv{display:grid !important;grid-template-columns:auto auto;grid-template-rows:repeat(4,auto);justify-content:center;align-content:center;column-gap:36px;row-gap:14px;padding:48px 40px;min-height:600px}
+.hv > *{position:relative !important;left:auto !important;right:auto !important;top:auto !important;bottom:auto !important;translate:none !important;margin:0 !important}
+.hv .hp,.hv .hcard{grid-column:1;justify-self:start}
+.hv .hp--b{margin-left:28px !important}
+.hv .hcard{width:auto !important;justify-self:stretch;margin-top:6px !important}
+.hv .hcpn-w{grid-column:2;grid-row:1 / span 4;align-self:center;width:320px}
+@media (min-width:1001px) and (max-width:1500px){
+  .hv{column-gap:24px;padding:40px 28px}
+  .hv .hcpn-w{width:270px}
+  .hv .hcpn{--cut:190px}.hv .hcpn__ph{height:190px}
+  .hp__ok{display:none}
+}
+@media (max-width:1180px){
+  .hv{min-height:0;padding:44px 32px}
+  .hv .hcpn-w{width:300px}
+  .hp__ok{display:inline-block}
+}
+@media (max-width:720px){
+  .hero__in{width:calc(100% - 2 * var(--pad))}
+  .hv{grid-template-columns:1fr;padding:20px 16px;column-gap:0}
+  .hv .hcpn-w{grid-column:1;grid-row:1;width:100%}
+  .hv .hp,.hv .hcard{grid-column:1}
+  .hv .hp--b{margin-left:0 !important;justify-self:end}
+}
+.hv .hp,.hv .hcard{align-self:center}
