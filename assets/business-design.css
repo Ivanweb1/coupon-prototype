@@ -1763,3 +1763,17 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .fmt:nth-child(1) .fmt__ph{box-shadow:0 0 0 2px rgba(255,255,255,.7)}
 @media (max-width:720px){.fmt__ph{width:28px;height:28px}}
 .fmt b{font-size:clamp(30px,2.6vw,40px)}
+/* Верх купона формата: значение слева, значок механики справа */
+.fmt__top{display:flex;align-items:center;justify-content:space-between;gap:10px;height:96px;padding:0 16px 0 20px}
+.fmt__top b{height:auto;padding:0;font-size:clamp(26px,2.2vw,36px)}
+.fmt__ic{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:12px;background:var(--brand-50);color:var(--brand)}
+.fmt__ic svg{width:22px;height:22px}
+.fmt:nth-child(1) .fmt__ic{background:rgba(255,255,255,.2);color:#fff}
+@media (max-width:720px){
+  .fmt__top{height:80px;padding:0 12px 0 14px}
+  .fmt__top b{font-size:24px}
+  .fmt__ic{width:34px;height:34px}.fmt__ic svg{width:19px;height:19px}
+}
+.fhead h2{max-width:none}
+.br-d{display:none}
+@media (min-width:1241px){.br-d{display:inline}.fhead h2{white-space:nowrap}}
