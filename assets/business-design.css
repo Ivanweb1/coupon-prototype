@@ -1197,3 +1197,13 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
 /* Заголовки блоков — того же размера и веса, что заголовок первого экрана */
 h2,.final h2,.pilot h2{font-size:clamp(34px,3.3vw,48px);font-weight:700;letter-spacing:-.035em;line-height:1.08}
 @media (max-width:720px){h2,.final h2,.pilot h2{font-size:32px}}
+/* Живая лента: новая строка красная, затем за ~6 с плавно серая */
+#demand .feed__list li.is-hot{background:var(--surface);color:var(--ink)}
+#demand .feed__list li.is-hot em{color:var(--ink-3);font-weight:400}
+#demand .feed__list li.is-hot .ava{box-shadow:none}
+#demand .feed__list li.is-new{animation:feedIn .5s var(--ease),feedHot 6.5s ease forwards}
+#demand .feed__list li.is-new em{animation:feedHotEm 6.5s ease forwards}
+#demand .feed__list li.is-new .ava{animation:feedHotAva 6.5s ease forwards}
+@keyframes feedHot{0%,25%{background:var(--brand);color:#fff}100%{background:var(--surface);color:var(--ink)}}
+@keyframes feedHotEm{0%,25%{color:rgba(255,255,255,.85)}100%{color:var(--ink-3)}}
+@keyframes feedHotAva{0%,25%{box-shadow:0 0 0 2px #fff}100%{box-shadow:0 0 0 2px transparent}}

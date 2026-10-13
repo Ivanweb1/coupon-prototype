@@ -69,19 +69,20 @@
       '</div><em>только что</em>';
     photo(li.firstChild, PEOPLE + e[0] + ".jpg");
     list.insertBefore(li, list.firstChild);
-    // Красным — только самый свежий забор купона
-    var lastTook = list.querySelector("li.is-took");
-    list.querySelectorAll("li.is-hot").forEach(function (x) { x.classList.remove("is-hot"); });
-    if (lastTook) lastTook.classList.add("is-hot");
+    // Новая строка появляется красной и за несколько секунд плавно
+    // становится серой (анимация в CSS). Стартовое заполнение — без подсветки.
+    if (started) li.classList.add("is-new");
     for (var k = 1; k < list.children.length; k++) {
       list.children[k].querySelector("em").textContent = (k < 2 ? "1 мин" : k + " мин") + " назад";
     }
     while (list.children.length > MAX) list.removeChild(list.lastChild);
   }
+  var started = false;
   if (list) {
     for (var n = 0; n < MAX; n++) push();
+    started = true;
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reduce) setInterval(push, 3200);
+    if (!reduce) { setTimeout(push, 900); setInterval(push, 7000); }
   }
 
   // Таблица сравнения — слайд 11 дека v4: g выгодно, y средне, n невыгодно
