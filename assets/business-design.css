@@ -876,12 +876,57 @@ h1 .tag,h2 .tag{font-weight:inherit;padding:0 .16em .05em;border-radius:.2em}
 /* Плашка меню — 34px */
 .hd .hd__nav{height:34px}
 @media (max-width:720px){.hd .hd__nav{height:34px}}
-/* Плашка меню: у крайних пунктов отступ слева/справа равен отступу сверху
-   и снизу (34px − строка 14px = по 10px), между пунктами — равные
-   промежутки (space-between) */
-.hd .hd__nav{padding:0 8px;justify-content:space-between;line-height:14px}
-.hd .hd__nav a{padding:0;line-height:14px}
-.hd.is-scrolled .hd__nav{padding:0 6px}
-/* Скругление поменьше: в полной «пилюле» крайние пункты прижимаются к дуге
-   и равный отступ на глаз выглядит теснее */
-.hd .hd__nav{border-radius:10px}
+
+/* ==========================================================================
+   Первый экран — спокойная композиция
+   Слева текст, справа ровный купон по центру своей колонки. Две плашки
+   стоят по диагонали: спрос — слева сверху на фото, «Код бесплатно» —
+   справа снизу на фото. Колонки одной ширины, выровнены по центру.
+   ========================================================================== */
+.hero{padding:72px 0 88px}
+@media (min-width:1001px){.hero__in{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:48px;align-items:center}}
+.hero .lead{max-width:520px;margin-top:22px}
+.hero .actions{margin-top:32px}
+.hero__vis{padding:0 36px 0 56px;filter:drop-shadow(0 22px 32px rgba(40,10,8,.14))}
+.hcpn{--cut:270px;max-width:440px;margin:0 auto}
+.hcpn__ph{height:270px}
+.hcpn__cat{left:auto;right:16px;top:16px}
+.hcpn__v{left:18px;right:auto;bottom:18px;font-size:26px}
+.hcpn__b{padding:20px 24px 24px}
+.hcpn__b > b{font-size:18px}
+.hcpn__code{margin-top:16px}
+.hcard{left:0;top:40px;width:auto;padding:16px 20px;border-radius:18px}
+.hcard > b{font-size:34px}
+.hcard > span{margin-top:4px;font-size:13px}
+.hchip{right:0;left:auto;top:196px;bottom:auto;padding:10px 16px 10px 10px}
+.hchip i{width:36px;height:36px}
+@media (max-width:1000px){
+  .hero__vis{max-width:520px;padding:0 24px 0 32px}
+}
+@media (max-width:720px){
+  .hero__vis{padding:24px 0 0}
+  .hcpn{--cut:220px}
+  .hcpn__ph{height:220px}
+  .hcpn__cat{top:auto;bottom:18px;right:14px}
+  .hcard{position:absolute;left:10px;top:4px;margin:0;padding:12px 16px}
+  .hcard > b{font-size:28px}
+  .hchip{display:none}
+}
+
+/* Первый экран: справа — витрина Липецка в окне браузера */
+.vit{position:relative;border-radius:22px;background:#fff;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.vit__bar{display:flex;align-items:center;gap:7px;height:38px;padding:0 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+.vit__bar i{width:9px;height:9px;border-radius:50%;background:var(--line-strong)}
+.vit__bar span{margin-left:12px;padding:4px 12px;border-radius:var(--r-pill);background:#fff;font-size:12px;color:var(--ink-3)}
+.vit__img{display:block;width:100%;height:auto}
+.hero__vis{padding:28px 0 28px 48px}
+.hcard{top:auto;bottom:0;left:0}
+.hchip{top:0;right:-14px}
+@media (max-width:1000px){.hero__vis{padding:28px 0 28px 32px}}
+@media (max-width:720px){
+  .hero__vis{padding:0 0 18px}
+  .vit{border-radius:16px}
+  .vit__bar{height:30px}
+  .vit__bar span{font-size:10.5px}
+  .hcard{position:absolute;top:auto;bottom:0;left:10px}
+}
