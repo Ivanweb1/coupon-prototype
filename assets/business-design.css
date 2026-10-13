@@ -1678,3 +1678,26 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .hero .lead,#how .hrow > .text--big,.text--big,.hrow > .text--big{font-size:16px;font-weight:400;line-height:1.6;color:var(--ink-2);letter-spacing:-.005em}
 .hero .lead{max-width:520px}
 @media (min-width:1001px){#how .hrow > .text--big{max-width:440px;text-align:left}}
+/* Окошки шагов — одна схема: основной элемент 48px, второй ряд 36px */
+.pv{justify-content:center;gap:12px}
+.pv > :first-child{height:48px;box-sizing:border-box}
+.pv > :last-child{height:36px;display:flex;align-items:center}
+.pv__city{align-self:stretch;justify-content:flex-start}
+.pv__search{align-self:stretch}
+.pv__code{border-radius:var(--r-pill)}
+.pv__code b{font-size:18px}
+.pv__ok{align-self:stretch;justify-content:flex-start}
+.pv__soc i{width:32px;height:32px}
+.pv__hit{gap:10px;padding:0 10px 0 4px;border-radius:var(--r-pill)}
+.pv__hit b{width:auto;height:28px;padding:0 9px;border-radius:var(--r-pill);font-size:13px}
+.pv__hit span{display:flex;align-items:baseline;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.pv__hit small{display:inline;white-space:nowrap}
+.pv__free span{height:28px;display:inline-flex;align-items:center;padding:0 12px}
+.pv__shop{padding-left:4px}
+/* Шаг 1: выбор города — как поле поиска в шаге 2; ниже «или в соцсетях» */
+.pv__city{gap:10px;padding:0 14px;border-radius:var(--r-pill);background:var(--surface);box-shadow:none;font-size:15px;font-weight:600}
+.pv__city em{display:flex;margin-left:auto;color:var(--ink-3)}
+.pv__city em svg{width:18px;height:18px}
+.pv__soc{gap:6px;padding-left:4px}
+.pv__soc span{margin-right:4px;font-size:12.5px;color:var(--ink-3);white-space:nowrap}
+.pv__soc i{width:28px;height:28px}
