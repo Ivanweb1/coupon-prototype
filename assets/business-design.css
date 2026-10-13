@@ -1316,3 +1316,14 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .dstat__week div{height:auto}
 .dstat__week i{height:calc(40px * var(--k))}
 @media (max-width:720px){.dstat__week i{height:calc(30px * var(--k))}}
+/* Главная часть — та же структура, что у корешка: значок, цифра, подпись,
+   внизу на уровне столбиков — покупатели и города */
+.dstat__main{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:24px 28px 24px 32px}
+.dstat__main > span{margin-top:4px}
+.dstat__ic--soft{background:#fff;color:var(--brand)}
+.dstat__who{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:auto;padding-top:14px}
+.dstat__who .faces .ava{width:30px;height:30px;border:2px solid var(--surface);margin-left:-8px}
+.dstat__who .faces .ava:first-child{margin-left:0}
+.dstat__cities{display:flex;gap:6px;flex-wrap:wrap}
+.dstat__cities i{font-style:normal;padding:4px 10px;border-radius:var(--r-pill);background:#fff;font-size:12px;font-weight:500;color:var(--ink-2)}
+@media (max-width:720px){.dstat__main .dstat__ic{display:none}.dstat__who{flex-wrap:wrap}}

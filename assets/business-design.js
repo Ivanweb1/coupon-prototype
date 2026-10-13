@@ -25,6 +25,7 @@
     check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>',
     mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/>',
     bookmark: '<path d="M7 3.5h10v17l-5-3.5-5 3.5z"/>',
+    users: '<circle cx="9" cy="8.5" r="3.3"/><path d="M3 19.5a6 6 0 0 1 12 0"/><circle cx="16.5" cy="9" r="2.6"/><path d="M16 14.2a5 5 0 0 1 5 5.3"/>',
     cal: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>'
   };
   function icon(k) {
