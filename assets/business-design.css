@@ -2589,3 +2589,18 @@ html.is-modal{overflow:hidden}
   .qd__body{padding:18px 20px 4px}
   .qd__foot{flex-direction:column-reverse;align-items:stretch;padding:18px 20px 22px;text-align:center}
 }
+/* Финал: подпись слева, кнопка справа — одной строкой по ширине талона */
+.final__cta{display:flex;align-items:center;justify-content:space-between;gap:20px;align-self:stretch;max-width:420px;margin-top:auto;padding-top:28px}
+.final__cta .small{margin:0;font-size:14px;line-height:1.5;color:rgba(255,255,255,.88)}
+.final__cta .btn{flex:none}
+@media (max-width:720px){
+  .final__cta{flex-direction:column;align-items:stretch;gap:16px}
+  .final__cta .btn{width:100%}
+}
+.final__cta{max-width:none}
+.final__cta .small{white-space:nowrap}
+@media (max-width:720px){.final__cta .small{white-space:normal}}
+.final__ct{max-width:none}
+@media (min-width:1001px) and (max-width:1400px){
+  .final__cta{flex-direction:column;align-items:flex-start;gap:16px}
+}
