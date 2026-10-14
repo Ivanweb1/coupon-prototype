@@ -248,9 +248,20 @@
   var evs = [document.querySelector('[data-hx-ev="0"]'), document.querySelector('[data-hx-ev="1"]')];
   if (reduce || !evs[0] || !evs[1]) return;
   var k = 1, slot = 0;
+  function shown(el) { return el.offsetParent !== null; }
+  function inView(i) {
+    var f = feed.getBoundingClientRect();
+    return Array.prototype.some.call(feed.querySelectorAll('[data-hx-card="' + i + '"]'), function (c) {
+      var r = c.getBoundingClientRect(); return r.top >= f.top - 10 && r.bottom <= f.bottom - 20;
+    });
+  }
   setInterval(function () {
-    k = (k + 1) % EV.length; slot = 1 - slot;
-    var e = EV[k], ev = evs[slot];
+    // следующее событие — по купону, который сейчас виден в ленте
+    for (var t = 0; t < EV.length; t++) { k = (k + 1) % EV.length; if (inView(EV[k][3])) break; }
+    // плашка: по очереди из видимых (на телефоне верхняя скрыта)
+    var vis = evs.filter(shown); if (!vis.length) return;
+    slot = (slot + 1) % vis.length;
+    var e = EV[k], ev = vis[slot];
     ev.classList.add("is-out");
     setTimeout(function () {
       ev.querySelector(".ava").style.backgroundImage = "url('" + P + e[0] + ".jpg')";
