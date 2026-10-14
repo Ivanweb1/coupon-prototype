@@ -2957,3 +2957,13 @@ html.is-modal{overflow:hidden}
 @media (max-width:1240px){.hx__ev--top{right:-12px !important}}
 @media (max-width:560px){.hx__ev--top{left:0 !important;right:0 !important;top:-30px !important}}
 @media (max-width:560px){.hx__ev--top{display:none}.hero__nums li > span:last-child br{display:none}}
+/* Каналы в карточке цифр: сайт, поиск и стопка всех соцсетей */
+.hn__soc{display:flex;margin-left:4px}
+.hn__soc i{display:block;width:28px;height:28px;margin-left:-8px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 2px var(--surface);background:#fff}
+.hn__soc i:first-child{margin-left:0}
+.hn__soc svg,.hn__soc img{display:block;width:100%;height:100%}
+@media (min-width:561px) and (max-width:1240px){
+  .hn__ch .hn__site + .hn__site{display:none}
+  .hn__ch i,.hn__soc i{width:24px;height:24px}
+  .hn__soc i{margin-left:-9px}.hn__soc i:first-child{margin-left:0}
+}
