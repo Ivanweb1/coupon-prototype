@@ -2604,3 +2604,35 @@ html.is-modal{overflow:hidden}
 @media (min-width:1001px) and (max-width:1400px){
   .final__cta{flex-direction:column;align-items:flex-start;gap:16px}
 }
+
+/* ==========================================================================
+   17. Подвал — слева логотип, описание и кнопка; справа три колонки
+   ссылок и контактов; внизу строка с регионом и «Наверх»
+   ========================================================================== */
+.ft{padding:64px 0 28px;color:#a9a9a9}
+.ft__grid{display:grid;grid-template-columns:minmax(0,5fr) repeat(3,minmax(0,2fr));gap:40px var(--gut,18px);padding-bottom:44px}
+.ft__about{display:flex;flex-direction:column;align-items:flex-start;gap:20px;max-width:400px}
+.ft__about p{font-size:15px;line-height:1.55}
+.ft__about .btn{margin-top:4px}
+.ft__col{display:flex;flex-direction:column;align-items:flex-start;gap:12px;font-size:15px}
+.ft__col b{margin-bottom:4px;color:#fff;font-size:15px;font-weight:600}
+.ft__col a{color:#cfcfcf;text-decoration:none;transition:color .2s var(--ease)}
+.ft__col a:hover{color:#fff}
+.ft__phone{color:#fff !important;font-size:19px;font-weight:700}
+.ft__soc{display:flex;gap:8px;margin-top:4px}
+.ft__soc a{display:block;width:34px;height:34px;border-radius:50%;overflow:hidden}
+.ft__soc svg,.ft__soc img{display:block;width:100%;height:100%}
+.ft__bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:22px;border-top:1px solid #333;font-size:13.5px;color:#8a8a8a}
+.ft__bottom a{color:#cfcfcf;text-decoration:none}
+.ft__bottom a::after{content:" ↑"}
+.ft__bottom a:hover{color:#fff}
+@media (max-width:1000px){
+  .ft__grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ft__about{grid-column:1/-1;max-width:none}
+}
+@media (max-width:560px){
+  .ft{padding-top:44px}
+  .ft__grid{grid-template-columns:1fr 1fr;gap:32px 16px}
+  .ft__ct{grid-column:1/-1}
+  .ft__about .btn{align-self:stretch}
+}
