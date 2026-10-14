@@ -151,9 +151,23 @@
     var bar = tabs[k].querySelector(".aix__bar");
     bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
   }
+  // На телефоне окно с примером встаёт сразу под выбранным пунктом (как аккордеон),
+  // автосмены нет — пункты переключает сам человек
+  var win = box.querySelector(".aix__win"), home = win.parentNode, homeNext = win.nextSibling;
+  var mq = window.matchMedia("(max-width:720px)");
+  function place() {
+    if (mq.matches) { var li = tabs[cur].closest("li"); if (win.parentNode !== li) li.appendChild(win); }
+    else if (win.parentNode !== home) home.insertBefore(win, homeNext);
+  }
+  var _show = show;
+  show = function (k) { _show(k); place(); };
   function next() { show((cur + 1) % tabs.length); }
-  function start() { if (reduce) return; clearInterval(timer); timer = setInterval(next, DUR); }
-  tabs.forEach(function (t, i) { t.addEventListener("click", function () { show(i); start(); }); });
+  function start() { clearInterval(timer); if (reduce || mq.matches) return; timer = setInterval(next, DUR); }
+  tabs.forEach(function (t, i) { t.addEventListener("click", function () {
+    show(i); start();
+    if (mq.matches) { var r = t.getBoundingClientRect(); if (r.top < 70) window.scrollBy({ top: r.top - 80, behavior: "smooth" }); }
+  }); });
+  (mq.addEventListener ? mq.addEventListener("change", function () { place(); start(); }) : mq.addListener(function () { place(); start(); }));
   show(0); start();
 })();
 

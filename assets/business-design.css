@@ -3174,3 +3174,22 @@ html.is-modal{overflow:hidden}
   .sec--red:has(.wcp) .head__cta{order:5;margin-top:20px;align-self:stretch}
 }
 .nw{white-space:nowrap}
+@media (max-width:720px){
+  /* AI-помощник: окно примера — под выбранным пунктом */
+  .aix__tabs li > .aix__win{margin:8px 0 6px;border-radius:var(--r-md)}
+  .aix__tabs button[aria-selected="true"] .aix__bar{display:none}
+  /* Пилот: заголовок → текст → талон «500» → шаги → кнопка */
+  .pilot{display:flex !important;flex-direction:column}
+  .pilot__r{display:contents}
+  .pilot__r > h2{order:1;padding:26px 22px 0}
+  .pilot__r > .text{order:2;padding:0 22px;margin-top:14px}
+  .pilot__l{order:3;margin-top:22px;border-top:2px dashed var(--line-strong);border-bottom:2px dashed var(--line-strong) !important;padding-top:22px !important}
+  .pilot__r > .pilot__steps{order:4;margin:22px 22px 0;align-self:auto}
+  .pilot__r > .btn{order:5;margin:20px 22px 26px !important;align-self:stretch}
+}
+@media (max-width:720px){
+  .aix__tabs li:has(> .aix__win){display:flex !important;flex-direction:column;align-items:stretch}
+  .aix__tabs li > .aix__win{width:100%;margin:8px 0 4px !important}
+  .aix__tabs li > .aix__win .aix__fun{height:180px}
+}
+@media (max-width:720px){.aix__tabs li > .aix__win .aix__fun{height:auto;min-height:170px}}
