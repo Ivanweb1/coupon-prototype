@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261019d">
+<link rel="stylesheet" href="assets/business-design.css?v=20261019e">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -421,29 +421,46 @@
       </div>
       <p class="text">Ваше предложение увидят там, где ищут выгоду. Публикацию на&nbsp;сайте, в&nbsp;поиске и&nbsp;в&nbsp;соцсетях мы берём на&nbsp;себя — одно размещение работает сразу во&nbsp;всех каналах.</p>
       </div>
-      <p class="kicker">Одно размещение — и&nbsp;предложение уже:</p>
-
-      <div class="chs">
+      <!-- Три канала — одно и то же предложение: сверху мини-интерфейс канала
+           (витрина, выдача поиска, пост в соцсети), снизу — подпись -->
+      <div class="chs chs--ui">
         <div class="ch">
-          <span class="ch__ic" data-ic="site"></span>
-          <h3>На&nbsp;сайте vsekupony.ru</h3>
-          <p>в&nbsp;витрине города</p>
+          <div class="chv">
+            <div class="chv__bar"><i></i><i></i><i></i><span>vsekupony.ru/lipetsk</span></div>
+            <div class="chv__tile">
+              <span class="chv__ph" style="background-image:url('assets/coupons/coffee.jpg')"><b>1+1</b></span>
+              <div><b>Капучино по&nbsp;будням</b><span>Кофейня «Пример» · Липецк</span></div>
+            </div>
+          </div>
+          <div class="ch__t"><span class="ch__ic" data-ic="site"></span><div><h3>На&nbsp;сайте vsekupony.ru</h3><p>в&nbsp;витрине города</p></div></div>
         </div>
         <div class="ch">
-          <span class="ch__ic" data-ic="search"></span>
-          <h3>В&nbsp;поиске</h3>
-          <p>своя страница в&nbsp;выдаче</p>
+          <div class="chv">
+            <div class="chv__q"><i data-ic="search"></i>кофе 1+1 липецк</div>
+            <div class="chv__res"><small>vsekupony.ru › lipetsk › kofe</small><b>Капучино 1+1 в&nbsp;Липецке — кофейня «Пример»</b><span>Купон бесплатно и&nbsp;без регистрации.</span></div>
+          </div>
+          <div class="ch__t"><span class="ch__ic" data-ic="search"></span><div><h3>В&nbsp;поиске</h3><p>своя страница в&nbsp;выдаче</p></div></div>
         </div>
         <div class="ch ch--wide">
-          <span class="ch__ic" data-ic="chat"></span>
-          <h3>В&nbsp;соцсетях города</h3>
-          <div class="ch__soc">
-            <span><i data-soc="vk"></i>ВКонтакте</span><span><i data-soc="tg"></i>Telegram</span><span><i data-soc="ok"></i>Одноклассники</span><span><i data-soc="max"></i>MAX</span>
+          <div class="chv chv--post">
+            <div class="chv__post">
+              <div class="chv__au"><img src="assets/brand/logo-red.png" alt=""><div><b>ВСЕКУПОНЫ · Липецк</b><span>только что</span></div></div>
+              <p>Капучино 1+1 по&nbsp;будням в&nbsp;кофейне «Пример». Код&nbsp;— бесплатно, без регистрации.</p>
+              <span class="chv__btn">Забрать код</span>
+            </div>
+            <span class="chv__img" style="background-image:url('assets/coupons/coffee.jpg')"></span>
+          </div>
+          <div class="ch__t">
+            <span class="ch__ic" data-ic="chat"></span>
+            <div><h3>В&nbsp;соцсетях города</h3>
+              <div class="ch__soc"><span><i data-soc="vk"></i>ВКонтакте</span><span><i data-soc="tg"></i>Telegram</span><span><i data-soc="ok"></i>Одноклассники</span><span><i data-soc="max"></i>MAX</span></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="actions">
+      <div class="launch__foot ch__foot">
+        <p class="text"><b>Одно размещение</b>&nbsp;— и&nbsp;предложение уже во&nbsp;всех каналах.</p>
         <a class="btn btn--red" href="#final">Хочу такое размещение</a>
       </div>
     </div>

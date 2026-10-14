@@ -2190,3 +2190,54 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .how__foot,.aix__foot,.launch__foot{padding:20px !important}
 }
 @media (max-width:720px){.how__foot .text,.aix__foot .text,.launch__foot .text{flex:none}}
+
+/* ==========================================================================
+   10. Каналы — в каждой карточке то же предложение, каким его видят
+   в канале: витрина сайта, выдача поиска, пост в соцсети
+   ========================================================================== */
+.chs--ui .ch{padding:0;overflow:hidden;gap:0}
+.chv{display:flex;flex-direction:column;justify-content:center;gap:10px;height:196px;margin:10px 10px 0;padding:20px;
+  border-radius:calc(var(--r-lg) - 8px);background:#fff;color:var(--ink)}
+.ch__t{display:flex;align-items:flex-start;gap:14px;padding:22px 24px 26px}
+.chs--ui .ch__ic{flex:none;width:40px;height:40px;border-radius:12px}
+.chs--ui .ch__ic svg{width:20px;height:20px}
+.chs--ui .ch h3{margin:0;padding-top:1px}
+.chs--ui .ch p{margin-top:2px}
+.chs--ui .ch--wide .ch__ic{background:rgba(255,255,255,.18);color:#fff}
+
+.chv__bar{display:flex;align-items:center;gap:5px;height:30px;padding:0 12px;border-radius:var(--r-pill);background:var(--surface)}
+.chv__bar i{width:7px;height:7px;border-radius:50%;background:var(--line-strong)}
+.chv__bar span{margin-left:8px;font-size:12.5px;color:var(--ink-2)}
+.chv__tile{display:flex;align-items:center;gap:12px;padding:8px;border-radius:14px;box-shadow:0 10px 22px -14px rgba(0,0,0,.35),inset 0 0 0 1px var(--line)}
+.chv__ph{position:relative;flex:none;width:72px;height:60px;border-radius:10px;background:center/cover no-repeat}
+.chv__ph b{position:absolute;left:6px;top:6px;padding:2px 7px;border-radius:7px;background:var(--brand);color:#fff;font-size:12px;font-weight:700}
+.chv__tile b{display:block;font-size:14px;font-weight:600;line-height:1.3}
+.chv__tile span{display:block;font-size:12px;color:var(--ink-3);margin-top:3px}
+
+.chv__q{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:var(--r-pill);background:var(--surface);font-size:14.5px;font-weight:500}
+.chv__q i{display:flex;color:var(--brand)}.chv__q svg{width:17px;height:17px}
+.chv__res{padding:10px 4px 0}
+.chv__res small{display:block;font-size:12px;color:var(--ink-3)}
+.chv__res b{display:block;margin-top:3px;font-size:15px;font-weight:600;line-height:1.3;color:#1a0dab}
+
+.chv--post{flex-direction:row;align-items:stretch;gap:16px;padding:16px}
+.chv__post{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.chv__au{display:flex;align-items:center;gap:10px}
+.chv__au img{width:34px;height:34px;padding:5px 9px;border-radius:50%;background:var(--brand-50);object-fit:contain}
+.chv__au b{display:block;font-size:14px;font-weight:600}
+.chv__au span{display:block;font-size:12px;color:var(--ink-3)}
+.chv__post p{font-size:14px;line-height:1.4;color:var(--ink)}
+.chv__btn{align-self:flex-start;margin-top:auto;padding:8px 14px;border-radius:10px;background:var(--brand);color:#fff;font-size:13px;font-weight:600}
+.chv__img{flex:none;width:42%;border-radius:12px;background:center/cover no-repeat}
+
+.chs--ui .ch__soc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;max-width:none}
+.chs--ui .ch__soc span{padding:5px 12px 5px 5px;font-size:13.5px}
+.chs--ui .ch__soc i{width:24px;height:24px}
+
+.ch__foot{margin-top:var(--gut,18px)}
+@media (max-width:720px){
+  .chv{height:auto;min-height:170px}
+  .chv--post{flex-direction:column}
+  .chv__img{width:100%;height:120px;order:-1}
+}
+.chv__res span{display:block;margin-top:4px;font-size:12.5px;color:var(--ink-2)}
