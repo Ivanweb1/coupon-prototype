@@ -2636,3 +2636,20 @@ html.is-modal{overflow:hidden}
   .ft__ct{grid-column:1/-1}
   .ft__about .btn{align-self:stretch}
 }
+/* Финал: левая часть компактнее, у формы подзаголовок и строка о согласии */
+.final__text{padding:40px 44px}
+.final h2{font-size:clamp(28px,2.4vw,38px)}
+.final__ct{margin-top:26px;padding:2px 18px}
+.final__ct a{padding:11px 0}
+.final__ct i{width:40px;height:40px}
+.final__ct b{font-size:20px}
+.final__cta{padding-top:22px}
+.final .form{padding:40px 44px;row-gap:12px}
+.form__head{grid-column:1/-1;margin-bottom:6px}
+.form__head .form__title{margin:0}
+.form__sub{margin-top:6px;font-size:15px;color:var(--ink-2)}
+.form__note{grid-column:1/-1;font-size:13px;color:var(--ink-3);text-align:center}
+.form__note a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
+.form__note a:hover{color:var(--brand)}
+@media (max-width:720px){.final__text,.final .form{padding:26px 22px}}
+.final__text{justify-content:center}.final__cta{margin-top:0}

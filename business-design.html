@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261020b">
+<link rel="stylesheet" href="assets/business-design.css?v=20261020c">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -715,7 +715,7 @@
       </div>
 
       <form class="form" id="leadForm" novalidate>
-        <p class="form__title">Или оставьте заявку</p>
+        <div class="form__head"><p class="form__title">Или оставьте заявку</p><p class="form__sub">Перезвоним, поможем выбрать формат и&nbsp;разместить первое предложение.</p></div>
         <label><span>Компания</span><input name="company" required placeholder="ООО или ИП"></label>
         <label><span>Сфера</span><input name="sphere" required placeholder="Например, кофейня"></label>
         <label><span>Город</span><input name="city" required value="Липецк"></label>
@@ -723,6 +723,7 @@
         <label><span>Телефон / Telegram</span><input name="contact" required placeholder="+7 или @username"></label>
         <label><span>Email</span><input name="email" type="email"></label>
         <button class="btn btn--red btn--lg" type="submit">Отправить заявку</button>
+        <p class="form__note">Нажимая кнопку, вы&nbsp;соглашаетесь с&nbsp;<a href="docs.html">обработкой персональных данных</a>.</p>
         <div class="form__done bz-form__done" hidden>
           <i data-ic="check"></i>
           <b>Заявка отправлена</b>
