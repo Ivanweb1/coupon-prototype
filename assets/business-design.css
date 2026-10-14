@@ -2376,3 +2376,9 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .next ol li:nth-child(2){border-top:1px dashed var(--line)}
   .next ol li{padding:8px 0}
 }
+/* География: вырезы сверху и снизу на линии перфорации — как у AI-помощника */
+@media (min-width:1001px){
+  .geo{--cut:calc(100% - 339px);
+    -webkit-mask:radial-gradient(circle 18px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 18px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+            mask:radial-gradient(circle 18px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 18px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+}
