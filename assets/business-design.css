@@ -2979,3 +2979,10 @@ html.is-modal{overflow:hidden}
 @media (min-width:1001px){.hero__in{grid-template-columns:minmax(0,5fr) minmax(0,6.4fr) !important;column-gap:56px !important}}
 @media (max-width:1000px){.hx__stage{max-width:600px}}
 @media (min-width:1600px){.hx__ph,.hx__c .hx__ph{aspect-ratio:4/3}}
+/* Окно витрины — во всю подложку, отступ одинаковый со всех сторон */
+.hero .hx{--hxp:40px;padding:var(--hxp) !important}
+.hx__stage,.hx__stage[class]{max-width:none !important;width:100%}
+.hx__ev{left:-24px;bottom:-26px}
+.hx__ev--top{right:-24px !important;top:-24px !important}
+@media (max-width:1240px){.hero .hx{--hxp:32px}.hx__ev{left:-16px}.hx__ev--top{right:-16px !important}}
+@media (max-width:560px){.hero .hx{--hxp:16px;padding-bottom:56px !important}.hx__ev{left:0;right:0;bottom:-40px}}
