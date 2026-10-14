@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261020c">
+<link rel="stylesheet" href="assets/business-design.css?v=20261020e">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -722,8 +722,8 @@
         <label><span>Имя</span><input name="name" required></label>
         <label><span>Телефон / Telegram</span><input name="contact" required placeholder="+7 или @username"></label>
         <label><span>Email</span><input name="email" type="email"></label>
+        <label class="form__agree"><input type="checkbox" name="agree" data-agree><i></i><span>Соглашаюсь с&nbsp;<a href="docs.html">обработкой персональных данных</a></span></label>
         <button class="btn btn--red btn--lg" type="submit">Отправить заявку</button>
-        <p class="form__note">Нажимая кнопку, вы&nbsp;соглашаетесь с&nbsp;<a href="docs.html">обработкой персональных данных</a>.</p>
         <div class="form__done bz-form__done" hidden>
           <i data-ic="check"></i>
           <b>Заявка отправлена</b>
@@ -795,6 +795,7 @@
         <label><input type="radio" name="via" value="mail"><span>Email</span></label>
       </fieldset>
       <label><span>Ваш вопрос</span><textarea name="q" rows="4" required placeholder="Например: подойдёт ли сервис для салона красоты?"></textarea></label>
+      <label class="form__agree"><input type="checkbox" name="agree" data-agree><i></i><span>Соглашаюсь с&nbsp;<a href="docs.html">обработкой персональных данных</a></span></label>
     </div>
 
     <div class="qd__foot">
@@ -811,7 +812,13 @@
   </form>
 </dialog>
 
+<!-- Плашка cookie: внизу слева, скрывается после «Хорошо» (запоминается в браузере) -->
+<div class="ck" data-cookie hidden role="region" aria-label="Cookie">
+  <p>Мы используем cookie, чтобы сайт работал удобнее. Оставаясь на&nbsp;сайте, вы&nbsp;соглашаетесь с&nbsp;<a href="docs.html">политикой обработки cookie</a>.</p>
+  <button class="btn btn--red" type="button" data-cookie-ok>Хорошо</button>
+</div>
+
 <script src="assets/business.js?v=20261013b"></script>
-<script src="assets/business-design.js?v=20261017dc"></script>
+<script src="assets/business-design.js?v=20261017de"></script>
 </body>
 </html>

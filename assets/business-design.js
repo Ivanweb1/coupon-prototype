@@ -200,7 +200,42 @@
     form.querySelectorAll("[required]").forEach(function (f) {
       var err = !f.value.trim(); f.classList.toggle("is-error", err); if (err && !bad) { bad = true; f.focus(); }
     });
+    var agree = form.querySelector("[data-agree]");
+    if (agree && !agree.checked) { agree.closest(".form__agree").classList.add("is-error"); if (!bad) { bad = true; agree.focus(); } }
     if (bad) return;
     done.hidden = false; form.classList.add("is-done");
+  });
+})();
+
+/* Форма заявки: без согласия на обработку данных не отправляем
+   (проверка до общего обработчика из business.js) */
+(function () {
+  var form = document.getElementById("leadForm"); if (!form) return;
+  var box = form.querySelector("[data-agree]"); if (!box) return;
+  var lbl = box.closest(".form__agree");
+  box.addEventListener("change", function () { lbl.classList.remove("is-error"); });
+  form.addEventListener("submit", function (e) {
+    if (box.checked) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    lbl.classList.add("is-error"); box.focus();
+  }, true);
+})();
+
+/* Поп-ап: снять подсветку согласия при отметке */
+(function () {
+  var box = document.querySelector("#ask [data-agree]"); if (!box) return;
+  box.addEventListener("change", function () { box.closest(".form__agree").classList.remove("is-error"); });
+})();
+
+/* Плашка cookie: показываем через секунду, «Хорошо» — запоминаем */
+(function () {
+  var ck = document.querySelector("[data-cookie]"); if (!ck) return;
+  var KEY = "vk-cookie-ok", seen = false;
+  try { seen = localStorage.getItem(KEY) === "1"; } catch (e) {}
+  if (seen) return;
+  setTimeout(function () { ck.hidden = false; requestAnimationFrame(function () { ck.classList.add("is-on"); }); }, 1000);
+  ck.querySelector("[data-cookie-ok]").addEventListener("click", function () {
+    try { localStorage.setItem(KEY, "1"); } catch (e) {}
+    ck.classList.remove("is-on"); setTimeout(function () { ck.hidden = true; }, 300);
   });
 })();

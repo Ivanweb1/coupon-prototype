@@ -2653,3 +2653,34 @@ html.is-modal{overflow:hidden}
 .form__note a:hover{color:var(--brand)}
 @media (max-width:720px){.final__text,.final .form{padding:26px 22px}}
 .final__text{justify-content:center}.final__cta{margin-top:0}
+/* Согласие на обработку данных — чекбокс слева, по левому краю формы */
+.form__agree{grid-column:1/-1;display:flex !important;flex-direction:row !important;align-items:center;gap:10px !important;cursor:pointer;font-size:14px !important;color:var(--ink-2)}
+.form__agree input{position:absolute;opacity:0;pointer-events:none}
+.form__agree i{display:grid;place-items:center;flex:none;width:22px;height:22px;border:2px solid var(--line-strong);border-radius:6px;background:#fff;transition:background .15s,border-color .15s}
+.form__agree i::after{content:"";width:10px;height:6px;margin-top:-2px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);opacity:0}
+.form__agree input:checked + i{background:var(--brand);border-color:var(--brand)}
+.form__agree input:checked + i::after{opacity:1}
+.form__agree input:focus-visible + i{outline:2px solid var(--brand);outline-offset:2px}
+.form__agree.is-error i{border-color:var(--brand);background:var(--brand-50)}
+.form__agree.is-error span{color:var(--brand)}
+.form__agree a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+.form__agree a:hover{color:var(--brand)}
+/* В поп-апе согласие — как в форме заявки */
+.qd__body .form__agree{margin-top:2px}
+
+/* ==========================================================================
+   Плашка cookie — белая карточка внизу слева, текст и кнопка в строку
+   ========================================================================== */
+.ck{position:fixed;left:24px;bottom:24px;z-index:60;display:flex;align-items:center;gap:20px;max-width:560px;padding:16px 16px 16px 22px;
+  border-radius:var(--r-md);background:#fff;color:var(--ink);box-shadow:0 24px 50px -24px rgba(0,0,0,.45),0 0 0 1px var(--line);
+  opacity:0;transform:translateY(16px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.ck.is-on{opacity:1;transform:none}
+.ck[hidden]{display:none}
+.ck p{font-size:14px;line-height:1.45;color:var(--ink-2)}
+.ck a{color:var(--ink);text-decoration:underline;text-underline-offset:2px}
+.ck a:hover{color:var(--brand)}
+.ck .btn{flex:none;height:44px;padding:0 24px}
+@media (max-width:560px){
+  .ck{left:12px;right:12px;bottom:12px;flex-direction:column;align-items:stretch;gap:12px;padding:16px}
+  .ck .btn{width:100%}
+}
