@@ -2331,3 +2331,48 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   -webkit-mask-composite:source-in;
   mask:linear-gradient(to bottom,#000 80%,transparent 98%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);
   mask-composite:intersect}
+
+/* ==========================================================================
+   13. География — карта и направления в одной белой панели,
+   между ними пунктир (как в AI-помощнике); список — нумерованные строки
+   ========================================================================== */
+.geo{gap:0 !important;align-items:stretch;border-radius:var(--r-lg);background:#fff;overflow:hidden}
+@media (min-width:1001px){
+  .geo{grid-template-columns:minmax(0,1fr) 340px !important}
+  .geo > .map,.geo > .next{grid-column:auto !important}
+}
+.geo .map{border-radius:0;background:none}
+.next{display:flex;flex-direction:column;padding:28px 28px 26px;border-left:2px dashed var(--line-strong)}
+.next__lg{gap:10px;margin:0 0 22px;padding-bottom:22px;border-bottom:1px solid var(--line);font-size:14px;font-weight:500}
+.next__lg i{width:14px;height:14px;border-radius:4px}
+.next__k{font-size:17px;font-weight:600}
+.next ol{list-style:none;margin:10px 0 0;padding:0;counter-reset:nx;display:flex;flex-direction:column}
+.next ol li{counter-increment:nx;display:flex;align-items:center;gap:14px;height:auto;padding:11px 0;border-radius:0;background:none;
+  border-top:1px dashed var(--line);font-size:15.5px;font-weight:500}
+.next ol li:first-child{border-top:0}
+.next ol li::before{content:counter(nx);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:var(--brand-50);color:var(--brand);font-size:12.5px;font-weight:700}
+@media (max-width:1000px){
+  .geo{grid-template-columns:1fr}
+  .next{border-left:0;border-top:2px dashed var(--line-strong)}
+  .next ol{display:grid;grid-template-columns:1fr 1fr;column-gap:16px}
+  .next ol li:nth-child(2){border-top:0}
+}
+.geo .map{align-self:start;overflow:hidden}.geo .next{align-self:stretch;position:relative;z-index:1;background:#fff}
+@media (min-width:1001px){
+  .next{padding:24px 26px 20px}
+  .next__lg{gap:6px;margin-bottom:16px;padding-bottom:16px}
+  .next ol{margin-top:6px}
+  .next ol li{padding:8px 0}
+}
+.geo .map{align-self:center}
+.geo .map__img{
+  -webkit-mask:linear-gradient(to bottom,transparent 0,#000 7%,#000 93%,transparent 100%),linear-gradient(to right,#000 0,#000 94%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask:linear-gradient(to bottom,transparent 0,#000 7%,#000 93%,transparent 100%),linear-gradient(to right,#000 0,#000 94%,transparent 100%);
+  mask-composite:intersect}
+@media (max-width:720px){
+  .next ol{grid-template-columns:1fr}
+  .next ol li:nth-child(2){border-top:1px dashed var(--line)}
+  .next ol li{padding:8px 0}
+}
