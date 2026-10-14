@@ -2157,3 +2157,24 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .launch__foot{flex-direction:column-reverse;align-items:stretch;gap:16px}
 }
 #launch .head{max-width:none}
+
+/* ==========================================================================
+   Низ блоков (шаги, AI-помощник, запуск) — читается слева направо:
+   сначала вывод, сразу за ним кнопка. Текст — от левого края контейнера.
+   ========================================================================== */
+.how__foot,.aix__foot,.launch__foot{display:flex !important;align-items:center;justify-content:flex-start;gap:20px 40px;flex-wrap:wrap;padding:0 !important}
+.how__foot .text,.aix__foot .text,.launch__foot .text{margin:0 !important;padding:0 !important;text-align:left;grid-column:auto}
+.how__foot .btn,.aix__foot .btn,.launch__foot .btn{flex:none}
+@media (max-width:720px){
+  .how__foot,.aix__foot,.launch__foot{flex-direction:column;align-items:stretch;gap:16px}
+}
+
+/* AI-помощник: у корешка своя шапка — на одном уровне с шапкой окна */
+@media (min-width:1001px){
+  .aix__l{padding:12px 22px 22px 18px}
+  .aix__l .aix__hd{display:flex;align-items:center;gap:10px;height:62px;margin:0 0 6px;padding:0 4px 0 16px;
+    border-bottom:1px dashed var(--line-strong);color:var(--ink);font-size:17px;font-weight:600}
+  .aix__hd i{display:flex;color:var(--brand)}.aix__hd svg{width:20px;height:20px}
+  .aix__hd span{margin-left:auto;padding:6px 12px;border-radius:var(--r-pill);background:#fff;color:var(--ink-2);font-size:13px;font-weight:500}
+  .aix__tabs button[aria-selected="true"]::before{content:none}
+}
