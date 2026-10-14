@@ -2247,3 +2247,10 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .chs--ui .ch__soc{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:2px}
 .chs--ui .ch__soc span{padding:0;background:none;color:rgba(255,255,255,.92);font-size:15px;font-weight:400;line-height:1.5;gap:6px;border-radius:0}
 .chs--ui .ch__soc i{width:18px;height:18px}
+/* Каналы: значок ровно по высоте подписи (заголовок 26 + строка 24 = 50) */
+.chs--ui .ch__t{align-items:center}
+.chs--ui .ch__ic{width:50px;height:50px;border-radius:14px}
+.chs--ui .ch__ic svg{width:22px;height:22px}
+.chs--ui .ch h3{padding:0;line-height:26px}
+.chs--ui .ch p,.chs--ui .ch__soc span{margin-top:0;line-height:24px}
+.chs--ui .ch__soc{margin-top:0}
