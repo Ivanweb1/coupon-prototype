@@ -2685,3 +2685,11 @@ html.is-modal{overflow:hidden}
   .ck .btn{width:100%}
 }
 .ft__col > span{color:#cfcfcf}
+/* Подвал: в нижней строке — документы */
+.ft__bottom{align-items:center}
+.ft__docs{display:flex;flex-wrap:wrap;gap:8px 24px;margin-right:auto;margin-left:40px}
+.ft__docs span{color:#a9a9a9}
+@media (max-width:1000px){
+  .ft__bottom{flex-direction:column;align-items:flex-start;gap:14px}
+  .ft__docs{margin:0;flex-direction:column;gap:10px}
+}
