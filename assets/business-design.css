@@ -2325,3 +2325,9 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .mate figcaption::before{left:14px;width:22px}
   .mate b{font-size:15px}
 }
+/* Команда: растворение фото вдвое короче */
+.mate__ph{
+  -webkit-mask:linear-gradient(to bottom,#000 80%,transparent 98%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask:linear-gradient(to bottom,#000 80%,transparent 98%),linear-gradient(to right,transparent 0,#000 6%,#000 94%,transparent 100%);
+  mask-composite:intersect}
