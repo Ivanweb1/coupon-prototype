@@ -27,6 +27,7 @@
     bookmark: '<path d="M7 3.5h10v17l-5-3.5-5 3.5z"/>',
     users: '<circle cx="9" cy="8.5" r="3.3"/><path d="M3 19.5a6 6 0 0 1 12 0"/><circle cx="16.5" cy="9" r="2.6"/><path d="M16 14.2a5 5 0 0 1 5 5.3"/>',
     chev: '<path d="m7 10 5 5 5-5"/>',
+    down: '<path d="M12 5v14M6 13l6 6 6-6"/>',
     "f-pct": '<path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/>',
     "f-two": '<path d="M3 9h7v4.5a3.5 3.5 0 0 1-7 0z"/><path d="M14 9h7v4.5a3.5 3.5 0 0 1-7 0z"/><path d="M6.5 4.5v2M17.5 4.5v2M3 21h18"/>',
     "f-gift": '<rect x="3.5" y="9" width="17" height="11.5" rx="1.5"/><path d="M2.5 9h19M12 9v11.5"/><path d="M12 9c-2.5 0-5-1-5-3a2 2 0 0 1 3.5-1.3L12 7l1.5-2.3A2 2 0 0 1 17 6c0 2-2.5 3-5 3z"/>',

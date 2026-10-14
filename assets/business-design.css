@@ -2912,3 +2912,4 @@ html.is-modal{overflow:hidden}
 @media (max-width:1000px){.hero .hx{padding:28px 20px 60px !important}.hx__ev{left:-6px;bottom:-30px}}
 @media (max-width:560px){.hero .hx{padding:20px 14px 60px !important}.hx__ev{left:0;right:0}}
 @media (min-width:1600px){.hx__stage{max-width:600px}.hx__ph{height:110px}}
+.hero__link:hover i svg{animation:hlDown .6s var(--ease)}@keyframes hlDown{50%{transform:translateY(3px)}}
