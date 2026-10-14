@@ -2942,3 +2942,18 @@ html.is-modal{overflow:hidden}
   .hero__nums li > .hn__faces,.hero__nums li > .hn__ch,.hero__nums li > .hn__price{display:none}
 }
 .hx__ph{background-size:cover;background-repeat:no-repeat}
+/* Лента купонов в окне — едет вверх по кругу, на наведении стоит */
+.hx__feed{position:relative;height:396px;overflow:hidden;
+  -webkit-mask:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 28px),transparent 100%);mask:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 28px),transparent 100%)}
+.hx__track{display:flex;flex-direction:column;gap:10px;padding-top:4px}
+.hx__feed.is-run .hx__track{animation:hxFeed 28s linear infinite}
+.hx__feed:hover .hx__track{animation-play-state:paused}
+@keyframes hxFeed{to{transform:translateY(calc(-50% - 5px))}}
+.hx__app{padding-bottom:0}
+@media (min-width:1600px){.hx__feed{height:430px}}
+@media (max-width:560px){.hx__feed{height:340px}}
+/* Вторая плашка — на верхнем правом углу окна */
+.hx__ev--top{left:auto !important;right:-28px !important;top:-26px !important;bottom:auto !important}
+@media (max-width:1240px){.hx__ev--top{right:-12px !important}}
+@media (max-width:560px){.hx__ev--top{left:0 !important;right:0 !important;top:-30px !important}}
+@media (max-width:560px){.hx__ev--top{display:none}.hero__nums li > span:last-child br{display:none}}

@@ -225,33 +225,43 @@
   });
 })();
 
-/* Первый экран: действия покупателей — уведомление сменяется,
-   в карточке купона растёт счётчик «забрали» */
+/* Первый экран: лента купонов прокручивается сама (копия ленты — для
+   бесшовного круга); две плашки с действиями покупателей сменяются
+   по очереди, купон подсвечивается, его счётчик растёт */
 (function () {
-  var ev = document.querySelector("[data-hx-ev]"); if (!ev) return;
+  var feed = document.querySelector("[data-hx-feed]"); if (!feed) return;
+  var track = feed.querySelector(".hx__track"), grid = track.querySelector(".hx__grid");
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) { var copy = grid.cloneNode(true); copy.setAttribute("aria-hidden", "true"); track.appendChild(copy); feed.classList.add("is-run"); }
+
   var P = "social-kit/photos/people/";
   var EV = [
     ["anna", "Анна забрала код", "1+1 на капучино", 0],
-    ["igor", "Игорь забрал код", "−20% на маникюр для жены", 1],
+    ["dmitry", "Дмитрий забрал код", "−30% на шиномонтаж", 3],
     ["olga", "Ольга забрала код", "первая тренировка за 0 ₽", 2],
-    ["sergey", "Сергей забрал код", "−30% на шиномонтаж", 3],
-    ["marina", "Марина забрала код", "маникюр с покрытием", 1],
-    ["dmitry", "Дмитрий забрал код", "капучино 1+1 по будням", 0]
+    ["igor", "Игорь забрал код", "завтрак за 349 ₽", 4],
+    ["marina", "Марина забрала код", "маникюр −20%", 1],
+    ["sergey", "Сергей забрал код", "час боулинга в подарок", 6],
+    ["maria", "Мария забрала код", "помада в подарок", 5],
+    ["oleg", "Олег забрал код", "груминг −15%", 7]
   ];
-  var ava = ev.querySelector(".ava"), b = ev.querySelector("b"), s = ev.querySelector(":scope > div > span");
-  var cards = document.querySelectorAll("[data-hx-card]"), k = 0;
-  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) return;
+  var evs = [document.querySelector('[data-hx-ev="0"]'), document.querySelector('[data-hx-ev="1"]')];
+  if (reduce || !evs[0] || !evs[1]) return;
+  var k = 1, slot = 0;
   setInterval(function () {
-    k = (k + 1) % EV.length; var e = EV[k];
+    k = (k + 1) % EV.length; slot = 1 - slot;
+    var e = EV[k], ev = evs[slot];
     ev.classList.add("is-out");
     setTimeout(function () {
-      ava.style.backgroundImage = "url('" + P + e[0] + ".jpg')";
-      b.textContent = e[1]; s.textContent = e[2] + " · только что";
-      cards.forEach(function (c) { c.classList.toggle("is-hot", +c.dataset.hxCard === e[3]); });
-      var u = document.querySelector('[data-hx-count="' + e[3] + '"]');
-      if (u) { u.textContent = String(+u.textContent + 1); u.classList.add("is-up"); setTimeout(function () { u.classList.remove("is-up"); }, 1200); }
+      ev.querySelector(".ava").style.backgroundImage = "url('" + P + e[0] + ".jpg')";
+      ev.querySelector("b").textContent = e[1];
+      ev.querySelector(":scope > div > span").textContent = e[2] + " · только что";
+      feed.querySelectorAll("[data-hx-card]").forEach(function (c) { c.classList.toggle("is-hot", +c.dataset.hxCard === e[3]); });
+      feed.querySelectorAll('[data-hx-count="' + e[3] + '"]').forEach(function (u) {
+        u.textContent = String(+u.textContent + 1); u.classList.add("is-up");
+        setTimeout(function () { u.classList.remove("is-up"); }, 1200);
+      });
       ev.classList.remove("is-out");
     }, 350);
-  }, 3200);
+  }, 2600);
 })();
