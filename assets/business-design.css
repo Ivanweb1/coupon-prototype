@@ -3108,3 +3108,25 @@ html.is-modal{overflow:hidden}
   .hd__burger{width:38px;height:38px;margin-left:2px}
   .hd__burger i{width:18px}
 }
+/* Цифры первого экрана на телефоне: строка — цифра и подпись слева, мини-иллюстрация справа */
+@media (max-width:560px){
+  .hero__nums{gap:8px;margin-top:28px}
+  .hero__nums li{display:grid !important;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:12px;align-items:center;padding:12px 14px !important}
+  .hero__nums li > b{grid-column:1;grid-row:1;margin:0;min-width:0;font-size:22px}
+  .hero__nums li > span:last-child{grid-column:1;grid-row:2;margin:2px 0 0;font-size:12.5px;line-height:1.35}
+  .hero__nums li > span:last-child br{display:none}
+  .hero__nums li > .hn__faces,.hero__nums li > .hn__ch,.hero__nums li > .hn__price{display:flex !important;grid-column:2;grid-row:1 / span 2;justify-self:end}
+  .hn__faces i{width:26px;height:26px;margin-left:-9px}
+  .hn__ch .hn__site{display:none}
+  .hn__soc i{width:24px;height:24px;margin-left:-8px}
+  .hn__price{flex-direction:column !important;align-items:flex-end;gap:3px;height:auto}
+}
+@media (max-width:360px){
+  .hn__faces i:nth-child(n+4){display:none}
+  .hero__nums li > b{font-size:20px}
+}
+@media (max-width:560px){
+  .hero__nums li{grid-template-rows:min-content min-content;align-content:center;row-gap:0 !important;gap:0 12px !important}
+  .hero__nums li > b{align-self:end;line-height:1.1}
+  .hero__nums li > span:last-child{align-self:start}
+}
