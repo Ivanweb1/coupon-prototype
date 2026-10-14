@@ -2290,3 +2290,4 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .bud__b{display:none}
 .cmp__t thead th:last-child{width:130px}
 .cmp__t{min-width:1060px}
+.launch__foot .text{text-wrap:balance}
