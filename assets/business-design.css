@@ -3211,3 +3211,18 @@ html.is-modal{overflow:hidden}
   .cmp__me img{height:24px}
 }
 @media (max-width:560px){.cmp__me img{display:none}.cmp__t tr.is-me th{font-size:13.5px}}
+/* Витрина: логотип с надписью, как на сайте */
+.hx__brand{display:flex;align-items:center;gap:6px;flex:none;margin-right:4px}
+.hx__brand b{font-size:10.5px;font-weight:700;line-height:1;letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
+.hx__top{flex-wrap:wrap}
+@media (max-width:520px){
+  /* поиск — отдельной строкой под логотипом и городом */
+  .hx__search{display:flex !important;flex:1 1 100%;order:3;margin-top:8px}
+  .hx__city{margin-left:auto}
+}
+/* «3 канала» на телефоне: сайт и поиск тоже */
+@media (max-width:560px){
+  .hn__ch .hn__site{display:grid !important;width:24px;height:24px}
+  .hn__ch .hn__site svg{width:13px;height:13px}
+  .hn__ch{gap:3px}
+}

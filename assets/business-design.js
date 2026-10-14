@@ -249,19 +249,15 @@
   if (!reduce) { var copy = grid.cloneNode(true); copy.setAttribute("aria-hidden", "true"); track.appendChild(copy); feed.classList.add("is-run"); }
 
   var P = "social-kit/photos/people/";
-  var EV = [
-    ["anna", "Анна забрала код", "1+1 на капучино", 0],
-    ["dmitry", "Дмитрий забрал код", "−30% на шиномонтаж", 3],
-    ["olga", "Ольга забрала код", "первая тренировка за 0 ₽", 2],
-    ["igor", "Игорь забрал код", "завтрак за 349 ₽", 4],
-    ["marina", "Марина забрала код", "маникюр −20%", 1],
-    ["sergey", "Сергей забрал код", "час боулинга в подарок", 6],
-    ["maria", "Мария забрала код", "помада в подарок", 5],
-    ["oleg", "Олег забрал код", "груминг −15%", 7]
-  ];
+  // купоны ленты (индекс = data-hx-card) и покупатели; пара собирается на лету,
+  // поэтому один и тот же человек не «забирает» один и тот же купон подряд
+  var CARD = ["1+1 на капучино", "маникюр −20%", "первая тренировка за 0 ₽", "−30% на шиномонтаж",
+              "завтрак за 349 ₽", "помада в подарок", "час боулинга в подарок", "груминг −15%"];
+  var WHO = [["anna", "Анна", 1], ["dmitry", "Дмитрий", 0], ["olga", "Ольга", 1], ["igor", "Игорь", 0],
+             ["marina", "Марина", 1], ["sergey", "Сергей", 0], ["maria", "Мария", 1], ["oleg", "Олег", 0]];
   var evs = [document.querySelector('[data-hx-ev="0"]'), document.querySelector('[data-hx-ev="1"]')];
   if (reduce || !evs[0] || !evs[1]) return;
-  var k = 1, slot = 0;
+  var slot = 0, lastCards = [0, 3], lastWho = [0, 1], w0 = 2;
   function shown(el) { return el.offsetParent !== null; }
   function inView(i) {
     var f = feed.getBoundingClientRect();
@@ -269,20 +265,31 @@
       var r = c.getBoundingClientRect(); return r.top >= f.top - 10 && r.bottom <= f.bottom - 20;
     });
   }
+  function pickCard() {
+    var all = CARD.map(function (_, i) { return i; });
+    var fresh = all.filter(function (i) { return lastCards.indexOf(i) < 0; });
+    var vis = fresh.filter(inView);
+    if (!vis.length) vis = all.filter(function (i) { return i !== lastCards[0] && inView(i); });
+    var pool = vis.length ? vis : fresh;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  function pickWho() {
+    for (var t = 0; t < WHO.length; t++) { w0 = (w0 + 1) % WHO.length; if (lastWho.indexOf(w0) < 0) break; }
+    return w0;
+  }
   setInterval(function () {
-    // следующее событие — по купону, который сейчас виден в ленте
-    for (var t = 0; t < EV.length; t++) { k = (k + 1) % EV.length; if (inView(EV[k][3])) break; }
-    // плашка: по очереди из видимых (на телефоне верхняя скрыта)
     var vis = evs.filter(shown); if (!vis.length) return;
     slot = (slot + 1) % vis.length;
-    var e = EV[k], ev = vis[slot];
+    var ci = pickCard(), wi = pickWho(), who = WHO[wi], ev = vis[slot];
+    lastCards = [ci].concat(lastCards).slice(0, 3);
+    lastWho = [wi].concat(lastWho).slice(0, 3);
     ev.classList.add("is-out");
     setTimeout(function () {
-      ev.querySelector(".ava").style.backgroundImage = "url('" + P + e[0] + ".jpg')";
-      ev.querySelector("b").textContent = e[1];
-      ev.querySelector(":scope > div > span").textContent = e[2] + " · только что";
-      feed.querySelectorAll("[data-hx-card]").forEach(function (c) { c.classList.toggle("is-hot", +c.dataset.hxCard === e[3]); });
-      feed.querySelectorAll('[data-hx-count="' + e[3] + '"]').forEach(function (u) {
+      ev.querySelector(".ava").style.backgroundImage = "url('" + P + who[0] + ".jpg')";
+      ev.querySelector("b").textContent = who[1] + (who[2] ? " забрала код" : " забрал код");
+      ev.querySelector(":scope > div > span").textContent = CARD[ci] + " · только что";
+      feed.querySelectorAll("[data-hx-card]").forEach(function (c) { c.classList.toggle("is-hot", +c.dataset.hxCard === ci); });
+      feed.querySelectorAll('[data-hx-count="' + ci + '"]').forEach(function (u) {
         u.textContent = String(+u.textContent + 1); u.classList.add("is-up");
         setTimeout(function () { u.classList.remove("is-up"); }, 1200);
       });
