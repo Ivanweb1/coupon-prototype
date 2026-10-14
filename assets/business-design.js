@@ -265,3 +265,35 @@
     }, 350);
   }, 2600);
 })();
+
+/* Плавное появление снизу вверх: по блокам, внутри сеток — по очереди.
+   Классы ставит скрипт, поэтому без JS всё видно сразу. */
+(function () {
+  if (!("IntersectionObserver" in window)) return;
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var GRIDS = ".path,.tix,.chs,.fmts,.team,.hero__nums,.faq__list,.pilot__steps,.stats,.pers";
+  var items = [];
+  function add(el, d) { el.classList.add("rv"); el.style.setProperty("--rv-d", d + "ms"); items.push(el); }
+  function walk(box) {
+    Array.prototype.forEach.call(box.children, function (el) {
+      if (el.matches("script,style,[hidden],.is-more")) return;
+      if (el.matches(".hero__text,.hrow,.faq__aside")) { walk(el); return; }
+      if (el.matches(GRIDS)) {
+        Array.prototype.forEach.call(el.children, function (c, i) { if (!c.matches(".is-more,[hidden],button")) add(c, Math.min(i, 6) * 80); });
+        return;
+      }
+      if (getComputedStyle(el).display === "contents") { walk(el); return; }
+      add(el, 0);
+    });
+  }
+  document.querySelectorAll("main > section").forEach(function (sec) {
+    var w = sec.querySelector(":scope > .wrap"); if (w) walk(w);
+  });
+  // в шапке блока: текст справа чуть позже заголовка
+  document.querySelectorAll(".hrow > .rv:not(.head)").forEach(function (el) { el.style.setProperty("--rv-d", "120ms"); });
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  items.forEach(function (el) { io.observe(el); });
+  document.documentElement.classList.add("rv-on");
+})();
