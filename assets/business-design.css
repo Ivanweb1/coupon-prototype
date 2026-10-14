@@ -2254,3 +2254,39 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .chs--ui .ch h3{padding:0;line-height:26px}
 .chs--ui .ch p,.chs--ui .ch__soc span{margin-top:0;line-height:24px}
 .chs--ui .ch__soc{margin-top:0}
+
+/* ==========================================================================
+   11. Выгода — таблица спокойнее: цвет только в делениях шкалы,
+   плашки — только в строке ВСЕКУПОНЫ, колонки одной ширины
+   ========================================================================== */
+.cmp{padding:24px 24px 14px}
+.cmp__t{table-layout:fixed}
+.cmp__t thead th:first-child{width:200px}
+.cmp__t thead th:last-child{width:190px}
+.cmp__t thead th{padding:0 10px 14px}
+.cmp__t tbody th,.cmp__t td{height:58px;padding:0 10px}
+.cmp__t tbody tr:not(.is-me) .rt{height:auto;padding:0;background:none;color:var(--ink);font-weight:500;font-size:14px}
+.cmp__t tbody tr:not(.is-me):hover th,.cmp__t tbody tr:not(.is-me):hover td{background:var(--surface)}
+.cmp__t tbody tr:not(.is-me):hover th{border-radius:14px 0 0 14px}
+.cmp__t tbody tr:not(.is-me):hover td:last-child{border-radius:0 14px 14px 0}
+.cmp__t tr.is-me th,.cmp__t tr.is-me td{height:74px}
+.cmp__t tr.is-me .rt{height:34px;padding:0 10px;font-weight:600}
+.bud__b{width:64px;height:8px}
+.bud__b b{min-width:8px;background:var(--ink-3)}
+.cmp__t tr.is-me .bud__b b{background:#fff}
+
+.cmp__foot .text{flex-basis:420px}
+.cmp__btns{display:flex;flex-wrap:wrap;gap:12px}
+@media (max-width:720px){.cmp__btns{flex-direction:column}.cmp__btns .btn{width:100%}}
+.sec--gray .launch__foot{background:#fff}
+.cmp__t tr.is-me .bud__b b{min-width:14px}
+.cmp__t{min-width:1180px}
+@media (max-width:720px){.cmp__foot .text{flex:none}}
+.cmp__t{min-width:1100px}
+.cmp__t thead th:first-child{width:180px}
+.cmp__t thead th:last-child{width:170px}
+.cmp__t tbody th,.cmp__t td{padding:0 8px}
+@media (max-width:1000px){.cmp__t{min-width:1180px}}
+.bud__b{display:none}
+.cmp__t thead th:last-child{width:130px}
+.cmp__t{min-width:1060px}
