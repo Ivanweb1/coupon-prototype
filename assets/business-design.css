@@ -2472,3 +2472,16 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .faq__list{order:1}
   .ask{order:2;margin-top:24px}
 }
+/* «Не нашли ответ?»: контакты — ровные строки (значок 40 + текст), мессенджеры — две кнопки одной ширины */
+.ask__ct{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ask__ct a{display:flex;align-items:center;gap:12px;color:var(--ink);text-decoration:none}
+.ask__ct i{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;background:#fff;color:var(--brand)}
+.ask__ct svg{width:18px;height:18px}
+.ask__ct b{font-size:19px;font-weight:700}
+.ask__ct span{font-size:16px;color:var(--ink-2)}
+.ask__ct a:hover span,.ask__ct a:hover b{color:var(--brand)}
+.ask__msg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.ask__msg a{display:flex;align-items:center;justify-content:center;gap:8px;height:44px;border-radius:var(--r-pill);background:#fff;color:var(--ink);font-size:15px;font-weight:500;text-decoration:none;transition:box-shadow .2s var(--ease)}
+.ask__msg a:hover{box-shadow:inset 0 0 0 1.5px var(--brand)}
+.ask__msg i{display:block;width:24px;height:24px;border-radius:50%;overflow:hidden}
+.ask__msg svg,.ask__msg img{display:block;width:100%;height:100%}
