@@ -151,24 +151,73 @@
     var bar = tabs[k].querySelector(".aix__bar");
     bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
   }
-  // На телефоне окно с примером встаёт сразу под выбранным пунктом (как аккордеон),
-  // автосмены нет — пункты переключает сам человек
-  var win = box.querySelector(".aix__win"), home = win.parentNode, homeNext = win.nextSibling;
+  // На телефоне пункты — «сторис» в окне: сверху бегущие полоски по числу пунктов,
+  // под ними текст активного пункта; переключаются сами, по касанию полоски и свайпом
+  var win = box.querySelector(".aix__win");
   var mq = window.matchMedia("(max-width:720px)");
-  function place() {
-    if (mq.matches) { var li = tabs[cur].closest("li"); if (win.parentNode !== li) li.appendChild(win); }
-    else if (win.parentNode !== home) home.insertBefore(win, homeNext);
-  }
+  var story = document.createElement("div");
+  story.className = "aix__story";
+  story.innerHTML = '<div class="aix__segs">' + Array.prototype.map.call(tabs, function (t, i) {
+    return '<button type="button" aria-label="Пункт ' + (i + 1) + '"><i></i></button>'; }).join("") +
+    '</div><p class="aix__cap"><em></em><span></span></p>';
+  win.querySelector(".aix__top").insertAdjacentElement("afterend", story);
+  var segs = story.querySelectorAll(".aix__segs button"), cap = story.querySelector(".aix__cap");
   var _show = show;
-  show = function (k) { _show(k); place(); };
+  show = function (k) {
+    _show(k);
+    segs.forEach(function (sg, i) {
+      sg.className = i < k ? "is-done" : i === k ? "is-on" : "";
+      var bar = sg.querySelector("i"); bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+    });
+    cap.querySelector("em").textContent = k + 1;
+    cap.querySelector("span").textContent = tabs[k].querySelector("span").textContent;
+  };
+  // автосмена — только пока блок на экране
+  var seen = true;
+  if ("IntersectionObserver" in window) {
+    seen = false;
+    new IntersectionObserver(function (es) { seen = es[0].isIntersecting; start(); }, { threshold: 0.25 }).observe(box);
+  }
   function next() { show((cur + 1) % tabs.length); }
-  function start() { clearInterval(timer); if (reduce || mq.matches) return; timer = setInterval(next, DUR); }
-  tabs.forEach(function (t, i) { t.addEventListener("click", function () {
-    show(i); start();
-    if (mq.matches) { var r = t.getBoundingClientRect(); if (r.top < 70) window.scrollBy({ top: r.top - 80, behavior: "smooth" }); }
-  }); });
-  (mq.addEventListener ? mq.addEventListener("change", function () { place(); start(); }) : mq.addListener(function () { place(); start(); }));
-  show(0); start();
+  function prev() { show((cur - 1 + tabs.length) % tabs.length); }
+  function start() { clearInterval(timer); if (reduce || !seen) return; timer = setInterval(next, DUR); }
+  tabs.forEach(function (t, i) { t.addEventListener("click", function () { show(i); start(); }); });
+  segs.forEach(function (sg, i) { sg.addEventListener("click", function () { show(i); start(); }); });
+  // свайп по окну влево/вправо
+  var x0 = null, y0 = null;
+  win.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  win.addEventListener("touchend", function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { (dx < 0 ? next : prev)(); start(); }
+  }, { passive: true });
+  // подпись под полосками — высотой с самый длинный пункт, чтобы окно не прыгало
+  function capH() {
+    if (!mq.matches) { cap.style.minHeight = ""; return; }
+    var span = cap.querySelector("span"), keep = span.textContent, h = 0;
+    cap.style.minHeight = "0";
+    tabs.forEach(function (t) { span.textContent = t.querySelector("span").textContent; h = Math.max(h, cap.offsetHeight); });
+    span.textContent = keep; cap.style.minHeight = h + "px";
+  }
+  window.addEventListener("resize", capH);
+  show(0); start(); capH();
+})();
+
+/* Таблица «Выгоды»: подсказка «листайте вправо» — стрелка у правого края,
+   по касанию прокручивает; прячется, когда долистали до конца */
+(function () {
+  var sc = document.querySelector(".cmp__scroll"); if (!sc) return;
+  var btn = document.createElement("button");
+  btn.type = "button"; btn.className = "cmp__more"; btn.setAttribute("aria-label", "Листать таблицу вправо");
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  sc.parentNode.classList.add("cmp--hint"); sc.parentNode.appendChild(btn);
+  function upd() {
+    var can = sc.scrollWidth - sc.clientWidth > 4, end = sc.scrollLeft + sc.clientWidth >= sc.scrollWidth - 4;
+    sc.parentNode.classList.toggle("is-end", !can || end);
+    if (sc.scrollLeft > 10) sc.parentNode.classList.add("is-moved");
+  }
+  btn.addEventListener("click", function () { sc.scrollBy({ left: sc.clientWidth * 0.7, behavior: "smooth" }); });
+  sc.addEventListener("scroll", upd, { passive: true }); window.addEventListener("resize", upd); upd();
 })();
 
 /* FAQ: сначала восемь вопросов, остальные — по кнопке */

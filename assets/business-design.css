@@ -3226,3 +3226,52 @@ html.is-modal{overflow:hidden}
   .hn__ch .hn__site svg{width:13px;height:13px}
   .hn__ch{gap:3px}
 }
+/* AI-помощник: «сторис» — только на телефоне */
+.aix__story{display:none}
+@media (max-width:720px){
+  .aix__tabs{display:none !important}
+  .aix__l .aix__hd{margin-bottom:12px}
+  .aix__story{display:block;padding:14px 16px 4px;background:#fff}
+  .aix__segs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+  .aix__segs button{position:relative;height:16px;padding:6px 0;border:0;background:none;cursor:pointer}
+  .aix__segs button::before{content:"";position:absolute;left:0;right:0;top:6px;height:4px;border-radius:2px;background:var(--line)}
+  .aix__segs i{position:absolute;left:0;top:6px;height:4px;width:0;border-radius:2px;background:var(--brand)}
+  .aix__segs .is-done i{width:100%}
+  .aix__segs .is-on i{animation:aixBar var(--aix-dur,4500ms) linear forwards}
+  .aix__cap{display:flex;align-items:flex-start;gap:10px;margin-top:10px;min-height:66px;font-size:14.5px;line-height:1.4;color:var(--ink)}
+  .aix__cap em{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--brand);color:#fff;font-style:normal;font-size:12.5px;font-weight:700}
+  .aix__win .aix__p{min-height:300px}
+}
+/* «3 канала» на узком десктопе: тоже все значки */
+@media (min-width:561px) and (max-width:1240px){.hn__ch .hn__site + .hn__site{display:grid !important}}
+@media (max-width:720px){
+  /* окно одной высоты для всех пунктов — блок не прыгает при переключении */
+  .aix__win{display:grid !important;grid-template-columns:minmax(0,1fr)}
+  .aix__win > .aix__top{grid-row:1}
+  .aix__win > .aix__story{grid-row:2}
+  .aix__win > .aix__p{grid-row:3;grid-column:1;display:block !important;visibility:hidden;opacity:0;min-height:0;transition:opacity .3s var(--ease)}
+  .aix__win > .aix__p.is-on{visibility:visible;opacity:1}
+}
+/* Каналы на телефоне: соцсети — стопкой значков */
+@media (max-width:560px){
+  .chs--ui .ch__soc{gap:0;margin-top:6px}
+  .chs--ui .ch__soc span{font-size:0;padding:0;margin-left:-8px;gap:0}
+  .chs--ui .ch__soc span:first-child{margin-left:0}
+  .chs--ui .ch__soc i{width:28px;height:28px;border-radius:50%;box-shadow:0 0 0 2px var(--brand)}
+}
+@media (max-width:720px){
+  .aix__win > .aix__p{display:flex !important;flex-direction:column}
+  .aix__win .aix__fun{flex:1}
+}
+/* Таблица: стрелка «листайте вправо» */
+.cmp--hint{position:relative}
+.cmp__more{position:absolute;right:10px;top:50%;z-index:3;display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;
+  background:var(--brand);color:#fff;box-shadow:0 10px 24px -8px rgba(160,30,20,.55);cursor:pointer;
+  transition:opacity .3s var(--ease),transform .3s var(--ease);animation:cmpNudge 1.8s var(--ease) infinite}
+.cmp__more svg{width:20px;height:20px}
+.cmp--hint::after{content:"";position:absolute;right:0;top:56px;bottom:14px;width:56px;z-index:2;pointer-events:none;border-radius:0 var(--r-lg) var(--r-lg) 0;
+  background:linear-gradient(90deg,rgba(255,255,255,0),#fff 75%);transition:opacity .3s var(--ease)}
+.cmp--hint.is-moved .cmp__more{animation:none}
+.cmp--hint.is-end .cmp__more,.cmp--hint.is-end::after{opacity:0;pointer-events:none}
+@keyframes cmpNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@media (prefers-reduced-motion:reduce){.cmp__more{animation:none}}
