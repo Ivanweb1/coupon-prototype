@@ -2967,3 +2967,15 @@ html.is-modal{overflow:hidden}
   .hn__ch i,.hn__soc i{width:24px;height:24px}
   .hn__soc i{margin-left:-9px}.hn__soc i:first-child{margin-left:0}
 }
+/* Купоны в ленте выше: фото 5:4, сюжет целиком */
+.hx__ph,.hx__c .hx__ph{height:auto !important;aspect-ratio:5/4}
+.hx__feed{height:440px}
+@media (min-width:1600px){.hx__feed{height:480px}}
+@media (max-width:560px){.hx__feed{height:380px}}
+/* Окно витрины шире — почти во всю подложку */
+.hx__stage{max-width:580px}
+.hero .hx{padding-left:32px !important;padding-right:32px !important}
+@media (min-width:1600px){.hx__stage{max-width:680px}.hx__feed{height:520px}}
+@media (min-width:1001px){.hero__in{grid-template-columns:minmax(0,5fr) minmax(0,6.4fr) !important;column-gap:56px !important}}
+@media (max-width:1000px){.hx__stage{max-width:600px}}
+@media (min-width:1600px){.hx__ph,.hx__c .hx__ph{aspect-ratio:4/3}}
