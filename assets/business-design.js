@@ -178,3 +178,29 @@
   if (!list || !btn) return;
   btn.addEventListener("click", function () { list.classList.add("is-all"); btn.remove(); });
 })();
+
+/* Поп-ап «Задать вопрос» */
+(function () {
+  var dlg = document.getElementById("ask"); if (!dlg || !dlg.showModal) return;
+  var form = dlg.querySelector("[data-ask-form]"), done = dlg.querySelector(".qd__done");
+  function open(e) {
+    if (e) e.preventDefault();
+    form.reset(); done.hidden = true; form.classList.remove("is-done");
+    form.querySelectorAll(".is-error").forEach(function (f) { f.classList.remove("is-error"); });
+    dlg.showModal(); document.documentElement.classList.add("is-modal");
+  }
+  function close() { dlg.close(); }
+  dlg.addEventListener("close", function () { document.documentElement.classList.remove("is-modal"); });
+  document.querySelectorAll("[data-ask-open]").forEach(function (a) { a.addEventListener("click", open); });
+  dlg.querySelectorAll("[data-ask-close]").forEach(function (b) { b.addEventListener("click", close); });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) close(); });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var bad = false;
+    form.querySelectorAll("[required]").forEach(function (f) {
+      var err = !f.value.trim(); f.classList.toggle("is-error", err); if (err && !bad) { bad = true; f.focus(); }
+    });
+    if (bad) return;
+    done.hidden = false; form.classList.add("is-done");
+  });
+})();

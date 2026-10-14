@@ -2538,3 +2538,54 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .final .actions{padding-top:28px}
 .final .small{max-width:420px;line-height:1.5}
 @media (max-width:720px){.final__ct{padding:4px 16px}.final__ct b{font-size:19px}}
+
+/* ==========================================================================
+   Поп-ап «Задать вопрос» — белая карточка, шапка со значком,
+   поля, выбор канала ответа чипами, внизу телефон и кнопка
+   ========================================================================== */
+html.is-modal{overflow:hidden}
+.qd{width:min(560px,calc(100% - 32px));max-height:calc(100% - 32px);margin:auto;padding:0;border:0;border-radius:var(--r-lg);background:#fff;color:var(--ink);
+  box-shadow:0 40px 80px -30px rgba(40,10,8,.45);overflow:auto}
+.qd::backdrop{background:rgba(27,27,27,.55);backdrop-filter:blur(3px)}
+.qd[open]{animation:qdIn .28s var(--ease)}
+@keyframes qdIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.qd__box{position:relative;display:flex;flex-direction:column}
+.qd__x{position:absolute;right:16px;top:16px;display:grid;place-items:center;width:40px;height:40px;border:0;border-radius:50%;background:var(--surface);color:var(--ink-2);cursor:pointer;z-index:2}
+.qd__x:hover{background:var(--brand-50);color:var(--brand)}
+.qd__x svg{width:18px;height:18px}
+.qd__head{display:flex;gap:16px;padding:30px 72px 22px 30px;border-bottom:2px dashed var(--line-strong)}
+.qd__ic{display:grid;place-items:center;flex:none;width:48px;height:48px;border-radius:14px;background:var(--brand-50);color:var(--brand)}
+.qd__ic svg{width:24px;height:24px}
+.qd__head h3{font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.qd__head p{margin-top:6px;font-size:15px;line-height:1.45;color:var(--ink-2)}
+.qd__body{display:flex;flex-direction:column;gap:14px;padding:22px 30px 6px}
+.qd__body label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:500;color:var(--ink-2)}
+.qd__body input:not([type=radio]),.qd__body textarea{width:100%;height:50px;padding:0 16px;border:2px solid var(--line);border-radius:var(--r-sm,12px);background:var(--surface);
+  font:inherit;font-size:16px;color:var(--ink);outline:none;transition:border-color .2s var(--ease),background .2s var(--ease)}
+.qd__body textarea{height:auto;min-height:104px;padding:12px 16px;resize:vertical;line-height:1.45}
+.qd__body input:focus,.qd__body textarea:focus{border-color:var(--brand);background:#fff}
+.qd__body .is-error{border-color:var(--brand) !important;background:var(--brand-50) !important}
+.qd__ch{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;border:0}
+.qd__ch legend{width:100%;margin-bottom:6px;padding:0;font-size:13px;font-weight:500;color:var(--ink-2)}
+.qd__ch label{flex-direction:row;cursor:pointer}
+.qd__ch input{position:absolute;opacity:0;pointer-events:none}
+.qd__ch span{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:var(--r-pill);background:var(--surface);color:var(--ink);font-size:14.5px;font-weight:500;transition:background .2s,box-shadow .2s,color .2s}
+.qd__ch input:checked + span{background:var(--brand-50);color:var(--brand);box-shadow:inset 0 0 0 1.5px var(--brand)}
+.qd__ch input:focus-visible + span{outline:2px solid var(--brand);outline-offset:2px}
+.qd__foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 30px 28px}
+.qd__foot p{font-size:14px;color:var(--ink-2)}
+.qd__foot a{color:var(--ink);font-weight:600;text-decoration:none;white-space:nowrap}
+.qd__foot a:hover{color:var(--brand)}
+.qd__done{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:40px;background:#fff;text-align:center;border-radius:inherit}
+.qd__done[hidden]{display:none}
+.qd__ic--lg{width:64px;height:64px;border-radius:50%}
+.qd__ic--lg svg{width:32px;height:32px}
+.qd__done b{margin-top:6px;font-size:24px;font-weight:700}
+.qd__done > span:not(.qd__ic){color:var(--ink-2)}
+.qd__done .btn{margin-top:14px}
+@media (max-width:520px){
+  .qd__head{padding:24px 64px 18px 20px}
+  .qd__head .qd__ic{display:none}
+  .qd__body{padding:18px 20px 4px}
+  .qd__foot{flex-direction:column-reverse;align-items:stretch;padding:18px 20px 22px;text-align:center}
+}

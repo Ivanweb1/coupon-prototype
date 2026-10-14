@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261019x">
+<link rel="stylesheet" href="assets/business-design.css?v=20261019y">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -597,7 +597,7 @@
             <a href="#"><i data-soc="max"></i>MAX</a>
           </div>
           <div class="ask__btns">
-            <a class="btn btn--soft" href="#final">Задать вопрос</a>
+            <a class="btn btn--soft" href="#ask" data-ask-open>Задать вопрос</a>
             <a class="btn btn--red" href="#final">Разместиться</a>
           </div>
         </div>
@@ -754,7 +754,47 @@
   </div>
 </footer>
 
+<!-- Поп-ап «Задать вопрос»: имя, контакт, удобный способ связи, вопрос.
+     Открывается кнопками [data-ask-open], закрывается крестиком, фоном и Esc -->
+<dialog class="qd" id="ask" aria-labelledby="qdTitle">
+  <form class="qd__box" method="dialog" novalidate data-ask-form>
+    <button class="qd__x" type="button" aria-label="Закрыть" data-ask-close><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="qd__head">
+      <span class="qd__ic" data-ic="chat"></span>
+      <div>
+        <h3 id="qdTitle">Задать вопрос</h3>
+        <p>Расскажите, что хотите узнать&nbsp;— ответим лично, в&nbsp;удобном для вас канале.</p>
+      </div>
+    </div>
+
+    <div class="qd__body">
+      <label><span>Как к&nbsp;вам обращаться</span><input name="name" required placeholder="Имя"></label>
+      <label><span>Телефон или Telegram</span><input name="contact" required placeholder="+7 или @username"></label>
+      <fieldset class="qd__ch">
+        <legend>Как удобнее ответить</legend>
+        <label><input type="radio" name="via" value="call" checked><span>Звонок</span></label>
+        <label><input type="radio" name="via" value="tg"><span>Telegram</span></label>
+        <label><input type="radio" name="via" value="max"><span>MAX</span></label>
+        <label><input type="radio" name="via" value="mail"><span>Email</span></label>
+      </fieldset>
+      <label><span>Ваш вопрос</span><textarea name="q" rows="4" required placeholder="Например: подойдёт ли сервис для салона красоты?"></textarea></label>
+    </div>
+
+    <div class="qd__foot">
+      <p>Или позвоните: <a href="tel:88002228567">8 800 222-85-67</a></p>
+      <button class="btn btn--red" type="submit">Отправить вопрос</button>
+    </div>
+
+    <div class="qd__done" hidden>
+      <span class="qd__ic qd__ic--lg" data-ic="check"></span>
+      <b>Вопрос отправлен</b>
+      <span>Ответим лично, в&nbsp;выбранном канале.</span>
+      <button class="btn btn--soft" type="button" data-ask-close>Хорошо</button>
+    </div>
+  </form>
+</dialog>
+
 <script src="assets/business.js?v=20261013b"></script>
-<script src="assets/business-design.js?v=20261017db"></script>
+<script src="assets/business-design.js?v=20261017dc"></script>
 </body>
 </html>
