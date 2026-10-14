@@ -2706,3 +2706,4 @@ html.is-modal{overflow:hidden}
 @media (max-width:560px){.ck{left:12px;right:12px;width:auto;transform:translateY(16px)}.ck.is-on{transform:none}}
 .ck{width:min(calc(var(--maxw,1760px) - 2 * var(--pad,60px)),calc(100% - 2 * var(--pad,60px)))}
 @media (max-width:560px){.ck{width:auto}}
+.hd{background:#fff}
