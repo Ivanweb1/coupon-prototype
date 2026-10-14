@@ -2941,3 +2941,4 @@ html.is-modal{overflow:hidden}
   .hero__nums li > span:last-child{margin:0}
   .hero__nums li > .hn__faces,.hero__nums li > .hn__ch,.hero__nums li > .hn__price{display:none}
 }
+.hx__ph{background-size:cover;background-repeat:no-repeat}
