@@ -2855,3 +2855,60 @@ html.is-modal{overflow:hidden}
 .hx__stat > span{margin:0;max-width:130px;line-height:1.3}
 .hx__app{padding-bottom:22px}
 .hx__grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.hx__c{min-width:0}
+
+/* ==========================================================================
+   3. Первый экран, вариант A — единый светлый экран: слева текст, одна
+   кнопка и строка цифр; справа витрина на мягкой красной подложке
+   ========================================================================== */
+.hero{padding:40px 0 88px}
+@media (min-width:1001px){
+  .hero__in{display:grid !important;grid-template-columns:minmax(0,5fr) minmax(0,6fr) !important;column-gap:64px !important;gap:0 64px !important;
+    min-height:0;border-radius:0;background:none;overflow:visible;align-items:center}
+  .hero__in > .hero__text{grid-column:1 !important;padding:0 !important}
+  .hero__in > .hero__vis{grid-column:2 !important}
+}
+@media (max-width:1000px){
+  .hero__in{display:block !important;border-radius:0;background:none;overflow:visible}
+  .hero__in > .hero__text{padding:0 0 40px !important}
+}
+.hero h1{font-size:clamp(36px,3.6vw,56px)}
+.hero .lead{margin-top:20px;max-width:500px}
+.hero__cta{display:flex;align-items:center;flex-wrap:wrap;gap:16px 28px;margin-top:32px}
+.hero__link{display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:500;font-size:16px;text-decoration:none}
+.hero__link i{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--brand-50);color:var(--brand);transition:background .2s var(--ease),color .2s var(--ease)}
+.hero__link svg{width:20px;height:20px}
+.hero__link:hover{color:var(--brand)}
+.hero__link:hover i{background:var(--brand);color:#fff}
+.hero__nums{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:44px 0 0;padding:24px 0 0;border-top:1px solid var(--line)}
+.hero__nums li{padding:0 20px;border-left:1px solid var(--line)}
+.hero__nums li:first-child{padding-left:0;border-left:0}
+.hero__nums b{display:block;font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1.1;color:var(--ink);white-space:nowrap}
+.hero__nums li:first-child b{color:var(--brand)}
+.hero__nums li > span{display:block;margin-top:6px;font-size:13.5px;line-height:1.4;color:var(--ink-2)}
+.hero .src{margin-top:18px;font-size:12.5px;color:var(--ink-3)}
+
+/* Справа: витрина на мягкой подложке */
+.hero .hx{min-height:0;padding:44px 40px 44px !important;border-radius:32px;background:var(--brand-50)}
+.hero .hx::before{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:var(--brand);opacity:.08}
+.hero .hx{overflow:hidden}
+.hx__stage{max-width:520px}
+.hx__win{box-shadow:0 40px 70px -44px rgba(120,20,10,.45),0 0 0 1px rgba(221,68,60,.12)}
+.hx__ev{right:auto;left:-22px;top:auto;bottom:28px}
+@media (max-width:1240px){.hero .hx{padding:36px 28px !important}.hx__ev{left:-10px}}
+@media (max-width:1000px){.hero .hx{padding:32px 20px 40px !important}.hx__ev{left:-6px;bottom:-22px;top:auto}}
+@media (max-width:560px){
+  .hero{padding:24px 0 64px}
+  .hero__cta .btn{width:100%}
+  .hero__nums{grid-template-columns:1fr;gap:14px}
+  .hero__nums li{padding:0;border-left:0;display:flex;align-items:baseline;gap:12px}
+  .hero__nums li > span{margin:0}
+  .hero .hx{padding:24px 14px 44px !important;border-radius:24px}
+  .hx__ev{left:0;right:0}
+}
+.hero .hx::before{content:none}
+.hero .hx{padding:40px 48px 64px !important}
+.hx__ev{left:-28px;bottom:-30px}
+@media (max-width:1240px){.hero .hx{padding:32px 28px 60px !important}.hx__ev{left:-12px}}
+@media (max-width:1000px){.hero .hx{padding:28px 20px 60px !important}.hx__ev{left:-6px;bottom:-30px}}
+@media (max-width:560px){.hero .hx{padding:20px 14px 60px !important}.hx__ev{left:0;right:0}}
+@media (min-width:1600px){.hx__stage{max-width:600px}.hx__ph{height:110px}}
