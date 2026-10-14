@@ -2487,3 +2487,43 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 .ask__msg svg,.ask__msg img{display:block;width:100%;height:100%}
 .ask__msg{display:flex;flex-wrap:wrap;gap:8px}
 .ask__msg a{height:40px;padding:0 16px 0 8px;justify-content:flex-start}
+
+/* ==========================================================================
+   16. Финал — большой купон: слева красная часть (заголовок, регистрация,
+   телефон), справа белая форма заявки; между ними перфорация с вырезами
+   ========================================================================== */
+.final{gap:0 !important;align-items:stretch;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 30px 60px -44px rgba(0,0,0,.35)}
+@media (min-width:1001px){
+  .final{--cut:44%;grid-template-columns:44% 56% !important;
+    -webkit-mask:radial-gradient(circle 20px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 20px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+            mask:radial-gradient(circle 20px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 20px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+  .final > .final__text,.final > .form{grid-column:auto !important}
+}
+.final__text{display:flex;flex-direction:column;align-items:flex-start;padding:48px;background:var(--brand);color:#fff}
+.final h2{color:#fff}
+.final .code{margin-top:32px;border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.12)}
+.final .code span{color:rgba(255,255,255,.8)}
+.final .code a{color:#fff}
+.final__phone > span{color:rgba(255,255,255,.8)}
+.final__phone a{color:#fff;text-decoration:none}
+.final__phone i{background:rgba(255,255,255,.18);color:#fff}
+.final .actions{margin-top:auto;padding-top:32px}
+.final .small{margin-top:14px;font-size:14px;color:rgba(255,255,255,.85)}
+.final .form{border-radius:0;box-shadow:none;padding:48px;border-left:2px dashed var(--line-strong);align-content:start}
+@media (max-width:1000px){
+  .final .form{border-left:0;border-top:2px dashed var(--line-strong)}
+}
+@media (max-width:720px){
+  .final__text,.final .form{padding:26px 22px}
+  .final .actions{padding-top:24px;align-self:stretch}
+  .final .actions .btn{width:100%}
+}
+.final__text{border-radius:var(--r-lg) 0 0 var(--r-lg)}
+.final .form{border-radius:0 var(--r-lg) var(--r-lg) 0;align-content:center}
+.final h2{font-size:clamp(30px,2.8vw,42px)}
+@media (min-width:1001px){.final{--cut:calc(44% + 1px)}}
+@media (max-width:1000px){
+  .final__text{border-radius:var(--r-lg) var(--r-lg) 0 0}
+  .final .form{border-radius:0 0 var(--r-lg) var(--r-lg)}
+}
+.final .small{text-wrap:balance}
