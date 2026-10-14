@@ -2684,3 +2684,4 @@ html.is-modal{overflow:hidden}
   .ck{left:12px;right:12px;bottom:12px;flex-direction:column;align-items:stretch;gap:12px;padding:16px}
   .ck .btn{width:100%}
 }
+.ft__col > span{color:#cfcfcf}
