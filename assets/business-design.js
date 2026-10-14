@@ -223,3 +223,34 @@
     ck.classList.remove("is-on"); setTimeout(function () { ck.hidden = true; }, 300);
   });
 })();
+
+/* Первый экран: действия покупателей — уведомление сменяется,
+   в карточке купона растёт счётчик «забрали» */
+(function () {
+  var ev = document.querySelector("[data-hx-ev]"); if (!ev) return;
+  var P = "social-kit/photos/people/";
+  var EV = [
+    ["anna", "Анна забрала код", "1+1 на капучино", 0],
+    ["igor", "Игорь забрал код", "−20% на маникюр для жены", 1],
+    ["olga", "Ольга забрала код", "первая тренировка за 0 ₽", 2],
+    ["sergey", "Сергей забрал код", "−30% на пробное занятие", 3],
+    ["marina", "Марина забрала код", "маникюр с покрытием", 1],
+    ["dmitry", "Дмитрий забрал код", "капучино 1+1 по будням", 0]
+  ];
+  var ava = ev.querySelector(".ava"), b = ev.querySelector("b"), s = ev.querySelector("div > span");
+  var cards = document.querySelectorAll("[data-hx-card]"), k = 0;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+  setInterval(function () {
+    k = (k + 1) % EV.length; var e = EV[k];
+    ev.classList.add("is-out");
+    setTimeout(function () {
+      ava.style.backgroundImage = "url('" + P + e[0] + ".jpg')";
+      b.textContent = e[1]; s.textContent = e[2] + " · только что";
+      cards.forEach(function (c) { c.classList.toggle("is-hot", +c.dataset.hxCard === e[3]); });
+      var u = document.querySelector('[data-hx-count="' + e[3] + '"]');
+      if (u) { u.textContent = String(+u.textContent + 1); u.classList.add("is-up"); setTimeout(function () { u.classList.remove("is-up"); }, 1200); }
+      ev.classList.remove("is-out");
+    }, 350);
+  }, 3200);
+})();

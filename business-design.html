@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261020k">
+<link rel="stylesheet" href="assets/business-design.css?v=20261020o">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -70,30 +70,56 @@
         <p class="src">* По данным Яндекс Вордстат</p>
       </div>
 
-      <!-- Купон и покупатели: «мы знаем, кто они и чего хотят».
-           Подписи — из прототипа: персоны блока «Спрос» и события живой ленты -->
-      <div class="hero__vis hv" aria-hidden="true">
-<div class="hcpn-w">
-        <div class="hcpn">
-          <div class="hcpn__ph" style="background-image:url('assets/coupons/coffee.jpg')">
-            <span class="hcpn__v">5 = 4</span>
-          </div>
-          <div class="hcpn__b">
-            <b>Каждая пятая чашка кофе в&nbsp;подарок</b>
-            <span>Кофейня «Пример» · Липецк</span>
-            <div class="hcpn__code"><span>FIFTH</span><em>Забрать код</em></div>
+      <!-- Справа — отрисованный экран витрины Липецка (как скрин платформы)
+           и поверх него действия покупателей: уведомление сменяется само
+           (business-design.js), карточка спроса — та же цифра, что в блоке «Спрос» -->
+      <div class="hero__vis hx" aria-hidden="true">
+       <div class="hx__stage">
+        <div class="hx__win">
+          <div class="hx__bar"><i></i><i></i><i></i><span><b>vsekupony.ru</b>/lipetsk</span></div>
+          <div class="hx__app">
+            <div class="hx__top">
+              <img class="hx__logo" src="assets/brand/logo-red.png" alt="">
+              <span class="hx__city"><i data-ic="pin"></i>Липецк<em data-ic="chev"></em></span>
+              <span class="hx__search"><i data-ic="search"></i>Найти скидку: кафе, маникюр, фитнес…</span>
+            </div>
+            <div class="hx__cats"><span class="is-on">Все</span><span>Кафе</span><span>Красота</span><span>Фитнес</span><span>Детям</span><span>Авто</span></div>
+            <div class="hx__grid">
+              <div class="hx__c is-hot" data-hx-card="0">
+                <div class="hx__ph" style="background-image:url('assets/coupons/coffee.jpg')"><em>1+1</em></div>
+                <b>Капучино по&nbsp;будням</b><span>Кофейня «Пример»</span>
+                <small><i data-ic="ticket"></i>забрали <u data-hx-count="0">214</u></small>
+              </div>
+              <div class="hx__c" data-hx-card="1">
+                <div class="hx__ph" style="background-image:url('assets/coupons/manikyur-rose.jpg')"><em>−20%</em></div>
+                <b>Маникюр с&nbsp;покрытием</b><span>Студия «Пример»</span>
+                <small><i data-ic="ticket"></i>забрали <u data-hx-count="1">168</u></small>
+              </div>
+              <div class="hx__c" data-hx-card="2">
+                <div class="hx__ph" style="background-image:url('assets/coupons/fitness.jpg')"><em>0&nbsp;₽</em></div>
+                <b>Первая тренировка</b><span>Фитнес-клуб «Пример»</span>
+                <small><i data-ic="ticket"></i>забрали <u data-hx-count="2">97</u></small>
+              </div>
+              <div class="hx__c" data-hx-card="3">
+                <div class="hx__ph" style="background-image:url('assets/coupons/detyam-yellow.jpg')"><em>−30%</em></div>
+                <b>Пробное занятие для&nbsp;детей</b><span>Центр «Пример»</span>
+                <small><i data-ic="ticket"></i>забрали <u data-hx-count="3">76</u></small>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div class="hx__ev" data-hx-ev>
+          <span class="ava" style="background-image:url('social-kit/photos/people/anna.jpg')"></span>
+          <div><b>Анна забрала код</b><span>1+1 на&nbsp;капучино · только что</span></div>
+          <i class="hx__ok" data-ic="check"></i>
         </div>
 
-        <div class="hp hp--a"><span class="ava" data-img="social-kit/photos/people/anna.jpg"></span><div><b>Покупатель · 27</b><span>маникюр · кофе</span></div><em class="hp__ok">забрал(а) код</em></div>
-        <div class="hp hp--b"><span class="ava" data-img="social-kit/photos/people/marina.jpg"></span><div><b>Покупатель · 34</b><span>детские секции · кафе</span></div></div>
-        <div class="hp hp--c"><span class="ava" data-img="social-kit/photos/people/dmitry.jpg"></span><div><b>Покупатель · 41</b><span>фитнес · одежда</span></div><em class="hp__ok">забрал(а) код</em></div>
-
-        <div class="hcard">
+        <div class="hx__stat">
           <b><span data-demand="month">9 800</span><sup>*</sup></b>
           <span>покупателей в&nbsp;Липецкой области</span>
         </div>
+       </div>
       </div>
     </div>
   </section>
@@ -825,6 +851,6 @@
 </div>
 
 <script src="assets/business.js?v=20261013b"></script>
-<script src="assets/business-design.js?v=20261017df"></script>
+<script src="assets/business-design.js?v=20261017dg"></script>
 </body>
 </html>
