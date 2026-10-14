@@ -394,3 +394,12 @@
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); } });
   window.addEventListener("resize", function () { if (window.innerWidth > 720 && btn.getAttribute("aria-expanded") === "true") set(false); });
 })();
+
+/* Карта: всё содержимое — в общий слой, чтобы на телефоне его можно было приблизить */
+(function () {
+  document.querySelectorAll("[data-map]").forEach(function (m) {
+    var z = document.createElement("div"); z.className = "map__z";
+    Array.prototype.slice.call(m.children).forEach(function (c) { if (!c.classList.contains("map__ins")) z.appendChild(c); });
+    m.insertBefore(z, m.firstChild);
+  });
+})();

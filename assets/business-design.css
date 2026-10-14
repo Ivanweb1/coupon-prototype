@@ -3022,7 +3022,6 @@ html.is-modal{overflow:hidden}
   .hx__c > b{font-size:12px}
   .pilot__l b{font-size:96px}
   .final__ct b{font-size:17px}
-  .geo .map__c--ref{display:none}
   .btn{font-size:14px}
 }
 .cmp__t thead th{overflow:hidden;text-overflow:ellipsis}
@@ -3032,8 +3031,7 @@ html.is-modal{overflow:hidden}
   #demand .feed__list li em{grid-column:2;margin:2px 0 0;font-size:11.5px;justify-self:start}
   #demand .feed__t b{font-size:14px}
   /* карта: на узком экране подписаны только Липецк; города — в списке ниже */
-  .geo .map__c:not(.map__c--home) > span{display:none}
-  .geo .map__c:not(.map__c--home){width:8px;height:8px;box-shadow:0 0 0 2px var(--ink)}
+
 }
 /* меню в шапке на мобильной: справа мягкое затухание — видно, что листается */
 @media (max-width:720px){
@@ -3275,3 +3273,33 @@ html.is-modal{overflow:hidden}
 .cmp--hint.is-end .cmp__more,.cmp--hint.is-end::after{opacity:0;pointer-events:none}
 @keyframes cmpNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
 @media (prefers-reduced-motion:reduce){.cmp__more{animation:none}}
+
+/* Карта на телефоне: крупнее — приближена к Липецку и следующим регионам,
+   подписаны все города (слой карты шире окна, окно — квадратное) */
+.map__z{position:absolute;inset:0}
+@media (max-width:720px){
+  .geo .map{aspect-ratio:1/1.02;overflow:hidden}
+  .geo .map__z{inset:auto;left:-54%;top:0;width:200%;aspect-ratio:1180/600}
+  .geo .map__img{-webkit-mask:none;mask:none}
+  .geo .map__c > span{font-size:11.5px;padding:3px 8px;left:13px}
+  .geo .map__c--l > span{left:auto;right:13px}
+  .geo .map__c--home > span{left:22px;font-size:12.5px;padding:4px 10px}
+  .geo .map__c--ref > span{padding:0}
+}
+/* Вырезы купона на линиях отрыва — мобильная (цвет кругов = фон секции) */
+@media (max-width:720px){
+  .pilot__l::before,.pilot__l::after,.final .form::before,.geo .next::before{
+    content:"";position:absolute;left:0;right:0;height:24px;pointer-events:none;z-index:2;
+    background:radial-gradient(circle 12px at 0 50%,var(--nc) 98%,transparent 100%),radial-gradient(circle 12px at 100% 50%,var(--nc) 98%,transparent 100%)}
+  .pilot__l{--nc:var(--brand)}
+  .pilot__l::before{top:-13px}
+  .pilot__l::after{bottom:-13px}
+  .final .form{position:relative;--nc:var(--surface)}
+  .final .form::before{top:-13px}
+  .geo .next{--nc:var(--surface)}
+  .geo .next::before{top:-13px}
+}
+/* Согласие — в одну строку на телефоне */
+@media (max-width:560px){.form__agree{font-size:12.5px !important;letter-spacing:-.01em}.form__agree span{white-space:nowrap}}
+@media (max-width:350px){.form__agree{font-size:11.5px !important}}
+@media (max-width:380px){.form__agree span{white-space:normal}.form__agree{font-size:12px !important}}
