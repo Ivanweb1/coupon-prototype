@@ -2693,3 +2693,16 @@ html.is-modal{overflow:hidden}
   .ft__bottom{flex-direction:column;align-items:flex-start;gap:14px}
   .ft__docs{margin:0;flex-direction:column;gap:10px}
 }
+/* Шапка в начале страницы — 94px: верхняя строка плотнее, меню ниже */
+.hd:not(.is-scrolled) .hd__in{padding-top:8px}
+.hd:not(.is-scrolled) .hd__nav{height:36px;margin:6px 0 8px}
+.hd:not(.is-scrolled) .hd__in{padding-top:6px}
+.hd:not(.is-scrolled) .hd__nav{height:32px;margin:6px 0 6px}
+
+/* Cookie — плашка закреплена внизу экрана во всю ширину контейнера */
+.ck{left:50%;right:auto;bottom:16px;width:min(var(--maxw,1320px) - 2 * var(--pad,60px),calc(100% - 32px));max-width:none;
+  transform:translate(-50%,16px);justify-content:space-between;padding:14px 14px 14px 24px}
+.ck.is-on{transform:translate(-50%,0)}
+@media (max-width:560px){.ck{left:12px;right:12px;width:auto;transform:translateY(16px)}.ck.is-on{transform:none}}
+.ck{width:min(calc(var(--maxw,1760px) - 2 * var(--pad,60px)),calc(100% - 2 * var(--pad,60px)))}
+@media (max-width:560px){.ck{width:auto}}
