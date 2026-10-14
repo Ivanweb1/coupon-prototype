@@ -2241,3 +2241,9 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .chv__img{width:100%;height:120px;order:-1}
 }
 .chv__res span{display:block;margin-top:4px;font-size:12.5px;color:var(--ink-2)}
+
+/* Каналы: подпись широкой карточки — той же высоты, что у соседних:
+   заголовок + одна строка соцсетей вместо крупных плашек */
+.chs--ui .ch__soc{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:2px}
+.chs--ui .ch__soc span{padding:0;background:none;color:rgba(255,255,255,.92);font-size:15px;font-weight:400;line-height:1.5;gap:6px;border-radius:0}
+.chs--ui .ch__soc i{width:18px;height:18px}
