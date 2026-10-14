@@ -3193,3 +3193,21 @@ html.is-modal{overflow:hidden}
   .aix__tabs li > .aix__win .aix__fun{height:180px}
 }
 @media (max-width:720px){.aix__tabs li > .aix__win .aix__fun{height:auto;min-height:170px}}
+/* Выгода на телефоне: у прокрутки нет полей слева — закреплённая колонка
+   прилегает к краю карточки, под ней ничего не просвечивает */
+@media (max-width:560px){
+  .cmp{padding-left:0;padding-right:0}
+  .cmp__lg{padding:0 18px}
+  .cmp__scroll{margin:0;padding:0 0 6px}
+  .cmp__t thead th:first-child,.cmp__t tbody th{left:0;padding-left:18px}
+  .cmp__t tr.is-me th{border-radius:0}
+  .cmp__t tr.is-me td:last-child{border-radius:0}
+  .cmp__t td:last-child,.cmp__t thead th:last-child{padding-right:18px}
+}
+@media (max-width:560px){
+  .cmp__t thead th:first-child{width:132px}
+  .cmp__t tbody th{white-space:normal;font-size:13px;line-height:1.25;padding-right:8px;overflow:hidden}
+  .cmp__t tr.is-me th{font-size:14px}
+  .cmp__me img{height:24px}
+}
+@media (max-width:560px){.cmp__me img{display:none}.cmp__t tr.is-me th{font-size:13.5px}}
