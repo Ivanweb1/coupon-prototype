@@ -2991,3 +2991,53 @@ html.is-modal{overflow:hidden}
 /* Плавное появление снизу вверх (классы ставит business-design.js) */
 .rv-on .rv{opacity:0;translate:0 28px;transition:opacity .7s cubic-bezier(.22,.61,.36,1) var(--rv-d,0ms),translate .8s cubic-bezier(.22,.61,.36,1) var(--rv-d,0ms)}
 .rv-on .rv.is-in{opacity:1;translate:0 0}
+
+/* ==========================================================================
+   Мобильная версия — доводка от 320 px
+   ========================================================================== */
+@media (max-width:560px){
+  /* кнопки: текст в одну-две строки аккуратно */
+  .btn{white-space:normal;text-align:center;line-height:1.25;min-height:48px;height:auto;padding:10px 20px}
+  /* таблица выгоды: первая колонка закреплена при прокрутке вбок */
+  .cmp__t thead th:first-child,.cmp__t tbody th{position:sticky;left:0;z-index:1;background:#fff}
+  .cmp__t tr.is-me th{background:var(--brand)}
+  .cmp__t thead th:first-child{width:150px}
+  .cmp__t tbody th{box-shadow:6px 0 8px -8px rgba(0,0,0,.25)}
+  /* финал: телефон не рвётся */
+  .final__ct b{font-size:18px;white-space:nowrap}
+  /* форматы: «…и десятки других» помещается */
+  .fmts__more{flex-wrap:wrap;gap:10px;justify-self:start}
+  .fmts__more p{white-space:normal}
+  /* живая лента: время под текстом, заголовок в строку */
+  #demand .feed__t b{font-size:14.5px}
+}
+@media (max-width:400px){
+  :root{--pad:14px}
+  .hero h1{font-size:30px}
+  h2,.final h2,.pilot h2{font-size:27px !important}
+  h1 .tag,h2 .tag{white-space:normal}
+  .hero__nums li > b{min-width:96px;font-size:20px}
+  .fmt__top b{font-size:20px}
+  .fmt__top .fmt__ic{width:30px;height:30px}
+  .hx__c > b{font-size:12px}
+  .pilot__l b{font-size:96px}
+  .final__ct b{font-size:17px}
+  .geo .map__c--ref{display:none}
+  .btn{font-size:14px}
+}
+.cmp__t thead th{overflow:hidden;text-overflow:ellipsis}
+@media (max-width:480px){
+  /* живая лента: время под строкой, текст во всю ширину */
+  #demand .feed__list li{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:0;align-items:center}
+  #demand .feed__list li em{grid-column:2;margin:2px 0 0;font-size:11.5px;justify-self:start}
+  #demand .feed__t b{font-size:14px}
+  /* карта: на узком экране подписаны только Липецк; города — в списке ниже */
+  .geo .map__c:not(.map__c--home) > span{display:none}
+  .geo .map__c:not(.map__c--home){width:8px;height:8px;box-shadow:0 0 0 2px var(--ink)}
+}
+/* меню в шапке на мобильной: справа мягкое затухание — видно, что листается */
+@media (max-width:720px){
+  .hd .hd__nav{-webkit-mask:linear-gradient(90deg,#000 calc(100% - 36px),transparent);mask:linear-gradient(90deg,#000 calc(100% - 36px),transparent)}
+}
+@media (max-width:560px){.ck{padding:14px;gap:10px}.ck p{font-size:13px}.ck .btn{min-height:42px;height:42px}}
+.ft__col a,.ft__ct a{padding:3px 0}
