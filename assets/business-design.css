@@ -2442,3 +2442,33 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .pilot__steps li:not(:last-child)::after{display:none}
 }
 .pilot__r .text{max-width:760px}
+
+/* ==========================================================================
+   15. Вопросы и ответы — слева карточка «Не нашли ответ?» с контактами,
+   справа восемь вопросов и кнопка «Показать все»
+   ========================================================================== */
+.faq__aside .head{margin-bottom:28px}
+.ask{margin-top:0;padding:26px 26px 24px}
+.ask > b{font-size:19px;font-weight:700}
+.ask > p{line-height:1.5}
+.ask__phone{margin-top:20px;font-size:19px;font-weight:700}
+.ask__soc{display:flex;align-items:center;gap:8px;margin-top:12px}
+.ask__soc a[data-soc]{display:block;width:32px;height:32px;border-radius:50%;overflow:hidden}
+.ask__soc svg,.ask__soc img{display:block;width:100%;height:100%}
+.ask__mail{margin-left:6px;font-size:15px;color:var(--ink-2);text-decoration:none}
+.ask__mail:hover{color:var(--brand)}
+.ask__btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;padding-top:22px;border-top:2px dashed var(--line-strong)}
+.faq__list details.is-more{display:none}
+.faq__list.is-all details.is-more{display:block}
+.faq__more{display:flex;align-items:center;justify-content:center;gap:10px;height:60px;border:2px dashed var(--line-strong);border-radius:var(--r-md);
+  background:none;color:var(--ink);font:inherit;font-size:16px;font-weight:600;cursor:pointer;transition:border-color .2s var(--ease),color .2s var(--ease)}
+.faq__more span{padding:3px 10px;border-radius:var(--r-pill);background:var(--brand-50);color:var(--brand);font-size:13px}
+.faq__more:hover{border-color:var(--brand);color:var(--brand)}
+@media (max-width:720px){.ask__btns .btn{flex:1 1 100%}}
+@media (max-width:1000px){
+  .faq{row-gap:0 !important}
+  .faq__aside{display:contents}
+  .faq__aside .head{order:0;margin-bottom:24px}
+  .faq__list{order:1}
+  .ask{order:2;margin-top:24px}
+}

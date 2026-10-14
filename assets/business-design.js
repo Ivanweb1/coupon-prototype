@@ -171,3 +171,10 @@
   tabs.forEach(function (t, i) { t.addEventListener("click", function () { show(i); start(); }); });
   show(0); start();
 })();
+
+/* FAQ: сначала восемь вопросов, остальные — по кнопке */
+(function () {
+  var list = document.querySelector("[data-faq]"), btn = document.querySelector("[data-faq-more]");
+  if (!list || !btn) return;
+  btn.addEventListener("click", function () { list.classList.add("is-all"); btn.remove(); });
+})();

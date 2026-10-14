@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/business-design.css?v=20261019s">
+<link rel="stylesheet" href="assets/business-design.css?v=20261019t">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body>
@@ -583,15 +583,21 @@
     <div class="wrap faq">
       <div class="faq__aside">
         <div class="head">
-          <h2>Вопросы и&nbsp;ответы</h2>
+          <h2>Вопросы и&nbsp;<span class="tag">ответы</span></h2>
         </div>
-        <div class="actions actions--col">
-          <a class="btn btn--soft btn--ai" href="#final"><i data-ic="chat"></i>Задать вопрос</a>
-          <a class="btn btn--red" href="#final">Разместиться</a>
+        <div class="ask">
+          <b>Не&nbsp;нашли ответ?</b>
+          <p>Позвоните или напишите&nbsp;— расскажем, как разместить ваше предложение.</p>
+          <a class="ask__phone" href="tel:88002228567"><i data-ic="phone"></i>8 800 222-85-67</a>
+          <div class="ask__soc"><a href="#" data-soc="tg" aria-label="Telegram"></a><a href="#" data-soc="max" aria-label="MAX"></a><a class="ask__mail" href="mailto:info@vsekupony.ru">info@vsekupony.ru</a></div>
+          <div class="ask__btns">
+            <a class="btn btn--soft" href="#final">Задать вопрос</a>
+            <a class="btn btn--red" href="#final">Разместиться</a>
+          </div>
         </div>
       </div>
 
-      <div class="faq__list">
+      <div class="faq__list" data-faq>
         <details>
           <summary>Не хотим давать скидку, что делать?</summary>
           <p>Скидка — лишь один из способов привлечь клиента. Можно предложить другие механики, которые не снижают цену:</p>
@@ -638,50 +644,51 @@
           <summary>Сколько это стоит по-честному? Что входит в «от 1 000 ₽»?</summary>
           <p>Вы платите за размещение предложения, не за «продажу купона» человеку. Ориентир входа — от 1 000 ₽. Точная сумма зависит от города и каналов (сайт + соцсети) и считается в кабинете до оплаты. Код покупатель забирает бесплатно.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>«Бесплатно для 500» — навсегда? Что потом?</summary>
           <p>Нет, не навсегда. Первым 500 зарегистрировавшимся рекламодателям — первое размещение бесплатно (на условиях пилота, ориентир — 1 месяц). Потом — обычная оплата размещения, если решите продлить. Условия после пилота говорим до старта, без сюрпризов в конце месяца.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Покупатель платит вам за купон?</summary>
           <p>Нет. Покупатель забирает код бесплатно — без регистрации. Деньги за размещение платите вы как бизнес.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Есть комиссия с моих продаж?</summary>
           <p>Нет процента «с чека» за то, что гость пришёл по коду. Модель простая: оплата размещения на срок. Продажу и чек делаете вы у себя.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Мне каждый день что-то вести — посты, настройки, ответы?</summary>
           <p>Нет. Один раз оформили предложение, опубликовали — оно крутится на сайте и в каналах пакета. Статистику можно смотреть, когда удобно. Каждый день «вести SMM ради купона» не нужно.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>А если я не умею придумывать акции и делать картинки?</summary>
           <p>Для этого AI-помощник: варианты оффера, картинка, подсказка механики под вашу нишу. Можно взять простой формат: скидка, 1+1, подарок, первый визит. Не нужно быть маркетологом.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Где именно меня увидят?</summary>
           <p>На витрине города на vsekupony.ru, в поиске по странице предложения и в соцсетях города из пакета: ВКонтакте, Telegram, Одноклассники, MAX. Одно размещение — несколько точек показа.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Как я пойму на кассе, что человек пришёл с ВСЕКУПОНОВ?</summary>
           <p>Гость называет или показывает код из вашего предложения. Вы проверяете условия акции и применяете скидку / подарок у себя. Отдельное приложение на кассу для MVP не требуется.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Можно ограничить: только будни, только новым, лимит штук?</summary>
           <p>Да, условия задаёте вы в предложении: кому, когда и на каких правилах действует акция. Чем яснее условия — тем меньше вопросов у гостя и у вас на месте.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Я ИП или ООО, точка одна — мне подойдёт?</summary>
           <p>Да, если вы ИП или ООО. Самозанятым размещение недоступно. Локальному бизнесу как раз нужен показ в своём городе — без огромного рекламного бюджета.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Сколько ждать от регистрации до первых гостей?</summary>
           <p>Оформить предложение можно до 10 минут. Дальше — модерация и публикация. Когда пойдут заборы кода — зависит от оффера, ниши и сезона. Мы ускоряем путь «увидел → взял код → пришёл», но не обещаем очередь у двери в конкретный день.</p>
         </details>
-        <details>
+        <details class="is-more">
           <summary>Если не зайдёт — можно просто не продлевать?</summary>
           <p>Да. Размещение на срок (1 месяц). Не продлили — не платите дальше. Это нормальный способ проверить канал без долгого договора «на год вперёд».</p>
         </details>
+        <button type="button" class="faq__more" data-faq-more>Показать все вопросы<span>ещё 11</span></button>
       </div>
     </div>
   </section>
@@ -740,6 +747,6 @@
 </footer>
 
 <script src="assets/business.js?v=20261013b"></script>
-<script src="assets/business-design.js?v=20261017d"></script>
+<script src="assets/business-design.js?v=20261017db"></script>
 </body>
 </html>
