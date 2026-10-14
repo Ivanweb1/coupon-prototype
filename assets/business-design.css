@@ -2382,3 +2382,8 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
     -webkit-mask:radial-gradient(circle 18px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 18px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
             mask:radial-gradient(circle 18px at var(--cut) 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 18px at var(--cut) 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
 }
+/* География на широких экранах: карта не шире 1000px (высота ≈ списку),
+   остаток ширины — колонке направлений; вырезы — на стыке колонок */
+@media (min-width:1001px){
+  .geo{grid-template-columns:minmax(0,1000px) minmax(340px,1fr) !important;--cut:calc(min(1000px,100% - 340px) + 1px)}
+}
