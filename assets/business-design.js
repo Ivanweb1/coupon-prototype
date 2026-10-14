@@ -237,7 +237,7 @@
     ["marina", "Марина забрала код", "маникюр с покрытием", 1],
     ["dmitry", "Дмитрий забрал код", "капучино 1+1 по будням", 0]
   ];
-  var ava = ev.querySelector(".ava"), b = ev.querySelector("b"), s = ev.querySelector("div > span");
+  var ava = ev.querySelector(".ava"), b = ev.querySelector("b"), s = ev.querySelector(":scope > div > span");
   var cards = document.querySelectorAll("[data-hx-card]"), k = 0;
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) return;
