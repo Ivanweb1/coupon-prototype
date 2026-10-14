@@ -3161,3 +3161,16 @@ html.is-modal{overflow:hidden}
   #demand .dstat__sub::after{right:-12px}
   .m-hide{display:none}
 }
+/* Мобильная логика блоков: заголовок → текст → наглядное → кнопка в конце */
+@media (max-width:720px){
+  /* 20 млн: кнопка — после купона и источника */
+  .sec--red:has(.wcp) > .wrap{display:flex;flex-direction:column}
+  .sec--red:has(.wcp) .hrow{display:contents !important}
+  .sec--red:has(.wcp) .hrow > .head{display:contents}
+  .sec--red:has(.wcp) h2{order:1;margin-bottom:20px}
+  .sec--red:has(.wcp) .hrow__txt{order:2;margin-bottom:24px}
+  .sec--red:has(.wcp) .wcp{order:3}
+  .sec--red:has(.wcp) .wcp__src{order:4}
+  .sec--red:has(.wcp) .head__cta{order:5;margin-top:20px;align-self:stretch}
+}
+.nw{white-space:nowrap}
