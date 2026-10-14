@@ -3152,3 +3152,12 @@ html.is-modal{overflow:hidden}
   .hero__text > .hero__cta{margin-top:24px}
   .hero .src{text-align:left;margin-top:14px}
 }
+/* Спрос на телефоне: карточка-купон — скруглённые края и вырезы на линии отрыва */
+@media (max-width:720px){
+  #demand .dstat{border-radius:var(--r-lg);overflow:hidden}
+  #demand .dstat__sub{position:relative;overflow:visible}
+  #demand .dstat__sub::before,#demand .dstat__sub::after{content:"";position:absolute;top:-13px;width:24px;height:24px;border-radius:50%;background:#fff}
+  #demand .dstat__sub::before{left:-12px}
+  #demand .dstat__sub::after{right:-12px}
+  .m-hide{display:none}
+}
