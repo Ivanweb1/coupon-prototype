@@ -2416,3 +2416,16 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 }
 .pilot__r .text{text-wrap:pretty;max-width:600px}
 @media (max-width:720px){.pilot__l{padding-top:86px}}
+/* Пилот: корешок — метка сверху, число по центру, «чек» из двух строк внизу */
+.pilot__l{justify-content:space-between;gap:32px;padding:44px 48px 40px}
+.pilot__k{position:static;padding:7px 16px}
+.pilot__num{display:flex;flex-direction:column}
+.pilot__num span{margin-top:14px;font-size:17px;font-weight:600}
+.pilot__rows{align-self:stretch;margin:0;padding-top:18px;border-top:2px dashed rgba(221,68,60,.3)}
+.pilot__rows div{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:9px 0}
+.pilot__rows div + div{border-top:1px solid rgba(221,68,60,.15)}
+.pilot__rows dt{font-size:15px;color:var(--ink-2)}
+.pilot__rows dd{margin:0;font-size:17px;font-weight:700;color:var(--brand);white-space:nowrap}
+.pilot__r .btn{margin-top:32px}
+@media (max-width:1000px){.pilot__l{padding:36px 40px 32px}}
+@media (max-width:720px){.pilot__l{padding:24px 22px 20px;gap:22px}}
