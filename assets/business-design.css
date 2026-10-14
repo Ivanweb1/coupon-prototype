@@ -3309,3 +3309,5 @@ html.is-modal{overflow:hidden}
 }
 /* Подпись ленты: на десктопе — две строки по переносу, на телефоне — сплошным текстом */
 @media (max-width:720px){.br-dt{display:none}#demand .feed__bottom .feed__foot{white-space:normal !important;line-height:1.5 !important}}
+/* Первый экран не обрезает низ: сноска под цифрами выезжает при появлении */
+.hero{overflow:visible;overflow-x:clip}
