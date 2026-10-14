@@ -2387,3 +2387,32 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
 @media (min-width:1001px){
   .geo{grid-template-columns:minmax(0,1000px) minmax(340px,1fr) !important;--cut:calc(min(1000px,100% - 340px) + 1px)}
 }
+
+/* ==========================================================================
+   14. Пилот — корешок купона розовый, с меткой «Пилот»; справа текст
+   одним абзацем, два факта плашками вместо пустой шкалы, кнопка
+   ========================================================================== */
+.pilot__l{position:relative;align-items:flex-start;background:var(--brand-50);border-right-width:2px}
+.pilot__k{position:absolute;left:56px;top:48px;display:inline-flex;align-items:center;gap:8px;margin:0 !important;
+  padding:7px 14px 7px 10px;border-radius:var(--r-pill);background:#fff;color:var(--brand);font-size:14px !important;font-weight:600 !important}
+.pilot__k i{display:flex}.pilot__k svg{width:18px;height:18px}
+.pilot__r{display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.pilot__r .text{max-width:620px;margin-top:20px}
+.pilot__facts{list-style:none;margin:28px 0 32px;padding:0;display:flex;flex-wrap:wrap;gap:12px}
+.pilot__facts li{display:flex;align-items:center;gap:12px;padding:12px 20px 12px 12px;border-radius:var(--r-md);background:var(--surface)}
+.pilot__facts i{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#fff;color:var(--brand)}
+.pilot__facts svg{width:20px;height:20px}
+.pilot__facts b{display:block;font-size:17px;font-weight:700;line-height:1.2}
+.pilot__facts span{display:block;font-size:13.5px;color:var(--ink-2)}
+@media (max-width:1000px){
+  .pilot__l{border-right:0;border-bottom:2px dashed var(--line-strong);padding-top:96px}
+  .pilot__k{left:40px;top:36px}
+}
+@media (max-width:720px){
+  .pilot__l{padding-top:76px}
+  .pilot__k{left:22px;top:26px}
+  .pilot__facts{flex-direction:column;align-self:stretch}
+  .pilot__r .btn{align-self:stretch}
+}
+.pilot__r .text{text-wrap:pretty;max-width:600px}
+@media (max-width:720px){.pilot__l{padding-top:86px}}
