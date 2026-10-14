@@ -2913,3 +2913,31 @@ html.is-modal{overflow:hidden}
 @media (max-width:560px){.hero .hx{padding:20px 14px 60px !important}.hx__ev{left:0;right:0}}
 @media (min-width:1600px){.hx__stage{max-width:600px}.hx__ph{height:110px}}
 .hero__link:hover i svg{animation:hlDown .6s var(--ease)}@keyframes hlDown{50%{transform:translateY(3px)}}
+/* Первый экран: три цифры — карточками, у каждой своя мини-иллюстрация */
+.hero__nums{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:40px;padding:0;border:0}
+.hero__nums li{display:flex;flex-direction:column;align-items:flex-start;padding:16px 16px 18px !important;border:0 !important;border-radius:var(--r-md);background:var(--surface)}
+.hero__nums li > b{margin-top:14px;font-size:24px}
+.hero__nums li > b.is-red{color:var(--brand)}
+.hero__nums li:first-child b{color:var(--brand)}
+.hero__nums li:not(:first-child) b{color:var(--ink)}
+.hero__nums li > span:last-child{margin-top:4px;font-size:13px}
+.hn__faces,.hn__ch,.hn__price{display:flex;align-items:center;height:30px}
+.hn__faces i{width:30px;height:30px;margin-left:-8px;border-radius:50%;border:2px solid var(--surface);background:var(--surface-2) center 25%/cover no-repeat}
+.hn__faces i:first-child{margin-left:0}
+.hn__ch{gap:5px}
+.hn__ch i{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;overflow:hidden}
+.hn__ch svg,.hn__ch img{display:block;width:100%;height:100%}
+.hn__ch .hn__site{background:#fff;color:var(--brand)}
+.hn__ch .hn__site svg{width:15px;height:15px}
+.hn__price{gap:8px}
+.hn__price s{font-size:13px;color:var(--ink-3)}
+.hn__price em{font-style:normal;padding:4px 10px;border-radius:var(--r-pill);background:var(--brand);color:#fff;font-size:13px;font-weight:600}
+.hero__nums li > .hn__faces,.hero__nums li > .hn__ch,.hero__nums li > .hn__price{display:flex;margin:0;flex-direction:row}
+.hero__nums li > .hn__ch > i,.hero__nums li > .hn__faces > i{flex:none}
+@media (max-width:560px){
+  .hero__nums{grid-template-columns:1fr;gap:8px}
+  .hero__nums li{flex-direction:row !important;align-items:center;gap:14px;padding:14px 16px !important}
+  .hero__nums li > b{margin:0;min-width:110px;font-size:22px}
+  .hero__nums li > span:last-child{margin:0}
+  .hero__nums li > .hn__faces,.hero__nums li > .hn__ch,.hero__nums li > .hn__price{display:none}
+}
