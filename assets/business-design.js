@@ -308,3 +308,19 @@
   items.forEach(function (el) { io.observe(el); });
   document.documentElement.classList.add("rv-on");
 })();
+
+/* Мобильное меню (бургер): открыть/закрыть, закрыть по ссылке, Esc и при расширении экрана */
+(function () {
+  var btn = document.querySelector("[data-burger]"), nav = document.querySelector("[data-mnav]");
+  if (!btn || !nav) return;
+  function set(open) {
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    document.documentElement.classList.toggle("is-mnav", open);
+    if (open) { nav.hidden = false; requestAnimationFrame(function () { nav.classList.add("is-open"); }); }
+    else { nav.classList.remove("is-open"); setTimeout(function () { if (!nav.classList.contains("is-open")) nav.hidden = true; }, 250); }
+  }
+  btn.addEventListener("click", function () { set(btn.getAttribute("aria-expanded") !== "true"); });
+  nav.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", function () { set(false); }); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); } });
+  window.addEventListener("resize", function () { if (window.innerWidth > 720 && btn.getAttribute("aria-expanded") === "true") set(false); });
+})();
