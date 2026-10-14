@@ -2527,3 +2527,14 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .final .form{border-radius:0 0 var(--r-lg) var(--r-lg)}
 }
 .final .small{text-wrap:balance}
+/* Финал: регистрация и телефон — две одинаковые строки в одной плашке-талоне */
+.final__ct{list-style:none;align-self:stretch;max-width:420px;margin:32px 0 0;padding:6px 20px;border:2px dashed rgba(255,255,255,.5);border-radius:var(--r-md);background:rgba(255,255,255,.1)}
+.final__ct li + li{border-top:1px solid rgba(255,255,255,.22)}
+.final__ct a{display:flex;align-items:center;gap:14px;padding:14px 0;color:#fff;text-decoration:none}
+.final__ct i{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;background:#fff;color:var(--brand)}
+.final__ct svg{width:20px;height:20px}
+.final__ct span{display:block;font-size:13px;color:rgba(255,255,255,.8)}
+.final__ct b{display:block;margin-top:2px;font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.final .actions{padding-top:28px}
+.final .small{max-width:420px;line-height:1.5}
+@media (max-width:720px){.final__ct{padding:4px 16px}.final__ct b{font-size:19px}}
