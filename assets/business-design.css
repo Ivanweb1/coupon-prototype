@@ -2178,3 +2178,15 @@ li.is-took .feed__act{background:var(--brand);color:#fff}
   .aix__hd span{margin-left:auto;padding:6px 12px;border-radius:var(--r-pill);background:#fff;color:var(--ink-2);font-size:13px;font-weight:500}
   .aix__tabs button[aria-selected="true"]::before{content:none}
 }
+
+/* Низ блоков — плашка во всю ширину контента: вывод слева, кнопка в конце строки */
+.how__foot,.aix__foot,.launch__foot{justify-content:space-between;gap:16px 32px;margin-top:var(--gut,18px);
+  padding:14px 14px 14px 28px !important;border-radius:var(--r-lg);background:var(--surface)}
+.how__foot .text,.aix__foot .text,.launch__foot .text{flex:1 1 320px;font-size:17px;line-height:1.45;color:var(--ink)}
+.how__foot .text b,.aix__foot .text b,.launch__foot .text b{font-weight:600}
+.sec--red .launch__foot{background:rgba(255,255,255,.14)}
+.sec--red .launch__foot .text{color:#fff}
+@media (max-width:720px){
+  .how__foot,.aix__foot,.launch__foot{padding:20px !important}
+}
+@media (max-width:720px){.how__foot .text,.aix__foot .text,.launch__foot .text{flex:none}}
