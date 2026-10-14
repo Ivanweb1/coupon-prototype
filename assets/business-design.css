@@ -2986,3 +2986,4 @@ html.is-modal{overflow:hidden}
 .hx__ev--top{right:-24px !important;top:-24px !important}
 @media (max-width:1240px){.hero .hx{--hxp:32px}.hx__ev{left:-16px}.hx__ev--top{right:-16px !important}}
 @media (max-width:560px){.hero .hx{--hxp:16px;padding-bottom:56px !important}.hx__ev{left:0;right:0;bottom:-40px}}
+.hero{padding-bottom:0}@media (max-width:560px){.hero{padding-bottom:0}}
