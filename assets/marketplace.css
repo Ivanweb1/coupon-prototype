@@ -66,6 +66,7 @@
 .mp-wiz__step em{font-style:normal;display:inline-block;padding:2px 8px;margin-right:6px;border-radius:6px;background:var(--ink);color:#fff;font-size:12px}
 .mp-wiz__step--2{margin-top:20px}
 .mp-wiz__url{display:flex;gap:8px}
+.mp-wiz__url select{flex:none;height:46px;padding:0 10px;border-radius:var(--r-sm);border:1.5px solid var(--ink);background:#fff;font:inherit;font-size:14px;font-weight:600;color:var(--ink)}
 .mp-wiz__url input{flex:1;min-width:0;height:46px;padding:0 14px;border-radius:var(--r-sm);border:1.5px solid var(--ink);background:#fff;outline:none;font-size:14px}
 .mp-wiz__url .btn{border-color:var(--ink);flex:none}
 .mp-wiz__url .btn:hover{background:var(--ink);color:#fff}
@@ -209,7 +210,7 @@
   .mp-tally b span{font-size:34px}
   .mp-wiz__body{padding:16px}
   .mp-wiz__url{flex-direction:column}
-  .mp-wiz__url input{flex:none}
+  .mp-wiz__url input,.mp-wiz__url select{flex:none}
   .mp-wiz__pull{grid-template-columns:minmax(0,1fr)}
   .mp-cpn{grid-template-columns:88px 1fr}
   .mp-wiz__pub{margin-left:0;width:100%;justify-content:center}

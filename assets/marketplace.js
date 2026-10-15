@@ -4,24 +4,18 @@
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Демо мастера «Маркетплейс»: ссылка → сервис сам подтягивает карточку.
-  // Площадка определяется по адресу; остальное — пример для прототипа,
-  // в проде — данные карточки, которые вернёт парсер площадки.
+  // Демо мастера «Маркетплейс»: селлер выбирает площадку и вставляет ссылку →
+  // сервис сам подтягивает карточку. Данные карточки — пример для прототипа,
+  // в проде — то, что вернёт парсер площадки.
   var DEMO_URL = "https://www.wildberries.ru/catalog/184239517/detail.aspx";
-  var SHOPS = [
-    { re: /wildberries|wb\.ru/i, mp: "Wildberries", short: "WB" },
-    { re: /ozon/i, mp: "Ozon", short: "Ozon" },
-    { re: /market\.yandex|ya\.cc/i, mp: "Яндекс Маркет", short: "ЯМ" },
-    { re: /mvideo/i, mp: "М.Видео", short: "М.Видео" },
-    { re: /megamarket/i, mp: "Мегамаркет", short: "ММ" }
-  ];
-  var CARD = { nm: "Набор контейнеров для хранения, 6 шт.", pr: 1290, ct: "Товары для дома" };
+  var CARD = { nm: "Набор контейнеров для хранения, 6 шт.", pr: 1290, ct: "Товары для дома", ds: "из карточки" };
   var DISCOUNT = 0.15;
 
   var wiz = document.querySelector("[data-wiz]");
   if (wiz) {
     var form = wiz.querySelector("[data-wiz-form]");
     var input = wiz.querySelector("[data-wiz-input]");
+    var mpSel = wiz.querySelector("[data-wiz-mp]");
     var rows = wiz.querySelectorAll("[data-wiz-pull] li");
     var cpn = wiz.querySelector("[data-wiz-cpn]");
     var timers = [];
@@ -32,23 +26,15 @@
     var later = function (fn, ms) { timers.push(setTimeout(fn, reduce ? 0 : ms)); };
     var clear = function () { timers.forEach(clearTimeout); timers = []; };
 
-    var detect = function (url) {
-      for (var i = 0; i < SHOPS.length; i++) if (SHOPS[i].re.test(url)) return SHOPS[i];
-      // Голый артикул — в мастере площадку выбирают из списка; в демо — WB
-      if (/^\s*\d{5,}\s*$/.test(url)) return { mp: "Wildberries · по артикулу", short: "WB" };
-      return { mp: "определится по ссылке", short: "МП" };
-    };
-
     var pull = function () {
       clear();
       ran = true;
-      var shop = detect(input.value);
-      var val = {
-        mp: shop.mp, nm: CARD.nm, pr: rub(CARD.pr), ct: CARD.ct
-      };
+      var val = { nm: CARD.nm, pr: rub(CARD.pr), ct: CARD.ct, ds: CARD.ds };
+      // Значок площадки на купоне — из выбранной селлером площадки
+      set("mp", mpSel.value.split("|")[1]);
       rows.forEach(function (r) { r.classList.remove("is-ok", "is-load"); });
       cpn.classList.remove("is-on");
-      ["mp", "nm", "pr", "ct"].forEach(function (k) { set(k, "—"); });
+      ["nm", "pr", "ct", "ds"].forEach(function (k) { set(k, "—"); });
       set("pr2", "—");
 
       rows.forEach(function (r, i) {
@@ -57,7 +43,6 @@
           r.classList.remove("is-load"); r.classList.add("is-ok");
           var k = r.dataset.k;
           if (val[k]) set(k, val[k]);
-          if (k === "mp") wiz.querySelectorAll('.mp-cpn [data-v="mp"]').forEach(function (el) { el.textContent = shop.short; });
         }, 650 + i * 420);
       });
       later(function () {
@@ -68,6 +53,7 @@
 
     form.addEventListener("submit", function (e) { e.preventDefault(); pull(); });
     input.addEventListener("paste", function () { setTimeout(pull, 50); });
+    mpSel.addEventListener("change", function () { if (input.value) pull(); });
 
     // Автопроигрывание: ссылка «впечатывается», когда блок попадает в экран
     var typeDemo = function () {

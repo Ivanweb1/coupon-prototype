@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/business.css?v=20261013c">
-<link rel="stylesheet" href="assets/marketplace.css?v=20261014a">
+<link rel="stylesheet" href="assets/marketplace.css?v=20261015a">
 </head>
 <body>
 
@@ -24,7 +24,7 @@
      «Купон соберётся сам» (демо мастера), по брифу 14.10.2026.
 
      Фиксации из ТЗ:
-     — только для селлеров;
+     — только для селлеров, ни слова про партнёров и промокод партнёра;
      — без QR; «бесплатно»; код покупателю бесплатно;
      — срок размещения 1 месяц, платит селлер за размещение;
      — размещают только ООО и ИП;
@@ -128,7 +128,7 @@
         <span class="bz-num">02</span>
         <h2>Вставьте ссылку на&nbsp;карточку&nbsp;— купон соберётся сам</h2>
       </div>
-      <p class="bz-text mp-easy__lead">Не&nbsp;нужно делать баннер, писать текст и&nbsp;загружать фото. Нейросеть берёт всё из&nbsp;вашей карточки на&nbsp;маркетплейсе. От&nbsp;вас&nbsp;— ссылка и&nbsp;промокод.</p>
+      <p class="bz-text mp-easy__lead">Не&nbsp;нужно делать баннер, писать текст и&nbsp;загружать фото. Нейросеть берёт всё из&nbsp;вашей карточки на&nbsp;маркетплейсе. От&nbsp;вас&nbsp;— площадка, ссылка и&nbsp;промокод.</p>
 
       <div class="mp-easy">
         <!-- Слева: что делаете вы / что делает сервис -->
@@ -136,6 +136,7 @@
           <div class="mp-split__col">
             <span class="mp-split__k">Вы</span>
             <ol class="mp-you">
+              <li><b>Выбираете площадку</b><span>WB, Ozon, Яндекс Маркет или другую</span></li>
               <li><b>Вставляете ссылку</b><span>на&nbsp;карточку товара или артикул</span></li>
               <li><b>Указываете промокод</b><span>и&nbsp;размер скидки</span></li>
             </ol>
@@ -143,7 +144,6 @@
           <div class="mp-split__col mp-split__col--auto">
             <span class="mp-split__k">Сервис сам</span>
             <ul class="mp-auto">
-              <li>определяет площадку</li>
               <li>забирает фото товара</li>
               <li>берёт название и&nbsp;цену</li>
               <li>ставит категорию на&nbsp;витрине</li>
@@ -153,8 +153,8 @@
             </ul>
           </div>
           <div class="mp-tally">
-            <b><span>2</span> действия ваши</b>
-            <b><span>7</span> делает сервис</b>
+            <b><span>3</span> действия ваши</b>
+            <b><span>6</span> делает сервис</b>
           </div>
         </div>
 
@@ -162,18 +162,24 @@
         <div class="mp-wiz" data-wiz>
           <div class="mp-wiz__bar"><i></i><i></i><i></i><span>vsekupony.ru/seller/coupons/new/marketplace/</span></div>
           <div class="mp-wiz__body">
-            <p class="mp-wiz__step"><em>Шаг 1</em> Ссылка на&nbsp;карточку или артикул</p>
+            <p class="mp-wiz__step"><em>Шаг 1</em> Площадка и&nbsp;ссылка на&nbsp;карточку или артикул</p>
             <form class="mp-wiz__url" data-wiz-form>
+              <select aria-label="Площадка" data-wiz-mp>
+                <option value="Wildberries|WB">Wildberries</option>
+                <option value="Ozon|Ozon">Ozon</option>
+                <option value="Яндекс Маркет|ЯМ">Яндекс Маркет</option>
+                <option value="Другая площадка|МП">Другая</option>
+              </select>
               <input type="text" value="" placeholder="Вставьте ссылку на карточку товара" aria-label="Ссылка на карточку или артикул" data-wiz-input>
               <button class="btn btn--light" type="submit">Подтянуть</button>
             </form>
 
             <ul class="mp-wiz__pull" data-wiz-pull>
-              <li data-k="mp">Площадка<b data-v="mp">—</b></li>
               <li data-k="ph">Фото карточки<b>3 фото</b></li>
               <li data-k="nm">Название<b data-v="nm">—</b></li>
               <li data-k="pr">Цена<b data-v="pr">—</b></li>
               <li data-k="ct">Категория<b data-v="ct">—</b></li>
+              <li data-k="ds">Описание<b data-v="ds">—</b></li>
               <li data-k="tx">Текст купона<b>написала нейросеть</b></li>
             </ul>
 
@@ -195,12 +201,12 @@
               <span class="btn btn--light mp-wiz__pub">Опубликовать на&nbsp;всю Россию</span>
             </div>
           </div>
-          <p class="mp-wiz__note" data-wiz-note>Демо: вставьте ссылку со&nbsp;своей карточки WB, Ozon или Яндекс Маркета&nbsp;— площадка определится по&nbsp;ссылке. Остальные данные в&nbsp;прототипе примерные.</p>
+          <p class="mp-wiz__note" data-wiz-note>Демо: выберите площадку и&nbsp;вставьте ссылку со&nbsp;своей карточки. Данные карточки в&nbsp;прототипе примерные.</p>
         </div>
       </div>
 
       <div class="bz-launch__foot">
-        <p class="bz-text"><b>Ссылка и&nbsp;промокод</b>&nbsp;— больше ничего готовить не&nbsp;нужно.</p>
+        <p class="bz-text"><b>Площадка, ссылка и&nbsp;промокод</b>&nbsp;— больше ничего готовить не&nbsp;нужно.</p>
         <a class="btn btn--light" href="#final">Открыть мастер маркетплейса</a>
       </div>
     </div>
@@ -248,21 +254,19 @@
     </div>
   </section>
 
-  <!-- Сколько стоит. Цены в ТЗ нет. Промокод партнёра −20% — по листу
-       «Структура и тексты»; листы «Фиксации» и «Разбор ТЗ» его запрещают — уточнить -->
+  <!-- Сколько стоит. Цены в ТЗ нет. Промокод партнёра и «Размещу без кода» убраны —
+       фиксация «Без партнёров на лендинге» (решение 15.10.2026) -->
   <section class="bz-sec bz-sec--alt" id="price">
     <div class="wrap">
       <div class="bz-head">
         <span class="bz-num">04</span>
         <h2>Дешевле, чем один день внутренней рекламы</h2>
       </div>
-      <p class="bz-text">Если у&nbsp;вас есть промокод партнёра сервиса&nbsp;— вы получите скидку на&nbsp;размещение в&nbsp;20%.</p>
       <p class="bz-text">Ваше размещение увидят во&nbsp;всех городах присутствия сервиса, а&nbsp;мы&nbsp;усилим охваты через наши специализированные сообщества в&nbsp;ВК, MAX, Telegram, ОК. Внешние переходы&nbsp;— элемент «поведенческого фактора», как и&nbsp;лайки и&nbsp;корзины,&nbsp;— это стимулирует ранжирование карточки.</p>
 
       <div class="bz-actions">
         <a class="btn btn--primary" href="#final">Рассчитать в&nbsp;кабинете</a>
         <a class="btn btn--ghost" href="#pilot">Сначала пилот</a>
-        <a class="btn btn--ghost" href="#final">Размещу без кода</a>
       </div>
     </div>
   </section>
@@ -486,6 +490,6 @@
   </div>
 </footer>
 
-<script src="assets/marketplace.js?v=20261014a"></script>
+<script src="assets/marketplace.js?v=20261015a"></script>
 </body>
 </html>
