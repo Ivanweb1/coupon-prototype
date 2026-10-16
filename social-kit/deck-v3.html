@@ -271,6 +271,13 @@ a{color:inherit;text-decoration:none}
 #s14 .in{top:100px;width:1660px}
 #s14 .h1{margin:0}
 #s14 .sub{max-width:1640px}
+/* Призыв к действию (правка 16.10) — справа от заголовка, рамкой «как код купона»
+   вместо билетиков-украшений: после 18 механик — сразу шаг навстречу */
+.mxcta{position:absolute;right:150px;top:112px;width:580px;display:flex;align-items:center;gap:20px;padding:26px 26px 26px 34px;border:3px dashed #F3B0AB;border-radius:28px;background:var(--brand-50)}
+.mxcta div{flex:1;min-width:0}
+.mxcta b{display:block;font-size:29px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.mxcta span{display:block;margin-top:10px;font-size:22px;font-weight:600;color:var(--brand)}
+.mxcta i{flex:none;width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-style:normal;font-size:38px;font-weight:700;box-shadow:0 18px 30px -16px rgba(160,30,24,.55)}
 .mxs,.mx{position:absolute;left:150px;right:150px;display:grid;grid-template-columns:772px 400px 400px;column-gap:24px}
 .mxs{top:320px;row-gap:12px}
 .mxs__k{font-size:23px;font-weight:700;color:var(--brand)}
@@ -1041,12 +1048,12 @@ a{color:inherit;text-decoration:none}
   <!-- ===================== 3а. Скидка не обязательна ===================== -->
   <section class="slide" id="s14">
     <div class="cpn__l cpn__l--full">
-      <div class="deco"><span class="tk" style="right:120px;top:60px;font-size:72px;transform:rotate(-6deg)">5&nbsp;=&nbsp;4</span><span class="tk" style="right:430px;top:-28px;font-size:48px;transform:rotate(8deg)">0&nbsp;₽</span><span class="tk" style="right:-60px;top:190px;font-size:48px;transform:rotate(9deg)">Подарок</span></div>
       <div class="in">
         <h2 class="h1">Скидка <span class="city">не обязательна</span></h2>
         <p class="sub">Не&nbsp;нужно делиться выручкой: <b>9&nbsp;из&nbsp;18 механик</b> не&nbsp;снижают цену</p>
       </div>
     </div>
+    <div class="mxcta"><div><b>Ваш покупатель уже рядом. Дайте ему повод прийти!</b><span>Первое размещение&nbsp;— бесплатно</span></div><i>→</i></div>
     <div class="mxs">
       <span class="mxs__k">Не&nbsp;требуют дополнительных затрат</span><span class="mxs__k mxs__k--r">часть выручки →</span>
       <i></i><i></i><i></i>
