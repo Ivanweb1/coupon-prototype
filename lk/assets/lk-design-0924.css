@@ -1079,14 +1079,14 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd-post__ava{width:40px;height:40px;padding:6px 10px;border-radius:50%;background:var(--brand-50);object-fit:contain;box-sizing:border-box}
 .lkd-post__who b{display:block;font-size:14.5px;font-weight:600}
 .lkd-post__who span{font-size:12.5px;color:var(--ink-3)}
-.lkd-post__text{padding:0 16px 12px;font-size:14.5px;line-height:1.5;color:var(--ink);overflow-wrap:anywhere}
+.lkd-post__text{padding:14px 16px 12px;font-size:14.5px;line-height:1.5;color:var(--ink);overflow-wrap:anywhere}
 .lkd-post__text p{margin:0}
 .lkd-post__text .lkd-post__gap{height:10px}
 .lkd-post__link{color:#2a5885}
 .lkd-post__ad{font-size:12.5px;color:var(--ink-3)}
 /* Картинка поста — шаблоны social-kit (kit.css: .post45 и .post11) в
    единицах исходного макета 1080 px: --u — один пиксель макета */
-.lkd-post__img{container-type:inline-size;border-top:1px solid var(--line)}
+.lkd-post__img{container-type:inline-size;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .lkd-art{--u:calc(100cqw / 1080);position:relative;width:100%;aspect-ratio:4/5;background:var(--surface-2);overflow:hidden}
 .lkd-art--tg{aspect-ratio:1/1}
 .lkd-art__card{position:absolute;inset:calc(var(--u) * 40);border-radius:calc(var(--u) * 40);background:#fff;overflow:hidden;display:flex;flex-direction:column}

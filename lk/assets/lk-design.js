@@ -2792,8 +2792,9 @@ function socialPost(form) {
             '<img class="lkd-post__ava" src="../assets/brand/logo-red.png" alt="" width="20" height="34">' +
             '<div><b data-post-group>ВСЕКУПОНЫ · Липецк</b><span>только что · Реклама</span></div>' +
           '</header>' +
-          '<div class="lkd-post__text" data-post-text></div>' +
+          /* Картинка первой, текст под ней (правка 18.10) */
           '<div class="lkd-post__img" data-post-art></div>' +
+          '<div class="lkd-post__text" data-post-text></div>' +
           '<footer class="lkd-post__foot" data-post-foot></footer>' +
         '</article>' +
       '</div>').join("") + '</div>' +
