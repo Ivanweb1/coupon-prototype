@@ -2948,6 +2948,27 @@ function socialPost(form) {
   paint();
 }
 
+/* Порядок блоков на телефоне (правка 18.10). Колонки складываются в одну,
+   и правая — превью, стоимость, оплата — уезжала под кнопку «Отправить на
+   модерацию». На узком экране обе колонки становятся одним потоком
+   (display:contents в lk-design-0924.css), а порядок задаём здесь:
+   поля → изображение → превью в ленте → пост → «Поделитесь» → стоимость и
+   оплата → предупреждение и кнопки. На десктопе --m-order ни на что не влияет. */
+function mobileOrder(form) {
+  const left = form.firstElementChild, right = qs(".lk-prev", form);
+  if (!left || !right) return;
+  const img = panelByTitle(form, "Изображение купона");
+  const feed = panelByTitle(form, "Так купон увидят в ленте");
+  const set = (el, n) => el && el.style.setProperty("--m-order", n);
+  let afterImg = false;
+  [].forEach.call(left.children, el => {
+    if (afterImg) set(el, el.matches(".lkd-post") ? 2 : el.matches(".lkd-share") ? 3 : 30);
+    if (el === img) afterImg = true;
+  });
+  set(feed, 1);
+  [].forEach.call(right.children, (el, i) => { if (el !== feed) set(el, 10 + i); });
+}
+
 /* Режим конструктора: какой из трёх разделов сейчас открыт. lk.js читает
    window.LKD_MODE, чтобы знать, что обязательно (ссылка, регион), а цена
    считается ниже по своим правилам. */
@@ -2998,7 +3019,7 @@ window.initCouponBuilder = function (host) {
      и только потом добавляем свои — иначе базовые ссылки на узлы уедут. */
   if (form && qs("[data-img]", form)) patchWizard(form);
   baseInitCB(host);
-  if (form && qs("[data-img]", form)) { wizardExtras(form); socialPost(form); }
+  if (form && qs("[data-img]", form)) { wizardExtras(form); socialPost(form); mobileOrder(form); }
 };
 
 /* Первый рендер lk.js делает по DOMContentLoaded — к этому моменту все
