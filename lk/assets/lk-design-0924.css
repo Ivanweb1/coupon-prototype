@@ -1067,7 +1067,7 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd-post__top{margin-bottom:16px}
 .lkd-post__tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:var(--r-pill);
   background:var(--ink);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-.lkd-post__h{margin:12px 0 6px;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.lkd-post__h{margin:12px 0 6px;font-size:19px;line-height:1.25;font-weight:600;letter-spacing:-.02em}
 .lkd-post__lead{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2);max-width:620px}
 .lkd .lkd-post__tabs{margin-bottom:12px;background:var(--bg)}
 .lkd-post__off{margin-bottom:12px;padding:10px 14px;border-radius:var(--r-sm);background:var(--brand-50);color:var(--brand-600);font-size:13.5px;line-height:1.45}
@@ -1194,7 +1194,16 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 
 /* Телефон: колонки формы — одним потоком, порядок из mobileOrder() */
 @media (max-width:1000px){
-  .lkd .lk-form{display:flex;flex-direction:column;align-items:stretch}
+  /* gap от сетки обнуляем: отступы между блоками — их собственные margin,
+     как в обычном потоке. У предупреждения сверху добираем до 18 px: в
+     потоке его margin схлопывался с нижним отступом панели. */
+  .lkd .lk-form{display:flex;flex-direction:column;align-items:stretch;gap:0}
+  .lkd .lk-form > div > .lk-warn{margin-top:2px}
   .lkd .lk-form > div{display:contents}
   .lkd .lk-form > div > *{order:var(--m-order, 0)}
 }
+
+/* Заголовки кабинета — плотная межстрочка (правка 18.10). Наследовали 1.5 от
+   body, и на переносе (h1 на телефоне, длинные заголовки панелей) строки
+   расходились. */
+.lkd h1,.lkd h2,.lkd h3{line-height:1.2}
