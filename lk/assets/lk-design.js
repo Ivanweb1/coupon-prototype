@@ -2719,15 +2719,8 @@ function ruRange(a, b, short) {
 
 /* Картинка поста — те же шаблоны, что в social-kit (kit.js, «Пост с
    купоном»): ВКонтакте — 4:5, снимок сверху; Telegram — 1:1, снимок слева.
-   Своей картинки на этом шаге ещё нет, поэтому берём снимок ниши из
-   assets/coupons. */
-const POST_PHOTO = {
-  "Кафе и рестораны": "coffee.jpg", "Красота": "beauty.jpg", "Косметология": "krasota-green.jpg",
-  "Медицина": "meditsina-white.jpg", "Авто": "avto-steel.jpg", "Автотовары": "avto-steel.jpg",
-  "Фитнес и спорт": "fitness.jpg", "Развлечения": "entertainment.jpg", "Детям": "detyam-yellow.jpg",
-  "Товары для дома": "dom-beige.jpg", "Одежда и обувь": "odezhda-dark.jpg",
-  "Обучение персонала": "obuchenie-purple.jpg", "Электроника": "razvlecheniya-blue.jpg"
-};
+   Своей картинки на этом шаге ещё нет — на месте снимка заглушка, как в
+   превью ленты: изображение выбирают последним шагом. */
 const POST_PATH = {
   eda: '<path d="M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H15.6"/><path d="M8.5 3.5v3M12 3.5v3"/>',
   krasota: '<path d="M8.5 21h7v-9h-7z"/><path d="M9.5 12V7.5L14.5 4v8"/>',
@@ -2741,11 +2734,11 @@ const postIcon = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 const nicheIcon = n => /Кафе/.test(n) ? "eda" : /Красота|Космет/.test(n) ? "krasota" : /Фитнес|спорт/.test(n) ? "sport" : "ticket";
 
 function postArt(o) {
-  const photo = POST_PHOTO[o.niche] || "biz-warm.jpg";
   const empty = (t, ph) => t ? escHTML(t) : '<span class="is-ph">' + ph + '</span>';
   return '<div class="lkd-art ' + (o.tg ? "lkd-art--tg" : "lkd-art--vk") + '">' +
     '<div class="lkd-art__card">' +
-      '<div class="lkd-art__ph" style="background-image:url(\'../assets/coupons/' + photo + '\')">' +
+      '<div class="lkd-art__ph">' +
+        '<span class="lkd-art__hold">' + (o.isMarket ? "Картинку возьмём из карточки товара" : "Изображение — последним шагом") + '</span>' +
         '<div class="lkd-art__erid">Реклама · ' + escHTML(LK_COMPANY.name) + ' · erid: присвоим</div>' +
         '<span class="lkd-art__tk' + (o.value.length > 5 ? " is-long" : "") + '">' + escHTML(o.value) + '</span>' +
       '</div>' +
