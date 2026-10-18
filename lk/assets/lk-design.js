@@ -2719,8 +2719,8 @@ function ruRange(a, b, short) {
 
 /* Картинка поста — те же шаблоны, что в social-kit (kit.js, «Пост с
    купоном»): ВКонтакте — 4:5, снимок сверху; Telegram — 1:1, снимок слева.
-   Своей картинки на этом шаге ещё нет — на месте снимка заглушка, как в
-   превью ленты: изображение выбирают последним шагом. */
+   Пока картинку не выбрали — заглушка; выбрали — она же, что в превью
+   ленты. */
 const POST_PATH = {
   eda: '<path d="M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H15.6"/><path d="M8.5 3.5v3M12 3.5v3"/>',
   krasota: '<path d="M8.5 21h7v-9h-7z"/><path d="M9.5 12V7.5L14.5 4v8"/>',
@@ -2737,8 +2737,8 @@ function postArt(o) {
   const empty = (t, ph) => t ? escHTML(t) : '<span class="is-ph">' + ph + '</span>';
   return '<div class="lkd-art ' + (o.tg ? "lkd-art--tg" : "lkd-art--vk") + '">' +
     '<div class="lkd-art__card">' +
-      '<div class="lkd-art__ph">' +
-        '<span class="lkd-art__hold">' + (o.isMarket ? "Картинку возьмём из карточки товара" : "Изображение — последним шагом") + '</span>' +
+      '<div class="lkd-art__ph' + (o.img ? " has-img " + o.img : "") + '">' +
+        (o.img ? "" : '<span class="lkd-art__hold">' + (o.isMarket ? "Картинку возьмём из карточки товара" : "Изображение — выберите в блоке выше") + '</span>') +
         '<div class="lkd-art__erid">Реклама · ' + escHTML(LK_COMPANY.name) + ' · erid: присвоим</div>' +
         '<span class="lkd-art__tk' + (o.value.length > 5 ? " is-long" : "") + '">' + escHTML(o.value) + '</span>' +
       '</div>' +
@@ -2764,7 +2764,9 @@ function socialPost(form) {
   const isMarket = !!f("article");
   const mode = window.LKD_MODE;
 
-  const anchor = panelByTitle(form, "Каналы публикации") || qs(".lk-secret", form);
+  /* Пост — после изображения: картинка входит в пост, и пока её не
+     выбрали, показывать готовый материал раньше времени незачем */
+  const anchor = panelByTitle(form, "Изображение купона") || panelByTitle(form, "Каналы публикации");
   if (!anchor) return;
 
   const post = document.createElement("section");
@@ -2773,7 +2775,7 @@ function socialPost(form) {
     '<div class="lkd-post__top">' +
       '<span class="lkd-post__tag">Рекламный материал</span>' +
       '<h2 class="lkd-post__h">Так будет выглядеть пост в соцсетях</h2>' +
-      '<p class="lkd-post__lead">Текст собираем сами из полей купона и публикуем в наших группах ' +
+      '<p class="lkd-post__lead">Текст и картинку собираем сами из полей купона и публикуем в наших группах ' +
         (isMarket ? "по маркетплейсам" : mode === "for-business" ? "выбранных регионов" : "выбранных городов") + '. Здесь ничего заполнять не нужно — поправьте поля выше, и пост изменится следом.</p>' +
     '</div>' +
     '<div class="lk-seg lkd-post__tabs" role="tablist">' +
@@ -2844,6 +2846,12 @@ function socialPost(form) {
     return { text: text, place: cs.length > 1 ? cs.length + " " + plural(cs.length, "город", "города", "городов") : city };
   }
 
+  /* Выбранная картинка — тот же класс, что lk.js ставит превью ленты
+     (has-img + lk-up / lk-gen--N); не выбрана — заглушка */
+  const pvMedia = qs("[data-pv-media]", form);
+  const chosenImg = () => pvMedia && pvMedia.classList.contains("has-img")
+    ? [].filter.call(pvMedia.classList, c => c === "lk-up" || /^lk-gen--\d$/.test(c))[0] || "" : "";
+
   function paint() {
     const value = val("value"), title = val("title"), code = val("code");
     const dates = ruRange(val("from"), val("to"));
@@ -2859,7 +2867,7 @@ function socialPost(form) {
     qs("[data-post-art]", post).innerHTML = postArt({
       tg: tg, isMarket: isMarket,
       value: value || (pv ? pv.textContent : "−30%"),
-      title: title, niche: niche,
+      title: title, niche: niche, img: chosenImg(),
       where: w.text, dates: ruRange(val("from"), val("to"), true)
     });
 
@@ -2927,6 +2935,9 @@ function socialPost(form) {
   form.addEventListener("input", () => requestAnimationFrame(paint));
   form.addEventListener("change", () => requestAnimationFrame(paint));
   form.addEventListener("click", e => { if (e.target.closest("[data-city], [data-ai-list] *, [data-code-gen]")) setTimeout(paint, 0); });
+  /* Картинку выбирают кликом по варианту, а сетку lk.js тут же
+     перерисовывает — поэтому следим за самим превью ленты */
+  if (pvMedia) new MutationObserver(paint).observe(pvMedia, { attributes: true, attributeFilter: ["class"] });
   paint();
 }
 
