@@ -2781,16 +2781,22 @@ function socialPost(form) {
     '<div class="lk-seg lkd-post__tabs" role="tablist">' +
       POST_NETS.map((n, i) => '<button type="button" role="tab" data-post-net="' + n.id + '"' + (i ? "" : ' class="is-on"') + '>' + n.label + '</button>').join("") +
     '</div>' +
-    '<div class="lkd-post__off" data-post-off hidden></div>' +
-    '<article class="lkd-post__card" data-post-card>' +
-      '<header class="lkd-post__who">' +
-        '<img class="lkd-post__ava" src="../assets/brand/logo-red.png" alt="" width="20" height="34">' +
-        '<div><b data-post-group>ВСЕКУПОНЫ · Липецк</b><span>только что · Реклама</span></div>' +
-      '</header>' +
-      '<div class="lkd-post__text" data-post-text></div>' +
-      '<div class="lkd-post__img" data-post-art></div>' +
-      '<footer class="lkd-post__foot" data-post-foot></footer>' +
-    '</article>' +
+    /* По посту на каждую пару соцсетей. Широкий блок — оба рядом, узкий —
+       вкладками (container query в lk-design-0924.css) */
+    '<div class="lkd-post__cols">' + POST_NETS.map(n =>
+      '<div class="lkd-post__col" data-post-col="' + n.id + '">' +
+        '<div class="lkd-post__net">' + n.label + '</div>' +
+        '<div class="lkd-post__off" data-post-off hidden></div>' +
+        '<article class="lkd-post__card" data-post-card>' +
+          '<header class="lkd-post__who">' +
+            '<img class="lkd-post__ava" src="../assets/brand/logo-red.png" alt="" width="20" height="34">' +
+            '<div><b data-post-group>ВСЕКУПОНЫ · Липецк</b><span>только что · Реклама</span></div>' +
+          '</header>' +
+          '<div class="lkd-post__text" data-post-text></div>' +
+          '<div class="lkd-post__img" data-post-art></div>' +
+          '<footer class="lkd-post__foot" data-post-foot></footer>' +
+        '</article>' +
+      '</div>').join("") + '</div>' +
     '<div class="lkd-post__legend" aria-hidden="true">' +
       '<span><i class="lkd-mk lkd-mk--offer"></i>Предложение</span>' +
       '<span><i class="lkd-mk lkd-mk--code"></i>Промокод</span>' +
@@ -2801,6 +2807,7 @@ function socialPost(form) {
       '<button type="button" class="btn btn--ghost" data-post-copy><span>Скопировать текст поста</span></button>' +
       '<span class="lk-note">Пунктиром — то, что ещё не заполнено. Метку «Реклама» и erid добавим при публикации.</span>' +
     '</div>';
+  post.dataset.net = "vk";
   anchor.after(post);
 
   const share = document.createElement("section");
@@ -2823,7 +2830,6 @@ function socialPost(form) {
     '<div class="lkd-share__prize" aria-hidden="true"><b>+' + escHTML(SHARE_BONUS) + '</b><span>бонусов<br>за каждый купон</span></div>';
   post.after(share);
 
-  let net = "vk";
   let plain = "";
 
   /* Кусок поста: заполнен — как есть, пусто — пунктирная заглушка */
@@ -2839,7 +2845,7 @@ function socialPost(form) {
     const cs = qsa("[data-city].is-on", form).map(b => b.dataset.city);
     if (mode === "for-business") return { text: cs.length ? "Для компаний: " + cs.join(", ") : "", place: cs[0] || "Россия" };
     const ad = qsa("[data-addr-cb]", form)
-      .filter(i => i.checked && !i.closest("[data-addr-row]").hidden && !i.dataset.noaddr).map(i => i.value);
+      .filter(i => i.checked && !i.closest("[data-addr-row]").hidden && !("noaddr" in i.dataset)).map(i => i.value);
     const noaddr = qsa("[data-noaddr]", form).some(i => i.checked);
     const city = cs[0] || LK_COMPANY.city;
     const text = ad.length ? city + ", " + ad.join("; ") : noaddr ? city + " — по всему городу и онлайн" : "";
@@ -2859,19 +2865,31 @@ function socialPost(form) {
     const use = useEl ? useEl.value.trim() : "";
     const niche = val("niche") || LK_COMPANY.niche;
     const w = where();
-    const tg = net === "tg";
     const link = "vsekupony.ru/coupon/…";
+    const offer = (value ? value + " · " : "") + title;
 
-    qs("[data-post-group]", post).textContent = "ВСЕКУПОНЫ · " + (isMarket ? (f("market") ? f("market").value : "Маркетплейсы") : w.place);
+    plain = [
+      "🔥 " + (offer || "[заголовок купона]"),
+      LK_COMPANY.name + " · " + niche, "",
+      "🎟 Промокод: " + (code || "[промокод]"),
+      "📅 Действует " + (dates || "[даты]"),
+      (isMarket ? "🛒 " : "📍 ") + (w.text || "[адрес]"),
+      "ℹ️ " + (use || "[как воспользоваться]"), "",
+      "👉 Забрать купон: " + link
+    ].join("\n");
+
+    POST_NETS.forEach(n => {
+    const col = qs('[data-post-col="' + n.id + '"]', post);
+    const tg = n.id === "tg";
+    qs("[data-post-group]", col).textContent = "ВСЕКУПОНЫ · " + (isMarket ? (f("market") ? f("market").value : "Маркетплейсы") : w.place);
     const pv = qs("#pvVal", form);
-    qs("[data-post-art]", post).innerHTML = postArt({
+    qs("[data-post-art]", col).innerHTML = postArt({
       tg: tg, isMarket: isMarket,
       value: value || (pv ? pv.textContent : "−30%"),
       title: title, niche: niche, img: chosenImg(),
       where: w.text, dates: ruRange(val("from"), val("to"), true)
     });
 
-    const offer = (value ? value + " · " : "") + title;
     const lines = [
       (tg ? "<b>" : "") + "🔥 " + part("offer", offer, "Величина скидки · заголовок купона") + (tg ? "</b>" : ""),
       escHTML(LK_COMPANY.name) + " · " + escHTML(niche),
@@ -2885,37 +2903,26 @@ function socialPost(form) {
       "",
       '<span class="lkd-post__ad">Реклама. ' + escHTML(LK_COMPANY.name) + ", ИНН " + LK_COMPANY.inn + ". erid: присвоим при публикации</span>"
     ];
-    qs("[data-post-text]", post).innerHTML = lines.map(l => l ? "<p>" + l + "</p>" : '<p class="lkd-post__gap"></p>').join("");
+    qs("[data-post-text]", col).innerHTML = lines.map(l => l ? "<p>" + l + "</p>" : '<p class="lkd-post__gap"></p>').join("");
 
-    plain = [
-      "🔥 " + (offer || "[заголовок купона]"),
-      LK_COMPANY.name + " · " + niche, "",
-      "🎟 Промокод: " + (code || "[промокод]"),
-      "📅 Действует " + (dates || "[даты]"),
-      (isMarket ? "🛒 " : "📍 ") + (w.text || "[адрес]"),
-      "ℹ️ " + (use || "[как воспользоваться]"), "",
-      "👉 Забрать купон: " + link
-    ].join("\n");
-
-    qs("[data-post-foot]", post).innerHTML = tg
+    qs("[data-post-foot]", col).innerHTML = tg
       ? '<span>👁 0</span><span>Комментарии</span>'
       : '<span>♡ 0</span><span>💬 0</span><span>↗ 0</span><span class="lkd-post__views">👁 0</span>';
 
     /* Каналы сняли — честно говорим, что пост туда не уйдёт */
-    const n = POST_NETS.find(x => x.id === net);
     const boxes = n.chans.map(id => qs('[data-ch="' + id + '"]', form)).filter(Boolean);
-    const off = qs("[data-post-off]", post);
+    const off = qs("[data-post-off]", col);
     off.hidden = !boxes.length || boxes.some(b => b.checked);
     off.textContent = "Каналы «" + n.label + "» не выбраны в «Каналах публикации» — в них пост не уйдёт. Пример показан для наглядности.";
-    qs("[data-post-card]", post).classList.toggle("is-off", !off.hidden);
+    qs("[data-post-card]", col).classList.toggle("is-off", !off.hidden);
+    });
   }
 
   post.addEventListener("click", e => {
     const t = e.target.closest("[data-post-net]");
     if (!t) return;
-    net = t.dataset.postNet;
+    post.dataset.net = t.dataset.postNet;
     qsa("[data-post-net]", post).forEach(b => b.classList.toggle("is-on", b === t));
-    paint();
   });
 
   [post, share].forEach(box => box.addEventListener("click", e => {
