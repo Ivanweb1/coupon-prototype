@@ -2680,6 +2680,263 @@ function wizardExtras(form) {
   }
 }
 
+/* -------------------------------------------------------------------------
+   Пост для соцсетей и «Поделитесь купоном» (правки 18.10.2026)
+   -------------------------------------------------------------------------
+   Рекламодатель видит готовый текст публикации, который уйдёт в наши
+   группы: предложение, промокод, сроки и условия собираются из полей
+   формы и обновляются на каждый ввод. Блок оформлен как отдельный
+   рекламный материал, а не как ещё одна группа полей: в нём ничего не
+   заполняют, его только смотрят и копируют.
+
+   Ниже — отдельный блок с бонусом за репост в свои соцсети. Сумма берётся
+   из способа «Репост ссылки на свой купон» в LK_BONUS_WAYS (там рыба),
+   чтобы в попапе «Получить бонусы» и здесь цифра была одна. */
+const POST_NETS = [
+  { id: "vk", label: "ВКонтакте и Одноклассники", chans: ["vk", "ok"] },
+  { id: "tg", label: "Telegram и Max",            chans: ["tg", "max"] }
+];
+const SHARE_BONUS = ((LK_BONUS_WAYS.find(w => w.id === "repost") || {}).reward) || "100";
+const RU_MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+  "августа", "сентября", "октября", "ноября", "декабря"];
+const escHTML = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+
+/* «2026-10-03» → «3 октября 2026»; что не похоже на дату — как есть */
+function ruDate(v) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || "");
+  return m ? (+m[3]) + " " + RU_MONTHS[+m[2] - 1] + " " + m[1] : (v || "");
+}
+function ruRange(a, b, short) {
+  if (!a || !b) return "";
+  const A = ruDate(a).split(" "), B = ruDate(b).split(" ");
+  if (A.length === 3 && B.length === 3 && A[2] === B[2]) {
+    /* На картинке год не пишем — как в шаблонах social-kit */
+    const end = short ? B.slice(0, 2).join(" ") : B.join(" ");
+    return A[1] === B[1] ? "с " + A[0] + " по " + end : "с " + A[0] + " " + A[1] + " по " + end;
+  }
+  return "с " + ruDate(a) + " по " + ruDate(b);
+}
+
+/* Картинка поста — те же шаблоны, что в social-kit (kit.js, «Пост с
+   купоном»): ВКонтакте — 4:5, снимок сверху; Telegram — 1:1, снимок слева.
+   Своей картинки на этом шаге ещё нет, поэтому берём снимок ниши из
+   assets/coupons. */
+const POST_PHOTO = {
+  "Кафе и рестораны": "coffee.jpg", "Красота": "beauty.jpg", "Косметология": "krasota-green.jpg",
+  "Медицина": "meditsina-white.jpg", "Авто": "avto-steel.jpg", "Автотовары": "avto-steel.jpg",
+  "Фитнес и спорт": "fitness.jpg", "Развлечения": "entertainment.jpg", "Детям": "detyam-yellow.jpg",
+  "Товары для дома": "dom-beige.jpg", "Одежда и обувь": "odezhda-dark.jpg",
+  "Обучение персонала": "obuchenie-purple.jpg", "Электроника": "razvlecheniya-blue.jpg"
+};
+const POST_PATH = {
+  eda: '<path d="M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H15.6"/><path d="M8.5 3.5v3M12 3.5v3"/>',
+  krasota: '<path d="M8.5 21h7v-9h-7z"/><path d="M9.5 12V7.5L14.5 4v8"/>',
+  sport: '<path d="M7 7.5v9M4 9.5v5M17 7.5v9M20 9.5v5M7 12h10"/>',
+  ticket: '<path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/><path d="M14 6.5v11" stroke-dasharray="1.5 2"/>',
+  pin: '<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>',
+  cal: '<rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
+  cart: '<path d="M3.5 4.5h2l2 11h10l2-8H7"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="16.5" cy="19.5" r="1.3"/>'
+};
+const postIcon = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + POST_PATH[k] + '</svg>';
+const nicheIcon = n => /Кафе/.test(n) ? "eda" : /Красота|Космет/.test(n) ? "krasota" : /Фитнес|спорт/.test(n) ? "sport" : "ticket";
+
+function postArt(o) {
+  const photo = POST_PHOTO[o.niche] || "biz-warm.jpg";
+  const empty = (t, ph) => t ? escHTML(t) : '<span class="is-ph">' + ph + '</span>';
+  return '<div class="lkd-art ' + (o.tg ? "lkd-art--tg" : "lkd-art--vk") + '">' +
+    '<div class="lkd-art__card">' +
+      '<div class="lkd-art__ph" style="background-image:url(\'../assets/coupons/' + photo + '\')">' +
+        '<div class="lkd-art__erid">Реклама · ' + escHTML(LK_COMPANY.name) + ' · erid: присвоим</div>' +
+        '<span class="lkd-art__tk' + (o.value.length > 5 ? " is-long" : "") + '">' + escHTML(o.value) + '</span>' +
+      '</div>' +
+      '<div class="lkd-art__body">' +
+        '<div class="lkd-art__cat"><span>' + postIcon(nicheIcon(o.niche)) + '</span>' + escHTML(o.niche) + '</div>' +
+        '<div class="lkd-art__t">' + empty(o.title, "Заголовок купона") + '</div>' +
+        '<div class="lkd-art__c">' + escHTML(LK_COMPANY.name) + '</div>' +
+        '<ul class="lkd-art__meta">' +
+          '<li>' + postIcon(o.isMarket ? "cart" : "pin") + '<span>' + empty(o.where, "Адрес") + '</span></li>' +
+          '<li>' + postIcon("cal") + '<span>' + empty(o.dates, "Сроки") + '</span></li>' +
+        '</ul>' +
+        '<div class="lkd-art__foot"><div><span>Код купона — на сайте</span><b>vsekupony.ru</b></div>' +
+          '<img src="../assets/brand/logo-red.png" alt=""></div>' +
+      '</div>' +
+    '</div>' +
+    '<i class="lkd-art__n lkd-art__n--a"></i><i class="lkd-art__n lkd-art__n--b"></i>' +
+  '</div>';
+}
+
+function socialPost(form) {
+  const f = n => qs('[data-f="' + n + '"]', form);
+  const val = n => { const el = f(n); return el ? el.value.trim() : ""; };
+  const isMarket = !!f("article");
+  const mode = window.LKD_MODE;
+
+  const anchor = panelByTitle(form, "Каналы публикации") || qs(".lk-secret", form);
+  if (!anchor) return;
+
+  const post = document.createElement("section");
+  post.className = "lk-panel lkd-post";
+  post.innerHTML =
+    '<div class="lkd-post__top">' +
+      '<span class="lkd-post__tag">Рекламный материал</span>' +
+      '<h2 class="lkd-post__h">Так будет выглядеть пост в соцсетях</h2>' +
+      '<p class="lkd-post__lead">Текст собираем сами из полей купона и публикуем в наших группах ' +
+        (isMarket ? "по маркетплейсам" : mode === "for-business" ? "выбранных регионов" : "выбранных городов") + '. Здесь ничего заполнять не нужно — поправьте поля выше, и пост изменится следом.</p>' +
+    '</div>' +
+    '<div class="lk-seg lkd-post__tabs" role="tablist">' +
+      POST_NETS.map((n, i) => '<button type="button" role="tab" data-post-net="' + n.id + '"' + (i ? "" : ' class="is-on"') + '>' + n.label + '</button>').join("") +
+    '</div>' +
+    '<div class="lkd-post__off" data-post-off hidden></div>' +
+    '<article class="lkd-post__card" data-post-card>' +
+      '<header class="lkd-post__who">' +
+        '<img class="lkd-post__ava" src="../assets/brand/logo-red.png" alt="" width="20" height="34">' +
+        '<div><b data-post-group>ВСЕКУПОНЫ · Липецк</b><span>только что · Реклама</span></div>' +
+      '</header>' +
+      '<div class="lkd-post__text" data-post-text></div>' +
+      '<div class="lkd-post__img" data-post-art></div>' +
+      '<footer class="lkd-post__foot" data-post-foot></footer>' +
+    '</article>' +
+    '<div class="lkd-post__legend" aria-hidden="true">' +
+      '<span><i class="lkd-mk lkd-mk--offer"></i>Предложение</span>' +
+      '<span><i class="lkd-mk lkd-mk--code"></i>Промокод</span>' +
+      '<span><i class="lkd-mk lkd-mk--date"></i>Сроки</span>' +
+      '<span><i class="lkd-mk lkd-mk--rule"></i>Условия</span>' +
+    '</div>' +
+    '<div class="lkd-post__bar">' +
+      '<button type="button" class="btn btn--ghost" data-post-copy><span>Скопировать текст поста</span></button>' +
+      '<span class="lk-note">Пунктиром — то, что ещё не заполнено. Метку «Реклама» и erid добавим при публикации.</span>' +
+    '</div>';
+  anchor.after(post);
+
+  const share = document.createElement("section");
+  share.className = "lk-panel lkd-share";
+  share.innerHTML =
+    '<div class="lkd-share__main">' +
+      '<div class="lkd-share__k">Бонус за репост</div>' +
+      '<h2 class="lkd-share__h">Поделитесь купоном в своих соцсетях и получите <b>' + escHTML(SHARE_BONUS) + ' бонусов</b></h2>' +
+      '<ol class="lkd-share__steps">' +
+        '<li>Опубликуйте купон — после модерации пришлём ссылку на него</li>' +
+        '<li>Разместите пост в своей группе или канале: текст выше уже готов</li>' +
+        '<li>Бонусы придут на баланс, когда мы увидим репост, — ими можно оплатить следующее размещение</li>' +
+      '</ol>' +
+      '<div class="lkd-share__nets">' +
+        ["ВКонтакте", "Одноклассники", "Telegram", "Max"].map(n => '<button type="button" class="lkd-share__net" data-share-net>' + n + '</button>').join("") +
+        '<button type="button" class="btn btn--solid" data-post-copy><span>Скопировать текст</span></button>' +
+      '</div>' +
+      '<div class="lkd-share__note">Кнопки соцсетей заработают после публикации — у купона появится ссылка. Скопировать текст можно уже сейчас.</div>' +
+    '</div>' +
+    '<div class="lkd-share__prize" aria-hidden="true"><b>+' + escHTML(SHARE_BONUS) + '</b><span>бонусов<br>за каждый купон</span></div>';
+  post.after(share);
+
+  let net = "vk";
+  let plain = "";
+
+  /* Кусок поста: заполнен — как есть, пусто — пунктирная заглушка */
+  const part = (kind, text, ph) => text
+    ? '<span class="lkd-mk lkd-mk--' + kind + '">' + escHTML(text) + '</span>'
+    : '<span class="lkd-mk lkd-mk--' + kind + ' is-empty">' + escHTML(ph) + '</span>';
+
+  function where() {
+    if (isMarket) {
+      const mk = f("market") ? f("market").value : "маркетплейсе";
+      return { text: "Товар на " + mk, place: "Россия" };
+    }
+    const cs = qsa("[data-city].is-on", form).map(b => b.dataset.city);
+    if (mode === "for-business") return { text: cs.length ? "Для компаний: " + cs.join(", ") : "", place: cs[0] || "Россия" };
+    const ad = qsa("[data-addr-cb]", form)
+      .filter(i => i.checked && !i.closest("[data-addr-row]").hidden && !i.dataset.noaddr).map(i => i.value);
+    const noaddr = qsa("[data-noaddr]", form).some(i => i.checked);
+    const city = cs[0] || LK_COMPANY.city;
+    const text = ad.length ? city + ", " + ad.join("; ") : noaddr ? city + " — по всему городу и онлайн" : "";
+    return { text: text, place: cs.length > 1 ? cs.length + " " + plural(cs.length, "город", "города", "городов") : city };
+  }
+
+  function paint() {
+    const value = val("value"), title = val("title"), code = val("code");
+    const dates = ruRange(val("from"), val("to"));
+    const useEl = qs("[data-use-text]", form) || qs(".lk-ta:not([data-img-prompt])", form);
+    const use = useEl ? useEl.value.trim() : "";
+    const niche = val("niche") || LK_COMPANY.niche;
+    const w = where();
+    const tg = net === "tg";
+    const link = "vsekupony.ru/coupon/…";
+
+    qs("[data-post-group]", post).textContent = "ВСЕКУПОНЫ · " + (isMarket ? (f("market") ? f("market").value : "Маркетплейсы") : w.place);
+    const pv = qs("#pvVal", form);
+    qs("[data-post-art]", post).innerHTML = postArt({
+      tg: tg, isMarket: isMarket,
+      value: value || (pv ? pv.textContent : "−30%"),
+      title: title, niche: niche,
+      where: w.text, dates: ruRange(val("from"), val("to"), true)
+    });
+
+    const offer = (value ? value + " · " : "") + title;
+    const lines = [
+      (tg ? "<b>" : "") + "🔥 " + part("offer", offer, "Величина скидки · заголовок купона") + (tg ? "</b>" : ""),
+      escHTML(LK_COMPANY.name) + " · " + escHTML(niche),
+      "",
+      "🎟 Промокод: " + (code ? '<span class="lkd-mk lkd-mk--code' + (tg ? " is-mono" : "") + '">' + escHTML(code) + "</span>" : part("code", "", "появится, когда заполните")),
+      "📅 Действует " + part("date", dates, "с … по … — укажите даты"),
+      (isMarket ? "🛒 " : "📍 ") + part("rule", w.text, isMarket ? "площадка" : "адрес — отметьте в «Адресах применения»"),
+      "ℹ️ " + part("rule", use, "как воспользоваться"),
+      "",
+      "👉 Забрать купон: " + '<span class="lkd-post__link">' + link + "</span>",
+      "",
+      '<span class="lkd-post__ad">Реклама. ' + escHTML(LK_COMPANY.name) + ", ИНН " + LK_COMPANY.inn + ". erid: присвоим при публикации</span>"
+    ];
+    qs("[data-post-text]", post).innerHTML = lines.map(l => l ? "<p>" + l + "</p>" : '<p class="lkd-post__gap"></p>').join("");
+
+    plain = [
+      "🔥 " + (offer || "[заголовок купона]"),
+      LK_COMPANY.name + " · " + niche, "",
+      "🎟 Промокод: " + (code || "[промокод]"),
+      "📅 Действует " + (dates || "[даты]"),
+      (isMarket ? "🛒 " : "📍 ") + (w.text || "[адрес]"),
+      "ℹ️ " + (use || "[как воспользоваться]"), "",
+      "👉 Забрать купон: " + link
+    ].join("\n");
+
+    qs("[data-post-foot]", post).innerHTML = tg
+      ? '<span>👁 0</span><span>Комментарии</span>'
+      : '<span>♡ 0</span><span>💬 0</span><span>↗ 0</span><span class="lkd-post__views">👁 0</span>';
+
+    /* Каналы сняли — честно говорим, что пост туда не уйдёт */
+    const n = POST_NETS.find(x => x.id === net);
+    const boxes = n.chans.map(id => qs('[data-ch="' + id + '"]', form)).filter(Boolean);
+    const off = qs("[data-post-off]", post);
+    off.hidden = !boxes.length || boxes.some(b => b.checked);
+    off.textContent = "Каналы «" + n.label + "» не выбраны в «Каналах публикации» — в них пост не уйдёт. Пример показан для наглядности.";
+    qs("[data-post-card]", post).classList.toggle("is-off", !off.hidden);
+  }
+
+  post.addEventListener("click", e => {
+    const t = e.target.closest("[data-post-net]");
+    if (!t) return;
+    net = t.dataset.postNet;
+    qsa("[data-post-net]", post).forEach(b => b.classList.toggle("is-on", b === t));
+    paint();
+  });
+
+  [post, share].forEach(box => box.addEventListener("click", e => {
+    const b = e.target.closest("[data-post-copy]");
+    if (b) {
+      try { navigator.clipboard.writeText(plain); } catch (_) {}
+      const t = qs("span", b), was = t.textContent;
+      t.textContent = "Скопировано"; b.classList.add("is-done");
+      setTimeout(() => { t.textContent = was; b.classList.remove("is-done"); }, 1800);
+      return;
+    }
+    if (e.target.closest("[data-share-net]")) openModal('<h3>Поделиться можно после публикации</h3>' +
+      '<p class="lk-modal__lead">Сейчас у купона ещё нет ссылки. Когда он пройдёт модерацию, кнопки соцсетей заработают здесь и в «Моих купонах», а ' + escHTML(SHARE_BONUS) + ' бонусов придут на баланс после репоста.</p>' +
+      '<div class="lk-head__act" style="margin:12px 0 0"><button class="btn btn--solid" data-modal-close>Понятно</button></div>');
+  }));
+
+  form.addEventListener("input", () => requestAnimationFrame(paint));
+  form.addEventListener("change", () => requestAnimationFrame(paint));
+  form.addEventListener("click", e => { if (e.target.closest("[data-city], [data-ai-list] *, [data-code-gen]")) setTimeout(paint, 0); });
+  paint();
+}
+
 /* Режим конструктора: какой из трёх разделов сейчас открыт. lk.js читает
    window.LKD_MODE, чтобы знать, что обязательно (ссылка, регион), а цена
    считается ниже по своим правилам. */
@@ -2730,7 +2987,7 @@ window.initCouponBuilder = function (host) {
      и только потом добавляем свои — иначе базовые ссылки на узлы уедут. */
   if (form && qs("[data-img]", form)) patchWizard(form);
   baseInitCB(host);
-  if (form && qs("[data-img]", form)) wizardExtras(form);
+  if (form && qs("[data-img]", form)) { wizardExtras(form); socialPost(form); }
 };
 
 /* Первый рендер lk.js делает по DOMContentLoaded — к этому моменту все
