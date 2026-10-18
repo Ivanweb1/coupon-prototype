@@ -1080,9 +1080,12 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd-art--tg .lkd-art__card{flex-direction:row}
 .lkd-art__ph{position:relative;flex:none;height:calc(var(--u) * 700);background:var(--surface) center / cover no-repeat}
 .lkd-art--tg .lkd-art__ph{height:auto;width:calc(var(--u) * 430)}
-.lkd-art__ph::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--u) * 200);background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,0))}
+.lkd-art__ph{background:repeating-linear-gradient(135deg,var(--surface) 0 calc(var(--u) * 28),var(--surface-2) calc(var(--u) * 28) calc(var(--u) * 56))}
+.lkd-art__hold{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:calc(var(--u) * 40);
+  text-align:center;font-size:calc(var(--u) * 30);color:var(--ink-3)}
+.lkd-art__ph::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--u) * 200);display:none}
 .lkd-art__erid{position:absolute;left:calc(var(--u) * 30);right:calc(var(--u) * 24);top:calc(var(--u) * 28);
-  font-size:calc(var(--u) * 21);font-weight:500;line-height:1.3;color:rgba(255,255,255,.92)}
+  font-size:calc(var(--u) * 21);font-weight:500;line-height:1.3;color:var(--ink-3)}
 .lkd-art--tg .lkd-art__erid{left:calc(var(--u) * 28);font-size:calc(var(--u) * 19)}
 /* Билетик выгоды: красная плашка с полукруглыми вырезами по бокам */
 .lkd-art__tk{position:absolute;left:calc(var(--u) * 40);bottom:calc(var(--u) * 40);padding:.16em .62em .2em;
