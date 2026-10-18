@@ -1191,3 +1191,10 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd-art__ph.has-img .lkd-art__erid{color:rgba(255,255,255,.92)}
 .lkd-art--tg .lkd-art__meta li{align-items:flex-start}
 .lkd-art--tg .lkd-art__meta li span{white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+
+/* Телефон: колонки формы — одним потоком, порядок из mobileOrder() */
+@media (max-width:1000px){
+  .lkd .lk-form{display:flex;flex-direction:column;align-items:stretch}
+  .lkd .lk-form > div{display:contents}
+  .lkd .lk-form > div > *{order:var(--m-order, 0)}
+}
