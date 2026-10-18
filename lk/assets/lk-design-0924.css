@@ -1078,9 +1078,10 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
 .lkd-art--tg{aspect-ratio:1/1}
 .lkd-art__card{position:absolute;inset:calc(var(--u) * 40);border-radius:calc(var(--u) * 40);background:#fff;overflow:hidden;display:flex;flex-direction:column}
 .lkd-art--tg .lkd-art__card{flex-direction:row}
-.lkd-art__ph{position:relative;flex:none;height:calc(var(--u) * 700);background:var(--surface) center / cover no-repeat}
+.lkd-art__ph{position:relative;flex:none;height:calc(var(--u) * 700);background-color:var(--surface)}
 .lkd-art--tg .lkd-art__ph{height:auto;width:calc(var(--u) * 430)}
-.lkd-art__ph{background:repeating-linear-gradient(135deg,var(--surface) 0 calc(var(--u) * 28),var(--surface-2) calc(var(--u) * 28) calc(var(--u) * 56))}
+.lkd-art__ph:not(.has-img){background:repeating-linear-gradient(135deg,var(--surface) 0 calc(var(--u) * 28),var(--surface-2) calc(var(--u) * 28) calc(var(--u) * 56))}
+.lkd-art__ph.has-img{background-size:cover}
 .lkd-art__hold{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:calc(var(--u) * 40);
   text-align:center;font-size:calc(var(--u) * 30);color:var(--ink-3)}
 .lkd-art__ph::before{content:"";position:absolute;left:0;right:0;top:0;height:calc(var(--u) * 200);display:none}
@@ -1172,3 +1173,6 @@ body:has(.lkd-wizbar) .lk-pill{bottom:88px}
   .lkd-share__prize b{font-size:32px}
   .lkd-share__h{font-size:18px}
 }
+/* Картинку выбрали — erid снова белый поверх затемнения, как в social-kit */
+.lkd-art__ph.has-img::before{display:block;background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,0))}
+.lkd-art__ph.has-img .lkd-art__erid{color:rgba(255,255,255,.92)}
