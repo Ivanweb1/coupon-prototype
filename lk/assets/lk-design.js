@@ -2720,7 +2720,7 @@ function ruRange(a, b, short) {
 /* Картинка поста — те же шаблоны, что в social-kit (kit.js, «Пост с
    купоном»): ВКонтакте — 4:5, снимок сверху; Telegram — 1:1, снимок слева.
    Своей картинки на этом шаге ещё нет, поэтому берём снимок ниши из
-   assets/coupons с пометкой «Фото для примера». */
+   assets/coupons. */
 const POST_PHOTO = {
   "Кафе и рестораны": "coffee.jpg", "Красота": "beauty.jpg", "Косметология": "krasota-green.jpg",
   "Медицина": "meditsina-white.jpg", "Авто": "avto-steel.jpg", "Автотовары": "avto-steel.jpg",
@@ -2748,7 +2748,6 @@ function postArt(o) {
       '<div class="lkd-art__ph" style="background-image:url(\'../assets/coupons/' + photo + '\')">' +
         '<div class="lkd-art__erid">Реклама · ' + escHTML(LK_COMPANY.name) + ' · erid: присвоим</div>' +
         '<span class="lkd-art__tk' + (o.value.length > 5 ? " is-long" : "") + '">' + escHTML(o.value) + '</span>' +
-        '<span class="lkd-art__sample">' + (o.isMarket ? "Фото возьмём из карточки товара" : "Фото для примера") + '</span>' +
       '</div>' +
       '<div class="lkd-art__body">' +
         '<div class="lkd-art__cat"><span>' + postIcon(nicheIcon(o.niche)) + '</span>' + escHTML(o.niche) + '</div>' +
