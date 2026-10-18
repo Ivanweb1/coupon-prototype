@@ -2706,12 +2706,64 @@ function ruDate(v) {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || "");
   return m ? (+m[3]) + " " + RU_MONTHS[+m[2] - 1] + " " + m[1] : (v || "");
 }
-function ruRange(a, b) {
+function ruRange(a, b, short) {
   if (!a || !b) return "";
   const A = ruDate(a).split(" "), B = ruDate(b).split(" ");
-  if (A.length === 3 && B.length === 3 && A[2] === B[2])
-    return A[1] === B[1] ? "с " + A[0] + " по " + B.join(" ") : "с " + A[0] + " " + A[1] + " по " + B.join(" ");
+  if (A.length === 3 && B.length === 3 && A[2] === B[2]) {
+    /* На картинке год не пишем — как в шаблонах social-kit */
+    const end = short ? B.slice(0, 2).join(" ") : B.join(" ");
+    return A[1] === B[1] ? "с " + A[0] + " по " + end : "с " + A[0] + " " + A[1] + " по " + end;
+  }
   return "с " + ruDate(a) + " по " + ruDate(b);
+}
+
+/* Картинка поста — те же шаблоны, что в social-kit (kit.js, «Пост с
+   купоном»): ВКонтакте — 4:5, снимок сверху; Telegram — 1:1, снимок слева.
+   Своей картинки на этом шаге ещё нет, поэтому берём снимок ниши из
+   assets/coupons с пометкой «Фото для примера». */
+const POST_PHOTO = {
+  "Кафе и рестораны": "coffee.jpg", "Красота": "beauty.jpg", "Косметология": "krasota-green.jpg",
+  "Медицина": "meditsina-white.jpg", "Авто": "avto-steel.jpg", "Автотовары": "avto-steel.jpg",
+  "Фитнес и спорт": "fitness.jpg", "Развлечения": "entertainment.jpg", "Детям": "detyam-yellow.jpg",
+  "Товары для дома": "dom-beige.jpg", "Одежда и обувь": "odezhda-dark.jpg",
+  "Обучение персонала": "obuchenie-purple.jpg", "Электроника": "razvlecheniya-blue.jpg"
+};
+const POST_PATH = {
+  eda: '<path d="M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H15.6"/><path d="M8.5 3.5v3M12 3.5v3"/>',
+  krasota: '<path d="M8.5 21h7v-9h-7z"/><path d="M9.5 12V7.5L14.5 4v8"/>',
+  sport: '<path d="M7 7.5v9M4 9.5v5M17 7.5v9M20 9.5v5M7 12h10"/>',
+  ticket: '<path d="M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z"/><path d="M14 6.5v11" stroke-dasharray="1.5 2"/>',
+  pin: '<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>',
+  cal: '<rect x="4" y="5.5" width="16" height="14.5" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
+  cart: '<path d="M3.5 4.5h2l2 11h10l2-8H7"/><circle cx="9.5" cy="19.5" r="1.3"/><circle cx="16.5" cy="19.5" r="1.3"/>'
+};
+const postIcon = k => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + POST_PATH[k] + '</svg>';
+const nicheIcon = n => /Кафе/.test(n) ? "eda" : /Красота|Космет/.test(n) ? "krasota" : /Фитнес|спорт/.test(n) ? "sport" : "ticket";
+
+function postArt(o) {
+  const photo = POST_PHOTO[o.niche] || "biz-warm.jpg";
+  const empty = (t, ph) => t ? escHTML(t) : '<span class="is-ph">' + ph + '</span>';
+  return '<div class="lkd-art ' + (o.tg ? "lkd-art--tg" : "lkd-art--vk") + '">' +
+    '<div class="lkd-art__card">' +
+      '<div class="lkd-art__ph" style="background-image:url(\'../assets/coupons/' + photo + '\')">' +
+        '<div class="lkd-art__erid">Реклама · ' + escHTML(LK_COMPANY.name) + ' · erid: присвоим</div>' +
+        '<span class="lkd-art__tk' + (o.value.length > 5 ? " is-long" : "") + '">' + escHTML(o.value) + '</span>' +
+        '<span class="lkd-art__sample">' + (o.isMarket ? "Фото возьмём из карточки товара" : "Фото для примера") + '</span>' +
+      '</div>' +
+      '<div class="lkd-art__body">' +
+        '<div class="lkd-art__cat"><span>' + postIcon(nicheIcon(o.niche)) + '</span>' + escHTML(o.niche) + '</div>' +
+        '<div class="lkd-art__t">' + empty(o.title, "Заголовок купона") + '</div>' +
+        '<div class="lkd-art__c">' + escHTML(LK_COMPANY.name) + '</div>' +
+        '<ul class="lkd-art__meta">' +
+          '<li>' + postIcon(o.isMarket ? "cart" : "pin") + '<span>' + empty(o.where, "Адрес") + '</span></li>' +
+          '<li>' + postIcon("cal") + '<span>' + empty(o.dates, "Сроки") + '</span></li>' +
+        '</ul>' +
+        '<div class="lkd-art__foot"><div><span>Код купона — на сайте</span><b>vsekupony.ru</b></div>' +
+          '<img src="../assets/brand/logo-red.png" alt=""></div>' +
+      '</div>' +
+    '</div>' +
+    '<i class="lkd-art__n lkd-art__n--a"></i><i class="lkd-art__n lkd-art__n--b"></i>' +
+  '</div>';
 }
 
 function socialPost(form) {
@@ -2742,7 +2794,7 @@ function socialPost(form) {
         '<div><b data-post-group>ВСЕКУПОНЫ · Липецк</b><span>только что · Реклама</span></div>' +
       '</header>' +
       '<div class="lkd-post__text" data-post-text></div>' +
-      '<div class="lkd-post__img"><span class="lkd-post__badge" data-post-badge></span><span>' + (isMarket ? "Картинку возьмём из карточки товара" : "Изображение купона — то, что выберете последним шагом") + '</span></div>' +
+      '<div class="lkd-post__img" data-post-art></div>' +
       '<footer class="lkd-post__foot" data-post-foot></footer>' +
     '</article>' +
     '<div class="lkd-post__legend" aria-hidden="true">' +
@@ -2812,7 +2864,12 @@ function socialPost(form) {
 
     qs("[data-post-group]", post).textContent = "ВСЕКУПОНЫ · " + (isMarket ? (f("market") ? f("market").value : "Маркетплейсы") : w.place);
     const pv = qs("#pvVal", form);
-    qs("[data-post-badge]", post).textContent = value || (pv ? pv.textContent : "−30%");
+    qs("[data-post-art]", post).innerHTML = postArt({
+      tg: tg, isMarket: isMarket,
+      value: value || (pv ? pv.textContent : "−30%"),
+      title: title, niche: niche,
+      where: w.text, dates: ruRange(val("from"), val("to"), true)
+    });
 
     const offer = (value ? value + " · " : "") + title;
     const lines = [
