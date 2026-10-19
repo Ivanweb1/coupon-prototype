@@ -21,7 +21,8 @@
 
      Порядок — как разговор с рекламодателем: покупатели уже здесь →
      выгоду ищут каждый день → что такое «Все купоны» (путь покупателя и
-     форматы предложений) → AI-помощник → запуск в 3 шага → кто сделал →
+     форматы предложений) → скидка не обязательна (18 механик:
+     без скидки, больше товара, скидка) → AI-помощник → запуск в 3 шага → кто сделал →
      одно предложение — несколько площадок → реклама дорогой быть не
      должна → куда растём → первое размещение бесплатно.
 
@@ -263,6 +264,63 @@ a{color:inherit;text-decoration:none}
 .off .tk{font-size:32px;color:var(--brand)}
 .off .tk__bg{fill:#FCE4E2}
 .off > span:not(.tk){font-size:22px;font-weight:600;line-height:1.3;color:var(--ink-2);white-space:nowrap}
+
+/* ==========================================================================
+   3а. Скидка не обязательна — 18 механик по цене для бизнеса (добавлен 16.10)
+   ==========================================================================
+   Сразу после форматов: предприниматель боится работать в минус. Шкала
+   сверху — затраты слева направо: без дополнительных → единица товара → часть
+   выручки; под ней три колонки той же ширины. Главная — «Без скидки»,
+   на красном; две другие серые, билетики бледно-розовые, как в форматах. */
+#s14 .in{top:100px;width:1660px}
+#s14 .h1{margin:0}
+#s14 .sub{max-width:1640px}
+/* Призыв к действию (правка 16.10) — справа от заголовка, рамкой «как код купона»
+   вместо билетиков-украшений: после 18 механик — сразу шаг навстречу */
+.mxcta{position:absolute;right:150px;top:112px;width:580px;display:flex;align-items:center;padding:26px 34px;border:3px dashed #F3B0AB;border-radius:28px;background:var(--brand-50)}
+.mxcta div{flex:1;min-width:0}
+.mxcta b{display:block;font-size:29px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.mxcta span{display:block;margin-top:10px;font-size:22px;font-weight:600;color:var(--brand)}
+.mxs,.mx{position:absolute;left:150px;right:150px;display:grid;grid-template-columns:772px 400px 400px;column-gap:24px}
+.mxs{top:320px;row-gap:12px}
+.mxs__k{font-size:23px;font-weight:700;color:var(--brand)}
+.mxs__k--r{grid-column:2 / 4;justify-self:end;color:var(--ink-3)}
+.mxs i{height:8px;border-radius:4px;background:var(--brand)}
+.mxs i:nth-of-type(2){background:#F3B0AB}
+.mxs i:nth-of-type(3){background:var(--surface-2)}
+.mx{top:382px;height:612px}
+.mxc{position:relative;display:flex;flex-direction:column;min-width:0;padding:30px 30px 32px;border-radius:30px;background:var(--surface)}
+.mxc__h{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.mxc__t{font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.mxc__n{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--brand);font-size:22px;font-weight:800}
+.mxc__s{margin:6px 0 16px;font-size:21px;font-weight:500;color:#3A3A3A}
+/* строка механики: билетик выгоды фиксированной ширины, справа ниша и предложение */
+.mxr{display:flex;align-items:center;gap:14px;min-width:0;padding:5px 0;border-top:2px solid var(--line)}
+.mxr .tk{flex:none;width:136px;text-align:center;font-size:21px;color:var(--brand)}
+.mxr .tk__bg{fill:#FCE4E2}
+.mxr div{min-width:0;line-height:1.15}
+.mxr small{display:block;font-size:15px;font-weight:500;color:var(--ink-3)}
+.mxr b{display:block;font-size:20px;font-weight:700;white-space:nowrap}
+/* «Без скидки» — красная колонка, билетики белые, строки по две в ряд */
+.mxc--red{background:var(--brand);color:#fff}
+.mxc--red .mxc__s{color:rgba(255,255,255,.94)}
+.mxc--red .mxr{border-top-color:rgba(255,255,255,.28);padding:22px 0}
+.mxc--red .mxr .tk{width:150px;font-size:22px}
+.mxc--red .mxr .tk__bg{fill:#fff}
+.mxc--red .mxr small{color:rgba(255,255,255,.82);font-size:16px}
+.mxg{display:grid;grid-template-columns:1fr 1fr;column-gap:28px}
+.mxai{margin-top:auto;display:flex;align-items:center;gap:26px;padding:28px 32px;border-radius:24px;background:rgba(255,255,255,.14)}
+.mxai__i{flex:none;width:68px;height:68px;border-radius:16px;display:grid;place-items:center;background:#fff;color:var(--brand);font-size:30px;font-weight:800;letter-spacing:-.02em}
+/* значок и текст одной высоты — 68 px: заголовок 32 + отступ 6 + строка 30 */
+.mxai b{display:block;font-size:28px;font-weight:800;letter-spacing:-.015em;line-height:32px;white-space:nowrap}
+.mxai div > span{display:block;margin-top:6px;font-size:21px;font-weight:500;line-height:30px;white-space:nowrap;color:rgba(255,255,255,.9)}
+/* Пример в колонке «Больше товара» — карточка предложения как в ленте сайта */
+.mxp{margin-top:auto;border-radius:22px;background:#fff;overflow:hidden;box-shadow:0 18px 30px -20px rgba(40,10,8,.4)}
+.mxp__ph{position:relative;height:150px;background:var(--surface-2) url('../assets/coupons/coffee.jpg') 50% 74% / cover no-repeat}
+.mxp__ph .tk{position:absolute;left:16px;bottom:16px;font-size:30px}
+.mxp__c{padding:12px 18px 16px}
+.mxp__c b{display:block;font-size:21px;font-weight:800;line-height:1.2;letter-spacing:-.01em}
+.mxp__c span{display:block;margin-top:6px;font-size:16px;font-weight:500;color:var(--ink-3)}
 
 /* 0. Заставка: знак и «Привет!» по центру красного поля */
 .hi{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px}
@@ -993,6 +1051,57 @@ a{color:inherit;text-decoration:none}
     </div>
   </section>
 
+  <!-- ===================== 3а. Скидка не обязательна ===================== -->
+  <section class="slide" id="s14">
+    <div class="cpn__l cpn__l--full">
+      <div class="in">
+        <h2 class="h1">Скидка <span class="city">не обязательна</span></h2>
+        <p class="sub">Не&nbsp;нужно делиться выручкой: <b>9&nbsp;из&nbsp;18 механик</b> не&nbsp;снижают цену</p>
+      </div>
+    </div>
+    <div class="mxcta"><div><b>Ваш покупатель уже рядом.<br>Дайте ему повод прийти!</b><span>Первое размещение&nbsp;— бесплатно</span></div></div>
+    <div class="mxs">
+      <span class="mxs__k">Не&nbsp;требуют дополнительных затрат</span><span class="mxs__k mxs__k--r">часть выручки →</span>
+      <i></i><i></i><i></i>
+    </div>
+    <div class="mx">
+      <div class="mxc mxc--red">
+        <div class="mxc__h"><div class="mxc__t">Без скидки</div><span class="mxc__n">6</span></div>
+        <div class="mxc__s">Неценовое промо</div>
+        <div class="mxg">
+          <div class="mxr"><span class="tk">Бесплатно</span><div><small>Автосервис</small><b>Диагностика</b></div></div>
+          <div class="mxr"><span class="tk">Подарок</span><div><small>Кофейня</small><b>За&nbsp;подписку</b></div></div>
+          <div class="mxr"><span class="tk">0&nbsp;₽</span><div><small>Цветы</small><b>Доставка букета</b></div></div>
+          <div class="mxr"><span class="tk">0%</span><div><small>Мебель</small><b>Рассрочка</b></div></div>
+          <div class="mxr"><span class="tk">Абонемент</span><div><small>Фитнес</small><b>10&nbsp;занятий</b></div></div>
+          <div class="mxr"><span class="tk">Пробное</span><div><small>Детская студия</small><b>Первое занятие</b></div></div>
+        </div>
+        <div class="mxai"><span class="mxai__i">AI</span><div><b>Не&nbsp;знаете, что выбрать?</b><span>AI-помощник подскажет механику под&nbsp;вашу&nbsp;акцию</span></div></div>
+      </div>
+      <div class="mxc">
+        <div class="mxc__h"><div class="mxc__t">Больше товара</div><span class="mxc__n">3</span></div>
+        <div class="mxc__s">Стоит одну единицу товара</div>
+        <div class="mxr"><span class="tk">5&nbsp;=&nbsp;4</span><div><small>Кофейня</small><b>5-й кофе за&nbsp;0&nbsp;₽</b></div></div>
+        <div class="mxr"><span class="tk">2&nbsp;=&nbsp;3</span><div><small>Автомойка</small><b>3-я мойка за&nbsp;0&nbsp;₽</b></div></div>
+        <div class="mxr"><span class="tk">Подарок</span><div><small>Оптика</small><b>Футляр к&nbsp;очкам</b></div></div>
+        <div class="mxp"><div class="mxp__ph"><span class="tk">5&nbsp;=&nbsp;4</span></div><div class="mxp__c"><b>Каждый 5-й кофе<br>в&nbsp;подарок</b><span>Кофейня «Пример» · 5&nbsp;мин</span></div></div>
+      </div>
+      <div class="mxc">
+        <div class="mxc__h"><div class="mxc__t">Скидка</div><span class="mxc__n">9</span></div>
+        <div class="mxc__s">Привлекательное предложение</div>
+        <div class="mxr"><span class="tk">−20%</span><div><small>Салон</small><b>Маникюр</b></div></div>
+        <div class="mxr"><span class="tk">−500&nbsp;₽</span><div><small>Доставка еды</small><b>Первый заказ</b></div></div>
+        <div class="mxr"><span class="tk">349&nbsp;₽</span><div><small>Кафе</small><b>Бизнес-ланч</b></div></div>
+        <div class="mxr"><span class="tk">от&nbsp;3000&nbsp;₽</span><div><small>Продукты</small><b>Скидка на&nbsp;чек</b></div></div>
+        <div class="mxr"><span class="tk">до&nbsp;18:00</span><div><small>Пекарня</small><b>Вечерняя выпечка</b></div></div>
+        <div class="mxr"><span class="tk">до&nbsp;−15%</span><div><small>Стройматериалы</small><b>Опт</b></div></div>
+        <div class="mxr"><span class="tk">ДР</span><div><small>Ресторан</small><b>В&nbsp;день рождения</b></div></div>
+        <div class="mxr"><span class="tk">Кешбэк</span><div><small>Салон</small><b>За&nbsp;друга</b></div></div>
+        <div class="mxr"><span class="tk">Кешбэк</span><div><small>Маркетплейс</small><b>За&nbsp;отзыв</b></div></div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== 5. AI-помощник ===================== -->
   <section class="slide" id="s7">
     <div class="cpn__l cpn__l--full">
@@ -1552,7 +1661,7 @@ a{color:inherit;text-decoration:none}
      стоят абсолютно, поэтому после загрузки шрифтов сдвигаем их группой так,
      чтобы верх первого блока был ровно на 64 px ниже подзаголовка. */
   var BODY = {
-    s3: ".pace,.ws", s2: ".path__k,.path,.offs__k,.offs", s7: ".ai", s6: ".trio",
+    s3: ".pace,.ws", s2: ".path__k,.path,.offs__k,.offs", s14: ".mxs,.mx", s7: ".ai", s6: ".trio",
     s12: ".trio", s13: ".trio", s4: ".team", s10: ".fl__k,.fo,.fl__ar,.site,.fl__l,.chs", s11: ".cmp", s8: ".map,.next"
   };
   document.fonts.ready.then(function () {
