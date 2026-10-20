@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Значки Всекупонов</title>
+<!-- Страница собирается скриптом tools/icons/build.js из tools/icons/template.html.
+     Правьте шаблон, а не icons.html. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff;--surface:#F9F9F9;--line:#E7E7E7;--text:#141414;--muted:#77767A;
+  --accent:#DD443C;--accent-soft:#FDECEA;--chip:#F9F9F9;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121212;--surface:#1C1C1C;--line:#2C2C2C;--text:#F2F2F2;--muted:#9A999D;
+    --accent:#EE5C54;--accent-soft:#3A1E1C;--chip:#242424;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121212;--surface:#1C1C1C;--line:#2C2C2C;--text:#F2F2F2;--muted:#9A999D;
+  --accent:#EE5C54;--accent-soft:#3A1E1C;--chip:#242424;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 Onest,system-ui,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.03em;margin:0 0 8px}
+.lead{color:var(--muted);margin:0 0 28px;max-width:680px}
+.lead b{color:var(--text);font-weight:600}
+
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;padding:14px 0;margin-bottom:8px}
+.ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ctl__t{font-size:13px;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;color:var(--text);font:inherit;font-size:13px;font-weight:500;
+  padding:6px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.seg button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.sw{width:12px;height:12px;border-radius:50%;border:1px solid var(--line)}
+.bar__acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;font-size:13px;font-weight:600;
+  padding:9px 14px;border-radius:999px;cursor:pointer}
+.btn:hover{border-color:var(--text)}
+.btn--accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn--accent:hover{filter:brightness(.95);border-color:var(--accent)}
+
+section{margin-top:40px}
+.sec__h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.sec__h h2{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0}
+.sec__n{color:var(--muted);font-size:14px}
+.sec__h .btn{margin-left:auto;padding:6px 12px}
+.sec__note{color:var(--muted);margin:0 0 16px;font-size:14px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ic{position:relative;border:1px solid var(--line);border-radius:16px;background:var(--bg);
+  padding:18px 12px 12px;text-align:center;cursor:pointer;transition:border-color .15s}
+.ic:hover{border-color:var(--accent)}
+.ic__pic{height:56px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.ic__pic svg{display:block}
+.ic__name{font-size:13px;font-weight:600;line-height:1.25}
+.ic__key{font-size:11px;color:var(--muted);margin-top:2px;font-family:ui-monospace,monospace}
+.ic__dl{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:0;
+  background:var(--surface);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
+.ic:hover .ic__dl,.ic__dl:focus-visible{opacity:1}
+.ic__dl:hover{color:var(--accent)}
+@media (hover:none){.ic__dl{opacity:1}}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:var(--text);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;transition:.2s}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:640px){
+  .wrap{padding:24px 16px 60px}
+  .bar__acts{margin-left:0}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Значки Всекупонов</h1>
+  <p class="lead">Все значки прототипа на одной странице. <b>Клик по значку копирует SVG.</b> Вставьте его в Figma через Ctrl+V / ⌘V, и он ляжет вектором. Стрелка в углу карточки скачивает файл. Кнопка «Скопировать раздел» кладёт весь раздел одним листом: каждый значок в нём отдельный слой со своим названием.</p>
+
+  <div class="bar">
+    <div class="ctl"><span class="ctl__t">Цвет</span>
+      <div class="seg" data-ctl="color">
+        <button data-v="#DD443C" aria-pressed="true"><i class="sw" style="background:#DD443C"></i>Красный</button>
+        <button data-v="#141414" aria-pressed="false"><i class="sw" style="background:#141414"></i>Чёрный</button>
+        <button data-v="#FFFFFF" aria-pressed="false"><i class="sw" style="background:#fff"></i>Белый</button>
+      </div>
+    </div>
+    <div class="ctl"><span class="ctl__t">Подложка</span>
+      <div class="seg" data-ctl="bg">
+        <button data-v="none" aria-pressed="true">Без фона</button>
+        <button data-v="#F9F9F9" aria-pressed="false">Серый круг</button>
+        <button data-v="#DD443C" aria-pressed="false">Красный круг</button>
+      </div>
+    </div>
+    <div class="bar__acts">
+      <button class="btn" data-all="copy">Скопировать всё</button>
+      <button class="btn btn--accent" data-all="dl">Скачать всё (SVG)</button>
+    </div>
+  </div>
+
+  <div id="groups"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const GROUPS = [{"id":"cats","title":"Категории","note":"Значки ниш из строки категорий: региональные, маркетплейсы и «Для бизнеса».","items":[{"key":"eda","body":"<path d=\"M5 9h11v4.5A5.5 5.5 0 0 1 10.5 19h0A5.5 5.5 0 0 1 5 13.5z\"/><path d=\"M16 10.5h1.5a2.5 2.5 0 0 1 0 5H15.6\"/><path d=\"M8.5 3.5v3M12 3.5v3\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Кафе и рестораны"},{"key":"krasota","body":"<path d=\"M8.5 21h7v-9h-7z\"/><path d=\"M9.5 12V7.5L14.5 4v8\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Красота"},{"key":"kosmetologiya","body":"<path d=\"M12 3.5l1.7 4.3L18 9.5l-4.3 1.7L12 15.5l-1.7-4.3L6 9.5l4.3-1.7z\"/><path d=\"M18 15l.7 1.8 1.8.7-1.8.7L18 20l-.7-1.8-1.8-.7 1.8-.7z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Косметология"},{"key":"meditsina","body":"<path d=\"M9.5 4h5v5.5H20v5h-5.5V20h-5v-5.5H4v-5h5.5z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Медицина"},{"key":"avto","body":"<path d=\"M4 16.5v-4.5l2.2-5h11.6l2.2 5v4.5z\"/><path d=\"M5 16.5v2.5h3v-2.5M16 16.5v2.5h3v-2.5\"/><path d=\"M7.5 12.5h.01M16.5 12.5h.01\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Авто"},{"key":"avtomoyki","body":"<path d=\"M12 3.5s5.5 6.2 5.5 10.3a5.5 5.5 0 0 1-11 0C6.5 9.7 12 3.5 12 3.5z\"/><path d=\"M9.5 14a2.5 2.5 0 0 0 2.5 2.5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Автомойки"},{"key":"avtotovary","body":"<circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M12 3.5v2.5M12 18v2.5M3.5 12H6M18 12h2.5M6 6l1.8 1.8M16.2 16.2 18 18M6 18l1.8-1.8M16.2 7.8 18 6\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Автотовары"},{"key":"sport","body":"<path d=\"M7 7.5v9M4 9.5v5M17 7.5v9M20 9.5v5M7 12h10\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Фитнес и спорт"},{"key":"spa","body":"<path d=\"M12 20c-4.5 0-7.5-3.5-7.5-8 4 0 7.5 3 7.5 8zm0 0c4.5 0 7.5-3.5 7.5-8-4 0-7.5 3-7.5 8z\"/><path d=\"M12 12c-1.8-1.8-1.8-5.2 0-8 1.8 2.8 1.8 6.2 0 8z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"СПА и массаж"},{"key":"razvlecheniya","body":"<path d=\"M3.5 8.5a2 2 0 0 0 2-2h13a2 2 0 0 0 2 2v1.5a2 2 0 0 0 0 4v1.5a2 2 0 0 0-2 2h-13a2 2 0 0 0-2-2V14a2 2 0 0 0 0-4z\"/><path d=\"M14 6.5v11\" stroke-dasharray=\"1.5 2\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Развлечения"},{"key":"detyam","body":"<circle cx=\"12\" cy=\"13.5\" r=\"6\"/><circle cx=\"7\" cy=\"7\" r=\"2\"/><circle cx=\"17\" cy=\"7\" r=\"2\"/><path d=\"M10 14.5h.01M14 14.5h.01M10.5 17h3\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Детям"},{"key":"obuchenie","body":"<path d=\"M3.5 5.5h7v13h-7zM13.5 5.5h7v13h-7z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Обучение / Обучение персонала"},{"key":"dom","body":"<path d=\"M4 11 12 4l8 7v9H4z\"/><path d=\"M10 20v-5h4v5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Товары для дома"},{"key":"remont","body":"<path d=\"M14 3.5 20.5 10l-3 3L11 6.5z\"/><path d=\"M12.5 8 4 16.5 7.5 20 16 11.5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Ремонт и стройка"},{"key":"odezhda","body":"<path d=\"M8.5 4 12 6l3.5-2 5 4-2.8 3-1.7-1V20h-8v-10l-1.7 1-2.8-3z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Одежда и обувь"},{"key":"pitomtsy","body":"<circle cx=\"7\" cy=\"10\" r=\"1.8\"/><circle cx=\"10.5\" cy=\"6.5\" r=\"1.8\"/><circle cx=\"14.5\" cy=\"6.5\" r=\"1.8\"/><circle cx=\"18\" cy=\"10\" r=\"1.8\"/><path d=\"M12 12c-3 0-5.5 3-5.5 5.2 0 1.8 1.6 2.3 3 2 1.2-.3 1.8-.7 2.5-.7s1.3.4 2.5.7c1.4.3 3-.2 3-2C17.5 15 15 12 12 12z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Питомцы"},{"key":"uslugi","body":"<circle cx=\"12\" cy=\"12\" r=\"8.5\"/><path d=\"m8.5 12.3 2.4 2.4 4.8-5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Услуги / Услуги для бизнеса"},{"key":"puteshestviya","body":"<path d=\"M3.5 12.5 20.5 5 15 20.5l-3-5.5z\"/><path d=\"m12 15 3.5-4\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Путешествия"},{"key":"18plus","body":"<rect x=\"5\" y=\"10.5\" width=\"14\" height=\"10\" rx=\"2\"/><path d=\"M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"18+"},{"key":"elektronika","body":"<rect x=\"7\" y=\"3.5\" width=\"10\" height=\"17\" rx=\"2\"/><path d=\"M11 17.5h2\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Электроника"},{"key":"reklama","body":"<path d=\"M4 10v4h3l7 4V6l-7 4z\"/><path d=\"M17.5 9.5a3.5 3.5 0 0 1 0 5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Реклама и маркетинг"},{"key":"it","body":"<rect x=\"3.5\" y=\"5\" width=\"17\" height=\"11\" rx=\"1.5\"/><path d=\"M8 20h8M12 16v4\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"IT и сервисы"},{"key":"oborudovanie","body":"<path d=\"M4 20V9l5 3V9l5 3V5h6v15z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Оборудование"},{"key":"logistika","body":"<path d=\"M3.5 7h10v9h-10zM13.5 10h4l3 3v3h-7z\"/><circle cx=\"7\" cy=\"17.5\" r=\"1.6\"/><circle cx=\"17\" cy=\"17.5\" r=\"1.6\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Логистика"},{"key":"grid","body":"<rect x=\"4\" y=\"4\" width=\"6.5\" height=\"6.5\" rx=\"1.5\"/><rect x=\"13.5\" y=\"4\" width=\"6.5\" height=\"6.5\" rx=\"1.5\"/><rect x=\"4\" y=\"13.5\" width=\"6.5\" height=\"6.5\" rx=\"1.5\"/><rect x=\"13.5\" y=\"13.5\" width=\"6.5\" height=\"6.5\" rx=\"1.5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Без значка (запасной)"}]},{"id":"ui","title":"Интерфейс сайта","note":"Шапка, поиск, плашки разделов, карточка купона, контакты компании.","items":[{"key":"search","body":"<circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-3.2-3.2\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Поиск"},{"key":"mic","body":"<rect x=\"9\" y=\"3\" width=\"6\" height=\"11\" rx=\"3\"/><path d=\"M5 11a7 7 0 0 0 14 0M12 18v3\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Голосовой ввод"},{"key":"pin","body":"<path d=\"M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z\"/><circle cx=\"12\" cy=\"10\" r=\"2.6\"/>","sw":"1.8","cap":"","join":"","fill":"none","stroke":"currentColor","name":"Рядом со мной / гео"},{"key":"chev","body":"<path d=\"m6 9 6 6 6-6\"/>","sw":"2","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Стрелка вниз"},{"key":"share","body":"<path d=\"M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3m0 0L8 7m4-4 4 4\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Поделиться"},{"key":"close","body":"<path d=\"M6 6l12 12M18 6 6 18\"/>","sw":"2","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Закрыть"},{"key":"eye","body":"<path d=\"M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z\"/><circle cx=\"12\" cy=\"12\" r=\"2.6\"/>","sw":"1.7","cap":"","join":"","fill":"none","stroke":"currentColor","name":"Просмотры"},{"key":"copy","body":"<rect x=\"9\" y=\"9\" width=\"11\" height=\"11\" rx=\"2\"/><path d=\"M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1\"/>","sw":"1.7","cap":"","join":"round","fill":"none","stroke":"currentColor","name":"Скопировать код"},{"key":"used","body":"<path d=\"m4 12.5 5.2 5.2L20 7\"/>","sw":"1.9","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Использован / галочка"},{"key":"pinFill","body":"<path d=\"M12 22s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Zm0-8.4a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2Z\"/>","cap":"","join":"","fill":"currentColor","stroke":"","name":"Метка на карте"},{"key":"burger","body":"<path d=\"M4 7h16M4 12h16M4 17h16\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Меню"},{"key":"user","body":"<circle cx=\"12\" cy=\"8\" r=\"3.6\"/><path d=\"M4.5 20a7.5 7.5 0 0 1 15 0\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Профиль"},{"key":"grid","body":"<rect x=\"3\" y=\"3\" width=\"7.5\" height=\"7.5\" rx=\"2\"/><rect x=\"13.5\" y=\"3\" width=\"7.5\" height=\"7.5\" rx=\"2\"/><rect x=\"3\" y=\"13.5\" width=\"7.5\" height=\"7.5\" rx=\"2\"/><rect x=\"13.5\" y=\"13.5\" width=\"7.5\" height=\"7.5\" rx=\"2\"/>","sw":"1.9","cap":"","join":"","fill":"none","stroke":"currentColor","name":"Все категории"},{"key":"plus","body":"<path d=\"M12 5v14M5 12h14\"/>","sw":"2","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Добавить"},{"key":"link","body":"<path d=\"M10 14a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1\"/><path d=\"M14 10a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Ссылка"},{"key":"bag","body":"<path d=\"M4 8h16l-1.2 11.2a2 2 0 0 1-2 1.8H7.2a2 2 0 0 1-2-1.8Z\"/><path d=\"M9 8V6a3 3 0 0 1 6 0v2\"/>","sw":"1.8","cap":"","join":"","fill":"none","stroke":"currentColor","name":"Маркетплейсы"},{"key":"case","body":"<rect x=\"3\" y=\"7\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7\"/>","sw":"1.8","cap":"","join":"","fill":"none","stroke":"currentColor","name":"Для бизнеса"},{"key":"phone","body":"<path d=\"M6.6 10.8a15.7 15.7 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.4c1 .3 2 .5 3.1.5a1.5 1.5 0 0 1 1.5 1.5V20a1.5 1.5 0 0 1-1.5 1.5C10.7 21.5 3 13.8 3 4.5A1.5 1.5 0 0 1 4.5 3h3.1A1.5 1.5 0 0 1 9.1 4.5c0 1.1.2 2.1.5 3.1a1.5 1.5 0 0 1-.4 1.5Z\"/>","sw":"1.8","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Телефон"},{"key":"mail","body":"<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"m4 7 8 6 8-6\"/>","sw":"1.8","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Почта"}]},{"id":"lk","title":"Личный кабинет","note":"Меню кабинета, поля форм, пост для соцсетей. Повторы значков сайта убраны.","items":[{"key":"bell","body":"<path d=\"M18 9a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7\"/><path d=\"M10.5 20a2 2 0 0 0 3 0\"/>","sw":"1.7","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Уведомления"},{"key":"tag","body":"<path d=\"M12.6 3H5a2 2 0 0 0-2 2v7.6a2 2 0 0 0 .6 1.4l7.4 7.4a2 2 0 0 0 2.8 0l7.6-7.6a2 2 0 0 0 0-2.8L14 3.6A2 2 0 0 0 12.6 3Z\"/><circle cx=\"7.9\" cy=\"7.9\" r=\"1.3\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Купоны"},{"key":"bag","body":"<path d=\"M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8Z\"/><path d=\"M9 8V6a3 3 0 0 1 6 0v2\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Маркетплейсы"},{"key":"archive","body":"<rect x=\"3\" y=\"4\" width=\"18\" height=\"4.5\" rx=\"1.5\"/><path d=\"M5 8.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5\"/><path d=\"M10 12.5h4\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Архив"},{"key":"chart","body":"<path d=\"M4 20h16\"/><path d=\"M7.5 20v-5.5M12 20V9M16.5 20v-8\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Статистика"},{"key":"card","body":"<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2.5\"/><path d=\"M3 10h18\"/><path d=\"M6.5 14.5h3\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Оплата"},{"key":"store","body":"<path d=\"M4.5 9.5h15V19a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1V9.5Z\"/><path d=\"M4.5 9.5 6 4.5h12l1.5 5\"/><path d=\"M9.8 20v-5h4.4v5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Компания"},{"key":"users","body":"<circle cx=\"9.2\" cy=\"8.4\" r=\"3.2\"/><path d=\"M3.5 19.2a5.7 5.7 0 0 1 11.4 0\"/><path d=\"M16.2 5.6a3.2 3.2 0 0 1 0 5.6M17.3 19.2a5.7 5.7 0 0 0-1.5-3.9\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Партнёры"},{"key":"code","body":"<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2.5\"/><path d=\"M7 9v6M10.5 9v6M14 9v6M17 9v6\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Промокоды"},{"key":"case","body":"<rect x=\"3\" y=\"7\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7\"/><path d=\"M3 12.5h18\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Для бизнеса"},{"key":"gift","body":"<rect x=\"3.5\" y=\"8.5\" width=\"17\" height=\"4\" rx=\"1\"/><path d=\"M5.2 12.5V19a1 1 0 0 0 1 1h11.6a1 1 0 0 0 1-1v-6.5\"/><path d=\"M12 8.5V20\"/><path d=\"M12 8.5S10.9 4 8.9 4a2.25 2.25 0 0 0 0 4.5H12Z\"/><path d=\"M12 8.5S13.1 4 15.1 4a2.25 2.25 0 0 1 0 4.5H12Z\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Бонусы"},{"key":"wallet","body":"<path d=\"M19.5 8.5V7a2 2 0 0 0-2-2H5.5a2.5 2.5 0 0 0 0 5h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-12a2.5 2.5 0 0 1-2.5-2.5v-9\"/><circle cx=\"16.5\" cy=\"14.5\" r=\"1.1\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Баланс"},{"key":"user","body":"<circle cx=\"12\" cy=\"8\" r=\"3.6\"/><path d=\"M4.8 20a7.2 7.2 0 0 1 14.4 0\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Профиль"},{"key":"exit","body":"<path d=\"M15 4h3a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3\"/><path d=\"M10 8l-4 4 4 4M6 12h9\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Выйти"},{"key":"doc","body":"<path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z\"/><path d=\"M14 3v5h5\"/><path d=\"M9 13h6M9 17h4\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Документы"},{"key":"book","body":"<path d=\"M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z\"/><path d=\"M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"База знаний"},{"key":"coins","body":"<path d=\"M5 6.3H19a2 2 0 0 1 2 2V10a2 2 0 0 0 0 4v1.7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V14a2 2 0 0 0 0-4V8.3a2 2 0 0 1 2-2Z\"/><path d=\"M14.2 8.9H10.2V15.1H12.7a1.6 1.6 0 0 0 0-3.2H10.2\"/>","sw":"1.7","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Тариф / монеты"},{"key":"clock","body":"<circle cx=\"12\" cy=\"12\" r=\"8.5\"/><path d=\"M12 7.5V12l3 2\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Время"},{"key":"q","body":"<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6\"/><circle cx=\"12\" cy=\"17.2\" r=\".6\" fill=\"currentColor\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Подсказка «?»"},{"key":"lock","body":"<rect x=\"5\" y=\"11\" width=\"14\" height=\"9\" rx=\"2\"/><path d=\"M8 11V8a4 4 0 0 1 8 0v3\"/>","sw":"1.8","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Заблокировано"},{"key":"eyeOff","body":"<path d=\"M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z\"/><circle cx=\"12\" cy=\"12\" r=\"2.6\"/><path d=\"M4 20 20 4\"/>","sw":"1.7","cap":"round","join":"","fill":"none","stroke":"currentColor","name":"Скрыть"},{"key":"cal","body":"<rect x=\"4\" y=\"5.5\" width=\"16\" height=\"14.5\" rx=\"2\"/><path d=\"M4 10h16M8.5 3.5v4M15.5 3.5v4\"/>","sw":"1.8","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Календарь"},{"key":"cart","body":"<path d=\"M3.5 4.5h2l2 11h10l2-8H7\"/><circle cx=\"9.5\" cy=\"19.5\" r=\"1.3\"/><circle cx=\"16.5\" cy=\"19.5\" r=\"1.3\"/>","sw":"1.8","cap":"round","join":"round","fill":"none","stroke":"currentColor","name":"Корзина"}]},{"id":"soc","title":"Соцсети","note":"Фирменные знаки в цвете бренда.","items":[{"key":"vk","name":"ВКонтакте","raw":"<svg width=\"48\" height=\"48\" viewBox=\"0 0 32 32\"><rect fill=\"#0077FF\" rx=\"9.0\" width=\"32\" height=\"32\"/><path fill=\"#fff\" d=\"M16.8 21.615c-6.15 0-9.656-4.208-9.8-11.22h3.093c.099 5.142 2.364 7.318 4.163 7.767v-7.768h2.904v4.433c1.771-.19 3.641-2.212 4.27-4.442h2.896a8.57 8.57 0 0 1-3.938 5.602A8.87 8.87 0 0 1 25 21.615h-3.192c-.683-2.131-2.391-3.785-4.648-4.01v4.01h-.36\"/></svg>"},{"key":"tg","name":"Telegram","raw":"<svg width=\"48\" height=\"48\" viewBox=\"0 0 248 248\"><rect fill=\"#2AABEE\" rx=\"69.4\" width=\"248\" height=\"248\"/><path fill=\"#fff\" d=\"M129.362 93.057q-16.659 6.93-66.588 28.682-8.107 3.225-8.494 6.308c-.436 3.475 3.916 4.844 9.842 6.707l.12.038q1.155.361 2.377.756c5.83 1.895 13.672 4.113 17.749 4.201q5.547.12 12.382-4.574 46.65-31.491 48.162-31.833c.711-.162 1.696-.365 2.364.228.668.594.602 1.718.531 2.019-.431 1.838-17.512 17.718-26.351 25.936l-.074.068c-2.717 2.526-4.64 4.315-5.037 4.726-.894.93-1.807 1.81-2.684 2.655-5.415 5.221-9.477 9.136.226 15.53 4.649 3.064 8.373 5.6 12.085 8.128l.031.02c4.064 2.768 8.119 5.53 13.365 8.968 1.336.876 2.613 1.787 3.856 2.673 4.731 3.372 8.981 6.402 14.232 5.919 3.051-.281 6.202-3.149 7.803-11.706 3.782-20.221 11.218-64.035 12.936-82.09.15-1.582-.039-3.606-.191-4.495-.152-.888-.47-2.155-1.625-3.092-1.368-1.11-3.48-1.344-4.424-1.328-4.295.076-10.884 2.367-42.593 15.556\"/></svg>"},{"key":"max","name":"MAX","raw":"<svg width=\"48\" height=\"48\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\"><defs><linearGradient id=\"b\"><stop offset=\"0\" stop-color=\"#00f\"/><stop offset=\"1\" stop-opacity=\"0\"/></linearGradient><linearGradient id=\"a\"><stop offset=\"0\" stop-color=\"#4cf\"/><stop offset=\".662\" stop-color=\"#53e\"/><stop offset=\"1\" stop-color=\"#93d\"/></linearGradient><linearGradient id=\"c\" x1=\"117.847\" x2=\"1000\" y1=\"760.536\" y2=\"500\" gradientUnits=\"userSpaceOnUse\" href=\"#a\"/><radialGradient id=\"d\" cx=\"-87.392\" cy=\"1166.116\" r=\"500\" fx=\"-87.392\" fy=\"1166.116\" gradientTransform=\"rotate(51.356 1551.478 559.3)scale(2.42703433 1)\" gradientUnits=\"userSpaceOnUse\" href=\"#b\"/></defs><rect width=\"1000\" height=\"1000\" fill=\"url(#c)\" ry=\"249.681\"/><rect width=\"1000\" height=\"1000\" fill=\"url(#d)\" ry=\"249.681\"/><path fill=\"#fff\" fill-rule=\"evenodd\" d=\"M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z\" clip-rule=\"evenodd\"/></svg>"},{"key":"instagram","name":"Instagram","raw":"<svg width=\"48\" height=\"48\" viewBox=\"0 0 32 32\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\"><path fill=\"url(#a)\" d=\"M0 0h32v32H0z\"/><path fill=\"url(#b)\" d=\"M0 0h32v32H0z\"/><path fill=\"#fff\" d=\"M16 7c-2.443 0-2.75.01-3.71.054-.958.044-1.612.196-2.185.418A4.4 4.4 0 0 0 8.511 8.51c-.5.5-.808 1.003-1.039 1.594-.223.573-.375 1.227-.418 2.185C7.011 13.249 7 13.556 7 16s.01 2.75.054 3.71c.044.958.196 1.612.419 2.185a4.4 4.4 0 0 0 1.038 1.594c.5.5 1.002.809 1.593 1.039.573.222 1.227.374 2.185.418.96.043 1.267.054 3.71.054 2.445 0 2.751-.01 3.711-.054.958-.044 1.613-.196 2.185-.418a4.4 4.4 0 0 0 1.594-1.04c.5-.5.808-1.002 1.038-1.593.222-.573.374-1.227.419-2.185.043-.96.054-1.266.054-3.71s-.011-2.751-.054-3.711c-.045-.958-.197-1.612-.419-2.184A4.4 4.4 0 0 0 23.49 8.51c-.5-.5-1.001-.808-1.594-1.038-.574-.222-1.228-.374-2.186-.418-.96-.043-1.266-.054-3.711-.054zm-.806 1.622H16c2.403 0 2.688.008 3.637.052.877.04 1.353.186 1.67.31.42.163.72.358 1.035.673s.51.615.673 1.035c.124.316.27.793.31 1.67.043.949.053 1.234.053 3.636s-.01 2.687-.053 3.636c-.04.877-.186 1.353-.31 1.67-.163.42-.358.72-.673 1.034s-.614.51-1.034.673c-.317.124-.794.27-1.671.31-.95.043-1.234.053-3.637.053s-2.688-.01-3.637-.053c-.878-.04-1.354-.187-1.671-.31a2.8 2.8 0 0 1-1.035-.673 2.8 2.8 0 0 1-.674-1.035c-.123-.316-.27-.793-.31-1.67-.043-.949-.051-1.234-.051-3.637s.008-2.687.051-3.636c.04-.877.187-1.354.31-1.671.163-.42.359-.72.674-1.035s.615-.51 1.035-.674c.317-.123.793-.27 1.671-.31.83-.037 1.152-.049 2.83-.05zm5.611 1.494a1.08 1.08 0 1 0 0 2.16 1.08 1.08 0 0 0 0-2.16m-4.804 1.262a4.622 4.622 0 1 0 0 9.244 4.622 4.622 0 0 0 0-9.244M16 13a3 3 0 1 1 0 6 3 3 0 0 1 0-6\"/><defs><radialGradient id=\"a\" cx=\"0\" cy=\"0\" r=\"1\" gradientTransform=\"matrix(0 -31.7144 29.4969 0 8.5 34.465)\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FD5\"/><stop offset=\".1\" stop-color=\"#FD5\"/><stop offset=\".5\" stop-color=\"#FF543E\"/><stop offset=\"1\" stop-color=\"#C837AB\"/></radialGradient><radialGradient id=\"b\" cx=\"0\" cy=\"0\" r=\"1\" gradientTransform=\"matrix(2.78252 13.9007 -57.298 11.4759 -5.36 2.305)\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#3771C8\"/><stop offset=\".128\" stop-color=\"#3771C8\"/><stop offset=\"1\" stop-color=\"#60F\" stop-opacity=\"0\"/></radialGradient></defs></svg>"},{"key":"dzen","name":"Дзен","raw":"<svg width=\"48\" height=\"48\" viewBox=\"0 0 24 24\"><rect fill=\"#000000\" rx=\"6.7\" width=\"24\" height=\"24\"/><path fill=\"#fff\" d=\"M12 4.6c.2 4 3.4 7.2 7.4 7.4-4 .2-7.2 3.4-7.4 7.4-.2-4-3.4-7.2-7.4-7.4 4-.2 7.2-3.4 7.4-7.4Z\"/></svg>"},{"key":"rutube","name":"RuTube","raw":"<svg width=\"48\" height=\"48\" viewBox=\"0 0 24 24\"><rect fill=\"#100943\" rx=\"6.7\" width=\"24\" height=\"24\"/><path fill=\"#fff\" fill-rule=\"evenodd\" d=\"M7.6 7.4h5.5c2 0 3.4 1.3 3.4 3.1 0 1.5-.9 2.6-2.3 2.9l2.5 3.4h-2.5l-2.2-3.2h-2.2v3.2H7.6V7.4Zm2.2 1.9v2.5h3.1c.8 0 1.3-.5 1.3-1.3 0-.7-.5-1.2-1.3-1.2H9.8Z\"/><circle cx=\"17.6\" cy=\"6.6\" r=\"1.6\" fill=\"#ED143B\"/></svg>"},{"key":"site","name":"Сайт","raw":"<svg width=\"48\" height=\"48\" viewBox=\"0 0 24 24\"><rect fill=\"#DD443C\" rx=\"6.7\" width=\"24\" height=\"24\"/><g stroke=\"#fff\" fill=\"none\" stroke-width=\"1.6\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"6.6\"/><path d=\"M5.6 12h12.8M12 5.4c1.9 1.9 2.8 4.1 2.8 6.6s-.9 4.7-2.8 6.6c-1.9-1.9-2.8-4.1-2.8-6.6s.9-4.7 2.8-6.6Z\"/></g></svg>"},{"key":"ok","name":"Одноклассники","raw":"<svg width=\"48\" height=\"48\" viewBox=\"0 0 44 44\"><rect fill=\"#FF7700\" rx=\"12.3\" width=\"44\" height=\"44\"/><path fill=\"#fff\" d=\"M26.868 19.87a6.85 6.85 0 0 1-2.229 1.492 6.88 6.88 0 0 1-7.5-1.492 6.87 6.87 0 0 1-1.875-3.51 6.84 6.84 0 0 1 .392-3.955 6.9 6.9 0 0 1 2.527-3.08 6.96 6.96 0 0 1 3.82-1.18 6.96 6.96 0 0 1 3.83 1.177 6.9 6.9 0 0 1 2.532 3.086 6.84 6.84 0 0 1 .389 3.962 6.87 6.87 0 0 1-1.886 3.512zm-4.877-7.978a3.15 3.15 0 0 0-2.21.917 3.105 3.105 0 0 0 0 4.397c.586.584 1.38.914 2.21.918a3.15 3.15 0 0 0 2.21-.918 3.1 3.1 0 0 0 .913-2.198c0-.824-.328-1.615-.914-2.199a3.15 3.15 0 0 0-2.209-.917m7.239 10.017 2.014 2.753a.315.315 0 0 1-.05.434 14.2 14.2 0 0 1-5.725 2.79l3.889 7.495a.316.316 0 0 1-.123.43.3.3 0 0 1-.16.041h-4.17a.32.32 0 0 1-.296-.19l-2.605-6.182-2.618 6.181a.32.32 0 0 1-.295.191H14.92c-.244 0-.386-.255-.283-.471l3.902-7.494c-2.054-.484-4.03-1.402-5.724-2.791a.32.32 0 0 1-.064-.434l2.027-2.74a.334.334 0 0 1 .475-.064 10.5 10.5 0 0 0 6.75 2.677c2.503 0 4.84-1.045 6.752-2.677.128-.127.359-.102.475.051\"/></svg>"}],"brand":true}];
+const S = { color: "#DD443C", bg: "none" };
+const NS = 'xmlns="http://www.w3.org/2000/svg"';
+
+/* Красный круг под красным знаком не виден — знак на нём белый, как у
+   «Все категории» на сайте */
+function inkFor() { return S.bg === "#DD443C" && S.color === "#DD443C" ? "#FFFFFF" : S.color; }
+
+/* Значок 24×24; с подложкой — круг 40×40, знак в центре */
+function iconInner(ic, ink) {
+  const body = ic.body.replace(/currentColor/g, ink);
+  const paint = ic.fill === "currentColor"
+    ? `fill="${ink}"`
+    : `fill="none" stroke="${ink}" stroke-width="${ic.sw}"` +
+      (ic.cap ? ` stroke-linecap="${ic.cap}"` : "") + (ic.join ? ` stroke-linejoin="${ic.join}"` : "");
+  return `<g ${paint}>${body}</g>`;
+}
+function iconSvg(ic, opts = {}) {
+  if (ic.raw) return ic.raw.replace("<svg", "<svg " + (ic.raw.includes("xmlns=") ? "" : NS));
+  const ink = inkFor();
+  const id = opts.id ? ` id="${opts.id}"` : "";
+  if (S.bg === "none") {
+    return `<svg ${NS}${id} width="24" height="24" viewBox="0 0 24 24">${iconInner(ic, ink)}</svg>`;
+  }
+  return `<svg ${NS}${id} width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="${S.bg}"/><g transform="translate(8 8)">${iconInner(ic, ink)}</g></svg>`;
+}
+const layerName = (g, ic) => `${g.id}/${ic.key} — ${ic.name}`.replace(/"/g, "");
+
+/* Лист раздела: сетка по 8 в ряд, у каждого значка свой слой */
+function sheet(groups) {
+  const cell = 64, cols = 8;
+  let y = 0, parts = [];
+  groups.forEach(g => {
+    g.items.forEach((ic, i) => {
+      const x = (i % cols) * cell, yy = y + Math.floor(i / cols) * cell;
+      let svg = iconSvg(ic);
+      const size = ic.raw ? 48 : (S.bg === "none" ? 24 : 40);
+      svg = svg.replace(/<svg[^>]*?(viewBox="[^"]*")[^>]*>/,
+        `<svg x="${x + (cell - size) / 2}" y="${yy + (cell - size) / 2}" width="${size}" height="${size}" $1>`)
+        .replace(/^<svg/, `<svg id="${layerName(g, ic)}"`);
+      parts.push(svg.replace(/\s+xmlns="[^"]*"/, ""));
+    });
+    y += Math.ceil(g.items.length / cols) * cell + cell / 2;
+  });
+  return `<svg ${NS} width="${cols * cell}" height="${y - cell / 2}" viewBox="0 0 ${cols * cell} ${y - cell / 2}">${parts.join("")}</svg>`;
+}
+
+function render() {
+  const host = document.getElementById("groups");
+  host.innerHTML = GROUPS.map((g, gi) => `
+    <section>
+      <div class="sec__h"><h2>${g.title}</h2><span class="sec__n">${g.items.length}</span>
+        <button class="btn" data-sec="${gi}">Скопировать раздел</button></div>
+      <p class="sec__note">${g.note}</p>
+      <div class="grid">${g.items.map((ic, i) => `
+        <div class="ic" tabindex="0" role="button" data-g="${gi}" data-i="${i}" title="Скопировать SVG">
+          <button class="ic__dl" data-dl aria-label="Скачать ${ic.name}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg></button>
+          <div class="ic__pic">${scaled(iconSvg(ic), ic.raw ? 44 : 40)}</div>
+          <div class="ic__name">${ic.name}</div>
+          <div class="ic__key">${ic.key}</div>
+        </div>`).join("")}</div>
+    </section>`).join("");
+}
+/* На странице значок крупнее, чтобы рассмотреть; в файл идёт 24/40 */
+function scaled(svg, px) {
+  return svg.replace(/width="\d+" height="\d+"/, `width="${px}" height="${px}"`);
+}
+
+const toastEl = document.getElementById("toast");
+let toastT;
+function toast(t) {
+  toastEl.textContent = t; toastEl.classList.add("is-on");
+  clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove("is-on"), 1800);
+}
+async function copy(text, msg) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {
+    const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy"); ta.remove();
+  }
+  toast(msg);
+}
+function download(name, text) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "image/svg+xml" }));
+  a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+const suffix = () => (S.bg === "none" ? "" : "-circle") + "-" + inkFor().slice(1).toLowerCase();
+
+document.addEventListener("click", e => {
+  const seg = e.target.closest(".seg button");
+  if (seg) {
+    const ctl = seg.parentElement.dataset.ctl;
+    S[ctl] = seg.dataset.v;
+    seg.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === seg));
+    render(); return;
+  }
+  const card = e.target.closest(".ic");
+  if (card) {
+    const g = GROUPS[card.dataset.g], ic = g.items[card.dataset.i];
+    if (e.target.closest("[data-dl]")) { download(`${g.id}-${ic.key}${ic.raw ? "" : suffix()}.svg`, iconSvg(ic)); return; }
+    copy(iconSvg(ic, { id: layerName(g, ic) }), `«${ic.name}» скопирован — вставьте в Figma`);
+    return;
+  }
+  const sec = e.target.closest("[data-sec]");
+  if (sec) { const g = GROUPS[sec.dataset.sec]; copy(sheet([g]), `Раздел «${g.title}» скопирован`); return; }
+  const all = e.target.closest("[data-all]");
+  if (all) {
+    if (all.dataset.all === "copy") copy(sheet(GROUPS), "Все значки скопированы — вставьте в Figma");
+    else download(`vsekupony-icons${suffix()}.svg`, sheet(GROUPS));
+  }
+});
+document.addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("ic")) { e.preventDefault(); e.target.click(); }
+});
+render();
+</script>
+</body>
+</html>

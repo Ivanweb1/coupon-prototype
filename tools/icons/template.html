@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Значки Всекупонов</title>
+<!-- Страница собирается скриптом tools/icons/build.js из tools/icons/template.html.
+     Правьте шаблон, а не icons.html. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff;--surface:#F9F9F9;--line:#E7E7E7;--text:#141414;--muted:#77767A;
+  --accent:#DD443C;--accent-soft:#FDECEA;--chip:#F9F9F9;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121212;--surface:#1C1C1C;--line:#2C2C2C;--text:#F2F2F2;--muted:#9A999D;
+    --accent:#EE5C54;--accent-soft:#3A1E1C;--chip:#242424;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121212;--surface:#1C1C1C;--line:#2C2C2C;--text:#F2F2F2;--muted:#9A999D;
+  --accent:#EE5C54;--accent-soft:#3A1E1C;--chip:#242424;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 Onest,system-ui,sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:40px 24px 80px}
+h1{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.03em;margin:0 0 8px}
+.lead{color:var(--muted);margin:0 0 28px;max-width:680px}
+.lead b{color:var(--text);font-weight:600}
+
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;padding:14px 0;margin-bottom:8px}
+.ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ctl__t{font-size:13px;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;color:var(--text);font:inherit;font-size:13px;font-weight:500;
+  padding:6px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.seg button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+.sw{width:12px;height:12px;border-radius:50%;border:1px solid var(--line)}
+.bar__acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;font-size:13px;font-weight:600;
+  padding:9px 14px;border-radius:999px;cursor:pointer}
+.btn:hover{border-color:var(--text)}
+.btn--accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn--accent:hover{filter:brightness(.95);border-color:var(--accent)}
+
+section{margin-top:40px}
+.sec__h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.sec__h h2{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0}
+.sec__n{color:var(--muted);font-size:14px}
+.sec__h .btn{margin-left:auto;padding:6px 12px}
+.sec__note{color:var(--muted);margin:0 0 16px;font-size:14px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ic{position:relative;border:1px solid var(--line);border-radius:16px;background:var(--bg);
+  padding:18px 12px 12px;text-align:center;cursor:pointer;transition:border-color .15s}
+.ic:hover{border-color:var(--accent)}
+.ic__pic{height:56px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.ic__pic svg{display:block}
+.ic__name{font-size:13px;font-weight:600;line-height:1.25}
+.ic__key{font-size:11px;color:var(--muted);margin-top:2px;font-family:ui-monospace,monospace}
+.ic__dl{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:0;
+  background:var(--surface);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s}
+.ic:hover .ic__dl,.ic__dl:focus-visible{opacity:1}
+.ic__dl:hover{color:var(--accent)}
+@media (hover:none){.ic__dl{opacity:1}}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:var(--text);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:500;transition:.2s}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:640px){
+  .wrap{padding:24px 16px 60px}
+  .bar__acts{margin-left:0}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Значки Всекупонов</h1>
+  <p class="lead">Все значки прототипа на одной странице. <b>Клик по значку копирует SVG.</b> Вставьте его в Figma через Ctrl+V / ⌘V, и он ляжет вектором. Стрелка в углу карточки скачивает файл. Кнопка «Скопировать раздел» кладёт весь раздел одним листом: каждый значок в нём отдельный слой со своим названием.</p>
+
+  <div class="bar">
+    <div class="ctl"><span class="ctl__t">Цвет</span>
+      <div class="seg" data-ctl="color">
+        <button data-v="#DD443C" aria-pressed="true"><i class="sw" style="background:#DD443C"></i>Красный</button>
+        <button data-v="#141414" aria-pressed="false"><i class="sw" style="background:#141414"></i>Чёрный</button>
+        <button data-v="#FFFFFF" aria-pressed="false"><i class="sw" style="background:#fff"></i>Белый</button>
+      </div>
+    </div>
+    <div class="ctl"><span class="ctl__t">Подложка</span>
+      <div class="seg" data-ctl="bg">
+        <button data-v="none" aria-pressed="true">Без фона</button>
+        <button data-v="#F9F9F9" aria-pressed="false">Серый круг</button>
+        <button data-v="#DD443C" aria-pressed="false">Красный круг</button>
+      </div>
+    </div>
+    <div class="bar__acts">
+      <button class="btn" data-all="copy">Скопировать всё</button>
+      <button class="btn btn--accent" data-all="dl">Скачать всё (SVG)</button>
+    </div>
+  </div>
+
+  <div id="groups"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const GROUPS = /*ICONS*/null;
+const S = { color: "#DD443C", bg: "none" };
+const NS = 'xmlns="http://www.w3.org/2000/svg"';
+
+/* Красный круг под красным знаком не виден — знак на нём белый, как у
+   «Все категории» на сайте */
+function inkFor() { return S.bg === "#DD443C" && S.color === "#DD443C" ? "#FFFFFF" : S.color; }
+
+/* Значок 24×24; с подложкой — круг 40×40, знак в центре */
+function iconInner(ic, ink) {
+  const body = ic.body.replace(/currentColor/g, ink);
+  const paint = ic.fill === "currentColor"
+    ? `fill="${ink}"`
+    : `fill="none" stroke="${ink}" stroke-width="${ic.sw}"` +
+      (ic.cap ? ` stroke-linecap="${ic.cap}"` : "") + (ic.join ? ` stroke-linejoin="${ic.join}"` : "");
+  return `<g ${paint}>${body}</g>`;
+}
+function iconSvg(ic, opts = {}) {
+  if (ic.raw) return ic.raw.replace("<svg", "<svg " + (ic.raw.includes("xmlns=") ? "" : NS));
+  const ink = inkFor();
+  const id = opts.id ? ` id="${opts.id}"` : "";
+  if (S.bg === "none") {
+    return `<svg ${NS}${id} width="24" height="24" viewBox="0 0 24 24">${iconInner(ic, ink)}</svg>`;
+  }
+  return `<svg ${NS}${id} width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="${S.bg}"/><g transform="translate(8 8)">${iconInner(ic, ink)}</g></svg>`;
+}
+const layerName = (g, ic) => `${g.id}/${ic.key} — ${ic.name}`.replace(/"/g, "");
+
+/* Лист раздела: сетка по 8 в ряд, у каждого значка свой слой */
+function sheet(groups) {
+  const cell = 64, cols = 8;
+  let y = 0, parts = [];
+  groups.forEach(g => {
+    g.items.forEach((ic, i) => {
+      const x = (i % cols) * cell, yy = y + Math.floor(i / cols) * cell;
+      let svg = iconSvg(ic);
+      const size = ic.raw ? 48 : (S.bg === "none" ? 24 : 40);
+      svg = svg.replace(/<svg[^>]*?(viewBox="[^"]*")[^>]*>/,
+        `<svg x="${x + (cell - size) / 2}" y="${yy + (cell - size) / 2}" width="${size}" height="${size}" $1>`)
+        .replace(/^<svg/, `<svg id="${layerName(g, ic)}"`);
+      parts.push(svg.replace(/\s+xmlns="[^"]*"/, ""));
+    });
+    y += Math.ceil(g.items.length / cols) * cell + cell / 2;
+  });
+  return `<svg ${NS} width="${cols * cell}" height="${y - cell / 2}" viewBox="0 0 ${cols * cell} ${y - cell / 2}">${parts.join("")}</svg>`;
+}
+
+function render() {
+  const host = document.getElementById("groups");
+  host.innerHTML = GROUPS.map((g, gi) => `
+    <section>
+      <div class="sec__h"><h2>${g.title}</h2><span class="sec__n">${g.items.length}</span>
+        <button class="btn" data-sec="${gi}">Скопировать раздел</button></div>
+      <p class="sec__note">${g.note}</p>
+      <div class="grid">${g.items.map((ic, i) => `
+        <div class="ic" tabindex="0" role="button" data-g="${gi}" data-i="${i}" title="Скопировать SVG">
+          <button class="ic__dl" data-dl aria-label="Скачать ${ic.name}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg></button>
+          <div class="ic__pic">${scaled(iconSvg(ic), ic.raw ? 44 : 40)}</div>
+          <div class="ic__name">${ic.name}</div>
+          <div class="ic__key">${ic.key}</div>
+        </div>`).join("")}</div>
+    </section>`).join("");
+}
+/* На странице значок крупнее, чтобы рассмотреть; в файл идёт 24/40 */
+function scaled(svg, px) {
+  return svg.replace(/width="\d+" height="\d+"/, `width="${px}" height="${px}"`);
+}
+
+const toastEl = document.getElementById("toast");
+let toastT;
+function toast(t) {
+  toastEl.textContent = t; toastEl.classList.add("is-on");
+  clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove("is-on"), 1800);
+}
+async function copy(text, msg) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {
+    const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand("copy"); ta.remove();
+  }
+  toast(msg);
+}
+function download(name, text) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "image/svg+xml" }));
+  a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+const suffix = () => (S.bg === "none" ? "" : "-circle") + "-" + inkFor().slice(1).toLowerCase();
+
+document.addEventListener("click", e => {
+  const seg = e.target.closest(".seg button");
+  if (seg) {
+    const ctl = seg.parentElement.dataset.ctl;
+    S[ctl] = seg.dataset.v;
+    seg.parentElement.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b === seg));
+    render(); return;
+  }
+  const card = e.target.closest(".ic");
+  if (card) {
+    const g = GROUPS[card.dataset.g], ic = g.items[card.dataset.i];
+    if (e.target.closest("[data-dl]")) { download(`${g.id}-${ic.key}${ic.raw ? "" : suffix()}.svg`, iconSvg(ic)); return; }
+    copy(iconSvg(ic, { id: layerName(g, ic) }), `«${ic.name}» скопирован — вставьте в Figma`);
+    return;
+  }
+  const sec = e.target.closest("[data-sec]");
+  if (sec) { const g = GROUPS[sec.dataset.sec]; copy(sheet([g]), `Раздел «${g.title}» скопирован`); return; }
+  const all = e.target.closest("[data-all]");
+  if (all) {
+    if (all.dataset.all === "copy") copy(sheet(GROUPS), "Все значки скопированы — вставьте в Figma");
+    else download(`vsekupony-icons${suffix()}.svg`, sheet(GROUPS));
+  }
+});
+document.addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("ic")) { e.preventDefault(); e.target.click(); }
+});
+render();
+</script>
+</body>
+</html>
