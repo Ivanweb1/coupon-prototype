@@ -67,10 +67,11 @@
   .hw-art{--w:calc(50% - 6px);gap:12px;height:400px;padding-right:0}
   .hw-col{flex:1}
 }
-/* Узкий телефон: две карточки рядом не помещаются — одна колонка по центру */
+/* Узкий телефон: две карточки рядом не помещаются — одна колонка
+   на всю ширину сетки, как лента на главной */
 @media (max-width:480px){
-  .hw-art{justify-content:center;height:420px}
-  .hw-col{flex:0 1 250px}
+  .hw-art{height:480px}
+  .hw-col{flex:1 1 100%;width:100%}
   .hw-col--down{display:none}
 }
 
