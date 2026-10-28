@@ -25,12 +25,15 @@
 /* --------------------------------------------------------------------------
    01. Первый экран
    --------------------------------------------------------------------------
-   Слева заголовок и кнопка, справа иллюстрация из того же набора, что на
-   главной: шар из логотипа, купоны и знак процента. */
+   Слева заголовок и кнопка, справа два купона из ленты. Всё на одной
+   серой подложке: купоны стоят на ней и уходят за нижний край, поэтому
+   текст и картинка читаются одним блоком, а не двумя половинами. */
 .hw-hero{
   display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
-  align-items:center;gap:40px;padding:56px 0 8px;
+  align-items:center;gap:40px;margin-top:24px;padding:0 56px;
+  border-radius:32px;background:var(--surface);overflow:hidden;
 }
+.hw-hero > div:first-child{padding:56px 0}
 .hw-hero h1{
   margin:0;font-family:var(--font-display);font-weight:800;
   font-size:clamp(36px,5vw,64px);line-height:1.02;letter-spacing:-.04em;color:var(--ink);
@@ -55,20 +58,20 @@
 .hw-art .dzl__ticket span{font-size:12.5px}
 .hw-art .hw-art__t3{--rot:-4deg;left:34%;bottom:4px;z-index:2;animation-duration:8s;animation-delay:-4s}
 
-/* Два купона из ленты — настоящие .card в натуральную величину, веером:
-   левый выше и с наклоном влево, правый ниже, заходит на него сбоку */
-.hw-art{height:520px}
+/* Два купона из ленты — настоящие .card в натуральную величину, прямо,
+   рядом без нахлёста: правый ниже на полкарточки, оба слегка парят */
+.hw-art{height:600px}
 .hw-fly.card{
-  --rot:-5deg;
-  position:absolute;z-index:1;width:290px;margin:0;pointer-events:none;
-  transform:rotate(var(--rot));
+  position:absolute;z-index:1;width:270px;margin:0;pointer-events:none;
   animation:hwFly 6s ease-in-out infinite;
 }
-.hw-fly--1{left:calc(50% - 290px);top:0}
-.hw-fly--2{--rot:5deg;z-index:2;left:calc(50% - 20px);top:50px;animation-duration:7s;animation-delay:-3s}
+.hw-fly.card{transition:opacity .5s ease, filter .5s ease}
+.hw-fly.card.is-out{opacity:0;filter:blur(4px)}
+.hw-fly--1{left:calc(50% - 280px);top:44px}
+.hw-fly--2{left:calc(50% + 10px);top:104px;animation-duration:7s;animation-delay:-3s}
 @keyframes hwFly{
-  0%,100%{transform:rotate(var(--rot)) translateY(0)}
-  50%{transform:rotate(var(--rot)) translateY(-10px)}
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
 }
 /* Знак процента — красный круг */
 .hw-art__pct{
@@ -81,13 +84,22 @@
 }
 
 @media (max-width:860px){
-  .hw-hero{grid-template-columns:1fr;gap:12px;padding-top:36px}
+  .hw-hero{grid-template-columns:1fr;gap:0;padding:0 20px;border-radius:26px}
+  .hw-hero > div:first-child{padding:32px 0 8px}
   .hw-art{height:260px;max-width:420px;width:100%;margin:0 auto}
   .hw-art__balloon{height:240px}
-  .hw-art{height:360px}
-  .hw-fly.card{width:180px}
-  .hw-fly--1{left:calc(50% - 175px)}
-  .hw-fly--2{left:calc(50% - 10px);top:40px}
+  .hw-art{height:400px}
+  .hw-fly.card{width:200px}
+  .hw-fly--1{left:calc(50% - 206px);top:16px}
+  .hw-fly--2{left:calc(50% + 6px);top:56px}
+}
+/* Узкий телефон: две карточки рядом не помещаются — одна по центру,
+   смена купонов идёт в ней одной (скрипт пропускает скрытое место) */
+@media (max-width:480px){
+  .hw-art{height:470px}
+  .hw-fly.card{width:min(250px,100%)}
+  .hw-fly--1{left:max(0px,calc(50% - 125px));top:20px}
+  .hw-fly.card.hw-fly--2{display:none}
 }
 
 /* --------------------------------------------------------------------------
@@ -251,14 +263,17 @@
 .hw-cp .card__badge,.hw-cp .card__near{overflow:visible}
 
 /* Номер-метка у поля карточки */
+/* Тонкий кружок с цифрой: на карточке — красный с белой каймой,
+   в пояснениях — светлый, краснеет при наведении */
 .hw-pin{
-  display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
-  background:var(--ink);color:#fff;
-  font-family:var(--font-display);font-size:13px;font-weight:800;font-style:normal;
-  box-shadow:0 0 0 3px #fff;
+  display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  background:var(--brand);color:#fff;
+  font-family:var(--font-body,inherit);font-size:12px;font-weight:600;font-style:normal;
+  font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1;
+  box-shadow:0 0 0 2px #fff,0 4px 10px -4px rgba(0,0,0,.35);
 }
-.hw-cp .hw-pin{position:absolute;z-index:3;right:-13px;top:-13px;letter-spacing:0;line-height:1}
-.hw-cp .card__near .hw-pin{right:-14px;top:-12px}
+.hw-cp .hw-pin{position:absolute;z-index:3;right:-11px;top:-11px}
+.hw-cp .card__near .hw-pin{right:-12px;top:-10px}
 /* Справа от выгоды стоит «Проверено» — метку выгоды ставим слева */
 
 .hw-why{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
@@ -270,8 +285,12 @@
   transition:border-color .18s, transform .18s var(--ease), box-shadow .18s;
 }
 .hw-why li.is-on{border-color:var(--brand);transform:translateX(4px);box-shadow:var(--shadow-1)}
-.hw-why .hw-pin{width:34px;height:34px;font-size:15px;box-shadow:none;transition:background .18s}
-.hw-why li.is-on .hw-pin,.hw-cp .hw-pin.is-on{background:var(--brand)}
+.hw-why .hw-pin{
+  width:32px;height:32px;font-size:14px;font-weight:600;
+  background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line-strong);
+  transition:background .18s, color .18s, box-shadow .18s;
+}
+.hw-why li.is-on .hw-pin{background:var(--brand);color:#fff;box-shadow:none}
 .hw-cp .hw-pin{transition:background .18s, transform .18s}
 .hw-cp .hw-pin.is-on{transform:scale(1.2)}
 .hw-why b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
@@ -351,6 +370,13 @@
 }
 .hw-copied [data-icon]{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--brand)}
 
+/* Узкий телефон: веер плотнее, чтобы крайние купоны не обрезались */
+@media (max-width:480px){
+  .hw-fan{width:80px;height:88px;margin:-44px 0 0 -40px}
+  .hw-fan:nth-child(1),.hw-why li.is-on .hw-fan:nth-child(1){transform:translateX(-50px) rotate(-12deg) scale(.88)}
+  .hw-fan:nth-child(2),.hw-why li.is-on .hw-fan:nth-child(2){transform:translateX(50px) rotate(11deg) scale(.88)}
+  .hw-fan__v--ink{font-size:10.5px}
+}
 @media (max-width:1100px){
   .hw-why li{grid-template-columns:34px minmax(0,1fr)}
   .hw-why__ex{grid-column:1 / -1;width:auto;margin:0}

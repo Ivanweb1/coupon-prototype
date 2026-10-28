@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <!-- Страница «Как это работает» — отдельным слоем -->
-<link rel="stylesheet" href="assets/design-3-how.css?v=20261028h">
+<link rel="stylesheet" href="assets/design-3-how.css?v=20261028l">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -555,8 +555,41 @@
     qsa("button", host).forEach(b => { b.tabIndex = -1; b.onclick = e => e.preventDefault(); });
   }
   demoCard(qs(".hw-cp"), HW_DEMO[0]);
-  demoCard(qs(".hw-fly--1"), HW_DEMO[1]);
-  demoCard(qs(".hw-fly--2"), HW_DEMO[2]);
+
+  /* Купоны первого экрана сменяют друг друга: купон гаснет, на его месте
+     проявляется следующий. Два места меняются по очереди, не вместе. */
+  const cat = (slug, name) => ({ l1: "regional", slug, name });
+  const HW_FLY = [
+    HW_DEMO[1], HW_DEMO[2],
+    { id: "hw4", title: "Абонемент на месяц", company: "Фитнес-клуб «Пульс»", value: "−40%",
+      dist: 1400, erid: "2VtzqwF2Rs", views: 3120, photo: "assets/coupons/sport-teal.jpg", cat: cat("sport", "Фитнес и спорт") },
+    { id: "hw5", title: "Второй билет в подарок", company: "Квест «Ключ»", value: "1+1",
+      dist: 700, erid: "2VtzqwG5Tn", views: 1780, photo: "assets/coupons/razvlecheniya-blue.jpg", cat: cat("razvlecheniya", "Развлечения") },
+    { id: "hw6", title: "Груминг для собак", company: "Салон «Хвост»", value: "−20%",
+      dist: 1100, erid: "2VtzqwH8Vb", views: 640, photo: "assets/coupons/pitomtsy-brown.jpg", cat: cat("pitomtsy", "Питомцы") },
+    { id: "hw7", title: "Пробное занятие", company: "Школа «Слово»", value: "Бесплатно",
+      dist: 240, erid: "2VtzqwJ3Wc", views: 2050, photo: "assets/coupons/obuchenie-purple.jpg", cat: cat("obuchenie", "Обучение") }
+  ];
+  const flySlots = [qs(".hw-fly--1"), qs(".hw-fly--2")];
+  let flyNext = 0;
+  flySlots.forEach(slot => demoCard(slot, HW_FLY[flyNext++]));
+  const onScreen = () => flySlots.map(s => s._coupon);
+  function swapFly(slot) {
+    /* Следующий купон — тот, которого сейчас нет ни в одном из мест */
+    while (onScreen().includes(HW_FLY[flyNext % HW_FLY.length])) flyNext++;
+    const next = HW_FLY[flyNext++ % HW_FLY.length];
+    slot.classList.add("is-out");
+    setTimeout(() => { demoCard(slot, next); slot.classList.remove("is-out"); }, 500);
+  }
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let turn = 0;
+    setInterval(() => {
+      if (document.hidden) return;
+      /* На узком телефоне второе место скрыто — меняем только видимые */
+      const shown = flySlots.filter(s => s.offsetParent);
+      swapFly(shown[turn++ % shown.length]);
+    }, 2800);
+  }
   /* Метки 1–3 на карточке-примере: выгода, сколько идти, кнопка с кодом */
   [[".card__media", 1], [".card__near", 2], ["[data-card-reveal]", 3]].forEach(([sel, n]) => {
     const el = qs(".hw-cp " + sel);
@@ -567,8 +600,8 @@
   function placePin1() {
     const badge = qs(".hw-cp .card__badge"), pin = qs('.hw-cp .card__media > [data-pin="1"]');
     if (!badge || !pin) return;
-    pin.style.left = (badge.offsetLeft + badge.offsetWidth / 2 - 13) + "px";
-    pin.style.top = (badge.offsetTop - 32) + "px";
+    pin.style.left = (badge.offsetLeft + badge.offsetWidth / 2 - 11) + "px";
+    pin.style.top = (badge.offsetTop - 28) + "px";
     pin.style.right = "auto";
   }
   placePin1();
