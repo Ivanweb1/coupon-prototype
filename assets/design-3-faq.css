@@ -1,0 +1,48 @@
+/* ==========================================================================
+   Страница «Вопросы и ответы» (faq.html) — для посетителей
+   ==========================================================================
+   Тексты и порядок блоков — из прототипа FAQ_ВСЕКУПОНЫ от 28.10.2026:
+   крошки → заголовок → шесть вопросов → «Не нашёл ответ?» → «Готов выбрать
+   предложение?». Шапка и подвал — как на главной, не меняются.
+   Аккордеон — общий .pg-faq, размер текста как на «Как это работает». */
+
+.fq-hero{padding:28px 0 0}
+.fq-hero .crumbs{margin:0}
+.fq-hero h1{
+  margin:18px 0 0;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(30px,3.6vw,48px);line-height:1.06;letter-spacing:-.03em;color:var(--ink);
+}
+.fq-hero p{margin:14px 0 0;max-width:52ch;font-size:17px;line-height:1.55;color:var(--ink-2)}
+
+.fq-list{margin-top:36px}
+.fq-list .pg-faq{margin-top:0}
+.fq-list .pg-faq summary{padding:22px 2px;font-size:19px}
+.fq-list .pg-faq p{font-size:17px;margin-bottom:24px}
+
+/* Два финальных блока: серый «помощь» и белый «к купонам».
+   Красная кнопка одна — у перехода к купонам, ради него страница. */
+.fq-box{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:28px;
+  padding:40px 44px;border-radius:32px;
+}
+.fq-box h2{
+  margin:0;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(24px,2.4vw,32px);line-height:1.1;letter-spacing:-.03em;color:var(--ink);
+}
+.fq-box p{margin:10px 0 0;max-width:44ch;font-size:16px;line-height:1.55;color:var(--ink-2)}
+.fq-box .btn{height:52px;padding:0 28px;font-size:15px;font-weight:600}
+.fq-box--help{margin-top:64px;background:var(--surface)}
+.fq-box--help .btn{background:var(--ink);color:#fff}
+.fq-box--help .btn:hover{background:#000}
+.fq-box--go{margin-top:16px;border:1px solid var(--line)}
+
+@media (max-width:760px){
+  .fq-hero{padding-top:20px}
+  .fq-list .pg-faq summary{font-size:17px;padding:18px 2px}
+  .fq-list .pg-faq p{font-size:16px}
+  .fq-box{grid-template-columns:1fr;padding:28px 22px;border-radius:26px}
+  .fq-box .btn{width:100%;justify-content:center}
+}
+
+/* Красный баннер бизнеса в подвале — как на «Как это работает» */
+.hw-biz .dz-biz__acts{align-items:center}

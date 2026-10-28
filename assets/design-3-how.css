@@ -55,21 +55,20 @@
 .hw-art .dzl__ticket span{font-size:12.5px}
 .hw-art .hw-art__t3{--rot:-4deg;left:34%;bottom:4px;z-index:2;animation-duration:8s;animation-delay:-4s}
 
-/* Два купона из ленты вокруг шара — настоящие .card, уменьшенные */
+/* Два купона из ленты — настоящие .card в натуральную величину, веером:
+   левый выше и с наклоном влево, правый ниже, заходит на него сбоку */
+.hw-art{height:520px}
 .hw-fly.card{
-  --rot:-8deg;--k:.56;
-  position:absolute;z-index:1;width:280px;margin:0;pointer-events:none;
-  transform-origin:0 0;transform:scale(var(--k)) rotate(var(--rot));
-  box-shadow:0 34px 60px -30px rgba(0,0,0,.45);
+  --rot:-5deg;
+  position:absolute;z-index:1;width:290px;margin:0;pointer-events:none;
+  transform:rotate(var(--rot));
   animation:hwFly 6s ease-in-out infinite;
 }
-/* Шар — поверх купонов, купоны разведены по краям */
-.hw-art__balloon{z-index:2}
-.hw-fly--1{left:-6%;top:24px}
-.hw-fly--2{--rot:8deg;right:-6%;top:70px;transform-origin:100% 0;animation-duration:7s;animation-delay:-3s}
+.hw-fly--1{left:calc(50% - 290px);top:0}
+.hw-fly--2{--rot:5deg;z-index:2;left:calc(50% - 20px);top:50px;animation-duration:7s;animation-delay:-3s}
 @keyframes hwFly{
-  0%,100%{transform:scale(var(--k)) rotate(var(--rot)) translateY(0)}
-  50%{transform:scale(var(--k)) rotate(var(--rot)) translateY(-14px)}
+  0%,100%{transform:rotate(var(--rot)) translateY(0)}
+  50%{transform:rotate(var(--rot)) translateY(-10px)}
 }
 /* Знак процента — красный круг */
 .hw-art__pct{
@@ -85,9 +84,10 @@
   .hw-hero{grid-template-columns:1fr;gap:12px;padding-top:36px}
   .hw-art{height:260px;max-width:420px;width:100%;margin:0 auto}
   .hw-art__balloon{height:240px}
-  .hw-fly.card{--k:.4}
-  .hw-fly--1{left:-2%;top:30px}
-  .hw-fly--2{right:-2%;top:70px}
+  .hw-art{height:360px}
+  .hw-fly.card{width:180px}
+  .hw-fly--1{left:calc(50% - 175px)}
+  .hw-fly--2{left:calc(50% - 10px);top:40px}
 }
 
 /* --------------------------------------------------------------------------
@@ -103,15 +103,11 @@
   transition:transform .2s var(--ease), box-shadow .2s, border-color .2s;
 }
 .hw-steps li:hover{transform:translateY(-4px);border-color:var(--line-strong);box-shadow:var(--shadow-1)}
-/* Линия отрыва между карточками: пунктир со стрелкой */
+/* Стрелка между карточками: пунктир и наконечник одной картинкой,
+   чтобы наконечник всегда стоял ровно на линии */
 .hw-steps li + li::before{
-  content:"";position:absolute;left:-26px;top:96px;width:24px;
-  border-top:2px dashed var(--brand);
-}
-.hw-steps li + li::after{
-  content:"";position:absolute;left:-9px;top:92px;width:8px;height:8px;
-  border-top:2px solid var(--brand);border-right:2px solid var(--brand);
-  transform:rotate(45deg);
+  content:"";position:absolute;left:-27px;top:90px;width:26px;height:14px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='14' viewBox='0 0 26 14' fill='none' stroke='%23DD443C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 7h19' stroke-dasharray='3 3'/%3E%3Cpath d='M19 2l5 5-5 5'/%3E%3C/svg%3E") center/contain no-repeat;
 }
 .hw-steps__body{position:relative;padding:0 26px 26px}
 .hw-steps__n{
@@ -223,13 +219,12 @@
 }
 .hw-stamp [data-icon]{display:inline-flex}
 
-@media (max-width:1000px){.hw-steps li + li::before,.hw-steps li + li::after{top:86px}}
+@media (max-width:1000px){.hw-steps li + li::before{top:80px}}
 @media (max-width:860px){
   .hw-steps{grid-template-columns:1fr;gap:30px}
   .hw-toast{right:4%;top:10px}
   /* На телефоне линия отрыва вертикальная, сверху вниз */
-  .hw-steps li + li::before{left:50%;top:-28px;width:0;height:24px;border-top:0;border-left:2px dashed var(--brand)}
-  .hw-steps li + li::after{left:calc(50% - 4px);top:-11px;transform:rotate(135deg)}
+  .hw-steps li + li::before{left:calc(50% - 13px);top:-29px;transform:rotate(90deg)}
 }
 
 /* --------------------------------------------------------------------------
@@ -245,7 +240,13 @@
   padding:48px;border-radius:32px;background:var(--surface);
 }
 /* Сама карточка — .card из ленты (cardHTML), здесь только её место в блоке */
-.hw-cp.card{position:relative;align-self:center;width:100%;max-width:340px;margin:0 auto;box-shadow:0 30px 60px -36px rgba(0,0,0,.28)}
+.hw-cp.card{position:relative;align-self:center;width:100%;max-width:340px;margin:0 auto}
+/* В ленте карточка лежит прямо на белом фоне. Здесь она парит над серым,
+   поэтому под неё подложена белая плашка — иначе тень обрезает низ */
+.hw-cp.card,.hw-fly.card{
+  padding:8px 8px 12px;border-radius:26px;background:#fff;
+  box-shadow:0 30px 60px -34px rgba(0,0,0,.35);
+}
 .hw-cp [data-card-reveal]{position:relative;overflow:visible}
 .hw-cp .card__badge,.hw-cp .card__near{overflow:visible}
 
@@ -259,7 +260,6 @@
 .hw-cp .hw-pin{position:absolute;z-index:3;right:-13px;top:-13px;letter-spacing:0;line-height:1}
 .hw-cp .card__near .hw-pin{right:-14px;top:-12px}
 /* Справа от выгоды стоит «Проверено» — метку выгоды ставим слева */
-.hw-cp .card__badge .hw-pin{right:auto;left:-13px}
 
 .hw-why{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
 /* Три пояснения делят высоту купона поровну: верх и низ колонок совпадают */

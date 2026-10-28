@@ -146,8 +146,6 @@
 
     <!-- Иллюстрация: купон, знак %, повседневные покупки -->
     <div class="hw-art" aria-hidden="true">
-      <img class="hw-art__balloon" src="assets/brand/logo-red.png" alt="" width="357" height="600">
-      <span class="hw-art__pct">%</span>
       <!-- Два купона из ленты — та же карточка, что на главной (cardHTML), уменьшенная -->
       <div class="hw-fly hw-fly--1"></div>
       <div class="hw-fly hw-fly--2"></div>
@@ -560,10 +558,22 @@
   demoCard(qs(".hw-fly--1"), HW_DEMO[1]);
   demoCard(qs(".hw-fly--2"), HW_DEMO[2]);
   /* Метки 1–3 на карточке-примере: выгода, сколько идти, кнопка с кодом */
-  [[".card__badge", 1], [".card__near", 2], ["[data-card-reveal]", 3]].forEach(([sel, n]) => {
+  [[".card__media", 1], [".card__near", 2], ["[data-card-reveal]", 3]].forEach(([sel, n]) => {
     const el = qs(".hw-cp " + sel);
     if (el) el.insertAdjacentHTML("beforeend", '<i class="hw-pin" data-pin="' + n + '">' + n + "</i>");
   });
+  /* Метка 1 — над плашкой выгоды. Фото обрезает всё, что за его краем,
+     поэтому метка живёт внутри фото и встаёт по месту плашки */
+  function placePin1() {
+    const badge = qs(".hw-cp .card__badge"), pin = qs('.hw-cp .card__media > [data-pin="1"]');
+    if (!badge || !pin) return;
+    pin.style.left = (badge.offsetLeft + badge.offsetWidth / 2 - 13) + "px";
+    pin.style.top = (badge.offsetTop - 32) + "px";
+    pin.style.right = "auto";
+  }
+  placePin1();
+  addEventListener("resize", placePin1);
+  if (document.fonts) document.fonts.ready.then(placePin1);
 
   /* Наведение на пояснение подсвечивает его поле на карточке купона */
   qsa(".hw-why li").forEach(li => {
