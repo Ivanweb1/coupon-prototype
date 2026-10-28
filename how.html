@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <!-- Страница «Как это работает» — отдельным слоем -->
-<link rel="stylesheet" href="assets/design-3-how.css?v=20261028c">
+<link rel="stylesheet" href="assets/design-3-how.css?v=20261028f">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -107,15 +107,27 @@
       </div>
       <div class="mobile-nav__group">
         <h4>Бизнесу</h4>
-        <a href="register-design.html">Разместить купон</a>
-        <a href="pricing.html">Условия размещения</a>
+        <a href="register-design.html">Зарегистрироваться</a>
+        <a href="pricing.html">Сколько стоит</a>
+        <a href="docs.html">Документы</a>
       </div>
       <div class="mobile-nav__group">
         <h4>Партнёрам</h4>
-        <a href="service.html#partners">Партнёрская программа</a>
         <a href="partner.html">Стать партнёром</a>
+        <a href="partner.html#cities">Города присутствия</a>
+        <a href="service.html#partners">Партнёрская программа</a>
       </div>
     </nav>
+
+    <div class="mobile-nav__soc">
+      <span class="mobile-nav__soc-label">Мы в соцсетях <span data-geo-gen>Липецка</span></span>
+      <div class="mobile-nav__soc-row">
+        <a class="soc" href="#" data-city-social="ВКонтакте" aria-label="ВКонтакте" data-icon="vk"></a>
+        <a class="soc" href="#" data-city-social="Telegram" aria-label="Telegram" data-icon="tg"></a>
+        <a class="soc" href="#" data-city-social="Одноклассники" aria-label="Одноклассники" data-icon="ok"></a>
+        <a class="soc" href="#" data-city-social="MAX" aria-label="MAX" data-icon="max"></a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -152,16 +164,18 @@
       <li>
         <div class="hw-scene hw-scene--pick" aria-hidden="true">
           <div class="hw-mini">
-            <span class="hw-mini__v">−20%</span>
-            <span class="hw-mini__t"><i></i><i></i></span>
+            <span class="hw-mini__ph" style="background-image:url(assets/coupons/manikyur-rose.jpg)"></span>
+            <span class="hw-mini__t"><b>Маникюр с покрытием</b><small>Студия «Лак» · 650 м</small></span>
+            <span class="hw-mini__v">−30%</span>
           </div>
           <div class="hw-mini is-on">
+            <span class="hw-mini__ph" style="background-image:url(assets/coupons/coffee.jpg)"></span>
+            <span class="hw-mini__t"><b>Два кофе по цене одного</b><small>Кофейня «Зерно» · 400 м</small></span>
             <span class="hw-mini__v">1 + 1</span>
-            <span class="hw-mini__t"><i></i><i></i></span>
             <span class="hw-mini__ok" data-icon="used"></span>
           </div>
           <div class="hw-chips">
-            <span>до 30.11</span><span>ул. Ленина, 27</span><span>по записи</span>
+            <span>до 30 ноября</span><span>ул. Ленина, 27</span><span>без записи</span>
           </div>
         </div>
         <div class="hw-steps__body">
@@ -173,7 +187,9 @@
       <li>
         <div class="hw-scene hw-scene--save" aria-hidden="true">
           <div class="hw-phone">
-            <span class="hw-phone__k">Промокод</span>
+            <span class="hw-phone__ph" style="background-image:url(assets/coupons/coffee.jpg)"><i>1 + 1</i></span>
+            <span class="hw-phone__ttl">Два кофе по цене одного</span>
+            <span class="hw-phone__co">Кофейня «Зерно» · до 30.11</span>
             <span class="hw-phone__code">COFFEE</span>
             <span class="hw-phone__btn">Сохранить купон</span>
           </div>
@@ -188,11 +204,13 @@
       <li>
         <div class="hw-scene hw-scene--pay" aria-hidden="true">
           <div class="hw-check">
-            <span class="hw-check__row"><span>Капучино × 2</span><span>560 ₽</span></span>
-            <span class="hw-check__row hw-check__row--off"><span>Купон 1 + 1</span><span>−280 ₽</span></span>
-            <span class="hw-check__sum"><span>Итого</span><b>280 ₽</b></span>
+            <span class="hw-check__head">Кофейня «Зерно»</span>
+            <span class="hw-check__row"><span>Капучино 0,3 × 2</span><span>380 ₽</span></span>
+            <span class="hw-check__row hw-check__row--off"><span>Купон 1 + 1 · COFFEE</span><span>−190 ₽</span></span>
+            <span class="hw-check__sum"><span>Итого</span><b>190 ₽</b></span>
+            <span class="hw-stamp"><span data-icon="used"></span>Купон принят</span>
           </div>
-          <span class="hw-stamp">Выгода</span>
+          
         </div>
         <div class="hw-steps__body">
           <span class="hw-steps__n">03</span>
@@ -358,8 +376,9 @@
     <div class="dz-foot">
       <div class="dz-foot__brand">
         <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
-        <p class="dz-foot__tag">Выгода в повседневной жизни. Бесплатно и без регистрации.</p>
+        <p class="dz-foot__tag">Все скидки <span data-geo-gen>Липецка</span> в одном месте. Бесплатно и без регистрации: нашли купон, сохранили код, показали на кассе.</p>
       </div>
+
       <div class="fcol">
         <h4>Сервис</h4>
         <ul>
@@ -371,39 +390,67 @@
       <div class="fcol">
         <h4>Бизнесу</h4>
         <ul>
-          <li><a href="register-design.html">Разместить купон</a></li>
-          <li><a href="pricing.html">Условия размещения</a></li>
+          <li><a href="register-design.html">Зарегистрироваться</a></li>
+          <li><a href="pricing.html">Сколько стоит</a></li>
+          <li><a href="docs.html">Документы</a></li>
         </ul>
       </div>
       <div class="fcol">
         <h4>Партнёрам</h4>
         <ul>
-          <li><a href="service.html#partners">Партнёрская программа</a></li>
           <li><a href="partner.html">Стать партнёром</a></li>
+          <li><a href="partner.html#cities">Города присутствия</a></li>
+          <li><a href="service.html#partners">Партнёрская программа</a></li>
         </ul>
       </div>
     </div>
 
     <div class="dz-foot-socs">
       <div class="footer-soc-group">
-        <span class="footer-soc-group__label"><a href="socials.html">Мы ВКонтакте</a></span>
+        <span class="footer-soc-group__label"><a href="socials.html">Мы в соцсетях <span data-geo-gen>города</span></a></span>
         <div class="footer-soc-group__row">
           <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
+          <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram"><span data-icon="tg"></span> Telegram</a>
+          <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках"><span data-icon="ok"></span> Одноклассники</a>
+          <a class="soc" href="#" data-city-social="MAX" title="Мы в MAX"><span data-icon="max"></span> MAX</a>
+        </div>
+      </div>
+      <div class="footer-soc-group dz-foot__mp">
+        <span class="footer-soc-group__label"><a href="socials.html#mp">Сообщества маркетплейсов</a></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" title="Сообщество Wildberries"><img class="soc-ic soc-ic--img" src="assets/brand/mp/wildberries.svg" alt=""> Wildberries</a>
+          <a class="soc" href="#" title="Сообщество Ozon"><img class="soc-ic soc-ic--img" src="assets/brand/mp/ozon.svg" alt=""> Ozon</a>
+          <a class="soc" href="#" title="Сообщество Яндекс Маркет"><img class="soc-ic soc-ic--img" src="assets/brand/mp/yandex-market.svg" alt=""> Яндекс Маркет</a>
+          <a class="soc" href="#" title="Сообщество М.Видео"><img class="soc-ic soc-ic--img" src="assets/brand/mp/mvideo.svg" alt=""> М.Видео</a>
         </div>
       </div>
     </div>
 
+    <div class="dz-foot-ad">
+      <div>
+        <span class="dz-foot-ad__k">По вопросам рекламы</span>
+        <p>Нужен нетиповой формат, город под ключ или объём — напишите, соберём предложение под задачу.</p>
+      </div>
+      <a class="btn dz-foot-ad__mail" href="mailto:reklama@vsekupony.ru">reklama@vsekupony.ru</a>
+    </div>
+
     <div class="dz-foot-legal">
-      <p class="dz-foot-legal__req">ООО «ВСЕКУПОНЫ» · ИНН 4800033186 · ОГРН 1264800005370</p>
+      <p class="dz-foot-legal__req">
+        ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 ·
+        г. Липецк, ул. Название, 1
+      </p>
+      <p class="dz-foot-legal__pd">
+        Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону,
+        третьим лицам не передаём. Пользователю для поиска купонов регистрация не нужна.
+      </p>
     </div>
 
     <div class="footer__legal">
       <span>© 2026 ВСЕКУПОНЫ</span>
       <a href="docs.html#all">Политика конфиденциальности</a>
       <a href="docs.html#all">Пользовательское соглашение</a>
-      <a href="docs.html#all">Оферта</a>
       <a href="docs.html#all">Согласие на обработку данных</a>
-      <a href="docs.html#all">Cookies</a>
+      <a class="dz-foot__author" href="https://lead-space.ru" target="_blank" rel="noopener">Разработано lead-space.ru</a>
       <button type="button" class="dz-foot__top" data-to-top>Наверх ↑</button>
     </div>
   </div>
