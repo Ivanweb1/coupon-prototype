@@ -12,7 +12,7 @@
   margin:18px 0 0;font-family:var(--font-display);font-weight:800;
   font-size:clamp(30px,3.6vw,48px);line-height:1.06;letter-spacing:-.03em;color:var(--ink);
 }
-.fq-hero p{margin:14px 0 0;max-width:52ch;font-size:17px;line-height:1.55;color:var(--ink-2)}
+.fq-hero p{margin:14px 0 0;max-width:none;font-size:17px;line-height:1.55;color:var(--ink-2)}
 
 .fq-list{margin-top:36px}
 .fq-list .pg-faq{margin-top:0}
