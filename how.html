@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <!-- Страница «Как это работает» — отдельным слоем -->
-<link rel="stylesheet" href="assets/design-3-how.css?v=20261028a">
+<link rel="stylesheet" href="assets/design-3-how.css?v=20261028c">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -146,21 +146,59 @@
   <!-- ================= Как воспользоваться купоном ================= -->
   <section class="hw-sec" id="steps">
     <h2>Как воспользоваться купоном</h2>
+    <!-- Шаги с мини-сценами: в каждой карточке — то, что человек видит
+         на этом шаге. Между карточками — пунктирная «линия отрыва» купона. -->
     <ol class="hw-steps">
       <li>
-        <span class="hw-steps__n">01</span>
-        <b>Выберите предложение</b>
-        <p>Проверьте срок действия, адрес и условия акции. Обратите внимание, нужна ли запись.</p>
+        <div class="hw-scene hw-scene--pick" aria-hidden="true">
+          <div class="hw-mini">
+            <span class="hw-mini__v">−20%</span>
+            <span class="hw-mini__t"><i></i><i></i></span>
+          </div>
+          <div class="hw-mini is-on">
+            <span class="hw-mini__v">1 + 1</span>
+            <span class="hw-mini__t"><i></i><i></i></span>
+            <span class="hw-mini__ok" data-icon="used"></span>
+          </div>
+          <div class="hw-chips">
+            <span>до 30.11</span><span>ул. Ленина, 27</span><span>по записи</span>
+          </div>
+        </div>
+        <div class="hw-steps__body">
+          <span class="hw-steps__n">01</span>
+          <b>Выберите предложение</b>
+          <p>Проверьте срок действия, адрес и условия акции. Обратите внимание, нужна ли запись.</p>
+        </div>
       </li>
       <li>
-        <span class="hw-steps__n">02</span>
-        <b>Сохраните купон</b>
-        <p>Откройте купон, сохраните промокод или сделайте скриншот, чтобы показать его в компании.</p>
+        <div class="hw-scene hw-scene--save" aria-hidden="true">
+          <div class="hw-phone">
+            <span class="hw-phone__k">Промокод</span>
+            <span class="hw-phone__code">COFFEE</span>
+            <span class="hw-phone__btn">Сохранить купон</span>
+          </div>
+          <div class="hw-toast"><span data-icon="used"></span>Купон сохранён</div>
+        </div>
+        <div class="hw-steps__body">
+          <span class="hw-steps__n">02</span>
+          <b>Сохраните купон</b>
+          <p>Откройте купон, сохраните промокод или сделайте скриншот, чтобы показать его в компании.</p>
+        </div>
       </li>
       <li>
-        <span class="hw-steps__n">03</span>
-        <b>Покажите до оплаты</b>
-        <p>Сообщите о купоне при записи или перед покупкой и получите выгоду.</p>
+        <div class="hw-scene hw-scene--pay" aria-hidden="true">
+          <div class="hw-check">
+            <span class="hw-check__row"><span>Капучино × 2</span><span>560 ₽</span></span>
+            <span class="hw-check__row hw-check__row--off"><span>Купон 1 + 1</span><span>−280 ₽</span></span>
+            <span class="hw-check__sum"><span>Итого</span><b>280 ₽</b></span>
+          </div>
+          <span class="hw-stamp">Выгода</span>
+        </div>
+        <div class="hw-steps__body">
+          <span class="hw-steps__n">03</span>
+          <b>Покажите до оплаты</b>
+          <p>Сообщите о купоне при записи или перед покупкой и получите выгоду.</p>
+        </div>
       </li>
     </ol>
     <p class="hw-note">Товары и услуги оплачиваются у компании на условиях акции.</p>
@@ -178,20 +216,20 @@
     <div class="hw-demo">
       <article class="hw-cp" aria-label="Пример купона">
         <div class="hw-cp__media" role="img" aria-label="Фотография предложения">
-          <span class="hw-cp__value">1 + 1<i class="hw-pin">1</i></span>
+          <span class="hw-cp__value">1 + 1<i class="hw-pin" data-pin="1">1</i></span>
         </div>
         <div class="hw-cp__body">
           <span class="hw-cp__k">Пример купона</span>
           <h3 class="hw-cp__title">Два кофе по цене одного</h3>
           <p class="hw-cp__company">Кофейня</p>
           <div class="hw-cp__terms">
-            <i class="hw-pin">2</i>
+            <i class="hw-pin" data-pin="2">2</i>
             <span>По будням, с 12:00 до 14:00</span>
             <span>С 01.11.2026 по 30.11.2026</span>
             <span>Покажи купон до оплаты.</span>
           </div>
           <div class="hw-cp__code">
-            <i class="hw-pin">3</i>
+            <i class="hw-pin" data-pin="3">3</i>
             <span>Промокод: <b>COFFEE</b></span>
             <span data-icon="copy"></span>
           </div>
@@ -201,26 +239,33 @@
       </article>
 
       <ol class="hw-why">
-        <li>
+        <li data-pin="1">
           <i class="hw-pin">1</i>
           <div>
             <b>Выгода понятна сразу</b>
             <p>В карточке указано, что ты получишь: скидку, подарок или другое предложение.</p>
           </div>
+          <span class="hw-why__ex" aria-hidden="true">
+            <span class="hw-ex-val">1 + 1</span><span class="hw-ex-val hw-ex-val--alt">−30%</span>
+          </span>
         </li>
-        <li>
+        <li data-pin="2">
           <i class="hw-pin">2</i>
           <div>
             <b>Условия на виду</b>
             <p>Срок, адрес и ограничения помогают заранее понять, подходит ли тебе акция.</p>
           </div>
+          <span class="hw-why__ex hw-why__ex--chips" aria-hidden="true">
+            <span>до 30.11</span><span>12:00–14:00</span><span>по будням</span>
+          </span>
         </li>
-        <li>
+        <li data-pin="3">
           <i class="hw-pin">3</i>
           <div>
             <b>Код под рукой</b>
             <p>Сохрани купон, чтобы показать его при записи, заказе или перед оплатой.</p>
           </div>
+          <span class="hw-why__ex" aria-hidden="true"><span class="hw-ex-code">COFFEE</span></span>
         </li>
       </ol>
     </div>
@@ -430,6 +475,14 @@
     qsa(".hw-cat").forEach(a => a.href = "index-design-3.html?" + geo + "&l1=regional&l2=" + a.dataset.l2);
   }
   linkCatalog();
+
+  /* Наведение на пояснение подсвечивает его поле на карточке купона */
+  qsa(".hw-why li").forEach(li => {
+    const pin = qs('.hw-cp [data-pin="' + li.dataset.pin + '"]');
+    const on = v => { li.classList.toggle("is-on", v); if (pin) pin.classList.toggle("is-on", v); };
+    li.addEventListener("mouseenter", () => on(true));
+    li.addEventListener("mouseleave", () => on(false));
+  });
 </script>
 </body>
 </html>

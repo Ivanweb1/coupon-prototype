@@ -78,27 +78,141 @@
    -------------------------------------------------------------------------- */
 .hw-steps{
   margin:28px 0 0;padding:0;list-style:none;
-  display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr));
+  display:grid;gap:28px;grid-template-columns:repeat(3,minmax(0,1fr));
 }
 .hw-steps li{
-  padding:26px 26px 24px;border:1px solid var(--line);border-radius:24px;background:#fff;
+  position:relative;display:flex;flex-direction:column;
+  border:1px solid var(--line);border-radius:24px;background:#fff;
+  transition:transform .2s var(--ease), box-shadow .2s, border-color .2s;
 }
+.hw-steps li:hover{transform:translateY(-4px);border-color:var(--line-strong);box-shadow:var(--shadow-1)}
+/* Линия отрыва между карточками: пунктир со стрелкой */
+.hw-steps li + li::before{
+  content:"";position:absolute;left:-26px;top:96px;width:24px;
+  border-top:2px dashed var(--brand);
+}
+.hw-steps li + li::after{
+  content:"";position:absolute;left:-9px;top:92px;width:8px;height:8px;
+  border-top:2px solid var(--brand);border-right:2px solid var(--brand);
+  transform:rotate(45deg);
+}
+.hw-steps__body{position:relative;padding:0 26px 26px}
 .hw-steps__n{
-  display:block;font-family:var(--font-display);font-size:34px;font-weight:800;
-  letter-spacing:-.04em;line-height:1;color:var(--brand);
+  position:absolute;top:-22px;left:22px;
+  display:grid;place-items:center;height:44px;min-width:58px;padding:0 12px;
+  border-radius:14px;background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.03em;line-height:1;
+  box-shadow:0 0 0 4px #fff;
 }
-.hw-steps b{display:block;margin-top:18px;font-size:18px;font-weight:700;letter-spacing:-.015em;color:var(--ink)}
-.hw-steps p{margin:8px 0 0;font-size:15px;line-height:1.55;color:var(--ink-2)}
-@media (max-width:860px){.hw-steps{grid-template-columns:1fr}}
+.hw-steps__body b{display:block;margin-top:38px;font-size:18px;font-weight:700;letter-spacing:-.015em;color:var(--ink)}
+.hw-steps__body p{margin:8px 0 0;font-size:15px;line-height:1.55;color:var(--ink-2)}
+
+/* Сцена шага — серая «витрина» сверху карточки */
+.hw-scene{
+  position:relative;height:192px;margin:8px 8px 0;border-radius:18px;
+  background:var(--surface);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  padding-bottom:22px; /* место под номер шага, который заходит на сцену */
+}
+
+/* 01 — две мини-карточки, выбранная в красной рамке, под ними условия */
+.hw-scene--pick{flex-direction:column;gap:8px;padding:10px 14px 30px}
+.hw-mini{
+  position:relative;display:flex;align-items:center;gap:12px;
+  width:min(240px,90%);padding:10px 12px;border-radius:12px;background:#fff;
+  border:1.5px solid transparent;box-shadow:0 8px 18px -14px rgba(0,0,0,.35);
+}
+.hw-mini:first-child{opacity:.55;transform:scale(.95)}
+.hw-mini.is-on{border-color:var(--brand);transform:rotate(-2deg)}
+.hw-mini__v{
+  flex:0 0 auto;display:grid;place-items:center;height:30px;padding:0 9px;border-radius:8px;
+  background:var(--brand);color:#fff;font-family:var(--font-display);font-size:13px;font-weight:800;
+}
+.hw-mini:first-child .hw-mini__v{background:var(--ink-4)}
+.hw-mini__t{flex:1;display:grid;gap:6px}
+.hw-mini__t i{display:block;height:7px;border-radius:4px;background:var(--surface-2)}
+.hw-mini__t i + i{width:60%}
+.hw-mini__ok{
+  position:absolute;right:-9px;top:-9px;display:grid;place-items:center;
+  width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;
+  box-shadow:0 0 0 3px var(--surface);
+}
+.hw-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;margin-top:4px}
+.hw-chips span{
+  padding:4px 9px;border-radius:var(--r-pill);background:#fff;border:1px solid var(--line-strong);
+  font-size:11px;font-weight:600;color:var(--ink-2);white-space:nowrap;
+}
+
+/* 02 — край телефона с промокодом и уведомление «сохранён» */
+.hw-scene--save{align-items:flex-end;padding-bottom:0}
+.hw-phone{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  width:170px;height:168px;padding:18px 14px 0;
+  border:6px solid var(--ink);border-bottom:0;border-radius:26px 26px 0 0;background:#fff;
+}
+.hw-phone__k{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.hw-phone__code{
+  width:100%;padding:8px 0;border:1.5px dashed var(--brand);border-radius:10px;text-align:center;
+  font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:.06em;color:var(--ink);
+}
+.hw-phone__btn{
+  width:100%;padding:8px 0;border-radius:var(--r-pill);background:var(--brand);color:#fff;
+  text-align:center;font-size:11px;font-weight:600;
+}
+.hw-toast{
+  position:absolute;right:10%;top:22px;display:flex;align-items:center;gap:7px;
+  padding:8px 12px 8px 8px;border-radius:var(--r-pill);background:var(--ink);color:#fff;
+  font-size:12px;font-weight:600;transform:rotate(4deg);
+  box-shadow:0 12px 22px -12px rgba(0,0,0,.5);
+  animation:hwPop 4s ease-in-out infinite;
+}
+.hw-toast [data-icon]{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--brand)}
+@keyframes hwPop{0%,100%{transform:rotate(4deg) translateY(0)}50%{transform:rotate(4deg) translateY(-5px)}}
+
+/* 03 — чек со строкой купона и красный штамп «Выгода» */
+.hw-check{
+  position:relative;display:grid;gap:9px;width:min(230px,86%);padding:16px 16px 18px;
+  background:#fff;border-radius:10px 10px 0 0;box-shadow:0 10px 22px -16px rgba(0,0,0,.4);
+  font-size:12.5px;color:var(--ink-2);
+}
+/* Зубчатый край чека */
+.hw-check::after{
+  content:"";position:absolute;left:0;right:0;bottom:-8px;height:8px;
+  background:linear-gradient(-45deg,transparent 6px,#fff 0) 0 0/12px 8px repeat-x,
+             linear-gradient(45deg,transparent 6px,#fff 0) 0 0/12px 8px repeat-x;
+}
+.hw-check__row,.hw-check__sum{display:flex;justify-content:space-between;gap:10px}
+.hw-check__row--off{color:var(--brand);font-weight:600}
+.hw-check__sum{padding-top:9px;border-top:1.5px dashed var(--line-strong);color:var(--ink);font-weight:600}
+.hw-check__sum b{font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-.02em}
+.hw-stamp{
+  position:absolute;right:6%;bottom:16px;padding:6px 12px;border:2.5px solid var(--brand);border-radius:10px;
+  color:var(--brand);font-family:var(--font-display);font-size:15px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.04em;background:rgba(255,255,255,.85);
+  transform:rotate(-12deg);
+}
+
+@media (max-width:1000px){.hw-scene{height:170px}.hw-steps li + li::before,.hw-steps li + li::after{top:86px}}
+@media (max-width:860px){
+  .hw-steps{grid-template-columns:1fr;gap:30px}
+  .hw-toast{right:4%;top:10px}
+  .hw-phone{padding-top:30px}
+  /* На телефоне линия отрыва вертикальная, сверху вниз */
+  .hw-steps li + li::before{left:50%;top:-28px;width:0;height:24px;border-top:0;border-left:2px dashed var(--brand)}
+  .hw-steps li + li::after{left:calc(50% - 4px);top:-11px;transform:rotate(135deg)}
+}
 
 /* --------------------------------------------------------------------------
    03. Пример купона
    --------------------------------------------------------------------------
    Карточка слева, объяснение полей справа. Номера на карточке и у пояснений
    одни и те же — видно, какой текст к какому полю. Данные учебные. */
+/* Купон и пояснения — на общей серой подложке, чтобы блок занимал всю
+   ширину, а не висел узкой колонкой слева */
 .hw-demo{
   display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);
-  gap:56px;align-items:center;margin-top:32px;
+  gap:48px;align-items:center;margin-top:32px;
+  padding:48px;border-radius:32px;background:var(--surface);
 }
 .hw-cp{
   position:relative;border:1px solid var(--line);border-radius:24px;background:#fff;
@@ -152,15 +266,42 @@
 .hw-cp__terms .hw-pin{right:0;top:12px}
 .hw-cp__code .hw-pin{right:-12px;top:-14px}
 
-.hw-why{display:grid;gap:30px;margin:0;padding:0;list-style:none}
-.hw-why li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:16px}
-.hw-why .hw-pin{margin-top:2px}
+.hw-why{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.hw-why li{
+  display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:20px;
+  padding:24px 26px;border:1.5px solid transparent;border-radius:22px;background:#fff;
+  transition:border-color .18s, transform .18s var(--ease), box-shadow .18s;
+}
+.hw-why li.is-on{border-color:var(--brand);transform:translateX(4px);box-shadow:var(--shadow-1)}
+.hw-why .hw-pin{width:34px;height:34px;font-size:15px;box-shadow:none;transition:background .18s}
+.hw-why li.is-on .hw-pin,.hw-cp .hw-pin.is-on{background:var(--brand)}
+.hw-cp .hw-pin{transition:background .18s, transform .18s}
+.hw-cp .hw-pin.is-on{transform:scale(1.2)}
 .hw-why b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
-.hw-why p{margin:8px 0 0;max-width:46ch;font-size:15.5px;line-height:1.6;color:var(--ink-2)}
+.hw-why p{margin:6px 0 0;font-size:15px;line-height:1.55;color:var(--ink-2)}
 
+/* Справа в пояснении — кусочек купона, о котором речь */
+.hw-why__ex{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:190px}
+.hw-ex-val{
+  display:inline-flex;align-items:center;height:38px;padding:0 14px;border-radius:12px;
+  background:var(--brand);color:#fff;font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-.03em;
+  transform:rotate(-4deg);
+}
+.hw-ex-val--alt{background:var(--ink);transform:rotate(5deg)}
+.hw-why__ex--chips span{
+  padding:5px 10px;border-radius:var(--r-pill);border:1px solid var(--line-strong);
+  font-size:12px;font-weight:600;color:var(--ink-2);white-space:nowrap;
+}
+.hw-ex-code{
+  padding:9px 16px;border:1.5px dashed var(--brand);border-radius:12px;
+  font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:.06em;color:var(--ink);
+}
+
+@media (max-width:1100px){.hw-why li{grid-template-columns:34px minmax(0,1fr)}.hw-why__ex{grid-column:2;justify-content:flex-start;max-width:none}}
 @media (max-width:860px){
-  .hw-demo{grid-template-columns:1fr;gap:36px}
-  .hw-cp{max-width:400px}
+  .hw-demo{grid-template-columns:1fr;gap:28px;padding:20px;border-radius:26px}
+  .hw-cp{max-width:400px;width:100%;margin:0 auto}
+  .hw-why li{padding:18px;gap:14px}
 }
 
 /* --------------------------------------------------------------------------
