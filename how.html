@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <!-- Страница «Как это работает» — отдельным слоем -->
-<link rel="stylesheet" href="assets/design-3-how.css?v=20261028f">
+<link rel="stylesheet" href="assets/design-3-how.css?v=20261028h">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -136,7 +136,6 @@
   <!-- ================= Первый экран ================= -->
   <section class="hw-hero">
     <div>
-      <span class="hw-k">Выгода рядом</span>
       <h1>Купоны и скидки в&nbsp;твоём городе</h1>
       <p class="hw-hero__sub">Бесплатно и без регистрации. Выбирай предложение, сохраняй купон и пользуйся выгодой.</p>
       <div class="hw-acts">
@@ -149,9 +148,9 @@
     <div class="hw-art" aria-hidden="true">
       <img class="hw-art__balloon" src="assets/brand/logo-red.png" alt="" width="357" height="600">
       <span class="hw-art__pct">%</span>
-      <div class="dzl__ticket hw-art__t1"><b>−30%</b><span>Комбо-обед</span></div>
-      <div class="dzl__ticket hw-art__t2"><b>1 + 1</b><span>Кофе с собой</span></div>
-      <div class="dzl__ticket hw-art__t3"><b>Подарок</b><span>Десерт к напитку</span></div>
+      <!-- Два купона из ленты — та же карточка, что на главной (cardHTML), уменьшенная -->
+      <div class="hw-fly hw-fly--1"></div>
+      <div class="hw-fly hw-fly--2"></div>
     </div>
   </section>
 
@@ -232,29 +231,8 @@
     <h2>Всё важное — в одном купоне</h2>
 
     <div class="hw-demo">
-      <article class="hw-cp" aria-label="Пример купона">
-        <div class="hw-cp__media" role="img" aria-label="Фотография предложения">
-          <span class="hw-cp__value">1 + 1<i class="hw-pin" data-pin="1">1</i></span>
-        </div>
-        <div class="hw-cp__body">
-          <span class="hw-cp__k">Пример купона</span>
-          <h3 class="hw-cp__title">Два кофе по цене одного</h3>
-          <p class="hw-cp__company">Кофейня</p>
-          <div class="hw-cp__terms">
-            <i class="hw-pin" data-pin="2">2</i>
-            <span>По будням, с 12:00 до 14:00</span>
-            <span>С 01.11.2026 по 30.11.2026</span>
-            <span>Покажи купон до оплаты.</span>
-          </div>
-          <div class="hw-cp__code">
-            <i class="hw-pin" data-pin="3">3</i>
-            <span>Промокод: <b>COFFEE</b></span>
-            <span data-icon="copy"></span>
-          </div>
-          <button type="button" class="btn btn--solid">Сохранить купон</button>
-          <p class="hw-cp__foot">Учебный пример, не действующая акция.</p>
-        </div>
-      </article>
+      <!-- Карточка 1в1 как в ленте: рисует cardHTML, метки 1–3 ставит скрипт внизу -->
+      <div class="hw-cp" aria-label="Пример купона"></div>
 
       <ol class="hw-why">
         <li data-pin="1">
@@ -263,8 +241,10 @@
             <b>Выгода понятна сразу</b>
             <p>В карточке указано, что ты получишь: скидку, подарок или другое предложение.</p>
           </div>
-          <span class="hw-why__ex" aria-hidden="true">
-            <span class="hw-ex-val">1 + 1</span><span class="hw-ex-val hw-ex-val--alt">−30%</span>
+          <span class="hw-why__ex hw-why__ex--fan" aria-hidden="true">
+            <span class="hw-fan" style="background-image:url(assets/coupons/manikyur-rose.jpg)"><i class="hw-fan__v hw-fan__v--ink">−30%</i></span>
+            <span class="hw-fan" style="background-image:url(assets/coupons/razvlecheniya-blue.jpg)"><i class="hw-fan__v hw-fan__v--ink">Подарок</i></span>
+            <span class="hw-fan is-top" style="background-image:url(assets/coupons/coffee.jpg)"><i class="hw-fan__v">1 + 1</i></span>
           </span>
         </li>
         <li data-pin="2">
@@ -273,8 +253,14 @@
             <b>Условия на виду</b>
             <p>Срок, адрес и ограничения помогают заранее понять, подходит ли тебе акция.</p>
           </div>
-          <span class="hw-why__ex hw-why__ex--chips" aria-hidden="true">
-            <span>до 30.11</span><span>12:00–14:00</span><span>по будням</span>
+          <span class="hw-why__ex hw-why__ex--cal" aria-hidden="true">
+            <span class="hw-cal">
+              <span class="hw-cal__head">Ноябрь<b>01–30</b></span>
+              <span class="hw-cal__week">
+                <i class="on">пн</i><i class="on">вт</i><i class="on">ср</i><i class="on">чт</i><i class="on">пт</i><i>сб</i><i>вс</i>
+              </span>
+              <span class="hw-cal__time"><span class="hw-clock"></span>12:00–14:00</span>
+            </span>
           </span>
         </li>
         <li data-pin="3">
@@ -283,7 +269,14 @@
             <b>Код под рукой</b>
             <p>Сохрани купон, чтобы показать его при записи, заказе или перед оплатой.</p>
           </div>
-          <span class="hw-why__ex" aria-hidden="true"><span class="hw-ex-code">COFFEE</span></span>
+          <span class="hw-why__ex hw-why__ex--code" aria-hidden="true">
+            <span class="hw-ticket">
+              <small>Промокод</small>
+              <b>COFFEE</b>
+              <span class="hw-ticket__copy" data-icon="copy"></span>
+            </span>
+            <span class="hw-copied"><span data-icon="ok"></span>Скопировано</span>
+          </span>
         </li>
       </ol>
     </div>
@@ -500,11 +493,18 @@
 
   /* Пять плиток категорий: [ниша региональных, подпись из прототипа] */
   const HW_CATS = [
-    ["eda",     "Еда и напитки"],
-    ["krasota", "Красота"],
-    ["avto",    "Авто"],
-    ["detyam",  "Для детей"],
-    ["uslugi",  "Товары и услуги"]
+    ["eda",           "Еда и напитки"],
+    ["krasota",       "Красота"],
+    ["sport",         "Фитнес и спорт"],
+    ["razvlecheniya", "Развлечения"],
+    ["detyam",        "Для детей"],
+    ["avto",          "Авто"],
+    ["meditsina",     "Медицина"],
+    ["obuchenie",     "Обучение"],
+    ["odezhda",       "Одежда и обувь"],
+    ["dom",           "Товары для дома"],
+    ["pitomtsy",      "Питомцы"],
+    ["uslugi",        "Товары и услуги"]
   ];
   const catsHost = qs("#hwCats");
   HW_CATS.forEach(([slug, label]) => {
@@ -514,6 +514,16 @@
     a.innerHTML = '<span class="hw-cat__ic">' + catIcon(slug, 26) + "</span><b>" + label + "</b>";
     catsHost.appendChild(a);
   });
+  /* Категорий больше, чем влезает: показываем ровно один полный ряд —
+     сколько колонок уложила сетка, столько плиток, без пустых мест */
+  function fitCats() {
+    const tiles = qsa(".hw-cat", catsHost);
+    if (getComputedStyle(catsHost).overflowX === "auto") { tiles.forEach(a => a.hidden = false); return; }
+    const cols = getComputedStyle(catsHost).gridTemplateColumns.split(" ").length;
+    tiles.forEach((a, i) => a.hidden = i >= cols);
+  }
+  fitCats();
+  addEventListener("resize", fitCats);
 
   /* 04 / Переход в каталог — с сохранением выбранного города */
   function linkCatalog() {
@@ -522,6 +532,38 @@
     qsa(".hw-cat").forEach(a => a.href = "index-design-3.html?" + geo + "&l1=regional&l2=" + a.dataset.l2);
   }
   linkCatalog();
+
+  /* Купоны на странице — та же карточка, что в ленте главной. Данные
+     демонстрационные, кнопки в них ничего не делают. */
+  const HW_DEMO = [
+    { id: "hw1", title: "Два кофе по цене одного", company: "Кофейня «Зерно»", value: "1+1",
+      dist: 180, erid: "2VtzqwB7Kd", views: 1240, verified: true, photo: "assets/coupons/coffee.jpg",
+      cat: { l1: "regional", slug: "eda", name: "Кафе и рестораны" } },
+    { id: "hw2", title: "Комбо-обед в будни", company: "Бистро «Обед»", value: "−30%",
+      dist: 900, erid: "2VtzqwC4Mf", views: 860, photo: "assets/coupons/eda-cool.jpg",
+      cat: { l1: "regional", slug: "eda", name: "Кафе и рестораны" } },
+    { id: "hw3", title: "Маникюр с покрытием", company: "Студия «Ноготок»", value: "−25%",
+      dist: 260, erid: "2VtzqwD9Pk", views: 2310, photo: "assets/coupons/manikyur-rose.jpg",
+      cat: { l1: "regional", slug: "krasota", name: "Красота" } }
+  ];
+  function demoCard(host, c) {
+    c.city = state.city;
+    host.classList.add("card");
+    host._coupon = c;
+    host.innerHTML = cardHTML(c);
+    const media = qs(".card__media", host);
+    media.style.background = 'url("' + c.photo + '") center/cover no-repeat';
+    media.classList.add("has-photo");
+    qsa("button", host).forEach(b => { b.tabIndex = -1; b.onclick = e => e.preventDefault(); });
+  }
+  demoCard(qs(".hw-cp"), HW_DEMO[0]);
+  demoCard(qs(".hw-fly--1"), HW_DEMO[1]);
+  demoCard(qs(".hw-fly--2"), HW_DEMO[2]);
+  /* Метки 1–3 на карточке-примере: выгода, сколько идти, кнопка с кодом */
+  [[".card__badge", 1], [".card__near", 2], ["[data-card-reveal]", 3]].forEach(([sel, n]) => {
+    const el = qs(".hw-cp " + sel);
+    if (el) el.insertAdjacentHTML("beforeend", '<i class="hw-pin" data-pin="' + n + '">' + n + "</i>");
+  });
 
   /* Наведение на пояснение подсвечивает его поле на карточке купона */
   qsa(".hw-why li").forEach(li => {

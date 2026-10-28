@@ -53,9 +53,24 @@
 .hw-art .dzl__ticket{padding:12px 16px 11px;border-radius:14px}
 .hw-art .dzl__ticket b{font-size:24px}
 .hw-art .dzl__ticket span{font-size:12.5px}
-.hw-art .hw-art__t1{left:2%;top:58px}
-.hw-art .hw-art__t2{--rot:7deg;right:0;top:150px;animation-duration:7s;animation-delay:-2s}
-.hw-art .hw-art__t3{--rot:-4deg;left:12%;bottom:22px;animation-duration:8s;animation-delay:-4s}
+.hw-art .hw-art__t3{--rot:-4deg;left:34%;bottom:4px;z-index:2;animation-duration:8s;animation-delay:-4s}
+
+/* Два купона из ленты вокруг шара — настоящие .card, уменьшенные */
+.hw-fly.card{
+  --rot:-8deg;--k:.56;
+  position:absolute;z-index:1;width:280px;margin:0;pointer-events:none;
+  transform-origin:0 0;transform:scale(var(--k)) rotate(var(--rot));
+  box-shadow:0 34px 60px -30px rgba(0,0,0,.45);
+  animation:hwFly 6s ease-in-out infinite;
+}
+/* Шар — поверх купонов, купоны разведены по краям */
+.hw-art__balloon{z-index:2}
+.hw-fly--1{left:-6%;top:24px}
+.hw-fly--2{--rot:8deg;right:-6%;top:70px;transform-origin:100% 0;animation-duration:7s;animation-delay:-3s}
+@keyframes hwFly{
+  0%,100%{transform:scale(var(--k)) rotate(var(--rot)) translateY(0)}
+  50%{transform:scale(var(--k)) rotate(var(--rot)) translateY(-14px)}
+}
 /* Знак процента — красный круг */
 .hw-art__pct{
   position:absolute;right:12%;top:18px;
@@ -70,7 +85,9 @@
   .hw-hero{grid-template-columns:1fr;gap:12px;padding-top:36px}
   .hw-art{height:260px;max-width:420px;width:100%;margin:0 auto}
   .hw-art__balloon{height:240px}
-  .hw-art .hw-art__t2{top:110px}
+  .hw-fly.card{--k:.4}
+  .hw-fly--1{left:-2%;top:30px}
+  .hw-fly--2{right:-2%;top:70px}
 }
 
 /* --------------------------------------------------------------------------
@@ -227,45 +244,10 @@
   gap:48px;align-items:stretch;margin-top:32px;
   padding:48px;border-radius:32px;background:var(--surface);
 }
-.hw-cp{
-  position:relative;border:1px solid var(--line);border-radius:24px;background:#fff;
-  box-shadow:0 30px 60px -36px rgba(0,0,0,.28);overflow:hidden;
-}
-.hw-cp__media{
-  position:relative;aspect-ratio:16/10;
-  background:var(--surface) url("coupons/coffee.jpg") 50% 78%/cover no-repeat;
-}
-.hw-cp__value{
-  position:absolute;left:16px;bottom:-18px;
-  display:inline-flex;align-items:center;height:40px;padding:0 16px;
-  border-radius:12px;background:var(--brand);color:#fff;
-  font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.03em;
-  box-shadow:0 12px 22px -12px rgba(0,0,0,.45);
-}
-.hw-cp__body{padding:32px 22px 20px}
-.hw-cp__k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-.hw-cp__title{
-  margin:8px 0 0;font-family:var(--font-display);font-size:22px;font-weight:800;
-  line-height:1.15;letter-spacing:-.025em;color:var(--ink);
-}
-.hw-cp__company{margin:6px 0 0;font-size:14px;font-weight:600;color:var(--ink-2)}
-.hw-cp__terms{
-  position:relative;margin:16px 0 0;padding:14px 0 0;border-top:1px dashed var(--line-strong);
-  display:grid;gap:6px;
-}
-.hw-cp__terms > span{display:flex;gap:9px;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
-.hw-cp__terms > span::before{
-  content:"";flex:0 0 auto;width:5px;height:5px;margin-top:7px;border-radius:50%;background:var(--ink-4);
-}
-.hw-cp__code{
-  position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;
-  margin:16px 0 0;padding:12px 14px;border:1.5px dashed var(--line-strong);border-radius:14px;
-  font-size:14px;color:var(--ink-2);
-}
-.hw-cp__code b{font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:.04em;color:var(--ink)}
-.hw-cp__code [data-icon]{display:inline-flex;color:var(--ink-3)}
-.hw-cp .btn{width:100%;justify-content:center;height:50px;margin-top:12px;font-size:15px;font-weight:600}
-.hw-cp__foot{margin:12px 0 0;text-align:center;font-size:12px;color:var(--ink-4)}
+/* Сама карточка — .card из ленты (cardHTML), здесь только её место в блоке */
+.hw-cp.card{position:relative;align-self:center;width:100%;max-width:340px;margin:0 auto;box-shadow:0 30px 60px -36px rgba(0,0,0,.28)}
+.hw-cp [data-card-reveal]{position:relative;overflow:visible}
+.hw-cp .card__badge,.hw-cp .card__near{overflow:visible}
 
 /* Номер-метка у поля карточки */
 .hw-pin{
@@ -274,10 +256,10 @@
   font-family:var(--font-display);font-size:13px;font-weight:800;font-style:normal;
   box-shadow:0 0 0 3px #fff;
 }
-.hw-cp .hw-pin{position:absolute;z-index:1}
-.hw-cp__value .hw-pin{right:-12px;top:-12px}
-.hw-cp__terms .hw-pin{right:0;top:12px}
-.hw-cp__code .hw-pin{right:-12px;top:-14px}
+.hw-cp .hw-pin{position:absolute;z-index:3;right:-13px;top:-13px;letter-spacing:0;line-height:1}
+.hw-cp .card__near .hw-pin{right:-14px;top:-12px}
+/* Справа от выгоды стоит «Проверено» — метку выгоды ставим слева */
+.hw-cp .card__badge .hw-pin{right:auto;left:-13px}
 
 .hw-why{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
 /* Три пояснения делят высоту купона поровну: верх и низ колонок совпадают */
@@ -295,24 +277,84 @@
 .hw-why b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
 .hw-why p{margin:6px 0 0;font-size:15px;line-height:1.55;color:var(--ink-2)}
 
-/* Справа в пояснении — кусочек купона, о котором речь */
-.hw-why__ex{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:190px}
-.hw-ex-val{
-  display:inline-flex;align-items:center;height:38px;padding:0 14px;border-radius:12px;
-  background:var(--brand);color:#fff;font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-.03em;
-  transform:rotate(-4deg);
-}
-.hw-ex-val--alt{background:var(--ink);transform:rotate(5deg)}
-.hw-why__ex--chips span{
-  padding:5px 10px;border-radius:var(--r-pill);border:1px solid var(--line-strong);
-  font-size:12px;font-weight:600;color:var(--ink-2);white-space:nowrap;
-}
-.hw-ex-code{
-  padding:9px 16px;border:1.5px dashed var(--brand);border-radius:12px;
-  font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:.06em;color:var(--ink);
+/* Справа в пояснении — серая «витрина» со сценкой, как у трёх шагов выше */
+.hw-why__ex{
+  position:relative;align-self:stretch;width:250px;min-height:136px;
+  display:flex;align-items:center;justify-content:center;
+  margin:-10px -12px -10px 0;border-radius:18px;background:var(--surface);overflow:hidden;
 }
 
-@media (max-width:1100px){.hw-why li{grid-template-columns:34px minmax(0,1fr)}.hw-why__ex{grid-column:2;justify-content:flex-start;max-width:none}}
+/* 1 — веер из трёх мини-купонов с разной выгодой */
+.hw-fan{
+  position:absolute;top:50%;left:50%;width:96px;height:104px;margin:-52px 0 0 -48px;
+  border:4px solid #fff;border-radius:14px;background:var(--surface-2) center/cover no-repeat;
+  box-shadow:0 14px 24px -14px rgba(0,0,0,.45);
+  transition:transform .3s var(--ease);
+}
+.hw-fan:nth-child(1){transform:translateX(-62px) rotate(-12deg) scale(.88)}
+.hw-fan:nth-child(2){transform:translateX(62px) rotate(11deg) scale(.88)}
+.hw-fan.is-top{transform:translateY(-4px) rotate(-2deg)}
+.hw-why li.is-on .hw-fan:nth-child(1){transform:translateX(-72px) rotate(-16deg) scale(.88)}
+.hw-why li.is-on .hw-fan:nth-child(2){transform:translateX(72px) rotate(15deg) scale(.88)}
+.hw-fan__v{
+  position:absolute;left:6px;bottom:6px;padding:3px 8px;border-radius:8px;
+  background:var(--brand);color:#fff;font-style:normal;
+  font-family:var(--font-display);font-size:15px;font-weight:800;letter-spacing:-.02em;white-space:nowrap;
+}
+.hw-fan__v--ink{background:var(--ink);font-size:12px}
+
+/* 2 — листок календаря: месяц, будни, время */
+.hw-cal{
+  width:190px;border-radius:14px;background:#fff;overflow:hidden;
+  box-shadow:0 14px 24px -16px rgba(0,0,0,.4);transform:rotate(-2deg);
+}
+.hw-cal__head{
+  display:flex;justify-content:space-between;align-items:baseline;padding:8px 12px;
+  background:var(--brand);color:#fff;font-size:13px;font-weight:700;
+}
+.hw-cal__head b{font-size:11px;font-weight:600;opacity:.85}
+.hw-cal__week{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;padding:10px 10px 6px}
+.hw-cal__week i{
+  display:grid;place-items:center;height:24px;border-radius:7px;font-style:normal;
+  font-size:10.5px;font-weight:700;color:var(--ink-4);background:var(--surface);text-decoration:line-through;
+}
+.hw-cal__week i.on{background:var(--ink);color:#fff;text-decoration:none}
+.hw-cal__time{display:flex;align-items:center;gap:7px;padding:4px 12px 10px;font-size:13px;font-weight:700;color:var(--ink)}
+/* Циферблат: стрелки показывают 12 часов */
+.hw-clock{position:relative;width:16px;height:16px;border:2px solid var(--brand);border-radius:50%}
+.hw-clock::before,.hw-clock::after{content:"";position:absolute;left:50%;bottom:50%;width:2px;margin-left:-1px;background:var(--brand);border-radius:1px;transform-origin:50% 100%}
+.hw-clock::before{height:5px}
+.hw-clock::after{height:4px;transform:rotate(90deg)}
+
+/* 3 — билет с промокодом и всплывающее «Скопировано» */
+.hw-ticket{
+  position:relative;display:grid;justify-items:center;gap:2px;padding:12px 40px 12px 22px;
+  border-radius:12px;background:#fff;box-shadow:0 14px 24px -16px rgba(0,0,0,.4);
+  /* Вырезы по бокам, как у отрывного талона */
+  -webkit-mask:radial-gradient(circle 8px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,
+               radial-gradient(circle 8px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 8px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,
+               radial-gradient(circle 8px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
+}
+.hw-ticket small{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.hw-ticket b{
+  padding:4px 10px;border:1.5px dashed var(--brand);border-radius:8px;
+  font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:.08em;color:var(--ink);
+}
+.hw-ticket__copy{position:absolute;right:14px;top:50%;margin-top:3px;display:inline-flex;color:var(--brand)}
+.hw-copied{
+  position:absolute;right:14px;top:14px;display:flex;align-items:center;gap:6px;
+  padding:5px 10px 5px 5px;border-radius:var(--r-pill);background:var(--ink);color:#fff;
+  font-size:11.5px;font-weight:600;transform:rotate(4deg);
+  box-shadow:0 10px 18px -10px rgba(0,0,0,.5);
+  animation:hwPop 4s ease-in-out infinite;
+}
+.hw-copied [data-icon]{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--brand)}
+
+@media (max-width:1100px){
+  .hw-why li{grid-template-columns:34px minmax(0,1fr)}
+  .hw-why__ex{grid-column:1 / -1;width:auto;margin:0}
+}
 @media (max-width:860px){
   .hw-demo{grid-template-columns:1fr;gap:28px;padding:20px;border-radius:26px}
   .hw-cp{max-width:400px;width:100%;margin:0 auto}
@@ -324,7 +366,9 @@
    --------------------------------------------------------------------------
    Пять плиток со ссылками на подборки города. Значок ниши — тот же, что в
    строке категорий на главной (catIcon). На телефоне — две колонки. */
-.hw-cats{display:grid;gap:14px;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:28px}
+/* Колонок столько, сколько влезает плиток от 168px; лишние прячет fitCats() */
+.hw-cats{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));margin-top:28px}
+.hw-cat[hidden]{display:none}
 .hw-cat{
   display:flex;flex-direction:column;gap:18px;min-height:150px;padding:20px;
   border:1px solid var(--line);border-radius:24px;background:#fff;color:var(--ink);
@@ -338,11 +382,17 @@
 .hw-cat:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:var(--shadow-1)}
 .hw-cat:hover .hw-cat__ic{background:var(--brand);color:#fff}
 .hw-cat:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
-@media (max-width:1000px){.hw-cats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* На телефоне — одна строка с прокруткой вбок, видны все категории */
 @media (max-width:620px){
-  .hw-cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .hw-cat{min-height:128px;padding:16px}
+  .hw-cats{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-16px;padding:4px 16px 8px;scrollbar-width:none}
+  .hw-cats::-webkit-scrollbar{display:none}
+  .hw-cat{flex:0 0 140px;min-height:128px;padding:16px;scroll-snap-align:start}
 }
+
+/* Вопросы на этой странице — крупнее, чем общий аккордеон */
+#faq .pg-faq summary{padding:22px 2px;font-size:19px}
+#faq .pg-faq p{font-size:17px;margin-bottom:24px}
+.hw-faq-more{font-size:16px}
 
 /* --------------------------------------------------------------------------
    05. Вопросы и ответы — аккордеон .pg-faq из design-3-pages.css
