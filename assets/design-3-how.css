@@ -87,11 +87,12 @@
   transition:transform .2s var(--ease), box-shadow .2s, border-color .2s;
 }
 .hw-steps li:hover{transform:translateY(-4px);border-color:var(--line-strong);box-shadow:var(--shadow-1)}
-/* Стрелка между карточками: пунктир и наконечник одной картинкой,
-   чтобы наконечник всегда стоял ровно на линии */
+/* Стрелка между карточками — красная плашка с белым шевроном,
+   ровно посередине зазора между шагами, поверх их рамок */
 .hw-steps li + li::before{
-  content:"";position:absolute;left:-27px;top:90px;width:26px;height:14px;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='14' viewBox='0 0 26 14' fill='none' stroke='%23DD443C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 7h19' stroke-dasharray='3 3'/%3E%3Cpath d='M19 2l5 5-5 5'/%3E%3C/svg%3E") center/contain no-repeat;
+  content:"";position:absolute;z-index:2;left:-27px;top:84px;width:26px;height:26px;
+  border-radius:8px;box-shadow:0 0 0 3px #fff;
+  background:var(--brand) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5.5 3.5 9 7l-3.5 3.5'/%3E%3C/svg%3E") center/14px no-repeat;
 }
 .hw-steps__body{position:relative;padding:0 26px 26px}
 .hw-steps__n{
@@ -203,12 +204,12 @@
 }
 .hw-stamp [data-icon]{display:inline-flex}
 
-@media (max-width:1000px){.hw-steps li + li::before{top:80px}}
+@media (max-width:1000px){.hw-steps li + li::before{top:74px}}
 @media (max-width:860px){
   .hw-steps{grid-template-columns:1fr;gap:30px}
   .hw-toast{right:4%;top:10px}
   /* На телефоне линия отрыва вертикальная, сверху вниз */
-  .hw-steps li + li::before{left:calc(50% - 13px);top:-29px;transform:rotate(90deg)}
+  .hw-steps li + li::before{left:calc(50% - 13px);top:-28px;transform:rotate(90deg)}
 }
 
 /* --------------------------------------------------------------------------
