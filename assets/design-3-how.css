@@ -1,0 +1,225 @@
+/* ==========================================================================
+   Страница «Как это работает» (how.html)
+   ==========================================================================
+   Тексты и порядок блоков — из прототипа «Как это работает» от 27.10.2026.
+   Стиль — design-3: белый фон, один шрифт Онест, заголовки 800, без
+   градиентов, красная кнопка в блоке одна. Общие куски (шапка, подвал,
+   аккордеон .pg-faq, красный баннер .dz-biz) берутся из готовых слоёв —
+   здесь только то, чего на сайте ещё не было.
+   ========================================================================== */
+
+.hw-sec{margin-top:88px;scroll-margin-top:84px}
+.hw-sec h2{
+  margin:0;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(26px,2.8vw,38px);line-height:1.1;letter-spacing:-.03em;color:var(--ink);
+}
+.hw-sec__lead{margin:12px 0 0;max-width:62ch;font-size:16px;line-height:1.6;color:var(--ink-2)}
+.hw-k{
+  display:block;margin:0 0 12px;font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--brand);
+}
+.hw-note{margin:14px 0 0;font-size:13.5px;line-height:1.5;color:var(--ink-3)}
+.hw-acts{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:26px}
+.hw-acts .btn{height:52px;padding:0 28px;font-size:15px;font-weight:600}
+
+/* --------------------------------------------------------------------------
+   01. Первый экран
+   --------------------------------------------------------------------------
+   Слева заголовок и кнопка, справа иллюстрация из того же набора, что на
+   главной: шар из логотипа, купоны и знак процента. */
+.hw-hero{
+  display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  align-items:center;gap:40px;padding:56px 0 8px;
+}
+.hw-hero h1{
+  margin:0;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(36px,5vw,64px);line-height:1.02;letter-spacing:-.04em;color:var(--ink);
+}
+.hw-hero__city{color:var(--brand)}
+.hw-hero__sub{margin:20px 0 0;max-width:44ch;font-size:18px;line-height:1.55;color:var(--ink-2)}
+.hw-hero .hw-note{margin-top:14px}
+
+.hw-art{position:relative;height:360px}
+.hw-art__balloon{
+  position:absolute;left:50%;top:6px;height:330px;width:auto;
+  transform:translateX(-50%) rotate(6deg);
+  animation:hwFloat 7s ease-in-out infinite;
+}
+@keyframes hwFloat{
+  0%,100%{transform:translateX(-50%) rotate(6deg)}
+  50%{transform:translate(-50%,-8px) rotate(3deg)}
+}
+/* Купоны вокруг шара — те же .dzl__ticket, что на главной, только крупнее */
+.hw-art .dzl__ticket{padding:12px 16px 11px;border-radius:14px}
+.hw-art .dzl__ticket b{font-size:24px}
+.hw-art .dzl__ticket span{font-size:12.5px}
+.hw-art .hw-art__t1{left:2%;top:58px}
+.hw-art .hw-art__t2{--rot:7deg;right:0;top:150px;animation-duration:7s;animation-delay:-2s}
+.hw-art .hw-art__t3{--rot:-4deg;left:12%;bottom:22px;animation-duration:8s;animation-delay:-4s}
+/* Знак процента — красный круг */
+.hw-art__pct{
+  position:absolute;right:12%;top:18px;
+  display:grid;place-items:center;width:64px;height:64px;border-radius:50%;
+  background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-size:30px;font-weight:800;
+  box-shadow:0 18px 30px -16px rgba(0,0,0,.4);
+  transform:rotate(-10deg);
+}
+
+@media (max-width:860px){
+  .hw-hero{grid-template-columns:1fr;gap:12px;padding-top:36px}
+  .hw-art{height:260px;max-width:420px;width:100%;margin:0 auto}
+  .hw-art__balloon{height:240px}
+  .hw-art .hw-art__t2{top:110px}
+}
+
+/* --------------------------------------------------------------------------
+   02. Три шага
+   -------------------------------------------------------------------------- */
+.hw-steps{
+  margin:28px 0 0;padding:0;list-style:none;
+  display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.hw-steps li{
+  padding:26px 26px 24px;border:1px solid var(--line);border-radius:24px;background:#fff;
+}
+.hw-steps__n{
+  display:block;font-family:var(--font-display);font-size:34px;font-weight:800;
+  letter-spacing:-.04em;line-height:1;color:var(--brand);
+}
+.hw-steps b{display:block;margin-top:18px;font-size:18px;font-weight:700;letter-spacing:-.015em;color:var(--ink)}
+.hw-steps p{margin:8px 0 0;font-size:15px;line-height:1.55;color:var(--ink-2)}
+@media (max-width:860px){.hw-steps{grid-template-columns:1fr}}
+
+/* --------------------------------------------------------------------------
+   03. Пример купона
+   --------------------------------------------------------------------------
+   Карточка слева, объяснение полей справа. Номера на карточке и у пояснений
+   одни и те же — видно, какой текст к какому полю. Данные учебные. */
+.hw-demo{
+  display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);
+  gap:56px;align-items:center;margin-top:32px;
+}
+.hw-cp{
+  position:relative;border:1px solid var(--line);border-radius:24px;background:#fff;
+  box-shadow:0 30px 60px -36px rgba(0,0,0,.28);overflow:hidden;
+}
+.hw-cp__media{
+  position:relative;aspect-ratio:16/10;
+  background:var(--surface) url("coupons/coffee.jpg") center/cover no-repeat;
+}
+.hw-cp__value{
+  position:absolute;left:16px;bottom:-18px;
+  display:inline-flex;align-items:center;height:40px;padding:0 16px;
+  border-radius:12px;background:var(--brand);color:#fff;
+  font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.03em;
+  box-shadow:0 12px 22px -12px rgba(0,0,0,.45);
+}
+.hw-cp__body{padding:32px 22px 20px}
+.hw-cp__k{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.hw-cp__title{
+  margin:8px 0 0;font-family:var(--font-display);font-size:22px;font-weight:800;
+  line-height:1.15;letter-spacing:-.025em;color:var(--ink);
+}
+.hw-cp__company{margin:6px 0 0;font-size:14px;font-weight:600;color:var(--ink-2)}
+.hw-cp__terms{
+  position:relative;margin:16px 0 0;padding:14px 0 0;border-top:1px dashed var(--line-strong);
+  display:grid;gap:6px;
+}
+.hw-cp__terms > span{display:flex;gap:9px;font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+.hw-cp__terms > span::before{
+  content:"";flex:0 0 auto;width:5px;height:5px;margin-top:7px;border-radius:50%;background:var(--ink-4);
+}
+.hw-cp__code{
+  position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin:16px 0 0;padding:12px 14px;border:1.5px dashed var(--line-strong);border-radius:14px;
+  font-size:14px;color:var(--ink-2);
+}
+.hw-cp__code b{font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:.04em;color:var(--ink)}
+.hw-cp__code [data-icon]{display:inline-flex;color:var(--ink-3)}
+.hw-cp .btn{width:100%;justify-content:center;height:50px;margin-top:12px;font-size:15px;font-weight:600}
+.hw-cp__foot{margin:12px 0 0;text-align:center;font-size:12px;color:var(--ink-4)}
+
+/* Номер-метка у поля карточки */
+.hw-pin{
+  display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  font-family:var(--font-display);font-size:13px;font-weight:800;font-style:normal;
+  box-shadow:0 0 0 3px #fff;
+}
+.hw-cp .hw-pin{position:absolute;z-index:1}
+.hw-cp__value .hw-pin{right:-12px;top:-12px}
+.hw-cp__terms .hw-pin{right:0;top:12px}
+.hw-cp__code .hw-pin{right:-12px;top:-14px}
+
+.hw-why{display:grid;gap:30px;margin:0;padding:0;list-style:none}
+.hw-why li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:16px}
+.hw-why .hw-pin{margin-top:2px}
+.hw-why b{display:block;font-size:20px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.hw-why p{margin:8px 0 0;max-width:46ch;font-size:15.5px;line-height:1.6;color:var(--ink-2)}
+
+@media (max-width:860px){
+  .hw-demo{grid-template-columns:1fr;gap:36px}
+  .hw-cp{max-width:400px}
+}
+
+/* --------------------------------------------------------------------------
+   04. Категории
+   --------------------------------------------------------------------------
+   Пять плиток со ссылками на подборки города. Значок ниши — тот же, что в
+   строке категорий на главной (catIcon). На телефоне — две колонки. */
+.hw-cats{display:grid;gap:14px;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:28px}
+.hw-cat{
+  display:flex;flex-direction:column;gap:18px;min-height:150px;padding:20px;
+  border:1px solid var(--line);border-radius:24px;background:#fff;color:var(--ink);
+  transition:border-color .18s, transform .18s var(--ease), box-shadow .18s;
+}
+.hw-cat__ic{
+  display:grid;place-items:center;width:52px;height:52px;border-radius:50%;
+  background:#F9F9F9;color:var(--brand);transition:background .18s, color .18s;
+}
+.hw-cat b{margin-top:auto;font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.hw-cat:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:var(--shadow-1)}
+.hw-cat:hover .hw-cat__ic{background:var(--brand);color:#fff}
+.hw-cat:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+@media (max-width:1000px){.hw-cats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:620px){
+  .hw-cats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .hw-cat{min-height:128px;padding:16px}
+}
+
+/* --------------------------------------------------------------------------
+   05. Вопросы и ответы — аккордеон .pg-faq из design-3-pages.css
+   -------------------------------------------------------------------------- */
+.hw-faq-more{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:22px;font-size:15px;color:var(--ink-2)}
+.hw-faq-more a{font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-strong)}
+.hw-faq-more a:hover{color:var(--brand);text-decoration-color:var(--brand)}
+
+/* --------------------------------------------------------------------------
+   06. Повтор действия
+   --------------------------------------------------------------------------
+   Завершение покупательской части: серая плашка, текст слева, кнопка
+   справа. Серая, а не красная — красным ниже отделён блок для бизнеса. */
+.hw-cta{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:28px;
+  margin-top:88px;padding:44px 48px;border-radius:32px;background:var(--surface);
+}
+.hw-cta h2{
+  margin:0;font-family:var(--font-display);font-weight:800;
+  font-size:clamp(26px,2.8vw,38px);line-height:1.1;letter-spacing:-.03em;color:var(--ink);
+}
+.hw-cta p{margin:10px 0 0;font-size:16px;color:var(--ink-2)}
+.hw-cta .btn{height:52px;padding:0 28px;font-size:15px;font-weight:600}
+@media (max-width:760px){
+  .hw-cta{grid-template-columns:1fr;padding:30px 24px;border-radius:26px}
+  .hw-cta .btn{width:100%;justify-content:center}
+}
+
+/* --------------------------------------------------------------------------
+   07. Блок для бизнеса — красный баннер .dz-biz над подвалом.
+   Вторая кнопка — «Условия размещения», обводкой.
+   -------------------------------------------------------------------------- */
+.hw-biz .dz-biz__acts{align-items:center}
+
+/* Подвал: одна соцсеть — «Мы ВКонтакте» */
+.hw-foot-vk{display:flex;align-items:center;gap:12px;flex-wrap:wrap}

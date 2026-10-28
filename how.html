@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Как это работает — Все купоны</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=20261004c">
+<link rel="stylesheet" href="assets/design.css?v=20260918eyb">
+<link rel="stylesheet" href="assets/design-3.css?v=20260924a">
+<link rel="stylesheet" href="assets/design-3-cards.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
+<link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
+<link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
+<!-- Страница «Как это работает» — отдельным слоем -->
+<link rel="stylesheet" href="assets/design-3-how.css?v=20261028a">
+<link rel="icon" href="assets/brand/logo-red.png">
+</head>
+<body class="dz dz3 cards-wb">
+
+<!-- ===================================================================
+     КАК ЭТО РАБОТАЕТ. Дизайн-версия по прототипу страницы от 27.10.2026:
+     тексты и порядок блоков — оттуда дословно, стиль — design-3.
+
+     Блоки: первый экран → три шага → пример купона → категории →
+     вопросы и ответы → повтор действия → блок для бизнеса → подвал.
+
+     Комментарии дизайнеру из прототипа:
+     01 Пример купона — данные демонстрационные, за предложение партнёра
+        не выдаём (подпись «Учебный пример» под кнопкой).
+     02 Категории — пять плиток со ссылками на подборки, на телефоне две
+        колонки.
+     03 Вопросы — на сайте раскрыт первый, остальные закрыты.
+     04 Повтор действия — переход в каталог с сохранением города.
+     05 Блок для бизнеса — визуально отделён, кнопка ведёт на регистрацию.
+     =================================================================== -->
+
+<header class="header dz-header">
+  <div class="wrap header__in">
+    <a class="dz-logo" href="index-design-3.html" aria-label="Все купоны — на главную">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </a>
+    <span class="dz-logo__tag">Все скидки <span data-geo-gen>Липецка</span><br>бесплатно и без регистрации</span>
+    <span class="header__spacer"></span>
+
+    <div class="dz-city-group">
+      <button class="city-btn" data-city-open>
+        <span data-icon="pin"></span>
+        <span data-geo-short>Липецк</span>
+        <span class="chev" data-icon="chev"></span>
+      </button>
+      <div class="head-socials" aria-label="Мы в соцсетях города">
+        <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="vk"></a>
+        <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="tg"></a>
+        <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="ok"></a>
+        <a class="soc" href="#" data-city-social="MAX" title="Мы в MAX" data-icon="max"></a>
+      </div>
+    </div>
+
+    <a class="btn btn--solid header-cta" href="register-design.html">
+      <span data-icon="plus"></span><span class="header-cta__label">Разместить купон</span>
+    </a>
+
+    <a class="lk-chip" href="login-design.html" aria-label="Войти в личный кабинет">
+      <span data-icon="user"></span>
+      <span class="lk-chip__label">Войти в личный кабинет</span>
+    </a>
+
+    <button type="button" class="burger" data-menu-open aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav" data-mobile-nav hidden>
+  <div class="mobile-nav__bar">
+    <span class="dz-logo">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </span>
+    <button type="button" class="mobile-nav__close" data-menu-close aria-label="Закрыть меню" data-icon="close"></button>
+  </div>
+
+  <div class="mobile-nav__body">
+    <button type="button" class="mobile-nav__city" data-city-open>
+      <span class="mobile-nav__city-ic" data-icon="pin"></span>
+      <span class="mobile-nav__city-txt"><small>Ваш город</small><b data-geo-short>Липецк</b></span>
+      <span class="mobile-nav__city-go">Сменить</span>
+    </button>
+
+    <div class="mobile-nav__acts">
+      <a class="btn btn--solid" href="register-design.html"><span data-icon="plus"></span>Разместить купон</a>
+      <a class="btn btn--ghost" href="login-design.html"><span data-icon="user"></span>Личный кабинет</a>
+    </div>
+
+    <nav class="mobile-nav__groups" aria-label="Меню">
+      <div class="mobile-nav__group">
+        <h4>Сервис</h4>
+        <a href="how.html">Как это работает</a>
+        <a href="faq.html">Вопросы и ответы</a>
+        <a href="contacts.html">Контакты</a>
+      </div>
+      <div class="mobile-nav__group">
+        <h4>Бизнесу</h4>
+        <a href="register-design.html">Разместить купон</a>
+        <a href="pricing.html">Условия размещения</a>
+      </div>
+      <div class="mobile-nav__group">
+        <h4>Партнёрам</h4>
+        <a href="service.html#partners">Партнёрская программа</a>
+        <a href="partner.html">Стать партнёром</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ================= Первый экран ================= -->
+  <section class="hw-hero">
+    <div>
+      <span class="hw-k">Выгода рядом</span>
+      <h1>Купоны и скидки в&nbsp;твоём городе</h1>
+      <p class="hw-hero__sub">Бесплатно и без регистрации. Выбирай предложение, сохраняй купон и пользуйся выгодой.</p>
+      <div class="hw-acts">
+        <a class="btn btn--solid" href="index-design-3.html" data-to-catalog>Найти купон</a>
+      </div>
+      <p class="hw-note">За купон платить не нужно.</p>
+    </div>
+
+    <!-- Иллюстрация: купон, знак %, повседневные покупки -->
+    <div class="hw-art" aria-hidden="true">
+      <img class="hw-art__balloon" src="assets/brand/logo-red.png" alt="" width="357" height="600">
+      <span class="hw-art__pct">%</span>
+      <div class="dzl__ticket hw-art__t1"><b>−30%</b><span>Комбо-обед</span></div>
+      <div class="dzl__ticket hw-art__t2"><b>1 + 1</b><span>Кофе с собой</span></div>
+      <div class="dzl__ticket hw-art__t3"><b>Подарок</b><span>Десерт к напитку</span></div>
+    </div>
+  </section>
+
+  <!-- ================= Как воспользоваться купоном ================= -->
+  <section class="hw-sec" id="steps">
+    <h2>Как воспользоваться купоном</h2>
+    <ol class="hw-steps">
+      <li>
+        <span class="hw-steps__n">01</span>
+        <b>Выберите предложение</b>
+        <p>Проверьте срок действия, адрес и условия акции. Обратите внимание, нужна ли запись.</p>
+      </li>
+      <li>
+        <span class="hw-steps__n">02</span>
+        <b>Сохраните купон</b>
+        <p>Откройте купон, сохраните промокод или сделайте скриншот, чтобы показать его в компании.</p>
+      </li>
+      <li>
+        <span class="hw-steps__n">03</span>
+        <b>Покажите до оплаты</b>
+        <p>Сообщите о купоне при записи или перед покупкой и получите выгоду.</p>
+      </li>
+    </ol>
+    <p class="hw-note">Товары и услуги оплачиваются у компании на условиях акции.</p>
+    <div class="hw-acts">
+      <a class="btn btn--solid" href="index-design-3.html" data-to-catalog>Перейти к купонам</a>
+    </div>
+  </section>
+
+  <!-- ================= Пример купона ================= -->
+  <!-- 01 / Пример купона. Карточка слева, объяснение полей справа.
+       Данные демонстрационные — пример не выдаём за предложение партнёра. -->
+  <section class="hw-sec" id="example">
+    <h2>Всё важное — в одном купоне</h2>
+
+    <div class="hw-demo">
+      <article class="hw-cp" aria-label="Пример купона">
+        <div class="hw-cp__media" role="img" aria-label="Фотография предложения">
+          <span class="hw-cp__value">1 + 1<i class="hw-pin">1</i></span>
+        </div>
+        <div class="hw-cp__body">
+          <span class="hw-cp__k">Пример купона</span>
+          <h3 class="hw-cp__title">Два кофе по цене одного</h3>
+          <p class="hw-cp__company">Кофейня</p>
+          <div class="hw-cp__terms">
+            <i class="hw-pin">2</i>
+            <span>По будням, с 12:00 до 14:00</span>
+            <span>С 01.11.2026 по 30.11.2026</span>
+            <span>Покажи купон до оплаты.</span>
+          </div>
+          <div class="hw-cp__code">
+            <i class="hw-pin">3</i>
+            <span>Промокод: <b>COFFEE</b></span>
+            <span data-icon="copy"></span>
+          </div>
+          <button type="button" class="btn btn--solid">Сохранить купон</button>
+          <p class="hw-cp__foot">Учебный пример, не действующая акция.</p>
+        </div>
+      </article>
+
+      <ol class="hw-why">
+        <li>
+          <i class="hw-pin">1</i>
+          <div>
+            <b>Выгода понятна сразу</b>
+            <p>В карточке указано, что ты получишь: скидку, подарок или другое предложение.</p>
+          </div>
+        </li>
+        <li>
+          <i class="hw-pin">2</i>
+          <div>
+            <b>Условия на виду</b>
+            <p>Срок, адрес и ограничения помогают заранее понять, подходит ли тебе акция.</p>
+          </div>
+        </li>
+        <li>
+          <i class="hw-pin">3</i>
+          <div>
+            <b>Код под рукой</b>
+            <p>Сохрани купон, чтобы показать его при записи, заказе или перед оплатой.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= Категории ================= -->
+  <!-- 02 / Категории. Пять плиток со ссылками на подборки города.
+       Показываем только категории с предложениями. -->
+  <section class="hw-sec" id="cats">
+    <h2>Выгода на каждый день</h2>
+    <p class="hw-sec__lead">Скидки, подарки, 1+1 и пробные занятия — выбирай то, что подходит твоим планам.</p>
+    <div class="hw-cats" id="hwCats"></div>
+  </section>
+
+  <!-- ================= Вопросы и ответы ================= -->
+  <!-- 03 / Вопросы. На сайте раскрыт первый вопрос, остальные закрыты. -->
+  <section class="hw-sec" id="faq">
+    <h2>Остались вопросы?</h2>
+    <div class="pg-faq">
+      <details open>
+        <summary>Купон действительно бесплатный?</summary>
+        <p>Да. За купон платить не нужно. Товар или услугу ты оплачиваешь у компании на условиях акции.</p>
+      </details>
+      <details>
+        <summary>Нужно ли регистрироваться?</summary>
+        <p>Нет. Находить и использовать купоны можно без регистрации.</p>
+      </details>
+      <details>
+        <summary>Нужна ли предварительная запись?</summary>
+        <p>Это зависит от предложения. Если нужна запись, она указана в условиях купона. Сообщи о купоне при записи.</p>
+      </details>
+      <details>
+        <summary>Можно ли использовать купон повторно?</summary>
+        <p>Проверь условия конкретного купона: в них могут быть ограничения по количеству использований или участию в акции.</p>
+      </details>
+      <details>
+        <summary>Суммируется ли купон с другими скидками?</summary>
+        <p>Это зависит от условий акции. Если в купоне нет ответа, уточни у компании до покупки или записи.</p>
+      </details>
+      <details>
+        <summary>Что делать, если купон не приняли?</summary>
+        <p>Проверь срок и условия акции. Если всё соблюдено, свяжись с нами: пришли ссылку на купон и расскажи, что произошло.</p>
+      </details>
+    </div>
+    <p class="hw-faq-more">Не нашёл ответ? <a href="contacts.html">Связаться с нами</a></p>
+  </section>
+
+  <!-- ================= Повтор действия ================= -->
+  <!-- 04 / Завершение покупательской части. Переход в каталог
+       с сохранением выбранного города. -->
+  <section class="hw-cta">
+    <div>
+      <h2>Найди выгоду к своим планам</h2>
+      <p>Посмотри предложения в своём городе.</p>
+    </div>
+    <a class="btn btn--solid" href="index-design-3.html" data-to-catalog>Перейти к купонам</a>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+
+    <!-- 05 / Блок для бизнеса — красным баннером, отдельно от покупательской
+         части. Кнопка ведёт на регистрацию. -->
+    <div class="dz-biz hw-biz">
+      <div>
+        <span class="dz-biz__k">Для бизнеса</span>
+        <h2>Есть бизнес? Расскажи о своём предложении</h2>
+        <p>Размести купон и познакомь жителей города со своей компанией.</p>
+        <div class="dz-biz__acts">
+          <a class="btn dz-btn-white" href="register-design.html">Разместить купон</a>
+          <a class="btn dz-btn-line" href="pricing.html">Условия размещения</a>
+        </div>
+      </div>
+      <div class="dz-biz__art" aria-hidden="true">
+        <img class="dz-biz__balloon" src="assets/brand/logo-white.png" alt="" width="357" height="600">
+        <div class="dz-biz__card dz-biz__card--stat">
+          <span>Забрали купон</span>
+          <b>128</b>
+          <em>+24 за неделю</em>
+        </div>
+        <div class="dz-biz__card dz-biz__card--pub">
+          <span>Опубликовано</span>
+          <div class="dz-biz__socs"><i data-icon="site"></i><i data-icon="vk"></i><i data-icon="tg"></i><i data-icon="ok"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dz-foot">
+      <div class="dz-foot__brand">
+        <div class="dz-foot-brand"><img src="assets/brand/logo-white.png" alt="" width="24" height="40"><span>Все<br>купоны</span></div>
+        <p class="dz-foot__tag">Выгода в повседневной жизни. Бесплатно и без регистрации.</p>
+      </div>
+      <div class="fcol">
+        <h4>Сервис</h4>
+        <ul>
+          <li><a href="how.html">Как это работает</a></li>
+          <li><a href="faq.html">Вопросы и ответы</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Бизнесу</h4>
+        <ul>
+          <li><a href="register-design.html">Разместить купон</a></li>
+          <li><a href="pricing.html">Условия размещения</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <h4>Партнёрам</h4>
+        <ul>
+          <li><a href="service.html#partners">Партнёрская программа</a></li>
+          <li><a href="partner.html">Стать партнёром</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dz-foot-socs">
+      <div class="footer-soc-group">
+        <span class="footer-soc-group__label"><a href="socials.html">Мы ВКонтакте</a></span>
+        <div class="footer-soc-group__row">
+          <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте"><span data-icon="vk"></span> ВКонтакте</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dz-foot-legal">
+      <p class="dz-foot-legal__req">ООО «ВСЕКУПОНЫ» · ИНН 4800033186 · ОГРН 1264800005370</p>
+    </div>
+
+    <div class="footer__legal">
+      <span>© 2026 ВСЕКУПОНЫ</span>
+      <a href="docs.html#all">Политика конфиденциальности</a>
+      <a href="docs.html#all">Пользовательское соглашение</a>
+      <a href="docs.html#all">Оферта</a>
+      <a href="docs.html#all">Согласие на обработку данных</a>
+      <a href="docs.html#all">Cookies</a>
+      <button type="button" class="dz-foot__top" data-to-top>Наверх ↑</button>
+    </div>
+  </div>
+</footer>
+
+<!-- Выбор города: открывается кнопкой в шапке. На входе не спрашиваем —
+     это справочная страница, а не витрина. -->
+<div class="modal" id="cityModal">
+  <div class="modal__box">
+    <h3>Вы в городе <span data-city-detected>Липецк</span>?</h3>
+    <p>Определили автоматически. Покажем купоны, которые действуют рядом с вами.</p>
+    <button class="btn btn--solid btn--lg modal__yes" data-city-yes>
+      Да, я в городе <span data-city-detected>Липецк</span>
+    </button>
+    <div class="modal__or">или выберите другую выдачу</div>
+    <div data-region-row></div>
+    <div class="city-list"></div>
+    <p class="modal__note">Города других областей — по мере запуска сервиса.</p>
+    <button class="btn btn--ghost" data-city-close>Позже</button>
+  </div>
+</div>
+
+<script src="assets/data.js?v=20261004b"></script>
+<script src="assets/app.js?v=20261014a"></script>
+<script>
+  /* Без initCommon: он спрашивает город на входе, а справке это не нужно.
+     Город меняется кнопкой в шапке. */
+  initIcons();
+  buildCityModal();
+  qs("[data-city-yes]").onclick = confirmCity;
+  /* Смена города здесь не уводит на витрину: страница та же, меняются
+     подстановки и ссылки «к купонам» */
+  goGeo = function (scope, city) {
+    if (city) { state.city = city; localStorage.setItem("cp_city", city.slug); }
+    state.scope = scope;
+    localStorage.setItem("cp_scope", scope);
+    confirmCity();
+    renderGeo();
+    linkCatalog();
+    buildCityModal();
+    qs("[data-city-yes]").onclick = confirmCity;
+  };
+  renderGeo();
+  initHeaderShadow();
+  initMobileMenu();
+  qs("[data-to-top]").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  /* Пять плиток категорий: [ниша региональных, подпись из прототипа] */
+  const HW_CATS = [
+    ["eda",     "Еда и напитки"],
+    ["krasota", "Красота"],
+    ["avto",    "Авто"],
+    ["detyam",  "Для детей"],
+    ["uslugi",  "Товары и услуги"]
+  ];
+  const catsHost = qs("#hwCats");
+  HW_CATS.forEach(([slug, label]) => {
+    const a = document.createElement("a");
+    a.className = "hw-cat";
+    a.dataset.l2 = slug;
+    a.innerHTML = '<span class="hw-cat__ic">' + catIcon(slug, 26) + "</span><b>" + label + "</b>";
+    catsHost.appendChild(a);
+  });
+
+  /* 04 / Переход в каталог — с сохранением выбранного города */
+  function linkCatalog() {
+    const geo = isRegion() ? "region=" + REGION.slug : "city=" + state.city.slug;
+    qsa("[data-to-catalog]").forEach(a => a.href = "index-design-3.html?" + geo);
+    qsa(".hw-cat").forEach(a => a.href = "index-design-3.html?" + geo + "&l1=regional&l2=" + a.dataset.l2);
+  }
+  linkCatalog();
+</script>
+</body>
+</html>
