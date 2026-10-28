@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <!-- Страница «Как это работает» — отдельным слоем -->
-<link rel="stylesheet" href="assets/design-3-how.css?v=20261028l">
+<link rel="stylesheet" href="assets/design-3-how.css?v=20261028n">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -146,9 +146,10 @@
 
     <!-- Иллюстрация: купон, знак %, повседневные покупки -->
     <div class="hw-art" aria-hidden="true">
-      <!-- Два купона из ленты — та же карточка, что на главной (cardHTML), уменьшенная -->
-      <div class="hw-fly hw-fly--1"></div>
-      <div class="hw-fly hw-fly--2"></div>
+      <!-- Две бегущие колонки купонов из ленты (та же карточка cardHTML):
+           левая едет вверх, правая вниз. Наполняет скрипт внизу. -->
+      <div class="hw-col hw-col--up"><div class="hw-col__track"></div></div>
+      <div class="hw-col hw-col--down"><div class="hw-col__track"></div></div>
     </div>
   </section>
 
@@ -570,26 +571,18 @@
     { id: "hw7", title: "Пробное занятие", company: "Школа «Слово»", value: "Бесплатно",
       dist: 240, erid: "2VtzqwJ3Wc", views: 2050, photo: "assets/coupons/obuchenie-purple.jpg", cat: cat("obuchenie", "Обучение") }
   ];
-  const flySlots = [qs(".hw-fly--1"), qs(".hw-fly--2")];
-  let flyNext = 0;
-  flySlots.forEach(slot => demoCard(slot, HW_FLY[flyNext++]));
-  const onScreen = () => flySlots.map(s => s._coupon);
-  function swapFly(slot) {
-    /* Следующий купон — тот, которого сейчас нет ни в одном из мест */
-    while (onScreen().includes(HW_FLY[flyNext % HW_FLY.length])) flyNext++;
-    const next = HW_FLY[flyNext++ % HW_FLY.length];
-    slot.classList.add("is-out");
-    setTimeout(() => { demoCard(slot, next); slot.classList.remove("is-out"); }, 500);
-  }
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    let turn = 0;
-    setInterval(() => {
-      if (document.hidden) return;
-      /* На узком телефоне второе место скрыто — меняем только видимые */
-      const shown = flySlots.filter(s => s.offsetParent);
-      swapFly(shown[turn++ % shown.length]);
-    }, 2800);
-  }
+  /* Бегущая строка в две колонки навстречу друг другу: у каждой свои три
+     купона, повторённые дважды — лента сдвигается ровно на половину
+     и начинается заново без шва */
+  [[".hw-col--up", [0, 2, 4]], [".hw-col--down", [1, 3, 5]]].forEach(([sel, ids]) => {
+    const track = qs(sel + " .hw-col__track");
+    [...ids, ...ids].forEach(i => {
+      const el = document.createElement("div");
+      el.className = "hw-run";
+      track.appendChild(el);
+      demoCard(el, Object.assign({}, HW_FLY[i]));
+    });
+  });
   /* Метки 1–3 на карточке-примере: выгода, сколько идти, кнопка с кодом */
   [[".card__media", 1], [".card__near", 2], ["[data-card-reveal]", 3]].forEach(([sel, n]) => {
     const el = qs(".hw-cp " + sel);
