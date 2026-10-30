@@ -9,8 +9,11 @@
    Форма, как и весь прототип, ничего не сохраняет.
    ========================================================================== */
 
-const qs  = (s, r = document) => r.querySelector(s);
-const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+/* На дизайн-страницах раньше подключён app.js со своими qs/qsa —
+   повторный const уронил бы скрипт. Без app.js (Ч/Б версия) хелперы
+   берутся отсюда. */
+window.qs  = window.qs  || ((s, r = document) => r.querySelector(s));
+window.qsa = window.qsa || ((s, r = document) => Array.from(r.querySelectorAll(s)));
 
 const reg = { orgType: "ООО", manual: false };
 
