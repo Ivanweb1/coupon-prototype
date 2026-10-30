@@ -194,3 +194,17 @@
 
 /* Подзаголовок партнёрской программы — в одну строку на десктопе */
 #partners .pg-sec__lead{max-width:none}
+
+/* Узкие телефоны (проверка 320 px, 30.10) */
+@media (max-width:400px){
+  /* карточки партнёров не шире экрана: длинная кнопка переносится */
+  .sv-plans{grid-template-columns:minmax(0,1fr)}
+  .sv-plans .pg-plan{min-width:0;padding:20px}
+  .sv-plans .btn{white-space:normal;height:auto;min-height:44px;text-align:center}
+  /* визуал: пилюли компактнее, телефон и сдвиг меньше — ничего не упирается в край */
+  .sv-steps{gap:4px;left:8px;right:8px}
+  .sv-step{height:28px;padding:0 8px 0 3px;font-size:11px;gap:4px}
+  .sv-step i{width:20px;height:20px;font-size:11px}
+  .sv-phone{width:176px;margin-left:-88px;--shift:-40px}
+  .sv-check{width:146px;right:8px}
+}

@@ -421,3 +421,11 @@
   .nf__acts{flex-direction:column;width:100%}
   .nf__acts .btn{width:100%}
 }
+
+/* Узкие телефоны (проверка 320 px, 30.10): колонка калькулятора не шире
+   экрана — 1fr растягивался по самому широкому ряду кнопок */
+@media (max-width:900px){.pg-calc{grid-template-columns:minmax(0,1fr)}.pg-calc > *,.pg-calc__steps > *{min-width:0}}
+@media (max-width:400px){
+  .pg-calc .pt-card,.pg-result{padding:18px}
+  .pg-calc .btn{white-space:normal;height:auto;min-height:44px;text-align:center}
+}
