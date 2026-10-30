@@ -18,7 +18,7 @@
 <!-- Инфостраницы подвала — отдельным слоем -->
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <link rel="stylesheet" href="assets/design-3-how.css?v=20261030a">
-<link rel="stylesheet" href="assets/design-3-service.css?v=20261030a">
+<link rel="stylesheet" href="assets/design-3-service.css?v=20261030c">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -156,35 +156,43 @@
     </nav>
     </div>
 
-    <!-- Визуал к заголовку «Купон, скриншот, выгода»: те же мини-сцены,
-         что в шагах на «Как это работает» (стили design-3-how.css) -->
+    <!-- Визуал к заголовку «Купон, скриншот, выгода» — история по кругу
+         (9 секунд): 1) в телефоне открыт купон, нажимают «Забрать купон» и
+         открывается код; 2) скриншот — вспышка экрана и плашка «сохранён»;
+         3) сбоку выезжает чек со скидкой и штамп «Купон принят».
+         Пилюли сверху подсвечивают текущий шаг. Чек — .hw-check из шагов
+         «Как это работает». Данные учебные. -->
     <div class="sv-art" aria-hidden="true">
-      <div class="sv-art__item sv-art__item--coupon">
-        <div class="hw-mini is-on">
-          <span class="hw-mini__ph" style="background-image:url(assets/coupons/coffee.jpg)"></span>
-          <span class="hw-mini__t"><b>Два кофе по цене одного</b><small>Кофейня «Зерно» · 400 м</small></span>
-          <span class="hw-mini__v">1 + 1</span>
-        </div>
-        <span class="sv-tag"><i>1</i>Купон</span>
+      <span class="sv-ring sv-ring--a"></span>
+      <span class="sv-ring sv-ring--b"></span>
+
+      <div class="sv-steps">
+        <span class="sv-step sv-step--1"><i>1</i>Купон</span>
+        <span class="sv-step sv-step--2"><i>2</i>Скриншот</span>
+        <span class="sv-step sv-step--3"><i>3</i>Выгода</span>
       </div>
-      <div class="sv-art__item sv-art__item--phone">
-        <div class="hw-phone">
-          <span class="hw-phone__ph" style="background-image:url(assets/coupons/coffee.jpg)"><i>1 + 1</i></span>
-          <span class="hw-phone__ttl">Два кофе по цене одного</span>
-          <span class="hw-phone__co">Кофейня «Зерно» · до 30.11</span>
-          <span class="hw-phone__code">COFFEE</span>
-          <span class="hw-phone__btn">Сохранить купон</span>
+
+      <div class="sv-phone">
+        <div class="sv-screen">
+          <span class="sv-cp__ph" style="background-image:url(assets/coupons/coffee.jpg)"><i>1 + 1</i></span>
+          <b class="sv-cp__t">Два кофе по цене одного</b>
+          <small class="sv-cp__co">Кофейня «Зерно» · 400 м</small>
+          <span class="sv-cp__chips"><span>до 30 ноября</span><span>без записи</span></span>
+          <span class="sv-cp__code">COFFEE<span class="sv-cp__btn">Забрать купон</span><span class="sv-tap"></span></span>
+          <span class="sv-flash"></span>
         </div>
-        <span class="sv-tag"><i>2</i>Скриншот</span>
       </div>
-      <div class="sv-art__item sv-art__item--check">
+
+      <div class="sv-toast"><span data-icon="used"></span>Скриншот сохранён</div>
+
+      <div class="sv-check">
         <div class="hw-check">
           <span class="hw-check__head">Кофейня «Зерно»</span>
           <span class="hw-check__row"><span>Капучино × 2</span><span>380 ₽</span></span>
           <span class="hw-check__row hw-check__row--off"><span>Купон COFFEE</span><span>−190 ₽</span></span>
           <span class="hw-check__sum"><span>Итого</span><b>190 ₽</b></span>
+          <span class="hw-stamp"><span data-icon="used"></span>Купон принят</span>
         </div>
-        <span class="sv-tag"><i>3</i>Выгода</span>
       </div>
     </div>
   </section>
