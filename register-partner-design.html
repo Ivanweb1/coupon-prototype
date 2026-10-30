@@ -19,6 +19,7 @@
      этот лист только переводит её на дизайн -->
 <link rel="stylesheet" href="assets/register.css?v=20260925e">
 <link rel="stylesheet" href="assets/design-3-register.css?v=20260930b">
+<link rel="stylesheet" href="assets/design-3-partner-reg.css?v=20261030a">
 <!-- Правки созвона 24.09.2026 — отдельным слоем -->
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
 <link rel="icon" href="assets/brand/logo-red.png">
@@ -134,16 +135,31 @@
 
 <main class="wrap">
 
-  <section class="rg-hero">
+  <!-- Первый экран по макету заказчика (30.10): заголовок, «бесплатно»
+       инверсией, четыре «без», две роли теми же текстами, что на «Сервисе» -->
+  <section class="rg-hero pr-hero">
     <span class="rg-hero__k">Партнёрам</span>
-    <h1>Приводите клиентов и получайте вознаграждение</h1>
-    <p class="rg-hero__sub" data-ptab-sub>
-      Регистрация открывает партнёрство по маркетплейсам: вы получаете свои
-      промокоды, раздаёте их и видите начисления. Регистрируются ООО, ИП и самозанятые.
-    </p>
+    <h1>Становитесь партнёром сервиса</h1>
+    <p class="pr-hero__sub">Откройте или расширьте свой бизнес <span class="pr-mark">бесплатно</span></p>
+    <ul class="pt-list pr-free">
+      <li>Без паушального взноса</li>
+      <li>Без роялти</li>
+      <li>Без комиссий</li>
+      <li>Без навязанных сервисов и&nbsp;услуг</li>
+    </ul>
+    <div class="pr-roles">
+      <div class="pr-role">
+        <h2>Партнёр по маркетплейсам</h2>
+        <p>Распространяете свой реферальный код и&nbsp;получаете вознаграждение за&nbsp;размещение с&nbsp;применением вашего реферального кода. Рекламодатель получит внушительную скидку на&nbsp;размещение.</p>
+      </div>
+      <div class="pr-role">
+        <h2>Региональный партнёр</h2>
+        <p>Представляет сервис в&nbsp;своём городе и&nbsp;за&nbsp;его пределами. Ведёт городские сообщества и&nbsp;получает повышенное вознаграждение. Имеет действующий бизнес в&nbsp;области рекламы, маркетинга, СМИ.</p>
+      </div>
+    </div>
   </section>
 
-  <div class="rg-cols">
+  <div class="rg-cols pr-cols">
 
     <div class="reg__card">
       <ol class="reg__steps">
@@ -170,7 +186,7 @@
         <div class="reg__f">
           <span class="reg__l">Форма регистрации</span>
           <div class="reg__chips">
-            <button type="button" class="reg__chip is-on" data-org="ООО">ООО</button>
+            <button type="button" class="reg__chip is-on" data-org="ООО">Организация</button>
             <button type="button" class="reg__chip" data-org="ИП">ИП</button>
             <button type="button" class="reg__chip" data-org="Самозанятый" data-ptab-only="market">Самозанятый</button>
           </div>
@@ -180,7 +196,7 @@
         <label class="reg__f">
           <span class="reg__l" data-reg-inn-l>ИНН</span>
           <div class="reg__inline">
-            <input class="reg__i" data-reg-inn placeholder="10 цифр — как у ООО" inputmode="numeric">
+            <input class="reg__i" data-reg-inn placeholder="10 цифр — как у организации" inputmode="numeric">
             <button type="button" class="btn btn--ghost" data-reg-inn-check>Найти по ИНН</button>
           </div>
         </label>
@@ -203,8 +219,13 @@
             <option>Интернет-реклама и SMM</option>
             <option>Реклама на ТВ и радио</option>
             <option>Типография</option>
-            <option>Другое</option>
+            <option>Интернет или локальное СМИ</option>
+            <option value="other">Другое</option>
           </select>
+        </label>
+        <label class="reg__f" data-reg-sphere-other-f hidden>
+          <span class="reg__l">Ваша сфера деятельности</span>
+          <input class="reg__i" data-reg-sphere-other placeholder="Например, event-агентство">
         </label>
 
         <label class="reg__f">
@@ -222,29 +243,6 @@
           <input class="reg__i" data-reg-email type="email" placeholder="you@company.ru">
         </label>
 
-        <!-- Пароль дважды (созвон 30.09) -->
-        <div class="reg__row--2">
-          <label class="reg__f">
-            <span class="reg__l">Пароль</span>
-            <input class="reg__i" data-reg-pass type="password" autocomplete="new-password" placeholder="Не короче 8 символов">
-          </label>
-          <label class="reg__f">
-            <span class="reg__l">Повторите пароль</span>
-            <input class="reg__i" data-reg-pass2 type="password" autocomplete="new-password" placeholder="Ещё раз">
-          </label>
-        </div>
-        <p class="reg__hint is-bad" data-reg-pass-err hidden></p>
-        <p class="reg__note">Восстановить доступ можно только через email — SMS не используется.</p>
-
-        <!-- Моё предложение, на созвонах не обсуждали: одно поле, по
-             которому модератор понимает, откуда партнёр приведёт людей.
-             Необязательное, чтобы не удлинять регистрацию. -->
-        <label class="reg__f">
-          <span class="reg__l" data-ptab-link-l>Где будете раздавать промокоды</span>
-          <input class="reg__i" data-reg-link placeholder="https:// — сайт, паблик, канал">
-          <span class="reg__note" style="margin:2px 0 0">Необязательно. Со ссылкой заявку проверяем быстрее.</span>
-        </label>
-
         <!-- «Куда присылать уведомления» убрано (созвон 30.09): бот
              подключается в кабинете, почта — всегда -->
 
@@ -258,11 +256,11 @@
           <span>Даю согласие на <a href="docs.html#all" target="_blank" rel="noopener">обработку персональных данных</a></span>
         </label>
 
-        <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-submit data-ptab-submit>Зарегистрироваться</button>
+        <button type="button" class="btn btn--solid btn--lg btn--wide" data-reg-submit data-ptab-submit>Оставить заявку</button>
 
         <p class="reg__note" style="margin-top:14px">
           Размещаете свои купоны, а не приводите клиентов? Это другая роль —
-          <a href="register-design.html">регистрация рекламодателя</a>.
+          <a class="pr-adv-link" href="register-design.html">регистрация рекламодателя</a>.
         </p>
       </section>
 
@@ -293,34 +291,6 @@
       </section>
     </div>
 
-    <aside class="rg-side">
-      <div class="rg-side__card">
-        <h2>Что вы получаете</h2>
-        <ul class="rg-list" data-ptab-list>
-          <li>Свои промокоды маркетплейсов — раздавать можно сразу после регистрации.</li>
-          <li>Начисления по переходам и покупкам по вашему коду — в кабинете, по дням.</li>
-          <li>Выплаты на расчётный счёт ООО, ИП или самозанятого.</li>
-        </ul>
-      </div>
-
-    <!-- Запрос на региональное партнёрство. Самостоятельной регистрации
-         здесь нет намеренно: по правилу от 25.09.2026 сервис связывается
-         с партнёром сам и даёт инструкции. Тот же запрос лежит в кабинете
-         партнёра, чтобы его можно было отправить и после регистрации. -->
-    <section class="rg-side__card reg__ask rg-ask" data-ptab-ask>
-      <h2>Хотите стать региональным партнёром?</h2>
-      <p class="reg__ask-p">
-        Региональный партнёр ведёт свой город: приводит местный бизнес на витрину и
-        получает долю с размещений. Зарегистрироваться на эту роль самостоятельно нельзя —
-        отправьте запрос, мы свяжемся и расскажем, что нужно дальше.
-      </p>
-      <div class="reg__ask-row" data-ask-row>
-        <button type="button" class="btn btn--solid" data-ask-send>Отправить запрос</button>
-        <a class="btn btn--ghost" href="partner.html#cities">Посмотреть свободные города</a>
-      </div>
-      <p class="reg__ask-ok" data-ask-ok hidden>Запрос отправлен — свяжемся по будням и дадим инструкции.</p>
-    </section>
-    </aside>
 
   </div>
 
@@ -388,6 +358,6 @@
   initSearch();
   initMobileMenu();
 </script>
-<script src="assets/register-partner.js?v=20261030a"></script>
+<script src="assets/register-partner.js?v=20261030b"></script>
 </body>
 </html>

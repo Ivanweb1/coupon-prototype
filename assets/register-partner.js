@@ -37,7 +37,7 @@ function innDigitsNeeded() {
 function applyOrgType() {
   const name = qs("[data-reg-name]");
   qs("[data-reg-inn]").placeholder = innDigitsNeeded() === 10
-    ? "10 цифр — как у ООО"
+    ? "10 цифр — как у " + (qs('[data-org="ООО"]').textContent.trim() === "ООО" ? "ООО" : "организации")
     : "12 цифр — как у ИП и самозанятых";
   qs("[data-reg-name-l]").textContent = reg.orgType === "ООО" ? "Название компании" : "Название и ФИО";
   name.value = "";
@@ -112,7 +112,7 @@ const PTAB = {
   market: {
     sub: "Регистрация открывает партнёрство по маркетплейсам: вы получаете свои промокоды, раздаёте их и видите начисления. Регистрируются ООО, ИП и самозанятые.",
     note: "Партнёру мы перечисляем вознаграждение, поэтому физлицу регистрация партнёра недоступна.",
-    sphere: "mp", submit: "Зарегистрироваться",
+    sphere: "mp", submit: qs("[data-ptab]") ? "Оставить заявку" : "Зарегистрироваться",
     doneH: "Кабинет партнёра открыт",
     doneP: "Вам доступно партнёрство по маркетплейсам: промокоды, начисления и выплаты.",
     linkL: "Где будете раздавать промокоды",
@@ -122,8 +122,8 @@ const PTAB = {
   },
   regional: {
     sub: "Региональный партнёр ведёт свой город: приводит местный бизнес на витрину и получает долю с размещений. Регистрируются ООО и ИП, заявку проверяем вручную.",
-    note: "Региональный партнёр работает с организациями, поэтому регистрируются только ООО и ИП.",
-    sphere: "Рекламное агентство полного цикла", submit: "Отправить заявку",
+    note: "Региональный партнёр работает с организациями, поэтому регистрируются только организации и ИП.",
+    sphere: "Рекламное агентство полного цикла", submit: "Оставить заявку",
     doneH: "Заявка отправлена",
     doneP: "Кабинет уже открыт: пока идёт проверка, в нём доступно партнёрство по маркетплейсам. Когда откроем ваш город, пришлём письмо и инструкции.",
     linkL: "Сайт или соцсети вашей компании",
@@ -132,6 +132,13 @@ const PTAB = {
            "Бонусы, которыми можно поощрять клиентов, и материалы для встреч."]
   }
 };
+/* «Другое» в сфере деятельности (правки 30.10) — открывает поле, куда
+   сферу вписывают вручную. В Ч/Б форме поля нет — функция молчит. */
+function syncSphereOther() {
+  const sel = qs("[data-reg-sphere]"), f = qs("[data-reg-sphere-other-f]");
+  if (!sel || !f) return;
+  f.hidden = sel.value !== "other";
+}
 function setPartnerTab(id) {
   const t = PTAB[id];
   if (!t || !qs("[data-ptab]")) return;
@@ -150,7 +157,7 @@ function setPartnerTab(id) {
   const list = qs("[data-ptab-list]");
   if (list) list.innerHTML = t.list.map(x => "<li>" + x + "</li>").join("");
   const sphere = qs("[data-reg-sphere]");
-  if (sphere) sphere.value = t.sphere;
+  if (sphere) { sphere.value = t.sphere; syncSphereOther(); }
   /* Самозанятый — только у маркетплейсов; выбран был он — переключаем на ООО */
   qsa("[data-ptab-only]").forEach(el => { el.hidden = el.dataset.ptabOnly !== id; });
   const cur = qs("[data-org].is-on");
@@ -189,8 +196,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* Запрос на региональное партнёрство: кнопка уходит, на её месте
      остаётся строка «свяжемся» — повторно отправлять запрос незачем. */
-  qs("[data-ask-send]").onclick = () => {
+  const ask = qs("[data-ask-send]");
+  if (ask) ask.onclick = () => {
     qs("[data-ask-row]").hidden = true;
     qs("[data-ask-ok]").hidden = false;
   };
+  const sphere = qs("[data-reg-sphere]");
+  if (sphere) sphere.addEventListener("change", syncSphereOther);
 });

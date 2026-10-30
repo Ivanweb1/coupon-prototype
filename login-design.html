@@ -296,7 +296,9 @@
     qs("[data-lg-role-note]").textContent = R.note;
     const reg = qs("[data-lg-reg]");
     reg.href = R.reg; reg.textContent = R.regText;
-    qs("[data-lg-reg-top]").href = R.reg;
+    /* Кнопки «зарегистрироваться» в шапке больше нет — шапка полная, как на витрине */
+    const top = qs("[data-lg-reg-top]");
+    if (top) top.href = R.reg;
   }
   function go(name) {
     qsa("[data-lg-screen]").forEach(s => s.classList.toggle("is-on", s.dataset.lgScreen === name));

@@ -1,0 +1,31 @@
+/* ==========================================================================
+   Регистрация партнёра (правки 30.10): первый экран по макету заказчика
+   и форма в одну колонку без правой панели. Сборка из готовых блоков:
+   .rg-hero, .pt-list (галочки), карточки — как .pt-card на «Сервисе».
+   ========================================================================== */
+
+.pr-hero h1{max-width:16ch}
+/* «бесплатно» — выделение инверсией, как велят правила design-3 */
+.pr-hero__sub{margin:14px 0 0;font-size:clamp(20px,2vw,26px);font-weight:500;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+.pr-mark{display:inline-block;padding:0 .3em .05em;border-radius:10px;background:var(--brand);color:#fff;font-weight:700}
+
+.pr-free{margin-top:22px;grid-template-columns:repeat(2,minmax(0,max-content));column-gap:40px}
+.pr-free li{font-size:16px;color:var(--ink)}
+
+/* Две роли — карточки в ряд, тексты те же, что на «Сервисе» */
+.pr-roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:32px}
+.pr-role{padding:26px 28px;border-radius:24px;background:var(--surface)}
+.pr-role h2{margin:0;font-size:clamp(20px,1.7vw,24px);font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.pr-role p{margin:10px 0 0;font-size:15px;line-height:1.6;color:var(--ink-2)}
+
+/* Форма — одна колонка по центру: правую панель убрали */
+.pr-cols{grid-template-columns:minmax(0,760px);justify-content:center}
+
+/* Ссылка на регистрацию рекламодателя — фирменным цветом, заметнее */
+.pr-adv-link{color:var(--brand);font-weight:600}
+
+@media (max-width:720px){
+  .pr-free{grid-template-columns:1fr}
+  .pr-roles{grid-template-columns:1fr}
+  .pr-role{padding:22px}
+}
