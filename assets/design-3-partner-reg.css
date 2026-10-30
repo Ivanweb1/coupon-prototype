@@ -9,7 +9,7 @@
 .pr-hero__sub{margin:14px 0 0;font-size:clamp(20px,2vw,26px);font-weight:500;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
 .pr-mark{display:inline-block;padding:0 .3em .05em;border-radius:10px;background:var(--brand);color:#fff;font-weight:700}
 
-.pr-free{margin-top:22px;grid-template-columns:repeat(2,minmax(0,max-content));column-gap:40px}
+.pr-free{margin-top:22px;display:flex;flex-wrap:wrap;gap:12px 36px}
 .pr-free li{font-size:16px;color:var(--ink)}
 
 /* Две роли — карточки в ряд, тексты те же, что на «Сервисе» */
@@ -25,7 +25,7 @@
 .pr-adv-link{color:var(--brand);font-weight:600}
 
 @media (max-width:720px){
-  .pr-free{grid-template-columns:1fr}
+  .pr-free{flex-direction:column}
   .pr-roles{grid-template-columns:1fr}
   .pr-role{padding:22px}
 }
