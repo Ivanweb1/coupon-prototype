@@ -427,3 +427,17 @@
    -------------------------------------------------------------------------- */
 .hw-biz .dz-biz__acts{align-items:center}
 
+
+/* Правки 29.10: первый экран целиком красный — как баннер «Для бизнеса»:
+   текст белый, кнопка тёмная (та же пара, что dz-btn-white в баннере) */
+.hw-hero{background:var(--brand)}
+.hw-hero h1{color:#fff}
+.hw-hero__sub{color:rgba(255,255,255,.9)}
+.hw-hero .hw-note{color:rgba(255,255,255,.75)}
+.hw-hero .btn--solid{background:var(--ink);border-color:var(--ink);color:#fff}
+.hw-hero .btn--solid:hover{background:#000;border-color:#000}
+
+/* «Более 300 вариантов выгоды» — акцент заказчика после подзаголовка */
+#cats .hw-sec__lead{max-width:none}
+.hw-lead-acc{margin-left:8px;color:var(--brand);font-weight:500;white-space:nowrap}
+@media (max-width:720px){.hw-lead-acc{display:block;margin:4px 0 0}}
