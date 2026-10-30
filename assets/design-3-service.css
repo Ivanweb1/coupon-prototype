@@ -47,7 +47,7 @@
    отъезжает влево — освобождает место чеку */
 .sv-phone{
   position:absolute;left:50%;top:84px;width:224px;height:330px;margin-left:-112px;
-  padding:8px;border-radius:36px;background:var(--ink);
+  padding:4px;border-radius:34px;background:var(--ink);
   box-shadow:0 30px 60px -26px rgba(0,0,0,.5);z-index:2;
 }
 .sv-screen{
@@ -144,8 +144,8 @@
   .sv-steps{left:10px;right:10px;gap:5px;top:16px}
   .sv-step{height:30px;padding:0 10px 0 4px;font-size:12px;gap:5px}
   .sv-step i{width:22px;height:22px}
-  .sv-phone{width:190px;height:292px;top:66px;margin-left:-95px;border-radius:32px;padding:7px;--shift:-58px}
-  .sv-screen{border-radius:25px}
+  .sv-phone{width:190px;height:292px;top:66px;margin-left:-95px;border-radius:30px;padding:4px;--shift:-58px}
+  .sv-screen{border-radius:26px}
   .sv-cp__ph{height:100px}
   .sv-cp__t{font-size:13.5px}
   .sv-cp__ph i{font-size:12.5px;padding:3px 8px}
