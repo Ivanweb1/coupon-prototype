@@ -29,3 +29,32 @@
   .pr-roles{grid-template-columns:1fr}
   .pr-role{padding:22px}
 }
+
+/* Визуал в карточках ролей (правки 30.10): значок раздела сверху,
+   внизу — что получает партнёр, картинкой */
+.pr-role{display:flex;flex-direction:column}
+.pr-role .sv-plan__ic{margin-bottom:16px;background:#fff}
+.pr-viz{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:auto;padding-top:20px}
+.pr-mps{display:flex}
+.pr-mps img{width:40px;height:40px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--surface);object-fit:contain}
+.pr-mps img + img{margin-left:-8px}
+.pr-code{
+  display:inline-flex;align-items:center;gap:10px;height:40px;padding:0 14px;
+  border:1.5px dashed var(--brand);border-radius:12px;background:#fff;
+}
+.pr-code small{font-size:11px;font-weight:600;color:var(--ink-3)}
+.pr-code b{font-family:var(--font-display);font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--ink)}
+.pr-city{
+  display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px 0 10px;border-radius:var(--r-pill);
+  background:var(--brand);color:#fff;font-size:14px;font-weight:700;
+}
+.pr-city [data-icon]{display:inline-flex}
+.pr-socs{display:flex;gap:6px}
+.pr-socs i{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#fff;font-style:normal}
+/* Цветные значки соцсетей — те же SVG, что были в шапке регистрации */
+.pr-socs i{overflow:hidden;background:none}
+.pr-socs .soc-ic{width:40px;height:40px;display:block}
+/* В карточке значки сразу цветные — как в пустой ленте (.empty-feed__soc) */
+.dz3 .pr-socs .soc-ic__bg{fill:var(--soc-c)}
+.dz3 .pr-socs .soc-ic__g{fill:#fff}
+.dz3 .pr-socs .soc-ic--img{filter:none;opacity:1}
