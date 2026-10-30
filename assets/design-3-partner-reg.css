@@ -4,7 +4,7 @@
    .rg-hero, .pt-list (галочки), карточки — как .pt-card на «Сервисе».
    ========================================================================== */
 
-.pr-hero h1{max-width:16ch}
+.pr-hero h1{max-width:none}
 /* «бесплатно» — выделение инверсией, как велят правила design-3 */
 .pr-hero__sub{margin:14px 0 0;font-size:clamp(20px,2vw,26px);font-weight:500;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
 .pr-mark{display:inline-block;padding:0 .3em .05em;border-radius:10px;background:var(--brand);color:#fff;font-weight:700}
