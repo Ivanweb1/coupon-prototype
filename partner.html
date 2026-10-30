@@ -119,7 +119,6 @@
       <div class="mobile-nav__group">
         <h4>Партнёрам</h4>
         <a href="partner.html">Стать партнёром</a>
-        <a href="partner.html#cities">Города присутствия</a>
         <a href="service.html#partners">Партнёрская программа</a>
       </div>
     </nav>
@@ -267,42 +266,6 @@
 
   </div>
 
-  <!-- Города присутствия. Списком, без карты — решение Вилла. Отметка
-       «свободно» набрана акцентом: по ней страница и работает.
-       Города взяты из данных прототипа (Липецкая область); занятость —
-       заглушка, реальных партнёров пока нет. -->
-  <section class="pt-cities" id="cities">
-    <div class="pt-cities__head">
-      <h2>Города присутствия</h2>
-      <span class="pt-cities__note">Липецкая область · дальше — по мере запуска</span>
-    </div>
-
-    <!-- Поиск: сейчас городов десять, в планах ~1115 — глазами в таком
-         списке свой город не найти. Ищем по названию, счётчик под строкой
-         показывает, сколько из найденных свободно: ради этого и приходят. -->
-    <div class="pt-cities__find" data-city-find>
-      <span data-icon="search"></span>
-      <input type="search" placeholder="Найдите свой город" aria-label="Поиск по городам" autocomplete="off">
-      <button type="button" data-city-clear aria-label="Очистить" data-icon="close"></button>
-    </div>
-    <p class="pt-cities__count" data-city-count></p>
-    <div class="pt-grid">
-      <div class="pt-city pt-city--busy"><span>Липецк</span><span class="pt-city__busy">занят</span></div>
-      <div class="pt-city pt-city--busy"><span>Елец</span><span class="pt-city__busy">занят</span></div>
-      <div class="pt-city"><span>Грязи</span><span class="pt-city__free">свободно</span></div>
-      <div class="pt-city"><span>Данков</span><span class="pt-city__free">свободно</span></div>
-      <div class="pt-city"><span>Задонск</span><span class="pt-city__free">свободно</span></div>
-      <div class="pt-city"><span>Лебедянь</span><span class="pt-city__free">свободно</span></div>
-      <div class="pt-city"><span>Усмань</span><span class="pt-city__free">свободно</span></div>
-      <div class="pt-city"><span>Чаплыгин</span><span class="pt-city__free">свободно</span></div>
-      <div class="pt-city"><span>Добринка</span><span class="pt-city__free">свободно</span></div>
-      <div class="pt-city"><span>Лев Толстой</span><span class="pt-city__free">свободно</span></div>
-    </div>
-    <p class="pt-cities__empty" data-city-empty hidden>
-      Такого города в списке нет. Область открывает региональный партнёр —
-      <a href="#">напишите в заявке</a>, какой город вам нужен.
-    </p>
-  </section>
 
 </main>
 
@@ -334,7 +297,6 @@
         <h4>Партнёрам</h4>
         <ul>
           <li><a href="partner.html">Стать партнёром</a></li>
-          <li><a href="partner.html#cities">Города присутствия</a></li>
           <li><a href="service.html#partners">Партнёрская программа</a></li>
         </ul>
       </div>
@@ -427,6 +389,8 @@ initIcons();
    данные: реальный список придёт с бэкенда вместе с занятостью. */
 (function () {
   const box = document.querySelector("[data-city-find]");
+  /* Раздел «Города присутствия» убран (30.10) — без него поиск не нужен */
+  if (!box) return;
   const input = box.querySelector("input");
   const clear = box.querySelector("[data-city-clear]");
   const cities = Array.from(document.querySelectorAll(".pt-city"));
