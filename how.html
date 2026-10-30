@@ -46,7 +46,12 @@
       <span class="dz-logo__word">Все<br>купоны</span>
     </a>
     <span class="dz-logo__tag">Все скидки <span data-geo-gen>Липецка</span><br>бесплатно и без регистрации</span>
-    <span class="header__spacer"></span>
+
+    <div class="search search--compact dz-head-search" data-head-search>
+      <span class="search__icon" data-icon="search"></span>
+      <input type="text" placeholder="Кофе, маникюр, шиномонтаж…" aria-label="Поиск купонов">
+      <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
+    </div>
 
     <div class="dz-city-group">
       <button class="city-btn" data-city-open>
@@ -510,6 +515,7 @@
   };
   renderGeo();
   initHeaderShadow();
+  initSearch();
   initMobileMenu();
   qs("[data-to-top]").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 

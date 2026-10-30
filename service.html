@@ -17,6 +17,8 @@
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
 <!-- Инфостраницы подвала — отдельным слоем -->
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
+<link rel="stylesheet" href="assets/design-3-how.css?v=20261030a">
+<link rel="stylesheet" href="assets/design-3-service.css?v=20261030a">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -43,14 +45,101 @@
       <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
       <span class="dz-logo__word">Все<br>купоны</span>
     </a>
-    <span class="header__spacer"></span>
-    <a class="btn btn--ghost" href="index-design-3.html">На витрину</a>
+    <span class="dz-logo__tag">Все скидки <span data-geo-gen>Липецка</span><br>бесплатно и без регистрации</span>
+
+    <div class="search search--compact dz-head-search" data-head-search>
+      <span class="search__icon" data-icon="search"></span>
+      <input type="text" placeholder="Кофе, маникюр, шиномонтаж…" aria-label="Поиск купонов">
+      <button class="search__voice" title="Голосовой поиск" data-icon="mic"></button>
+    </div>
+
+    <div class="dz-city-group">
+      <button class="city-btn" data-city-open>
+        <span data-icon="pin"></span>
+        <span data-geo-short>Липецк</span>
+        <span class="chev" data-icon="chev"></span>
+      </button>
+      <div class="head-socials" aria-label="Мы в соцсетях города">
+        <a class="soc" href="#" data-city-social="ВКонтакте" title="Мы в ВКонтакте" data-icon="vk"></a>
+        <a class="soc" href="#" data-city-social="Telegram" title="Мы в Telegram" data-icon="tg"></a>
+        <a class="soc" href="#" data-city-social="Одноклассники" title="Мы в Одноклассниках" data-icon="ok"></a>
+        <a class="soc" href="#" data-city-social="MAX" title="Мы в MAX" data-icon="max"></a>
+      </div>
+    </div>
+
+    <a class="btn btn--solid header-cta" href="register-design.html">
+      <span data-icon="plus"></span><span class="header-cta__label">Разместить купон</span>
+    </a>
+
+    <a class="lk-chip" href="login-design.html" aria-label="Войти в личный кабинет">
+      <span data-icon="user"></span>
+      <span class="lk-chip__label">Войти в личный кабинет</span>
+    </a>
+
+    <button type="button" class="burger" data-menu-open aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
+<div class="mobile-nav" id="mobileNav" data-mobile-nav hidden>
+  <div class="mobile-nav__bar">
+    <span class="dz-logo">
+      <img class="dz-logo__mark" src="assets/brand/logo-red.png" alt="" width="26" height="44">
+      <span class="dz-logo__word">Все<br>купоны</span>
+    </span>
+    <button type="button" class="mobile-nav__close" data-menu-close aria-label="Закрыть меню" data-icon="close"></button>
+  </div>
+
+  <div class="mobile-nav__body">
+    <button type="button" class="mobile-nav__city" data-city-open>
+      <span class="mobile-nav__city-ic" data-icon="pin"></span>
+      <span class="mobile-nav__city-txt"><small>Ваш город</small><b data-geo-short>Липецк</b></span>
+      <span class="mobile-nav__city-go">Сменить</span>
+    </button>
+
+    <div class="mobile-nav__acts">
+      <a class="btn btn--solid" href="register-design.html"><span data-icon="plus"></span>Разместить купон</a>
+      <a class="btn btn--ghost" href="login-design.html"><span data-icon="user"></span>Личный кабинет</a>
+    </div>
+
+    <nav class="mobile-nav__groups" aria-label="Меню">
+      <div class="mobile-nav__group">
+        <h4>Сервис</h4>
+        <a href="how.html">Как это работает</a>
+        <a href="faq.html">Вопросы и ответы</a>
+        <a href="contacts.html">Контакты</a>
+      </div>
+      <div class="mobile-nav__group">
+        <h4>Бизнесу</h4>
+        <a href="register-design.html">Зарегистрироваться</a>
+        <a href="pricing.html">Сколько стоит</a>
+        <a href="docs.html">Документы</a>
+      </div>
+      <div class="mobile-nav__group">
+        <h4>Партнёрам</h4>
+        <a href="partner.html">Стать партнёром</a>
+        <a href="partner.html#cities">Города присутствия</a>
+        <a href="service.html#partners">Партнёрская программа</a>
+      </div>
+    </nav>
+
+    <div class="mobile-nav__soc">
+      <span class="mobile-nav__soc-label">Мы в соцсетях <span data-geo-gen>Липецка</span></span>
+      <div class="mobile-nav__soc-row">
+        <a class="soc" href="#" data-city-social="ВКонтакте" aria-label="ВКонтакте" data-icon="vk"></a>
+        <a class="soc" href="#" data-city-social="Telegram" aria-label="Telegram" data-icon="tg"></a>
+        <a class="soc" href="#" data-city-social="Одноклассники" aria-label="Одноклассники" data-icon="ok"></a>
+        <a class="soc" href="#" data-city-social="MAX" aria-label="MAX" data-icon="max"></a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <main class="wrap">
 
-  <section class="pt-hero pt-hero--wide">
+  <section class="pt-hero pt-hero--wide sv-hero">
+    <div class="sv-hero__text">
     <span class="pt-hero__k">Сервис</span>
     <h1>Купон, скриншот, выгода</h1>
     <p class="pt-hero__sub">
@@ -65,6 +154,39 @@
       <a href="#how">Как это работает</a>
       <a href="#partners">Партнёрская программа</a>
     </nav>
+    </div>
+
+    <!-- Визуал к заголовку «Купон, скриншот, выгода»: те же мини-сцены,
+         что в шагах на «Как это работает» (стили design-3-how.css) -->
+    <div class="sv-art" aria-hidden="true">
+      <div class="sv-art__item sv-art__item--coupon">
+        <div class="hw-mini is-on">
+          <span class="hw-mini__ph" style="background-image:url(assets/coupons/coffee.jpg)"></span>
+          <span class="hw-mini__t"><b>Два кофе по цене одного</b><small>Кофейня «Зерно» · 400 м</small></span>
+          <span class="hw-mini__v">1 + 1</span>
+        </div>
+        <span class="sv-tag"><i>1</i>Купон</span>
+      </div>
+      <div class="sv-art__item sv-art__item--phone">
+        <div class="hw-phone">
+          <span class="hw-phone__ph" style="background-image:url(assets/coupons/coffee.jpg)"><i>1 + 1</i></span>
+          <span class="hw-phone__ttl">Два кофе по цене одного</span>
+          <span class="hw-phone__co">Кофейня «Зерно» · до 30.11</span>
+          <span class="hw-phone__code">COFFEE</span>
+          <span class="hw-phone__btn">Сохранить купон</span>
+        </div>
+        <span class="sv-tag"><i>2</i>Скриншот</span>
+      </div>
+      <div class="sv-art__item sv-art__item--check">
+        <div class="hw-check">
+          <span class="hw-check__head">Кофейня «Зерно»</span>
+          <span class="hw-check__row"><span>Капучино × 2</span><span>380 ₽</span></span>
+          <span class="hw-check__row hw-check__row--off"><span>Купон COFFEE</span><span>−190 ₽</span></span>
+          <span class="hw-check__sum"><span>Итого</span><b>190 ₽</b></span>
+        </div>
+        <span class="sv-tag"><i>3</i>Выгода</span>
+      </div>
+    </div>
   </section>
 
   <!-- ================= Как это работает ================= -->
@@ -122,8 +244,9 @@
       Партнёры приводят на&nbsp;витрину рекламодателей и&nbsp;получают вознаграждение с&nbsp;их&nbsp;размещений.
     </p>
 
-    <div class="pg-cards">
+    <div class="pg-cards sv-plans">
       <div class="pt-card pg-plan">
+        <span class="sv-plan__ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></span>
         <h2>Партнёр по маркетплейсам</h2>
         <p class="pg-card__lead">Распространяете свой реферальный код и&nbsp;получаете вознаграждение за&nbsp;размещение с&nbsp;применением вашего реферального кода. Рекламодатель получит внушительную скидку на&nbsp;размещение.</p>
         <ul class="pt-list">
@@ -137,6 +260,7 @@
       </div>
 
       <div class="pt-card pg-plan">
+        <span class="sv-plan__ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
         <h2>Региональный партнёр</h2>
         <p class="pg-card__lead">Представляет сервис в&nbsp;своём городе и&nbsp;за&nbsp;его пределами. Ведёт городские сообщества и&nbsp;получает повышенное вознаграждение. Имеет действующий бизнес в&nbsp;области рекламы, маркетинга, СМИ.</p>
         <ul class="pt-list">
@@ -149,7 +273,8 @@
         </div>
       </div>
 
-      <div class="pt-card pg-plan">
+      <div class="pt-card pg-plan sv-plan--not">
+        <span class="sv-plan__ic" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg></span>
         <h2>Что партнёр не делает</h2>
         <ul class="pt-list">
           <li>Не публикует купоны за&nbsp;клиента&nbsp;— купон создаёт сам рекламодатель</li>
@@ -263,6 +388,21 @@
   </div>
 </footer>
 
+<div class="modal" id="cityModal">
+  <div class="modal__box">
+    <h3>Вы в городе <span data-city-detected>Липецк</span>?</h3>
+    <p>Определили автоматически. Покажем купоны, которые действуют рядом с вами.</p>
+    <button class="btn btn--solid btn--lg modal__yes" data-city-yes>
+      Да, я в городе <span data-city-detected>Липецк</span>
+    </button>
+    <div class="modal__or">или выберите другую выдачу</div>
+    <div data-region-row></div>
+    <div class="city-list"></div>
+    <p class="modal__note">Города других областей — по мере запуска сервиса.</p>
+    <button class="btn btn--ghost" data-city-close>Позже</button>
+  </div>
+</div>
+
 <script src="assets/data.js?v=20261004b"></script>
 <script src="assets/app.js?v=20261014a"></script>
 <script src="assets/pages-tabs.js?v=20260928a"></script>
@@ -271,6 +411,21 @@
      он ключевой триггер витрины, а не справки. Берём только иконки,
      подстановку города и кнопку «наверх». */
   initIcons();
+  /* Полная шапка как на витрине (правки 29.10): поиск ведёт в выдачу,
+     город меняется кнопкой без перезагрузки — на входе не спрашиваем */
+  buildCityModal();
+  qs("[data-city-yes]").onclick = confirmCity;
+  goGeo = function (scope, city) {
+    if (city) { state.city = city; localStorage.setItem("cp_city", city.slug); }
+    state.scope = scope;
+    localStorage.setItem("cp_scope", scope);
+    confirmCity();
+    renderGeo();
+    buildCityModal();
+    qs("[data-city-yes]").onclick = confirmCity;
+  };
+  initSearch();
+  initMobileMenu();
   renderGeo();
   initHeaderShadow();
   qs("[data-to-top]").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });

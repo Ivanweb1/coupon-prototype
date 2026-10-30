@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Страница «Сервис» (правки 29.10): визуал первого экрана и выровненные
+   карточки партнёров. Только сборка из готовых блоков: мини-сцены
+   .hw-mini / .hw-phone / .hw-check из design-3-how.css, карточки
+   .pt-card / .pg-plan, значок в круге — как .hw-cat__ic у категорий.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Первый экран: текст слева, справа коллаж «купон → скриншот → выгода»
+   -------------------------------------------------------------------------- */
+.sv-hero{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);
+  gap:56px;align-items:center;
+}
+.sv-hero .pt-hero__sub{max-width:58ch}
+
+.sv-art{
+  position:relative;height:420px;border-radius:32px;background:var(--surface);overflow:hidden;
+}
+.sv-art__item{position:absolute;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+
+/* 1 — выбранный купон из ленты, слева сверху */
+.sv-art__item--coupon{left:26px;top:34px;width:280px;z-index:2}
+/* В шаге 01 первая мини-карточка — «невыбранная», бледная; здесь она одна */
+.sv-art__item--coupon .hw-mini{width:100%;opacity:1;transform:rotate(-3deg)}
+.sv-art__item--coupon .hw-mini .hw-mini__v{background:var(--brand)}
+.sv-art__item--coupon .sv-tag{margin-left:10px}
+
+/* 2 — телефон с кодом, по центру снизу: обрезан краем плашки, как в шаге 02 */
+.sv-art__item--phone{left:50%;bottom:0;transform:translateX(-58%);align-items:center;z-index:1}
+.sv-art__item--phone .hw-phone{width:196px;height:200px;order:2}
+.sv-art__item--phone .sv-tag{order:1}
+
+/* 3 — чек со скидкой, справа, поверх края телефона */
+.sv-art__item--check{right:24px;top:112px;width:196px;z-index:3;align-items:flex-end}
+.sv-art__item--check .hw-check{width:100%;transform:rotate(3deg)}
+
+/* Подпись шага: белая плашка с красным номером — слова из заголовка */
+.sv-tag{
+  display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 5px;
+  border-radius:var(--r-pill);background:#fff;box-shadow:0 8px 18px -14px rgba(0,0,0,.4);
+  font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap;
+}
+.sv-tag i{
+  display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  background:var(--brand);color:#fff;font-style:normal;font-size:12px;font-weight:800;
+}
+
+@media (max-width:1100px){
+  .sv-hero{grid-template-columns:1fr;gap:28px}
+  .sv-art{max-width:560px;width:100%}
+}
+@media (max-width:560px){
+  .sv-art{height:380px;border-radius:24px}
+  .sv-art__item--coupon{left:14px;top:20px;width:232px}
+  /* Телефон прижат влево, подпись над ним — чек справа её не закрывает */
+  .sv-art__item--phone{left:18px;transform:none;align-items:flex-start}
+  .sv-art__item--phone .hw-phone{width:164px;height:172px}
+  .sv-art__item--check{right:12px;top:118px;width:150px}
+  .sv-art__item--check .hw-check{font-size:11px;padding:10px 12px 14px}
+  .sv-art__item--check .hw-check__sum b{font-size:15px}
+}
+
+/* --------------------------------------------------------------------------
+   Карточки партнёров: значок, заголовок, текст, список и кнопка стоят на
+   одних линиях во всех трёх карточках (subgrid по строкам)
+   -------------------------------------------------------------------------- */
+.sv-plans{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(5,auto)}
+.sv-plans .pg-plan{display:grid;grid-row:span 5;grid-template-rows:subgrid;row-gap:0}
+.sv-plans .pg-plan h2{margin-top:18px;font-size:clamp(22px,1.75vw,26px);line-height:1.15}
+.sv-plans .pg-plan .pg-card__lead{margin-top:12px}
+.sv-plans .pg-plan .pt-list{margin-top:18px;align-content:start}
+.sv-plans .pg-plan__foot{align-self:end}
+/* У «Что партнёр не делает» текста нет — список встаёт сразу под
+   заголовок и растягивается на строку текста и строку списка */
+.sv-plans .sv-plan--not .pt-list{grid-row:span 2}
+
+.sv-plan__ic{
+  display:grid;place-items:center;width:52px;height:52px;border-radius:50%;
+  background:var(--brand-50);color:var(--brand);
+}
+
+/* «Не делает»: вместо красной галочки — графитовый крестик, иначе пункт
+   читается как «делает» */
+.sv-plan--not{background:var(--surface);border-color:transparent}
+.sv-plan--not .sv-plan__ic{background:#fff;color:var(--ink-2)}
+.sv-plan--not .pt-list li::before{
+  background:var(--ink-3);
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M7.5 7.5l9 9M16.5 7.5l-9 9'/%3E%3C/svg%3E");
+          mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M7.5 7.5l9 9M16.5 7.5l-9 9'/%3E%3C/svg%3E");
+}
+.sv-plan--not .btn--ghost{background:#fff}
+
+@media (max-width:1000px){
+  .sv-plans{grid-template-columns:1fr;grid-template-rows:none}
+  .sv-plans .pg-plan{display:flex;grid-row:auto}
+}
