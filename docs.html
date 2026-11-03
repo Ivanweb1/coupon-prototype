@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
 <link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
-<link rel="stylesheet" href="assets/design-3-pages.css?v=20261103a">
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20261103b">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -202,7 +202,7 @@
 
     <!-- Баннер под документами (правка 03.11.2026): вернуть человека
          к купонам. Тексты — из подписи подвала. -->
-    <div class="dz-biz hw-biz">
+    <div class="dz-biz hw-biz dz-biz--feed">
       <div>
         <span class="dz-biz__k">Купоны</span>
         <h2>Все скидки <span data-geo-gen>Липецка</span> в&nbsp;одном месте</h2>
@@ -211,8 +211,11 @@
           <a class="btn dz-btn-white" href="index-design-3.html">Перейти к купонам</a>
         </div>
       </div>
-      <div class="dz-biz__art" aria-hidden="true">
-        <img class="dz-biz__balloon" src="assets/brand/logo-white.png" alt="" width="357" height="600">
+      <!-- Справа — две бегущие колонки купонов, как на первом экране
+           «Как это работает» (правка 03.11.2026). Наполняет скрипт внизу. -->
+      <div class="hw-art" aria-hidden="true">
+        <div class="hw-col hw-col--up"><div class="hw-col__track"></div></div>
+        <div class="hw-col hw-col--down"><div class="hw-col__track"></div></div>
       </div>
     </div>
   </section>
@@ -407,6 +410,43 @@
   renderGeo();
   initHeaderShadow();
   qs("[data-to-top]").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  /* Баннер «Купоны» на вкладке «Всем»: колонки купонов из how.html —
+     та же карточка ленты (cardHTML), данные демонстрационные */
+  const cat = (slug, name) => ({ l1: "regional", slug, name });
+  const FEED = [
+    { id: "dc1", title: "Комбо-обед в будни", company: "Бистро «Обед»", value: "−30%",
+      dist: 900, erid: "2VtzqwC4Mf", views: 860, photo: "assets/coupons/eda-cool.jpg", cat: cat("eda", "Кафе и рестораны") },
+    { id: "dc2", title: "Маникюр с покрытием", company: "Студия «Ноготок»", value: "−25%",
+      dist: 260, erid: "2VtzqwD9Pk", views: 2310, photo: "assets/coupons/manikyur-rose.jpg", cat: cat("krasota", "Красота") },
+    { id: "dc3", title: "Абонемент на месяц", company: "Фитнес-клуб «Пульс»", value: "−40%",
+      dist: 1400, erid: "2VtzqwF2Rs", views: 3120, photo: "assets/coupons/sport-teal.jpg", cat: cat("sport", "Фитнес и спорт") },
+    { id: "dc4", title: "Второй билет в подарок", company: "Квест «Ключ»", value: "1+1",
+      dist: 700, erid: "2VtzqwG5Tn", views: 1780, photo: "assets/coupons/razvlecheniya-blue.jpg", cat: cat("razvlecheniya", "Развлечения") },
+    { id: "dc5", title: "Груминг для собак", company: "Салон «Хвост»", value: "−20%",
+      dist: 1100, erid: "2VtzqwH8Vb", views: 640, photo: "assets/coupons/pitomtsy-brown.jpg", cat: cat("pitomtsy", "Питомцы") },
+    { id: "dc6", title: "Пробное занятие", company: "Школа «Слово»", value: "Бесплатно",
+      dist: 240, erid: "2VtzqwJ3Wc", views: 2050, photo: "assets/coupons/obuchenie-purple.jpg", cat: cat("obuchenie", "Обучение") }
+  ];
+  function feedCard(host, c) {
+    c.city = state.city;
+    host.classList.add("card");
+    host._coupon = c;
+    host.innerHTML = cardHTML(c);
+    const media = qs(".card__media", host);
+    media.style.background = 'url("' + c.photo + '") center/cover no-repeat';
+    media.classList.add("has-photo");
+    qsa("button", host).forEach(b => { b.tabIndex = -1; b.onclick = e => e.preventDefault(); });
+  }
+  [[".hw-col--up", [0, 2, 4]], [".hw-col--down", [1, 3, 5]]].forEach(([sel, ids]) => {
+    const track = qs(".dz-biz--feed " + sel + " .hw-col__track");
+    [...ids, ...ids].forEach(i => {
+      const el = document.createElement("div");
+      el.className = "hw-run";
+      track.appendChild(el);
+      feedCard(el, Object.assign({}, FEED[i]));
+    });
+  });
 </script>
 </body>
 </html>

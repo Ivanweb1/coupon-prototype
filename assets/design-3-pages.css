@@ -434,3 +434,43 @@
    В подвале он сдвинут вверх и наезжает на подвал; внутри страницы
    сдвиг убираем и отделяем баннер от списка документов отступом. */
 .pg-sec .dz-biz{margin:32px 0 0;transform:none}
+
+/* Текст баннеров во вкладках — белый: на странице заголовки секций
+   тёмные, и это правило перебивало белый цвет баннера */
+.pg-sec .dz-biz h2{color:#fff}
+.pg-sec .dz-biz p{color:rgba(255,255,255,.9)}
+
+/* Баннер «Купоны» с бегущими колонками справа (как на how.html):
+   колонки идут от верхнего до нижнего края плашки и растворяются у края */
+.dz-biz--feed{padding:0 0 0 48px;gap:40px}
+.dz-biz--feed > div:first-child{padding:44px 0}
+.dz-biz--feed .hw-art{
+  --w:236px;
+  display:flex;gap:16px;height:400px;padding-right:40px;
+  -webkit-mask:linear-gradient(transparent,#000 12%,#000 88%,transparent);
+          mask:linear-gradient(transparent,#000 12%,#000 88%,transparent);
+}
+.dz-biz--feed .hw-col{width:var(--w);overflow:hidden}
+.dz-biz--feed .hw-col__track{display:flex;flex-direction:column;gap:16px;padding-bottom:16px}
+.dz-biz--feed .hw-col--up .hw-col__track{animation:hwRunUp 36s linear infinite}
+.dz-biz--feed .hw-col--down .hw-col__track{animation:hwRunDown 36s linear infinite}
+.dz-biz--feed .hw-col--down{margin-top:-120px}
+.dz-biz--feed .hw-run.card{
+  margin:0;pointer-events:none;
+  padding:8px 8px 12px;border-radius:26px;background:#fff;
+  box-shadow:0 30px 60px -34px rgba(0,0,0,.35);
+}
+@keyframes hwRunUp{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@keyframes hwRunDown{from{transform:translateY(-50%)}to{transform:translateY(0)}}
+@media (prefers-reduced-motion:reduce){.dz-biz--feed .hw-col__track{animation-duration:110s!important}}
+@media (max-width:1100px){.dz-biz--feed .hw-art{--w:200px;padding-right:28px}}
+@media (max-width:860px){
+  .dz-biz--feed{grid-template-columns:1fr;gap:0;padding:0 20px}
+  .dz-biz--feed > div:first-child{padding:30px 4px 20px}
+  .dz-biz--feed .hw-art{position:static;--w:calc(50% - 6px);gap:12px;width:auto;height:360px;padding-right:0;opacity:1;z-index:auto}
+  .dz-biz--feed .hw-col{flex:1}
+}
+@media (max-width:480px){
+  .dz-biz--feed .hw-col{flex:1 1 100%;width:100%}
+  .dz-biz--feed .hw-col--down{display:none}
+}
