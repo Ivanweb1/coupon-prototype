@@ -18,7 +18,7 @@
 <!-- Инфостраницы подвала — отдельным слоем -->
 <link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
 <link rel="stylesheet" href="assets/design-3-how.css?v=20261030a">
-<link rel="stylesheet" href="assets/design-3-service.css?v=20261030h">
+<link rel="stylesheet" href="assets/design-3-service.css?v=20261103b">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -142,14 +142,24 @@
     <div class="sv-hero__text">
     <span class="pt-hero__k">Сервис</span>
     <h1>Купон, скриншот, выгода</h1>
-    <p class="pt-hero__sub">
-      «ВСЕКУПОНЫ»&nbsp;— сервис специальных предложений. Посетитель без регистрации
-      забирает предложения бесплатно: находит купон на&nbsp;сайте или в&nbsp;социальных сетях,
-      любым удобным способом сохраняет код, использует его при записи или оплате.
-      Бизнес размещает свои предложения и&nbsp;видит всю статистику просмотров, переходов,
-      активаций. Партнёры сервиса помогают размещению клиентов и&nbsp;зарабатывают
-      вознаграждение от&nbsp;каждого размещения.
-    </p>
+    <!-- Абзац о сервисе разложен по ролям (правка 03.11.2026): вводная
+         строкой, дальше три коротких пункта — читается за пару секунд.
+         Слова из прежнего абзаца, у посетителя переставлены. -->
+    <p class="pt-hero__sub sv-lead">«ВСЕКУПОНЫ»&nbsp;— сервис специальных предложений</p>
+    <ul class="sv-roles">
+      <li>
+        <span class="sv-roles__ic" data-icon="user"></span>
+        <span><b>Посетитель</b>находит купон на&nbsp;сайте или в&nbsp;соцсетях, сохраняет код и&nbsp;использует при записи или оплате. Бесплатно и&nbsp;без регистрации</span>
+      </li>
+      <li>
+        <span class="sv-roles__ic" data-icon="case"></span>
+        <span><b>Бизнес</b>размещает свои предложения и&nbsp;видит всю статистику просмотров, переходов, активаций</span>
+      </li>
+      <li>
+        <span class="sv-roles__ic" data-icon="link"></span>
+        <span><b>Партнёры</b>помогают размещению клиентов и&nbsp;зарабатывают вознаграждение от&nbsp;каждого размещения</span>
+      </li>
+    </ul>
     <nav class="pg-tabs" data-tabs aria-label="Разделы страницы">
       <a href="#how">Как это работает</a>
       <a href="#partners">Партнёрская программа</a>

@@ -208,3 +208,23 @@
   .sv-phone{width:176px;margin-left:-88px;--shift:-40px}
   .sv-check{width:146px;right:8px}
 }
+
+/* --------------------------------------------------------------------------
+   Абзац о сервисе по ролям (правка 03.11.2026): вводная строкой и три
+   пункта со значком в круге — как .hw-cat__ic у категорий
+   -------------------------------------------------------------------------- */
+.sv-lead{font-size:19px;font-weight:600;color:var(--ink)}
+.sv-roles{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:12px;max-width:60ch}
+.sv-roles li{display:flex;gap:14px;align-items:flex-start}
+.sv-roles__ic{
+  flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;
+  background:color-mix(in srgb, var(--brand) 10%, #fff);color:var(--brand);
+}
+.sv-roles__ic svg{width:20px;height:20px}
+.sv-roles li > span:last-child{padding-top:9px;font-size:15px;line-height:1.5;color:var(--ink-2)}
+.sv-roles b{margin-right:.35em;font-weight:700;color:var(--ink)}
+@media (max-width:560px){
+  .sv-lead{font-size:17px}
+  .sv-roles__ic{width:36px;height:36px}
+  .sv-roles li > span:last-child{padding-top:7px;font-size:14.5px}
+}
