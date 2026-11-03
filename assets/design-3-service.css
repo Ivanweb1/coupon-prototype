@@ -221,10 +221,13 @@
   background:color-mix(in srgb, var(--brand) 10%, #fff);color:var(--brand);
 }
 .sv-roles__ic svg{width:20px;height:20px}
-.sv-roles li > span:last-child{padding-top:9px;font-size:15px;line-height:1.5;color:var(--ink-2)}
-.sv-roles b{margin-right:.35em;font-weight:700;color:var(--ink)}
+/* Подпись роли — отдельной строкой по центру значка, текст под ней:
+   у всех трёх пунктов текст начинается от одной линии */
+.sv-roles li > span:last-child{font-size:15px;line-height:1.5;color:var(--ink-2)}
+.sv-roles b{display:flex;align-items:center;min-height:40px;font-size:16px;font-weight:700;color:var(--ink)}
 @media (max-width:560px){
   .sv-lead{font-size:17px}
   .sv-roles__ic{width:36px;height:36px}
-  .sv-roles li > span:last-child{padding-top:7px;font-size:14.5px}
+  .sv-roles li > span:last-child{font-size:14.5px}
+  .sv-roles b{min-height:36px}
 }
