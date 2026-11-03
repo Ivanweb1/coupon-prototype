@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="assets/design-3-type.css?v=20260921a">
 <link rel="stylesheet" href="assets/design-3-shell.css?v=20260928a">
 <link rel="stylesheet" href="assets/design-3-0924.css?v=20260930i">
-<link rel="stylesheet" href="assets/design-3-pages.css?v=20261004e">
+<link rel="stylesheet" href="assets/design-3-pages.css?v=20261103a">
 <link rel="icon" href="assets/brand/logo-red.png">
 </head>
 <body class="dz dz3 cards-wb">
@@ -145,9 +145,8 @@
     <span class="pt-hero__k">Документы</span>
     <h1>Правила, договоры и согласия</h1>
     <p class="pt-hero__sub">
-      Всё, по чему работает сервис. Посетителю читать ничего не нужно — купоны
-      бесплатные и без регистрации; документы нужны тем, кто размещает купоны и
-      получает выплаты.
+      Всё, по чему работает сервис. Посетителю регистрация не нужна — купоны
+      бесплатные; рекламодателям и партнёрам — свои вкладки.
     </p>
     <nav class="pg-tabs" data-tabs aria-label="Разделы страницы">
       <a href="#all">Всем</a>
@@ -156,49 +155,65 @@
     </nav>
   </section>
 
+  <!-- Состав документов — список заказчика 03.11.2026: семь документов,
+       остальные (согласие на обработку ПД, маркировка, тарифы, договоры
+       партнёров и т. п.) убраны; карточки вкладок заменены баннерами. Описания под названиями — мои, файлы и
+       даты редакций — заглушки. -->
+
   <!-- ================= Всем ================= -->
   <section class="pg-sec" id="all">
     <span class="pg-sec__k">Всем</span>
     <h2>Сайт и персональные данные</h2>
-    <p class="pg-sec__lead">
-      Данные посетителя мы не собираем: чтобы найти купон и воспользоваться им,
-      регистрация не нужна. Эти документы описывают работу сайта и то, что
-      происходит с данными тех, кто всё же оставляет их у нас.
-    </p>
 
     <div class="pg-docs">
-      <a class="pg-doc" href="#">
+      <a class="pg-doc" id="doc-rules" href="#">
         <span class="pg-doc__ic" data-icon="site"></span>
         <span>
-          <b>Пользовательское соглашение</b>
-          <span>Правила пользования сайтом: что делает сервис, за что отвечает и чего не гарантирует.</span>
+          <b>Правила использования сервиса</b>
+          <span>Внутри — пользовательская оферта: что делает сервис, за что отвечает и чего не гарантирует.</span>
         </span>
         <span class="pg-doc__meta">PDF · ред. —</span>
       </a>
-      <a class="pg-doc" href="#">
+      <a class="pg-doc" id="doc-pd" href="#">
         <span class="pg-doc__ic" data-icon="site"></span>
         <span>
-          <b>Политика конфиденциальности</b>
+          <b>Политика в отношении обработки персональных данных</b>
           <span>Какие данные собираем, зачем, сколько храним и кому не передаём. По 152-ФЗ.</span>
         </span>
         <span class="pg-doc__meta">PDF · ред. —</span>
       </a>
-      <a class="pg-doc" href="#">
+      <a class="pg-doc" id="doc-cookie" href="#">
         <span class="pg-doc__ic" data-icon="site"></span>
         <span>
-          <b>Согласие на обработку персональных данных</b>
-          <span>Текст согласия, которое подтверждают при регистрации рекламодателя и партнёра.</span>
-        </span>
-        <span class="pg-doc__meta">PDF · ред. —</span>
-      </a>
-      <a class="pg-doc" href="#">
-        <span class="pg-doc__ic" data-icon="site"></span>
-        <span>
-          <b>Политика в отношении файлов cookie</b>
+          <b>Политика использования файлов cookie</b>
           <span>Что сохраняется в браузере: выбранный город, подтверждение возраста, настройки выдачи.</span>
         </span>
         <span class="pg-doc__meta">PDF · ред. —</span>
       </a>
+      <a class="pg-doc" id="doc-requisites" href="#">
+        <span class="pg-doc__ic" data-icon="site"></span>
+        <span>
+          <b>Реквизиты компании</b>
+          <span>ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 · г. Липецк, ул. Название, 1</span>
+        </span>
+        <span class="pg-doc__meta">PDF · ред. —</span>
+      </a>
+    </div>
+
+    <!-- Баннер под документами (правка 03.11.2026): вернуть человека
+         к купонам. Тексты — из подписи подвала. -->
+    <div class="dz-biz hw-biz">
+      <div>
+        <span class="dz-biz__k">Купоны</span>
+        <h2>Все скидки <span data-geo-gen>Липецка</span> в&nbsp;одном месте</h2>
+        <p>Бесплатно и без регистрации: нашли купон, сохранили код, показали на кассе.</p>
+        <div class="dz-biz__acts">
+          <a class="btn dz-btn-white" href="index-design-3.html">Перейти к купонам</a>
+        </div>
+      </div>
+      <div class="dz-biz__art" aria-hidden="true">
+        <img class="dz-biz__balloon" src="assets/brand/logo-white.png" alt="" width="357" height="600">
+      </div>
     </div>
   </section>
 
@@ -206,67 +221,39 @@
   <section class="pg-sec" id="business">
     <span class="pg-sec__k">Рекламодателям</span>
     <h2>Размещение купонов</h2>
-    <p class="pg-sec__lead">
-      Размещать купоны могут ООО, ИП, самозанятые и физлица. Договор заключается
-      офертой — подписывать бумаги и ездить в офис не нужно.
-    </p>
 
     <div class="pg-docs">
-      <a class="pg-doc" href="#">
+      <a class="pg-doc" id="doc-offer" href="#">
         <span class="pg-doc__ic" data-icon="case"></span>
         <span>
-          <b>Оферта на размещение купонов</b>
+          <b>Публичная оферта для рекламодателей</b>
           <span>Основной договор с рекламодателем: предмет, права и обязанности, ответственность.</span>
         </span>
         <span class="pg-doc__meta">PDF · ред. —</span>
       </a>
-      <a class="pg-doc" href="#">
+      <a class="pg-doc" id="doc-placement" href="#">
         <span class="pg-doc__ic" data-icon="case"></span>
         <span>
-          <b>Правила размещения и модерации</b>
-          <span>Что можно публиковать, что проверяет модерация и почему купон может быть отклонён. Пять состояний купона: черновик, модерация, опубликован, завершён, отклонён.</span>
-        </span>
-        <span class="pg-doc__meta">PDF · ред. —</span>
-      </a>
-      <a class="pg-doc" href="#">
-        <span class="pg-doc__ic" data-icon="case"></span>
-        <span>
-          <b>Требования к рекламе и маркировке</b>
-          <span>Маркировка рекламы и ERID: у каждого объявления он свой. Кто получает идентификатор и кто отчитывается.</span>
-        </span>
-        <span class="pg-doc__meta">PDF · ред. —</span>
-      </a>
-      <a class="pg-doc" href="#">
-        <span class="pg-doc__ic" data-icon="case"></span>
-        <span>
-          <b>Тарифы и порядок оплаты</b>
-          <span>Стоимость размещения, сроки для раздела B2B, первое бесплатное размещение, закрывающие документы.</span>
-        </span>
-        <span class="pg-doc__meta">PDF · ред. —</span>
-      </a>
-      <a class="pg-doc" href="#">
-        <span class="pg-doc__ic" data-icon="case"></span>
-        <span>
-          <b>Согласие на публикацию материалов</b>
-          <span>Права на изображения и тексты купона: что рекламодатель подтверждает, загружая свой креатив.</span>
+          <b>Правила размещения рекламных купонов</b>
+          <span>Что можно публиковать, что проверяет модерация и почему купон может быть отклонён.</span>
         </span>
         <span class="pg-doc__meta">PDF · ред. —</span>
       </a>
     </div>
 
-    <div class="pg-cards">
-      <div class="pt-card pg-plan">
-        <h2>Сначала посчитать</h2>
-        <p class="pg-card__lead">Три шага — и увидите вилку по цене и охвату. Первое размещение бесплатное.</p>
-        <div class="pg-plan__foot"><a class="btn btn--solid" href="pricing.html">Сколько стоит</a></div>
+    <!-- Баннер вместо карточек «Сначала посчитать» / «Закрывающие документы»
+         (правка 03.11.2026). Тексты — с баннера «Для бизнеса» витрины. -->
+    <div class="dz-biz hw-biz">
+      <div>
+        <span class="dz-biz__k">Для бизнеса</span>
+        <h2>Есть бизнес? Расскажи о своём предложении</h2>
+        <p>Размести купон и познакомь жителей города со своей компанией.</p>
+        <div class="dz-biz__acts">
+          <a class="btn dz-btn-white" href="register-design.html">Разместить купон</a>
+        </div>
       </div>
-      <div class="pt-card pg-plan">
-        <h2>Закрывающие документы</h2>
-        <p class="pg-card__lead">
-          Акты и счета приходят в биллинг кабинета. Порядок для физлиц ещё
-          согласуется — до этого физлицу лучше уточнить условия в поддержке.
-        </p>
-        <div class="pg-plan__foot"><a class="btn btn--ghost" href="contacts.html">Написать в поддержку</a></div>
+      <div class="dz-biz__art" aria-hidden="true">
+        <img class="dz-biz__balloon" src="assets/brand/logo-white.png" alt="" width="357" height="600">
       </div>
     </div>
   </section>
@@ -274,58 +261,35 @@
   <!-- ================= Партнёрам ================= -->
   <section class="pg-sec" id="partners">
     <span class="pg-sec__k">Партнёрам</span>
-    <h2>Партнёрство и выплаты</h2>
-    <p class="pg-sec__lead">
-      Партнёром по маркетплейсам становятся при регистрации, региональным —
-      по заявке: город закрепляется за одним человеком.
-    </p>
+    <h2>Партнёрство и бонусы</h2>
 
     <div class="pg-docs">
-      <a class="pg-doc" href="#">
+      <a class="pg-doc" id="doc-bonus" href="#">
         <span class="pg-doc__ic" data-icon="user"></span>
         <span>
-          <b>Условия партнёрской программы</b>
-          <span>Роли партнёра, что он делает и чего не делает, порядок и сроки выплат.</span>
-        </span>
-        <span class="pg-doc__meta">PDF · ред. —</span>
-      </a>
-      <a class="pg-doc" href="#">
-        <span class="pg-doc__ic" data-icon="user"></span>
-        <span>
-          <b>Договор с региональным партнёром</b>
-          <span>Закрепление города, обязательства сторон, основания для расторжения.</span>
-        </span>
-        <span class="pg-doc__meta">PDF · ред. —</span>
-      </a>
-      <a class="pg-doc" href="#">
-        <span class="pg-doc__ic" data-icon="user"></span>
-        <span>
-          <b>Правила бонусов клиентам</b>
-          <span>Какие бонусы партнёр выдаёт рекламодателям, за что и как часто.</span>
+          <b>Правила бонусной программы</b>
+          <span>Какие бонусы партнёр выдаёт клиентам, за что и как часто.</span>
         </span>
         <span class="pg-doc__meta">PDF · ред. —</span>
       </a>
     </div>
 
-    <div class="pg-cards">
-      <div class="pt-card pg-plan">
-        <h2>Открыть город</h2>
-        <p class="pg-card__lead">Посмотрите, свободен ли ваш город, и отправьте заявку — она же квалифицирует.</p>
-        <div class="pg-plan__foot"><a class="btn btn--solid" href="register-partner-design.html">Стать партнёром</a></div>
+    <!-- Баннер вместо карточек «Открыть город» / «Как устроена программа»
+         (правка 03.11.2026). Тексты — с баннера партнёров на «Сервисе». -->
+    <div class="dz-biz hw-biz">
+      <div>
+        <span class="dz-biz__k">Партнёрам</span>
+        <h2>Откройте новые возможности своего бизнеса с&nbsp;«ВСЕКУПОНЫ»</h2>
+        <p>Первое размещение ваших клиентов&nbsp;— бесплатно</p>
+        <div class="dz-biz__acts">
+          <a class="btn dz-btn-white" href="register-partner-design.html">Стать партнёром сервиса</a>
+        </div>
       </div>
-      <div class="pt-card pg-plan">
-        <h2>Как устроена программа</h2>
-        <p class="pg-card__lead">Две роли партнёра, что даёт сервис и где проходит граница ответственности.</p>
-        <div class="pg-plan__foot"><a class="btn btn--ghost" href="service.html#partners">Партнёрская программа</a></div>
+      <div class="dz-biz__art" aria-hidden="true">
+        <img class="dz-biz__balloon" src="assets/brand/logo-white.png" alt="" width="357" height="600">
       </div>
     </div>
   </section>
-
-  <div class="pg-req">
-    <p class="pg-req__req">ООО «Название» · ИНН 0000000000 · ОГРН 0000000000000 · г. Липецк, ул. Название, 1</p>
-    <p>Работаем по 152-ФЗ: персональные данные обрабатываем и храним по закону, третьим лицам
-    не передаём. Пользователю для поиска купонов регистрация не нужна.</p>
-  </div>
 
 </main>
 
@@ -396,9 +360,9 @@
 
     <div class="footer__legal">
       <span>© 2026 ВСЕКУПОНЫ</span>
-      <a href="docs.html#all">Политика конфиденциальности</a>
-      <a href="docs.html#all">Пользовательское соглашение</a>
-      <a href="docs.html#all">Согласие на обработку данных</a>
+      <a href="docs.html#all">Политика обработки персональных данных</a>
+      <a href="docs.html#all">Правила использования сервиса</a>
+      <a href="docs.html#all">Политика использования cookie</a>
       <a class="dz-foot__author" href="https://lead-space.ru" target="_blank" rel="noopener">Разработано lead-space.ru</a>
       <button type="button" class="dz-foot__top" data-to-top>Наверх ↑</button>
     </div>

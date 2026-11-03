@@ -429,3 +429,8 @@
   .pg-calc .pt-card,.pg-result{padding:18px}
   .pg-calc .btn{white-space:normal;height:auto;min-height:44px;text-align:center}
 }
+
+/* Красный баннер внутри вкладки «Документов» (правка 03.11.2026).
+   В подвале он сдвинут вверх и наезжает на подвал; внутри страницы
+   сдвиг убираем и отделяем баннер от списка документов отступом. */
+.pg-sec .dz-biz{margin:32px 0 0;transform:none}
