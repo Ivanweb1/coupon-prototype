@@ -1,32 +1,34 @@
 /* ==========================================================================
-   Все купоны — визитка, три варианта
+   Все купоны — визитка, три варианта (заход 2: «поинтереснее и поаккуратнее»)
    ==========================================================================
-   Всё в миллиметрах, чтобы страница была одновременно превью и печатным
-   макетом: tools/render-card.py снимает каждую сторону в PDF ровно
-   94×54 мм (90×50 + вылеты по 2 мм) и PNG 300 dpi.
+   Всё в миллиметрах: страница одновременно превью и печатный макет.
+   tools/render-card.py снимает каждую сторону в PDF с вылетами и PNG 300 dpi.
 
-   Ничего нового не придумано — приёмы сняты с витрины и соцсетей
-   (assets/brand/social/social.css):
-     · красный #DD443C, нейтральные серые, без градиентов и розового;
-     · Onest, заголовки 800;
-     · плашка города — наклон −2°, радиус .18em (.dzl__city);
-     · «билет» с перфорацией и полукруглыми вырезами (обложка ВК);
-     · шаги с кружками-номерами (.dzl__steps);
-     · выделение инверсией: на красном — белое, на белом — красное.
+   Сетка одна на все стороны:
+     · .vc  — лист с вылетами (90×50 + 2 мм с каждой стороны);
+     · .t   — формат после реза, внутри него и ведётся вёрстка;
+     · --m  — поле 6 мм от реза, к нему прижато всё содержимое.
+   Кегли — одна шкала: имя 5 мм / 800, тексты 2.6 мм / 500,
+   подписи 2.2 мм / 600. Иконок у контактов нет: на 90 мм они шумят
+   сильнее, чем помогают.
+
+   Приёмы с витрины и из соцкомплекта (assets/brand/social/social.css):
+   .ticket — плашка выгоды с полукруглыми вырезами, .cpn — карточка
+   купона 4:5, плашка города −2°, шаги с кружками.
    ========================================================================== */
 
 :root{
   --brand:#DD443C;
+  --brand-100:#FBE3E1;
   --ink:#1B1B1B;
   --ink-2:#565656;
   --ink-3:#767676;
   --line:#E8E8E8;
-  --page:#F2F2F2;
+  --page:#EFEFEF;
 
-  --bleed:2mm;   /* вылет под обрез */
-  --safe:4mm;    /* отступ важного от линии реза */
-  --a-cut:66mm;  /* A: где перфорация (от левого края с вылетом) */
-  --c-cut:44mm;  /* C: где перфорация (от верхнего края с вылетом) */
+  --bleed:2mm;
+  --safe:4mm;
+  --m:6mm;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -35,195 +37,192 @@ body{
   background:var(--page);color:var(--ink);
   padding:32px 16px 64px;
   -webkit-font-smoothing:antialiased;
+  font-variant-numeric:tabular-nums;
 }
 
 /* ---------- обвязка страницы ---------- */
-.sheet-head{max-width:1040px;margin:0 auto 32px}
+.sheet-head,.variant{max-width:1040px;margin-left:auto;margin-right:auto}
+.sheet-head{margin-bottom:36px}
 .sheet-head h1{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
 .sheet-head p{font-size:15px;line-height:1.5;color:var(--ink-2);margin-bottom:6px}
 .sheet-head a{color:var(--brand)}
 
-.variant{max-width:1040px;margin:0 auto 40px}
-.variant h2{font-size:20px;font-weight:800;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.variant{margin-bottom:44px}
+.variant h2{font-size:20px;font-weight:800;display:flex;align-items:center;gap:10px}
 .variant h2 span{
   width:30px;height:30px;border-radius:50%;
   background:var(--brand);color:#fff;font-size:15px;
   display:inline-grid;place-items:center;
 }
+.variant__note{font-size:14px;color:var(--ink-3);margin:6px 0 16px 40px;max-width:720px;line-height:1.45}
 .pair{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
 figure{display:flex;flex-direction:column;gap:8px}
 figcaption{font-size:13px;color:var(--ink-3)}
 
-/* превью крупнее натуры: 1 мм ≈ 3.78 px, визитка 340 px — мелко */
 .pair .vc{zoom:1.35}
-@media (max-width:760px){ .pair .vc{zoom:1} }
+@media (max-width:760px){ .pair .vc{zoom:1} .variant__note{margin-left:0} }
 
-body.bare .sheet-head, body.bare figcaption, body.bare .variant h2{display:none}
+body.bare .sheet-head, body.bare figcaption, body.bare .variant h2, body.bare .variant__note{display:none}
 body.single{padding:0;background:#fff}
-body.single .variant, body.single .pair{margin:0;gap:0}
+body.single .variant,body.single .pair{margin:0;gap:0}
 body.single .pair .vc{zoom:1}
 
-/* ---------- сама карточка ---------- */
+/* ---------- лист и формат ---------- */
 .vc{
-  position:relative;overflow:hidden;flex:none;
-  background:#fff;
-  box-shadow:0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+  position:relative;overflow:hidden;flex:none;background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.05), 0 10px 28px rgba(0,0,0,.07);
 }
 body.single .vc, body.bare .vc{box-shadow:none}
 .vc--h{width:94mm;height:54mm}
 .vc--v{width:54mm;height:94mm}
+.vc--red{background:var(--brand);color:#fff}
+.t{position:absolute;inset:var(--bleed)}
 
-/* в превью вылеты прикрыты — видно визитку как после реза */
-body:not(.single):not(.guides) .vc{clip-path:inset(var(--bleed) round 1.2mm)}
+/* превью — как после реза */
+body:not(.single):not(.guides) .vc{clip-path:inset(var(--bleed) round 1mm)}
 
-/* направляющие: рез и безопасная зона */
-body.guides .vc::before,
-body.guides .vc::after{content:"";position:absolute;pointer-events:none;z-index:10}
+body.guides .vc::before, body.guides .vc::after{content:"";position:absolute;pointer-events:none;z-index:20}
 body.guides .vc::before{inset:var(--bleed);outline:.25mm dashed #00A3FF}
 body.guides .vc::after{inset:calc(var(--bleed) + var(--safe));outline:.2mm solid rgba(0,0,0,.25)}
 
 /* ---------- общие кусочки ---------- */
-.who__name{font-size:4.6mm;font-weight:800;letter-spacing:-.02em;line-height:1.05}
-.who__role{font-size:2.6mm;font-weight:500;color:var(--ink-3);margin-top:1.2mm}
+.who__name{font-size:5mm;font-weight:800;letter-spacing:-.025em;line-height:1}
+.who__role{font-size:2.4mm;font-weight:500;color:var(--ink-3);margin-top:1.6mm}
 
-.contacts{list-style:none;display:grid;gap:1.3mm;font-size:2.65mm;font-weight:500}
-.contacts li{display:flex;align-items:center;gap:1.8mm;white-space:nowrap}
+.ct{list-style:none;display:grid;gap:1.1mm;font-size:2.55mm;font-weight:500;line-height:1.2;color:var(--ink-2)}
+.ct li{white-space:nowrap}
+.ct__main{color:var(--ink);font-weight:700;font-size:2.9mm}
+.ct__url{color:var(--brand);font-weight:700}
 
-.ic{
-  width:3.4mm;height:3.4mm;flex:none;border-radius:50%;
-  background:var(--brand);position:relative;
+/* плашка выгоды — один в один social.css, размеры в em */
+.ticket{
+  display:inline-block;white-space:nowrap;
+  padding:.24em .62em .29em;border-radius:.42em;
+  background:var(--brand);color:#fff;
+  font-weight:800;line-height:1.1;letter-spacing:-.02em;
+  -webkit-mask:
+    radial-gradient(circle .24em at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle .24em at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask:
+    radial-gradient(circle .24em at left 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle .24em at right 50%, transparent 98%, #000) right / 51% 100% no-repeat;
 }
-.ic::after{
-  content:"";position:absolute;inset:.75mm;background:#fff;
-  -webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;
-}
-.ic-phone{--m:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z'/%3E%3C/svg%3E")}
-.ic-mail{--m:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4 7.3V17h16V7.3z'/%3E%3C/svg%3E")}
-.ic-web{--m:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-3a15.7 15.7 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8zM12 4c.8 1.2 1.5 2.5 1.9 4h-3.8c.4-1.5 1.1-2.8 1.9-4zM4.3 14a8 8 0 0 1 0-4h3.4a16.5 16.5 0 0 0 0 4zm.8 2h3a15.7 15.7 0 0 0 1.4 3.6A8 8 0 0 1 5.1 16zm3-8h-3a8 8 0 0 1 4.4-3.6C8.9 5.5 8.4 6.7 8.1 8zM12 20c-.8-1.2-1.5-2.5-1.9-4h3.8c-.4 1.5-1.1 2.8-1.9 4zm2.3-6H9.7a14.7 14.7 0 0 1 0-4h4.6a14.7 14.7 0 0 1 0 4zm.2 5.6c.6-1.1 1.1-2.3 1.4-3.6h3a8 8 0 0 1-4.4 3.6zm1.8-5.6a16.5 16.5 0 0 0 0-4h3.4a8 8 0 0 1 0 4z'/%3E%3C/svg%3E")}
+.ticket--inv{background:#fff;color:var(--brand)}
 
-.eyebrow{font-size:2.5mm;font-weight:600;color:var(--brand)}
-.h1{font-size:6.2mm;font-weight:800;letter-spacing:-.03em;line-height:1.08}
+/* карточка купона 4:5 — пропорции social.css, всё от --cw */
+.cpn{
+  position:absolute;width:var(--cw);aspect-ratio:4/5;
+  border-radius:calc(var(--cw) * .067);
+  background:#fff;overflow:hidden;
+  box-shadow:0 0 0 .15mm var(--line), 0 1.8mm 4mm rgba(27,27,27,.13);
+}
+.cpn__ph{position:relative;height:66%;background-size:cover;background-color:#EEE}
+.cpn .cpn__badge{position:absolute;left:5%;bottom:6%;font-size:calc(var(--cw) * .085)}
+.cpn__txt{padding:calc(var(--cw) * .06) calc(var(--cw) * .065) 0}
+.cpn__name{font-size:calc(var(--cw) * .072);font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.cpn__m{margin-top:calc(var(--cw) * .04);font-size:calc(var(--cw) * .06);font-weight:600;color:#949494}
+
 .city{
   display:inline-block;background:var(--brand);color:#fff;
-  padding:0 .22em .06em;border-radius:.18em;transform:rotate(-2deg);
+  padding:0 .2em .05em;border-radius:.16em;transform:rotate(-2deg);
 }
-.city--inv{background:#fff;color:var(--brand)}
 
-.steps{list-style:none;display:flex;gap:2.4mm;font-size:2.3mm;font-weight:500;color:var(--ink-2)}
+/* вырезы: в превью — цвет подложки страницы, в PDF — белые (под вырубку) */
+.notch{position:absolute;width:5mm;height:5mm;border-radius:50%;background:#fff;z-index:5}
+body:not(.single):not(.bare):not(.guides) .notch{background:var(--page)}
+
+/* линия отрыва: точки, а не пунктир — пунктир читается как линия реза */
+.perf{
+  position:absolute;left:3.4mm;right:3.4mm;height:.6mm;z-index:4;
+  background:radial-gradient(circle, rgba(255,255,255,.55) 45%, transparent 52%) 0 50% / 1.6mm .6mm repeat-x;
+}
+.perf--grey{background-image:radial-gradient(circle, #CFCFCF 45%, transparent 52%)}
+
+/* ==========================================================================
+   A. Лента купонов
+   ========================================================================== */
+.a-f .who{position:absolute;left:var(--m);top:var(--m)}
+.a-f .ct{position:absolute;left:var(--m);bottom:var(--m)}
+/* две карточки внахлёст — композиция обложки ВК (.dzl__art) */
+.a-f__c1{left:47mm;top:13mm;transform:rotate(-6deg);z-index:1}
+.a-f__c2{left:60.5mm;top:5.5mm;transform:rotate(5deg);z-index:2}
+
+.a-b{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4.2mm}
+.a-b__logo{height:30mm;width:auto;display:block;margin-top:-1mm}
+.a-b__tag{font-size:2.3mm;font-weight:700;letter-spacing:0}
+
+/* ==========================================================================
+   B. Корешок «Забрать купон»
+   ========================================================================== */
+.b-f{--cut:64mm}
+.b-f__main{
+  position:absolute;left:0;top:0;bottom:0;width:var(--cut);
+  padding:var(--m);display:flex;gap:4.5mm;align-items:stretch;
+}
+.b-f__logo{height:100%;width:auto;flex:none;object-fit:contain;object-position:left center}
+.b-f__info{display:flex;flex-direction:column;justify-content:space-between;min-width:0;padding:.4mm 0 .2mm}
+.b-f__stub{
+  position:absolute;left:var(--cut);right:0;top:-2mm;bottom:-2mm;   /* в вылет */
+  background:var(--brand);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.4mm;
+}
+.b-f__stub::before{  /* линия отрыва по вертикали */
+  content:"";position:absolute;left:0;top:0;bottom:0;width:.6mm;margin-left:-.3mm;
+  background:radial-gradient(circle, #fff 45%, transparent 52%) 50% 0 / .6mm 1.6mm repeat-y;
+}
+.b-f__qr{background:#fff;border-radius:1.2mm;padding:1.3mm;display:block}
+.b-f__qr img{width:14mm;height:14mm;display:block}
+.b-f__btn{
+  font-size:2.2mm;font-weight:700;color:var(--brand);background:#fff;
+  padding:.9mm 2.2mm 1mm;border-radius:1.2mm;white-space:nowrap;
+}
+.b-f .notch--t{left:var(--cut);top:-2.5mm;margin-left:-2.5mm}
+.b-f .notch--b{left:var(--cut);bottom:-2.5mm;margin-left:-2.5mm}
+
+.b-b{padding:var(--m);display:flex;flex-direction:column}
+.b-b__eyebrow{font-size:2.3mm;font-weight:600;opacity:.85}
+.b-b__h{font-size:6.4mm;font-weight:800;letter-spacing:-.035em;line-height:1.08;margin-top:2.2mm}
+.b-b .city{background:#fff;color:var(--brand)}
+.steps{list-style:none;display:flex;align-items:center;gap:1.4mm;margin-top:auto;font-size:2.15mm;font-weight:500}
 .steps li{display:flex;align-items:center;gap:1mm;white-space:nowrap}
 .steps b{
-  width:3.2mm;height:3.2mm;border-radius:50%;flex:none;
-  background:#FBE3E1;color:var(--brand);
-  font-size:1.9mm;font-weight:700;display:grid;place-items:center;
-}
-.steps--inv{color:#fff}
-.steps--inv b{background:#fff;color:var(--brand)}
-.steps--col{flex-direction:column;gap:1.6mm}
-
-/* вырез «билета»: круг цвета подложки ровно на линии реза */
-.notch{
-  position:absolute;width:5mm;height:5mm;border-radius:50%;
-  background:#fff;z-index:2;
-}
-.notch--top{top:calc(var(--bleed) - 2.5mm);margin-left:-2.5mm}
-.notch--bottom{bottom:calc(var(--bleed) - 2.5mm);margin-left:-2.5mm}
-.notch--left{left:calc(var(--bleed) - 2.5mm);margin-top:-2.5mm}
-.notch--right{right:calc(var(--bleed) - 2.5mm);margin-top:-2.5mm}
-/* в превью без направляющих вылет срезан — вырез виден на подложке страницы */
-body:not(.single):not(.bare) .notch{background:var(--page)}
-
-/* ==========================================================================
-   A. Билет
-   ========================================================================== */
-.a-front{display:flex}
-.a-front__body{
-  width:var(--a-cut);
-  padding:calc(var(--bleed) + 5.5mm) 4mm calc(var(--bleed) + 5mm) calc(var(--bleed) + 6mm);
-  display:flex;flex-direction:column;justify-content:space-between;
-}
-.a-front__stub{
-  flex:1;background:var(--brand);position:relative;
+  width:3.1mm;height:3.1mm;border-radius:50%;flex:none;
+  background:#fff;color:var(--brand);font-size:1.8mm;font-weight:800;
   display:grid;place-items:center;
-  padding-right:var(--bleed);
 }
-.a-front__stub::before{          /* перфорация */
-  content:"";position:absolute;left:0;top:0;bottom:0;
-  border-left:.3mm dashed rgba(0,0,0,.25);
-}
-.a-front__stub img{height:31mm;width:auto;display:block}
-
-.a-back{
-  padding:calc(var(--bleed) + 6mm) calc(var(--bleed) + 6mm);
-  display:flex;align-items:center;
-}
-.a-back__body{display:flex;flex-direction:column;gap:2.6mm}
-.a-back .steps{margin-top:1.2mm}
+.steps__arr{width:1.2mm;height:1.2mm;border-top:.25mm solid rgba(255,255,255,.7);border-right:.25mm solid rgba(255,255,255,.7);transform:rotate(45deg)}
+.b-b__logo{position:absolute;right:var(--m);top:var(--m);height:15mm;width:auto}
 
 /* ==========================================================================
-   B. Красная лицевая
+   C. Вертикальный билетик с вырубкой
    ========================================================================== */
-.b-front{background:var(--brand);color:#fff}
-.b-front__body{
-  position:absolute;
-  left:calc(var(--bleed) + 6mm);top:calc(var(--bleed) + 6mm);bottom:calc(var(--bleed) + 5.5mm);
+.c-f, .c-b{--cut:52mm}   /* линия отрыва от верхнего реза */
+.c-f .perf, .c-b .perf{top:var(--cut);margin-top:-.3mm}
+.c-f .notch, .c-b .notch{top:var(--cut);margin-top:-2.5mm}
+.notch--l{left:-2.5mm}
+.notch--r{right:-2.5mm}
+
+.c-f__top{position:absolute;left:0;right:0;top:0;height:var(--cut);display:grid;place-items:center;padding-top:1mm}
+.c-f__top img{height:36mm;width:auto;display:block}
+.c-f__bottom{
+  position:absolute;left:var(--m);right:var(--m);top:calc(var(--cut) + 6mm);bottom:var(--m);
   display:flex;flex-direction:column;justify-content:space-between;
 }
-.b-front__h{font-size:6mm;font-weight:800;letter-spacing:-.03em;line-height:1.05}
-.b-front__url{font-size:2.8mm;font-weight:600;opacity:.85}
-/* шар крупно и с наклоном, как «улетает» вправо; надпись в шаре целиком в поле реза */
-.b-front__logo{
-  position:absolute;height:44mm;width:auto;
-  right:calc(var(--bleed) + 5mm);top:calc(var(--bleed) + 4mm);
-  transform:rotate(8deg);transform-origin:50% 30%;
-}
+.c-f__h{font-size:4.6mm;font-weight:800;letter-spacing:-.03em;line-height:1.08}
+.c-f__url{font-size:2.5mm;font-weight:600;opacity:.85}
 
-.b-back{padding:calc(var(--bleed) + 5.5mm) calc(var(--bleed) + 6mm)}
-.b-back__body{height:100%;display:flex;align-items:center;gap:5mm}
-.b-back__logo{height:30mm;width:auto;flex:none}
-.b-back__info{flex:1;display:flex;flex-direction:column;gap:4mm;min-width:0}
-.b-back__qr{
-  flex:none;display:flex;flex-direction:column;align-items:center;gap:1.2mm;
-  font-size:2mm;font-weight:600;color:var(--ink-3);
+.c-b__top{
+  position:absolute;left:var(--m);right:var(--m);top:var(--m);height:calc(var(--cut) - var(--m) - 6mm);
+  display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;
 }
-.b-back__qr img{width:17mm;height:17mm;display:block}
-
-/* ==========================================================================
-   C. Вертикальная
-   ========================================================================== */
-.c-front{display:flex;flex-direction:column}
-.c-front__top{
-  height:var(--c-cut);background:var(--brand);
-  display:grid;place-items:center;
-  padding-top:var(--bleed);
-  position:relative;
-}
-.c-front__top::after{            /* перфорация */
-  content:"";position:absolute;left:0;right:0;bottom:0;
-  border-bottom:.3mm dashed rgba(0,0,0,.25);
-}
-.c-front__top img{height:33mm;width:auto;display:block}
-.c-front__bottom{
-  flex:1;
-  padding:6mm calc(var(--bleed) + 5.5mm) calc(var(--bleed) + 5.5mm);
+.c-b__tag{font-size:2.4mm;font-weight:800}
+.c-b .who__name{font-size:5.6mm}
+.c-b__bottom{
+  position:absolute;left:var(--m);right:var(--m);top:calc(var(--cut) + 6mm);bottom:var(--m);
   display:flex;flex-direction:column;justify-content:space-between;
 }
-.c-front .contacts{font-size:2.55mm}
-
-.c-back{background:var(--brand);color:#fff}
-.c-back__body{
-  position:absolute;inset:calc(var(--bleed) + 6mm) calc(var(--bleed) + 5.5mm) calc(var(--bleed) + 5.5mm);
-  display:flex;flex-direction:column;gap:4mm;
-}
-.c-back__badge{
-  align-self:flex-start;
-  font-size:2.3mm;font-weight:700;
-  background:#fff;color:var(--brand);
-  padding:.8mm 2mm;border-radius:1mm;
-}
-.c-back__h{font-size:5.6mm;font-weight:800;letter-spacing:-.03em;line-height:1.12}
-.c-back__qr{
-  margin-top:auto;display:flex;align-items:center;gap:2.4mm;
-  font-size:2.6mm;font-weight:600;
-}
-.c-back__qrbox{background:#fff;padding:1.2mm;border-radius:1mm;display:block}
-.c-back__qrbox img{width:13mm;height:13mm;display:block}
+.c-b__qrrow{display:flex;align-items:center;gap:2.6mm}
+.c-b__qr{display:block;flex:none}
+.c-b__qr img{width:12.5mm;height:12.5mm;display:block}
+.c-b__qrtxt{font-size:2.2mm;font-weight:500;line-height:1.25;color:var(--ink-3)}
+.c-b__qrtxt b{color:var(--brand);font-weight:700}

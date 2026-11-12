@@ -14,88 +14,52 @@
 
 <header class="sheet-head">
   <h1>Визитка «Все купоны» — 3 варианта</h1>
-  <p>Формат 90×50 мм (вариант C — 50×90), вылеты по 2 мм. Каждый вариант — лицо и оборот.
-     Пунктир — линия реза, серая рамка — безопасная зона 4 мм: всё важное внутри неё
-     (видно при <a href="?guides=1">?guides=1</a>).</p>
-  <p>Приёмы сняты с витрины и обложек соцсетей: красный #DD443C, шрифт Onest, плашка города
-     с наклоном −2°, «билет» с перфорацией, три шага с кружками.
-     <b>Заглушки:</b> имя, должность, личная почта. Телефон 8 800 222-85-67 и vsekupony.ru — с сайта.</p>
+  <p>90×50 мм (C — 50×90), вылеты по 2 мм, единая сетка: поля 6 мм, все блоки прижаты к ним.
+     Проверка реза и безопасной зоны — <a href="?guides=1">?guides=1</a>.</p>
+  <p><b>Из бренда:</b> красный #DD443C, Onest, плашка-«билетик» с вырезами, плашка города −2°,
+     карточки купонов 4:5 с фото из ленты, «Забрать купон», три шага.
+     <b>Моё:</b> визитка-корешок с QR (B) и вырубка визитки по форме билетика (C).
+     <b>Заглушки:</b> имя, должность, почта.</p>
 </header>
 
-<!-- ============================ A. Билет ============================ -->
+<!-- ============================ A ============================ -->
 <section class="variant">
-  <h2><span>A</span> Билет — как обложка ВК</h2>
+  <h2><span>A</span>Лента купонов</h2>
+  <p class="variant__note">Лицо собрано как первый экран витрины: человек слева, справа — две карточки из ленты. Оборот — только знак.</p>
   <div class="pair">
     <figure>
-      <div class="vc vc--h a-front" id="a-front">
-        <div class="a-front__body">
+      <div class="vc vc--h" id="a-front">
+        <div class="t a-f">
           <div class="who">
-            <div class="who__name">Имя Фамилия</div>
+            <div class="who__name">Имя<br>Фамилия</div>
             <div class="who__role">Должность</div>
           </div>
-          <ul class="contacts">
-            <li><i class="ic ic-phone"></i>8 800 222-85-67</li>
-            <li><i class="ic ic-mail"></i>name@vsekupony.ru</li>
-            <li><i class="ic ic-web"></i>vsekupony.ru</li>
+          <ul class="ct">
+            <li class="ct__main">8 800 222-85-67</li>
+            <li>name@vsekupony.ru</li>
+            <li class="ct__url">vsekupony.ru</li>
           </ul>
-        </div>
-        <div class="a-front__stub">
-          <img src="../logo-white.png" alt="Все купоны">
-        </div>
-        <span class="notch notch--top" style="left:var(--a-cut)"></span>
-        <span class="notch notch--bottom" style="left:var(--a-cut)"></span>
-      </div>
-      <figcaption>Лицо</figcaption>
-    </figure>
-    <figure>
-      <div class="vc vc--h a-back" id="a-back">
-        <div class="a-back__body">
-          <div class="eyebrow">Бесплатно · без регистрации</div>
-          <div class="h1">Все скидки <span class="city">Липецка</span><br>в&nbsp;одном месте</div>
-          <ol class="steps">
-            <li><b>1</b>Находите купон</li>
-            <li><b>2</b>Делаете скриншот</li>
-            <li><b>3</b>Платите со скидкой</li>
-          </ol>
-        </div>
-      </div>
-      <figcaption>Оборот — первый экран витрины</figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- ============================ B. Красная ============================ -->
-<section class="variant">
-  <h2><span>B</span> Красная лицевая + QR на обороте</h2>
-  <div class="pair">
-    <figure>
-      <div class="vc vc--h b-front" id="b-front">
-        <div class="b-front__body">
-          <div class="b-front__h">Все скидки<br>города<br>в&nbsp;одном месте</div>
-          <div class="b-front__url">vsekupony.ru</div>
-        </div>
-        <img class="b-front__logo" src="../logo-white.png" alt="Все купоны">
-      </div>
-      <figcaption>Лицо</figcaption>
-    </figure>
-    <figure>
-      <div class="vc vc--h b-back" id="b-back">
-        <div class="b-back__body">
-          <img class="b-back__logo" src="../logo-red.png" alt="">
-          <div class="b-back__info">
-            <div class="who">
-              <div class="who__name">Имя Фамилия</div>
-              <div class="who__role">Должность</div>
+          <div class="cpn a-f__c1" style="--cw:25mm">
+            <div class="cpn__ph" style="background-image:url(../../coupons/kofe-warm.jpg);background-position:50% 35%">
+              <span class="ticket cpn__badge">−50%</span>
             </div>
-            <ul class="contacts">
-              <li><i class="ic ic-phone"></i>8 800 222-85-67</li>
-              <li><i class="ic ic-mail"></i>name@vsekupony.ru</li>
-            </ul>
+            <div class="cpn__txt"><div class="cpn__name">Кофе и выпечка</div><div class="cpn__m">до 31 октября</div></div>
           </div>
-          <div class="b-back__qr">
-            <img src="qr.svg" alt="QR vsekupony.ru">
-            <span>vsekupony.ru</span>
+          <div class="cpn a-f__c2" style="--cw:25mm">
+            <div class="cpn__ph" style="background-image:url(../../coupons/manikyur-rose.jpg);background-position:50% 25%">
+              <span class="ticket cpn__badge">2 по цене 1</span>
+            </div>
+            <div class="cpn__txt"><div class="cpn__name">Маникюр и покрытие</div><div class="cpn__m">7 минут пешком</div></div>
           </div>
+        </div>
+      </div>
+      <figcaption>Лицо</figcaption>
+    </figure>
+    <figure>
+      <div class="vc vc--h vc--red" id="a-back">
+        <div class="t a-b">
+          <img class="a-b__logo" src="../logo-white.png" alt="Все купоны">
+          <span class="ticket ticket--inv a-b__tag">Бесплатно · без регистрации</span>
         </div>
       </div>
       <figcaption>Оборот</figcaption>
@@ -103,45 +67,95 @@
   </div>
 </section>
 
-<!-- ============================ C. Вертикальная ============================ -->
+<!-- ============================ B ============================ -->
 <section class="variant">
-  <h2><span>C</span> Вертикальная — купон с отрывным корешком</h2>
+  <h2><span>B</span>Корешок «Забрать купон»</h2>
+  <p class="variant__note">Визитка — сама купон: отрывной корешок с QR на сайт и кнопкой витрины. Оборот — первый экран сайта в инверсии.</p>
   <div class="pair">
     <figure>
-      <div class="vc vc--v c-front" id="c-front">
-        <div class="c-front__top">
-          <img src="../logo-white.png" alt="Все купоны">
-        </div>
-        <div class="c-front__bottom">
-          <div class="who">
-            <div class="who__name">Имя Фамилия</div>
-            <div class="who__role">Должность</div>
+      <div class="vc vc--h" id="b-front">
+        <div class="t b-f">
+          <div class="b-f__main">
+            <img class="b-f__logo" src="../logo-red.png" alt="Все купоны">
+            <div class="b-f__info">
+              <div class="who">
+                <div class="who__name">Имя Фамилия</div>
+                <div class="who__role">Должность</div>
+              </div>
+              <ul class="ct">
+                <li class="ct__main">8 800 222-85-67</li>
+                <li>name@vsekupony.ru</li>
+              </ul>
+            </div>
           </div>
-          <ul class="contacts">
-            <li><i class="ic ic-phone"></i>8 800 222-85-67</li>
-            <li><i class="ic ic-mail"></i>name@vsekupony.ru</li>
-            <li><i class="ic ic-web"></i>vsekupony.ru</li>
-          </ul>
+          <div class="b-f__stub">
+            <span class="b-f__qr"><img src="qr.svg" alt="QR vsekupony.ru"></span>
+            <span class="b-f__btn">Забрать купон</span>
+          </div>
+          <i class="notch notch--t"></i><i class="notch notch--b"></i>
         </div>
-        <span class="notch notch--left" style="top:var(--c-cut)"></span>
-        <span class="notch notch--right" style="top:var(--c-cut)"></span>
       </div>
       <figcaption>Лицо</figcaption>
     </figure>
     <figure>
-      <div class="vc vc--v c-back" id="c-back">
-        <div class="c-back__body">
-          <div class="c-back__badge">Бесплатно</div>
-          <div class="c-back__h">Все скидки <span class="city city--inv">Липецка</span> в&nbsp;одном месте</div>
-          <ol class="steps steps--inv steps--col">
-            <li><b>1</b>Находите купон</li>
-            <li><b>2</b>Делаете скриншот</li>
-            <li><b>3</b>Платите со скидкой</li>
+      <div class="vc vc--h vc--red" id="b-back">
+        <div class="t b-b">
+          <div class="b-b__eyebrow">Бесплатно · без регистрации</div>
+          <div class="b-b__h">Все скидки <span class="city">Липецка</span><br>в&nbsp;одном месте</div>
+          <ol class="steps">
+            <li><b>1</b>Находите купон</li><li class="steps__arr"></li>
+            <li><b>2</b>Делаете скриншот</li><li class="steps__arr"></li>
+            <li><b>3</b>Платите со&nbsp;скидкой</li>
           </ol>
-          <div class="c-back__qr">
-            <span class="c-back__qrbox"><img src="qr.svg" alt="QR vsekupony.ru"></span>
-            <span>vsekupony.ru</span>
+          <img class="b-b__logo" src="../logo-white.png" alt="">
+        </div>
+      </div>
+      <figcaption>Оборот</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================ C ============================ -->
+<section class="variant">
+  <h2><span>C</span>Вертикальный билетик с вырубкой</h2>
+  <p class="variant__note">Форма плашки выгоды с витрины, перенесённая на саму визитку: полукруглые вырезы по бокам и линия отрыва между ними. Нужна вырубка в типографии.</p>
+  <div class="pair">
+    <figure>
+      <div class="vc vc--v vc--red" id="c-front">
+        <div class="t c-f">
+          <div class="c-f__top"><img src="../logo-white.png" alt="Все купоны"></div>
+          <div class="c-f__bottom">
+            <div class="c-f__h">Все скидки<br>города<br>в&nbsp;одном месте</div>
+            <div class="c-f__url">vsekupony.ru</div>
           </div>
+          <i class="perf"></i>
+          <i class="notch notch--l"></i><i class="notch notch--r"></i>
+        </div>
+      </div>
+      <figcaption>Лицо</figcaption>
+    </figure>
+    <figure>
+      <div class="vc vc--v" id="c-back">
+        <div class="t c-b">
+          <div class="c-b__top">
+            <span class="ticket c-b__tag">Все купоны</span>
+            <div class="who">
+              <div class="who__name">Имя<br>Фамилия</div>
+              <div class="who__role">Должность</div>
+            </div>
+          </div>
+          <div class="c-b__bottom">
+            <ul class="ct">
+              <li class="ct__main">8 800 222-85-67</li>
+              <li>name@vsekupony.ru</li>
+            </ul>
+            <div class="c-b__qrrow">
+              <span class="c-b__qr"><img src="qr.svg" alt="QR vsekupony.ru"></span>
+              <span class="c-b__qrtxt">Все скидки<br>города —<br><b>vsekupony.ru</b></span>
+            </div>
+          </div>
+          <i class="perf perf--grey"></i>
+          <i class="notch notch--l"></i><i class="notch notch--r"></i>
         </div>
       </div>
       <figcaption>Оборот</figcaption>
@@ -150,8 +164,8 @@
 </section>
 
 <script>
-  // ?guides=1 — линии реза и безопасной зоны; ?bare=1 — без подписей (для рендера);
-  // ?side=a-front — только одна сторона, без полей (для PDF в типографию).
+  // ?guides=1 — рез и безопасная зона; ?bare=1 — без подписей;
+  // ?side=a-front — одна сторона без полей (для PDF в типографию).
   const q = new URLSearchParams(location.search);
   if (q.has('guides')) document.body.classList.add('guides');
   if (q.has('bare')) document.body.classList.add('bare');
