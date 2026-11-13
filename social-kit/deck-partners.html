@@ -1331,6 +1331,7 @@ a{color:inherit;text-decoration:none}
 .svc div{display:flex;flex-direction:column;justify-content:space-between;gap:12px;padding:20px 22px;border-radius:22px;background:var(--brand-50);font-size:23px;font-weight:700;line-height:1.25}
 .svc__i{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--brand);color:#fff}
 .svc__i svg{width:28px;height:28px}
+.rv__av.is-cl{background:#fff;color:var(--brand)}
 </style>
 </head>
 <body>
@@ -1628,7 +1629,7 @@ a{color:inherit;text-decoration:none}
         <div class="rv rv--link">
           <div class="rv__who"><span class="rv__av is-me" data-ic="user"></span><b>Вы</b></div>
           <i class="rv__ln"></i>
-          <div class="rv__who"><span class="rv__av" style="background-image:url('../assets/coupons/kofe-warm.jpg')"></span><b>Клиент</b></div>
+          <div class="rv__who"><span class="rv__av is-cl" data-ic="shop"></span><b>Клиент</b></div>
           <div class="rv__pin"><svg data-i="check"></svg>Закреплён за&nbsp;вами</div>
         </div>
       </div>
@@ -1790,6 +1791,7 @@ a{color:inherit;text-decoration:none}
     chart: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>',
     check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>',
     doc: '<path d="M6.5 3.5h7l4 4v13h-11z"/><path d="M13.5 3.5v4h4M9 12h6M9 15.5h6"/>',
+    shop: '<path d="M4 9.5 5.5 4.5h13L20 9.5"/><path d="M4 9.5a2.7 2.7 0 0 0 5.3 0 2.7 2.7 0 0 0 5.4 0 2.7 2.7 0 0 0 5.3 0"/><path d="M5.5 12v7.5h13V12M10 19.5v-4.5h4v4.5"/>',
     coin: '<circle cx="12" cy="12" r="8.5"/><path d="M10 7.5h3a2.3 2.3 0 0 1 0 4.6h-3zM10 7.5v9M8.5 14.5h4.5"/>',
     copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5v-3a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/>'
   };
