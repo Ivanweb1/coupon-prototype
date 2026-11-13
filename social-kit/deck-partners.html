@@ -1280,6 +1280,57 @@ a{color:inherit;text-decoration:none}
 .fmt li:first-child{border-top:0}
 .fmts{height:650px}
 .fmt li{padding:16px 0}
+
+/* слайд 8, правка 13.11: визуализации */
+.day__bar i{flex-direction:column;gap:6px}
+.day__bar i:not(.is-on) svg{width:30px;height:30px;color:#CFCFCF}
+.day__bar i.is-on{font-size:26px}
+.day__t{display:flex;gap:3px}
+.day__t svg{width:22px;height:22px;color:#fff}
+.day__leg{display:flex;gap:34px;margin-top:16px;font-size:20px;font-weight:600;color:var(--ink-2)}
+.day__leg span{display:flex;align-items:center;gap:10px}
+.day__leg i{width:22px;height:22px;border-radius:6px;background:var(--surface);box-shadow:inset 0 0 0 2px var(--line)}
+.day__leg i.is-on{background:var(--brand);box-shadow:none}
+.dd{top:690px;height:310px}
+.dd > div{padding:28px 34px}
+.chat{margin-top:18px;display:flex;flex-direction:column;gap:12px}
+.chat__m{max-width:90%;padding:14px 18px;border-radius:20px;font-size:21px;font-weight:600;line-height:1.35}
+.chat__m small{display:block;margin-top:6px;font-size:14px;font-weight:600;opacity:.7}
+.chat__m--me{align-self:flex-start;background:#fff;color:var(--ink);border-bottom-left-radius:6px}
+.chat__m--you{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:6px}
+.dd__b ul{gap:10px 20px;margin-top:16px}
+.dd__b li{height:66px;padding:0 16px;gap:14px}
+.dd__i{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#fff;color:var(--brand)}
+.dd__i svg{width:24px;height:24px}
+
+/* слайд 8: меньше пустоты между шкалой и блоками */
+.dd{top:640px;height:350px}
+/* слайд 9, правка 13.11: визуализации в карточках ролей */
+.roles{height:620px}
+.rv{margin-top:auto;border-radius:22px;background:var(--surface)}
+.rv--link{position:relative;display:flex;align-items:center;justify-content:space-between;padding:26px 26px 64px}
+.rv__who{display:flex;flex-direction:column;align-items:center;gap:8px;z-index:1}
+.rv__who b{font-size:18px;font-weight:800}
+.rv__av{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:#fff center / cover no-repeat;box-shadow:0 0 0 4px #fff,0 12px 22px -14px rgba(40,10,8,.5);color:#fff}
+.rv__av.is-me{background:var(--brand)}
+.rv__av svg{width:38px;height:38px}
+.rv__ln{position:absolute;left:110px;right:110px;top:64px;border-top:3px dashed #F3A9A3}
+.rv__ln::after{content:"";position:absolute;right:-2px;top:-9px;width:12px;height:12px;border-top:3px solid #F3A9A3;border-right:3px solid #F3A9A3;transform:rotate(45deg)}
+.rv__pin{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:18px;background:#fff;color:var(--brand);font-size:16px;font-weight:700;white-space:nowrap}
+.rv__pin svg{width:18px;height:18px}
+.rv--cpn{overflow:hidden;background:#fff;box-shadow:0 0 0 2px var(--line),0 18px 30px -22px rgba(40,10,8,.45)}
+.rv__ph{position:relative;height:150px;background:center / cover no-repeat}
+.rv__ph .tk{position:absolute;left:14px;bottom:14px;font-size:26px}
+.rv__c{padding:14px 18px 16px}
+.rv__c b{display:block;font-size:20px;font-weight:800;line-height:1.2}
+.rv__st{display:flex;gap:18px;margin-top:8px;font-size:17px;font-weight:700;color:var(--ink-2)}
+.rv__st span{display:flex;align-items:center;gap:6px}
+.rv__st svg{width:20px;height:20px;color:var(--ink-3)}
+.rv__st .is-hot,.rv__st .is-hot svg{color:var(--brand)}
+.svc{margin-top:26px;flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:14px}
+.svc div{display:flex;flex-direction:column;justify-content:space-between;gap:12px;padding:20px 22px;border-radius:22px;background:var(--brand-50);font-size:23px;font-weight:700;line-height:1.25}
+.svc__i{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--brand);color:#fff}
+.svc__i svg{width:28px;height:28px}
 </style>
 </head>
 <body>
@@ -1532,23 +1583,27 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="day">
       <div class="day__lab">Рабочий день вашего сотрудника:&nbsp;<b>один час из&nbsp;девяти</b></div>
-      <div class="day__bar"><i>основная работа</i><i></i><i></i><i></i><i class="is-on">5 продаж<small>ВСЕКУПОНЫ</small></i><i></i><i></i><i></i><i>основная работа</i></div>
+      <div class="day__bar"><i><svg data-i="user"></svg></i><i><svg data-i="user"></svg></i><i><svg data-i="user"></svg></i><i><svg data-i="user"></svg></i><i class="is-on"><span class="day__t"><svg data-i="ticket"></svg><svg data-i="ticket"></svg><svg data-i="ticket"></svg><svg data-i="ticket"></svg><svg data-i="ticket"></svg></span>5 продаж</i><i><svg data-i="user"></svg></i><i><svg data-i="user"></svg></i><i><svg data-i="user"></svg></i><i><svg data-i="user"></svg></i></div>
       <div class="day__h"><span>9:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span><span>16:00</span><span>17:00</span></div>
+      <div class="day__leg"><span><i></i>основная работа</span><span><i class="is-on"></i>ВСЕКУПОНЫ: около 12&nbsp;минут на&nbsp;одну продажу</span></div>
     </div>
     <div class="dd">
       <div class="dd__a">
         <div class="dd__t">Сотрудник</div>
-        <p>Предлагает клиенту купон <b>по&nbsp;готовой инструкции</b>&nbsp;— как дополнительную услугу к&nbsp;тому, что вы&nbsp;уже продаёте.<br>Один час в&nbsp;день&nbsp;— <b>пять продаж</b>.</p>
+        <div class="chat">
+          <div class="chat__m chat__m--me">Добавим к&nbsp;рекламе купон на&nbsp;ВСЕКУПОНАХ? Первое размещение бесплатно<small>Сотрудник · по&nbsp;готовой инструкции</small></div>
+          <div class="chat__m chat__m--you">Давайте!<small>Клиент</small></div>
+        </div>
       </div>
       <div class="dd__b">
-        <div class="dd__t">Сервис</div>
+        <div class="dd__t">Сервис&nbsp;— всё после «да» клиента</div>
         <ul>
-          <li><svg data-i="check"></svg>Оформляет документы</li>
-          <li><svg data-i="check"></svg>Помогает с&nbsp;оффером</li>
-          <li><svg data-i="check"></svg>Модерирует купоны</li>
-          <li><svg data-i="check"></svg>Публикует на&nbsp;площадках</li>
-          <li><svg data-i="check"></svg>Готовит отчёты</li>
-          <li><svg data-i="check"></svg>Считает вознаграждение</li>
+          <li><span class="dd__i" data-ic="doc"></span>Оформляет документы</li>
+          <li><span class="dd__i" data-ic="spark"></span>Помогает с&nbsp;оффером</li>
+          <li><span class="dd__i" data-ic="eye"></span>Модерирует купоны</li>
+          <li><span class="dd__i" data-ic="site"></span>Публикует на&nbsp;площадках</li>
+          <li><span class="dd__i" data-ic="chart"></span>Готовит отчёты</li>
+          <li><span class="dd__i" data-ic="coin"></span>Считает вознаграждение</li>
         </ul>
       </div>
     </div>
@@ -1570,7 +1625,12 @@ a{color:inherit;text-decoration:none}
           <li><svg data-i="check"></svg>Привлекает рекламодателей</li>
           <li data-for="reg"><svg data-i="check"></svg>Участвует в&nbsp;ведении городских сообществ</li>
         </ul>
-        <span class="role__tag">И&nbsp;всё</span>
+        <div class="rv rv--link">
+          <div class="rv__who"><span class="rv__av is-me" data-ic="user"></span><b>Вы</b></div>
+          <i class="rv__ln"></i>
+          <div class="rv__who"><span class="rv__av" style="background-image:url('../assets/coupons/kofe-warm.jpg')"></span><b>Клиент</b></div>
+          <div class="rv__pin"><svg data-i="check"></svg>Закреплён за&nbsp;вами</div>
+        </div>
       </div>
       <div class="role">
         <div class="role__h"><span class="role__n">2</span><div class="role__t">Рекламодатель</div></div>
@@ -1578,17 +1638,22 @@ a{color:inherit;text-decoration:none}
           <li><svg data-i="check"></svg>Создаёт купон: предложение и&nbsp;условия</li>
           <li><svg data-i="check"></svg>Следит за&nbsp;просмотрами и&nbsp;переходами в&nbsp;кабинете</li>
         </ul>
+        <div class="rv rv--cpn">
+          <div class="rv__ph" style="background-image:url('../assets/coupons/kofe-warm.jpg')"><span class="tk">5&nbsp;=&nbsp;4</span></div>
+          <div class="rv__c"><b>Пятая чашка кофе в&nbsp;подарок</b>
+            <div class="rv__st"><span><svg data-i="eye"></svg>1&nbsp;240</span><span class="is-hot"><svg data-i="ticket"></svg>забрали 86</span></div></div>
+        </div>
       </div>
       <div class="role role--main">
         <div class="role__h"><span class="role__n">3</span><div class="role__t role__brand"><img src="../assets/brand/logo-red.png" alt="">ВСЕКУПОНЫ</div></div>
-        <ul>
-          <li><svg data-i="check"></svg>Витрина и&nbsp;соцсети</li>
-          <li><svg data-i="check"></svg>Личные кабинеты</li>
-          <li><svg data-i="check"></svg>Модерация купонов</li>
-          <li><svg data-i="check"></svg>Рекламные охваты</li>
-          <li><svg data-i="check"></svg>Документооборот</li>
-          <li><svg data-i="check"></svg>Отчёты и&nbsp;выплаты</li>
-        </ul>
+        <div class="svc">
+          <div><span class="svc__i" data-ic="site"></span>Витрина и&nbsp;соцсети</div>
+          <div><span class="svc__i" data-ic="user"></span>Личные кабинеты</div>
+          <div><span class="svc__i" data-ic="eye"></span>Модерация купонов</div>
+          <div><span class="svc__i" data-ic="search"></span>Рекламные охваты</div>
+          <div><span class="svc__i" data-ic="doc"></span>Документооборот</div>
+          <div><span class="svc__i" data-ic="coin"></span>Отчёты и&nbsp;выплаты</div>
+        </div>
       </div>
     </div>
   </section>
@@ -1725,6 +1790,7 @@ a{color:inherit;text-decoration:none}
     chart: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>',
     check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/>',
     doc: '<path d="M6.5 3.5h7l4 4v13h-11z"/><path d="M13.5 3.5v4h4M9 12h6M9 15.5h6"/>',
+    coin: '<circle cx="12" cy="12" r="8.5"/><path d="M10 7.5h3a2.3 2.3 0 0 1 0 4.6h-3zM10 7.5v9M8.5 14.5h4.5"/>',
     copy: '<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5v-3a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/>'
   };
   function icon(k) {
