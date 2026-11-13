@@ -1175,6 +1175,77 @@ a{color:inherit;text-decoration:none}
 .vz--soc i.vz__site svg{width:40px;height:40px}
 .vz--soc .soc-ic__bg{fill:var(--soc-c)}.vz--soc .soc-ic__g{fill:#fff}
 .vz--soc em{font-style:normal;font-size:18px;font-weight:700;color:#fff;white-space:nowrap}
+
+/* ---------- слайд 3, правка 13.11: стрелки в заголовке, карточки с визуализацией ---------- */
+.arr{display:inline-block;margin:0 .05em;color:var(--brand);font-weight:700;transform:translateY(-.04em)}
+#p3 .path__k{top:330px}
+.bpath{position:absolute;left:150px;right:150px;top:388px;height:340px;display:flex;gap:44px}
+.bc{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:28px;background:var(--surface)}
+.bc + .bc::before,.ac + .ac::before{content:"";position:absolute;left:-29px;top:50%;width:14px;height:14px;border-top:3px solid var(--ink-4);border-right:3px solid var(--ink-4);transform:translateY(-50%) rotate(45deg)}
+.bc__h{display:flex;align-items:center;gap:14px}
+.bc__n{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:21px;font-weight:800}
+.bc__t{font-size:25px;font-weight:800;line-height:1.12;letter-spacing:-.015em}
+.bv{position:relative;flex:1;min-height:0;border-radius:20px;background:#fff;box-shadow:0 14px 26px -20px rgba(40,10,8,.4)}
+.bv svg:not(.tk__bg){flex:none;width:22px;height:22px}
+.bv--city{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:14px}
+.bv--city div{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:14px;font-size:20px;font-weight:700;color:var(--ink-3)}
+.bv--city div svg{color:var(--ink-4)}
+.bv--city div.is-on{background:var(--brand-50);color:var(--ink);box-shadow:inset 0 0 0 2px var(--brand)}
+.bv--city div.is-on svg{color:var(--brand)}
+.bv--city .ok{margin-left:auto}
+.bv--card{display:flex;flex-direction:column;overflow:hidden}
+.bv__ph{position:relative;flex:1;background:center 30% / cover no-repeat}
+.bv__ph .tk{position:absolute;left:12px;bottom:12px;font-size:24px}
+.bv__c{padding:10px 14px 12px}
+.bv__c b{display:block;font-size:18px;font-weight:800;line-height:1.2}
+.bv__c span{display:block;margin-top:3px;font-size:14px;font-weight:600;color:var(--ink-3)}
+.bv--shot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:18px}
+.bv__code{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 22px;border:2px dashed #F3B0AB;border-radius:14px;background:var(--brand-50)}
+.bv__code span{font-size:14px;font-weight:600;color:var(--ink-3)}
+.bv__code b{font-size:30px;font-weight:800;letter-spacing:.06em}
+.bv__saved{display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:18px;background:#E3F3EA;color:#1F7A45;font-size:16px;font-weight:700}
+.bv__saved svg{width:18px;height:18px}
+.bv__cr{position:absolute;width:22px;height:22px;border:0 solid var(--ink)}
+.bv__cr--tl{left:12px;top:12px;border-left-width:3px;border-top-width:3px;border-top-left-radius:8px}
+.bv__cr--tr{right:12px;top:12px;border-right-width:3px;border-top-width:3px;border-top-right-radius:8px}
+.bv__cr--bl{left:12px;bottom:12px;border-left-width:3px;border-bottom-width:3px;border-bottom-left-radius:8px}
+.bv__cr--br{right:12px;bottom:12px;border-right-width:3px;border-bottom-width:3px;border-bottom-right-radius:8px}
+.bv--bill{display:flex;flex-direction:column;justify-content:center;gap:9px;padding:16px 18px}
+.bv--bill div{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:17px;font-weight:600;color:var(--ink-2)}
+.bv--bill div b{font-size:19px;font-weight:800;color:var(--ink);white-space:nowrap}
+.bv--bill div.is-off,.bv--bill div.is-off b{color:var(--brand)}
+.bv--bill div.is-sum{padding-top:9px;border-top:2px dashed var(--line-strong);color:var(--ink)}
+.bv--bill div.is-sum b{font-size:24px}
+.bv--bill em{display:flex;align-items:center;justify-content:center;gap:8px;height:40px;margin-top:4px;border-radius:20px;background:var(--brand);color:#fff;font-style:normal;font-size:17px;font-weight:700}
+.bv--bill em svg{width:18px;height:18px}
+#p3 .adv__k{top:770px}
+.apath{position:absolute;left:150px;right:150px;top:826px;height:176px;display:flex;gap:44px}
+.ac{position:relative;flex:1;min-width:0;display:flex;align-items:center;gap:18px;padding:0 22px;border-radius:28px;background:var(--surface)}
+.ac__l{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.ac__t{font-size:24px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
+.ac__d{font-size:17px;font-weight:500;line-height:1.35;color:var(--ink-2)}
+.ac--red{background:var(--brand);color:#fff}
+.ac--red .bc__n{background:#fff;color:var(--brand)}
+.ac--red .ac__d{color:rgba(255,255,255,.92)}
+.av{flex:none;width:200px}
+.av--reg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.av--reg i{height:38px;border-radius:19px;background:#fff;box-shadow:inset 0 0 0 2px var(--line);display:grid;place-items:center;font-style:normal;font-size:15px;font-weight:700;color:var(--ink-2)}
+.av--reg i.is-on{background:var(--brand);box-shadow:none;color:#fff}
+.av--ai{display:flex;flex-direction:column;gap:8px}
+.av__offer{display:flex;align-items:center;gap:8px;height:42px;padding:0 10px;border-radius:12px;background:#fff;font-size:14px;font-weight:700;white-space:nowrap}
+.av__offer em{font-style:normal;font-size:12px;font-weight:800;padding:3px 7px;border-radius:7px;background:var(--brand);color:#fff}
+.av__imgs{display:flex;gap:8px;height:80px}
+.av__imgs i{flex:1;border-radius:12px;background:center / cover no-repeat}
+.av__imgs i.is-on{box-shadow:0 0 0 3px var(--brand)}
+.av--soc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;justify-items:center;width:190px}
+.av--soc i{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;overflow:hidden;background:#fff;color:var(--brand)}
+.av--soc i svg,.av--soc i img{display:block;width:100%;height:100%}
+.av--soc i.av__site svg{width:28px;height:28px}
+.av--soc .soc-ic__bg{fill:var(--soc-c)}.av--soc .soc-ic__g{fill:#fff}
+.bv--city div.is-on svg:last-child{margin-left:auto}
+.av--reg i{font-size:14px}
+.av{width:210px}
+.av__offer{font-size:15px}
 </style>
 </head>
 <body>
@@ -1246,26 +1317,46 @@ a{color:inherit;text-decoration:none}
   <section class="slide" id="p3">
     <div class="cpn__l cpn__l--full">
       <div class="in in--w">
-        <h2 class="h1">Купон. Скриншот. <span class="city">Выгода.</span></h2>
+        <h2 class="h1">Купон <span class="arr">→</span> Скриншот <span class="arr">→</span> <span class="city">Выгода</span></h2>
         <p class="sub">Покупателю&nbsp;— бесплатно и&nbsp;без регистрации. Рекламодатель платит только за&nbsp;размещение</p>
       </div>
     </div>
     <div class="path__k">Путь <em>покупателя</em></div>
-    <div class="path">
-      <div class="pst"><div class="pst__h"><span class="pst__n">1</span><div class="pst__t">Выбирает<br>город</div></div>
-        <div class="pst__v"><svg data-i="pin"></svg>Липецк<i></i></div></div>
-      <div class="pst"><div class="pst__h"><span class="pst__n">2</span><div class="pst__t">Находит<br>предложение</div></div>
-        <div class="pst__v"><svg data-i="search"></svg><div>маникюр<small>−20% · Студия «Пример»</small></div></div></div>
-      <div class="pst"><div class="pst__h"><span class="pst__n">3</span><div class="pst__t">Сохраняет<br>промокод</div></div>
-        <div class="pst__v is-code"><svg data-i="ticket"></svg>KRASA-25</div></div>
-      <div class="pst"><div class="pst__h"><span class="pst__n">4</span><div class="pst__t">Приходит<br>к&nbsp;рекламодателю</div></div>
-        <div class="pst__v is-ok"><svg data-i="check"></svg>Скидка применена</div></div>
+    <div class="bpath">
+      <div class="bc"><div class="bc__h"><span class="bc__n">1</span><div class="bc__t">Выбирает<br>город</div></div>
+        <div class="bv bv--city">
+          <div class="is-on"><svg data-i="pin"></svg>Липецк<svg class="ok" data-i="check"></svg></div>
+          <div><svg data-i="pin"></svg>Елец</div>
+          <div><svg data-i="pin"></svg>Воронеж</div>
+        </div></div>
+      <div class="bc"><div class="bc__h"><span class="bc__n">2</span><div class="bc__t">Находит<br>предложение</div></div>
+        <div class="bv bv--card">
+          <div class="bv__ph" style="background-image:url('../assets/coupons/manikyur-rose.jpg')"><span class="tk">−20%</span></div>
+          <div class="bv__c"><b>Маникюр в&nbsp;будний день</b><span>Студия «Пример» · 7&nbsp;мин пешком</span></div>
+        </div></div>
+      <div class="bc"><div class="bc__h"><span class="bc__n">3</span><div class="bc__t">Делает скриншот<br>промокода</div></div>
+        <div class="bv bv--shot">
+          <div class="bv__code"><span>Промокод</span><b>KRASA-25</b></div>
+          <div class="bv__saved"><svg data-i="check"></svg>Скриншот сохранён</div>
+          <i class="bv__cr bv__cr--tl"></i><i class="bv__cr bv__cr--tr"></i><i class="bv__cr bv__cr--bl"></i><i class="bv__cr bv__cr--br"></i>
+        </div></div>
+      <div class="bc"><div class="bc__h"><span class="bc__n">4</span><div class="bc__t">Приходит<br>к&nbsp;рекламодателю</div></div>
+        <div class="bv bv--bill">
+          <div><span>Маникюр</span><b>2&nbsp;000&nbsp;₽</b></div>
+          <div class="is-off"><span>Скидка по&nbsp;купону</span><b>−400&nbsp;₽</b></div>
+          <div class="is-sum"><span>Итого</span><b>1&nbsp;600&nbsp;₽</b></div>
+          <em><svg data-i="check"></svg>Скидка применена</em>
+        </div></div>
     </div>
     <div class="adv__k">Путь <em>рекламодателя</em>&nbsp;— вашего клиента</div>
-    <div class="adv">
-      <div class="pst"><span class="pst__n">1</span><div class="pst__t">Регистрируется<small>ООО, ИП, самозанятый или&nbsp;физлицо</small></div></div>
-      <div class="pst"><span class="pst__n">2</span><div class="pst__t">Создаёт купон за&nbsp;10&nbsp;минут<small>AI-помощник подскажет оффер и&nbsp;картинку</small></div></div>
-      <div class="pst is-red"><span class="pst__n">3</span><div class="pst__t">Получает покупателей<small>Публикуем на&nbsp;сайте и&nbsp;в&nbsp;соцсетях города</small></div></div>
+    <div class="apath">
+      <div class="ac"><div class="ac__l"><span class="bc__n">1</span><div class="ac__t">Регистрируется</div><div class="ac__d">ООО, ИП, самозанятый или&nbsp;физлицо</div></div>
+        <div class="av av--reg"><i class="is-on">ООО</i><i>ИП</i><i>Самозанятый</i><i>Физлицо</i></div></div>
+      <div class="ac"><div class="ac__l"><span class="bc__n">2</span><div class="ac__t">Создаёт купон за&nbsp;10&nbsp;минут</div><div class="ac__d">AI-помощник подскажет оффер и&nbsp;картинку</div></div>
+        <div class="av av--ai"><div class="av__offer"><em>AI</em>−30% по&nbsp;будням</div>
+          <div class="av__imgs"><i class="is-on" style="background-image:url('../assets/coupons/eda-cool.jpg')"></i><i style="background-image:url('../assets/coupons/coffee.jpg')"></i><i style="background-image:url('../assets/coupons/kofe-warm.jpg')"></i></div></div></div>
+      <div class="ac ac--red"><div class="ac__l"><span class="bc__n">3</span><div class="ac__t">Получает покупателей</div><div class="ac__d">Публикуем на&nbsp;сайте и&nbsp;в&nbsp;соцсетях города</div></div>
+        <div class="av av--soc"><i class="av__site" data-ic="site"></i><i data-soc-ic2="vk"></i><i data-soc-ic2="tg"></i><i data-soc-ic2="ok"></i><i data-soc-ic2="max"></i></div></div>
     </div>
   </section>
 
@@ -1774,7 +1865,7 @@ a{color:inherit;text-decoration:none}
      стоят абсолютно, поэтому после загрузки шрифтов сдвигаем их группой так,
      чтобы верх первого блока был ровно на 64 px ниже подзаголовка. */
   var BODY = {
-    p2: ".big3", p3: ".path__k,.path,.adv__k,.adv", p4: ".gain", p5: ".fmts",
+    p2: ".big3", p3: ".path__k,.bpath,.adv__k,.apath", p4: ".gain", p5: ".fmts",
     p6: ".rates,.kal,.calc,.foot", p7: ".mps,.calc,.foot", p8: ".day,.dd", p9: ".roles", p10: ".kit",
     p11: ".nil,.nil__s,.chk,.gift"
   };
