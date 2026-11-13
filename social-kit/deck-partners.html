@@ -1156,6 +1156,25 @@ a{color:inherit;text-decoration:none}
 .big3{height:500px}
 .big3 b{font-size:120px}
 .big3{height:580px}
+/* слайд 2: визуализации в плитках (правка 13.11) */
+.vz{margin:0;padding:0;list-style:none}
+.vz--bars{display:flex;flex-direction:column;gap:14px}
+.vz--bars li{display:grid;grid-template-columns:130px 1fr auto;align-items:center;gap:14px}
+.vz--bars em{font-style:normal;font-size:21px;font-weight:600;color:var(--ink-2)}
+.vz--bars i{display:block;height:22px;border-radius:6px;background:var(--brand);min-width:10px}
+.vz--bars li:nth-child(n+2) i{background:#F3B0AB}
+.vz--bars strong{font-size:21px;font-weight:800;color:var(--ink);white-space:nowrap}
+.vz--city{display:flex;flex-wrap:wrap;gap:10px}
+.vz--city li{height:44px;padding:0 16px;border-radius:22px;background:rgba(255,255,255,.18);display:flex;align-items:center;font-size:20px;font-weight:700;color:#fff;white-space:nowrap}
+.vz--city li.is-home{background:#fff;color:var(--brand)}
+.vz--city li.is-more{background:none;border:2px dashed rgba(255,255,255,.6)}
+.vz--soc{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.vz--soc li{display:flex;flex-direction:column;align-items:center;gap:10px}
+.vz--soc i{display:grid;place-items:center;width:76px;height:76px;border-radius:50%;overflow:hidden;background:#fff;color:var(--brand);box-shadow:0 14px 24px -14px rgba(80,10,6,.6)}
+.vz--soc i svg,.vz--soc i img{display:block;width:100%;height:100%}
+.vz--soc i.vz__site svg{width:40px;height:40px}
+.vz--soc .soc-ic__bg{fill:var(--soc-c)}.vz--soc .soc-ic__g{fill:#fff}
+.vz--soc em{font-style:normal;font-size:18px;font-weight:700;color:#fff;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -1198,9 +1217,28 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="big3">
-      <div><b>20&nbsp;млн</b><span>запросов «промокод», «акция», «скидка», «купон» в&nbsp;месяц&nbsp;— Яндекс Вордстат</span></div>
-      <div><b>1&nbsp;115</b><span>городов в&nbsp;плане запуска,<br>старт&nbsp;— Липецк</span></div>
-      <div><b>5</b><span>площадок одним размещением: сайт, ВКонтакте, Telegram, Одноклассники и&nbsp;MAX</span></div>
+      <div><b>20&nbsp;млн</b>
+        <ul class="vz vz--bars">
+          <li><em>промокод</em><i style="width:100%"></i><strong>10,6&nbsp;млн</strong></li>
+          <li><em>акция</em><i style="width:47%"></i><strong>5&nbsp;млн</strong></li>
+          <li><em>скидка</em><i style="width:36%"></i><strong>3,8&nbsp;млн</strong></li>
+          <li><em>купон</em><i style="width:6%"></i><strong>619&nbsp;тыс.</strong></li>
+        </ul>
+        <span>запросов в&nbsp;месяц по&nbsp;России&nbsp;— Яндекс Вордстат</span></div>
+      <div><b>1&nbsp;115</b>
+        <ul class="vz vz--city">
+          <li class="is-home">Липецк · старт</li><li>Нижний Новгород</li><li>Воронеж</li><li>Ростов-на-Дону</li><li>Краснодар</li><li>Рязань</li><li>Волгоград</li><li>Тула</li><li class="is-more">+1&nbsp;100</li>
+        </ul>
+        <span>городов в&nbsp;плане запуска</span></div>
+      <div><b>5</b>
+        <ul class="vz vz--soc">
+          <li><i class="vz__site" data-ic="site"></i><em>Сайт</em></li>
+          <li><i data-soc-ic2="vk"></i><em>ВКонтакте</em></li>
+          <li><i data-soc-ic2="tg"></i><em>Telegram</em></li>
+          <li><i data-soc-ic2="ok"></i><em>ОК</em></li>
+          <li><i data-soc-ic2="max"></i><em>MAX</em></li>
+        </ul>
+        <span>площадок одним размещением</span></div>
     </div>
   </section>
 
