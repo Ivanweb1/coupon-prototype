@@ -32,13 +32,17 @@ def main():
     ap.add_argument("--png", action="store_true", help="только PNG, без PDF")
     ap.add_argument("--city", help="город, родительный падеж: Ельца (если есть на слайдах)")
     ap.add_argument("--src", default="deck", help="страница без .html: deck или deck-v2")
+    ap.add_argument("--v", help="версия партнёрской презентации: reg или mp → out/<src>-<v>/")
     args = ap.parse_args()
     PAGE = ROOT / (args.src + ".html")
-    OUT = ROOT / "out" / args.src
+    name = args.src + ("-" + args.v if args.v else "")
+    OUT = ROOT / "out" / name
 
     url = PAGE.as_uri() + "?bare=1"
     if args.city:
         url += "&city=" + quote(args.city)
+    if args.v:
+        url += "&v=" + quote(args.v)
 
     launch = {}
     if os.path.exists("/opt/pw-browsers/chromium"):
@@ -68,7 +72,7 @@ def main():
         shots = []
         for el in hi.query_selector_all(".slide"):
             shots.append(Image.open(io.BytesIO(el.screenshot(type="jpeg", quality=92))).convert("RGB"))
-        pdf = OUT / ("vsekupony-" + args.src + ".pdf")
+        pdf = OUT / ("vsekupony-" + name + ".pdf")
         shots[0].save(pdf, save_all=True, append_images=shots[1:], resolution=144)
         print(pdf.relative_to(ROOT))
         browser.close()
