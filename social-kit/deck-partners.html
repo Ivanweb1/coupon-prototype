@@ -1332,6 +1332,55 @@ a{color:inherit;text-decoration:none}
 .svc__i{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--brand);color:#fff}
 .svc__i svg{width:28px;height:28px}
 .rv__av.is-cl{background:#fff;color:var(--brand)}
+
+/* слайд 10, правка 13.11: визуализации вместо значков */
+.kit{grid-auto-rows:300px}
+.kt{padding:26px 30px 28px}
+.kt__t{font-size:29px}
+.kt__d{font-size:20px}
+.kv{position:relative;height:130px}
+/* материалы: две страницы презентации и визитка */
+.kv__deck{position:absolute;left:0;top:6px;width:200px;height:113px;border-radius:10px;background:#fff center / cover no-repeat;box-shadow:0 14px 24px -14px rgba(0,0,0,.45);transform:rotate(-4deg)}
+.kv__deck--2{left:58px;top:14px;transform:rotate(3deg)}
+.kv__card{position:absolute;left:270px;top:20px;width:170px;height:96px;padding:12px 14px;border-radius:10px;background:#fff;color:var(--ink);display:flex;flex-direction:column;box-shadow:0 14px 24px -14px rgba(0,0,0,.45);transform:rotate(-3deg)}
+.kv__card img{height:30px;width:auto;align-self:flex-start}
+.kv__card b{margin-top:auto;font-size:15px;font-weight:800}
+.kv__card span{font-size:12px;font-weight:600;color:var(--brand)}
+/* обучение: видеоурок */
+.kv--video{border-radius:16px;background:#1B1B1B url('../assets/coupons/biz-warm.jpg') center / cover;overflow:hidden}
+.kv--video::before{content:"";position:absolute;inset:0;background:rgba(20,12,10,.45)}
+.kv__play{position:absolute;left:50%;top:44%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:var(--brand);box-shadow:0 10px 20px -8px rgba(0,0,0,.5)}
+.kv__play::after{content:"";position:absolute;left:21px;top:16px;border-left:16px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent}
+.kv__bar{position:absolute;left:14px;right:14px;bottom:36px;height:5px;border-radius:3px;background:rgba(255,255,255,.35)}
+.kv__bar i{display:block;width:38%;height:100%;border-radius:3px;background:var(--brand)}
+.kv--video em{position:absolute;left:14px;bottom:10px;font-style:normal;font-size:14px;font-weight:700;color:#fff}
+/* инструкции: чек-лист шагов */
+.kv--list{display:flex;flex-direction:column;justify-content:center;gap:8px}
+.kv--list div{display:flex;align-items:center;gap:10px;height:36px;padding:0 14px;border-radius:12px;background:#fff;font-size:17px;font-weight:700;color:var(--ink)}
+.kv--list div svg{width:20px;height:20px;color:var(--brand)}
+.kv--list div.is-ok{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--ink-4)}
+.kv--list div b{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff;font-size:12px}
+/* кабинет: начислено и столбцы */
+.kv--cab{display:flex;align-items:flex-end;gap:18px;padding:14px 16px;border-radius:16px;background:#fff}
+.kv__num{flex:none;display:flex;flex-direction:column;align-self:center}
+.kv__num b{font-size:28px;font-weight:800;letter-spacing:-.02em;color:var(--brand)}
+.kv__num span{font-size:14px;font-weight:600;color:var(--ink-3)}
+.kv__bars{flex:1;height:100%;display:flex;align-items:flex-end;gap:6px}
+.kv__bars i{flex:1;border-radius:5px 5px 2px 2px;background:#F3B0AB}
+.kv__bars i.is-on{background:var(--brand)}
+/* AI: варианты оффера */
+.kv--ai{display:flex;flex-direction:column;justify-content:center;gap:8px}
+.kv__offer{display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 2px var(--brand);font-size:16px;font-weight:700}
+.kv__offer.is-dim{box-shadow:none;color:var(--ink-3)}
+.kv__offer em{font-style:normal;font-size:11px;font-weight:800;padding:3px 7px;border-radius:7px;background:var(--brand);color:#fff}
+.kv__offer.is-dim em{background:#F3B0AB}
+.kv__time{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:#1F7A45}
+.kv__time svg{width:18px;height:18px}
+/* поддержка: диалог */
+.kv--chat{display:flex;flex-direction:column;justify-content:center;gap:10px}
+.kv__q{align-self:flex-start;padding:10px 14px;border-radius:16px 16px 16px 4px;background:#fff;font-size:16px;font-weight:600}
+.kv__a{align-self:flex-end;padding:10px 14px;border-radius:16px 16px 4px 16px;background:var(--brand);color:#fff;font-size:16px;font-weight:600}
+.kv + .kt__t{margin-top:24px}
 </style>
 </head>
 <body>
@@ -1668,12 +1717,12 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
     <div class="kit">
-      <div class="kt kt--red"><span class="kt__i" data-ic="site"></span><div class="kt__t">Материалы для&nbsp;продаж</div><div class="kt__d">Презентации и&nbsp;визитки для&nbsp;встреч с&nbsp;клиентами</div></div>
-      <div class="kt"><span class="kt__i" data-ic="user"></span><div class="kt__t">Обучение сотрудников</div><div class="kt__d">Как работает сервис и&nbsp;как его предлагать</div></div>
-      <div class="kt"><span class="kt__i" data-ic="doc"></span><div class="kt__t">Инструкции</div><div class="kt__d">Пошагово: от&nbsp;первого разговора до&nbsp;размещения</div></div>
-      <div class="kt"><span class="kt__i" data-ic="chart"></span><div class="kt__t">Кабинет партнёра</div><div class="kt__d">Клиенты, размещения, отчёты и&nbsp;выплаты</div></div>
-      <div class="kt"><span class="kt__i" data-ic="spark"></span><div class="kt__t">AI-помощник</div><div class="kt__d">Ваш клиент создаёт купон сам за&nbsp;10&nbsp;минут</div></div>
-      <div class="kt"><span class="kt__i" data-ic="chat"></span><div class="kt__t">Поддержка</div><div class="kt__d">Поможем с&nbsp;любым вопросом&nbsp;— вашим и&nbsp;клиента</div></div>
+      <div class="kt kt--red"><div class="kv kv--mat"><i class="kv__deck" style="background-image:url('out/deck-partners/slide-05.png')"></i><i class="kv__deck kv__deck--2" style="background-image:url('out/deck-partners/slide-03.png')"></i><div class="kv__card"><img src="../assets/brand/logo-red.png" alt=""><b>ВСЕКУПОНЫ</b><span>vsekupony.ru</span></div></div><div class="kt__t">Материалы для&nbsp;продаж</div><div class="kt__d">Презентации и&nbsp;визитки для&nbsp;встреч с&nbsp;клиентами</div></div>
+      <div class="kt"><div class="kv kv--video"><span class="kv__play"></span><div class="kv__bar"><i></i></div><em>Урок 1 · Как работает сервис</em></div><div class="kt__t">Обучение сотрудников</div><div class="kt__d">Как работает сервис и&nbsp;как его предлагать</div></div>
+      <div class="kt"><div class="kv kv--list"><div class="is-ok"><svg data-i="check"></svg>Знакомство с&nbsp;клиентом</div><div class="is-ok"><svg data-i="check"></svg>Регистрация</div><div><b>3</b>Первый купон</div></div><div class="kt__t">Инструкции</div><div class="kt__d">Пошагово: от&nbsp;первого разговора до&nbsp;размещения</div></div>
+      <div class="kt"><div class="kv kv--cab"><div class="kv__num"><b>31&nbsp;200&nbsp;₽</b><span>начислено за&nbsp;месяц</span></div><div class="kv__bars"><i style="height:30%"></i><i style="height:45%"></i><i style="height:40%"></i><i style="height:62%"></i><i style="height:74%"></i><i class="is-on" style="height:100%"></i></div></div><div class="kt__t">Кабинет партнёра</div><div class="kt__d">Клиенты, размещения, отчёты и&nbsp;выплаты</div></div>
+      <div class="kt"><div class="kv kv--ai"><div class="kv__offer"><em>AI</em>−30% на&nbsp;меню по&nbsp;будням</div><div class="kv__offer is-dim"><em>AI</em>Десерт в&nbsp;подарок к&nbsp;обеду</div><div class="kv__time"><svg data-i="check"></svg>Купон готов за&nbsp;10&nbsp;минут</div></div><div class="kt__t">AI-помощник</div><div class="kt__d">Ваш клиент создаёт купон сам за&nbsp;10&nbsp;минут</div></div>
+      <div class="kt"><div class="kv kv--chat"><div class="kv__q">Как добавить второй адрес?</div><div class="kv__a">Сейчас покажем&nbsp;— это пара кликов</div></div><div class="kt__t">Поддержка</div><div class="kt__d">Поможем с&nbsp;любым вопросом&nbsp;— вашим и&nbsp;клиента</div></div>
     </div>
   </section>
 
